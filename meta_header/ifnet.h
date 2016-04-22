@@ -88,9 +88,10 @@ public:
 
 	virtual void		Close(void);
 
-	virtual bool		Reconnect(void);
+	virtual SOCKET		Reconnect(void);
 
 	virtual bool		IsConnected(void);
+	virtual bool		IsConnecting(void);
 
 	virtual void		Init(FxConnection* poConnection);
 

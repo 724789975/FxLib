@@ -40,9 +40,10 @@ public:
 		assert(m_eType == ENetStreamType_Read);
 		if (dwLen <= m_dwLen)
 		{
+			char* pTemp = m_pData;
 			m_pData += dwLen;
 			m_dwLen -= dwLen;
-			return m_pData;
+			return pTemp;
 		}
 		return NULL;
 	}
