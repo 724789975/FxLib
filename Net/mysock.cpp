@@ -781,8 +781,6 @@ void FxConnectSock::OnWrite()
 {
 }
 
-int nClose = 0;
-int nCloseBefore = 0;
 bool FxConnectSock::Close()
 {
 	// 首先 把数据先发过去//
@@ -795,7 +793,6 @@ bool FxConnectSock::Close()
 //		assert(0);
 	}
 
-//	LogScreen("total %d close" , ++nClose);
 	if (IsConnect())
 	{
 		SetState(SSTATE_CLOSE);
@@ -805,11 +802,6 @@ bool FxConnectSock::Close()
 		m_oLock.UnLock();
 		return true;
 	}
-//	if(m_poConnection)
-//	{
-//		m_poConnection->OnSocketDestroy();
-//	}
-//	LogScreen("socket id : %d handler : %d addr : %d, sock %d", GetSockId(), m_poEpollHandler, this, GetSock());
 
 #ifdef WIN32
 	shutdown(GetSock(), SD_RECEIVE);
@@ -836,7 +828,6 @@ bool FxConnectSock::Close()
 
 	SetSock(INVALID_SOCKET);
 
-//	LogScreen("close before event %d", ++nCloseBefore);
 	PushNetEvent(NETEVT_TERMINATE, 0);
 	m_oLock.UnLock();
 
@@ -871,12 +862,6 @@ void FxConnectSock::Reset()
 		FxLoopBuffMgr::Instance()->Release(m_poSendBuf);
 		m_poSendBuf = NULL;
 	}
-
-//	if (m_pLock)
-//	{
-//		m_pLock.Release();
-//		m_pLock = NULL;
-//	}
 
 #ifdef WIN32
 	m_nPostRecv = 0;
@@ -979,48 +964,15 @@ bool FxConnectSock::Send(const char* pData, int dwLen)
 
 bool FxConnectSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
 {
-	// 首先 状态要对 状态不对的话 抛不进事件的//
-//	m_pLock.Lock();
-//	if (GetState() == SSTATE_INVALID)
-//	{
-//		m_pLock.UnLock();
-//		return false;
-//	}
-	{
-		if(eType == NETEVT_ERROR || eType == NETEVT_TERMINATE)
-		{
-		}
-	}
 	SNetEvent oEvent;
 	// 先扔网络事件进去，然后在报告上层有事件，先后顺序不能错，这样上层就不会错取事件//
 	oEvent.eType = eType;
 	oEvent.dwValue = dwValue;
 
-//	if(GetState() == SSTATE_CLOSE)
-//	{
-//		if(eType != NETEVT_TERMINATE && eType != NETEVT_RELEASE)
-//		{
-//			LogScreen("socket close error");
-//			m_pLock.UnLock();
-//			return false;
-//		}
-//	}
-//		LogScreen("socket id %d, addr %d, event type %d, value %d, sock %d, state %d, thread id %d", GetSockId(), this, eType, dwValue, GetSock(), GetState(), pthread_self());
 	while (!m_oEvtQueue.PushBack(oEvent))
 	{
 		FxSleep(1);
 	}
-
-//	while (!FxNetModule::Instance()->PushNetEvent(this))
-//	{
-//		FxSleep(1);
-//	}
-
-//	while(!m_poEpollHandler->PushSock(this))
-//	{
-//		break;
-//		FxSleep(1);
-//	}
 
 	if(!m_poEpollHandler->PushSock(this))
 	{
@@ -1030,7 +982,6 @@ bool FxConnectSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
 		}
 	}
 
-//	m_pLock.UnLock();
 	return true;
 }
 
@@ -1519,7 +1470,6 @@ SOCKET FxConnectSock::Connect()
 
 	//todo
 	//int irt = ::bind(GetSock(), (sockaddr *)(&local_addr), sizeof (sockaddr_in));
-	// keep alive windows下怎么加?  暂时先不添加了//
 #else
 	setsockopt(GetSock(), SOL_SOCKET, SO_SNDLOWAT, &VAL_SO_SNDLOWAT, sizeof(VAL_SO_SNDLOWAT));
 	setsockopt(GetSock(), SOL_SOCKET, SO_SNDBUF, &MAX_SYS_SEND_BUF, sizeof(MAX_SYS_SEND_BUF));
@@ -1566,18 +1516,18 @@ SOCKET FxConnectSock::Connect()
 
 	//请求连接时 Windows跟linux是有区别的//
 #ifdef WIN32
-	LPFN_CONNECTEX m_lpfnConnectEx = NULL ;
-	DWORD dwBytes = 0;
-	GUID GuidConnectEx = WSAID_CONNECTEX;
+	//LPFN_CONNECTEX m_lpfnConnectEx = NULL ;
+	//DWORD dwBytes = 0;
+	//GUID GuidConnectEx = WSAID_CONNECTEX;
 
-	if (SOCKET_ERROR == WSAIoctl(GetSock(), SIO_GET_EXTENSION_FUNCTION_POINTER,
-		&GuidConnectEx, sizeof (GuidConnectEx),
-		&m_lpfnConnectEx, sizeof (m_lpfnConnectEx), &dwBytes, 0, 0))
-	{
-		PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
-		closesocket(GetSock());
-		return INVALID_SOCKET;
-	}
+	//if (SOCKET_ERROR == WSAIoctl(GetSock(), SIO_GET_EXTENSION_FUNCTION_POINTER,
+	//	&GuidConnectEx, sizeof (GuidConnectEx),
+	//	&m_lpfnConnectEx, sizeof (m_lpfnConnectEx), &dwBytes, 0, 0))
+	//{
+	//	PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
+	//	closesocket(GetSock());
+	//	return INVALID_SOCKET;
+	//}
 
 	//// 这个时候 还没有连上 所以 将这个改成IOCP_CONNECT 等连完以后再改回来
 	//m_stRecvIoData.nOp = IOCP_CONNECT;
@@ -1597,15 +1547,6 @@ SOCKET FxConnectSock::Connect()
 		PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
 		closesocket(GetSock());
 		return INVALID_SOCKET;
-		//if(WSAEWOULDBLOCK != WSAGetLastError())
-		//{
-		//	PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
-		//	closesocket(GetSock());
-		//	return INVALID_SOCKET;
-		//}
-		//else;//
-		//{
-		//}
 	}
 	else
 	{
