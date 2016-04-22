@@ -20,9 +20,10 @@ public:
 	virtual ~FxConnection();
 
 	bool						IsConnected(void);
+	bool						IsConnecting(void);
 	bool						Send(const char* pBuf,UINT32 dwLen);
 	void						Close(void);
-	bool						Reconnect();
+	SOCKET						Reconnect();
 	const UINT32				GetRemoteIP(void)		 { return m_dwRemoteIP;	}
 	const char*					GetRemoteIPStr(void)	{ return m_szRemoteIP;	}
 	UINT16						GetRemotePort(void)		{ return m_wRemotePort; }

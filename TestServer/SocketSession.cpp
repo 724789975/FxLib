@@ -77,14 +77,14 @@ private:
 
 void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
-//	LogScreen("ip : %s, port : %d, recv %s\n", GetRemoteIPStr(), GetRemotePort(), pBuf);
+	LogScreen("ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
 
-	//Send(pBuf, dwLen);
+	Send(pBuf, dwLen);
 
-	DBQuery * pQuery = new DBQuery;
-	pQuery->m_strQuery = pBuf;
-	FxDBGetModule()->AddQuery(pQuery);
-	pQuery->pSession = this;
+	//DBQuery * pQuery = new DBQuery;
+	//pQuery->m_strQuery = pBuf;
+	//FxDBGetModule()->AddQuery(pQuery);
+	//pQuery->pSession = this;
 }
 
 void CSocketSession::Release(void)

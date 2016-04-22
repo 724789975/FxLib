@@ -316,7 +316,15 @@ bool FxListenSock::PostAccept(SPerIoData& oSPerIoData)
 
 	if (INVALID_SOCKET == hNewSock)
 	{
-		LogScreen("CCpListener::PostAcceptEx, WSASocket failed, errno %d", WSAGetLastError());
+		LogScreen("WSASocket failed, errno %d", WSAGetLastError());
+		return false;
+	}
+
+	unsigned long ul = 1;
+	if (SOCKET_ERROR == ioctlsocket(hNewSock, FIONBIO, (unsigned long*)&ul))
+	{
+		closesocket(hNewSock);
+		LogScreen("Set socket FIONBIO error : %d", WSAGetLastError());
 		return false;
 	}
 
@@ -325,7 +333,7 @@ bool FxListenSock::PostAccept(SPerIoData& oSPerIoData)
 	if ((0 != setsockopt(hNewSock, SOL_SOCKET, SO_RCVBUF, (char*)&nRecvBuffSize, sizeof(int))) ||
 		(0 != setsockopt(hNewSock, SOL_SOCKET, SO_SNDBUF, (char*)&nSendBuffSize, sizeof(int))))
 	{
-		int nError = GetLastError();
+		int nError = WSAGetLastError();
 		closesocket(hNewSock);
 		return false;
 	}
@@ -937,7 +945,7 @@ bool FxConnectSock::Send(const char* pData, int dwLen)
 		{
 			return false;
 		}
-		FxSleep(50);
+		FxSleep(1);
 		m_oLock.Lock();
 	}
 
@@ -948,7 +956,7 @@ bool FxConnectSock::Send(const char* pData, int dwLen)
 		{
 			return false;
 		}
-		FxSleep(50);
+		FxSleep(1);
 		m_oLock.Lock();
 	}
 
@@ -1391,13 +1399,13 @@ IFxDataHeader* FxConnectSock::GetDataHeader()
 	return NULL;
 }
 
-int nAddevent = 0;
 bool FxConnectSock::AddEvent()
 {
 #ifdef WIN32
 	if (!m_poEpollHandler->AddEvent(GetSock(), this))
 	{
 		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
+		LogScreen("error : %d", WSAGetLastError());
 		Close();
 		return false;
 	}
@@ -1405,10 +1413,10 @@ bool FxConnectSock::AddEvent()
 	if (!m_poEpollHandler->AddEvent(GetSock(), EPOLLOUT|EPOLLIN, this))
 	{
 		PushNetEvent(NETEVT_ERROR, errno);
+		LogScreen("error : %d", errno);
 		Close();
 		return false;
 	}
-//	LogScreen("total %d addevent", ++nAddevent);
 #endif // WIN32
 
 	PushNetEvent(NETEVT_ASSOCIATE, 0);
@@ -1503,13 +1511,14 @@ SOCKET FxConnectSock::Connect()
 	if ((0 != setsockopt(GetSock(), SOL_SOCKET, SO_RCVBUF, (char*)&nRecvBuffSize, sizeof(int))) ||
 		(0 != setsockopt(GetSock(), SOL_SOCKET, SO_SNDBUF, (char*)&nSendBuffSize, sizeof(int))))
 	{
-		int nError = GetLastError();
+		int nError = WSAGetLastError();
 		PushNetEvent(NETEVT_CONN_ERR, nError);
 		closesocket(GetSock());
 		return INVALID_SOCKET;
 	}
 
-	int irt = ::bind(GetSock(), (sockaddr *)(&local_addr), sizeof (sockaddr_in));
+	//todo
+	//int irt = ::bind(GetSock(), (sockaddr *)(&local_addr), sizeof (sockaddr_in));
 	// keep alive windows下怎么加?  暂时先不添加了//
 #else
 	setsockopt(GetSock(), SOL_SOCKET, SO_SNDLOWAT, &VAL_SO_SNDLOWAT, sizeof(VAL_SO_SNDLOWAT));
@@ -1584,18 +1593,37 @@ SOCKET FxConnectSock::Connect()
 
 	if(-1 == connect(GetSock(), (sockaddr*)&stAddr, sizeof(stAddr)))
 	{
-		if(WSAEWOULDBLOCK != WSAGetLastError())
+		// todo 直接阻塞住往上连
+		PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
+		closesocket(GetSock());
+		return INVALID_SOCKET;
+		//if(WSAEWOULDBLOCK != WSAGetLastError())
+		//{
+		//	PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
+		//	closesocket(GetSock());
+		//	return INVALID_SOCKET;
+		//}
+		//else;//
+		//{
+		//}
+	}
+	else
+	{
+		m_stRecvIoData.nOp = IOCP_RECV;
+		unsigned long ul = 1;
+		if (SOCKET_ERROR == ioctlsocket(GetSock(), FIONBIO, (unsigned long*)&ul))
+		{
+			PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
+			closesocket(GetSock());
+			LogScreen("Set socket FIONBIO error : %d", WSAGetLastError());
+			return false;
+		}
+		if (!AddEvent())
 		{
 			PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
 			closesocket(GetSock());
 			return INVALID_SOCKET;
 		}
-		else;//
-		{
-		}
-	}
-	else
-	{
 		OnConnect();
 	}
 #else
@@ -1685,21 +1713,13 @@ void FxConnectSock::OnConnect()
 
 	GetConnection()->SetID(GetSockId());
 
-	if (!AddEvent())
-	{
-		PushNetEvent(NETEVT_CONN_ERR, errno);
-		Close();
-	}
-	else
-	{
-		SetState(SSTATE_ESTABLISH);
-		PushNetEvent(NETEVT_ESTABLISH, 0);
+	SetState(SSTATE_ESTABLISH);
+	PushNetEvent(NETEVT_ESTABLISH, 0);
 
-		if (false == PostRecv())
-		{
-			PushNetEvent(NETEVT_ERROR, WSAGetLastError());
-			Close();
-		}
+	if (false == PostRecv())
+	{
+		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
+		Close();
 	}
 #else
 	SetState(SSTATE_ESTABLISH);
@@ -1746,11 +1766,6 @@ void FxConnectSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByt
 	{
 		Close();
 		return;
-	}
-
-	if (GetState() == SSTATE_CONNECT)
-	{
-		OnConnect();
 	}
 
 	switch (pIoData->nOp)

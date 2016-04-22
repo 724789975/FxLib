@@ -23,30 +23,31 @@ int main()
 	FxSession* pSession = oSessionFactory.CreateSession();
 	pNet->Connect(pSession, dwIP, 10000, true);
 
-	FxSleep(1000);
-
-	char szMsg[1024] = "";
-	int i = 0;
+	//char szMsg[1024] = "";
+	//int i = 0;
 	while (true)
 	{
+		GetTimeHandler()->Run();
 		pNet->Run(0xffffffff);
 		if (pSession->IsConnected())
 		{
-			sprintf(szMsg, "%s", "select * from role");
-			++i;
+			//sprintf(szMsg, "%s", "select * from role");
+			//++i;
 			//sprintf(szMsg, "%d", ++i);
-			pSession->Send(szMsg, 1024);
-			i %= 20;
-			if (i == 0)
-			{
-				pSession->Close();
-			}
-			FxSleep(500);
+			//pSession->Send(szMsg, 1024);
+			//i %= 20;
+			//if (i == 0)
+			//{
+			//	pSession->Close();
+			//}
+			FxSleep(1);
 		}
 		else
 		{
-			pSession->Reconnect();
-			FxSleep(1000);
+			if (!pSession->IsConnecting())
+			{
+				pSession->Reconnect();
+			}
 		}
 	}
 }

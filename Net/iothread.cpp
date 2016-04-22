@@ -227,6 +227,8 @@ void FxIoThread::ThrdFunc()
 		}
 
 		__DealEpollSock();
+
+		FxSleep(1);
 	}
 	LogScreen("thread id %d end\n", m_poThrdHandler->GetThreadId());
 }

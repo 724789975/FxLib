@@ -14,6 +14,9 @@ CSocketSession::~CSocketSession()
 void CSocketSession::OnConnect(void)
 {
 	LogScreen("ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
+	char szMsg[1024] = "";
+	sprintf(szMsg, "%d", 0);
+	Send(szMsg, 1024);
 }
 
 void CSocketSession::OnClose(void)
@@ -29,7 +32,10 @@ void CSocketSession::OnError(UINT32 dwErrorNo)
 
 void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
-	LogScreen("ip : %s, port : %d, recv %s\n", GetRemoteIPStr(), GetRemotePort(), pBuf);
+	LogScreen("ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
+	char szMsg[1024] = "";
+	sprintf(szMsg, "%d", atoi(pBuf) + 1);
+	Send(szMsg, 1024);
 }
 
 void CSocketSession::Release(void)

@@ -51,6 +51,11 @@ bool FxConnection::IsConnected(void)
 	return (CONN_OK == m_nConnStat);
 }
 
+bool FxConnection::IsConnecting(void)
+{
+	return (CONN_ASSOCIATE == m_nConnStat);
+}
+
 void FxConnection::SetRemoteIP(UINT32 dwIP)
 {
 	m_dwRemoteIP = dwIP;
@@ -236,26 +241,25 @@ void FxConnection::OnConnError(UINT32 dwErrorNo)
 	}
 }
 
-bool FxConnection::Reconnect()
+SOCKET FxConnection::Reconnect()
 {
 	if (m_poSock)
 	{
 		m_poSock->Close();
-		return false;
+		return INVALID_SOCKET;
 	}
 	else
 	{
 		FxConnectSock* poSock = FxMySockMgr::Instance()->Create();
 		if (NULL == poSock)
 		{
-			return false;
+			return INVALID_SOCKET;
 		}
 		poSock->SetConnection(this);
 		SetSock(poSock);
 		SetID(poSock->GetSockId());
-		poSock->Connect();
+		return poSock->Connect();
 	}
-	return true;
 }
 
 bool FxConnection::SetConnectionOpt(ESessionOpt eOpt, bool bSetting)

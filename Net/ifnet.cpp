@@ -5,7 +5,7 @@
 
 FxSession::FxSession()
 {
-    m_poConnection = NULL;
+	m_poConnection = NULL;
 	m_pDataHeader = NULL;
 }
 
@@ -26,52 +26,62 @@ FxSession::~FxSession()
 
 bool FxSession::Send(const char* pBuf,UINT32 dwLen)
 {
-    if (m_poConnection && m_poConnection->IsConnected())
-    {
-        return m_poConnection->Send(pBuf, dwLen);
-    }
-    
-    return false;
+	if (m_poConnection && m_poConnection->IsConnected())
+	{
+	    return m_poConnection->Send(pBuf, dwLen);
+	}
+	
+	return false;
 }
 
 void FxSession::Close(void)
 {
-    if (m_poConnection && m_poConnection->IsConnected())
-    {
-        m_poConnection->Close();
-    }
+	if (m_poConnection && m_poConnection->IsConnected())
+	{
+	    m_poConnection->Close();
+	}
 }
 
 void FxSession::Init(FxConnection* poConnection)
 {
-    m_poConnection = poConnection;
+	m_poConnection = poConnection;
 }
 
 bool FxSession::SetSessionOpt(ESessionOpt eOpt, bool bSetting)
 {
-    if (NULL == m_poConnection)
-    {
-        return false;
-    }
+	if (NULL == m_poConnection)
+	{
+	    return false;
+	}
 
-    return m_poConnection->SetConnectionOpt(eOpt, bSetting);
+	return m_poConnection->SetConnectionOpt(eOpt, bSetting);
 }
 
 bool FxSession::IsConnected(void)
 {
-    if (NULL == m_poConnection)
-    {
-        return false;
-    }
+	if (NULL == m_poConnection)
+	{
+	    return false;
+	}
 
-    return m_poConnection->IsConnected();
+	return m_poConnection->IsConnected();
 }
 
-bool FxSession::Reconnect(void)
+bool FxSession::IsConnecting(void)
 {
 	if (NULL == m_poConnection)
 	{
 		return false;
+	}
+
+	return m_poConnection->IsConnecting();
+}
+
+SOCKET FxSession::Reconnect(void)
+{
+	if (NULL == m_poConnection)
+	{
+		return INVALID_SOCKET;
 	}
 
 	return m_poConnection->Reconnect();
@@ -79,27 +89,27 @@ bool FxSession::Reconnect(void)
 
 const char* FxSession::GetRemoteIPStr()
 {
-    if (NULL != m_poConnection)
-    {
-        return m_poConnection->GetRemoteIPStr();
-    }
+	if (NULL != m_poConnection)
+	{
+	    return m_poConnection->GetRemoteIPStr();
+	}
 
-    return "NoIP";
+	return "NoIP";
 }
 
 UINT32 FxSession::GetRemotePort()
 {
-    if (NULL != m_poConnection)
-    {
-        return m_poConnection->GetRemotePort();
-    }
+	if (NULL != m_poConnection)
+	{
+	    return m_poConnection->GetRemotePort();
+	}
 
-    return 0;
+	return 0;
 }
 
 FxConnection* FxSession::GetConnection(void)
 {
-    return m_poConnection;
+	return m_poConnection;
 }
 
 bool FxSession::OnDestroy()
@@ -127,27 +137,27 @@ void FxSession::SetDataHeader(IFxDataHeader* pDataHeader)
 
 IFxNet* FxNetGetModule()
 {
-    if(NULL == FxNetModule::Instance())
-    {
+	if(NULL == FxNetModule::Instance())
+	{
 #ifdef WIN32
-        WSADATA data;
+	    WSADATA data;
 		int nErr = WSAStartup(MAKEWORD(2, 2), &data);
 		if (nErr != 0)
 		{
 			LogScreen("WSAStartup failed error no : %d", nErr);
 		}
 #endif
-        if(false == FxNetModule::CreateInstance())
-            return NULL;
+	    if(false == FxNetModule::CreateInstance())
+	        return NULL;
 
-         if(false == FxNetModule::Instance()->Init())
-         {
+	     if(false == FxNetModule::Instance()->Init())
+	     {
 			 LogScreen("SDNetGetModule, Init CSDNetWin failed");
-             FxNetModule::DestroyInstance();
-             return NULL;
-         }
-    }
+	         FxNetModule::DestroyInstance();
+	         return NULL;
+	     }
+	}
 
-    return FxNetModule::Instance();
+	return FxNetModule::Instance();
 }
 
