@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "netstream.h"
+#include <stdlib.h>
 
 CSocketSession::CSocketSession()
 {
