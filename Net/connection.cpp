@@ -53,7 +53,7 @@ bool FxConnection::IsConnected(void)
 
 bool FxConnection::IsConnecting(void)
 {
-	return (CONN_ASSOCIATE == m_nConnStat);
+	return (CONN_ASSOCIATE == m_nConnStat || CONN_NONE == m_nConnStat);
 }
 
 void FxConnection::SetRemoteIP(UINT32 dwIP)
@@ -169,7 +169,7 @@ void FxConnection::OnClose()
 //	FxMySockMgr::Instance()->DelayRelease(m_poSock);
 //	if (m_poSock->IsAccept())
 //	{
-//		// ·Ç½ÓÊÜ·½, ¼´·¢Æð·½²»ÐèÒªÉ¾³ý, »¹ÒªÓÃµ½
+//		// ï¿½Ç½ï¿½ï¿½Ü·ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ð·½²ï¿½ï¿½ï¿½ÒªÉ¾ï¿½ï¿½, ï¿½ï¿½Òªï¿½Ãµï¿½
 //		m_poSession = NULL;
 //		m_poSock->SetConnection(NULL);
 //		FxConnectionMgr::Instance()->Release(this);
