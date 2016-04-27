@@ -140,8 +140,9 @@ bool FxIoThread::AddEvent(int hSock, IFxSocket* poSock)
 
 	if (NULL == CreateIoCompletionPort((HANDLE)hSock, GetHandle(), (ULONG_PTR)poSock, 0))
 	{
-		LogScreen("errno %d", WSAGetLastError());
-		LogFile("errno %d", WSAGetLastError());
+		int dwErr = WSAGetLastError();
+		LogScreen("errno %d", dwErr);
+		LogFile("errno %d", dwErr);
 		LogFile(PrintTrace());
 		return false;
 	}
