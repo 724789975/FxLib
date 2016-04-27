@@ -44,7 +44,7 @@ FxIoThread::~FxIoThread()
 bool FxIoThread::Init(UINT32 dwMaxSock)
 {
 #ifdef WIN32
-	// ´´½¨ÏÂÍê³É¶Ë¿Ú// Õâ¸öº¯ÊýÒªÔÚÏß³Ìº¯Êý¿ªÊ¼µ÷ÓÃÖ®Ç°µ÷ÓÃ//
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¶Ë¿ï¿½// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Òªï¿½ï¿½ï¿½ß³Ìºï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½Ö®Ç°ï¿½ï¿½ï¿½ï¿½//
 	if (GetHandle() == NULL)
 	{
 		return false;
@@ -156,7 +156,7 @@ bool FxIoThread::AddEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 	{
 		LogScreen("hSock : %d", hSock);
 		LogFile("hSock : %d", hSock);
-		LogFile(PrintTrace());
+		LogFile("%s", PrintTrace());
 		return false;
 	}
 
@@ -164,7 +164,7 @@ bool FxIoThread::AddEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 	{
 		LogScreen("%s", "m_hEpoll < 0");
 		LogFile("%s", "m_hEpoll < 0");
-		LogFile(PrintTrace());
+		LogFile("%s", PrintTrace());
 		return false;
 	}
 
@@ -190,7 +190,7 @@ bool FxIoThread::ChangeEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 	{
 		LogScreen("%s", "m_hEpoll < 0");
 		LogFile("%s", "m_hEpoll < 0");
-		LogFile(PrintTrace());
+		LogFile("%s", PrintTrace());
 		return false;
 	}
 
@@ -198,7 +198,7 @@ bool FxIoThread::ChangeEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 	{
 		LogScreen("socket : %d", hSock);
 		LogFile("socket : %d", hSock);
-		LogFile(PrintTrace());
+		LogFile("%s", PrintTrace());
 		return false;
 	}
 
@@ -208,9 +208,9 @@ bool FxIoThread::ChangeEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 
 	if (epoll_ctl(m_hEpoll, EPOLL_CTL_MOD, hSock, &e) < 0)
 	{
-		LogScreen("%s", "epoll_ctl");
-		LogFile("%s", "epoll_ctl errno : ", errno);
-		LogFile(PrintTrace());
+		LogScreen("epoll_ctl errno : %d", errno);
+		LogFile("epoll_ctl errno : %d", errno);
+		LogFile("%s", PrintTrace());
 		return false;
 	}
 
@@ -259,7 +259,7 @@ void FxIoThread::ThrdFunc()
 
 bool FxIoThread::PushSock(IFxSocket* poSock)
 {
-    // Èç¹û20´Î»¹ÊÇÎÞ·¨Èû½øÈ¥£¬ÄÇ¾ÍÈÏÎªÊ§°Ü
+    // ï¿½ï¿½ï¿½20ï¿½Î»ï¿½ï¿½ï¿½ï¿½Þ·ï¿½ï¿½ï¿½ï¿½È¥ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ÎªÊ§ï¿½ï¿½
     if (NULL == poSock)
     {
         return false;
@@ -299,7 +299,7 @@ bool FxIoThread::__DealEpollData()
 				(LPOVERLAPPED*)&pstPerIoData,
 				INFINITE);
 
-		// ¼ì²éÊÇ·ñÊÇÏß³ÌÍË³ö
+		// ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ï¿½ï¿½ï¿½ß³ï¿½ï¿½Ë³ï¿½
 		if (NULL == poSock)
 		{
 			return false;
@@ -359,7 +359,7 @@ bool FxIoThread::Start()
 #ifdef WIN32
 HANDLE FxIoThread::GetHandle()
 {
-	// ´´½¨µÄ¹ý³ÌÒª±£Ö¤ÔÚµ¥Ïß³ÌÖÐÖ´ÐÐ ³ý·Ç³ÌÐòÍ£Ö¹ÔËÐÐ ²»È»Õâ¸öÒ»Ö±ÓÐÐ§
+	// ï¿½ï¿½ï¿½ï¿½ï¿½Ä¹ï¿½ï¿½Òªï¿½ï¿½Ö¤ï¿½Úµï¿½ï¿½ß³ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ ï¿½ï¿½Ç³ï¿½ï¿½ï¿½Í£Ö¹ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È»ï¿½ï¿½ï¿½Ò»Ö±ï¿½ï¿½Ð§
 	static const HANDLE hCompletionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 	return hCompletionPort;
 }

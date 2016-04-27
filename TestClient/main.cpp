@@ -21,7 +21,7 @@ int main()
 	UINT32 dwIP = inet_addr("127.0.0.1");
 
 	FxSession* pSession = oSessionFactory.CreateSession();
-	pNet->Connect(pSession, dwIP, 10000, true);
+	pNet->Connect(pSession, dwIP, 12000, true);
 
 	//char szMsg[1024] = "";
 	//int i = 0;

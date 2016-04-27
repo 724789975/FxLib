@@ -139,7 +139,7 @@ FxSession*	CSessionFactory::CreateSession()
 		}
 	}
 	LogScreen("left free session : %d", (int)m_listSession.size());
-	LogFile("left free session : %d", (int)m_listSession.size());
+//	LogFile("left free session : %d", (int)m_listSession.size());
 	m_pLock->UnLock();
 	return pSession;
 }
@@ -150,7 +150,7 @@ void CSessionFactory::Release(CSocketSession* pSession)
 //	m_poolSessions.ReleaseObj(pSession);
 	m_listSession.push_back(pSession);
 	LogScreen("left free session : %d", (int)m_listSession.size());
-	LogFile("left free session : %d", (int)m_listSession.size());
+//	LogFile("left free session : %d", (int)m_listSession.size());
 	m_pLock->UnLock();
 }
 
