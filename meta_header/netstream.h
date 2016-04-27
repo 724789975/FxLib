@@ -189,7 +189,7 @@ public:
 
 	bool WriteFloat(float fData)
 	{
-		int nData = fData * 256;
+		int nData = (int)(fData * 256);
 		return WriteInt(nData);
 	}
 

@@ -124,17 +124,25 @@ bool FxIoThread::AddEvent(int hSock, IFxSocket* poSock)
 {
 	if (hSock < 0)
 	{
+		LogScreen("hSock : %d", hSock);
+		LogFile("hSock : %d", hSock);
+		LogFile(PrintTrace());
 		return false;
 	}
 
 	if (NULL == GetHandle())
 	{
+		LogScreen("%s", "GetHandle failed");
+		LogFile("%s", "GetHandle failed");
+		LogFile(PrintTrace());
 		return false;
 	}
 
 	if (NULL == CreateIoCompletionPort((HANDLE)hSock, GetHandle(), (ULONG_PTR)poSock, 0))
 	{
-		LogScreen("CIocpCtrl::AssociateWithIocp, failed, errno %d", WSAGetLastError());
+		LogScreen("errno %d", WSAGetLastError());
+		LogFile("errno %d", WSAGetLastError());
+		LogFile(PrintTrace());
 		return false;
 	}
 
@@ -145,11 +153,17 @@ bool FxIoThread::AddEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 {
 	if (hSock < 0)
 	{
+		LogScreen("hSock : %d", hSock);
+		LogFile("hSock : %d", hSock);
+		LogFile(PrintTrace());
 		return false;
 	}
 
 	if (m_hEpoll < 0)
 	{
+		LogScreen("%s", "m_hEpoll < 0");
+		LogFile("%s", "m_hEpoll < 0");
+		LogFile(PrintTrace());
 		return false;
 	}
 
@@ -173,11 +187,17 @@ bool FxIoThread::ChangeEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 {
 	if (m_hEpoll < 0)
 	{
+		LogScreen("%s", "m_hEpoll < 0");
+		LogFile("%s", "m_hEpoll < 0");
+		LogFile(PrintTrace());
 		return false;
 	}
 
 	if (hSock < 0)
 	{
+		LogScreen("socket : %d", hSock);
+		LogFile("socket : %d", hSock);
+		LogFile(PrintTrace());
 		return false;
 	}
 
@@ -187,6 +207,9 @@ bool FxIoThread::ChangeEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 
 	if (epoll_ctl(m_hEpoll, EPOLL_CTL_MOD, hSock, &e) < 0)
 	{
+		LogScreen("%s", "epoll_ctl");
+		LogFile("%s", "epoll_ctl errno : ", errno);
+		LogFile(PrintTrace());
 		return false;
 	}
 

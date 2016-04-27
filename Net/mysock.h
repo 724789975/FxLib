@@ -111,7 +111,7 @@ private:
 
 	TEventQueue<SNetEvent>	m_oEvtQueue;
 
-	FxIoThread* m_poEpollHandler;
+	FxIoThread* m_poIoThreadHandler;
 
 #ifdef WIN32
 	bool PostAccept(SPerIoData& oSPerIoData);
@@ -154,7 +154,7 @@ public:
 
 	IFxDataHeader* GetDataHeader();
 
-	void SetIoThread(FxIoThread* pIoThread){ m_poEpollHandler = pIoThread;}// LogScreen("thread id %d, socket id : %d", m_poEpollHandler, GetSockId()); }
+	void SetIoThread(FxIoThread* pIoThread){ m_poIoThreadHandler = pIoThread;}// LogScreen("thread id %d, socket id : %d", m_poEpollHandler, GetSockId()); }
 	bool AddEvent();
 
 	virtual void ProcEvent();
@@ -205,7 +205,7 @@ private:
 	FxLoopBuff*         m_poRecvBuf;
 	FxConnection*		m_poConnection;
 
-	FxIoThread* m_poEpollHandler;
+	FxIoThread* m_poIoThreadHandler;
 
 	int m_nNeedData;        // 未处理完的逻辑数据包还需要的长度//
 	int m_nPacketLen;       // 未处理完的逻辑数据包长度//
