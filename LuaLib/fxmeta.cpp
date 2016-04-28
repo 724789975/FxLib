@@ -412,7 +412,7 @@ char* PrintTrace()
 		nLen += sprintf(strTrace + nLen, "%s\n", strings[i]);
 	}
 #endif // WIN32
-	nLen += sprintf(strTrace + nLen, "%s", " [Trace] ___________end___________");
+	nLen += sprintf(strTrace + nLen, "%s\n", " [Trace] ___________end___________");
 
 	return strTrace;
 }

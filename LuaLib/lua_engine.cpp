@@ -34,8 +34,8 @@ bool CLuaEngine::Reload()
 	{
 		return false;
 	}
-	luaopen_base(m_pBackState);   // ¼ÓÔØLua»ù±¾¿â//
-	luaL_openlibs(m_pBackState);  // ¼ÓÔØLuaÍ¨ÓÃÀ©Õ¹¿â//
+	luaopen_base(m_pBackState);   // ï¿½ï¿½ï¿½ï¿½Luaï¿½ï¿½ï¿½//
+	luaL_openlibs(m_pBackState);  // ï¿½ï¿½ï¿½ï¿½LuaÍ¨ï¿½ï¿½ï¿½ï¿½Õ¹ï¿½ï¿½//
 
 	for (int i = 0; i < (int) m_vecToLuaFunctions.size(); ++i)
 	{
@@ -119,8 +119,8 @@ bool CLuaEngine::CallFunction(const char* pFunctionName,
 	int ret = lua_pcall(GetLuaState(), 0, nReturnNum, 0);
 	if (ret != 0)
 	{
-		LogScreen("result : %d, error : %s", ret,
-				lua_tostring(GetLuaState(), -1));
+		LogScreen(LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
+		LogFile(LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
 		lua_pop(GetLuaState(), 1);
 		return false;
 	}
@@ -142,11 +142,12 @@ bool CLuaEngine::LoadFile(const char* pFileName)
 	int nRet = 0;
 	if (NULL == m_pBackState)
 	{
-		LogScreen("lua_State is NULL");
+		LogScreen(LogLv_Error, "%s", "lua_State is NULL");
+		LogFile(LogLv_Error, "%s", "lua_State is NULL");
 		return false;
 	}
 
-	char pc[512] = { 0 };  //×ã¹»³¤//
+	char pc[512] = { 0 };  //ï¿½ã¹»ï¿½ï¿½//
 	//strcpy(pc, pFileName);
 	memcpy(pc, pFileName, strlen(pFileName));
 
@@ -165,8 +166,8 @@ bool CLuaEngine::LoadFile(const char* pFileName)
 	nRet = luaL_dofile(m_pBackState, pFileName);
 	if (nRet != 0)
 	{
-		LogScreen("lua_loadfile : %s, result : %d, err : %s", pFileName, nRet,
-				lua_tostring(m_pBackState, -1));
+		LogScreen(LogLv_Error, "lua_loadfile : %s, result : %d, err : %s", pFileName, nRet, lua_tostring(m_pBackState, -1));
+		LogFile(LogLv_Error, "lua_loadfile : %s, result : %d, err : %s", pFileName, nRet, lua_tostring(m_pBackState, -1));
 		return false;
 	}
 
@@ -175,7 +176,7 @@ bool CLuaEngine::LoadFile(const char* pFileName)
 
 const char* CLuaEngine::LuaTraceBack()
 {
-	// ´òÓ¡luaµ÷ÓÃÕ»¿ªÊ¼//
+	// ï¿½ï¿½Ó¡luaï¿½ï¿½ï¿½ï¿½Õ»ï¿½ï¿½Ê¼//
 	lua_getglobal(GetLuaState(), "debug");
 	lua_getfield(GetLuaState(), -1, "traceback");
 	int iError = lua_pcall(GetLuaState(),    //VMachine

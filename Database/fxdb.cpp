@@ -12,7 +12,8 @@ IDBModule* FxDBGetModule()
 
 		if (false == FxDBModule::Instance()->Init())
 		{
-			LogScreen("Init FxDBModule failed");
+			LogScreen(LogLv_Error, "%s", "Init FxDBModule failed");
+			LogFile(LogLv_Error, "%s", "Init FxDBModule failed");
 			FxDBModule::DestroyInstance();
 			return NULL;
 		}

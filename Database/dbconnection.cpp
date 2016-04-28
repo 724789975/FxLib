@@ -23,7 +23,7 @@ bool FxMySQLConnection::Connect(SDBAccount& account)
     memcpy((char*)&m_oAccount, (char*)&account, sizeof(SDBAccount));
     if ('\0' == m_oAccount.m_szCharactSet[0])
     {
-        // Èç¹ûÃ»ÓÐÉèÖÃÁ´½ÓÂë£¬ÉèÖÃÄ¬ÈÏµÄÁ¬½ÓÂëÎª [latin1]
+        // ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½Ïµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Îª [latin1]
         StrSafeCopy(m_oAccount.m_szCharactSet, "latin1");
     }
 	return Connect();
@@ -53,7 +53,7 @@ bool FxMySQLConnection::Connect()
         m_oAccount.m_szLoginPwd, m_oAccount.m_szDBName, m_oAccount.m_wConnPort, NULL, CLIENT_MULTI_STATEMENTS|CLIENT_MULTI_RESULTS);
 	if (NULL == myConn)
 	{
-		LogScreen("connect error : %s", mysql_error(m_myConnection));
+		LogScreen(LogLv_Error, "connect error : %s", mysql_error(m_myConnection));
 		Close();
 		return false;
 	}
@@ -206,7 +206,7 @@ INT32 FxMySQLConnection::Query(const char* pszSQL, INT32 nLength, FxMySQLReader&
         if (NULL != tmpRes)
         {
             mysql_free_result(reader.m_res);
-            reader.m_res = tmpRes;  // È¡×îºóÒ»¸ö
+            reader.m_res = tmpRes;  // È¡ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
         }
     }
     
@@ -278,7 +278,7 @@ INT32 FxMySQLConnection::Query(const char* pszSQL, FxMySQLReader& reader)
         if (NULL != tmpRes)
         {
             mysql_free_result(reader.m_res);
-            reader.m_res = tmpRes;  // È¡×îºóÒ»¸ö
+            reader.m_res = tmpRes;  // È¡ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
         }
     }
 

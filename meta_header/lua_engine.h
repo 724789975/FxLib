@@ -93,11 +93,11 @@ private:
 	bool CallFunction(const char* pFunctionName, int nReturnNum);
 
 	template<typename T>
-	bool CallFunction(const char* pFunctionName, T tParam, int nReturnNum); //Ö´ÐÐÖ¸¶¨LuaÎÄ¼þÖÐµÄº¯Êý//
+	bool CallFunction(const char* pFunctionName, T tParam, int nReturnNum); //Ö´ï¿½ï¿½Ö¸ï¿½ï¿½Luaï¿½Ä¼ï¿½ï¿½ÐµÄºï¿½ï¿½ï¿½//
 
 	template<typename T1, typename T2>
 	bool CallFunction(const char* pFunctionName, T1 tParam1, T2 tParam2,
-			int nReturnNum = 0); //Ö´ÐÐÖ¸¶¨LuaÎÄ¼þÖÐµÄº¯Êý//
+			int nReturnNum = 0); //Ö´ï¿½ï¿½Ö¸ï¿½ï¿½Luaï¿½Ä¼ï¿½ï¿½ÐµÄºï¿½ï¿½ï¿½//
 
 	void PushValue(double lfValue);
 //	void PushValue(const char* strValue);
@@ -105,13 +105,13 @@ private:
 	template<class T>
 	void PushValue(T* pT);
 
-	bool LoadFile(const char* pFileName);                           //¼ÓÔØÖ¸¶¨µÄLuaÎÄ¼þ//
+	bool LoadFile(const char* pFileName);                           //ï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ï¿½ï¿½ï¿½Luaï¿½Ä¼ï¿½//
 
 	const char* LuaTraceBack();
 
 private:
-	lua_State* m_pState;   //Õâ¸öÊÇLuaµÄState¶ÔÏóÖ¸Õë£¬Äã¿ÉÒÔÒ»¸öluaÎÄ¼þ¶ÔÓ¦Ò»¸ö¡£//
-	lua_State* m_pBackState;	//ÓÃÀ´ÖØÔØµÄ//
+	lua_State* m_pState;   //ï¿½ï¿½ï¿½ï¿½ï¿½Luaï¿½ï¿½Stateï¿½ï¿½ï¿½ï¿½Ö¸ï¿½ë£¬ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½luaï¿½Ä¼ï¿½ï¿½ï¿½Ó¦Ò»ï¿½ï¿½ï¿½ï¿½//
+	lua_State* m_pBackState;	//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Øµï¿½//
 
 	std::vector<ToluaFunctionOpen*> m_vecToLuaFunctions;
 };
@@ -144,9 +144,9 @@ inline void CLuaEngine::PushValue(T* pT)
 	}
 #else
 	const char* strTypeName = typeid(*pT).name();
-//linuxÏÂ ¸ñÊ½Îª nXXXX Ö¸ÕëÎª Pnxxxx ÈôÎªÖ¸ÕëÀàÐÍ ÔòÊÇ´íµÄ//
+//linuxï¿½ï¿½ ï¿½ï¿½Ê½Îª nXXXX Ö¸ï¿½ï¿½Îª Pnxxxx ï¿½ï¿½ÎªÖ¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ç´ï¿½ï¿½//
 	assert(*strTypeName != 'P');
-//Êý×Ö¿ªÍ· ²»ÖªµÀÎªÊ²Ã´ÊÇ×î¶à2¸ö//
+//ï¿½ï¿½ï¿½Ö¿ï¿½Í· ï¿½ï¿½Öªï¿½ï¿½ÎªÊ²Ã´ï¿½ï¿½ï¿½ï¿½ï¿½2ï¿½ï¿½//
 	if (*strTypeName >= '0' && *strTypeName <= '9')
 	{
 		++strTypeName;
@@ -179,8 +179,8 @@ bool CLuaEngine::CallFunction(const char* pFunctionName, T tParam,
 	int ret = lua_pcall(GetLuaState(), 1, nReturnNum, 0);
 	if (ret != 0)
 	{
-		LogScreen("result : %d, error : %s", ret,
-				lua_tostring(GetLuaState(), -1));
+		LogScreen(LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
+		LogFile(LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
 		lua_pop(GetLuaState(), 1);
 		return false;
 	}
@@ -197,8 +197,8 @@ bool CLuaEngine::CallFunction(const char* pFunctionName, T1 tParam1, T2 tParam2,
 	int ret = lua_pcall(GetLuaState(), 2, nReturnNum, 0);
 	if (ret != 0)
 	{
-		LogScreen("result : %d, error : %s", ret,
-				lua_tostring(GetLuaState(), -1));
+		LogScreen(LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
+		LogFile(LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
 		lua_pop(GetLuaState(), 1);
 		return false;
 	}

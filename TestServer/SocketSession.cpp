@@ -25,7 +25,7 @@ void CSocketSession::OnClose(void)
 
 void CSocketSession::OnError(UINT32 dwErrorNo)
 {
-	LogScreen("ip : %s, port : %d, connect addr : %d, error no : %d", GetRemoteIPStr(), GetRemotePort(), GetConnection(), dwErrorNo);
+	LogScreen(LogLv_Debug, "ip : %s, port : %d, connect addr : %d, error no : %d", GetRemoteIPStr(), GetRemotePort(), GetConnection(), dwErrorNo);
 }
 
 class DBQuery : public IQuery
@@ -77,7 +77,7 @@ private:
 
 void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
-	LogScreen("ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
+	LogScreen(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
 
 	Send(pBuf, dwLen);
 
@@ -138,7 +138,7 @@ FxSession*	CSessionFactory::CreateSession()
 			pSession->SetDataHeader(oDataHeaderFactory.CreateDataHeader());
 		}
 	}
-	LogScreen("left free session : %d", (int)m_listSession.size());
+	LogScreen(LogLv_Debug, "left free session : %d", (int)m_listSession.size());
 //	LogFile("left free session : %d", (int)m_listSession.size());
 	m_pLock->UnLock();
 	return pSession;
@@ -149,7 +149,7 @@ void CSessionFactory::Release(CSocketSession* pSession)
 	m_pLock->Lock();
 //	m_poolSessions.ReleaseObj(pSession);
 	m_listSession.push_back(pSession);
-	LogScreen("left free session : %d", (int)m_listSession.size());
+	LogScreen(LogLv_Debug, "left free session : %d", (int)m_listSession.size());
 //	LogFile("left free session : %d", (int)m_listSession.size());
 	m_pLock->UnLock();
 }

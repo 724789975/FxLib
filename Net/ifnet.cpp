@@ -114,7 +114,7 @@ FxConnection* FxSession::GetConnection(void)
 
 bool FxSession::OnDestroy()
 {
-	// µ±Ïú»ÙµÄÊ±ºò Ó¦¸ÃÊÇ°Éconnection Ò²releaseµô
+	// ï¿½ï¿½ï¿½ï¿½Ùµï¿½Ê±ï¿½ï¿½ Ó¦ï¿½ï¿½ï¿½Ç°ï¿½connection Ò²releaseï¿½ï¿½
 	if (m_poConnection)
 	{
 		m_poConnection->SetSession(NULL);
@@ -144,7 +144,7 @@ IFxNet* FxNetGetModule()
 		int nErr = WSAStartup(MAKEWORD(2, 2), &data);
 		if (nErr != 0)
 		{
-			LogScreen("WSAStartup failed error no : %d", nErr);
+			LogScreen(LogLv_Error, "WSAStartup failed error no : %d", nErr);
 		}
 #endif
 	    if(false == FxNetModule::CreateInstance())
@@ -152,7 +152,7 @@ IFxNet* FxNetGetModule()
 
 	     if(false == FxNetModule::Instance()->Init())
 	     {
-			 LogScreen("SDNetGetModule, Init CSDNetWin failed");
+			 LogScreen(LogLv_Error, "%s", "SDNetGetModule, Init CSDNetWin failed");
 	         FxNetModule::DestroyInstance();
 	         return NULL;
 	     }

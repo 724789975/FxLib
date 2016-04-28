@@ -31,7 +31,7 @@ int main()
 	//	LogScreen("db connected~~~~");
 	//}
 
-	pNet->Listen(CSessionFactory::Instance(), 0, 0, 10000);
+	pNet->Listen(CSessionFactory::Instance(), 0, 0, 12000);
 
 	while (true)
 	{

@@ -13,7 +13,7 @@ FxDBModule::~FxDBModule()
 void FxDBModule::Release(void)
 {
 	Uninit();
-	// !!!!Ôø¾­£¬ÏÂÃæÕâÐÐ´úÂë·ÅÔÚDestroyInstanceÖ®ÏÂ£¬µ¼ÖÂÁËÎÞÉùÎÞÏ¢µÄ±ÀÀ££¬¼Ó´Ë×¢ÊÍÒÔÊ¾¾¯½ä
+	// !!!!ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½DestroyInstanceÖ®ï¿½Â£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢ï¿½Ä±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ó´ï¿½×¢ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
 	FxDBModule::DestroyInstance();
 	return;
 }
@@ -30,14 +30,16 @@ bool FxDBModule::Open(SDBConnInfo& DBInfo)
 	FxMySqlClient *poMySqlClient = FindDBClient(DBInfo.m_dwDBId);
 	if(poMySqlClient != NULL)
 	{
-		LogScreen("db id = %d already exist", DBInfo.m_dwDBId);
+		LogScreen(LogLv_Error, "db id = %d already exist", DBInfo.m_dwDBId);
+		LogFile(LogLv_Error, "db id = %d already exist", DBInfo.m_dwDBId);
 		return false;
 	}
 
 	poMySqlClient = new FxMySqlClient;
 	if(NULL == poMySqlClient)
 	{
-		LogScreen("FxDBModule::Open, new CMySqlClient error");
+		LogScreen(LogLv_Error, "%s", "FxDBModule::Open, new CMySqlClient error");
+		LogFile(LogLv_Error, "%s", "FxDBModule::Open, new CMySqlClient error");
 		return false;
 	}
 
@@ -141,7 +143,8 @@ void FxDBModule::AddResult(IQuery* poQuery)
 {
     if (NULL == poQuery)
     {
-        LogScreen("FxDBModule::AddResult : NULL Query");
+        LogScreen(LogLv_Error, "%s", "FxDBModule::AddResult : NULL Query");
+        LogFile(LogLv_Error, "%s", "FxDBModule::AddResult : NULL Query");
         return;
     }
     m_oLock.Lock();

@@ -124,26 +124,23 @@ bool FxIoThread::AddEvent(int hSock, IFxSocket* poSock)
 {
 	if (hSock < 0)
 	{
-		LogScreen("hSock : %d", hSock);
-		LogFile("hSock : %d", hSock);
-		LogFile(PrintTrace());
+		LogScreen(LogLv_Error, "hSock : %d", hSock);
+		LogFile(LogLv_Error, "hSock : %d", hSock);
 		return false;
 	}
 
 	if (NULL == GetHandle())
 	{
-		LogScreen("%s", "GetHandle failed");
-		LogFile("%s", "GetHandle failed");
-		LogFile(PrintTrace());
+		LogScreen(LogLv_Error, "%s", "GetHandle failed");
+		LogFile(LogLv_Error, "%s", "GetHandle failed");
 		return false;
 	}
 
 	if (NULL == CreateIoCompletionPort((HANDLE)hSock, GetHandle(), (ULONG_PTR)poSock, 0))
 	{
 		int dwErr = WSAGetLastError();
-		LogScreen("errno %d", dwErr);
-		LogFile("errno %d", dwErr);
-		LogFile(PrintTrace());
+		LogScreen(LogLv_Error, "errno %d", dwErr);
+		LogFile(LogLv_Error, "errno %d", dwErr);
 		return false;
 	}
 
@@ -154,17 +151,15 @@ bool FxIoThread::AddEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 {
 	if (hSock < 0)
 	{
-		LogScreen("hSock : %d", hSock);
-		LogFile("hSock : %d", hSock);
-		LogFile("%s", PrintTrace());
+		LogScreen(LogLv_Error, "hSock : %d", hSock);
+		LogFile(LogLv_Error, "hSock : %d", hSock);
 		return false;
 	}
 
 	if (m_hEpoll < 0)
 	{
-		LogScreen("%s", "m_hEpoll < 0");
-		LogFile("%s", "m_hEpoll < 0");
-		LogFile("%s", PrintTrace());
+		LogScreen(LogLv_Error, "%s", "m_hEpoll < 0");
+		LogFile(LogLv_Error, "%s", "m_hEpoll < 0");
 		return false;
 	}
 
@@ -188,17 +183,15 @@ bool FxIoThread::ChangeEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 {
 	if (m_hEpoll < 0)
 	{
-		LogScreen("%s", "m_hEpoll < 0");
-		LogFile("%s", "m_hEpoll < 0");
-		LogFile("%s", PrintTrace());
+		LogScreen(LogLv_Error, "%s", "m_hEpoll < 0");
+		LogFile(LogLv_Error, "%s", "m_hEpoll < 0");
 		return false;
 	}
 
 	if (hSock < 0)
 	{
-		LogScreen("socket : %d", hSock);
-		LogFile("socket : %d", hSock);
-		LogFile("%s", PrintTrace());
+		LogScreen(LogLv_Error, "socket : %d", hSock);
+		LogFile(LogLv_Error, "socket : %d", hSock);
 		return false;
 	}
 
@@ -208,9 +201,8 @@ bool FxIoThread::ChangeEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 
 	if (epoll_ctl(m_hEpoll, EPOLL_CTL_MOD, hSock, &e) < 0)
 	{
-		LogScreen("epoll_ctl errno : %d", errno);
-		LogFile("epoll_ctl errno : %d", errno);
-		LogFile("%s", PrintTrace());
+		LogScreen(LogLv_Error, "epoll_ctl errno : %d", errno);
+		LogFile(LogLv_Error, "epoll_ctl errno : %d", errno);
 		return false;
 	}
 
@@ -234,7 +226,7 @@ bool FxIoThread::DelEvent(int hSock)
 	{
 		return false;
 	}
-//	LogScreen("%d", hSock);
+//	LogScreen(LogLv_Error, "%d", hSock);
 	return true;
 }
 
@@ -242,7 +234,7 @@ bool FxIoThread::DelEvent(int hSock)
 
 void FxIoThread::ThrdFunc()
 {
-	LogScreen("thread id %d start\n", m_poThrdHandler->GetThreadId());
+	LogScreen(LogLv_Info, "thread id %d start", m_poThrdHandler->GetThreadId());
 	while (!m_bStop)
 	{
 		if (!__DealEpollData())
@@ -254,7 +246,7 @@ void FxIoThread::ThrdFunc()
 
 		FxSleep(1);
 	}
-	LogScreen("thread id %d end\n", m_poThrdHandler->GetThreadId());
+	LogScreen(LogLv_Info, "thread id %d end", m_poThrdHandler->GetThreadId());
 }
 
 bool FxIoThread::PushSock(IFxSocket* poSock)

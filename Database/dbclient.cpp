@@ -30,7 +30,8 @@ bool FxMySqlClient::Start()
 	m_poThrdHandler = FxCreateThreadHandler(this, true);
 	if(NULL == m_poThrdHandler)
 	{
-		LogScreen("FxCreateThreadHandler failed");
+		LogScreen(LogLv_Error, "%s", "FxCreateThreadHandler failed");
+		LogFile(LogLv_Error, "%s", "FxCreateThreadHandler failed");
         return false;
 	}
 
@@ -54,13 +55,15 @@ bool FxMySqlClient::ConnectDB(SDBAccount& account)
 	m_poMySqlConn = new FxMySQLConnection;
 	if(NULL == m_poMySqlConn)
 	{
-		LogScreen("CMySqlClient::ConnectDB, new CMySQLConnection failed");
+		LogScreen(LogLv_Error, "%s", "CMySqlClient::ConnectDB, new CMySQLConnection failed");
+		LogFile(LogLv_Error, "%s", "CMySqlClient::ConnectDB, new CMySQLConnection failed");
 		return false;
 	}
 
 	if(!m_poMySqlConn->Connect(account))                                                                              
 	{
-		LogScreen("Connect to Database %s error: %d, %s", account.m_szDBName, m_poMySqlConn->GetLastError(), m_poMySqlConn->GetLastErrorString());
+		LogScreen(LogLv_Error, "Connect to Database %s error: %d, %s", account.m_szDBName, m_poMySqlConn->GetLastError(), m_poMySqlConn->GetLastErrorString());
+		LogFile(LogLv_Error, "Connect to Database %s error: %d, %s", account.m_szDBName, m_poMySqlConn->GetLastError(), m_poMySqlConn->GetLastErrorString());
 		return false;
 	}
 
@@ -151,7 +154,7 @@ void FxMySqlClient::ThrdFunc()
 		}
 		else
 		{
-			//Ã¿30ÃëÖØÁªÒ»´Î
+			//Ã¿30ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½
             time_t nNow = time(NULL);
 			if(nNow - m_nLastReconnectTime > 10)
 			{
@@ -170,7 +173,7 @@ void FxMySqlClient::ThrdFunc()
 		}
 	}
 
-	//ÍË³öÇ°È·±£ËùÓÐµÄÇëÇó¶¼ÒÑÖ´ÐÐÍê
+	//ï¿½Ë³ï¿½Ç°È·ï¿½ï¿½ï¿½ï¿½ï¿½Ðµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ï¿½ï¿½ï¿½
 	__ClearQuery();
 
 	m_poMySqlConn->Close();
