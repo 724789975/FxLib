@@ -101,7 +101,7 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 			nLenStr += sprintf(Temp + nLenStr, "%s ", LogLevelString[eLevel]); \
 			nLenStr += sprintf(Temp + nLenStr, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__); \
 			nLenStr += sprintf(Temp + nLenStr, strFmt, ##__VA_ARGS__);\
-			nLenStr += sprintf(Temp + nLenStr, "%s ", "\n"); \
+			nLenStr += sprintf(Temp + nLenStr, "%s", "\n"); \
 			if(eLevel == LogLv_Error)\
 			{\
 				sprintf(Temp + nLenStr, "%s", PrintTrace());\
