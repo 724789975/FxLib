@@ -51,6 +51,9 @@ Array* parray = &array;
 
 int main(int argc, char **argv)
 {
+	LogThread::CreateInstance();
+	LogThread::Instance()->Init();
+
 	int tolua_tarray_open(lua_State*);
 
 	CLuaEngine::CreateInstance();

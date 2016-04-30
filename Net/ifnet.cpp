@@ -1,4 +1,4 @@
-#include "ifnet.h"
+﻿#include "ifnet.h"
 #include "connection.h"
 #include "net.h"
 #include "connectionmgr.h"

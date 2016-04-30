@@ -85,7 +85,7 @@ const char* FxMySQLStmt::GetErrorString()
 
 UINT32 FxMySQLStmt::AffectedRows()
 {
-	return mysql_stmt_affected_rows(m_pStmt);
+	return (UINT32)(mysql_stmt_affected_rows(m_pStmt));
 }
 
 bool FxMySQLStmt::Restore()
@@ -104,7 +104,7 @@ bool FxMySQLStmt::Fetch()
 
 UINT32 FxMySQLStmt::NumOfRows()
 {
-	return mysql_stmt_num_rows(m_pStmt);
+	return (UINT32)(mysql_stmt_num_rows(m_pStmt));
 }
 
 void FxMySQLStmt::Release()

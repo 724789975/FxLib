@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include "singleton.h"
 #include "fxtimer.h"
+#include "thread.h"
+#include "log_thread.h"
 
 typedef signed char INT8;
 typedef unsigned char UINT8;
@@ -91,54 +93,83 @@ char* PrintTrace();
 bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 
 #define LogScreen(eLevel, strFmt, ...)\
-{\
-	{\
-		if(eLevel < LogLv_Count)\
-		{\
-			char Temp[2048] = { 0 };\
-			int nLenStr = 0;\
-			nLenStr = sprintf(Temp, "%s ", GetTimeHandler()->GetTimeStr()); \
-			nLenStr += sprintf(Temp + nLenStr, "%s ", LogLevelString[eLevel]); \
-			nLenStr += sprintf(Temp + nLenStr, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__); \
-			nLenStr += sprintf(Temp + nLenStr, strFmt, ##__VA_ARGS__);\
-			nLenStr += sprintf(Temp + nLenStr, "%s", "\n"); \
-			if(eLevel == LogLv_Error)\
-			{\
-				sprintf(Temp + nLenStr, "%s", PrintTrace());\
-			}\
-			printf("%s", Temp);\
-		}\
-	}\
-}
+{}
+//{\
+//	{\
+//		if(eLevel < LogLv_Count)\
+//		{\
+//			char Temp[2048] = { 0 };\
+//			int nLenStr = 0;\
+//			nLenStr = sprintf(Temp, "%s ", GetTimeHandler()->GetTimeStr()); \
+//			nLenStr += sprintf(Temp + nLenStr, "%s ", LogLevelString[eLevel]); \
+//			nLenStr += sprintf(Temp + nLenStr, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__); \
+//			nLenStr += sprintf(Temp + nLenStr, strFmt, ##__VA_ARGS__);\
+//			nLenStr += sprintf(Temp + nLenStr, "%s", "\n"); \
+//			if(eLevel == LogLv_Error)\
+//			{\
+//				sprintf(Temp + nLenStr, "%s", PrintTrace());\
+//			}\
+//			printf("%s", Temp);\
+//		}\
+//	}\
+//}
 
 #define LogFile(eLevel, strFmt, ...)\
+{}
+//{\
+//	{\
+//		FILE* pFile = GetLogFile("log.txt");\
+//		if(pFile && (eLevel < LogLv_Count))\
+//		{\
+//			char Temp[1024] = { 0 };\
+//			int nLenStr = 0;\
+//			nLenStr = sprintf(Temp, "%s ", GetTimeHandler()->GetTimeStr()); \
+//			nLenStr += sprintf(Temp + nLenStr, "%s ", LogLevelString[eLevel]); \
+//			nLenStr += sprintf(Temp + nLenStr, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__); \
+//			nLenStr += sprintf(Temp + nLenStr, strFmt, ##__VA_ARGS__);\
+//			nLenStr += sprintf(Temp + nLenStr, "%s ", "\n"); \
+//			if(eLevel == LogLv_Error)\
+//			{\
+//				sprintf(Temp + nLenStr, "%s", PrintTrace());\
+//			}\
+//			int ret = 0;\
+//			ret = fprintf(pFile, "%s ", Temp);\
+//			if(ret <= 0)\
+//			{\
+//				printf("error put string !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");\
+//			}\
+//		}\
+//		else\
+//		{\
+//			printf("error log file!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");\
+//		}\
+//	}\
+//}
+
+#define LogFun(eLogType, eLevel, strFmt, ...)\
 {\
 	{\
-		FILE* pFile = GetLogFile("log.txt");\
-		if(pFile && (eLevel < LogLv_Count))\
+		char* strLog = NULL;\
+		UINT32 dwIndex = 0;\
+		LogThread::Instance()->BeginLog(eLogType, strLog, dwIndex);\
+		if(strLog && (eLevel < LogLv_Count))\
 		{\
-			char Temp[1024] = { 0 };\
 			int nLenStr = 0;\
-			nLenStr = sprintf(Temp, "%s ", GetTimeHandler()->GetTimeStr()); \
-			nLenStr += sprintf(Temp + nLenStr, "%s ", LogLevelString[eLevel]); \
-			nLenStr += sprintf(Temp + nLenStr, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__); \
-			nLenStr += sprintf(Temp + nLenStr, strFmt, ##__VA_ARGS__);\
-			nLenStr += sprintf(Temp + nLenStr, "%s ", "\n"); \
+			nLenStr += sprintf(strLog + nLenStr, "%s ", GetTimeHandler()->GetTimeStr());\
+			nLenStr += sprintf(strLog + nLenStr, "%s ", LogLevelString[eLevel]);\
+			nLenStr += sprintf(strLog + nLenStr, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__);\
+			nLenStr += sprintf(strLog + nLenStr, strFmt, ##__VA_ARGS__);\
+			nLenStr += sprintf(strLog + nLenStr, "%s ", "\n");\
 			if(eLevel == LogLv_Error)\
 			{\
-				sprintf(Temp + nLenStr, "%s", PrintTrace());\
-			}\
-			int ret = 0;\
-			ret = fprintf(pFile, "%s ", Temp);\
-			if(ret <= 0)\
-			{\
-				printf("error put string !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");\
+				sprintf(strLog + nLenStr, "%s", PrintTrace());\
 			}\
 		}\
 		else\
 		{\
-			printf("error log file!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");\
+			printf("error log fun !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");\
 		}\
+		LogThread::Instance()->EndLog(dwIndex);\
 	}\
 }
 
@@ -182,61 +213,13 @@ private:
 
 #define FX_INFINITE			0xffffffff
 
-class IFxThread
-{
-public:
-	virtual ~IFxThread()
-	{
-	}
-
-	virtual void ThrdFunc() = 0;
-
-	virtual void Stop() = 0;
-};
-
-class IFxThreadHandler
-{
-public:
-	virtual ~IFxThreadHandler()
-	{
-	}
-
-	virtual void Stop(void) = 0;
-
-	virtual bool Kill(UINT32 dwExitCode) = 0;
-
-	virtual bool WaitFor(UINT32 dwWaitTime = FX_INFINITE) = 0;
-
-	virtual UINT32 GetThreadId(void) = 0;
-
-	virtual IFxThread* GetThread(void) = 0;
-
-	virtual void Release(void) = 0;
-
-	bool IsStop(void)
-	{
-		return m_bIsStop;
-	}
-
-#ifdef WIN32
-	void* GetHandle(void)
-	{	return m_hHandle;}
-protected:
-	void* m_hHandle;		// ????????? ?????? NULL ???? INVALID_HANDLE_VALUE??
-#endif // WIN32
-
-protected:
-	bool m_bIsStop;
-};
-
 IFxLock* FxCreateThreadLock();
 
 IFxLock* FxCreateThreadFakeLock();
 
-IFxThreadHandler* FxCreateThreadHandler(IFxThread* poThread, bool bNeedWaitfor);
-
 void FxSleep(UINT32 dwMilliseconds);
 
 char* GetExePath();
+char* GetExeName();
 
 #endif

@@ -13,7 +13,7 @@ FxDBModule::~FxDBModule()
 void FxDBModule::Release(void)
 {
 	Uninit();
-	// !!!!���������д������DestroyInstance֮�£�������������Ϣ�ı������Ӵ�ע����ʾ����
+	// !!!!曾经，下面这行代码放在DestroyInstance之下，导致了无声无息的崩溃，加此注释以示警戒
 	FxDBModule::DestroyInstance();
 	return;
 }
@@ -31,7 +31,7 @@ bool FxDBModule::Open(SDBConnInfo& DBInfo)
 	if(poMySqlClient != NULL)
 	{
 		LogScreen(LogLv_Error, "db id = %d already exist", DBInfo.m_dwDBId);
-		LogFile(LogLv_Error, "db id = %d already exist", DBInfo.m_dwDBId);
+		LogFun(LT_Screen | LT_File, LogLv_Error, "db id = %d already exist", DBInfo.m_dwDBId);
 		return false;
 	}
 
@@ -39,7 +39,7 @@ bool FxDBModule::Open(SDBConnInfo& DBInfo)
 	if(NULL == poMySqlClient)
 	{
 		LogScreen(LogLv_Error, "%s", "FxDBModule::Open, new CMySqlClient error");
-		LogFile(LogLv_Error, "%s", "FxDBModule::Open, new CMySqlClient error");
+		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "FxDBModule::Open, new CMySqlClient error");
 		return false;
 	}
 
@@ -144,7 +144,7 @@ void FxDBModule::AddResult(IQuery* poQuery)
     if (NULL == poQuery)
     {
         LogScreen(LogLv_Error, "%s", "FxDBModule::AddResult : NULL Query");
-        LogFile(LogLv_Error, "%s", "FxDBModule::AddResult : NULL Query");
+        LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "FxDBModule::AddResult : NULL Query");
         return;
     }
     m_oLock.Lock();

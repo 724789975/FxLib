@@ -155,6 +155,7 @@
     <ClCompile Include="lmem.c" />
     <ClCompile Include="loadlib.c" />
     <ClCompile Include="lobject.c" />
+    <ClCompile Include="log_thread.cpp" />
     <ClCompile Include="lopcodes.c" />
     <ClCompile Include="loslib.c" />
     <ClCompile Include="lparser.c" />
@@ -169,6 +170,7 @@
     <ClCompile Include="lvm.c" />
     <ClCompile Include="lzio.c" />
     <ClCompile Include="print.c" />
+    <ClCompile Include="thread.cpp" />
     <ClCompile Include="tolua_event.c" />
     <ClCompile Include="tolua_is.c" />
     <ClCompile Include="tolua_map.c" />

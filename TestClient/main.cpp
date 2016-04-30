@@ -9,6 +9,9 @@
 
 int main()
 {
+	LogThread::CreateInstance();
+	LogThread::Instance()->Init();
+
 	CLuaEngine::CreateInstance();
 
 	CLuaEngine::Instance()->Reload();

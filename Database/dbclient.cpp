@@ -1,4 +1,4 @@
-#include "dbclient.h"
+﻿#include "dbclient.h"
 #include "dbreader.h"
 #include "dbmodule.h"
 
@@ -31,7 +31,7 @@ bool FxMySqlClient::Start()
 	if(NULL == m_poThrdHandler)
 	{
 		LogScreen(LogLv_Error, "%s", "FxCreateThreadHandler failed");
-		LogFile(LogLv_Error, "%s", "FxCreateThreadHandler failed");
+		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "FxCreateThreadHandler failed");
         return false;
 	}
 
@@ -56,14 +56,14 @@ bool FxMySqlClient::ConnectDB(SDBAccount& account)
 	if(NULL == m_poMySqlConn)
 	{
 		LogScreen(LogLv_Error, "%s", "CMySqlClient::ConnectDB, new CMySQLConnection failed");
-		LogFile(LogLv_Error, "%s", "CMySqlClient::ConnectDB, new CMySQLConnection failed");
+		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "CMySqlClient::ConnectDB, new CMySQLConnection failed");
 		return false;
 	}
 
 	if(!m_poMySqlConn->Connect(account))                                                                              
 	{
 		LogScreen(LogLv_Error, "Connect to Database %s error: %d, %s", account.m_szDBName, m_poMySqlConn->GetLastError(), m_poMySqlConn->GetLastErrorString());
-		LogFile(LogLv_Error, "Connect to Database %s error: %d, %s", account.m_szDBName, m_poMySqlConn->GetLastError(), m_poMySqlConn->GetLastErrorString());
+		LogFun(LT_Screen | LT_File, LogLv_Error, "Connect to Database %s error: %d, %s", account.m_szDBName, m_poMySqlConn->GetLastError(), m_poMySqlConn->GetLastErrorString());
 		return false;
 	}
 
@@ -154,7 +154,7 @@ void FxMySqlClient::ThrdFunc()
 		}
 		else
 		{
-			//ÿ30������һ��
+			//每30秒重联一次
             time_t nNow = time(NULL);
 			if(nNow - m_nLastReconnectTime > 10)
 			{
@@ -173,7 +173,7 @@ void FxMySqlClient::ThrdFunc()
 		}
 	}
 
-	//�˳�ǰȷ�����е�������ִ����
+	//退出前确保所有的请求都已执行完
 	__ClearQuery();
 
 	m_poMySqlConn->Close();

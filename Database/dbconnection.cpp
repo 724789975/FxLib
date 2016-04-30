@@ -1,4 +1,4 @@
-#include "dbconnection.h"
+﻿#include "dbconnection.h"
 #include "strhelper.h"
 #include <errmsg.h>
 
@@ -23,7 +23,7 @@ bool FxMySQLConnection::Connect(SDBAccount& account)
     memcpy((char*)&m_oAccount, (char*)&account, sizeof(SDBAccount));
     if ('\0' == m_oAccount.m_szCharactSet[0])
     {
-        // ���û�����������룬����Ĭ�ϵ�������Ϊ [latin1]
+        // 如果没有设置链接码，设置默认的连接码为 [latin1]
         StrSafeCopy(m_oAccount.m_szCharactSet, "latin1");
     }
 	return Connect();
@@ -206,7 +206,7 @@ INT32 FxMySQLConnection::Query(const char* pszSQL, INT32 nLength, FxMySQLReader&
         if (NULL != tmpRes)
         {
             mysql_free_result(reader.m_res);
-            reader.m_res = tmpRes;  // ȡ���һ��
+            reader.m_res = tmpRes;  // 取最后一个
         }
     }
     
@@ -278,7 +278,7 @@ INT32 FxMySQLConnection::Query(const char* pszSQL, FxMySQLReader& reader)
         if (NULL != tmpRes)
         {
             mysql_free_result(reader.m_res);
-            reader.m_res = tmpRes;  // ȡ���һ��
+            reader.m_res = tmpRes;  // 取最后一个
         }
     }
 

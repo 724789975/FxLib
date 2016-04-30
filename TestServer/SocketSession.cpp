@@ -25,7 +25,7 @@ void CSocketSession::OnClose(void)
 
 void CSocketSession::OnError(UINT32 dwErrorNo)
 {
-	LogScreen(LogLv_Debug, "ip : %s, port : %d, connect addr : %d, error no : %d", GetRemoteIPStr(), GetRemotePort(), GetConnection(), dwErrorNo);
+	LogScreen(LogLv_Debug, "ip : %s, port : %d, connect addr : %d, error no : %d", GetRemoteIPStr(), GetRemotePort(), (int)(GetConnection()), dwErrorNo);
 }
 
 class DBQuery : public IQuery

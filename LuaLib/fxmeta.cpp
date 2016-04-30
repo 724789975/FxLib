@@ -133,194 +133,6 @@ FxCreateThreadFakeLock()
 	return new FxFakeLock;
 }
 
-class FxThreadHandler: public IFxThreadHandler
-{
-public:
-	FxThreadHandler(IFxThread *pThread, bool bNeedWaitfor)
-	{
-		m_dwThreadId = 0;
-		m_bIsStop = true;
-		m_bNeedWaitfor = bNeedWaitfor;
-		m_pThread = pThread;
-#ifdef WIN32
-		m_hHandle = INVALID_HANDLE_VALUE;
-#endif // WIN32
-	}
-
-	virtual ~FxThreadHandler()
-	{
-#ifdef WIN32
-		if (m_hHandle != INVALID_HANDLE_VALUE)
-#endif // WIN32
-		{
-			UINT32 dwErrCode = 0;
-			Kill(dwErrCode);
-		}
-	}
-
-public:
-	inline virtual void Stop(void)
-	{
-		if (NULL != m_pThread)
-		{
-			m_pThread->Stop();
-		}
-	}
-
-	inline virtual bool Kill(UINT32 dwExitCode)
-	{
-#ifdef WIN32
-		if (m_hHandle == INVALID_HANDLE_VALUE)
-		{
-			return false;
-		}
-
-		if (TerminateThread(m_hHandle, dwExitCode))
-		{
-			CloseHandle(m_hHandle);
-			m_hHandle = INVALID_HANDLE_VALUE;
-			return true;
-		}
-		return false;
-#else
-		pthread_cancel(m_dwThreadId);
-		return false;
-#endif // WIN32
-	}
-
-	inline virtual bool WaitFor(UINT32 dwWaitTime = FX_INFINITE)
-	{
-		if (!m_bNeedWaitfor)
-		{
-			return false;
-		}
-#ifdef WIN32
-		if (INVALID_HANDLE_VALUE == m_hHandle)
-		{
-			return false;
-		}
-		DWORD dwRet = WaitForSingleObject(m_hHandle, dwWaitTime);
-		CloseHandle(m_hHandle);
-		m_hHandle = INVALID_HANDLE_VALUE;
-		m_bIsStop = true;
-
-		if (WAIT_OBJECT_0 == dwRet)
-		{
-			return true;
-		}
-#else
-		pthread_join(m_dwThreadId, NULL);
-		return true;
-#endif // WIN32
-		return false;
-	}
-
-	inline virtual void Release(void)
-	{
-		delete this;
-	}
-	inline virtual UINT32 GetThreadId(void)
-	{
-		return m_dwThreadId;
-	}
-	inline virtual IFxThread* GetThread(void)
-	{
-		return m_pThread;
-	}
-
-	inline bool Start()
-	{
-#ifdef WIN32
-		m_hHandle= (HANDLE)_beginthreadex(0, 0, __StaticThreadFunc, this, 0, &m_dwThreadId);
-		if (m_hHandle == NULL)
-		{
-			return false;
-		}
-#else
-		if (0 != pthread_create(&m_dwThreadId, NULL, (void *
-		(*)(void *))__StaticThreadFunc, this))
-		{
-			return false;
-		}
-#endif // WIN32
-		return true;
-	}
-
-private:
-	static unsigned int
-#ifdef WIN32
-	__stdcall
-#endif // WIN32
-	__StaticThreadFunc(void *arg)
-	{
-		FxThreadHandler *pThreadCtrl = (FxThreadHandler *)arg;
-		pThreadCtrl->m_bIsStop = false;
-
-#ifdef WIN32
-#else
-		pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, 0);
-		pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, 0);
-
-		sigset_t new_set, old_set;
-		sigemptyset(&new_set);
-		sigemptyset(&old_set);
-		sigaddset(&new_set, SIGHUP);
-		sigaddset(&new_set, SIGINT);
-		sigaddset(&new_set, SIGQUIT);
-		sigaddset(&new_set, SIGTERM);
-		sigaddset(&new_set, SIGUSR1);
-		sigaddset(&new_set, SIGUSR2);
-		sigaddset(&new_set, SIGPIPE);
-		pthread_sigmask(SIG_BLOCK, &new_set, &old_set);
-
-		if (false == pThreadCtrl->m_bNeedWaitfor)
-		{
-			pthread_detach(pthread_self());
-		}
-#endif // WIN32
-		pThreadCtrl->m_pThread->ThrdFunc();
-
-#ifdef WIN32
-		//�߳̽����ʱ������ж�//
-		if (!pThreadCtrl->m_bNeedWaitfor)
-		{
-			CloseHandle(pThreadCtrl->m_hHandle);
-			pThreadCtrl->m_hHandle = INVALID_HANDLE_VALUE;
-			pThreadCtrl->m_bIsStop = true;
-		}
-#endif // WIN32
-		return 0;
-	}
-
-protected:
-
-	bool m_bNeedWaitfor;
-#ifdef WIN32
-	UINT32 m_dwThreadId;
-#else
-	pthread_t m_dwThreadId;
-#endif // WIN32
-	IFxThread* m_pThread;
-};
-
-IFxThreadHandler*
-FxCreateThreadHandler(IFxThread* poThread, bool bNeedWaitfor)
-{
-	FxThreadHandler *pThreadCtrl = new FxThreadHandler(poThread, bNeedWaitfor);
-	if (NULL == pThreadCtrl)
-	{
-		return NULL;
-	}
-
-	if (false == pThreadCtrl->Start())
-	{
-		delete pThreadCtrl;
-		return NULL;
-	}
-
-	return pThreadCtrl;
-}
-
 void FxSleep(UINT32 dwMilliseconds)
 {
 #ifdef WIN32
@@ -552,5 +364,56 @@ char* GetExePath()
 	}
 
 	return strWorkPath;
+}
+
+char* GetExeName()
+{
+	static char strExePath[256] =
+	{ 0 };
+	static bool bInited = false;
+
+	if (!bInited)
+	{
+#ifdef WIN32
+		//GetCurrentDirectory(256, strWorkPath);
+
+		GetModuleFileName(NULL, strExePath, 256);
+		//??????   
+		for (int i = strlen(strExePath); i >= 0; i--)
+		{
+			if (strExePath[i] == '\\')
+			{
+				memcpy(strExePath, &(strExePath[i + 1]), 256 - (i + 1) - 1);
+				//strExePath[i] = '\0';
+				break;
+			}
+		}
+#else
+		char strSysfile[256] =
+		{ 0 };
+		sprintf(strSysfile, "/proc/%d/exe", getpid());
+
+		int nRet = readlink(strSysfile, strExePath, 256);
+		if ((nRet > 0) & (nRet < 256))
+		{
+			bInited = true;
+
+			strExePath[nRet] = 0;
+
+			for (int i = nRet; i >= 0; --i)
+			{
+				if (strExePath[i] == '/')
+				{
+					memcpy(strExePath, &(strExePath[i + 1]), 256 - (i + 1) - 1);
+					//strExePath[i] = '\0';
+					break;
+				}
+				//strExePath[i] = '\0';
+			}
+		}
+#endif
+	}
+
+	return strExePath;
 }
 

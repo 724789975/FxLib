@@ -1,4 +1,4 @@
-/*
+﻿/*
  * lua_engine.h
  *
  *  Created on: 2015??11??9??
@@ -44,7 +44,7 @@ typedef int ToluaFunctionOpen(lua_State*);
 #define DLLCLASS_DECL
 #endif
 
-class DLLCLASS_DECL CLuaEngine: public ListDirAndLoadFile
+class CLuaEngine: public ListDirAndLoadFile
 {
 DECLARE_SINGLETON(CLuaEngine)
 public:

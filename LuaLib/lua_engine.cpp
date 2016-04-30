@@ -1,4 +1,4 @@
-#include "lua_engine.h"
+﻿#include "lua_engine.h"
 #include "string.h"
 #include <string>
 
@@ -34,8 +34,8 @@ bool CLuaEngine::Reload()
 	{
 		return false;
 	}
-	luaopen_base(m_pBackState);   // ����Lua���//
-	luaL_openlibs(m_pBackState);  // ����Luaͨ����չ��//
+	luaopen_base(m_pBackState);   // 加载Lua基本库//
+	luaL_openlibs(m_pBackState);  // 加载Lua通用扩展库//
 
 	for (int i = 0; i < (int) m_vecToLuaFunctions.size(); ++i)
 	{
@@ -120,7 +120,7 @@ bool CLuaEngine::CallFunction(const char* pFunctionName,
 	if (ret != 0)
 	{
 		LogScreen(LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
-		LogFile(LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
+		LogFun(LT_Screen | LT_File, LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
 		lua_pop(GetLuaState(), 1);
 		return false;
 	}
@@ -143,11 +143,11 @@ bool CLuaEngine::LoadFile(const char* pFileName)
 	if (NULL == m_pBackState)
 	{
 		LogScreen(LogLv_Error, "%s", "lua_State is NULL");
-		LogFile(LogLv_Error, "%s", "lua_State is NULL");
+		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "lua_State is NULL");
 		return false;
 	}
 
-	char pc[512] = { 0 };  //�㹻��//
+	char pc[512] = { 0 };  //足够长//
 	//strcpy(pc, pFileName);
 	memcpy(pc, pFileName, strlen(pFileName));
 
@@ -167,7 +167,7 @@ bool CLuaEngine::LoadFile(const char* pFileName)
 	if (nRet != 0)
 	{
 		LogScreen(LogLv_Error, "lua_loadfile : %s, result : %d, err : %s", pFileName, nRet, lua_tostring(m_pBackState, -1));
-		LogFile(LogLv_Error, "lua_loadfile : %s, result : %d, err : %s", pFileName, nRet, lua_tostring(m_pBackState, -1));
+		LogFun(LT_Screen | LT_File, LogLv_Error, "lua_loadfile : %s, result : %d, err : %s", pFileName, nRet, lua_tostring(m_pBackState, -1));
 		return false;
 	}
 
@@ -176,7 +176,7 @@ bool CLuaEngine::LoadFile(const char* pFileName)
 
 const char* CLuaEngine::LuaTraceBack()
 {
-	// ��ӡlua����ջ��ʼ//
+	// 打印lua调用栈开始//
 	lua_getglobal(GetLuaState(), "debug");
 	lua_getfield(GetLuaState(), -1, "traceback");
 	int iError = lua_pcall(GetLuaState(),    //VMachine
