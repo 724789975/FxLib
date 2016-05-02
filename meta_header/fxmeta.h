@@ -92,60 +92,6 @@ char* PrintTrace();
 
 bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 
-#define LogScreen(eLevel, strFmt, ...)\
-{\
-	{\
-		if(eLevel < LogLv_Count)\
-		{\
-			char Temp[2048] = { 0 };\
-			int nLenStr = 0;\
-			nLenStr = sprintf(Temp, "%s ", GetTimeHandler()->GetTimeStr()); \
-			nLenStr += sprintf(Temp + nLenStr, "%s ", LogLevelString[eLevel]); \
-			nLenStr += sprintf(Temp + nLenStr, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__); \
-			nLenStr += sprintf(Temp + nLenStr, strFmt, ##__VA_ARGS__);\
-			nLenStr += sprintf(Temp + nLenStr, "%s", "\n"); \
-			if(eLevel == LogLv_Error)\
-			{\
-				sprintf(Temp + nLenStr, "%s", PrintTrace());\
-			}\
-			printf("%s", Temp);\
-		}\
-	}\
-}
-
-#define LogFile(eLevel, strFmt, ...)\
-{}
-
-//{\
-//	{\
-//		FILE* pFile = GetLogFile("log.txt");\
-//		if(pFile && (eLevel < LogLv_Count))\
-//		{\
-//			char Temp[1024] = { 0 };\
-//			int nLenStr = 0;\
-//			nLenStr = sprintf(Temp, "%s ", GetTimeHandler()->GetTimeStr()); \
-//			nLenStr += sprintf(Temp + nLenStr, "%s ", LogLevelString[eLevel]); \
-//			nLenStr += sprintf(Temp + nLenStr, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__); \
-//			nLenStr += sprintf(Temp + nLenStr, strFmt, ##__VA_ARGS__);\
-//			nLenStr += sprintf(Temp + nLenStr, "%s ", "\n"); \
-//			if(eLevel == LogLv_Error)\
-//			{\
-//				sprintf(Temp + nLenStr, "%s", PrintTrace());\
-//			}\
-//			int ret = 0;\
-//			ret = fprintf(pFile, "%s ", Temp);\
-//			if(ret <= 0)\
-//			{\
-//				printf("error put string !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");\
-//			}\
-//		}\
-//		else\
-//		{\
-//			printf("error log file!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");\
-//		}\
-//	}\
-//}
-
 #define LogFun(eLogType, eLevel, strFmt, ...)\
 {\
 	{\
