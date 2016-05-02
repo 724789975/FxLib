@@ -179,8 +179,7 @@ bool CLuaEngine::CallFunction(const char* pFunctionName, T tParam,
 	int ret = lua_pcall(GetLuaState(), 1, nReturnNum, 0);
 	if (ret != 0)
 	{
-		LogScreen(LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
-		LogFile(LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
+		LogFun(LT_Screen | LT_File, LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
 		lua_pop(GetLuaState(), 1);
 		return false;
 	}
@@ -197,8 +196,7 @@ bool CLuaEngine::CallFunction(const char* pFunctionName, T1 tParam1, T2 tParam2,
 	int ret = lua_pcall(GetLuaState(), 2, nReturnNum, 0);
 	if (ret != 0)
 	{
-		LogScreen(LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
-		LogFile(LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
+		LogFun(LT_Screen | LT_File, LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
 		lua_pop(GetLuaState(), 1);
 		return false;
 	}

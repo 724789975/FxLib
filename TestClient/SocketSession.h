@@ -54,7 +54,9 @@ public:
 	virtual int __CheckPkgHeader(const char* pBuf);
 private:
 	// 消息头 为网络字节序
-	char m_dataBuffer[4];
+	char m_dataBuffer[8];
+	static const UINT32 s_dwMagic = 'T' << 24 | 'E' << 16 | 'S' << 8 | 'T';
+	//static const UINT32 s_dwMagic = 12345678;
 };
 
 class DataHeaderFactory : public IFxDataHeaderFactory

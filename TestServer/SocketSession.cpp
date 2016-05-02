@@ -154,7 +154,6 @@ void CSessionFactory::Release(CSocketSession* pSession)
 
 DataHeader::DataHeader()
 {
-
 }
 
 DataHeader::~DataHeader()
@@ -172,6 +171,7 @@ void* DataHeader::BuildSendPkgHeader(UINT32 dwDataLen)
 	//*((UINT32*)m_dataBuffer) = htonl(dwDataLen);
 	CNetStream oNetStream(ENetStreamType_Write, m_dataBuffer, sizeof(m_dataBuffer));
 	oNetStream.WriteInt(dwDataLen);
+	oNetStream.WriteInt(s_dwMagic);
 	return (void*)m_dataBuffer;
 }
 
@@ -196,7 +196,17 @@ int DataHeader::__CheckPkgHeader(const char* pBuf)
 	oHeaderStream.ReadInt(dwHeaderLength);
 	oRecvStream.ReadInt(dwBufferLength);
 
+	UINT32 dwHeaderMagic = 0;
+	UINT32 dwBufferMagic = 0;
+	oHeaderStream.ReadInt(dwHeaderMagic);
+	oRecvStream.ReadInt(dwBufferMagic);
+
 	if (dwHeaderLength != dwBufferLength)
+	{
+		return -1;
+	}
+
+	if (s_dwMagic != dwBufferMagic)
 	{
 		return -1;
 	}

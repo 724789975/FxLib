@@ -26,8 +26,8 @@ int main()
 	FxSession* pSession = oSessionFactory.CreateSession();
 	pNet->Connect(pSession, dwIP, 12000, true);
 
-	//char szMsg[1024] = "";
-	//int i = 0;
+	char szMsg[1024] = "";
+	int i = 0;
 	while (true)
 	{
 		GetTimeHandler()->Run();
@@ -36,8 +36,8 @@ int main()
 		{
 			//sprintf(szMsg, "%s", "select * from role");
 			//++i;
-			//sprintf(szMsg, "%d", ++i);
-			//pSession->Send(szMsg, 1024);
+			sprintf(szMsg, "%d", ++i);
+			pSession->Send(szMsg, 1024);
 			//i %= 20;
 			//if (i == 0)
 			//{

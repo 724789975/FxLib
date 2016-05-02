@@ -1,4 +1,4 @@
-#ifndef __MySock_h__
+﻿#ifndef __MySock_h__
 #define __MySock_h__
 
 #ifdef WIN32
