@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <string>
+#include <string.h>
 
 LogThread::LogThread()
 {
@@ -18,6 +19,7 @@ LogThread::LogThread()
 
 void LogThread::ThrdFunc()
 {
+	printf("%s", "thread start !!!!!!!!!!!!!!!!!!!\n");
 	while (true)
 	{
 		unsigned int dwIndex = m_dwInIndex;
@@ -25,9 +27,9 @@ void LogThread::ThrdFunc()
 		{
 			if (m_oLogItems[m_dwOutIndex].m_eState == LogItem::LS_None)
 			{
-				// ²»»á·¢ÉúµÄ;
+				// ï¿½ï¿½ï¿½á·¢ï¿½ï¿½ï¿½;
 				printf("%s", "error state !!!!!!!!!!\n");
-				++m_dwOutIndex;
+				m_dwOutIndex = (++m_dwOutIndex) % LOGITEMNUM;
 			}
 			while (m_oLogItems[m_dwOutIndex].m_eState == LogItem::LS_Writing)
 			{
@@ -62,11 +64,12 @@ void LogThread::ThrdFunc()
 					}
 				}
 				m_oLogItems[m_dwOutIndex].Reset();
-				++m_dwOutIndex;
+				m_dwOutIndex = (++m_dwOutIndex) % LOGITEMNUM;
 			}
 		}
 		FxSleep(1);
 	}
+	printf("%s", "thread end!!!!!!!!!!!!!!!!!!!\n");
 }
 
 void LogThread::Stop()
@@ -84,7 +87,6 @@ bool LogThread::Start()
 	m_poThrdHandler = FxCreateThreadHandler(this, true);
 	if (NULL == m_poThrdHandler)
 	{
-		//LogScreen(LogLv_Error, "%s", "FxCreateThreadHandler failed");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "FxCreateThreadHandler failed");
 		return false;
 	}
@@ -120,7 +122,7 @@ FILE* LogThread::GetLogFile()
 #ifdef WIN32
 	sprintf(strLogPath, "%s%s%s%s", GetExePath(), "\\", GetExeName(), "_log.txt");
 #else
-	sprintf(strLogPath, "%s%s%s", GetExePath(), "/", "log.txt");
+	sprintf(strLogPath, "%s%s%s%s", GetExePath(), "/", GetExeName(), "_log.txt");
 #endif // WIN32
 
 	static char sstrPath[512] =

@@ -6,7 +6,9 @@
 CPP_SRCS += \
 ../fxmeta.cpp \
 ../fxtimer.cpp \
-../lua_engine.cpp 
+../log_thread.cpp \
+../lua_engine.cpp \
+../thread.cpp 
 
 C_SRCS += \
 ../lapi.c \
@@ -65,6 +67,7 @@ OBJS += \
 ./lmem.o \
 ./loadlib.o \
 ./lobject.o \
+./log_thread.o \
 ./lopcodes.o \
 ./loslib.o \
 ./lparser.o \
@@ -79,6 +82,7 @@ OBJS += \
 ./lvm.o \
 ./lzio.o \
 ./print.o \
+./thread.o \
 ./tolua_event.o \
 ./tolua_is.o \
 ./tolua_map.o \
@@ -125,7 +129,9 @@ C_DEPS += \
 CPP_DEPS += \
 ./fxmeta.d \
 ./fxtimer.d \
-./lua_engine.d 
+./log_thread.d \
+./lua_engine.d \
+./thread.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

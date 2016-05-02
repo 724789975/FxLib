@@ -105,7 +105,6 @@ void FxConnection::Close(void)
 #ifdef WIN32
 	m_poSock->PostClose();
 #else
-//	LogScreen("close socket id %d local port %d", m_poSock->GetSockId(), GetLocalPort());
 	m_poSock->Close();
 #endif //WIN32
 }
@@ -280,7 +279,6 @@ void FxConnection::SetSock(FxConnectSock* poSock)
 
 void FxConnection::OnSocketDestroy()
 {
-//	LogScreen("socket destroy id %d, sock %d, addr %d", m_poSock->GetSockId(), m_poSock->GetSock(), m_poSock);
 	m_poSock = NULL;
 }
 

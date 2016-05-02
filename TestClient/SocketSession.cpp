@@ -14,7 +14,7 @@ CSocketSession::~CSocketSession()
 
 void CSocketSession::OnConnect(void)
 {
-	LogScreen(LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
+	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
 	char szMsg[1024] = "";
 	sprintf(szMsg, "%d", 0);
 	Send(szMsg, 1024);
@@ -22,18 +22,18 @@ void CSocketSession::OnConnect(void)
 
 void CSocketSession::OnClose(void)
 {
-	LogScreen(LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
+	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
 //	Reconnect();
 }
 
 void CSocketSession::OnError(UINT32 dwErrorNo)
 {
-	LogScreen(LogLv_Debug, "ip : %s, port : %d, error no : %d\n", GetRemoteIPStr(), GetRemotePort(), dwErrorNo);
+	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d, error no : %d\n", GetRemoteIPStr(), GetRemotePort(), dwErrorNo);
 }
 
 void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
-	LogScreen(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
+	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
 	char szMsg[1024] = "";
 	sprintf(szMsg, "%d", atoi(pBuf) + 1);
 	Send(szMsg, 1024);
@@ -41,7 +41,7 @@ void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 
 void CSocketSession::Release(void)
 {
-	LogScreen(LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
+	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
 }
 
 FxSession*	CSessionFactory::CreateSession()

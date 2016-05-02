@@ -31,7 +31,7 @@ int main()
 	//oInfo.m_stAccount.m_wConnPort = 3306;
 	//if (FxDBGetModule()->Open(oInfo))
 	//{
-	//	LogScreen("db connected~~~~");
+	//	LogFun(LT_Screen, LogLv_Info, "%s", "db connected~~~~");
 	//}
 
 	pNet->Listen(CSessionFactory::Instance(), 0, 0, 12000);
@@ -40,8 +40,7 @@ int main()
 	{
 		GetTimeHandler()->Run();
 		pNet->Run(0xffffffff);
-		//LogScreen(PrintTrace());
-		//LogFile(PrintTrace());
+		//LogFun(LT_Screen, LogLv_Info, "%s", PrintTrace());
 		FxSleep(1);
 	}
 }

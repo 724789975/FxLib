@@ -159,7 +159,6 @@ bool FxNetModule::PushNetEvent(IFxSocket* poSock)
 {
 	if(m_pEventQueue->PushBack(poSock))
 	{
-//		LogScreen("event socket addr %d, socket id %d", poSock, poSock->GetSockId());
 		return true;
 	}
 
@@ -186,7 +185,6 @@ bool FxNetModule::Run(UINT32 dwCount)
             bRet = false;
 			break;
         }
-//        LogScreen("event socket addr %d, socket id %d", poSock, poSock->GetSockId());
 
         poSock->ProcEvent();
     }

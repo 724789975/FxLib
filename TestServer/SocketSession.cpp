@@ -15,17 +15,17 @@ CSocketSession::~CSocketSession()
 
 void CSocketSession::OnConnect(void)
 {
-//	LogScreen("ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
+//	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
 }
 
 void CSocketSession::OnClose(void)
 {
-//	LogScreen("ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
+//	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
 }
 
 void CSocketSession::OnError(UINT32 dwErrorNo)
 {
-	LogScreen(LogLv_Debug, "ip : %s, port : %d, connect addr : %d, error no : %d", GetRemoteIPStr(), GetRemotePort(), (int)(GetConnection()), dwErrorNo);
+	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d, connect addr : %d, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
 }
 
 class DBQuery : public IQuery
@@ -77,7 +77,7 @@ private:
 
 void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
-	LogScreen(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
+	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
 
 	Send(pBuf, dwLen);
 
@@ -89,7 +89,7 @@ void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 
 void CSocketSession::Release(void)
 {
-//	LogScreen("ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
+//	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
 	OnDestroy();
 
 	Init(NULL);
@@ -138,7 +138,7 @@ FxSession*	CSessionFactory::CreateSession()
 			pSession->SetDataHeader(oDataHeaderFactory.CreateDataHeader());
 		}
 	}
-	LogScreen(LogLv_Debug, "left free session : %d", (int)m_listSession.size());
+	LogFun(LT_Screen, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
 //	LogFile("left free session : %d", (int)m_listSession.size());
 	m_pLock->UnLock();
 	return pSession;
@@ -149,7 +149,7 @@ void CSessionFactory::Release(CSocketSession* pSession)
 	m_pLock->Lock();
 //	m_poolSessions.ReleaseObj(pSession);
 	m_listSession.push_back(pSession);
-	LogScreen(LogLv_Debug, "left free session : %d", (int)m_listSession.size());
+	LogFun(LT_Screen, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
 //	LogFile("left free session : %d", (int)m_listSession.size());
 	m_pLock->UnLock();
 }

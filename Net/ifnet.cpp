@@ -144,7 +144,7 @@ IFxNet* FxNetGetModule()
 		int nErr = WSAStartup(MAKEWORD(2, 2), &data);
 		if (nErr != 0)
 		{
-			LogScreen(LogLv_Error, "WSAStartup failed error no : %d", nErr);
+			LogFun(LT_Screen | LT_File, LogLv_Error, "WSAStartup failed error no : %d", nErr);
 		}
 #endif
 	    if(false == FxNetModule::CreateInstance())
@@ -152,7 +152,7 @@ IFxNet* FxNetGetModule()
 
 	     if(false == FxNetModule::Instance()->Init())
 	     {
-			 LogScreen(LogLv_Error, "%s", "SDNetGetModule, Init CSDNetWin failed");
+			 LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "SDNetGetModule, Init CSDNetWin failed");
 	         FxNetModule::DestroyInstance();
 	         return NULL;
 	     }

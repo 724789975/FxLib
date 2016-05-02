@@ -12,7 +12,7 @@ class TestTimer: public IFxTimer
 {
 	virtual bool OnTimer(unsigned int dwSecond)
 	{
-		LogScreen(LogLv_Error, "%d", dwSecond);
+		LogFun(LT_File | LT_Screen, LogLv_Error, "%d", dwSecond);
 		return true;
 	}
 };

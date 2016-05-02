@@ -71,10 +71,8 @@ bool FxListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 
 #ifdef WIN32
 		int dwErr = WSAGetLastError();
-		LogScreen(LogLv_Error, "create socket error, %u:%u, errno %d", dwIP, wPort, dwErr);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "create socket error, %u:%u, errno %d", dwIP, wPort, dwErr);
 #else
-		LogScreen(LogLv_Error, "create socket error, %u:%u, errno %d", dwIP, wPort, errno);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "create socket error, %u:%u, errno %d", dwIP, wPort, errno);
 #endif // WIN32
 
@@ -100,10 +98,8 @@ bool FxListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 	{
 #ifdef WIN32
 		int dwErr = WSAGetLastError();
-		LogScreen(LogLv_Error, "bind at %u:%d failed, errno %d", dwIP, wPort, dwErr);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "bind at %u:%d failed, errno %d", dwIP, wPort, dwErr);
 #else
-		LogScreen(LogLv_Error, "bind at %u:%d failed, errno %d", dwIP, wPort, errno);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "bind at %u:%d failed, errno %d", dwIP, wPort, errno);
 #endif // WIN32
 		return false;
@@ -112,10 +108,8 @@ bool FxListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 	{
 #ifdef WIN32
 		int dwErr = WSAGetLastError();
-		LogScreen(LogLv_Error, "listen at %u:%d failed, errno %d", dwIP, wPort, dwErr);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "listen at %u:%d failed, errno %d", dwIP, wPort, dwErr);
 #else
-		LogScreen(LogLv_Error, "listen at %u:%d failed, errno %d", dwIP, wPort, errno);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "listen at %u:%d failed, errno %d", dwIP, wPort, errno);
 #endif // WIN32
 		return false;
@@ -139,7 +133,6 @@ bool FxListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 
 	if (false == InitAcceptEx())
 	{
-		LogScreen(LogLv_Error, "CCpListener::Start, InitAcceptEx failed");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "CCpListener::Start, InitAcceptEx failed");
 
 		return false;
@@ -149,7 +142,6 @@ bool FxListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 	{
 		if (false == PostAccept(m_oSPerIoDatas[i]))
 		{
-			LogScreen(LogLv_Error, "CCpListener::Start, PostAccept failed");
 			LogFun(LT_Screen | LT_File, LogLv_Error, "CCpListener::Start, PostAccept failed");
 
 			return false;
@@ -157,8 +149,7 @@ bool FxListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 	}
 #else
 #endif // WIN32
-
-	LogScreen(LogLv_Info, "listen at %u:%d success", dwIP, wPort);
+	LogFun(LT_Screen, LogLv_Info, "listen at %u:%d success", dwIP, wPort);
 	return true;
 }
 
@@ -166,7 +157,6 @@ bool FxListenSock::StopListen()
 {
 	if (SSTATE_LISTEN != GetState())
 	{
-		LogScreen(LogLv_Error, "state : %d != SSTATE_LISTEN", (UINT32)GetState());
 		LogFun(LT_Screen | LT_File, LogLv_Error, "state : %d != SSTATE_LISTEN", (UINT32)GetState());
 
 		return false;
@@ -174,7 +164,6 @@ bool FxListenSock::StopListen()
 
 	if (INVALID_SOCKET == GetSock())
 	{
-		LogScreen(LogLv_Error, "socket : %d == INVALID_SOCKET", GetSock());
 		LogFun(LT_Screen | LT_File, LogLv_Error, "socket : %d == INVALID_SOCKET", GetSock());
 
 		return false;
@@ -224,7 +213,6 @@ bool FxListenSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
 {
 	if (SSTATE_INVALID == GetState())
 	{
-		LogScreen(LogLv_Error, "state : %d == SSTATE_INVALID", (UINT32)GetState());
 		LogFun(LT_Screen | LT_File, LogLv_Error, "state : %d == SSTATE_INVALID", (UINT32)GetState());
 
 		return false;
@@ -333,7 +321,6 @@ bool FxListenSock::PostAccept(SPerIoData& oSPerIoData)
 	if (INVALID_SOCKET == hNewSock)
 	{
 		int dwErr = WSAGetLastError();
-		LogScreen(LogLv_Error, "WSASocket failed, errno %d", dwErr);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "WSASocket failed, errno %d", dwErr);
 
 		return false;
@@ -343,7 +330,6 @@ bool FxListenSock::PostAccept(SPerIoData& oSPerIoData)
 	if (SOCKET_ERROR == ioctlsocket(hNewSock, FIONBIO, (unsigned long*)&ul))
 	{
 		int dwErr = WSAGetLastError();
-		LogScreen(LogLv_Error, "Set socket FIONBIO error : %d", dwErr);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "Set socket FIONBIO error : %d", dwErr);
 
 		closesocket(hNewSock);
@@ -356,7 +342,6 @@ bool FxListenSock::PostAccept(SPerIoData& oSPerIoData)
 		(0 != setsockopt(hNewSock, SOL_SOCKET, SO_SNDBUF, (char*)&nSendBuffSize, sizeof(int))))
 	{
 		int nError = WSAGetLastError();
-		LogScreen(LogLv_Error, "Set socket setsockopt error : %d", nError);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "Set socket setsockopt error : %d", nError);
 		closesocket(hNewSock);
 		return false;
@@ -382,7 +367,6 @@ bool FxListenSock::PostAccept(SPerIoData& oSPerIoData)
 		int nError = WSAGetLastError();
 		if (WSA_IO_PENDING != nError)
 		{
-			LogScreen(LogLv_Error, "Init AcceptEx failed, errno %d", nError);
 			LogFun(LT_Screen | LT_File, LogLv_Error, "Init AcceptEx failed, errno %d", nError);
 
 			closesocket(hNewSock);
@@ -413,7 +397,6 @@ bool FxListenSock::InitAcceptEx()
 	if (SOCKET_ERROR == nRt)
 	{
 		int dwErr = WSAGetLastError();
-		LogScreen(LogLv_Error, "WSAIoctl WSAID_ACCEPTEX failed, errno %d", dwErr);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "WSAIoctl WSAID_ACCEPTEX failed, errno %d", dwErr);
 
 		return false;
@@ -437,7 +420,6 @@ bool FxListenSock::InitAcceptEx()
 	if (SOCKET_ERROR == nRt)
 	{
 		int dwErr = WSAGetLastError();
-		LogScreen(LogLv_Error, "WSAIoctl WSAID_GETACCEPTEXSOCKADDRS failed, errno %d", dwErr);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "WSAIoctl WSAID_GETACCEPTEXSOCKADDRS failed, errno %d", dwErr);
 
 		return false;
@@ -454,7 +436,6 @@ void FxListenSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByte
 		if (false == bRet)
 		{
 			int dwErr = WSAGetLastError();
-			LogScreen(LogLv_Error, "CCPSock::OnAccept, accept failed, errno %d", dwErr);
 			LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, accept failed, errno %d", dwErr);
 
 			closesocket(pIoData->hSock);
@@ -465,7 +446,6 @@ void FxListenSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByte
 	}
 	else
 	{
-		LogScreen(LogLv_Error, "state : %d != SSTATE_LISTEN", (UINT32)GetState());
 		LogFun(LT_Screen | LT_File, LogLv_Error, "state : %d != SSTATE_LISTEN", (UINT32)GetState());
 
 		Close();        // δ֪���󣬲�Ӧ�÷���//
@@ -478,7 +458,6 @@ void FxListenSock::OnAccept(SPerIoData* pstPerIoData)
 
 	if (SSTATE_LISTEN != GetState())
 	{
-		LogScreen(LogLv_Error, "state : %d != SSTATE_LISTEN", GetState());
 		LogFun(LT_Screen | LT_File, LogLv_Error, "state : %d != SSTATE_LISTEN", GetState());
 
 		closesocket(hSock);
@@ -489,7 +468,6 @@ void FxListenSock::OnAccept(SPerIoData* pstPerIoData)
 		FxConnectSock* poSock = FxMySockMgr::Instance()->Create();
 		if (NULL == poSock)
 		{
-			LogScreen(LogLv_Error, "CCPSock::OnAccept, create CCPSock failed");
 			LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, create CCPSock failed");
 
 			closesocket(hSock);
@@ -500,7 +478,6 @@ void FxListenSock::OnAccept(SPerIoData* pstPerIoData)
 		FxIoThread* poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSockId());
 		if (NULL == poIoThreadHandler)
 		{
-			LogScreen(LogLv_Error, "CCPSock::OnAccept, get iothread failed");
 			LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, get iothread failed");
 
 			closesocket(hSock);
@@ -511,7 +488,6 @@ void FxListenSock::OnAccept(SPerIoData* pstPerIoData)
 		FxConnection* poConnection = FxConnectionMgr::Instance()->Create();
 		if (NULL == poConnection)
 		{
-			LogScreen(LogLv_Error, "CCPSock::OnAccept, create Connection failed");
 			LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, create Connection failed");
 
 			closesocket(hSock);
@@ -553,7 +529,6 @@ void FxListenSock::OnAccept(SPerIoData* pstPerIoData)
 		FxSession* poSession = m_poSessionFactory->CreateSession();
 		if (NULL == poSession)
 		{
-			LogScreen(LogLv_Error, "CCPSock::OnAccept, CreateSession failed");
 			LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, CreateSession failed");
 
 			closesocket(hSock);
@@ -594,7 +569,6 @@ void FxListenSock::OnAccept(SPerIoData* pstPerIoData)
 		if (ret == SOCKET_ERROR)
 		{
 			int dwErr = WSAGetLastError();
-			LogScreen(LogLv_Error, "Set keep alive error: %d", dwErr);
 			LogFun(LT_Screen | LT_File, LogLv_Error, "Set keep alive error: %d", dwErr);
 
 			PostAccept(*pstPerIoData);
@@ -609,7 +583,6 @@ void FxListenSock::OnAccept(SPerIoData* pstPerIoData)
 
 		if (false == poSock->AddEvent())
 		{
-			LogScreen(LogLv_Error, "poSock->AddEvent failed");
 			LogFun(LT_Screen | LT_File, LogLv_Error, "poSock->AddEvent failed");
 
 			poSock->Close();
@@ -622,7 +595,6 @@ void FxListenSock::OnAccept(SPerIoData* pstPerIoData)
 			{
 				int dwErr = WSAGetLastError();
 				poSock->PushNetEvent(NETEVT_ERROR, dwErr);
-				LogScreen(LogLv_Error, "poSock->PushNetEvent failed, errno : %d", dwErr);
 				LogFun(LT_Screen | LT_File, LogLv_Error, "poSock->PushNetEvent failed, errno : %d", dwErr);
 
 				poSock->Close();
@@ -639,7 +611,6 @@ void FxListenSock::OnParserIoEvent(int dwEvents)
 	if (dwEvents & EPOLLERR)
 	{
 		PushNetEvent(NETEVT_ERROR, errno);
-		LogScreen(LogLv_Error, "get error event errno : %d", errno);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "get error event errno : %d", errno);
 
 		Close();
@@ -660,7 +631,6 @@ void FxListenSock::OnAccept()
 	UINT32 hAcceptSock = accept(GetSock(), (sockaddr*)&stRemoteAddr, &dwAddrLen);
 	if (INVALID_SOCKET == hAcceptSock)
 	{
-		LogScreen(LogLv_Error, "%s", "INVALID_SOCKET == hAcceptSock");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "INVALID_SOCKET == hAcceptSock");
 
 		return;
@@ -669,7 +639,6 @@ void FxListenSock::OnAccept()
 	FxConnectSock* poSock = FxMySockMgr::Instance()->Create();
 	if (NULL == poSock)
 	{
-		LogScreen(LogLv_Error, "%s", "create FxConnectSock failed");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "create FxConnectSock failed");
 
 		close(hAcceptSock);
@@ -679,7 +648,6 @@ void FxListenSock::OnAccept()
 	FxIoThread* poEpollHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSockId());
 	if (NULL == poEpollHandler)
 	{
-		LogScreen(LogLv_Error, "%s", "NULL == poEpollHandler");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "NULL == poEpollHandler");
 
 		close(hAcceptSock);
@@ -689,7 +657,6 @@ void FxListenSock::OnAccept()
 	FxConnection* poConnection = FxConnectionMgr::Instance()->Create();
 	if (NULL == poConnection)
 	{
-		LogScreen(LogLv_Error, "%s", "NULL == poConnection");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "NULL == poConnection");
 
 		close(hAcceptSock);
@@ -700,7 +667,6 @@ void FxListenSock::OnAccept()
 	FxSession* poSession = m_poSessionFactory->CreateSession();
 	if (NULL == poSession)
 	{
-		LogScreen(LogLv_Error, "%s", "NULL == poSession");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "NULL == poSession");
 
 		close(hAcceptSock);
@@ -744,7 +710,6 @@ void FxListenSock::OnAccept()
 
 	if(!poSock->AddEvent())
 	{
-		LogScreen(LogLv_Error, "%s", "poSock->AddEvent() failed");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "poSock->AddEvent() failed");
 
 		close(hAcceptSock);
@@ -818,7 +783,6 @@ bool FxConnectSock::Init()
 {
 	if (!m_oEvtQueue.Init(MAX_NETEVENT_PERSOCK))
 	{
-		LogScreen(LogLv_Error, "%s", "m_oEvtQueue.Init failed");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "m_oEvtQueue.Init failed");
 
 		return false;
@@ -829,7 +793,6 @@ bool FxConnectSock::Init()
 		m_poSendBuf = FxLoopBuffMgr::Instance()->Fetch();
 		if (NULL == m_poSendBuf)
 		{
-			LogScreen(LogLv_Error, "%s", "NULL == m_poSendBuf");
 			LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "NULL == m_poSendBuf");
 
 			return false;
@@ -841,7 +804,6 @@ bool FxConnectSock::Init()
 		m_poRecvBuf = FxLoopBuffMgr::Instance()->Fetch();
 		if (NULL == m_poRecvBuf)
 		{
-			LogScreen(LogLv_Error, "%s", "NULL == m_poRecvBuf");
 			LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "NULL == m_poRecvBuf");
 
 			return false;
@@ -850,7 +812,6 @@ bool FxConnectSock::Init()
 
 	if (!m_poRecvBuf->Init(RECV_BUFF_SIZE))
 	{
-		LogScreen(LogLv_Error, "%s", "m_poRecvBuf->Init failed");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "m_poRecvBuf->Init failed");
 
 		return false;
@@ -858,7 +819,6 @@ bool FxConnectSock::Init()
 
 	if (!m_poSendBuf->Init(SEND_BUFF_SIZE))
 	{
-		LogScreen(LogLv_Error, "%s", "m_poSendBuf->Init failed");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "m_poSendBuf->Init failed");
 
 		return false;
@@ -970,7 +930,6 @@ bool FxConnectSock::Send(const char* pData, int dwLen)
 {
 	if (false == IsConnect())
 	{
-		LogScreen(LogLv_Error, "%s", "socket not connected");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "socket not connected");
 
 		return false;
@@ -978,7 +937,6 @@ bool FxConnectSock::Send(const char* pData, int dwLen)
 
 	if (GetState() != SSTATE_ESTABLISH)
 	{
-		LogScreen(LogLv_Error, "socket state : %d != SSTATE_ESTABLISH", (UINT32)GetState());
 		LogFun(LT_Screen | LT_File, LogLv_Error, "socket state : %d != SSTATE_ESTABLISH", (UINT32)GetState());
 
 		return false;
@@ -993,13 +951,11 @@ bool FxConnectSock::Send(const char* pData, int dwLen)
 	{
 #ifdef WIN32
 		m_dwLastError = NET_SEND_OVERFLOW;
-		LogScreen(LogLv_Error, "send error NET_SEND_OVERFLOW");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "send error NET_SEND_OVERFLOW");
 
 		PostClose();
 #else
 		PushNetEvent(NETEVT_ERROR, NET_SEND_OVERFLOW);
-		LogScreen(LogLv_Error, "%s", "send error NET_SEND_OVERFLOW");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "send error NET_SEND_OVERFLOW");
 
 		Close();
@@ -1013,13 +969,11 @@ bool FxConnectSock::Send(const char* pData, int dwLen)
 	{
 #ifdef WIN32
 		m_dwLastError = NET_SEND_OVERFLOW;
-		LogScreen(LogLv_Error, "send error pDataHeader == NULL");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "send error pDataHeader == NULL");
 
 		PostClose();
 #else
 		PushNetEvent(NETEVT_ERROR, NET_SEND_OVERFLOW);
-		LogScreen(LogLv_Error, "%s", "send error pDataHeader == NULL");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "send error pDataHeader == NULL");
 
 		Close();
@@ -1048,13 +1002,11 @@ bool FxConnectSock::Send(const char* pData, int dwLen)
 	{
 #ifdef WIN32
 		m_dwLastError = WSAGetLastError();
-		LogScreen(LogLv_Error, "%s", "false == PostSendFree()");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == PostSendFree()");
 
 		PostClose();
 #else
 		PushNetEvent(NETEVT_ERROR, NET_SEND_OVERFLOW);
-		LogScreen(LogLv_Error, "%s", "false == PostSendFree()");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == PostSendFree()");
 
 		Close();
@@ -1093,7 +1045,6 @@ bool FxConnectSock::PostSend()
 #ifdef WIN32
 	if (false == IsConnect())
 	{
-		LogScreen(LogLv_Error, "%s", "false == IsConnect()");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnect()");
 
 		return false;
@@ -1127,7 +1078,6 @@ bool FxConnectSock::PostSend()
 			InterlockedCompareExchange(&m_nPostSend, 0, 1);
 
 			UINT32 dwErr = WSAGetLastError();
-			LogScreen(LogLv_Error, "WSASend errno : %d", WSAGetLastError());
 			LogFun(LT_Screen | LT_File, LogLv_Error, "WSASend errno : %d", WSAGetLastError());
 
 			return false;
@@ -1138,7 +1088,6 @@ bool FxConnectSock::PostSend()
 #else
 	if (false == IsConnect())
 	{
-		LogScreen(LogLv_Error, "%s", "false == IsConnect()");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnect()");
 
 		return false;
@@ -1146,7 +1095,6 @@ bool FxConnectSock::PostSend()
 
 	if (NULL == m_poIoThreadHandler)
 	{
-		LogScreen(LogLv_Error, "%s", "NULL == m_poIoThreadHandler");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "NULL == m_poIoThreadHandler");
 
 		Close();
@@ -1166,7 +1114,6 @@ bool FxConnectSock::PostSend()
 		// [12-03-16] hum modify: ��������Ҫ�����¼�ΪEPOLLIN������OUT�¼�һֱ�����ã�����CPU�ܸ�//
 		if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
 		{
-			LogScreen(LogLv_Error, "%s", "false == m_poIoThreadHandler->ChangeEvent");
 			LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == m_poIoThreadHandler->ChangeEvent");
 
 			PushNetEvent(NETEVT_ERROR, errno);
@@ -1186,7 +1133,6 @@ bool FxConnectSock::PostSend()
 		{
 			if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLOUT | EPOLLIN, this))
 			{
-				LogScreen(LogLv_Error, "%s", "false == m_poIoThreadHandler->ChangeEvent");
 				LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == m_poIoThreadHandler->ChangeEvent");
 
 				m_bSending = false;
@@ -1195,7 +1141,6 @@ bool FxConnectSock::PostSend()
 			return true;
 		}
 
-		LogScreen(LogLv_Error, "%s", "0 > nRet");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "0 > nRet");
 
 		m_bSending = false;
@@ -1203,7 +1148,6 @@ bool FxConnectSock::PostSend()
 	}
 	else if (0 == nRet)
 	{
-		LogScreen(LogLv_Error, "%s", "0 == nRet");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "0 == nRet");
 
 		m_bSending = false;
@@ -1215,7 +1159,6 @@ bool FxConnectSock::PostSend()
 
 	if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLOUT | EPOLLIN, this))
 	{
-		LogScreen(LogLv_Error, "%s", "false == m_poIoThreadHandler->ChangeEvent");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == m_poIoThreadHandler->ChangeEvent");
 
 		m_bSending = false;
@@ -1236,7 +1179,6 @@ bool FxConnectSock::PostSendFree()
 #else
 	if (false == IsConnect())
 	{
-		LogScreen(LogLv_Error, "%s", "false == IsConnect()");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnect()");
 
 		return false;
@@ -1244,7 +1186,6 @@ bool FxConnectSock::PostSendFree()
 
 	if (NULL == m_poIoThreadHandler)
 	{
-		LogScreen(LogLv_Error, "%s", "NULL == m_poIoThreadHandler");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "NULL == m_poIoThreadHandler");
 
 		Close();
@@ -1479,7 +1420,6 @@ bool FxConnectSock::AddEvent()
 	if (!m_poIoThreadHandler->AddEvent(GetSock(), this))
 	{
 		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
-		LogScreen(LogLv_Error, "error : %d", WSAGetLastError());
 		LogFun(LT_Screen | LT_File, LogLv_Error, "error : %d", WSAGetLastError());
 
 		Close();
@@ -1489,7 +1429,6 @@ bool FxConnectSock::AddEvent()
 	if (!m_poIoThreadHandler->AddEvent(GetSock(), EPOLLOUT|EPOLLIN, this))
 	{
 		PushNetEvent(NETEVT_ERROR, errno);
-		LogScreen(LogLv_Error, "error : %d", errno);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "error : %d", errno);
 
 		Close();
@@ -1568,7 +1507,6 @@ SOCKET FxConnectSock::Connect()
 		);
 	if (ret == SOCKET_ERROR)
 	{
-		LogScreen(LogLv_Error, "Set keep alive error: %d\n", WSAGetLastError());
 		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
 		Close();
 		return INVALID_SOCKET;
@@ -1677,7 +1615,7 @@ SOCKET FxConnectSock::Connect()
 		{
 			PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
 			closesocket(GetSock());
-			LogScreen(LogLv_Error, "Set socket FIONBIO error : %d", WSAGetLastError());
+			LogFun(LT_Screen | LT_File, LogLv_Error, "Set socket FIONBIO error : %d", WSAGetLastError());
 			return INVALID_SOCKET;
 		}
 		if (!AddEvent())
@@ -1695,7 +1633,7 @@ SOCKET FxConnectSock::Connect()
 		{
 //			m_pLock.UnLock();
 			PushNetEvent(NETEVT_CONN_ERR, errno);
-			LogScreen(LogLv_Error, "connect error id : %d", errno);
+			LogFun(LT_Screen | LT_File, LogLv_Error, "connect error id : %d", errno);
 			Close();
 			return INVALID_SOCKET;
 		}
@@ -1779,7 +1717,6 @@ void FxConnectSock::OnConnect()
 
 	if (false == PostRecv())
 	{
-		LogScreen(LogLv_Error, "%s", "false == PostRecv()");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == PostRecv()");
 
 		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
@@ -1793,7 +1730,6 @@ void FxConnectSock::OnConnect()
 	socklen_t nLen = sizeof(nError);
 	if (getsockopt(GetSock(), SOL_SOCKET, SO_ERROR, &nError, &nLen) < 0)
 	{
-		LogScreen(LogLv_Error, "getsockopt errno : %d", errno);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "getsockopt errno : %d", errno);
 
 		PushNetEvent(NETEVT_CONN_ERR, errno);
@@ -1803,7 +1739,6 @@ void FxConnectSock::OnConnect()
 
 	if (nError != 0)
 	{
-		LogScreen(LogLv_Error, "getsockopt errno : %d", nError);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "getsockopt errno : %d", nError);
 
 		PushNetEvent(NETEVT_CONN_ERR, nError);
@@ -1822,7 +1757,6 @@ void FxConnectSock::OnConnect()
 
 	if (!m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
 	{
-		LogScreen(LogLv_Error, "%s", "m_poIoThreadHandler->ChangeEvent");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "m_poIoThreadHandler->ChangeEvent");
 
 		PushNetEvent(NETEVT_CONN_ERR, errno);
@@ -1895,7 +1829,6 @@ void FxConnectSock::OnRecv(bool bRet, int dwBytes)
 
 	if (false == bRet)
 	{
-		LogScreen(LogLv_Error, "false == bRet errno : %d", WSAGetLastError());
 		LogFun(LT_Screen | LT_File, LogLv_Error, "false == bRet errno : %d", WSAGetLastError());
 
 		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
@@ -1916,7 +1849,6 @@ void FxConnectSock::OnRecv(bool bRet, int dwBytes)
 	int nLen = int(dwBytes);
 	if (m_poRecvBuf->CostBuff(nLen))
 	{
-		//LogScreen(LogLv_Error, "m_poRecvBuf->CostBuff error");
 		//LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->CostBuff error");
 		//
 		//InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
@@ -1929,7 +1861,6 @@ void FxConnectSock::OnRecv(bool bRet, int dwBytes)
 	nLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
 	if (nLen <= 0)
 	{
-		LogScreen(LogLv_Error, "nLen <= 0");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "nLen <= 0");
 
 		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
@@ -1969,7 +1900,6 @@ void FxConnectSock::OnRecv(bool bRet, int dwBytes)
 			m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen);
 			if (-1 == m_nPacketLen)
 			{
-				LogScreen(LogLv_Error, "%s", "header error");
 				LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "header error");
 
 				InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
@@ -1998,7 +1928,6 @@ void FxConnectSock::OnRecv(bool bRet, int dwBytes)
 						int nNewLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
 						if ((int)(GetDataHeader()->GetHeaderLength()) - nLen > nNewLen)
 						{
-							LogScreen(LogLv_Error, "%s", "header error");
 							LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "header error");
 
 							InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
@@ -2012,7 +1941,6 @@ void FxConnectSock::OnRecv(bool bRet, int dwBytes)
 						m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, GetDataHeader()->GetHeaderLength());
 						if (0 >= m_nPacketLen)
 						{
-							LogScreen(LogLv_Error, "%s", "header error");
 							LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "header error");
 
 							InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
@@ -2075,7 +2003,6 @@ void FxConnectSock::OnRecv(bool bRet, int dwBytes)
 	{
 		if (false == PostRecv())
 		{
-			LogScreen(LogLv_Error, "%s", "false == PostRecv");
 			LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == PostRecv");
 
 			m_dwLastError = WSAGetLastError();
@@ -2114,7 +2041,6 @@ void FxConnectSock::OnSend(bool bRet, int dwBytes)
 		{
 			if (false == PostSend())
 			{
-				LogScreen(LogLv_Error, "%s", "false == PostSend");
 				LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == PostSend");
 
 				m_dwLastError = WSAGetLastError();
@@ -2140,7 +2066,6 @@ void FxConnectSock::OnSend(bool bRet, int dwBytes)
 	{
 		if (false == PostSend())
 		{
-			LogScreen(LogLv_Error, "%s", "false == PostSend");
 			LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == PostSend");
 
 			m_dwLastError = WSAGetLastError();
@@ -2153,7 +2078,6 @@ bool FxConnectSock::PostRecv()
 {
 	if (false == IsConnect())
 	{
-		LogScreen(LogLv_Error, "%s", "false == IsConnect()");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnect()");
 
 		return false;
@@ -2174,7 +2098,6 @@ bool FxConnectSock::PostRecv()
 	int nLen = m_poRecvBuf->GetInCursorPtr(m_stRecvIoData.stWsaBuf.buf);
 	if (0 >= nLen)
 	{
-		LogScreen(LogLv_Error, "%s", "0 >= nLen");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "0 >= nLen");
 
 		// ��ʱ�� �϶���������//
@@ -2193,7 +2116,6 @@ bool FxConnectSock::PostRecv()
 	{
 		if (WSAGetLastError() != WSA_IO_PENDING)
 		{
-			LogScreen(LogLv_Error, "WSARecv errno : %d", WSAGetLastError());
 			LogFun(LT_Screen | LT_File, LogLv_Error, "WSARecv errno : %d", WSAGetLastError());
 
 			InterlockedCompareExchange(&m_nPostRecv, 0, 1);
@@ -2208,7 +2130,6 @@ bool FxConnectSock::PostClose()
 {
 	if (false == IsConnect())
 	{
-		LogScreen(LogLv_Error, "%s", "false == IsConnect()");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnect()");
 
 		return false;
@@ -2219,7 +2140,6 @@ bool FxConnectSock::PostClose()
 
 	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(0), (ULONG_PTR)this, &m_stRecvIoData.stOverlapped))
 	{
-		LogScreen(LogLv_Error, "PostQueuedCompletionStatus errno : %d", WSAGetLastError());
 		LogFun(LT_Screen | LT_File, LogLv_Error, "PostQueuedCompletionStatus errno : %d", WSAGetLastError());
 
 		return false;
@@ -2276,7 +2196,6 @@ void FxConnectSock::OnRecv()
 {
 	if (false == IsConnect())
 	{
-		LogScreen(LogLv_Error, "%s", "false == IsConnect()");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnect()");
 
 		return;
@@ -2302,7 +2221,6 @@ void FxConnectSock::OnRecv()
 	{
 		if ((errno != EAGAIN) && (errno != EINPROGRESS) && (errno != EINTR))
 		{
-			LogScreen(LogLv_Error, "recv errno : %d", errno);
 			LogFun(LT_Screen | LT_File, LogLv_Error, "recv errno : %d", errno);
 
 			PushNetEvent(NETEVT_ERROR, errno);
@@ -2326,7 +2244,6 @@ void FxConnectSock::OnRecv()
 		nLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
 		if (nLen <= 0)
 		{
-			LogScreen(LogLv_Error, "%s", "nLen <= 0");
 			LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "nLen <= 0");
 
 			PushNetEvent(NETEVT_ERROR, NET_RECVBUFF_ERROR);
@@ -2365,7 +2282,6 @@ void FxConnectSock::OnRecv()
 				m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen);
 				if (-1 == m_nPacketLen)
 				{
-					LogScreen(LogLv_Error, "%s", "header error");
 					LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "header error");
 
 					PushNetEvent(NETEVT_ERROR, NET_RECV_ERROR);
@@ -2392,7 +2308,6 @@ void FxConnectSock::OnRecv()
 							int nNewLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
 							if ((int)(GetDataHeader()->GetHeaderLength()) - nLen > nNewLen)
 							{
-								LogScreen(LogLv_Error, "%s", "header error");
 								LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "header error");
 
 								PushNetEvent(NETEVT_ERROR, NET_RECVBUFF_ERROR);
@@ -2404,7 +2319,6 @@ void FxConnectSock::OnRecv()
 							m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, GetDataHeader()->GetHeaderLength());
 							if (0 >= m_nPacketLen)
 							{
-								LogScreen(LogLv_Error, "%s", "header error");
 								LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "header error");
 
 								PushNetEvent(NETEVT_ERROR, NET_RECVBUFF_ERROR);
@@ -2466,7 +2380,6 @@ void FxConnectSock::OnSend()
 {
 	if (!IsConnect())
 	{
-		LogScreen(LogLv_Error, "%s", "false == IsConnect()");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnect()");
 
 		return;
@@ -2475,7 +2388,6 @@ void FxConnectSock::OnSend()
 	m_bSending = false;
 	if (!PostSend())
 	{
-		LogScreen(LogLv_Error, "%s", "false == PostSend()");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == PostSend()");
 
 		PushNetEvent(NETEVT_ERROR, errno);

@@ -184,7 +184,7 @@ char* PrintTrace()
 	static char strTrace[1024];
 	memset(strTrace, 0, 1024);
 	int nLen = 0;
-	nLen += sprintf(strTrace + nLen, "%s\n", "\n [Trace] ___________begin___________");
+	nLen += sprintf(strTrace + nLen, "%s\n", " [Trace] ___________begin___________");
 #ifdef WIN32
 	unsigned int   i;
 	void         * stack[100];

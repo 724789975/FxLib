@@ -16,15 +16,15 @@
 
 enum ESocketState
 {
-	SSTATE_INVALID = 0,	// ÎÞÐ§//
-	//SSTATE_START_LISTEN, // ¼àÌý¿ªÊ¼ÇëÇó×´Ì¬//
-	SSTATE_LISTEN,		// ¼àÌý×´Ì¬//
-	SSTATE_STOP_LISTEN,	// ¼àÌýÍ£Ö¹ÇëÇó×´Ì¬//
+	SSTATE_INVALID = 0,	// ï¿½ï¿½Ð§//
+	//SSTATE_START_LISTEN, // ï¿½ï¿½ï¿½ï¿½Ê¼ï¿½ï¿½ï¿½ï¿½×´Ì¬//
+	SSTATE_LISTEN,		// ï¿½ï¿½ï¿½ï¿½×´Ì¬//
+	SSTATE_STOP_LISTEN,	// ï¿½ï¿½ï¿½ï¿½Í£Ö¹ï¿½ï¿½ï¿½ï¿½×´Ì¬//
 	//SSTATE_ACCEPT,
-	SSTATE_CONNECT,		// Á´½ÓÇëÇó×´Ì¬//
-	SSTATE_ESTABLISH,	// Á´½Ó½¨Á¢×´Ì¬//
-	//SSTATE_DATA,		 // Êý¾Ý·¢ËÍ×´Ì¬//
-	SSTATE_CLOSE,		// ¹Ø±ÕÇëÇó×´Ì¬//
+	SSTATE_CONNECT,		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬//
+	SSTATE_ESTABLISH,	// ï¿½ï¿½ï¿½Ó½ï¿½ï¿½ï¿½×´Ì¬//
+	//SSTATE_DATA,		 // ï¿½ï¿½Ý·ï¿½ï¿½ï¿½×´Ì¬//
+	SSTATE_CLOSE,		// ï¿½Ø±ï¿½ï¿½ï¿½ï¿½ï¿½×´Ì¬//
 	//SSTATE_OK,
 	SSTATE_RELEASE,
 };
@@ -92,7 +92,7 @@ public:
 #ifdef WIN32
 	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred);		//
 #else
-	virtual void OnParserIoEvent(int dwEvents);		// ´¦ÀíÍê³É¶Ë¿ÚÊÂ¼þ//
+	virtual void OnParserIoEvent(int dwEvents);		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¶Ë¿ï¿½ï¿½Â¼ï¿½//
 #endif // WIN32
 
 public:
@@ -154,7 +154,7 @@ public:
 
 	IFxDataHeader* GetDataHeader();
 
-	void SetIoThread(FxIoThread* pIoThread){ m_poIoThreadHandler = pIoThread;}// LogScreen("thread id %d, socket id : %d", m_poEpollHandler, GetSockId()); }
+	void SetIoThread(FxIoThread* pIoThread){ m_poIoThreadHandler = pIoThread;}
 	bool AddEvent();
 
 	virtual void ProcEvent();
@@ -167,14 +167,14 @@ public:
 
 	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred);		//
 #else
-	virtual void OnParserIoEvent(int dwEvents);		// ´¦ÀíÍê³É¶Ë¿ÚÊÂ¼þ//
+	virtual void OnParserIoEvent(int dwEvents);		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¶Ë¿ï¿½ï¿½Â¼ï¿½//
 #endif // WIN32
 
 private:
 
 	bool PostSend();
 	bool PostSendFree();
-	bool SendImmediately();						// ½«Òª»º³åÇøÖÐÊý¾ÝÈ«²¿·¢ËÍ//
+	bool SendImmediately();						// ï¿½ï¿½Òªï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È«ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//
 
 	void	__ProcEstablish();
 	void	__ProcAssociate();
@@ -197,7 +197,7 @@ private:
 	ESocketState		m_nState;
 
 	TEventQueue<SNetEvent>	m_oEvtQueue;
-	bool					m_bSendLinger;		// ·¢ËÍÑÓ³Ù£¬Ö±µ½³É¹¦£¬»òÕß30´Îºó//
+	bool					m_bSendLinger;		// ï¿½ï¿½ï¿½ï¿½ï¿½Ó³Ù£ï¿½Ö±ï¿½ï¿½ï¿½É¹ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½30ï¿½Îºï¿½//
 
 	FxCriticalLock			m_oLock;
 
@@ -207,17 +207,17 @@ private:
 
 	FxIoThread* m_poIoThreadHandler;
 
-	int m_nNeedData;        // Î´´¦ÀíÍêµÄÂß¼­Êý¾Ý°ü»¹ÐèÒªµÄ³¤¶È//
-	int m_nPacketLen;       // Î´´¦ÀíÍêµÄÂß¼­Êý¾Ý°ü³¤¶È//
+	int m_nNeedData;        // Î´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¼ï¿½ï¿½ï¿½Ý°ï¿½ï¿½ï¿½Òªï¿½Ä³ï¿½ï¿½ï¿½//
+	int m_nPacketLen;       // Î´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¼ï¿½ï¿½ï¿½Ý°ï¿½ï¿½//
 
 private:
 #ifdef WIN32
 	SPerIoData			m_stRecvIoData;
 	SPerIoData			m_stSendIoData;
-	LONG                m_nPostRecv;        // Î´¾öµÄWSARecv²Ù×÷Êý//
-	LONG                m_nPostSend;        // Î´¾öµÄWSASend²Ù×÷Êý//
+	LONG                m_nPostRecv;        // Î´ï¿½ï¿½ï¿½ï¿½WSARecvï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//
+	LONG                m_nPostSend;        // Î´ï¿½ï¿½ï¿½ï¿½WSASendï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//
 
-	UINT32              m_dwLastError;      // ×îºóµÄ³ö´íÐÅÏ¢//
+	UINT32              m_dwLastError;      // ï¿½ï¿½ï¿½Ä³ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢//
 #else
 	bool				m_bSending;
 #endif // WIN32

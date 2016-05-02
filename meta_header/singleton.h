@@ -7,22 +7,22 @@ private:\
 public:\
     static bool CreateInstance()\
     {\
-        if(NULL == m_poInstance)\
+        if(0 == m_poInstance)\
             m_poInstance = new cls;\
-        return m_poInstance != NULL;\
+        return m_poInstance != 0;\
     }\
     static cls* Instance(){ return m_poInstance; }\
     static void DestroyInstance()\
     {\
-        if(m_poInstance != NULL)\
+        if(m_poInstance != 0)\
         {\
             delete m_poInstance;\
-            m_poInstance = NULL;\
+            m_poInstance = 0;\
         }\
     }
 
 #define IMPLEMENT_SINGLETON(cls) \
-    cls* cls::m_poInstance = NULL;
+    cls* cls::m_poInstance = 0;
 
 template<class T>
 class TSingletion
@@ -36,7 +36,7 @@ public:
 		if (!m_pInstance)
 		{
 			m_pInstance = new T();
-			return m_pInstance != NULL;
+			return m_pInstance != 0;
 		}
 		return false;
 	}
@@ -46,7 +46,7 @@ public:
 		if (m_pInstance)
 		{
 			delete m_pInstance;
-			m_pInstance = NULL;
+			m_pInstance = 0;
 			return true;
 		}
 		return false;

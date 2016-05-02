@@ -119,7 +119,6 @@ bool CLuaEngine::CallFunction(const char* pFunctionName,
 	int ret = lua_pcall(GetLuaState(), 0, nReturnNum, 0);
 	if (ret != 0)
 	{
-		LogScreen(LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
 		LogFun(LT_Screen | LT_File, LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
 		lua_pop(GetLuaState(), 1);
 		return false;
@@ -142,7 +141,6 @@ bool CLuaEngine::LoadFile(const char* pFileName)
 	int nRet = 0;
 	if (NULL == m_pBackState)
 	{
-		LogScreen(LogLv_Error, "%s", "lua_State is NULL");
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "lua_State is NULL");
 		return false;
 	}
@@ -166,7 +164,6 @@ bool CLuaEngine::LoadFile(const char* pFileName)
 	nRet = luaL_dofile(m_pBackState, pFileName);
 	if (nRet != 0)
 	{
-		LogScreen(LogLv_Error, "lua_loadfile : %s, result : %d, err : %s", pFileName, nRet, lua_tostring(m_pBackState, -1));
 		LogFun(LT_Screen | LT_File, LogLv_Error, "lua_loadfile : %s, result : %d, err : %s", pFileName, nRet, lua_tostring(m_pBackState, -1));
 		return false;
 	}
