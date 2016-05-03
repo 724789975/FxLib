@@ -25,7 +25,7 @@ void CSocketSession::OnClose(void)
 
 void CSocketSession::OnError(UINT32 dwErrorNo)
 {
-	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d, connect addr : %d, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
+	LogFun(LT_Screen | LT_File, LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
 }
 
 class DBQuery : public IQuery
@@ -79,7 +79,10 @@ void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
 	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
 
-	Send(pBuf, dwLen);
+	if (!Send(pBuf, dwLen))
+	{
+		Close();
+	}
 
 	//DBQuery * pQuery = new DBQuery;
 	//pQuery->m_strQuery = pBuf;

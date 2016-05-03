@@ -36,8 +36,15 @@ int main()
 		{
 			//sprintf(szMsg, "%s", "select * from role");
 			//++i;
-			sprintf(szMsg, "%d", ++i);
-			pSession->Send(szMsg, 1024);
+			sprintf(szMsg, "%d", i);
+			if (!pSession->Send(szMsg, 1024))
+			{
+				//pSession->Close();
+			}
+			else
+			{
+				++i;
+			}
 			//i %= 20;
 			//if (i == 0)
 			//{

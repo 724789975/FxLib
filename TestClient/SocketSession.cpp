@@ -23,12 +23,12 @@ void CSocketSession::OnConnect(void)
 void CSocketSession::OnClose(void)
 {
 	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
-//	Reconnect();
+	Reconnect();
 }
 
 void CSocketSession::OnError(UINT32 dwErrorNo)
 {
-	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d, error no : %d\n", GetRemoteIPStr(), GetRemotePort(), dwErrorNo);
+	LogFun(LT_Screen | LT_File, LogLv_Debug, "ip : %s, port : %d, error no : %d\n", GetRemoteIPStr(), GetRemotePort(), dwErrorNo);
 }
 
 void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)

@@ -129,7 +129,7 @@ public:
 		return false;
 	}
 
-	//只能获取开头的那段数据 用来获取信息头//
+	//只能获取开头的那段数据 用来获取信息头 或者是所有数据//
 	const char* GetData(unsigned int dwLen)
 	{
 		assert(m_eType == ENetStreamType_Read);
@@ -141,6 +141,19 @@ public:
 	}
 
 	bool WriteData(char* pData, unsigned int dwLen)
+	{
+		assert(m_eType == ENetStreamType_Write);
+		if (dwLen <= m_dwLen)
+		{
+			memcpy(m_pData, pData, dwLen);
+			m_pData += dwLen;
+			m_dwLen -= dwLen;
+			return true;
+		}
+		return false;
+	}
+
+	bool WriteData(const char* pData, unsigned int dwLen)
 	{
 		assert(m_eType == ENetStreamType_Write);
 		if (dwLen <= m_dwLen)

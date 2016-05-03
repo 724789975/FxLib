@@ -5,6 +5,7 @@
 #include "connection.h"
 #include "iothread.h"
 #include "net.h"
+#include "netstream.h"
 
 #ifdef WIN32
 struct tcp_keepalive {
@@ -846,7 +847,7 @@ bool FxConnectSock::Close()
 //		assert(0);
 	}
 
-	if (IsConnect())
+	if (IsConnected())
 	{
 		SetState(SSTATE_CLOSE);
 	}
@@ -862,7 +863,7 @@ bool FxConnectSock::Close()
 	shutdown(GetSock(), SHUT_RD);
 	m_poIoThreadHandler->DelEvent(GetSock());
 	// ��bug Windows�� �Ͳ����� �޸ĺ���˵//
-	SendImmediately();
+	//SendImmediately();
 #endif	//WIN32
 
 #ifdef WIN32
@@ -928,7 +929,7 @@ void FxConnectSock::Reset()
 // win�³�������ʱ ҪͶ�ݹر���Ϣ ��Ϊ��Ҫһ��post�رյĹ��//
 bool FxConnectSock::Send(const char* pData, int dwLen)
 {
-	if (false == IsConnect())
+	if (false == IsConnected())
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "socket not connected");
 
@@ -980,22 +981,21 @@ bool FxConnectSock::Send(const char* pData, int dwLen)
 #endif // WIN32
 		return false;
 	}
-	while (!m_poSendBuf->PushBuff((char*)(pDataHeader->BuildSendPkgHeader(dwLen)), pDataHeader->GetHeaderLength()))
-	{
-		if (!m_bSendLinger || 30 < ++nSendCount)  // ����30�λ�û����ȥ������Ϊʧ�ܣ�ʧ�ܽ���߼��㴦��//
-		{
-			return false;
-		}
-		FxSleep(1);
-	}
 
-	while (!m_poSendBuf->PushBuff(pData, dwLen))
+	// 这个是在主线程调用 所以 声明为静态就可以了 防止重复生成 占用空间
+	static char pTemData[RECV_BUFF_SIZE] = {0};
+	CNetStream oNetStream(ENetStreamType_Write, pTemData, dwLen + pDataHeader->GetHeaderLength());
+	oNetStream.WriteData((char*)(pDataHeader->BuildSendPkgHeader(dwLen)), pDataHeader->GetHeaderLength());
+	oNetStream.WriteData(pData, dwLen);
+
+	while (!m_poSendBuf->PushBuff(pTemData, dwLen + pDataHeader->GetHeaderLength()))
 	{
 		if (!m_bSendLinger || 30 < ++nSendCount)  // ����30�λ�û����ȥ������Ϊʧ�ܣ�ʧ�ܽ���߼��㴦��//
 		{
+			LogFun(LT_Screen | LT_File, LogLv_Critical, "%s", "send buffer overflow!!!!!!!!")
 			return false;
 		}
-		FxSleep(1);
+		FxSleep(10);
 	}
 
 	if (false == PostSendFree())
@@ -1043,7 +1043,7 @@ bool FxConnectSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
 bool FxConnectSock::PostSend()
 {
 #ifdef WIN32
-	if (false == IsConnect())
+	if (false == IsConnected())
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnect()");
 
@@ -1086,7 +1086,7 @@ bool FxConnectSock::PostSend()
 
 	return true;
 #else
-	if (false == IsConnect())
+	if (false == IsConnected())
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnect()");
 
@@ -1177,7 +1177,7 @@ bool FxConnectSock::PostSendFree()
 #ifdef WIN32
 	return PostSend();
 #else
-	if (false == IsConnect())
+	if (false == IsConnected())
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnect()");
 
@@ -1246,7 +1246,7 @@ bool FxConnectSock::SendImmediately()
 
 	while (true)
 	{
-		if (false == IsConnect())
+		if (false == IsConnected())
 		{
 			return false;
 		}
@@ -1443,7 +1443,7 @@ bool FxConnectSock::AddEvent()
 
 SOCKET FxConnectSock::Connect()
 {
-	if (IsConnect())
+	if (IsConnected())
 	{
 		return INVALID_SOCKET;
 	}
@@ -1837,7 +1837,7 @@ void FxConnectSock::OnRecv(bool bRet, int dwBytes)
 		return;
 	}
 
-	if (!IsConnect())
+	if (!IsConnected())
 	{
 		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
 		return;
@@ -2022,7 +2022,7 @@ void FxConnectSock::OnSend(bool bRet, int dwBytes)
 		return;
 	}
 
-	if (false == IsConnect())
+	if (false == IsConnected())
 	{
 		InterlockedCompareExchange(&m_nPostSend, 0, m_nPostSend);
 		return;
@@ -2076,9 +2076,9 @@ void FxConnectSock::OnSend(bool bRet, int dwBytes)
 
 bool FxConnectSock::PostRecv()
 {
-	if (false == IsConnect())
+	if (false == IsConnected())
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnect()");
+		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnected()");
 
 		return false;
 	}
@@ -2128,9 +2128,9 @@ bool FxConnectSock::PostRecv()
 
 bool FxConnectSock::PostClose()
 {
-	if (false == IsConnect())
+	if (false == IsConnected())
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnect()");
+		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnected()");
 
 		return false;
 	}
@@ -2164,7 +2164,7 @@ void FxConnectSock::OnParserIoEvent(int dwEvents)
 		}
 		return;
 	}
-	if (!IsConnect())
+	if (!IsConnected())
 	{
 		PushNetEvent(NETEVT_ERROR, errno);
 		Close();
@@ -2194,9 +2194,9 @@ void FxConnectSock::OnParserIoEvent(int dwEvents)
 
 void FxConnectSock::OnRecv()
 {
-	if (false == IsConnect())
+	if (false == IsConnected())
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnect()");
+		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnected()");
 
 		return;
 	}
@@ -2378,9 +2378,9 @@ void FxConnectSock::OnRecv()
 
 void FxConnectSock::OnSend()
 {
-	if (!IsConnect())
+	if (!IsConnected())
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnect()");
+		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "false == IsConnected()");
 
 		return;
 	}

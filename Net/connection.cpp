@@ -48,7 +48,11 @@ void FxConnection::Reset()
 
 bool FxConnection::IsConnected(void)
 {
-	return (CONN_OK == m_nConnStat);
+	if (m_poSock)
+	{
+		return m_poSock->IsConnected() && (CONN_OK == m_nConnStat);
+	}
+	return false;
 }
 
 bool FxConnection::IsConnecting(void)

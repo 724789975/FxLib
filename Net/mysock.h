@@ -148,7 +148,7 @@ public:
 	void SetConnection(FxConnection* poConnection){ m_poConnection = poConnection; }
 	FxConnection* GetConnection(){ return m_poConnection; }
 
-	bool IsConnect(){ return m_nState == SSTATE_ESTABLISH; }
+	bool IsConnected(){ return m_nState == SSTATE_ESTABLISH; }
 	void SetState(ESocketState eState){ m_nState = eState; }
 	ESocketState GetState(){ return m_nState; }
 
