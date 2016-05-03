@@ -7,6 +7,8 @@
 #include <arpa/inet.h>
 #endif // WIN32
 
+#include <string.h>
+
 
 enum ENetStreamType
 {
@@ -129,7 +131,7 @@ public:
 		return false;
 	}
 
-	//Ö»ÄÜ»ñÈ¡¿ªÍ·µÄÄÇ¶ÎÊı¾İ ÓÃÀ´»ñÈ¡ĞÅÏ¢Í· »òÕßÊÇËùÓĞÊı¾İ//
+	//Ö»ï¿½Ü»ï¿½È¡ï¿½ï¿½Í·ï¿½ï¿½ï¿½Ç¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È¡ï¿½ï¿½Ï¢Í· ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½//
 	const char* GetData(unsigned int dwLen)
 	{
 		assert(m_eType == ENetStreamType_Read);
