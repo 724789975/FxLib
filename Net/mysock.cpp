@@ -227,9 +227,8 @@ bool FxListenSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
 		FxSleep(1);
 	}
 
-	while(!m_poIoThreadHandler->PushSock(this))
+	while (!FxNetModule::Instance()->PushNetEvent(this))
 	{
-		break;
 		FxSleep(1);
 	}
 
@@ -1029,17 +1028,10 @@ bool FxConnectSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
 		FxSleep(1);
 	}
 
-#ifdef WIN32
 	while (!FxNetModule::Instance()->PushNetEvent(this))
 	{
 		FxSleep(1);
 	}
-#else
-	while (!m_poIoThreadHandler->PushSock(this))
-	{
-		FxSleep(1);
-	}
-#endif // !WIN32
 	return true;
 }
 
