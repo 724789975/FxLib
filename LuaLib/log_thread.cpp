@@ -103,11 +103,18 @@ void LogThread::BeginLog(unsigned int dwLogType, char* & strLog, unsigned int& d
 {
 	m_pLock->Lock();
 	dwIndex = m_dwInIndex;
-	m_dwInIndex = (++m_dwInIndex) % LOGITEMNUM;
-	m_oLogItems[dwIndex].m_dwLogType = dwLogType;
-	m_oLogItems[dwIndex].m_eState = LogItem::LS_Writing;
-	memset(m_oLogItems[dwIndex].m_strLog, 0, LOGLENGTH);
-	strLog = m_oLogItems[dwIndex].m_strLog;
+	if (m_oLogItems[dwIndex].m_eState == LogItem::LS_None)
+	{
+		m_dwInIndex = (++m_dwInIndex) % LOGITEMNUM;
+		m_oLogItems[dwIndex].m_dwLogType = dwLogType;
+		m_oLogItems[dwIndex].m_eState = LogItem::LS_Writing;
+		memset(m_oLogItems[dwIndex].m_strLog, 0, LOGLENGTH);
+		strLog = m_oLogItems[dwIndex].m_strLog;
+	}
+	else
+	{
+		strLog = NULL;
+	}
 	m_pLock->UnLock();
 }
 

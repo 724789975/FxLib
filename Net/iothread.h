@@ -23,7 +23,6 @@ public:
 	bool					Init(UINT32 dwMaxSock);
 	void					Uninit();
 
-	bool PushSock(IFxSocket* poSock);
 #ifdef WIN32
 	bool AddEvent(int hSock, IFxSocket* poSock);
 #else
@@ -53,7 +52,6 @@ protected:
 	UINT32				m_dwMaxSock;
 	bool				m_bStop;
 
-	TEventQueue<IFxSocket*>       m_sockQueue;		//因为事件都是在主线程处理的 所以 先把事件暂存一下 等io线程处理好后 再投递到主线程//
 #ifdef WIN32
 #else
 	int					m_hEpoll;

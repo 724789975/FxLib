@@ -50,8 +50,6 @@ bool FxIoThread::Init(UINT32 dwMaxSock)
 		return false;
 	}
 #else
-	m_sockQueue.Init(dwMaxSock);
-
 	m_dwMaxSock = dwMaxSock;
 	m_pEvents = new epoll_event[dwMaxSock];
 	if (NULL == m_pEvents)
@@ -97,25 +95,6 @@ void FxIoThread::Uninit()
 
 void FxIoThread::__DealEpollSock()
 {
-//#ifdef WIN32
-//#else
-	IFxSocket** ppSock = m_sockQueue.PopFront();
-	while (ppSock)
-	{
-		IFxSocket* poSock = *ppSock;
-		if (NULL == poSock)
-		{
-			continue;
-		}
-		while (!FxNetModule::Instance()->PushNetEvent(poSock))
-		{
-			FxSleep(1);
-		}
-//		poSock->ProcEvent();
-
-		ppSock = m_sockQueue.PopFront();
-	}
-//#endif	//WIN32
 }
 
 #ifdef WIN32
@@ -240,27 +219,6 @@ void FxIoThread::ThrdFunc()
 		FxSleep(1);
 	}
 	LogFun(LT_Screen, LogLv_Info, "thread id %d end", m_poThrdHandler->GetThreadId());
-}
-
-bool FxIoThread::PushSock(IFxSocket* poSock)
-{
-    // ���20�λ����޷����ȥ���Ǿ���Ϊʧ��
-    if (NULL == poSock)
-    {
-        return false;
-    }
-
-    int nTime =0;
-    while (!m_sockQueue.PushBack(poSock))
-    {
-        if (20 < nTime++)
-        {
-            return false;
-        }
-        FxSleep(1);
-    }
-
-    return true;
 }
 
 bool FxIoThread::__DealEpollData()

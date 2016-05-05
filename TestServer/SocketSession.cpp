@@ -81,6 +81,7 @@ void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 
 	if (!Send(pBuf, dwLen))
 	{
+		LogFun(LT_Screen | LT_File, LogLv_Debug, "ip : %s, port : %d, recv %s send error", GetRemoteIPStr(), GetRemotePort(), pBuf);
 		Close();
 	}
 

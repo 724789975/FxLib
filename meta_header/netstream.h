@@ -1,4 +1,4 @@
-#ifndef __NetStream_H__
+﻿#ifndef __NetStream_H__
 #define __NetStream_H__
 
 #ifdef WIN32
