@@ -2,7 +2,7 @@
 #include <time.h>
 
 // [12-06-07] hum add: Max socket count
-#define MAX_SOCKET_COUNT UINT32(64)
+#define MAX_SOCKET_COUNT UINT32(128)
 
 IMPLEMENT_SINGLETON(FxMySockMgr)
 
@@ -63,7 +63,7 @@ FxListenSock* FxMySockMgr::Create(UINT32 dwListenId, IFxSessionFactory* pSession
 		return &m_mapListenSocks[dwListenId];
 	}
 
-	//ÕâÀïµÄ¿½±´¹¹ÔìÓÐÎÊÌâ~~~~//
+	//ï¿½ï¿½ï¿½ï¿½Ä¿ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½~~~~//
 //	m_mapListenSocks[dwListenId] = FxListenSock();
 	if (!m_mapListenSocks[dwListenId].IFxListenSocket::Init(pSessionFactory))
 	{

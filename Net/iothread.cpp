@@ -204,17 +204,20 @@ bool FxIoThread::DelEvent(int hSock)
 {
 	if (m_hEpoll < 0)
 	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "m_hEpoll < 0");
 		return false;
 	}
 
 	if (hSock < 0)
 	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "socket : %d", hSock);
 		return false;
 	}
 
 	epoll_event e;
 	if (epoll_ctl(m_hEpoll, EPOLL_CTL_DEL, hSock, &e) < 0)
 	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "epoll_ctl errno : %d", errno);
 		return false;
 	}
 	return true;

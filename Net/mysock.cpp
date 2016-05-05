@@ -1351,7 +1351,6 @@ void FxConnectSock::__ProcError(UINT32 dwErrorNo)
 	}
 }
 
-int nTerminate = 0;
 void FxConnectSock::__ProcTerminate()
 {
 	PushNetEvent(NETEVT_RELEASE, 0);
@@ -1394,6 +1393,7 @@ void FxConnectSock::__ProcRelease()
 	{
 		if (GetSockId() != m_poConnection->GetID())
 		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "socket id : %d, connection id : %d, connection addr : %p", GetSockId(), m_poConnection->GetID(), m_poConnection);
 			return;
 		}
 
