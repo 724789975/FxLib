@@ -44,7 +44,6 @@ int main()
 			else
 			{
 				LogFun(LT_Screen | LT_File, LogLv_Debug, "send : %s", szMsg);
-				printf("send : %s\n", szMsg);
 				++i;
 			}
 			//i %= 20;
