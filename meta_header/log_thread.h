@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 #define LOGLENGTH 2048
-#define LOGITEMNUM 16
+#define LOGITEMNUM 2048
 
 class IFxLock;
 

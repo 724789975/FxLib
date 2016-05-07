@@ -22,14 +22,10 @@ void LogThread::ThrdFunc()
 	printf("%s", "thread start !!!!!!!!!!!!!!!!!!!\n");
 	while (true)
 	{
-		unsigned int dwIndex = m_dwInIndex;
-		while (m_dwOutIndex != dwIndex)
 		{
 			if (m_oLogItems[m_dwOutIndex].m_eState == LogItem::LS_None)
 			{
-				// ���ᷢ���;
-				printf("%s", "error state !!!!!!!!!!\n");
-				m_dwOutIndex = (++m_dwOutIndex) % LOGITEMNUM;
+				FxSleep(1);
 			}
 			while (m_oLogItems[m_dwOutIndex].m_eState == LogItem::LS_Writing)
 			{
@@ -37,8 +33,6 @@ void LogThread::ThrdFunc()
 				if (++dwCount > 10)
 				{
 					dwCount = 0;
-					//++m_dwOutIndex;
-					//printf("%s", "can't write end!!!!!!!!!!\n");
 					break;
 				}
 				FxSleep(1);
@@ -67,7 +61,6 @@ void LogThread::ThrdFunc()
 				m_dwOutIndex = (++m_dwOutIndex) % LOGITEMNUM;
 			}
 		}
-		FxSleep(1);
 	}
 	printf("%s", "thread end!!!!!!!!!!!!!!!!!!!\n");
 }
@@ -120,7 +113,9 @@ void LogThread::BeginLog(unsigned int dwLogType, char* & strLog, unsigned int& d
 
 void LogThread::EndLog(unsigned int dwIndex)
 {
+	m_pLock->Lock();
 	m_oLogItems[dwIndex].m_eState = LogItem::LS_WriteEnd;
+	m_pLock->UnLock();
 }
 
 FILE* LogThread::GetLogFile()
