@@ -77,7 +77,7 @@ private:
 
 void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
-	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
+	//LogFun(LT_Screen | LT_File, LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
 
 	if (!Send(pBuf, dwLen))
 	{
@@ -142,7 +142,7 @@ FxSession*	CSessionFactory::CreateSession()
 			pSession->SetDataHeader(oDataHeaderFactory.CreateDataHeader());
 		}
 	}
-	LogFun(LT_Screen, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
+	LogFun(LT_Screen | LT_File, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
 	m_pLock->UnLock();
 	return pSession;
 }
@@ -152,7 +152,7 @@ void CSessionFactory::Release(CSocketSession* pSession)
 	m_pLock->Lock();
 //	m_poolSessions.ReleaseObj(pSession);
 	m_listSession.push_back(pSession);
-	LogFun(LT_Screen, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
+	LogFun(LT_Screen | LT_File, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
 	m_pLock->UnLock();
 }
 

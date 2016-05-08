@@ -110,12 +110,12 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 			{\
 				sprintf(strLog + nLenStr, "%s", PrintTrace());\
 			}\
+			LogThread::Instance()->EndLog(dwIndex);\
 		}\
 		else\
 		{\
 			printf("error log fun !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");\
 		}\
-		LogThread::Instance()->EndLog(dwIndex);\
 	}\
 }
 

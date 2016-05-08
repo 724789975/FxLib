@@ -43,7 +43,7 @@ int main()
 			}
 			else
 			{
-				LogFun(LT_Screen | LT_File, LogLv_Debug, "send : %s", szMsg);
+				//LogFun(LT_Screen | LT_File, LogLv_Debug, "send : %s", szMsg);
 				++i;
 			}
 			//i %= 20;

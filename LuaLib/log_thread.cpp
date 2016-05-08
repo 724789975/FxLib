@@ -96,6 +96,16 @@ void LogThread::BeginLog(unsigned int dwLogType, char* & strLog, unsigned int& d
 {
 	m_pLock->Lock();
 	dwIndex = m_dwInIndex;
+
+	unsigned int dwCount = 0;
+	while (m_oLogItems[dwIndex].m_eState != LogItem::LS_None)
+	{
+		if (dwCount++ > 10)
+		{
+			break;
+		}
+		FxSleep(1);
+	}
 	if (m_oLogItems[dwIndex].m_eState == LogItem::LS_None)
 	{
 		m_dwInIndex = (++m_dwInIndex) % LOGITEMNUM;

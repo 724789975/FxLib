@@ -2098,7 +2098,7 @@ bool FxConnectSock::PostRecv()
 		// ��ʱ�� �϶���������//
 		InterlockedCompareExchange(&m_nPostRecv, 0, 1);
 		PostClose();
-		return true;
+		return false;
 	}
 
 	nLen = 65536 < nLen ? 65536 : nLen;
@@ -2139,6 +2139,8 @@ bool FxConnectSock::PostClose()
 
 		return false;
 	}
+
+	LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "post close");
 
 	return true;
 }
