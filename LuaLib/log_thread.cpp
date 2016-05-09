@@ -80,7 +80,7 @@ bool LogThread::Start()
 	m_poThrdHandler = FxCreateThreadHandler(this, true);
 	if (NULL == m_poThrdHandler)
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "FxCreateThreadHandler failed");
+		printf("%s", "FxCreateThreadHandler failed");
 		return false;
 	}
 

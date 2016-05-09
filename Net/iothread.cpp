@@ -102,7 +102,7 @@ bool FxIoThread::AddEvent(int hSock, IFxSocket* poSock)
 {
 	if (hSock < 0)
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "hSock : %d", hSock);
+		LogFun(LT_Screen | LT_File, LogLv_Error, "hSock : %d, socket id : %d", hSock, poSock->GetSockId());
 		return false;
 	}
 
@@ -115,7 +115,7 @@ bool FxIoThread::AddEvent(int hSock, IFxSocket* poSock)
 	if (NULL == CreateIoCompletionPort((HANDLE)hSock, GetHandle(), (ULONG_PTR)poSock, 0))
 	{
 		int dwErr = WSAGetLastError();
-		LogFun(LT_Screen | LT_File, LogLv_Error, "errno %d", dwErr);
+		LogFun(LT_Screen | LT_File, LogLv_Error, "CreateIoCompletionPort errno %d", dwErr);
 		return false;
 	}
 
@@ -126,7 +126,7 @@ bool FxIoThread::AddEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 {
 	if (hSock < 0)
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "hSock : %d", hSock);
+		LogFun(LT_Screen | LT_File, LogLv_Error, "hSock : %d, socket id : %d", hSock, poSock->GetSockId());
 		return false;
 	}
 
@@ -146,6 +146,7 @@ bool FxIoThread::AddEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 
 	if (epoll_ctl(m_hEpoll, EPOLL_CTL_ADD, hSock, &e) < 0)
 	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "epoll_ctl errno %d", errno);
 		return false;
 	}
 
@@ -206,7 +207,7 @@ bool FxIoThread::DelEvent(int hSock)
 
 void FxIoThread::ThrdFunc()
 {
-	LogFun(LT_Screen, LogLv_Info, "thread id %d start", m_poThrdHandler->GetThreadId());
+	LogFun(LT_Screen | LT_File, LogLv_Info, "thread id %d start", m_poThrdHandler->GetThreadId());
 	while (!m_bStop)
 	{
 		if (!__DealEpollData())
@@ -218,7 +219,7 @@ void FxIoThread::ThrdFunc()
 
 		FxSleep(1);
 	}
-	LogFun(LT_Screen, LogLv_Info, "thread id %d end", m_poThrdHandler->GetThreadId());
+	LogFun(LT_Screen | LT_File, LogLv_Info, "thread id %d end", m_poThrdHandler->GetThreadId());
 }
 
 bool FxIoThread::__DealEpollData()

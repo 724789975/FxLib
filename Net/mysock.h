@@ -164,6 +164,7 @@ public:
 #ifdef WIN32
 	bool PostRecv();
 	bool PostClose();
+	bool PostRecvFree();
 
 	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred);		//
 #else

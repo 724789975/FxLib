@@ -19,6 +19,6 @@ end
 print("bbbbbbb")
 
 for i = 0, 9 do
-	a[i] = i
-	print("test ", a[i])
+	--a[i] = i
+	--print("test ", a[i])
 end
