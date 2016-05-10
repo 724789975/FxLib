@@ -28,7 +28,9 @@ int     MAX_SYS_SEND_BUF = (128 * 1024);
 int     VAL_SO_SNDLOWAT = (64 * 1024);
 #endif // WIN32
 
-int nAccept = 0;
+#define RECV_BUFF_SIZE 8*64*1024
+#define SEND_BUFF_SIZE 64*64*1024
+
 FxListenSock::FxListenSock()
 {
 	// ǧ��Ҫ�������и�ָ�븳ֵ�Ĳ��� ��Ϊ �Ḵ�ƹ���//
@@ -1050,7 +1052,7 @@ bool FxConnectSock::PostSend()
 	int nLen = m_poSendBuf->GetOutCursorPtr(m_stSendIoData.stWsaBuf.buf);
 	if (0 >= nLen)
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Critical, "m_poSendBuf->GetOutCursorPtr, socket : %d, socket id : %d", GetSock(), GetSockId());
+		//LogFun(LT_Screen | LT_File, LogLv_Critical, "m_poSendBuf->GetOutCursorPtr() = %d, socket : %d, socket id : %d", nLen, GetSock(), GetSockId());
 		// 不算失败，只是没有投递而已，下次可以继续//
 		InterlockedCompareExchange(&m_nPostSend, 0, 1);
 		return true;
@@ -1101,6 +1103,7 @@ bool FxConnectSock::PostSend()
 	int nLen = m_poSendBuf->GetOutCursorPtr(pSendBuf);
 	if (0 >= nLen || NULL == pSendBuf)
 	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "m_poSendBuf->GetOutCursorPtr() = %d, socket : %d, socket id : %d", nLen, GetSock(), GetSockId());
 		// ����ʧ�ܣ�ֻ��û��Ͷ�ݶ��ѣ��´ο��Լ���//
 		// [12-03-16] hum modify: ��������Ҫ�����¼�ΪEPOLLIN������OUT�¼�һֱ�����ã�����CPU�ܸ�//
 		if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
@@ -2088,7 +2091,7 @@ bool FxConnectSock::PostRecv()
 	int nLen = m_poRecvBuf->GetInCursorPtr(m_stRecvIoData.stWsaBuf.buf);
 	if (0 >= nLen)
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetInCursorPtr() <= 0, socket : %d, socket id : %d", GetSock(), GetSockId());
+		LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetInCursorPtr() = %d, socket : %d, socket id : %d", nLen, GetSock(), GetSockId());
 
 		// ��ʱ�� �϶���������//
 		InterlockedCompareExchange(&m_nPostRecv, 0, 1);
@@ -2223,6 +2226,7 @@ void FxConnectSock::OnRecv()
 	int nLen = m_poRecvBuf->GetInCursorPtr(pRecvBuff);
 	if (0 >= nLen)
 	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetInCursorPtr() = %d, socket : %d, socket id : %d", nLen, GetSock(), GetSockId());
 		return;
 	}
 

@@ -47,6 +47,7 @@ FxConnectSock* FxMySockMgr::Create()
 	if (!poSock->Init())
 	{
 		Release(poSock);
+        return NULL;
 	}
 
     poSock->SetState(SSTATE_INVALID);

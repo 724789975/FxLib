@@ -105,7 +105,7 @@ int main(int argc, char **argv)
 	//			optarg);
 	//}
 
-	int aaa = CLuaEngine::Instance()->CallNumberFunction<int, char>("add", 3,
+	int aaa = (int)CLuaEngine::Instance()->CallNumberFunction<int, char>("add", 3,
 			4);
 
 	printf("%s",
