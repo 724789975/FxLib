@@ -1356,7 +1356,12 @@ void FxConnectSock::__ProcRecv(UINT32 dwLen)
 	{
 		if (UINT32(-1) == dwLen)
 		{
+#ifdef WIN32
 			PostRecvFree();
+#else
+			PushNetEvent(NETEVT_ERROR, NET_RECV_ERROR);
+			Close();
+#endif
 			return;
 		}
 
