@@ -9,12 +9,6 @@
 LogThread::LogThread()
 {
 	m_pLock = FxCreateThreadLock();
-	m_dwInIndex = 0;
-	m_dwOutIndex = 0;
-	for (int i = 0; i < LOGITEMNUM; ++i)
-	{
-		m_oLogItems[i].Reset();
-	}
 }
 
 void LogThread::ThrdFunc()
@@ -22,45 +16,41 @@ void LogThread::ThrdFunc()
 	printf("%s", "thread start !!!!!!!!!!!!!!!!!!!\n");
 	while (true)
 	{
+		if (m_bPrint)
 		{
-			if (m_oLogItems[m_dwOutIndex].m_eState == LogItem::LS_None)
+			bool bEmpty = false;
+			unsigned int dwIndex = m_dwCurrentIndex ? 0 : 1;
+			if (strlen(m_strScreenLog[dwIndex]) > 0)
 			{
-				FxSleep(1);
+				printf(m_strScreenLog[dwIndex]);
 			}
-			while (m_oLogItems[m_dwOutIndex].m_eState == LogItem::LS_Writing)
+			else
 			{
-				static int dwCount = 0;
-				if (++dwCount > 10)
-				{
-					dwCount = 0;
-					break;
-				}
-				FxSleep(1);
-				if (m_oLogItems[m_dwOutIndex].m_eState != LogItem::LS_Writing)
-				{
-					break;
-				}
+				bEmpty = true;
 			}
-			if (m_oLogItems[m_dwOutIndex].m_eState == LogItem::LS_WriteEnd)
+
+			if (strlen(m_strFileLog[dwIndex]) > 0)
 			{
-				if (m_oLogItems[m_dwOutIndex].m_dwLogType & LT_Screen)
+				FILE* pFile = GetLogFile();
+				assert(pFile);
+				int ret = fprintf(pFile, m_strFileLog[dwIndex]);
+				if (ret < 0)
 				{
-					printf("%s", m_oLogItems[m_dwOutIndex].m_strLog);
+					printf("write to file failed errno : %d\n", ret);
 				}
-				if (m_oLogItems[m_dwOutIndex].m_dwLogType & LT_File)
-				{
-					FILE* pFile = GetLogFile();
-					assert(pFile);
-					int ret = fprintf(pFile, "%s", m_oLogItems[m_dwOutIndex].m_strLog);
-					if (ret <= 0)
-					{
-						printf("write to file failed errno : %d\n", ret);
-					}
-				}
-				m_oLogItems[m_dwOutIndex].Reset();
-				m_dwOutIndex = (++m_dwOutIndex) % LOGITEMNUM;
+				bEmpty = false;
 			}
+
+			if (bEmpty)
+			{
+				printf("write empty~~~~~~~~~~~~~~~~~~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
+			}
+
+			m_bPrint = false;
+			memset(m_strScreenLog[dwIndex], 0, LOGLENGTH);
+			memset(m_strFileLog[dwIndex], 0, LOGLENGTH);
 		}
+		FxSleep(1);
 	}
 	printf("%s", "thread end!!!!!!!!!!!!!!!!!!!\n");
 }
@@ -89,42 +79,53 @@ bool LogThread::Start()
 
 bool LogThread::Init()
 {
+	m_dwInIndex = 0;
+	m_dwOutIndex = 0;
+	memset(m_strScreenLog, 0, 2 * LOGLENGTH);
+	memset(m_strFileLog, 0, 2 * LOGLENGTH);
+	m_dwCurrentIndex = 0;
+	m_bPrint = false;
+
 	return Start();
 }
 
-void LogThread::BeginLog(unsigned int dwLogType, char* & strLog, unsigned int& dwIndex)
+static unsigned int dwScreenLogIndex = 0;
+static unsigned int dwFileLogIndex = 0;
+void LogThread::ReadLog(unsigned int dwLogType, char* strLog)
 {
 	m_pLock->Lock();
-	dwIndex = m_dwInIndex;
-
-	unsigned int dwCount = 0;
-	while (m_oLogItems[dwIndex].m_eState != LogItem::LS_None)
+	bool bPrint = false;
+	if (dwScreenLogIndex + 2048 > LOGLENGTH)
 	{
-		if (dwCount++ > 10)
+		bPrint = true;
+	}
+	if (dwFileLogIndex + 2048 > LOGLENGTH)
+	{
+		bPrint = true;
+	}
+
+	if (bPrint)
+	{
+		unsigned int dwIndex = m_dwCurrentIndex ? 0 : 1;
+		while (m_strScreenLog[dwIndex][0] | m_strFileLog[dwIndex][0])
 		{
-			break;
+			FxSleep(1);
 		}
-		FxSleep(1);
+		dwScreenLogIndex = 0;
+		dwFileLogIndex = 0;
+		m_dwCurrentIndex = dwIndex;
+		m_bPrint = bPrint;
 	}
-	if (m_oLogItems[dwIndex].m_eState == LogItem::LS_None)
+	if (dwLogType & LT_Screen)
 	{
-		m_dwInIndex = (++m_dwInIndex) % LOGITEMNUM;
-		m_oLogItems[dwIndex].m_dwLogType = dwLogType;
-		m_oLogItems[dwIndex].m_eState = LogItem::LS_Writing;
-		memset(m_oLogItems[dwIndex].m_strLog, 0, LOGLENGTH);
-		strLog = m_oLogItems[dwIndex].m_strLog;
+		char* pStr = (char*)(m_strScreenLog[m_dwCurrentIndex]) + dwScreenLogIndex;
+		dwScreenLogIndex += sprintf(pStr, strLog);
 	}
-	else
+	if (dwLogType & LT_File)
 	{
-		strLog = NULL;
+		char* pStr = (char*)(m_strFileLog[m_dwCurrentIndex]) + dwFileLogIndex;
+		dwFileLogIndex += sprintf(pStr, strLog);
 	}
-	m_pLock->UnLock();
-}
-
-void LogThread::EndLog(unsigned int dwIndex)
-{
-	m_pLock->Lock();
-	m_oLogItems[dwIndex].m_eState = LogItem::LS_WriteEnd;
 	m_pLock->UnLock();
 }
 
@@ -153,19 +154,3 @@ FILE* LogThread::GetLogFile()
 	return pFile;
 }
 
-LogThread::LogItem::LogItem()
-{
-
-}
-
-LogThread::LogItem::~LogItem()
-{
-
-}
-
-void LogThread::LogItem::Reset()
-{
-	m_eState = LS_None;
-	m_dwLogType = LT_None;
-	memset(m_strLog, 0, LOGLENGTH);
-}

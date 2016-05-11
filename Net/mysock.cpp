@@ -593,7 +593,7 @@ void FxListenSock::OnAccept(SPerIoData* pstPerIoData)
 			{
 				int dwErr = WSAGetLastError();
 				poSock->PushNetEvent(NETEVT_ERROR, dwErr);
-				LogFun(LT_Screen | LT_File, LogLv_Error, "poSock->PushNetEvent failed, errno : %d", dwErr);
+				LogFun(LT_Screen | LT_File, LogLv_Error, "poSock->PostRecv failed, errno : %d", dwErr);
 
 				poSock->Close();
 			}
@@ -2156,12 +2156,14 @@ bool FxConnectSock::PostRecvFree()
 	LONG nPostRecv = InterlockedCompareExchange(&m_nPostRecv, 1, 0);
 	if (0 != nPostRecv)
 	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "m_nPostRecv == 1, socket : %d, socket id : %d", GetSock(), GetSockId());
 		return false;
 	}
 	ZeroMemory(&m_stRecvIoData.stOverlapped, sizeof(m_stRecvIoData.stOverlapped));
 	//post 失败的时候 再进入这个函数 可能会丢失一次
 	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(-1), (ULONG_PTR)this, &m_stRecvIoData.stOverlapped))
 	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "PostQueuedCompletionStatus error : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 		InterlockedCompareExchange(&m_nPostRecv, 0, 1);
 		return false;
 	}

@@ -5,8 +5,7 @@
 #include "thread.h"
 #include <stdio.h>
 
-#define LOGLENGTH 2048
-#define LOGITEMNUM 2048
+#define LOGLENGTH 2*1024*1024
 
 class IFxLock;
 
@@ -19,28 +18,6 @@ enum LogType
 class LogThread : public TSingletion<LogThread>, public IFxThread
 {
 public:
-	class LogItem
-	{
-		enum LogState
-		{
-			LS_None,
-			LS_Writing,
-			LS_WriteEnd,
-		};
-		friend class LogThread;
-	public:
-		LogItem();
-		~LogItem();
-
-		void Reset();
-
-	private:
-		LogState m_eState;
-		unsigned int m_dwLogType;
-		char m_strLog[LOGLENGTH];
-	};
-
-public:
 	LogThread();
 	virtual ~LogThread(){}
 
@@ -49,8 +26,7 @@ public:
 	bool Start();
 	bool Init();
 
-	void BeginLog(unsigned int dwLogType, char* & strLog, unsigned int& dwIndex);
-	void EndLog(unsigned int dwIndex);
+	void ReadLog(unsigned int dwLogType, char* strLog);
 	FILE* GetLogFile();
 protected:
 private:
@@ -61,7 +37,11 @@ private:
 	IFxLock*				m_pLock;
 	IFxThreadHandler*		m_poThrdHandler;
 
-	LogItem					m_oLogItems[LOGITEMNUM];
+	char					m_strScreenLog[2][LOGLENGTH];
+	char					m_strFileLog[2][LOGLENGTH];
+
+	bool					m_bPrint;
+	unsigned int			m_dwCurrentIndex;
 };
 
 #endif // !__LOG_H__

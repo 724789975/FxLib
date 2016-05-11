@@ -95,9 +95,7 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 #define LogFun(eLogType, eLevel, strFmt, ...)\
 {\
 	{\
-		char* strLog = NULL;\
-		UINT32 dwIndex = 0;\
-		LogThread::Instance()->BeginLog(eLogType, strLog, dwIndex);\
+		char strLog[2048] = {0};\
 		if(strLog && (eLevel < LogLv_Count))\
 		{\
 			int nLenStr = 0;\
@@ -110,7 +108,7 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 			{\
 				sprintf(strLog + nLenStr, "%s", PrintTrace());\
 			}\
-			LogThread::Instance()->EndLog(dwIndex);\
+			LogThread::Instance()->ReadLog(eLogType, strLog);\
 		}\
 		else\
 		{\
