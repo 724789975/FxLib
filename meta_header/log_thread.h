@@ -30,6 +30,7 @@ public:
 	FILE* GetLogFile();
 protected:
 private:
+	bool					m_bStop;
 	
 	unsigned int			m_dwInIndex;
 	unsigned int			m_dwOutIndex;

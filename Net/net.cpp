@@ -115,18 +115,21 @@ void FxNetModule::Uninit()
     __DestroyComponent();
 }
 
-bool FxNetModule::Listen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort)
+IFxListenSocket* FxNetModule::Listen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort)
 {
 	IFxListenSocket* pListenSocket = FxMySockMgr::Instance()->Create(dwListenId, pSessionFactory);
 	if (pListenSocket == NULL)
 	{
-		return false;
+		return NULL;
 	}
-	pListenSocket->Listen(dwIP, dwPort);
-	return true;
+	if (pListenSocket->Listen(dwIP, dwPort))
+	{
+		return pListenSocket;
+	}
+	return NULL;
 }
 
-SOCKET FxNetModule::Connect(FxSession* poSession,  UINT32 dwIP, UINT16 wPort, bool bReconnect /*= false*/)
+SOCKET FxNetModule::Connect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect /*= false*/)
 {
 	//FxConnectSock* poSock = FxMySockMgr::Instance()->Create();
 	//if (NULL == poSock)

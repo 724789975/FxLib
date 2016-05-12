@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <string>
 #include <string.h>
+#include <io.h>
 
 LogThread::LogThread()
 {
@@ -14,7 +15,7 @@ LogThread::LogThread()
 void LogThread::ThrdFunc()
 {
 	printf("%s", "thread start !!!!!!!!!!!!!!!!!!!\n");
-	while (true)
+	while (!m_bStop)
 	{
 		if (m_bPrint)
 		{
@@ -52,11 +53,52 @@ void LogThread::ThrdFunc()
 		}
 		FxSleep(1);
 	}
+
+	if (m_bPrint)
+	{
+		unsigned int dwIndex = m_dwCurrentIndex ? 0 : 1;
+		if (strlen(m_strScreenLog[dwIndex]) > 0)
+		{
+			printf(m_strScreenLog[dwIndex]);
+			memset(m_strScreenLog[dwIndex], 0, LOGLENGTH);
+		}
+
+		if (strlen(m_strFileLog[dwIndex]) > 0)
+		{
+			FILE* pFile = GetLogFile();
+			assert(pFile);
+			int ret = fprintf(pFile, m_strFileLog[dwIndex]);
+			if (ret <= 0)
+			{
+				printf("write to file failed errno : %d\n", ret);
+				memset(m_strFileLog[dwIndex], 0, LOGLENGTH);
+			}
+		}
+	}
+	unsigned int dwIndex = m_dwCurrentIndex;
+	if (strlen(m_strScreenLog[dwIndex]) > 0)
+	{
+		printf(m_strScreenLog[dwIndex]);
+		memset(m_strScreenLog[dwIndex], 0, LOGLENGTH);
+	}
+
+	if (strlen(m_strFileLog[dwIndex]) > 0)
+	{
+		FILE* pFile = GetLogFile();
+		assert(pFile);
+		int ret = fprintf(pFile, m_strFileLog[dwIndex]);
+		if (ret <= 0)
+		{
+			printf("write to file failed errno : %d\n", ret);
+			memset(m_strFileLog[dwIndex], 0, LOGLENGTH);
+		}
+	}
 	printf("%s", "thread end!!!!!!!!!!!!!!!!!!!\n");
 }
 
 void LogThread::Stop()
 {
+	m_bStop = true;
 	if (m_poThrdHandler != NULL)
 	{
 		m_poThrdHandler->WaitFor(0xffffffff);
@@ -85,6 +127,8 @@ bool LogThread::Init()
 	memset(m_strFileLog, 0, 2 * LOGLENGTH);
 	m_dwCurrentIndex = 0;
 	m_bPrint = false;
+	m_bStop = false;
+	assert(GetLogFile());
 
 	return Start();
 }
@@ -131,16 +175,25 @@ void LogThread::ReadLog(unsigned int dwLogType, char* strLog)
 
 FILE* LogThread::GetLogFile()
 {
-	char strLogPath[512] = { 0 };
+	static FILE* pFile = NULL;
+	static bool bInted = false;
+	static char sstrPath[512] = { 0 };
+	static char strLogPath[512] = { 0 };
+	if (bInted)
+	{
+		if (_access(strLogPath, 0) == -1)
+		{
+			fclose(pFile);
+			pFile = fopen(sstrPath, "a+");
+		}
+		return pFile;
+	}
 #ifdef WIN32
 	sprintf(strLogPath, "%s%s%s%s", GetExePath(), "\\", GetExeName(), "_log.txt");
 #else
 	sprintf(strLogPath, "%s%s%s%s", GetExePath(), "/", GetExeName(), "_log.txt");
 #endif // WIN32
 
-	static char sstrPath[512] =
-	{ 0 };
-	static FILE* pFile = NULL;
 	if (strcmp(strLogPath, sstrPath) != 0)
 	{
 		if (pFile)
@@ -150,6 +203,10 @@ FILE* LogThread::GetLogFile()
 		}
 		sprintf(sstrPath, "%s", strLogPath);
 		pFile = fopen(sstrPath, "a+");
+		if (pFile)
+		{
+			bInted = true;
+		}
 	}
 	return pFile;
 }

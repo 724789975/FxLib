@@ -249,7 +249,7 @@ public:
 	virtual void		Release() = 0;
 
 	virtual SOCKET      Connect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect = false) = 0;
-	virtual bool		Listen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort) = 0;
+	virtual IFxListenSocket* Listen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort) = 0;
 
 	//public:
 	//	virtual ~IFxNet() {}

@@ -195,6 +195,8 @@ bool FxListenSock::Close()
 #endif // WIN32
 
 	SetSock(INVALID_SOCKET);
+	
+	SetState(SSTATE_CLOSE);
 
 	PushNetEvent(NETEVT_TERMINATE, 0);
 	m_oLock.UnLock();
@@ -303,7 +305,6 @@ void FxListenSock::__ProcError(UINT32 dwErrorNo)
 
 void FxListenSock::__ProcTerminate()
 {
-
 }
 
 #ifdef WIN32

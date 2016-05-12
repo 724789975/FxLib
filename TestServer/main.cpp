@@ -4,8 +4,27 @@
 #include "fxdb.h"
 #include "fxmeta.h"
 
+#include <signal.h>
+
+IFxListenSocket* pListenSocket = NULL;
+void EndFun(int n)
+{
+	if (n == SIGINT)
+	{
+		if (pListenSocket)
+		{
+			pListenSocket->Close();
+		}
+
+		FxNetGetModule()->Release();
+		LogThread::Instance()->Stop();
+	}
+	exit(0);
+}
+
 int main()
 {
+	signal(SIGINT, EndFun);
 	LogThread::CreateInstance();
 	LogThread::Instance()->Init();
 
@@ -34,7 +53,7 @@ int main()
 	//	LogFun(LT_Screen, LogLv_Info, "%s", "db connected~~~~");
 	//}
 
-	pNet->Listen(CSessionFactory::Instance(), 0, 0, 12000);
+	pListenSocket = pNet->Listen(CSessionFactory::Instance(), 0, 0, 12000);
 
 	while (true)
 	{
