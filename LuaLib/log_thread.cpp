@@ -5,7 +5,12 @@
 #include <assert.h>
 #include <string>
 #include <string.h>
+
+#ifdef WIN32
 #include <io.h>
+#else
+#include <unistd.h>
+#endif
 
 LogThread::LogThread()
 {
@@ -173,6 +178,12 @@ void LogThread::ReadLog(unsigned int dwLogType, char* strLog)
 	m_pLock->UnLock();
 }
 
+#ifdef WIN32
+#define Access _access
+#else
+#define Access access
+#endif
+
 FILE* LogThread::GetLogFile()
 {
 	static FILE* pFile = NULL;
@@ -181,7 +192,7 @@ FILE* LogThread::GetLogFile()
 	static char strLogPath[512] = { 0 };
 	if (bInted)
 	{
-		if (_access(strLogPath, 0) == -1)
+		if (Access(strLogPath, 0) == -1)
 		{
 			fclose(pFile);
 			pFile = fopen(sstrPath, "a+");
