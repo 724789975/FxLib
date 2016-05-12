@@ -34,7 +34,7 @@ void LogThread::ThrdFunc()
 				FILE* pFile = GetLogFile();
 				assert(pFile);
 				int ret = fprintf(pFile, m_strFileLog[dwIndex]);
-				if (ret < 0)
+				if (ret <= 0)
 				{
 					printf("write to file failed errno : %d\n", ret);
 				}
