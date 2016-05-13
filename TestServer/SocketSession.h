@@ -28,7 +28,6 @@ public:
 
 	virtual UINT32		GetRecvSize(){ return 64 * 1024; };
 
-
 private:
 	char m_dataRecvBuf[1024* 1024];
 };
@@ -45,6 +44,8 @@ public:
 
 	void Init(){}
 	void Release(CSocketSession* pSession);
+
+	std::set<FxSession*> m_setSessions;
 
 private:
 //	TDynamicPoolEx<CSocketSession> m_poolSessions;

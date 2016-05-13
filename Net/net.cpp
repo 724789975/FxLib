@@ -97,7 +97,12 @@ bool FxNetModule::__InitComponent()
 
 void FxNetModule::__UninitComponent()
 {
-	// todo
+    for (int i = 0; i < m_nNetThreadCount; i++)
+    {
+        (m_pEpollHandlers + i)->SetStoped();
+    }
+	// 先设置为stop 然后 sleep 1s 这样 次线程就有时间终结了
+	FxSleep(1000);
     for (int i = 0; i < m_nNetThreadCount; i++)
     {
         (m_pEpollHandlers + i)->Uninit();

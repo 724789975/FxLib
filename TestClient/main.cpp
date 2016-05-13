@@ -1,23 +1,40 @@
-//#include <WinSock2.h>
 #include "SocketSession.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-//#include <unistd.h>
 #include "lua_engine.h"
 #include "fxtimer.h"
 
+#include <signal.h>
+
+bool bRun = true;
+
+void EndFun(int n)
+{
+	if (n == SIGINT || n == SIGTERM)
+	{
+		bRun = false;
+	}
+	else
+	{
+		printf("unknown signal : %d !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n", n);
+	}
+}
+
 int main()
 {
+	//--------------------order can't change begin-------------------------//
+	signal(SIGINT, EndFun);
+	signal(SIGTERM, EndFun);
 	LogThread::CreateInstance();
-	LogThread::Instance()->Init();
 
 	CLuaEngine::CreateInstance();
-
 	CLuaEngine::Instance()->Reload();
 
 	GetTimeHandler()->Init();
 	GetTimeHandler()->Run();
+	LogThread::Instance()->Init();
+	//--------------------order can't change end-------------------------//
 
 	IFxNet* pNet = FxNetGetModule();
 
@@ -28,14 +45,12 @@ int main()
 
 	char szMsg[1024] = "";
 	int i = 0;
-	while (true)
+	while (bRun)
 	{
 		GetTimeHandler()->Run();
 		pNet->Run(0xffffffff);
 		if (pSession->IsConnected())
 		{
-			//sprintf(szMsg, "%s", "select * from role");
-			//++i;
 			sprintf(szMsg, "%d", i);
 			if (!pSession->Send(szMsg, 1024))
 			{
@@ -46,11 +61,6 @@ int main()
 				LogFun(LT_Screen | LT_File, LogLv_Debug, "send : %s", szMsg);
 				++i;
 			}
-			//i %= 20;
-			//if (i == 0)
-			//{
-			//	pSession->Close();
-			//}
 			FxSleep(1);
 		}
 		else
@@ -61,4 +71,10 @@ int main()
 			}
 		}
 	}
+	pSession->Close();
+	FxSleep(10);
+	pNet->Run(0xffffffff);
+	FxSleep(10);
+	pNet->Release();
+	LogThread::Instance()->Stop();
 }

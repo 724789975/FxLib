@@ -230,7 +230,7 @@ bool FxIoThread::__DealEpollData()
 	BOOL bRet = false;
 	DWORD dwByteTransferred = 0;
 
-	while (true)
+	//while (true)
 	{
 		poSock = NULL;
 		pstPerIoData = NULL;
@@ -274,9 +274,8 @@ bool FxIoThread::__DealEpollData()
 
 		poSock->OnParserIoEvent(pEvent->events);
 	}
-
-	return true;
 #endif // WIN32
+	return true;
 }
 
 void FxIoThread::Stop()

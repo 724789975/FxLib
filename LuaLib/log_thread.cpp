@@ -15,11 +15,20 @@
 LogThread::LogThread()
 {
 	m_pLock = FxCreateThreadLock();
+
+	m_dwInIndex = 0;
+	m_dwOutIndex = 0;
+	memset(m_strScreenLog, 0, 2 * LOGLENGTH);
+	memset(m_strFileLog, 0, 2 * LOGLENGTH);
+	m_dwCurrentIndex = 0;
+	m_bPrint = false;
+	m_bStop = false;
+	assert(GetLogFile());
 }
 
 void LogThread::ThrdFunc()
 {
-	printf("%s", "thread start !!!!!!!!!!!!!!!!!!!\n");
+	LogFun(LT_Screen | LT_File, LogLv_Info, "thread : %d start!!!!!!!!!!!!!!!!!!!", m_poThrdHandler->GetThreadId());
 	while (!m_bStop)
 	{
 		if (m_bPrint)
@@ -98,6 +107,12 @@ void LogThread::ThrdFunc()
 			memset(m_strFileLog[dwIndex], 0, LOGLENGTH);
 		}
 	}
+	FILE* pFile = GetLogFile();
+	assert(pFile);
+	fprintf(pFile, "%s LogLv_Info\t\t[%s, %s, %d] thread : %d end!!!!!!!!!!!!!!!!!!!!!\n",
+		GetTimeHandler()->GetTimeStr(), __FILE__, __FUNCTION__, __LINE__, m_poThrdHandler->GetThreadId());
+	printf("%s LogLv_Info\t\t[%s, %s, %d] thread : %d end!!!!!!!!!!!!!!!!!!!!!\n",
+		GetTimeHandler()->GetTimeStr(), __FILE__, __FUNCTION__, __LINE__, m_poThrdHandler->GetThreadId());
 	printf("%s", "thread end!!!!!!!!!!!!!!!!!!!\n");
 }
 
@@ -126,15 +141,6 @@ bool LogThread::Start()
 
 bool LogThread::Init()
 {
-	m_dwInIndex = 0;
-	m_dwOutIndex = 0;
-	memset(m_strScreenLog, 0, 2 * LOGLENGTH);
-	memset(m_strFileLog, 0, 2 * LOGLENGTH);
-	m_dwCurrentIndex = 0;
-	m_bPrint = false;
-	m_bStop = false;
-	assert(GetLogFile());
-
 	return Start();
 }
 

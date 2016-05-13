@@ -170,23 +170,26 @@ bool FxListenSock::StopListen()
 	}
 
 #ifdef WIN32
-	CancelIo((HANDLE)GetSock());
-	closesocket(GetSock());
-	SetSock(INVALID_SOCKET);
+	shutdown(GetSock(), SD_RECEIVE);
 #else
-
-	m_poIoThreadHandler->DelEvent(GetSock());
-	close(GetSock());
-	SetSock(INVALID_SOCKET);
+	shutdown(GetSock(), SHUT_RD);
 #endif // WIN32
 
 	SetState(SSTATE_STOP_LISTEN);
+
+	// 不close 如需要 另外close
 	return true;
 }
 
 bool FxListenSock::Close()
 {
 	m_oLock.Lock();
+	if (GetState() == SSTATE_CLOSE)
+	{
+		m_oLock.UnLock();
+		return true;
+	}
+	SetState(SSTATE_CLOSE);
 #ifdef WIN32
 	closesocket(GetSock());
 #else
@@ -196,8 +199,6 @@ bool FxListenSock::Close()
 
 	SetSock(INVALID_SOCKET);
 	
-	SetState(SSTATE_CLOSE);
-
 	PushNetEvent(NETEVT_TERMINATE, 0);
 	m_oLock.UnLock();
 
@@ -429,13 +430,15 @@ bool FxListenSock::InitAcceptEx()
 
 void FxListenSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred)
 {
-	if (SSTATE_LISTEN == GetState())
+	switch (GetState())
+	{
+	case SSTATE_LISTEN:
 	{
 		m_oLock.Lock();
 		if (false == bRet)
 		{
 			int dwErr = WSAGetLastError();
-			LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, accept failed, errno %d", dwErr);
+			LogFun(LT_Screen | LT_File, LogLv_Error, "OnParserIoEvent failed, errno %d", dwErr);
 
 			closesocket(pIoData->hSock);
 			PostAccept(*pIoData);
@@ -443,11 +446,29 @@ void FxListenSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByte
 		OnAccept(pIoData);
 		m_oLock.UnLock();
 	}
-	else
+		break;
+	case SSTATE_CLOSE:
+	case SSTATE_STOP_LISTEN:
+	{
+		m_oLock.Lock();
+		if (bRet)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "listen socket has stoped but rei is true");
+		}
+		else
+		{
+			pIoData->hSock = INVALID_SOCKET;
+		}
+		m_oLock.UnLock();
+	}
+		break;
+	default:
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "state : %d != SSTATE_LISTEN", (UINT32)GetState());
 
 		Close();        // δ֪���󣬲�Ӧ�÷���//
+	}
+		break;
 	}
 }
 

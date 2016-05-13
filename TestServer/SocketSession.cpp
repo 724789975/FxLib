@@ -101,9 +101,6 @@ void CSocketSession::Release(void)
 	CSessionFactory::Instance()->Release(this);
 }
 
-#include <set>
-std::set<FxSession*> setSessions;
-
 IMPLEMENT_SINGLETON(CSessionFactory)
 
 CSessionFactory::CSessionFactory()
@@ -120,14 +117,6 @@ CSessionFactory::CSessionFactory()
 
 FxSession*	CSessionFactory::CreateSession()
 {
-//	FxSession* pSession = m_poolSessions.FetchObj();
-//	if(pSession)
-//	{
-//		if(!pSession->GetDataHeader())
-//		{
-//			pSession->SetDataHeader(oDataHeaderFactory.CreateDataHeader());
-//		}
-//	}
 	m_pLock->Lock();
 	FxSession* pSession = NULL;
 	if(m_listSession.size() > 0)
@@ -141,6 +130,8 @@ FxSession*	CSessionFactory::CreateSession()
 		{
 			pSession->SetDataHeader(oDataHeaderFactory.CreateDataHeader());
 		}
+
+		m_setSessions.insert(pSession);
 	}
 	LogFun(LT_Screen | LT_File, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
 	m_pLock->UnLock();
@@ -152,6 +143,7 @@ void CSessionFactory::Release(CSocketSession* pSession)
 	m_pLock->Lock();
 //	m_poolSessions.ReleaseObj(pSession);
 	m_listSession.push_back(pSession);
+	m_setSessions.erase(pSession);
 	LogFun(LT_Screen | LT_File, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
 	m_pLock->UnLock();
 }

@@ -18,6 +18,8 @@ public:
 	virtual void			ThrdFunc();
 	virtual void			Stop();
 
+	void					SetStoped() { m_bStop = true; }
+
 	bool					Start();
 
 	bool					Init(UINT32 dwMaxSock);

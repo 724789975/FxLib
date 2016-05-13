@@ -6,34 +6,34 @@
 
 #include <signal.h>
 
-IFxListenSocket* pListenSocket = NULL;
+bool bRun = true;
+
 void EndFun(int n)
 {
-	if (n == SIGINT)
+	if (n == SIGINT || n == SIGTERM)
 	{
-		if (pListenSocket)
-		{
-			pListenSocket->Close();
-		}
-
-		FxNetGetModule()->Release();
-		LogThread::Instance()->Stop();
+		bRun = false;
 	}
-	exit(0);
+	else
+	{
+		printf("unknown signal : %d !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n", n);
+	}
 }
 
 int main()
 {
+	//--------------------order can't change begin-------------------------//
 	signal(SIGINT, EndFun);
+	signal(SIGTERM, EndFun);
 	LogThread::CreateInstance();
-	LogThread::Instance()->Init();
 
 	CLuaEngine::CreateInstance();
-
 	CLuaEngine::Instance()->Reload();
 
 	GetTimeHandler()->Init();
 	GetTimeHandler()->Run();
+	LogThread::Instance()->Init();
+	//--------------------order can't change end-------------------------//
 
 	CSessionFactory::CreateInstance();
 	CSessionFactory::Instance()->Init();
@@ -53,13 +53,29 @@ int main()
 	//	LogFun(LT_Screen, LogLv_Info, "%s", "db connected~~~~");
 	//}
 
-	pListenSocket = pNet->Listen(CSessionFactory::Instance(), 0, 0, 12000);
+	IFxListenSocket* pListenSocket = pNet->Listen(CSessionFactory::Instance(), 0, 0, 12000);
 
-	while (true)
+	while (bRun)
 	{
 		GetTimeHandler()->Run();
 		pNet->Run(0xffffffff);
 		//LogFun(LT_Screen, LogLv_Info, "%s", PrintTrace());
 		FxSleep(1);
 	}
+	pListenSocket->StopListen();
+	pListenSocket->Close();
+	for (std::set<FxSession*>::iterator it = CSessionFactory::Instance()->m_setSessions.begin();
+	it != CSessionFactory::Instance()->m_setSessions.end(); ++it)
+	{
+		(*it)->Close();
+	}
+
+	while (CSessionFactory::Instance()->m_setSessions.size())
+	{
+		FxSleep(10);
+	}
+	pNet->Run(0xffffffff);
+	FxSleep(10);
+	pNet->Release();
+	LogThread::Instance()->Stop();
 }
