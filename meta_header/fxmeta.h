@@ -100,7 +100,7 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 		{\
 			int nLenStr = 0;\
 			nLenStr += sprintf(strLog + nLenStr, "%s ", GetTimeHandler()->GetTimeStr());\
-			nLenStr += sprintf(strLog + nLenStr, "%s ", LogLevelString[eLevel]);\
+			nLenStr += sprintf(strLog + nLenStr, "%s", LogLevelString[eLevel]);\
 			nLenStr += sprintf(strLog + nLenStr, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__);\
 			nLenStr += sprintf(strLog + nLenStr, strFmt, ##__VA_ARGS__);\
 			nLenStr += sprintf(strLog + nLenStr, "%s", "\n");\
