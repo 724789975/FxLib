@@ -76,16 +76,19 @@ bool FxConnection::Send(const char* pBuf,UINT32 dwLen)
 {
 	if (NULL == m_poSock)
 	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "NULL == m_poSock");
 		return false;
 	}
 
 	if(m_nConnStat != CONN_OK)
 	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "m_nConnStat : %d", m_nConnStat);
 		return false;
 	}
 
 	if(NULL == pBuf || 0 == dwLen)
 	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "pBuf : %p, dwLen : %d", pBuf, dwLen);
 		return false;
 	}
 

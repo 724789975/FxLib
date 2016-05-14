@@ -35,6 +35,7 @@ public:
 	virtual bool DelEveryFewMinuteTimer(IFxTimer* pFxTimer) = 0;
 	virtual int GetSecond() = 0;
 	virtual char* GetTimeStr() = 0;
+	virtual unsigned int GetTimeSeq() = 0;
 };
 
 IFxTimerHandler* GetTimeHandler();

@@ -14,6 +14,7 @@
 #include <psapi.h>
 #include <cstddef>  
 #include <dbghelp.h>
+#include <io.h>
 #else
 #include <pthread.h>
 #include <signal.h>
@@ -143,20 +144,46 @@ void FxSleep(UINT32 dwMilliseconds)
 
 }
 
-FILE* GetLogFile(const char* strPath)
+#ifdef WIN32
+#define Access _access
+#else
+#define Access access
+#endif
+
+FILE* GetLogFile()
 {
-	static char sstrPath[512] =
-	{ 0 };
 	static FILE* pFile = NULL;
-	if (strcmp(strPath, sstrPath) != 0)
+	static bool bInted = false;
+	static char sstrPath[512] = { 0 };
+	static char strLogPath[512] = { 0 };
+	if (bInted)
+	{
+		if (Access(strLogPath, 0) == -1)
+		{
+			fclose(pFile);
+			pFile = fopen(sstrPath, "a+");
+		}
+		return pFile;
+	}
+#ifdef WIN32
+	sprintf(strLogPath, "%s%s%s%s", GetExePath(), "\\", GetExeName(), "_exe_log.txt");
+#else
+	sprintf(strLogPath, "%s%s%s%s", GetExePath(), "/", GetExeName(), "_log.txt");
+#endif // WIN32
+
+	if (strcmp(strLogPath, sstrPath) != 0)
 	{
 		if (pFile)
 		{
 			fclose(pFile);
 			pFile = NULL;
 		}
-		sprintf(sstrPath, "%s", strPath);
+		sprintf(sstrPath, "%s", strLogPath);
 		pFile = fopen(sstrPath, "a+");
+		if (pFile)
+		{
+			bInted = true;
+		}
 	}
 	return pFile;
 }

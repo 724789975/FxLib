@@ -13,6 +13,7 @@ public:
 		m_dwSecond(0)
 	{
 		m_strTime[0] = 0;
+		m_vdwSeq = 0;
 //		m_bStop = false;
 	}
 
@@ -116,6 +117,11 @@ public:
 		return m_strTime;
 	}
 
+	virtual unsigned int GetTimeSeq()
+	{
+		return m_vdwSeq++;
+	}
+
 private:
 	void __Refresh()
 	{
@@ -133,6 +139,8 @@ private:
 		sprintf(m_strTime, "%s",
 				CLuaEngine::Instance()->CallStringFunction<unsigned int>(
 						"GetTimeStr", m_dwSecond));
+
+		m_vdwSeq = 0;
 
 		for (std::map<unsigned int, std::set<IFxTimer*> >::iterator it =
 				m_mapTimers.begin(); it != m_mapTimers.end(); ++it)
@@ -170,6 +178,8 @@ private:
 //	bool m_bStop;
 	unsigned int m_dwSecond;
 	char m_strTime[64];
+
+	volatile unsigned int m_vdwSeq;
 	FxCriticalLock m_oLock;
 
 	std::map<unsigned int, std::set<IFxTimer*> > m_mapTimers;

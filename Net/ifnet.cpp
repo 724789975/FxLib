@@ -31,6 +31,8 @@ bool FxSession::Send(const char* pBuf,UINT32 dwLen)
 	    return m_poConnection->Send(pBuf, dwLen);
 	}
 	
+	LogFun(LT_Screen | LT_File, LogLv_Error, "connection : %p, IsConnected() : %d",
+		m_poConnection, (int)m_poConnection->IsConnected())
 	return false;
 }
 

@@ -5,7 +5,7 @@
 #include "thread.h"
 #include <stdio.h>
 
-#define LOGLENGTH 2*1024*1024
+#define LOGLENGTH 512*1024
 
 class IFxLock;
 

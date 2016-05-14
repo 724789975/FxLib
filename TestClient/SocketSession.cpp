@@ -33,7 +33,7 @@ void CSocketSession::OnError(UINT32 dwErrorNo)
 
 void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
-	LogFun(LT_Screen | LT_File, LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
+	LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
 	//char szMsg[1024] = "";
 	//sprintf(szMsg, "%d", atoi(pBuf) + 1);
 	//Send(szMsg, 1024);

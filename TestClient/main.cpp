@@ -58,7 +58,7 @@ int main()
 			}
 			else
 			{
-				LogFun(LT_Screen | LT_File, LogLv_Debug, "send : %s", szMsg);
+				LogExe(LogLv_Debug, "send : %s", szMsg);
 				++i;
 			}
 			FxSleep(1);

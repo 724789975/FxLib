@@ -86,7 +86,7 @@ static const char* LogLevelString[LogLv_Count] =
 
 #define HALF_GIGA	512*1024*1024
 
-FILE* GetLogFile(const char* strPath);
+FILE* GetLogFile();
 
 char* PrintTrace();
 
@@ -99,7 +99,7 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 		if(strLog && (eLevel < LogLv_Count))\
 		{\
 			int nLenStr = 0;\
-			nLenStr += sprintf(strLog + nLenStr, "%s ", GetTimeHandler()->GetTimeStr());\
+			nLenStr += sprintf(strLog + nLenStr, "%s:%d ", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
 			nLenStr += sprintf(strLog + nLenStr, "%s", LogLevelString[eLevel]);\
 			nLenStr += sprintf(strLog + nLenStr, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__);\
 			nLenStr += sprintf(strLog + nLenStr, strFmt, ##__VA_ARGS__);\
@@ -109,6 +109,32 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 				sprintf(strLog + nLenStr, "%s", PrintTrace());\
 			}\
 			LogThread::Instance()->ReadLog(eLogType, strLog);\
+		}\
+		else\
+		{\
+			printf("error log fun !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");\
+		}\
+	}\
+}
+
+// can be used only in main thread
+#define LogExe(eLevel, strFmt, ...)\
+{\
+	{\
+		FILE* pFile = GetLogFile();\
+		assert(pFile);\
+		if((eLevel < LogLv_Count))\
+		{\
+			int nLenStr = 0;\
+			fprintf(pFile, "%s:%d ", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
+			fprintf(pFile, "%s", LogLevelString[eLevel]);\
+			fprintf(pFile, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__);\
+			fprintf(pFile, strFmt, ##__VA_ARGS__);\
+			fprintf(pFile, "%s", "\n");\
+			if(eLevel == LogLv_Error)\
+			{\
+				fprintf(pFile, "%s", PrintTrace());\
+			}\
 		}\
 		else\
 		{\
