@@ -3,7 +3,6 @@
 	<name>LuaTest</name>
 	<comment></comment>
 	<projects>
-		<project>LuaLib</project>
 		<project>Net</project>
 	</projects>
 	<buildSpec>
