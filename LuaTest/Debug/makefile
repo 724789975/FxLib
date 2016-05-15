@@ -40,14 +40,14 @@ endif
 all: LuaTest
 
 dependents:
-	-cd /home/dengxiaobo/workspace/FxLib/Net/Debug && $(MAKE) all
-	-cd /home/dengxiaobo/workspace/FxLib/LuaLib/Debug && $(MAKE) all
+	-cd /home/dengxiaobo/workspace/FxLib/Net/Debug && $(MAKE) clean all
+	-cd /home/dengxiaobo/workspace/FxLib/LuaLib/Debug && $(MAKE) clean all
 
 # Tool invocations
 LuaTest: $(OBJS) $(USER_OBJS) /home/dengxiaobo/workspace/FxLib/Net/Debug/libNet.a /home/dengxiaobo/workspace/FxLib/LuaLib/Debug/libLuaLib.a
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L../../LuaLib/Debug -L../../Net/Debug -L../../LuaLib/Debug -Lcrypto -o "LuaTest" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L"/home/dengxiaobo/workspace/FxLib/LuaLib/Debug" -L"/home/dengxiaobo/workspace/FxLib/Net/Debug" -L../../LuaLib/Debug -L../../Net/Debug -Lcrypto -o "LuaTest" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

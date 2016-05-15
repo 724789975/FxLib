@@ -37,30 +37,28 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: TestServer
+all: TestClient
 
 dependents:
-	-cd /home/dengxiaobo/workspace/FxLib/LuaLib/Debug && $(MAKE) clean all
-	-cd /home/dengxiaobo/workspace/FxLib/Net/Debug && $(MAKE) clean all
-	-cd /home/dengxiaobo/workspace/FxLib/Database/Debug && $(MAKE) clean all
+	-cd /home/dengxiaobo/workspace/FxLib/LuaLib/Release && $(MAKE) all
+	-cd /home/dengxiaobo/workspace/FxLib/Net/Release && $(MAKE) all
 
 # Tool invocations
-TestServer: $(OBJS) $(USER_OBJS) /home/dengxiaobo/workspace/FxLib/LuaLib/Debug/libLuaLib.a /home/dengxiaobo/workspace/FxLib/Net/Debug/libNet.a /home/dengxiaobo/workspace/FxLib/Database/Debug/libDatabase.a
+TestClient: $(OBJS) $(USER_OBJS) /home/dengxiaobo/workspace/FxLib/LuaLib/Release/libLuaLib.a /home/dengxiaobo/workspace/FxLib/Net/Release/libNet.a
 	@echo 'Building target: $@'
 	@echo 'Invoking: GNU C++ 链接器'
-	g++ -L"/home/dengxiaobo/workspace/FxLib/Database/Debug" -L"/home/dengxiaobo/workspace/FxLib/Net/Debug" -L"/home/dengxiaobo/workspace/FxLib/LuaLib/Debug" -L../../Database/Debug -L../../mysql/lib/linux -L../../Net/Debug -L../../LuaLib/Debug -Lcrypto -o "TestServer" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L"/home/dengxiaobo/workspace/FxLib/Net/Release" -L"/home/dengxiaobo/workspace/FxLib/LuaLib/Release" -L../../Net/Debug -L../../LuaLib/Debug -Lcrypto -o "TestClient" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(CPP_DEPS)$(EXECUTABLES)$(CXX_DEPS)$(C_UPPER_DEPS) TestServer
+	-$(RM) $(OBJS)$(C++_DEPS)$(C_DEPS)$(CC_DEPS)$(CPP_DEPS)$(EXECUTABLES)$(CXX_DEPS)$(C_UPPER_DEPS) TestClient
 	-@echo ' '
 
 .PHONY: all clean dependents
 .SECONDARY:
-/home/dengxiaobo/workspace/FxLib/LuaLib/Debug/libLuaLib.a:
-/home/dengxiaobo/workspace/FxLib/Net/Debug/libNet.a:
-/home/dengxiaobo/workspace/FxLib/Database/Debug/libDatabase.a:
+/home/dengxiaobo/workspace/FxLib/LuaLib/Release/libLuaLib.a:
+/home/dengxiaobo/workspace/FxLib/Net/Release/libNet.a:
 
 -include ../makefile.targets

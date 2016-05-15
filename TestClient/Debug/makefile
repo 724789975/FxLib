@@ -40,14 +40,14 @@ endif
 all: TestClient
 
 dependents:
-	-cd /home/dengxiaobo/workspace/FxLib/LuaLib/Debug && $(MAKE) all
-	-cd /home/dengxiaobo/workspace/FxLib/Net/Debug && $(MAKE) all
+	-cd /home/dengxiaobo/workspace/FxLib/LuaLib/Debug && $(MAKE) clean all
+	-cd /home/dengxiaobo/workspace/FxLib/Net/Debug && $(MAKE) clean all
 
 # Tool invocations
 TestClient: $(OBJS) $(USER_OBJS) /home/dengxiaobo/workspace/FxLib/LuaLib/Debug/libLuaLib.a /home/dengxiaobo/workspace/FxLib/Net/Debug/libNet.a
 	@echo 'Building target: $@'
 	@echo 'Invoking: GNU C++ 链接器'
-	g++ -L../../Net/Debug -L../../LuaLib/Debug -Lcrypto -p -pg -o "TestClient" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L"/home/dengxiaobo/workspace/FxLib/Net/Debug" -L"/home/dengxiaobo/workspace/FxLib/LuaLib/Debug" -L../../Net/Debug -L../../LuaLib/Debug -Lcrypto -p -pg -o "TestClient" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

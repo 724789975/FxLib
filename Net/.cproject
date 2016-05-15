@@ -34,6 +34,7 @@
 								<option id="gnu.cpp.compiler.option.debugging.other.73454229" name="Other debugging flags" superClass="gnu.cpp.compiler.option.debugging.other" value="-rdynamic" valueType="string"/>
 								<option id="gnu.cpp.compiler.option.debugging.prof.1357203079" name="Generate prof information (-p)" superClass="gnu.cpp.compiler.option.debugging.prof" value="true" valueType="boolean"/>
 								<option id="gnu.cpp.compiler.option.debugging.gprof.630803299" name="Generate gprof information (-pg)" superClass="gnu.cpp.compiler.option.debugging.gprof" value="true" valueType="boolean"/>
+								<option id="gnu.cpp.compiler.option.dialect.std.975788422" superClass="gnu.cpp.compiler.option.dialect.std" value="gnu.cpp.compiler.dialect.default" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.799795783" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.lib.debug.2087035318" name="GNU C 编译器" superClass="cdt.managedbuild.tool.gnu.c.compiler.lib.debug">
@@ -43,6 +44,7 @@
 								<option id="gnu.c.compiler.option.debugging.other.529405705" name="Other debugging flags" superClass="gnu.c.compiler.option.debugging.other" value="-rdynamic" valueType="string"/>
 								<option id="gnu.c.compiler.option.debugging.prof.362567397" name="Generate prof information (-p)" superClass="gnu.c.compiler.option.debugging.prof" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.debugging.gprof.1971482408" name="Generate gprof information (-pg)" superClass="gnu.c.compiler.option.debugging.gprof" value="true" valueType="boolean"/>
+								<option id="gnu.c.compiler.option.dialect.std.510112813" superClass="gnu.c.compiler.option.dialect.std" value="gnu.c.compiler.dialect.default" valueType="enumerated"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.331973331" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.base.517541067" name="GNU C 链接器" superClass="cdt.managedbuild.tool.gnu.c.linker.base"/>
@@ -87,6 +89,9 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.lib.release.1612336133" name="GNU C++ 编译器" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.lib.release">
 								<option id="gnu.cpp.compiler.lib.release.option.optimization.level.249718747" name="Optimization Level" superClass="gnu.cpp.compiler.lib.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.lib.release.option.debugging.level.1281375620" name="Debug Level" superClass="gnu.cpp.compiler.lib.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.include.paths.619766046" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="../../meta_header"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.900175074" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.lib.release.1483868034" name="GNU C 编译器" superClass="cdt.managedbuild.tool.gnu.c.compiler.lib.release">

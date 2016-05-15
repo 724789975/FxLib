@@ -5,6 +5,7 @@
 	<projects>
 		<project>LuaLib</project>
 		<project>Net</project>
+		<project>Database</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

@@ -20,7 +20,7 @@ CPP_DEPS += \
 %.o: ../%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C++ Compiler'
-	g++ -I../../LuaLib -I../../Net -I../../LuaLib -I../../meta_header -I../../tolua -I../../lua -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	g++ -I"/home/dengxiaobo/workspace/FxLib/LuaLib" -I"/home/dengxiaobo/workspace/FxLib/Net" -I../../LuaLib -I../../Net -I../../meta_header -I../../tolua -I../../lua -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

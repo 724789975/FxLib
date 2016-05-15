@@ -24,9 +24,10 @@
 								<option id="gnu.cpp.compiler.exe.debug.option.optimization.level.329464529" name="Optimization Level" superClass="gnu.cpp.compiler.exe.debug.option.optimization.level" value="gnu.cpp.compiler.optimization.level.none" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.exe.debug.option.debugging.level.1481054073" name="Debug Level" superClass="gnu.cpp.compiler.exe.debug.option.debugging.level" value="gnu.cpp.compiler.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.option.include.paths.2052436492" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="../../Database"/>
-									<listOptionValue builtIn="false" value="../../LuaLib"/>
-									<listOptionValue builtIn="false" value="../../Net"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Database}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Net}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LuaLib}&quot;"/>
+									<listOptionValue builtIn="false" value=""/>
 									<listOptionValue builtIn="false" value="../../tolua"/>
 									<listOptionValue builtIn="false" value="../../lua"/>
 									<listOptionValue builtIn="false" value="../../meta_header"/>
@@ -40,9 +41,9 @@
 								<option defaultValue="gnu.c.optimization.level.none" id="gnu.c.compiler.exe.debug.option.optimization.level.333970303" name="Optimization Level" superClass="gnu.c.compiler.exe.debug.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.exe.debug.option.debugging.level.380231855" name="Debug Level" superClass="gnu.c.compiler.exe.debug.option.debugging.level" value="gnu.c.debugging.level.max" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.1731602162" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="../../Database"/>
-									<listOptionValue builtIn="false" value="../../Net"/>
-									<listOptionValue builtIn="false" value="../../LuaLib"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Database}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Net}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LuaLib}&quot;"/>
 								</option>
 								<option id="gnu.c.compiler.option.debugging.other.505227928" name="Other debugging flags" superClass="gnu.c.compiler.option.debugging.other" value="-rdynamic" valueType="string"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.130254544" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
@@ -50,6 +51,10 @@
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.396589325" name="GNU C 链接器" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug.1827087932" name="GNU C++ 链接器" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.debug">
 								<option id="gnu.cpp.link.option.paths.503945048" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Database/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Net/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LuaLib/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value=""/>
 									<listOptionValue builtIn="false" value="../../Database/Debug"/>
 									<listOptionValue builtIn="false" value="../../mysql/lib/linux"/>
 									<listOptionValue builtIn="false" value="../../Net/Debug"/>
@@ -57,10 +62,10 @@
 									<listOptionValue builtIn="false" value="crypto"/>
 								</option>
 								<option id="gnu.cpp.link.option.libs.1664332892" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="Database"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="Database"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="Net"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="LuaLib"/>
 									<listOptionValue builtIn="false" value="mysqlclient"/>
-									<listOptionValue builtIn="false" value="Net"/>
-									<listOptionValue builtIn="false" value="LuaLib"/>
 									<listOptionValue builtIn="false" value="pthread"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.351663514" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
@@ -70,9 +75,9 @@
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.debug.1589001076" name="GCC 汇编器" superClass="cdt.managedbuild.tool.gnu.assembler.exe.debug">
 								<option id="gnu.both.asm.option.include.paths.162383011" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="../../Database"/>
-									<listOptionValue builtIn="false" value="../../Net"/>
-									<listOptionValue builtIn="false" value="../../LuaLib"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Database}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Net}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LuaLib}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1854536504" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -128,21 +133,57 @@
 							<tool id="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release.1174945783" name="GNU C++ 编译器" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.exe.release">
 								<option id="gnu.cpp.compiler.exe.release.option.optimization.level.592940992" name="Optimization Level" superClass="gnu.cpp.compiler.exe.release.option.optimization.level" value="gnu.cpp.compiler.optimization.level.most" valueType="enumerated"/>
 								<option id="gnu.cpp.compiler.exe.release.option.debugging.level.1665354815" name="Debug Level" superClass="gnu.cpp.compiler.exe.release.option.debugging.level" value="gnu.cpp.compiler.debugging.level.none" valueType="enumerated"/>
+								<option id="gnu.cpp.compiler.option.include.paths.1108158510" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Database}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Net}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LuaLib}&quot;"/>
+									<listOptionValue builtIn="false" value="../../tolua"/>
+									<listOptionValue builtIn="false" value="../../mysql/include"/>
+									<listOptionValue builtIn="false" value="../../meta_header"/>
+									<listOptionValue builtIn="false" value="../../lua"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.1154402545" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.compiler.exe.release.1070249589" name="GNU C 编译器" superClass="cdt.managedbuild.tool.gnu.c.compiler.exe.release">
 								<option defaultValue="gnu.c.optimization.level.most" id="gnu.c.compiler.exe.release.option.optimization.level.136541379" name="Optimization Level" superClass="gnu.c.compiler.exe.release.option.optimization.level" valueType="enumerated"/>
 								<option id="gnu.c.compiler.exe.release.option.debugging.level.1896960609" name="Debug Level" superClass="gnu.c.compiler.exe.release.option.debugging.level" value="gnu.c.debugging.level.none" valueType="enumerated"/>
+								<option id="gnu.c.compiler.option.include.paths.528357761" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Database}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Net}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LuaLib}&quot;"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.267080329" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.c.linker.exe.release.893922395" name="GNU C 链接器" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.release"/>
 							<tool id="cdt.managedbuild.tool.gnu.cpp.linker.exe.release.1937969505" name="GNU C++ 链接器" superClass="cdt.managedbuild.tool.gnu.cpp.linker.exe.release">
+								<option id="gnu.cpp.link.option.paths.883732450" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Database/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Net/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LuaLib/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="../../Database/Debug"/>
+									<listOptionValue builtIn="false" value="../../LuaLib/Debug"/>
+									<listOptionValue builtIn="false" value="../../Net/Debug"/>
+									<listOptionValue builtIn="false" value="../../mysql/lib/linux"/>
+									<listOptionValue builtIn="false" value="crypto"/>
+								</option>
+								<option id="gnu.cpp.link.option.libs.433670567" name="Libraries (-l)" superClass="gnu.cpp.link.option.libs" valueType="libs">
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="Database"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="Net"/>
+									<listOptionValue builtIn="false" srcPrefixMapping="" srcRootPath="" value="LuaLib"/>
+									<listOptionValue builtIn="false" value="mysqlclient"/>
+									<listOptionValue builtIn="false" value="pthread"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.1465819111" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
 								</inputType>
 							</tool>
 							<tool id="cdt.managedbuild.tool.gnu.assembler.exe.release.378938177" name="GCC 汇编器" superClass="cdt.managedbuild.tool.gnu.assembler.exe.release">
+								<option id="gnu.both.asm.option.include.paths.473333830" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Database}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Net}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LuaLib}&quot;"/>
+								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.18787373" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
 						</toolChain>
@@ -150,7 +191,29 @@
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
-			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings">
+				<externalSettings containerId="LuaLib;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/LuaLib"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/LuaLib/Debug"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="LuaLib" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="Net;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/Net"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/Net/Debug"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="Net" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+				<externalSettings containerId="Database;" factoryId="org.eclipse.cdt.core.cfg.export.settings.sipplier">
+					<externalSetting>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/Database"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/Database/Debug"/>
+						<entry flags="RESOLVED" kind="libraryFile" name="Database" srcPrefixMapping="" srcRootPath=""/>
+					</externalSetting>
+				</externalSettings>
+			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 		</cconfiguration>
 	</storageModule>
