@@ -1,8 +1,9 @@
-﻿生成启动时间为 2016/5/15 星期日 13:52:03。
+﻿生成启动时间为 2016/5/15 星期日 23:38:49。
      1>项目“C:\Users\Administrator\Desktop\FxLib\Net\Net.vcxproj”在节点 2 上(Build 个目标)。
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I../meta_header /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _CRT_SECURE_NO_DEPRECATE /D _WINSOCK_DEPRECATED_NO_WARNINGS /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Release\\" /Fd"Release\Net.pdb" /Gd /TP /analyze- /errorReport:prompt ifnet.cpp
-         ifnet.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\CL.exe /c /I../meta_header /Zi /nologo /W3 /WX- /sdl /O2 /Oi /Oy- /GL /D WIN32 /D NDEBUG /D _CONSOLE /D _LIB /D _CRT_SECURE_NO_DEPRECATE /D _WINSOCK_DEPRECATED_NO_WARNINGS /D _MBCS /Gm- /EHsc /MD /GS /Gy /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"Release\\" /Fd"Release\Net.pdb" /Gd /TP /analyze- /errorReport:prompt mysock.cpp sockmgr.cpp
+         mysock.cpp
+         sockmgr.cpp
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\Lib.exe /OUT:"C:\Users\Administrator\Desktop\FxLib\Release\Net.lib" /NOLOGO /LTCG Release\connection.obj
          Release\connectionmgr.obj
@@ -17,4 +18,4 @@
 
 已成功生成。
 
-已用时间 00:00:02.24
+已用时间 00:00:04.50

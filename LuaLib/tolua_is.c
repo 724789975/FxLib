@@ -351,7 +351,6 @@ TOLUA_API int tolua_isnumberarray
 	else
 	{
 		int i;
-        // nick add Ä¬ÈÏÊı×éÌî³äÁã
         def = 1;
 		for (i=1; i<=dim; ++i)
 		{

@@ -1126,7 +1126,7 @@ bool FxConnectSock::PostSend()
 	{
 //		LogFun(LT_Screen | LT_File, LogLv_Error, "m_poSendBuf->GetOutCursorPtr() = %d, socket : %d, socket id : %d", nLen, GetSock(), GetSockId());
 		// ����ʧ�ܣ�ֻ��û��Ͷ�ݶ��ѣ��´ο��Լ���//
-		// [12-03-16] hum modify: ��������Ҫ�����¼�ΪEPOLLIN������OUT�¼�һֱ�����ã�����CPU�ܸ�//
+		// modify: ��������Ҫ�����¼�ΪEPOLLIN������OUT�¼�һֱ�����ã�����CPU�ܸ�//
 		if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
 		{
 			LogFun(LT_Screen | LT_File, LogLv_Error, "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
