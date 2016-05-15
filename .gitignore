@@ -38,3 +38,15 @@ LuaTest/Debug/LuaTest.vcxprojResolveAssemblyReference.cache
 Net/Debug/Net.vcxprojResolveAssemblyReference.cache
 TestClient/Debug/TestClient.vcxprojResolveAssemblyReference.cache
 TestServer/Debug/TestServer.vcxprojResolveAssemblyReference.cache
+Database/Release/Database.Build.CppClean.log
+LuaLib/Release/LuaLib.Build.CppClean.log
+LuaLib/Release/LuaLib.log
+LuaTest/Release/LuaTest.Build.CppClean.log
+Database/Release/Database.log
+Net/Release/Net.Build.CppClean.log
+LuaTest/Release/LuaTest.log
+Release/scripts/cmd_param.lua
+TestClient/Release/TestClient.Build.CppClean.log
+TestClient/Release/TestClient.log
+TestServer/Release/TestServer.Build.CppClean.log
+TestServer/Release/TestServer.log
