@@ -90,13 +90,13 @@ lua_State* CLuaEngine::GetLuaState()
 
 void CLuaEngine::CallVoidFunction(const char* pFunctionName)
 {
-	assert(CallFunction(pFunctionName, 0));
+	Assert(CallFunction(pFunctionName, 0));
 }
 
 double CLuaEngine::CallNumberFunction(const char* pFunctionName)
 {
-	assert(CallFunction(pFunctionName, 1));
-	assert(lua_isnumber(GetLuaState(), -1) == 1);
+	Assert(CallFunction(pFunctionName, 1));
+	Assert(lua_isnumber(GetLuaState(), -1) == 1);
 	double lfValue = lua_tonumber(GetLuaState(), -1);
 	lua_pop(GetLuaState(), 1);
 	lua_settop(GetLuaState(), 0);
@@ -104,8 +104,8 @@ double CLuaEngine::CallNumberFunction(const char* pFunctionName)
 }
 const char* CLuaEngine::CallStringFunction(const char* pFunctionName)
 {
-	assert(CallFunction(pFunctionName, 1));
-	assert(lua_isstring(GetLuaState(), -1) == 1);
+	Assert(CallFunction(pFunctionName, 1));
+	Assert(lua_isstring(GetLuaState(), -1) == 1);
 	const char* strValue = lua_tostring(GetLuaState(), -1);
 	lua_pop(GetLuaState(), 1);
 	lua_settop(GetLuaState(), 0);
@@ -121,6 +121,7 @@ bool CLuaEngine::CallFunction(const char* pFunctionName,
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
 		lua_pop(GetLuaState(), 1);
+		printf("false\n");
 		return false;
 	}
 	return true;

@@ -19,7 +19,7 @@ extern "C"
 #include "tolua++.h"
 #include "fxmeta.h"
 #include <vector>
-#include <assert.h>
+#include "redef_assert.h"
 #include <typeinfo>
 #include <string>
 
@@ -135,7 +135,7 @@ inline void CLuaEngine::PushValue(T* pT)
 		}
 		if(strcmp(strOuter, "*") == 0)
 		{
-			assert(0);
+			Assert(0);
 		}
 		if(bClass)
 		{
@@ -145,7 +145,7 @@ inline void CLuaEngine::PushValue(T* pT)
 #else
 	const char* strTypeName = typeid(*pT).name();
 //linux�� ��ʽΪ nXXXX ָ��Ϊ Pnxxxx ��Ϊָ������ ���Ǵ��//
-	assert(*strTypeName != 'P');
+	Assert(*strTypeName != 'P');
 //���ֿ�ͷ ��֪��Ϊʲô�����2��//
 	if (*strTypeName >= '0' && *strTypeName <= '9')
 	{
@@ -157,7 +157,7 @@ inline void CLuaEngine::PushValue(T* pT)
 	}
 	else
 	{
-		assert(0);
+		Assert(0);
 	}
 	strLuaType = strTypeName;
 #endif
@@ -206,8 +206,8 @@ bool CLuaEngine::CallFunction(const char* pFunctionName, T1 tParam1, T2 tParam2,
 template<typename TRet>
 TRet* CLuaEngine::CallUserFunction(const char* pFunctionName)
 {
-	assert(CallFunction(pFunctionName, 1));
-	assert(lua_isuserdata(GetLuaState(), -1) == 1);
+	Assert(CallFunction(pFunctionName, 1));
+	Assert(lua_isuserdata(GetLuaState(), -1) == 1);
 	TRet* pRet = *(TRet**) (lua_touserdata(GetLuaState(), -1));
 	lua_pop(GetLuaState(), 1);
 	lua_settop(GetLuaState(), 0);
@@ -217,15 +217,15 @@ TRet* CLuaEngine::CallUserFunction(const char* pFunctionName)
 template<typename T>
 void CLuaEngine::CallVoidFunction(const char* pFunctionName, T tParam)
 {
-	assert(CallFunction(pFunctionName, tParam, 0));
+	Assert(CallFunction(pFunctionName, tParam, 0));
 	lua_settop(GetLuaState(), 0);
 }
 
 template<typename T>
 double CLuaEngine::CallNumberFunction(const char* pFunctionName, T tParam)
 {
-	assert(CallFunction(pFunctionName, tParam, 1));
-	assert(lua_isnumber(GetLuaState(), -1) == 1);
+	Assert(CallFunction(pFunctionName, tParam, 1));
+	Assert(lua_isnumber(GetLuaState(), -1) == 1);
 	double lfValue = lua_tonumber(GetLuaState(), -1);
 	lua_pop(GetLuaState(), 1);
 	lua_settop(GetLuaState(), 0);
@@ -235,8 +235,8 @@ double CLuaEngine::CallNumberFunction(const char* pFunctionName, T tParam)
 template<typename T>
 const char* CLuaEngine::CallStringFunction(const char* pFunctionName, T tParam)
 {
-	assert(CallFunction(pFunctionName, tParam, 1));
-	assert(lua_isstring(GetLuaState(), -1) == 1);
+	Assert(CallFunction(pFunctionName, tParam, 1));
+	Assert(lua_isstring(GetLuaState(), -1) == 1);
 	const char* strValue = lua_tostring(GetLuaState(), -1);
 	lua_pop(GetLuaState(), 1);
 	lua_settop(GetLuaState(), 0);
@@ -246,8 +246,8 @@ const char* CLuaEngine::CallStringFunction(const char* pFunctionName, T tParam)
 template<typename TRet, typename T>
 TRet* CLuaEngine::CallUserFunction(const char* pFunctionName, T tParam)
 {
-	assert(CallFunction(pFunctionName, tParam, 1));
-	assert(lua_isuserdata(GetLuaState(), -1) == 1);
+	Assert(CallFunction(pFunctionName, tParam, 1));
+	Assert(lua_isuserdata(GetLuaState(), -1) == 1);
 	TRet* pRet = *(TRet**) (lua_touserdata(GetLuaState(), -1));
 	lua_pop(GetLuaState(), 1);
 	lua_settop(GetLuaState(), 0);
@@ -258,7 +258,7 @@ template<typename T1, typename T2>
 void CLuaEngine::CallVoidFunction(const char* pFunctionName, T1 tParam1,
 		T2 tParam2)
 {
-	assert(CallFunction(pFunctionName, tParam1, tParam2, 0));
+	Assert(CallFunction(pFunctionName, tParam1, tParam2, 0));
 	lua_settop(GetLuaState(), 0);
 }
 
@@ -266,8 +266,8 @@ template<typename T1, typename T2>
 double CLuaEngine::CallNumberFunction(const char* pFunctionName, T1 tParam1,
 		T2 tParam2)
 {
-	assert(CallFunction(pFunctionName, tParam1, tParam2, 1));
-	assert(lua_isnumber(GetLuaState(), -1) == 1);
+	Assert(CallFunction(pFunctionName, tParam1, tParam2, 1));
+	Assert(lua_isnumber(GetLuaState(), -1) == 1);
 	double lfValue = lua_tonumber(GetLuaState(), -1);
 	lua_pop(GetLuaState(), 1);
 	lua_settop(GetLuaState(), 0);
@@ -278,8 +278,8 @@ template<typename T1, typename T2>
 const char* CLuaEngine::CallStringFunction(const char* pFunctionName,
 		T1 tParam1, T2 tParam2)
 {
-	assert(CallFunction(pFunctionName, tParam1, tParam2, 1));
-	assert(lua_isstring(GetLuaState(), -1) == 1);
+	Assert(CallFunction(pFunctionName, tParam1, tParam2, 1));
+	Assert(lua_isstring(GetLuaState(), -1) == 1);
 	const char* strValue = lua_tostring(GetLuaState(), -1);
 	lua_pop(GetLuaState(), 1);
 	lua_settop(GetLuaState(), 0);
@@ -290,8 +290,8 @@ template<typename TRet, typename T1, typename T2>
 TRet* CLuaEngine::CallUserFunction(const char* pFunctionName, T1 tParam1,
 		T2 tParam2)
 {
-	assert(CallFunction(pFunctionName, tParam1, tParam2, 1));
-	assert(lua_isuserdata(GetLuaState(), -1) == 1);
+	Assert(CallFunction(pFunctionName, tParam1, tParam2, 1));
+	Assert(lua_isuserdata(GetLuaState(), -1) == 1);
 	TRet* pRet = *(TRet**) (lua_touserdata(GetLuaState(), -1));
 	lua_pop(GetLuaState(), 1);
 	lua_settop(GetLuaState(), 0);

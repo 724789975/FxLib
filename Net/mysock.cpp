@@ -287,7 +287,7 @@ void FxListenSock::ProcEvent()
 
 		default:
 		{
-				   assert(0);
+				   Assert(0);
 		}
 			break;
 		}
@@ -862,7 +862,6 @@ bool FxConnectSock::Close()
 	{
 		m_oLock.UnLock();
 		return true;
-//		assert(0);
 	}
 
 	if (IsConnected())
@@ -1713,7 +1712,7 @@ void FxConnectSock::ProcEvent()
 
 		default:
 		{
-				   assert(0);
+				   Assert(0);
 		}
 			break;
 		}
@@ -1811,7 +1810,7 @@ void FxConnectSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByt
 	{
 						 if (GetState() != SSTATE_CONNECT)
 						 {
-							 assert(0);
+							 Assert(0);
 						 }
 						 OnConnect();
 	}

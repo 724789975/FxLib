@@ -156,7 +156,7 @@ void FxConnection::OnClose()
 
 	if (m_poSession == NULL)
 	{
-		assert(0);
+		Assert(0);
 		return;
 	}
 

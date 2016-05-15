@@ -7,6 +7,7 @@
 #include "fxtimer.h"
 #include "thread.h"
 #include "log_thread.h"
+#include "redef_assert.h"
 
 typedef signed char			INT8;
 typedef unsigned char		UINT8;
@@ -122,7 +123,7 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 {\
 	{\
 		FILE* pFile = GetLogFile();\
-		assert(pFile);\
+		Assert(pFile);\
 		if((eLevel < LogLv_Count))\
 		{\
 			int nLenStr = 0;\

@@ -23,7 +23,7 @@ LogThread::LogThread()
 	m_dwCurrentIndex = 0;
 	m_bPrint = false;
 	m_bStop = false;
-	assert(GetLogFile());
+	Assert(GetLogFile());
 }
 
 void LogThread::ThrdFunc()
@@ -47,7 +47,7 @@ void LogThread::ThrdFunc()
 			if (strlen(m_strFileLog[dwIndex]) > 0)
 			{
 				FILE* pFile = GetLogFile();
-				assert(pFile);
+				Assert(pFile);
 				int ret = fprintf(pFile, m_strFileLog[dwIndex]);
 				if (ret <= 0)
 				{
@@ -80,7 +80,7 @@ void LogThread::ThrdFunc()
 		if (strlen(m_strFileLog[dwIndex]) > 0)
 		{
 			FILE* pFile = GetLogFile();
-			assert(pFile);
+			Assert(pFile);
 			int ret = fprintf(pFile, m_strFileLog[dwIndex]);
 			if (ret <= 0)
 			{
@@ -99,7 +99,7 @@ void LogThread::ThrdFunc()
 	if (strlen(m_strFileLog[dwIndex]) > 0)
 	{
 		FILE* pFile = GetLogFile();
-		assert(pFile);
+		Assert(pFile);
 		int ret = fprintf(pFile, m_strFileLog[dwIndex]);
 		if (ret <= 0)
 		{
@@ -108,12 +108,11 @@ void LogThread::ThrdFunc()
 		}
 	}
 	FILE* pFile = GetLogFile();
-	assert(pFile);
-	fprintf(pFile, "%s LogLv_Info\t\t[%s, %s, %d] thread : %d end!!!!!!!!!!!!!!!!!!!!!\n",
-		GetTimeHandler()->GetTimeStr(), __FILE__, __FUNCTION__, __LINE__, m_poThrdHandler->GetThreadId());
-	printf("%s LogLv_Info\t\t[%s, %s, %d] thread : %d end!!!!!!!!!!!!!!!!!!!!!\n",
-		GetTimeHandler()->GetTimeStr(), __FILE__, __FUNCTION__, __LINE__, m_poThrdHandler->GetThreadId());
-	printf("%s", "thread end!!!!!!!!!!!!!!!!!!!\n");
+	Assert(pFile);
+	fprintf(pFile, "%s:%d LogLv_Info\t\t[%s, %s, %d] thread : %d end!!!!!!!!!!!!!!!!!!!!!\n",
+		GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq(), __FILE__, __FUNCTION__, __LINE__, m_poThrdHandler->GetThreadId());
+	printf("%s:%d LogLv_Info\t\t[%s, %s, %d] thread : %d end!!!!!!!!!!!!!!!!!!!!!\n",
+		GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq(), __FILE__, __FUNCTION__, __LINE__, m_poThrdHandler->GetThreadId());
 }
 
 void LogThread::Stop()
