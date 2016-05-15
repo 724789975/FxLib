@@ -160,9 +160,10 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Database/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Net/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LuaLib/Debug}&quot;"/>
-									<listOptionValue builtIn="false" value="../../Database/Debug"/>
-									<listOptionValue builtIn="false" value="../../LuaLib/Debug"/>
-									<listOptionValue builtIn="false" value="../../Net/Debug"/>
+									<listOptionValue builtIn="false" value=""/>
+									<listOptionValue builtIn="false" value="../../Database/Release"/>
+									<listOptionValue builtIn="false" value="../../LuaLib/Release"/>
+									<listOptionValue builtIn="false" value="../../Net/Release"/>
 									<listOptionValue builtIn="false" value="../../mysql/lib/linux"/>
 									<listOptionValue builtIn="false" value="crypto"/>
 								</option>

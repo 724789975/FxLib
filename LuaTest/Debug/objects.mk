@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lLuaLib -lNet -lpthread
+LIBS := -lLuaLib -lpthread
 

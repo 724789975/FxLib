@@ -48,7 +48,7 @@ dependents:
 TestServer: $(OBJS) $(USER_OBJS) /home/dengxiaobo/workspace/FxLib/LuaLib/Release/libLuaLib.a /home/dengxiaobo/workspace/FxLib/Net/Release/libNet.a /home/dengxiaobo/workspace/FxLib/Database/Release/libDatabase.a
 	@echo 'Building target: $@'
 	@echo 'Invoking: GNU C++ 链接器'
-	g++ -L"/home/dengxiaobo/workspace/FxLib/Database/Release" -L"/home/dengxiaobo/workspace/FxLib/Net/Release" -L"/home/dengxiaobo/workspace/FxLib/LuaLib/Release" -L../../Database/Debug -L../../LuaLib/Debug -L../../Net/Debug -L../../mysql/lib/linux -Lcrypto -o "TestServer" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L../../Database/Release -L../../LuaLib/Release -L../../Net/Release -L../../mysql/lib/linux -Lcrypto -o "TestServer" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

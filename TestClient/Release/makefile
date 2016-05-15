@@ -47,7 +47,7 @@ dependents:
 TestClient: $(OBJS) $(USER_OBJS) /home/dengxiaobo/workspace/FxLib/LuaLib/Release/libLuaLib.a /home/dengxiaobo/workspace/FxLib/Net/Release/libNet.a
 	@echo 'Building target: $@'
 	@echo 'Invoking: GNU C++ 链接器'
-	g++ -L"/home/dengxiaobo/workspace/FxLib/Net/Release" -L"/home/dengxiaobo/workspace/FxLib/LuaLib/Release" -L../../Net/Debug -L../../LuaLib/Debug -Lcrypto -o "TestClient" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L../../Net/Release -L../../LuaLib/Release -Lcrypto -o "TestClient" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

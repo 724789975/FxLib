@@ -55,7 +55,6 @@
 								<option id="gnu.cpp.link.option.paths.625710890" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Net/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LuaLib/Debug}&quot;"/>
-									<listOptionValue builtIn="false" value=""/>
 									<listOptionValue builtIn="false" value="../../Net/Debug"/>
 									<listOptionValue builtIn="false" value="../../LuaLib/Debug"/>
 									<listOptionValue builtIn="false" value="crypto"/>
@@ -154,8 +153,8 @@
 								<option id="gnu.cpp.link.option.paths.1725133602" name="Library search path (-L)" superClass="gnu.cpp.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/Net/Debug}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LuaLib/Debug}&quot;"/>
-									<listOptionValue builtIn="false" value="../../Net/Debug"/>
-									<listOptionValue builtIn="false" value="../../LuaLib/Debug"/>
+									<listOptionValue builtIn="false" value="../../Net/Release"/>
+									<listOptionValue builtIn="false" value="../../LuaLib/Release"/>
 									<listOptionValue builtIn="false" value="crypto"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.cpp.linker.input.2142196664" superClass="cdt.managedbuild.tool.gnu.cpp.linker.input">
