@@ -39,13 +39,8 @@ endif
 # All Target
 all: TestServer
 
-dependents:
-	-cd /home/dengxiaobo/workspace/FxLib/LuaLib/Release && $(MAKE) all
-	-cd /home/dengxiaobo/workspace/FxLib/Net/Release && $(MAKE) all
-	-cd /home/dengxiaobo/workspace/FxLib/Database/Release && $(MAKE) all
-
 # Tool invocations
-TestServer: $(OBJS) $(USER_OBJS) /home/dengxiaobo/workspace/FxLib/LuaLib/Release/libLuaLib.a /home/dengxiaobo/workspace/FxLib/Net/Release/libNet.a /home/dengxiaobo/workspace/FxLib/Database/Release/libDatabase.a
+TestServer: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GNU C++ 链接器'
 	g++ -L../../Database/Release -L../../LuaLib/Release -L../../Net/Release -L../../mysql/lib/linux -Lcrypto -o "TestServer" $(OBJS) $(USER_OBJS) $(LIBS)
@@ -59,8 +54,5 @@ clean:
 
 .PHONY: all clean dependents
 .SECONDARY:
-/home/dengxiaobo/workspace/FxLib/LuaLib/Release/libLuaLib.a:
-/home/dengxiaobo/workspace/FxLib/Net/Release/libNet.a:
-/home/dengxiaobo/workspace/FxLib/Database/Release/libDatabase.a:
 
 -include ../makefile.targets

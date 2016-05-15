@@ -3,9 +3,6 @@
 	<name>TestServer</name>
 	<comment></comment>
 	<projects>
-		<project>Net</project>
-		<project>LuaLib</project>
-		<project>Database</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

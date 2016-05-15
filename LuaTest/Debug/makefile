@@ -39,14 +39,11 @@ endif
 # All Target
 all: LuaTest
 
-dependents:
-	-cd /home/dengxiaobo/workspace/FxLib/LuaLib/Debug && $(MAKE) clean all
-
 # Tool invocations
-LuaTest: $(OBJS) $(USER_OBJS) /home/dengxiaobo/workspace/FxLib/LuaLib/Debug/libLuaLib.a
+LuaTest: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	g++ -L"/home/dengxiaobo/workspace/FxLib/LuaLib/Debug" -L../../LuaLib/Debug -Lcrypto -o "LuaTest" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L../../LuaLib/Debug -Lcrypto -o "LuaTest" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -57,6 +54,5 @@ clean:
 
 .PHONY: all clean dependents
 .SECONDARY:
-/home/dengxiaobo/workspace/FxLib/LuaLib/Debug/libLuaLib.a:
 
 -include ../makefile.targets

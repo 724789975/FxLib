@@ -39,12 +39,8 @@ endif
 # All Target
 all: TestClient
 
-dependents:
-	-cd /home/dengxiaobo/workspace/FxLib/LuaLib/Release && $(MAKE) all
-	-cd /home/dengxiaobo/workspace/FxLib/Net/Release && $(MAKE) all
-
 # Tool invocations
-TestClient: $(OBJS) $(USER_OBJS) /home/dengxiaobo/workspace/FxLib/LuaLib/Release/libLuaLib.a /home/dengxiaobo/workspace/FxLib/Net/Release/libNet.a
+TestClient: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GNU C++ 链接器'
 	g++ -L../../Net/Release -L../../LuaLib/Release -Lcrypto -o "TestClient" $(OBJS) $(USER_OBJS) $(LIBS)
@@ -58,7 +54,5 @@ clean:
 
 .PHONY: all clean dependents
 .SECONDARY:
-/home/dengxiaobo/workspace/FxLib/LuaLib/Release/libLuaLib.a:
-/home/dengxiaobo/workspace/FxLib/Net/Release/libNet.a:
 
 -include ../makefile.targets

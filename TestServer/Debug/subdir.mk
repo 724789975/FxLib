@@ -20,7 +20,7 @@ CPP_DEPS += \
 %.o: ../%.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GNU C++ 编译器'
-	g++ -I"/home/dengxiaobo/workspace/FxLib/Database" -I"/home/dengxiaobo/workspace/FxLib/Net" -I"/home/dengxiaobo/workspace/FxLib/LuaLib" -I../../tolua -I../../lua -I../../meta_header -I../../mysql/include -O0 -g3 -rdynamic -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
+	g++ -I../../tolua -I../../lua -I../../meta_header -I../../mysql/include -O0 -g3 -rdynamic -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
