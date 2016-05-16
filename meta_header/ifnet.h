@@ -1,4 +1,4 @@
-#ifndef __IFNET_H__
+﻿#ifndef __IFNET_H__
 #define __IFNET_H__
 
 
@@ -31,7 +31,7 @@ class FxConnection;
 
 class IFxDataHeader;
 
-#define LINUX_NETTHREAD_COUNT	2	// linux????????????,Windows??????cpu?????2??
+#define LINUX_NETTHREAD_COUNT	2	// linux默认网络线程数,Windows默认采用cpu个数的2倍 现在win下也是2个
 #define MAX_CONNECTION_COUNT	64
 #define MAX_NETEVENT_PERSOCK	1024
 
@@ -48,13 +48,13 @@ enum ENetErrCode{
 
 enum ESessionOpt
 {
-	ESESSION_SENDLINGER = 1,	// ????????????????????30?????????
+	ESESSION_SENDLINGER = 1,	// 发送延迟，直到成功，或者30次后，默认不打开
 };
 
 enum ENetOpt
 {
-	ENET_MAX_CONNECTION = 1,	// ?????????
-	ENET_MAX_TOTALEVENT,		// ???Socket????????????
+	ENET_MAX_CONNECTION = 1,	// 最大连接数
+	ENET_MAX_TOTALEVENT,		// 每个Socket的最大事件数量
 };
 
 class DLLCLASS_DECL FxSession
@@ -132,9 +132,9 @@ public:
 	unsigned int GetSockId(){ return m_dwSockId; }
 
 #ifdef WIN32
-	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred) = 0;    // ????????????
+	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred) = 0;    // 
 #else
-	virtual void OnParserIoEvent(int dwEvents) = 0;    // ????????????
+	virtual void OnParserIoEvent(int dwEvents) = 0;    // 
 #endif // WIN32
 
 
@@ -150,7 +150,7 @@ class IFxDataHeader
 public:
 	virtual ~IFxDataHeader(){}
 
-	virtual unsigned int GetHeaderLength() = 0;		// ?????
+	virtual unsigned int GetHeaderLength() = 0;		// 消息头长度
 
 	inline int ParsePacket(const char* pBuf, UINT32 dwLen)
 	{
@@ -199,9 +199,9 @@ public:
 	virtual void ProcEvent() = 0;
 
 #ifdef WIN32
-	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred) = 0;		// ????????????
+	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred) = 0;		//
 #else
-	virtual void OnParserIoEvent(int dwEvents) = 0;		// ????????????
+	virtual void OnParserIoEvent(int dwEvents) = 0;		//
 #endif // WIN32
 
 	IFxSessionFactory* GetSessionFactory(){ return m_poSessionFactory; }
@@ -229,13 +229,12 @@ public:
 	virtual bool Send(const char* pData, int dwLen) = 0;
 
 #ifdef WIN32
-	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred) = 0;		// ????????????
+	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred) = 0;		//
 #else
-	virtual void OnParserIoEvent(int dwEvents) = 0;		// ????????????
+	virtual void OnParserIoEvent(int dwEvents) = 0;		//
 #endif // WIN32
 
 protected:
-	//IFxListenSocket* m_pListenSocket;	//????????????? ???????
 private:
 
 };

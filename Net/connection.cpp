@@ -170,16 +170,6 @@ void FxConnection::OnClose()
 
 	m_poSession->OnClose();
 	m_poSession->Release();
-
-
-//	FxMySockMgr::Instance()->DelayRelease(m_poSock);
-//	if (m_poSock->IsAccept())
-//	{
-//		// �ǽ��ܷ�, �����𷽲���Ҫɾ��, ��Ҫ�õ�
-//		m_poSession = NULL;
-//		m_poSock->SetConnection(NULL);
-//		FxConnectionMgr::Instance()->Release(this);
-//	}
 }
 
 void FxConnection::OnRecv(UINT32 dwLen)

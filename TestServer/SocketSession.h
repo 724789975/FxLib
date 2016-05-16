@@ -1,4 +1,4 @@
-#ifndef __SocketSession_H__
+ï»¿#ifndef __SocketSession_H__
 #define __SocketSession_H__
 #include "dynamicpoolex.h"
 
@@ -62,13 +62,13 @@ class DataHeader : public IFxDataHeader
 public:
 	DataHeader();
 	virtual ~DataHeader();
-	virtual unsigned int GetHeaderLength(){ return sizeof(m_dataBuffer); }		// ?????
+	virtual unsigned int GetHeaderLength(){ return sizeof(m_dataBuffer); }		// æ¶ˆæ¯å¤´é•¿åº¦
 	virtual void* GetPkgHeader();
 	virtual void* BuildSendPkgHeader(UINT32 dwDataLen);
 	virtual bool BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset);
 	virtual int __CheckPkgHeader(const char* pBuf);
 private:
-	// // ÏûÏ¢Í· ÎªÍøÂç×Ö½ÚĞò
+	// // æ¶ˆæ¯å¤´ ä¸ºç½‘ç»œå­—èŠ‚åº
 	char m_dataBuffer[8];
 	static const UINT32 s_dwMagic = 'T' << 24 | 'E' << 16 | 'S' << 8 | 'T';
 	//static const UINT32 s_dwMagic = 12345678;

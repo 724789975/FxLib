@@ -1,4 +1,4 @@
-#ifndef __LOOPBUFF_H_NIJIE_2009_0825__
+ï»¿#ifndef __LOOPBUFF_H_NIJIE_2009_0825__
 #define __LOOPBUFF_H_NIJIE_2009_0825__
 
 #include "fxmeta.h"
@@ -30,10 +30,10 @@ private:
 	 char*					__GetOutCursorPtr();
 
 private:
-	 int						m_nTotalLen;			// ·ÖÅäµÄ×Ü³¤¶È//
-	 int						m_nFreeLen;			// µ±Ç°¿ÕÏĞ³¤¶È//
-	 int						m_nInCursor;			// µ±Ç°·ÅÈëµÄÓÎ±ê//
-	 int						m_nOutCursor;		 // µ±Ç°È¡³öµÄÓÎ±ê//
+	 int						m_nTotalLen;			// åˆ†é…çš„æ€»é•¿åº¦//
+	 int						m_nFreeLen;			// å½“å‰ç©ºé—²é•¿åº¦//
+	 int						m_nInCursor;			// å½“å‰æ”¾å…¥çš„æ¸¸æ ‡//
+	 int						m_nOutCursor;		 // å½“å‰å–å‡ºçš„æ¸¸æ ‡//
 	 int						m_nUseCursor;
 	 char*					m_pszBuff;			 // Buff
 	 bool					m_bLoop;

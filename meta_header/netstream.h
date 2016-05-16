@@ -1,4 +1,4 @@
-﻿#ifndef __NetStream_H__
+#ifndef __NetStream_H__
 #define __NetStream_H__
 
 #ifdef WIN32
@@ -131,7 +131,7 @@ public:
 		return false;
 	}
 
-	//ֻ�ܻ�ȡ��ͷ���Ƕ���� ������ȡ��Ϣͷ �������������//
+	//  //
 	const char* GetData(unsigned int dwLen)
 	{
 		assert(m_eType == ENetStreamType_Read);

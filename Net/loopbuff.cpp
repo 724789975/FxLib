@@ -1,4 +1,4 @@
-#include "loopbuff.h"
+ï»¿#include "loopbuff.h"
 #include <malloc.h>
 #include <memory.h>
 
@@ -185,7 +185,7 @@ bool FxLoopBuff::PushBuff(const char* pInBuff, int nLen)
     if (nLen > m_nFreeLen)
     {
         m_poLock->UnLock();
-        // ³¬³ö¿ÕÏÐ×Ö½Ú³¤¶È
+        // è¶…å‡ºç©ºé—²å­—èŠ‚é•¿åº¦
         return false;
     }
 
@@ -230,7 +230,7 @@ bool FxLoopBuff::PopBuff(char* pOutBuff, int nLen)
     if (nLen + m_nFreeLen > m_nTotalLen)
     {
         m_poLock->UnLock();
-        // ³¬³öbuffÖÐÒÑÓÃ³¤¶È
+        // è¶…å‡ºbuffä¸­å·²ç”¨é•¿åº¦
         return false;
     }
 
@@ -273,7 +273,7 @@ bool FxLoopBuff::DiscardBuff(int nLen)
     if (nLen + m_nFreeLen > m_nTotalLen)
     {
         m_poLock->UnLock();
-        // ³¬³öbuffÖÐÒÑÓÃ³¤¶È
+        // è¶…å‡ºbuffä¸­å·²ç”¨é•¿åº¦
         return false;
     }
 
@@ -304,7 +304,7 @@ bool FxLoopBuff::CostBuff(int nLen)
     if (nLen > m_nFreeLen)
     {
         m_poLock->UnLock();
-        // ³¬³ö¿ÕÏÐ×Ö½Ú³¤¶È
+        // è¶…å‡ºç©ºé—²å­—èŠ‚é•¿åº¦
         return false;
     }
 
@@ -336,7 +336,7 @@ bool FxLoopBuff::CostUsedBuff(int nLen)
     if (m_nFreeLen + nLen > m_nTotalLen)
     {
         m_poLock->UnLock();
-        // ³¬³öbuffÖÐ¿ÕÏÐ³¤¶È
+        // è¶…å‡ºbuffä¸­ç©ºé—²é•¿åº¦
         return false;
     }
 

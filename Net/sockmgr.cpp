@@ -64,7 +64,7 @@ FxListenSock* FxMySockMgr::Create(UINT32 dwListenId, IFxSessionFactory* pSession
 		return &m_mapListenSocks[dwListenId];
 	}
 
-	//����Ŀ�������������~~~~//
+	//这里的拷贝构造有问题~~~~//
 //	m_mapListenSocks[dwListenId] = FxListenSock();
 	if (!m_mapListenSocks[dwListenId].IFxListenSocket::Init(pSessionFactory))
 	{

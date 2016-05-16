@@ -16,15 +16,15 @@
 
 enum ESocketState
 {
-	SSTATE_INVALID = 0,	// ��Ч//
-	//SSTATE_START_LISTEN, // ����ʼ����״̬//
-	SSTATE_LISTEN,		// ����״̬//
-	SSTATE_STOP_LISTEN,	// ����ֹͣ����״̬//
+	SSTATE_INVALID = 0,	// //
+	//SSTATE_START_LISTEN, // //
+	SSTATE_LISTEN,		// //
+	SSTATE_STOP_LISTEN,	// //
 	//SSTATE_ACCEPT,
-	SSTATE_CONNECT,		// ��������״̬//
-	SSTATE_ESTABLISH,	// ���ӽ���״̬//
-	//SSTATE_DATA,		 // ��ݷ���״̬//
-	SSTATE_CLOSE,		// �ر�����״̬//
+	SSTATE_CONNECT,		// //
+	SSTATE_ESTABLISH,	// //
+	//SSTATE_DATA,		 // //
+	SSTATE_CLOSE,		// //
 	//SSTATE_OK,
 	SSTATE_RELEASE,
 };
@@ -92,7 +92,7 @@ public:
 #ifdef WIN32
 	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred);		//
 #else
-	virtual void OnParserIoEvent(int dwEvents);		// ������ɶ˿��¼�//
+	virtual void OnParserIoEvent(int dwEvents);		//  1/4 //
 #endif // WIN32
 
 public:
@@ -166,16 +166,16 @@ public:
 	bool PostClose();
 	bool PostRecvFree();
 
-	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred);		//
+	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred);		// 处理完成端口事件//
 #else
-	virtual void OnParserIoEvent(int dwEvents);		// ������ɶ˿��¼�//
+	virtual void OnParserIoEvent(int dwEvents);		//  1/4 //
 #endif // WIN32
 
 private:
 
 	bool PostSend();
 	bool PostSendFree();
-	bool SendImmediately();						// ��Ҫ�����������ȫ������//
+	bool SendImmediately();						// //
 
 	void	__ProcEstablish();
 	void	__ProcAssociate();
@@ -198,7 +198,7 @@ private:
 	ESocketState		m_nState;
 
 	TEventQueue<SNetEvent>	m_oEvtQueue;
-	bool					m_bSendLinger;		// �����ӳ٣�ֱ���ɹ�������30�κ�//
+	bool					m_bSendLinger;		// 发送延迟，直到成功，或者30次后 //
 
 	FxCriticalLock			m_oLock;
 
@@ -208,17 +208,17 @@ private:
 
 	FxIoThread* m_poIoThreadHandler;
 
-	int m_nNeedData;        // δ��������߼���ݰ���Ҫ�ĳ���//
-	int m_nPacketLen;       // δ��������߼���ݰ��//
+	int m_nNeedData;        // 未处理完的逻辑数据包还需要的长度//
+	int m_nPacketLen;       // 未处理完的逻辑数据包长度//
 
 private:
 #ifdef WIN32
 	SPerIoData			m_stRecvIoData;
 	SPerIoData			m_stSendIoData;
-	LONG                m_nPostRecv;        // δ����WSARecv������//
-	LONG                m_nPostSend;        // δ����WSASend������//
+	LONG                m_nPostRecv;        // 未决的WSARecv操作数//
+	LONG                m_nPostSend;        // 未决的WSASend操作数/
 
-	UINT32              m_dwLastError;      // ���ĳ�����Ϣ//
+	UINT32              m_dwLastError;      // 最后的出错信息//
 #else
 	bool				m_bSending;
 #endif // WIN32

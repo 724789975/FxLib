@@ -1,7 +1,7 @@
 #ifndef __TByteSet_h__
 #define __TByteSet_h__
 
-//这个类型的对象根本不会被创建成功
+//杩欎釜绫诲瀷鐨勫璞℃牴鏈笉浼氳鍒涘缓鎴愬姛
 #define EnumByteSet(EnumName) \
 template<EnumName>\
 class T##EnumName##ByteSet\

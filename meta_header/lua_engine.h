@@ -1,7 +1,7 @@
 ﻿/*
  * lua_engine.h
  *
- *  Created on: 2015??11??9??
+ *  Created on: 2015/11/9
  *      Author: dengxiaobo
  */
 
@@ -93,11 +93,11 @@ private:
 	bool CallFunction(const char* pFunctionName, int nReturnNum);
 
 	template<typename T>
-	bool CallFunction(const char* pFunctionName, T tParam, int nReturnNum); //ִ��ָ��Lua�ļ��еĺ���//
+	bool CallFunction(const char* pFunctionName, T tParam, int nReturnNum); //执行指定Lua文件中的函数//
 
 	template<typename T1, typename T2>
 	bool CallFunction(const char* pFunctionName, T1 tParam1, T2 tParam2,
-			int nReturnNum = 0); //ִ��ָ��Lua�ļ��еĺ���//
+			int nReturnNum = 0); //执行指定Lua文件中的函数//
 
 	void PushValue(double lfValue);
 //	void PushValue(const char* strValue);
@@ -105,13 +105,13 @@ private:
 	template<class T>
 	void PushValue(T* pT);
 
-	bool LoadFile(const char* pFileName);                           //����ָ����Lua�ļ�//
+	bool LoadFile(const char* pFileName);                           //加载指定的Lua文件//
 
 	const char* LuaTraceBack();
 
 private:
-	lua_State* m_pState;   //�����Lua��State����ָ�룬�����һ��lua�ļ���Ӧһ����//
-	lua_State* m_pBackState;	//�������ص�//
+	lua_State* m_pState;   //这个是Lua的State对象指针，你可以一个lua文件对应一个//
+	lua_State* m_pBackState;	//用来重载的//
 
 	std::vector<ToluaFunctionOpen*> m_vecToLuaFunctions;
 };
@@ -144,9 +144,9 @@ inline void CLuaEngine::PushValue(T* pT)
 	}
 #else
 	const char* strTypeName = typeid(*pT).name();
-//linux�� ��ʽΪ nXXXX ָ��Ϊ Pnxxxx ��Ϊָ������ ���Ǵ��//
+//linux下 格式为 nXXXX 指针为 Pnxxxx 若为指针类型 则是错的//
 	Assert(*strTypeName != 'P');
-//���ֿ�ͷ ��֪��Ϊʲô�����2��//
+//数字开头 不知道为什么是最多2个//
 	if (*strTypeName >= '0' && *strTypeName <= '9')
 	{
 		++strTypeName;

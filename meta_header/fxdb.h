@@ -1,18 +1,18 @@
-/*
+﻿/*
  * FileName:    FxDB.h
  * Author:      dengxiaobo  Version: FxLib V1.00  Date: 2015-4-10
- * Description: DBģ��ͷ�ļ�   
+ * Description: DB模块头文件   
  * Version:     V0.01
  * History:        
  * 	<author>	<time>		<version>	<desc>
- * 	<dengxiaobo>		<2015-4-10>	<V0.01>		����
+ * 	<dengxiaobo>		<2015-4-10>	<V0.01>		创建
  */
 
 #ifndef __FXDB_H_2016_0303__
 #define __FXDB_H_2016_0303__
 
 #ifdef WIN32
-#define WIN32_LEAN_AND_MEAN		// �� Windows ͷ���ų�����ʹ�õ�����
+#define WIN32_LEAN_AND_MEAN		// 从 Windows 头中排除极少使用的资料
 #include <WinSock2.h>
 #include <windows.h>
 #else
@@ -53,13 +53,13 @@ const char FXDB_MODULENAME[]        = "FXMySQLDB";
 
 enum EFxDBCode
 {
-    FXDB_ERR_UNKNOWN    = -4,       // δ֪����
-    FXDB_ERR_READER     = -3,       // ��������ݽ������
-    FXDB_ERR_CONN       = -2,       // ���Ӵ���
-    FXDB_DISCONNECT     = -1,       // �Ͽ�����
-    FXDB_SUCCESS        = 0,        // �ɹ�
-    FXDB_NO_RESULT      = 1,        // �ɹ����޽��
-    FXDB_HAS_RESULT     = 2         // �ɹ����в�ѯ���
+    FXDB_ERR_UNKNOWN    = -4,       // 未知错误
+    FXDB_ERR_READER     = -3,       // 错误的数据结果参数
+    FXDB_ERR_CONN       = -2,       // 链接错误
+    FXDB_DISCONNECT     = -1,       // 断开链接
+    FXDB_SUCCESS        = 0,        // 成功
+    FXDB_NO_RESULT      = 1,        // 成功，无结果
+    FXDB_HAS_RESULT     = 2         // 成功，有查询结果
 };
 
 struct SDBAccount{

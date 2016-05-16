@@ -1,4 +1,4 @@
-#include "fxdb.h"
+﻿#include "fxdb.h"
 #include "dbmodule.h"
 
 IDBModule* FxDBGetModule()

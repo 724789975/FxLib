@@ -28,7 +28,7 @@ void FxConnectionMgr::Uninit()
 }
 
 //
-// 多线程调用：IOCP线程，连接线程，但不存在两个线程针对同一对象口同时调用的可能//
+// 澶氱嚎绋嬭皟鐢細IOCP绾跨▼锛岃繛鎺ョ嚎绋嬶紝浣嗕笉瀛樺湪涓や釜绾跨▼閽堝鍚屼竴瀵硅薄鍙ｅ悓鏃惰皟鐢ㄧ殑鍙兘//
 //
 FxConnection* FxConnectionMgr::Create()
 {
@@ -42,7 +42,7 @@ FxConnection* FxConnectionMgr::Create()
 }
 
 //
-// 多线程调用：主线程，IOCP线程，连接线程，但不存在两个线程针对同一对象口同时调用的可能//
+// 澶氱嚎绋嬭皟鐢細涓荤嚎绋嬶紝IOCP绾跨▼锛岃繛鎺ョ嚎绋嬶紝浣嗕笉瀛樺湪涓や釜绾跨▼閽堝鍚屼竴瀵硅薄鍙ｅ悓鏃惰皟鐢ㄧ殑鍙兘//
 //
 void FxConnectionMgr::Release(FxConnection* poConnection)
 {

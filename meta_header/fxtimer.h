@@ -30,7 +30,6 @@ public:
 	virtual void Run() = 0;
 	virtual bool AddDelayTimer(unsigned int dwSecond, IFxTimer* pFxTimer) = 0;
 	virtual bool DelDelayTimer(IFxTimer* pFxTimer) = 0;
-	// ???????//
 	virtual bool AddEveryFewMinuteTimer(unsigned int dwSecond, IFxTimer* pFxTimer) = 0;
 	virtual bool DelEveryFewMinuteTimer(IFxTimer* pFxTimer) = 0;
 	virtual int GetSecond() = 0;

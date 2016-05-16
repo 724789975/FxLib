@@ -33,13 +33,13 @@ int     VAL_SO_SNDLOWAT = (64 * 1024);
 
 FxListenSock::FxListenSock()
 {
-	// ǧ��Ҫ�������и�ָ�븳ֵ�Ĳ��� ��Ϊ �Ḵ�ƹ���//
+	// 千万不要在这里有给指针赋值的操作 因为 会复制构造//
 	Reset();
 
 	SetState(SSTATE_INVALID);
 	SetSock(INVALID_SOCKET);
 	//m_dwLastError = 0;
-	//m_bSendLinger = false;     // �����ӳ٣�ֱ���ɹ�������30�κ���ʱĬ������//
+	//m_bSendLinger = false;     // 发送延迟，直到成功，或者30次后，这时默认设置//
 	m_poSessionFactory = NULL;
 }
 
@@ -127,7 +127,7 @@ bool FxListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 
 	SetState(SSTATE_LISTEN);
 
-	// �����̴߳���//
+	// 添加到事件 //
 	if (false == AddEvent())
 	{
 		return false;
@@ -221,7 +221,7 @@ bool FxListenSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
 		return false;
 	}
 	SNetEvent oEvent;
-	// ���������¼���ȥ��Ȼ���ڱ����ϲ����¼����Ⱥ�˳���ܴ?�����ϲ�Ͳ����ȡ�¼�//
+	// 先扔网络事件进去，然后在报告上层有事件，先后顺序不能错，这样上层就不会错取事件//
 	oEvent.eType = eType;
 	oEvent.dwValue = dwValue;
 	while (!m_oEvtQueue.PushBack(oEvent))
@@ -466,7 +466,7 @@ void FxListenSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByte
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "state : %d != SSTATE_LISTEN", (UINT32)GetState());
 
-		Close();        // δ֪���󣬲�Ӧ�÷���//
+		Close();        // 未知错误，不应该发生//
 	}
 		break;
 	}
@@ -598,7 +598,7 @@ void FxListenSock::OnAccept(SPerIoData* pstPerIoData)
 		}
 
 		//
-		// Ӧ����Ͷ�������¼��ٹ����׽ӿڣ�������ܳ��ֵ�һ��Recv�¼����������¼������
+		// 应该先投递连接事件再关联套接口，否则可能出现第一个Recv事件先于连接事件入队列
 		//
 
 		if (false == poSock->AddEvent())
@@ -770,7 +770,7 @@ FxConnectSock::FxConnectSock()
 	m_bSending = false;
 #endif // WIN32
 
-	m_bSendLinger = false;     // �����ӳ٣�ֱ���ɹ�������30�κ���ʱĬ������//
+	m_bSendLinger = false;     // 发送延迟，直到成功，或者30次后，这时默认设置//
 	m_oEvtQueue.Init(MAX_NETEVENT_PERSOCK);
 
 	Reset();
@@ -780,9 +780,8 @@ FxConnectSock::~FxConnectSock()
 {
 	if (m_poConnection)
 	{
-		// ��Ȼ��Ҫ��� ��ôӦ��֪ͨ ����Ӧָ������//
+		// 既然是要销毁 那么应该通知 将相应指针置零//
 		m_poConnection->OnSocketDestroy();
-		// ��sessionȥ����release�� ֻҪsession���� ��ô�Ϳ϶���connection//
 		m_poConnection = NULL;
 	}
 
@@ -855,7 +854,7 @@ void FxConnectSock::OnWrite()
 
 bool FxConnectSock::Close()
 {
-	// ���� ������ȷ���ȥ//
+	// 首先 把数据先发过去//
 	m_oLock.Lock();
 
 	if(GetState() == SSTATE_RELEASE || GetState() == SSTATE_CLOSE)
@@ -879,7 +878,7 @@ bool FxConnectSock::Close()
 #else
 	shutdown(GetSock(), SHUT_RD);
 	m_poIoThreadHandler->DelEvent(GetSock());
-	// ��bug Windows�� �Ͳ����� �޸ĺ���˵//
+	// 有bug 就不发了 修改后再说//
 	//SendImmediately();
 #endif	//WIN32
 
@@ -909,9 +908,8 @@ void FxConnectSock::Reset()
 {
 	if (NULL != m_poConnection)
 	{
-		// ��Ȼ��Ҫ��� ��ôӦ��֪ͨ ����Ӧָ������//
+		// 既然是要销毁 那么应该通知 将相应指针置零//
 		m_poConnection->OnSocketDestroy();
-		// ��sessionȥ����release�� ֻҪsession���� ��ô�Ϳ϶���connection//
 		SetConnection(NULL);
 	}
 
@@ -940,10 +938,10 @@ void FxConnectSock::Reset()
 #else
 	m_bSending = false;
 #endif // WIN32
-	m_bSendLinger = false;     // �����ӳ٣�ֱ���ɹ�������30�κ���ʱĬ������//
+	m_bSendLinger = false;     //发送延迟，直到成功，或者30次后，这时默认设置//
 }
 
-// win�³�������ʱ ҪͶ�ݹر���Ϣ ��Ϊ��Ҫһ��post�رյĹ��//
+// win下出现问题时 要投递关闭信息 因为需要一个post关闭的过程//
 bool FxConnectSock::Send(const char* pData, int dwLen)
 {
 	if (false == IsConnected())
@@ -1007,7 +1005,7 @@ bool FxConnectSock::Send(const char* pData, int dwLen)
 
 	while (!m_poSendBuf->PushBuff(pTemData, dwLen + pDataHeader->GetHeaderLength()))
 	{
-		if (!m_bSendLinger || 30 < ++nSendCount)  // ����30�λ�û����ȥ������Ϊʧ�ܣ�ʧ�ܽ���߼��㴦��//
+		if (!m_bSendLinger || 30 < ++nSendCount)  // 连续30次还没发出去，就认为失败，失败结果逻辑层处理//
 		{
 			LogFun(LT_Screen | LT_File, LogLv_Critical, "send buffer overflow!!!!!!!!, socket : %d, socket id : %d", GetSock(), GetSockId());
 			return false;
@@ -1037,7 +1035,7 @@ bool FxConnectSock::Send(const char* pData, int dwLen)
 bool FxConnectSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
 {
 	SNetEvent oEvent;
-	// ���������¼���ȥ��Ȼ���ڱ����ϲ����¼����Ⱥ�˳���ܴ?�����ϲ�Ͳ����ȡ�¼�//
+	// 先扔网络事件进去，然后在报告上层有事件，先后顺序不能错，这样上层就不会错取事件//
 	oEvent.eType = eType;
 	oEvent.dwValue = dwValue;
 
@@ -1125,8 +1123,8 @@ bool FxConnectSock::PostSend()
 	if (0 >= nLen || NULL == pSendBuf)
 	{
 //		LogFun(LT_Screen | LT_File, LogLv_Error, "m_poSendBuf->GetOutCursorPtr() = %d, socket : %d, socket id : %d", nLen, GetSock(), GetSockId());
-		// ����ʧ�ܣ�ֻ��û��Ͷ�ݶ��ѣ��´ο��Լ���//
-		// modify: ��������Ҫ�����¼�ΪEPOLLIN������OUT�¼�һֱ�����ã�����CPU�ܸ�//
+		// 不算失败，只是没有投递而已，下次可以继续//
+		// modify: 在这里需要设置事件为EPOLLIN，否则OUT事件一直被设置，导致CPU很高//
 		if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
 		{
 			LogFun(LT_Screen | LT_File, LogLv_Error, "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
@@ -1169,7 +1167,7 @@ bool FxConnectSock::PostSend()
 		return false;
 	}
 
-	// �ѳɹ������˵Ĵӷ��ͻ�������//
+	// 把成功发送了的从发送缓冲区丢弃//
 	m_poSendBuf->DiscardBuff(nRet);
 
 	if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLOUT | EPOLLIN, this))
@@ -1225,7 +1223,7 @@ bool FxConnectSock::SendImmediately()
 	if(errno != 0)
 #endif	//WIN32
 	{
-		// �Ѿ������� ���ܷ���//
+		// 已经出错了 不能发送//
 		return true;
 	}
 
@@ -1279,7 +1277,7 @@ bool FxConnectSock::SendImmediately()
 		m_bSending = true;
 #endif // WIN32
 
-		nLen = 64 * 1024 < nLen ? 64 * 1024 : nLen;     // ���64K
+		nLen = 64 * 1024 < nLen ? 64 * 1024 : nLen;     // 最大64K
 
 		int nRet = send(GetSock(), pSendBuf, nLen, 0);
 		if (0 > nRet)
@@ -1301,14 +1299,14 @@ bool FxConnectSock::SendImmediately()
 			{
 				continue;
 			}
-			//return false;	//ǰ���Ѿ��ȴ���һ��ʱ�� ���ʱ��Ҫ�Ƿ�����ȥ �����ǿͻ����Ǳ��Ѿ����� ������ȥ��//
+			//return false;	//前面已经等待了一段时间 这个时候要是发不过去 可能是客户端那边已经断了 发不过去了//
 		}
 		else if (0 == nRet)
 		{
 			return true;
 		}
 
-		// �ѳɹ������˵Ĵӷ��ͻ�������//
+		// 把成功发送了的从发送缓冲区丢弃//
 		m_poSendBuf->DiscardBuff(nRet);
 	}
 	return true;
@@ -1581,7 +1579,7 @@ SOCKET FxConnectSock::Connect()
 	SetState(SSTATE_CONNECT);
 
 #ifdef WIN32
-	// todo connectEX��ʱ������ ������ʱ���ӵ���ɶ˿���//
+	// todo connectEX暂时不能用 所以暂时不加到完成端口中//
 #else
 	if (!AddEvent())
 	{
@@ -1592,7 +1590,7 @@ SOCKET FxConnectSock::Connect()
 	}
 #endif // WIN32
 
-	//��������ʱ Windows��linux��������//
+	//请求连接时 Windows跟linux是有区别的//
 #ifdef WIN32
 	//LPFN_CONNECTEX m_lpfnConnectEx = NULL ;
 	//DWORD dwBytes = 0;
@@ -1607,17 +1605,17 @@ SOCKET FxConnectSock::Connect()
 	//	return INVALID_SOCKET;
 	//}
 
-	//// ���ʱ�� ��û������ ���� ������ĳ�IOCP_CONNECT �������Ժ��ٸĻ���
+	//// 这个时候 还没有连上 所以 将这个改成IOCP_CONNECT 等连完以后再改回来
 	//m_stRecvIoData.nOp = IOCP_CONNECT;
 
 	//int bResult = m_lpfnConnectEx(GetSock(),
-	//	(sockaddr *)&stAddr,  // [in] �Է���ַ
-	//	sizeof(stAddr),               // [in] �Է���ַ����
-	//	NULL,       // [in] ���Ӻ�Ҫ���͵����ݣ����ﲻ��
-	//	0,   // [in] �������ݵ��ֽ��� �����ﲻ��
-	//	NULL,       // [out] �����˶��ٸ��ֽڣ����ﲻ��
+	//	(sockaddr *)&stAddr,  // [in] 对方地址
+	//	sizeof(stAddr),               // [in] 对方地址长度
+	//	NULL,       // [in] 连接后要发送的内容，这里不用
+	//	0,   // [in] 发送内容的字节数 ，这里不用
+	//	NULL,       // [out] 发送了多少个字节，这里不用
 	//	&m_stRecvIoData.stOverlapped); // [in]
-	//if (!bResult)      // ����ֵ��//
+	//if (!bResult)      // 返回值处//
 
 	if(-1 == connect(GetSock(), (sockaddr*)&stAddr, sizeof(stAddr)))
 	{
@@ -1935,7 +1933,7 @@ void FxConnectSock::OnRecv(bool bRet, int dwBytes)
 
 				if ((int)(GetDataHeader()->GetHeaderLength()) > nLen)
 				{
-					// �ж��Ƿ���ѭ��buff��ͷ���������//
+					// 判断是否在循环buff的头部还有数据//
 					int nHasData = m_poRecvBuf->GetUseLen();
 					if ((int)(GetDataHeader()->GetHeaderLength()) <= nHasData)
 					{
@@ -2077,7 +2075,7 @@ void FxConnectSock::OnSend(bool bRet, int dwBytes)
 		return;
 	}
 
-	// �ѳɹ������˵Ĵӷ��ͻ�������//
+	// 把成功发送了的从发送缓冲区丢弃//
 	m_poSendBuf->DiscardBuff(dwBytes);
 
 	InterlockedCompareExchange(&m_nPostSend, m_nPostSend - 1, m_nPostSend);
@@ -2119,7 +2117,7 @@ bool FxConnectSock::PostRecv()
 	{
 		//LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetInCursorPtr() = %d, socket : %d, socket id : %d", nLen, GetSock(), GetSockId());
 
-		// ��ʱ�� �϶���������//
+		// 接受缓存不够 等会继续接收 //
 		InterlockedCompareExchange(&m_nPostRecv, 0, 1);
 		PushNetEvent(NETEVT_RECV, -1);
 		return true;
@@ -2155,7 +2153,7 @@ bool FxConnectSock::PostClose()
 	}
 
 	ZeroMemory(&m_stRecvIoData.stOverlapped, sizeof(m_stRecvIoData.stOverlapped));
-	// Postʧ�ܵ�ʱ���ٽ����������ʱ���ܻᶪʧһ�Ρ�//
+	// Post失败的时候再进入这个函数时可能会丢失一次//
 
 	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(0), (ULONG_PTR)this, &m_stRecvIoData.stOverlapped))
 	{
@@ -2341,7 +2339,7 @@ void FxConnectSock::OnRecv()
 
 					if ((int)(GetDataHeader()->GetHeaderLength()) > nLen)
 					{
-							// �ж��Ƿ���ѭ��buff��ͷ���������//
+							// 判断是否在循环buff的头部还有数据//
 						int nHasData = m_poRecvBuf->GetUseLen();
 						if ((int)(GetDataHeader()->GetHeaderLength()) <= nHasData)
 						{

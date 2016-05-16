@@ -44,7 +44,7 @@ FxIoThread::~FxIoThread()
 bool FxIoThread::Init(UINT32 dwMaxSock)
 {
 #ifdef WIN32
-	// ��������ɶ˿�// �������Ҫ���̺߳���ʼ����֮ǰ����//
+	// 初始化的时候 先获取下 创建完成端口 //
 	if (GetHandle() == NULL)
 	{
 		return false;
@@ -243,7 +243,7 @@ bool FxIoThread::__DealEpollData()
 				(LPOVERLAPPED*)&pstPerIoData,
 				INFINITE);
 
-		// ����Ƿ����߳��˳�
+		// 
 		if (NULL == poSock)
 		{
 			return false;
@@ -302,7 +302,7 @@ bool FxIoThread::Start()
 #ifdef WIN32
 HANDLE FxIoThread::GetHandle()
 {
-	// �����Ĺ��Ҫ��֤�ڵ��߳���ִ�� ��ǳ���ֹͣ���� ��Ȼ���һֱ��Ч
+	// 创建完成端口
 	static const HANDLE hCompletionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 	return hCompletionPort;
 }

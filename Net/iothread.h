@@ -33,7 +33,7 @@ public:
 	bool DelEvent(int hSock);
 #endif // WIN32
 
-	// win下为完成端口 linux下为epoll
+	// win涓嬩负瀹屾垚绔彛 linux涓嬩负epoll
 #ifdef WIN32
 	HANDLE GetHandle();
 #else

@@ -1,4 +1,4 @@
-﻿#include "log_thread.h"
+#include "log_thread.h"
 #include "fxmeta.h"
 #include <stdio.h>
 #include <stdlib.h>

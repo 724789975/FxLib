@@ -101,7 +101,7 @@ void FxNetModule::__UninitComponent()
     {
         (m_pEpollHandlers + i)->SetStoped();
     }
-	// 先设置为stop 然后 sleep 1s 这样 次线程就有时间终结了
+	// 鍏堣缃负stop 鐒跺悗 sleep 1s 杩欐牱 娆＄嚎绋嬪氨鏈夋椂闂寸粓缁撲簡
 	FxSleep(1000);
     for (int i = 0; i < m_nNetThreadCount; i++)
     {
