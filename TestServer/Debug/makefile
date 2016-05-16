@@ -43,7 +43,7 @@ all: TestServer
 TestServer: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: GNU C++ 链接器'
-	g++ -L../../Database/Debug -L../../mysql/lib/linux -L../../Net/Debug -L../../LuaLib/Debug -Lcrypto -o "TestServer" $(OBJS) $(USER_OBJS) $(LIBS)
+	g++ -L../../Database/Debug -L../../LuaLib/Debug -L../../Net/Debug -L../../mysql/lib/linux -Lcrypto -o "TestServer" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 

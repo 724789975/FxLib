@@ -4,5 +4,5 @@
 
 USER_OBJS :=
 
-LIBS := -lmysqlclient -lLuaLib -lNet -lpthread
+LIBS := -lmysqlclient -lNet -lLuaLib -lpthread
 
