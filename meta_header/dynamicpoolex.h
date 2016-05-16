@@ -16,8 +16,6 @@ public:
     virtual void Release(){ delete this; }
 };
 
-// nijie modify for placement new 20090428
-
 template <class T>
 class TDynamicPoolEx
 {
