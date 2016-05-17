@@ -48,12 +48,15 @@ void LogThread::ThrdFunc()
 			{
 				FILE* pFile = GetLogFile();
 				Assert(pFile);
-				int ret = fprintf(pFile, m_strFileLog[dwIndex]);
-				if (ret <= 0)
+				if (pFile)
 				{
-					printf("write to file failed errno : %d\n", ret);
+					int ret = fprintf(pFile, m_strFileLog[dwIndex]);
+					if (ret <= 0)
+					{
+						printf("write to file failed errno : %d\n", ret);
+					}
+					bEmpty = false;
 				}
-				bEmpty = false;
 			}
 
 			if (bEmpty)
@@ -81,11 +84,14 @@ void LogThread::ThrdFunc()
 		{
 			FILE* pFile = GetLogFile();
 			Assert(pFile);
-			int ret = fprintf(pFile, m_strFileLog[dwIndex]);
-			if (ret <= 0)
+			if (pFile)
 			{
-				printf("write to file failed errno : %d\n", ret);
-				memset(m_strFileLog[dwIndex], 0, LOGLENGTH);
+				int ret = fprintf(pFile, m_strFileLog[dwIndex]);
+				if (ret <= 0)
+				{
+					printf("write to file failed errno : %d\n", ret);
+					memset(m_strFileLog[dwIndex], 0, LOGLENGTH);
+				}
 			}
 		}
 	}
@@ -100,17 +106,23 @@ void LogThread::ThrdFunc()
 	{
 		FILE* pFile = GetLogFile();
 		Assert(pFile);
-		int ret = fprintf(pFile, m_strFileLog[dwIndex]);
-		if (ret <= 0)
+		if (pFile)
 		{
-			printf("write to file failed errno : %d\n", ret);
-			memset(m_strFileLog[dwIndex], 0, LOGLENGTH);
+			int ret = fprintf(pFile, m_strFileLog[dwIndex]);
+			if (ret <= 0)
+			{
+				printf("write to file failed errno : %d\n", ret);
+				memset(m_strFileLog[dwIndex], 0, LOGLENGTH);
+			}
 		}
 	}
 	FILE* pFile = GetLogFile();
 	Assert(pFile);
-	fprintf(pFile, "%s:%d LogLv_Info\t\t[%s, %s, %d] thread : %d end!!!!!!!!!!!!!!!!!!!!!\n",
-		GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq(), __FILE__, __FUNCTION__, __LINE__, m_poThrdHandler->GetThreadId());
+	if (pFile)
+	{
+		fprintf(pFile, "%s:%d LogLv_Info\t\t[%s, %s, %d] thread : %d end!!!!!!!!!!!!!!!!!!!!!\n",
+			GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq(), __FILE__, __FUNCTION__, __LINE__, m_poThrdHandler->GetThreadId());
+	}
 	printf("%s:%d LogLv_Info\t\t[%s, %s, %d] thread : %d end!!!!!!!!!!!!!!!!!!!!!\n",
 		GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq(), __FILE__, __FUNCTION__, __LINE__, m_poThrdHandler->GetThreadId());
 }

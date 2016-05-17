@@ -12,6 +12,7 @@ LuaTest/Debug/LuaTest.Build.CppClean.log
 LuaTest/Debug/LuaTest.log
 Net/Debug/Net.Build.CppClean.log
 Net/Debug/Net.log
+Net/Release/Net.log
 TestClient/Debug/TestClient.Build.CppClean.log
 TestClient/Debug/TestClient.log
 TestServer/Debug/TestServer.Build.CppClean.log
@@ -70,3 +71,4 @@ Release/TestClient.lib
 Release/TestClient.iobj
 Release/TestClient.exe_exe_log.txt
 Release/LuaTest.iobj
+

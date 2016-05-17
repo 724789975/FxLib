@@ -124,22 +124,29 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 	{\
 		FILE* pFile = GetLogFile();\
 		Assert(pFile);\
-		if((eLevel < LogLv_Count))\
+		if (pFile)\
 		{\
-			int nLenStr = 0;\
-			fprintf(pFile, "%s:%d ", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
-			fprintf(pFile, "%s", LogLevelString[eLevel]);\
-			fprintf(pFile, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__);\
-			fprintf(pFile, strFmt, ##__VA_ARGS__);\
-			fprintf(pFile, "%s", "\n");\
-			if(eLevel == LogLv_Error)\
+			if((eLevel < LogLv_Count))\
 			{\
-				fprintf(pFile, "%s", PrintTrace());\
+				int nLenStr = 0;\
+				fprintf(pFile, "%s:%d ", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
+				fprintf(pFile, "%s", LogLevelString[eLevel]);\
+				fprintf(pFile, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__);\
+				fprintf(pFile, strFmt, ##__VA_ARGS__);\
+				fprintf(pFile, "%s", "\n");\
+				if(eLevel == LogLv_Error)\
+				{\
+					fprintf(pFile, "%s", PrintTrace());\
+				}\
+			}\
+			else\
+			{\
+				printf("error log fun !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");\
 			}\
 		}\
 		else\
 		{\
-			printf("error log fun !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");\
+			printf("error pFile !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");\
 		}\
 	}\
 }
