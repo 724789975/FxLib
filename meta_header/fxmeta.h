@@ -89,7 +89,7 @@ static const char* LogLevelString[LogLv_Count] =
 
 FILE* GetLogFile();
 
-char* PrintTrace();
+void PrintTrace(char* strTrace);
 
 bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 
@@ -107,7 +107,7 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 			nLenStr += sprintf(strLog + nLenStr, "%s", "\n");\
 			if(eLevel == LogLv_Error)\
 			{\
-				sprintf(strLog + nLenStr, "%s", PrintTrace());\
+				PrintTrace(strLog + nLenStr);\
 			}\
 			LogThread::Instance()->ReadLog(eLogType, strLog);\
 		}\
@@ -122,6 +122,7 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 #define LogExe(eLevel, strFmt, ...)\
 {\
 	{\
+		char strLog[2048] = {0};\
 		FILE* pFile = GetLogFile();\
 		Assert(pFile);\
 		if (pFile)\
@@ -129,15 +130,16 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 			if((eLevel < LogLv_Count))\
 			{\
 				int nLenStr = 0;\
-				fprintf(pFile, "%s:%d ", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
-				fprintf(pFile, "%s", LogLevelString[eLevel]);\
-				fprintf(pFile, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__);\
-				fprintf(pFile, strFmt, ##__VA_ARGS__);\
-				fprintf(pFile, "%s", "\n");\
+				nLenStr += sprintf(strLog + nLenStr, "%s:%d ", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
+				nLenStr += sprintf(strLog + nLenStr, "%s", LogLevelString[eLevel]);\
+				nLenStr += sprintf(strLog + nLenStr, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__);\
+				nLenStr += sprintf(strLog + nLenStr, strFmt, ##__VA_ARGS__);\
+				nLenStr += sprintf(strLog + nLenStr, "%s", "\n");\
 				if(eLevel == LogLv_Error)\
 				{\
-					fprintf(pFile, "%s", PrintTrace());\
+					PrintTrace(strLog + nLenStr);\
 				}\
+				fprintf(pFile, "%s", strLog);\
 			}\
 			else\
 			{\

@@ -206,10 +206,8 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...)
 	return true;
 }
 
-char* PrintTrace()
+void PrintTrace(char* strTrace)
 {
-	static char strTrace[1024];
-	memset(strTrace, 0, 1024);
 	int nLen = 0;
 	nLen += sprintf(strTrace + nLen, "%s\n", " [Trace] ___________begin___________");
 #ifdef WIN32
@@ -252,8 +250,6 @@ char* PrintTrace()
 	}
 #endif // WIN32
 	nLen += sprintf(strTrace + nLen, "%s\n", " [Trace] ___________end___________");
-
-	return strTrace;
 }
 
 void ListDir(const char* pDirName, ListDirAndLoadFile* pListDirAndLoadFile)
