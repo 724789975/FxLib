@@ -1,9 +1,6 @@
 #include "sockmgr.h"
 #include <time.h>
 
-// Max socket count
-#define MAX_SOCKET_COUNT UINT32(128)
-
 IMPLEMENT_SINGLETON(FxMySockMgr)
 
 FxMySockMgr::FxMySockMgr()

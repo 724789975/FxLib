@@ -32,8 +32,11 @@ class FxConnection;
 class IFxDataHeader;
 
 #define LINUX_NETTHREAD_COUNT	2	// linux默认网络线程数,Windows默认采用cpu个数的2倍 现在win下也是2个
-#define MAX_CONNECTION_COUNT	64
+#define MAX_CONNECTION_COUNT	1024
 #define MAX_NETEVENT_PERSOCK	1024
+// Max socket count
+#define MAX_SOCKET_COUNT MAX_CONNECTION_COUNT*32		// 要比MAX_CONNECTION_COUNT 大
+
 
 enum ENetErrCode{
 	NET_RECVBUFF_ERROR	= -7,
