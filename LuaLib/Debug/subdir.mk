@@ -3,13 +3,6 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
-CPP_SRCS += \
-../fxmeta.cpp \
-../fxtimer.cpp \
-../log_thread.cpp \
-../lua_engine.cpp \
-../thread.cpp 
-
 C_SRCS += \
 ../lapi.c \
 ../lauxlib.c \
@@ -48,8 +41,6 @@ C_SRCS += \
 ../tolua_to.c 
 
 OBJS += \
-./fxmeta.o \
-./fxtimer.o \
 ./lapi.o \
 ./lauxlib.o \
 ./lbaselib.o \
@@ -67,7 +58,6 @@ OBJS += \
 ./lmem.o \
 ./loadlib.o \
 ./lobject.o \
-./log_thread.o \
 ./lopcodes.o \
 ./loslib.o \
 ./lparser.o \
@@ -77,12 +67,10 @@ OBJS += \
 ./ltable.o \
 ./ltablib.o \
 ./ltm.o \
-./lua_engine.o \
 ./lundump.o \
 ./lvm.o \
 ./lzio.o \
 ./print.o \
-./thread.o \
 ./tolua_event.o \
 ./tolua_is.o \
 ./tolua_map.o \
@@ -126,22 +114,8 @@ C_DEPS += \
 ./tolua_push.d \
 ./tolua_to.d 
 
-CPP_DEPS += \
-./fxmeta.d \
-./fxtimer.d \
-./log_thread.d \
-./lua_engine.d \
-./thread.d 
-
 
 # Each subdirectory must supply rules for building sources it contributes
-%.o: ../%.cpp
-	@echo 'Building file: $<'
-	@echo 'Invoking: GCC C++ Compiler'
-	g++ -I../../tolua -I../../meta_header -I../../lua -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -o "$@" "$<"
-	@echo 'Finished building: $<'
-	@echo ' '
-
 %.o: ../%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC C Compiler'
