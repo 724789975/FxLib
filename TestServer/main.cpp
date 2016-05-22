@@ -22,22 +22,44 @@ void EndFun(int n)
 
 int main()
 {
-	//--------------------order can't change begin-------------------------//
+	//----------------------order can't change begin-----------------------//
 	signal(SIGINT, EndFun);
 	signal(SIGTERM, EndFun);
-	LogThread::CreateInstance();
+	if (!LogThread::CreateInstance())
+	{
+		return 0;
+	}
 
-	CLuaEngine::CreateInstance();
-	CLuaEngine::Instance()->Reload();
+	if (!CLuaEngine::CreateInstance())
+	{
+		return 0;
+	}
+	if (!CLuaEngine::Instance()->Reload())
+	{
+		return 0;
+	}
 
-	GetTimeHandler()->Init();
+	if (!GetTimeHandler()->Init())
+	{
+		return 0;
+	}
 	GetTimeHandler()->Run();
-	LogThread::Instance()->Init();
-	//--------------------order can't change end-------------------------//
+	if (!LogThread::Instance()->Init())
+	{
+		return 0;
+	}
 
-	CSessionFactory::CreateInstance();
+	if (!CSessionFactory::CreateInstance())
+	{
+		return 0;
+	}
 	CSessionFactory::Instance()->Init();
 	IFxNet* pNet = FxNetGetModule();
+	if (!pNet)
+	{
+		return 0;
+	}
+	//----------------------order can't change end-----------------------//
 
 	//SDBConnInfo oInfo;
 	//memset(&oInfo, 0, sizeof(oInfo));

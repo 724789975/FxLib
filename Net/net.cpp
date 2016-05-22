@@ -9,7 +9,7 @@ FxNetModule::FxNetModule()
 {
     m_nNetThreadCount = 0;
     m_nMaxConnectionCount = MAX_CONNECTION_COUNT;
-    m_nTotalEventCount = MAX_NETEVENT_PERSOCK * MAX_CONNECTION_COUNT;
+    m_nTotalEventCount = MAX_NETEVENT_PERSOCK * MAX_SOCKET_COUNT;
     m_bInit = false;
 }
 

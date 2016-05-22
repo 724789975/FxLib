@@ -7,6 +7,8 @@
 
 #include <signal.h>
 
+#define CLIENTCOUNT 2
+
 bool bRun = true;
 
 void EndFun(int n)
@@ -26,52 +28,87 @@ int main()
 	//--------------------order can't change begin-------------------------//
 	signal(SIGINT, EndFun);
 	signal(SIGTERM, EndFun);
-	LogThread::CreateInstance();
+	if (!LogThread::CreateInstance())
+	{
+		return 0;
+	}
 
-	CLuaEngine::CreateInstance();
-	CLuaEngine::Instance()->Reload();
+	if (!CLuaEngine::CreateInstance())
+	{
+		return 0;
+	}
+	if (!CLuaEngine::Instance()->Reload())
+	{
+		return 0;
+	}
 
-	GetTimeHandler()->Init();
+	if (!GetTimeHandler()->Init())
+	{
+		return 0;
+	}
 	GetTimeHandler()->Run();
-	LogThread::Instance()->Init();
-	//--------------------order can't change end-------------------------//
+	if (!LogThread::Instance()->Init())
+	{
+		return 0;
+	}
 
 	IFxNet* pNet = FxNetGetModule();
+	if (!pNet)
+	{
+		return 0;
+	}
+	//--------------------order can't change end-------------------------//
 
 	UINT32 dwIP = inet_addr("127.0.0.1");
 
-	FxSession* pSession = oSessionFactory.CreateSession();
-	pNet->Connect(pSession, dwIP, 12000, true);
+	FxSession* oSessions[CLIENTCOUNT] = { 0 };
+
+	for (int i = 0; i < CLIENTCOUNT; ++i)
+	{
+		oSessions[i] = oSessionFactory.CreateSession();
+		pNet->Connect(oSessions[i], dwIP, 12000, true);
+	}
+
+	//FxSession* pSession = oSessionFactory.CreateSession();
+	//pNet->Connect(pSession, dwIP, 12000, true);
 
 	char szMsg[1024] = "";
-	int i = 0;
+	int j = 0;
 	while (bRun)
 	{
 		GetTimeHandler()->Run();
 		pNet->Run(0xffffffff);
-		if (pSession->IsConnected())
+		for (int i = 0; i < CLIENTCOUNT; ++i)
 		{
-			sprintf(szMsg, "%d", i);
-			if (!pSession->Send(szMsg, 1024))
+			if (oSessions[i]->IsConnected())
 			{
-				//pSession->Close();
+				sprintf(szMsg, "%d", j);
+				if (!oSessions[i]->Send(szMsg, 1024))
+				{
+					//pSession->Close();
+				}
+				else
+				{
+					LogExe(LogLv_Debug, "send : %s", szMsg);
+					//++i;
+				}
+				//FxSleep(1);
 			}
 			else
 			{
-				LogExe(LogLv_Debug, "send : %s", szMsg);
-				++i;
-			}
-			FxSleep(1);
-		}
-		else
-		{
-			if (!pSession->IsConnecting())
-			{
-				pSession->Reconnect();
+				if (!oSessions[i]->IsConnecting())
+				{
+					oSessions[i]->Reconnect();
+				}
 			}
 		}
+		FxSleep(1);
+		++j;
 	}
-	pSession->Close();
+	for (int i = 0; i < CLIENTCOUNT; ++i)
+	{
+		oSessions[i]->Close();
+	}
 	FxSleep(10);
 	pNet->Run(0xffffffff);
 	FxSleep(10);
