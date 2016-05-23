@@ -443,7 +443,10 @@ void FxListenSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByte
 			closesocket(pIoData->hSock);
 			PostAccept(*pIoData);
 		}
-		OnAccept(pIoData);
+		else
+		{
+			OnAccept(pIoData);
+		}
 		m_oLock.UnLock();
 	}
 		break;

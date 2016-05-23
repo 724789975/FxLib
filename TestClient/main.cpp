@@ -7,7 +7,7 @@
 
 #include <signal.h>
 
-#define CLIENTCOUNT 2
+#define CLIENTCOUNT 256
 
 bool bRun = true;
 

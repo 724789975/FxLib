@@ -239,7 +239,7 @@ bool FxIoThread::__DealEpollData()
 		bRet = GetQueuedCompletionStatus(
 				GetHandle(),
 				&dwByteTransferred,
-				(LPDWORD)&poSock,
+				(PULONG_PTR)&poSock,
 				(LPOVERLAPPED*)&pstPerIoData,
 				INFINITE);
 

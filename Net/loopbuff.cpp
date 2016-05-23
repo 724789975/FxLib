@@ -39,6 +39,7 @@ FxLoopBuff::~FxLoopBuff()
 
 bool FxLoopBuff::Init(int nLen)
 {
+	char* pTem = m_pszBuff;
     if (nLen != m_nTotalLen)
     {
         m_pszBuff = (char*)realloc(m_pszBuff, nLen);
@@ -46,6 +47,8 @@ bool FxLoopBuff::Init(int nLen)
 
     if (NULL == m_pszBuff)
     {
+		// realloc 失败 以前开辟过空间的话 会内存泄漏
+		m_pszBuff = pTem;
         return false;
     }
     
