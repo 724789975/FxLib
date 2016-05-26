@@ -97,7 +97,7 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 {\
 	{\
 		char strLog[2048] = {0};\
-		if(strLog && (eLevel < LogLv_Count))\
+		if(eLevel < LogLv_Count)\
 		{\
 			int nLenStr = 0;\
 			nLenStr += sprintf(strLog + nLenStr, "%s:%d ", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
