@@ -1,20 +1,24 @@
 ﻿#ifndef __IFNET_H__
 #define __IFNET_H__
 
-
-#ifdef WIN32
-#include <WinSock2.h>
-
 #ifdef	FXN_DLLCLASS
-#define	DLLCLASS_DECL			__declspec(dllimport)	
+#ifndef DLLCLASS_DECL
+#define	DLLCLASS_DECL			__declspec(dllimport)
+#endif
 #else
-#define	DLLCLASS_DECL			__declspec(dllexport)	
+#ifndef DLLCLASS_DECL
+#define	DLLCLASS_DECL			__declspec(dllexport)
+#endif
 #endif
 
 #ifdef FXN_STATICLIB
 #undef	DLLCLASS_DECL
 #define DLLCLASS_DECL
 #endif
+
+
+#ifdef WIN32
+#include <WinSock2.h>
 
 #else
 #include <arpa/inet.h>
