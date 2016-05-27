@@ -16,14 +16,13 @@
 #define DLLCLASS_DECL
 #endif
 
-
 #ifdef WIN32
 #include <WinSock2.h>
 
 #else
 #include <arpa/inet.h>
 #define SOCKET UINT32
-#define DLLCLASS_DECL
+//#define DLLCLASS_DECL
 #define INVALID_SOCKET UINT32(-1)
 #endif
 
@@ -64,7 +63,7 @@ enum ENetOpt
 	ENET_MAX_TOTALEVENT,		// 每个Socket的最大事件数量
 };
 
-class DLLCLASS_DECL FxSession
+class FxSession
 {
 public:
 	FxSession();
@@ -196,7 +195,7 @@ public:
 
 	virtual bool Init() = 0;
 
-	virtual bool Init(IFxSessionFactory* pSessionFactory){ m_poSessionFactory = pSessionFactory; return Init(); }
+	bool Init(IFxSessionFactory* pSessionFactory){ m_poSessionFactory = pSessionFactory; return Init(); }
 
 	virtual void OnRead() = 0;
 	virtual void OnWrite() = 0;

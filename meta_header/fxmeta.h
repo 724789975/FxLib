@@ -73,8 +73,6 @@ static const char* LogLevelString[LogLv_Count] =
 		"LogLv_Debug3	",
 };
 
-#define HALF_GIGA	512*1024*1024
-
 FILE* GetLogFile();
 
 void PrintTrace(char* strTrace);

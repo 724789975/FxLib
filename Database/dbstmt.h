@@ -40,11 +40,11 @@ private:
 	FxMySQLConnection* m_pDBConnection;
 	MYSQL_STMT* m_pStmt;
 	MYSQL_BIND* m_pParamsBind;
-	UINT32 m_dwParamsNum;
-	UINT32 m_dwCurBindParamPos;
 	MYSQL_BIND* m_pResultsBind;
-	UINT32 m_dwResultsNum;
+	UINT32 m_dwCurBindParamPos;
+	UINT32 m_dwParamsNum;
 	UINT32 m_dwCurBindResultPos;
+	UINT32 m_dwResultsNum;
 };
 
 #endif /* __DB_STMT_H_2012_11_28__ */

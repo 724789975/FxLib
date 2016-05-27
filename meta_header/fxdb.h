@@ -179,10 +179,4 @@ public:
 
 IDBModule *             FxDBGetModule();
 
-//typedef IDBModule *     (*PFN_FxDBGetModule)();
-
-//bool                    FxDBSetLogger(IFxLogger* poLogger, UINT32 dwLevel);
-
-//typedef bool            (*PFN_FxDBSetLogger)(IFxLogger* poLogger, UINT32 dwLevel);
-
 #endif  // __FXDB_H_2016_0303__

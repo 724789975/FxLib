@@ -12,8 +12,8 @@ RANLIB	= ranlib
 #  Flags
 ifeq ($(BUILD),DEBUG)
 D = d
-C_LFLAGS		= -g -Wall -D_DEBUG -DLINUX
-CXX_FLAGS 		= -g -Wall -Woverloaded-virtual -D_DEBUG -DLINUX 
+C_LFLAGS		= -g3 -O2 -rdynamic -Wall -D_DEBUG -DLINUX
+CXX_FLAGS 		= -g3 -O2 -rdynamic -Wall -Woverloaded-virtual -D_DEBUG -DLINUX 
 else
 D = 
 C_LFLAGS		= -g -Wall -DNDEBUG -DLINUX
@@ -39,12 +39,14 @@ all:$(OUTPUT)
 
 $(OUTPUT):$(OBJS:.cpp=.o)
 	@echo Build...$@
-	@$(AR) $(ARFLAGS) $(OUTPUT_DIR)/$(OUTPUT) $(OBJS:.cpp=.o)
+	$(AR) $(ARFLAGS) $(OUTPUT_DIR)/$(OUTPUT) $(OBJS:.cpp=.o)
 	@$(RANLIB) $(OUTPUT_DIR)/$(OUTPUT)
 
 %.o: %.cpp
-	@echo Compile...$@
-	$(CPP) $(CXX_FLAGS) $(INCLUDE_FLAG) -c $< -o $@ -MMD -MP -MF$(@:%.o=%.d) 
+#	@echo Compile...$@
+	$(CPP) $(CXX_FLAGS) $(INCLUDE_FLAG) -c $< -o $@ -MMD -MP -MF$(@:%.o=%.d)
+
+-include $(OBJS:.cpp=.d)
 	
 clean:
 	rm -f $(OUTPUT_DIR)/$(OUTPUT)

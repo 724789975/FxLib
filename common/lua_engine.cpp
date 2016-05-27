@@ -8,12 +8,10 @@ CLuaEngine::CLuaEngine()
 {
 	m_pState = NULL;
 	m_pBackState = NULL;
-// TODO Auto-generated constructor stub
 }
 
 CLuaEngine::~CLuaEngine()
 {
-// TODO Auto-generated destructor stub
 }
 
 bool CLuaEngine::Init(std::vector<ToluaFunctionOpen*>& vecToLuaFunctions)

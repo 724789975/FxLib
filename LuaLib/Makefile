@@ -12,11 +12,11 @@ RANLIB	= ranlib
 #  Flags
 ifeq ($(BUILD),DEBUG)
 D = d
-C_FLAGS		= -g -Wall -D_DEBUG -DLINUX
-CXX_FLAGS 		= -g -Wall -Woverloaded-virtual -D_DEBUG -DLINUX 
+C_FLAGS			= -g3 -O2 -rdynamic -Wall -D_DEBUG -DLINUX
+CXX_FLAGS 		= -g3 -O2 -rdynamic -Wall -Woverloaded-virtual -D_DEBUG -DLINUX 
 else
 D = 
-C_FLAGS		= -g -Wall -DNDEBUG -DLINUX
+C_FLAGS			= -g -Wall -DNDEBUG -DLINUX
 CXX_FLAGS 		= -g -Wall -Woverloaded-virtual -DNDEBUG -DLINUX
 endif
 
@@ -35,16 +35,18 @@ OUTPUT = libLuaLib.a
 OBJS = $(foreach i, $(CODE_DIR), $(shell find $(i) -name "*.c"))
 INCLUDE_FLAG = $(foreach i, $(INCLUDE_DIR), -I$(i))
 
-all:$(OUTPUT) $(OBJS:.c=.d)
+all:$(OUTPUT)
 
 $(OUTPUT):$(OBJS:.c=.o)
 	@echo Build...$@
-	@$(AR) $(ARFLAGS) $(OUTPUT_DIR)/$(OUTPUT) $(OBJS:.c=.o)
+	$(AR) $(ARFLAGS) $(OUTPUT_DIR)/$(OUTPUT) $(OBJS:.c=.o)
 	@$(RANLIB) $(OUTPUT_DIR)/$(OUTPUT)
 
 %.o: %.c
-	@echo Compile...$@
-	@$(CC) $(C_FLAGS) $(INCLUDE_FLAG) -c $< -o $@ -MMD -MP -MF$(@:%.o=%.d) 
+#	@echo Compile...$@
+	$(CC) $(C_FLAGS) $(INCLUDE_FLAG) -c $< -o $@ -MMD -MP -MF$(@:%.o=%.d)
+
+-include $(OBJS:.c=.d)
 
 clean:
 	rm -f $(OUTPUT_DIR)/$(OUTPUT)

@@ -355,7 +355,7 @@ const char* FxMySQLConnection::GetLastErrorString()
 
 bool FxMySQLConnection::__GetCharSetInfo()
 {
-    char* pszSql = "select  @@character_set_client, \
+    const char* pszSql = "select  @@character_set_client, \
                             @@character_set_connection,\
                             @@character_set_database,\
                             @@character_set_results,\

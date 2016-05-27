@@ -37,7 +37,7 @@ void LogThread::ThrdFunc()
 			unsigned int dwIndex = m_dwCurrentIndex ? 0 : 1;
 			if (strlen(m_strScreenLog[dwIndex]) > 0)
 			{
-				printf(m_strScreenLog[dwIndex]);
+				printf("%s", m_strScreenLog[dwIndex]);
 			}
 			else
 			{
@@ -50,7 +50,7 @@ void LogThread::ThrdFunc()
 				Assert(pFile);
 				if (pFile)
 				{
-					int ret = fprintf(pFile, m_strFileLog[dwIndex]);
+					int ret = fprintf(pFile, "%s", m_strFileLog[dwIndex]);
 					if (ret <= 0)
 					{
 						printf("write to file failed errno : %d\n", ret);
@@ -76,7 +76,7 @@ void LogThread::ThrdFunc()
 		unsigned int dwIndex = m_dwCurrentIndex ? 0 : 1;
 		if (strlen(m_strScreenLog[dwIndex]) > 0)
 		{
-			printf(m_strScreenLog[dwIndex]);
+			printf("%s", m_strScreenLog[dwIndex]);
 			memset(m_strScreenLog[dwIndex], 0, LOGLENGTH);
 		}
 
@@ -86,7 +86,7 @@ void LogThread::ThrdFunc()
 			Assert(pFile);
 			if (pFile)
 			{
-				int ret = fprintf(pFile, m_strFileLog[dwIndex]);
+				int ret = fprintf(pFile, "%s", m_strFileLog[dwIndex]);
 				if (ret <= 0)
 				{
 					printf("write to file failed errno : %d\n", ret);
@@ -98,7 +98,7 @@ void LogThread::ThrdFunc()
 	unsigned int dwIndex = m_dwCurrentIndex;
 	if (strlen(m_strScreenLog[dwIndex]) > 0)
 	{
-		printf(m_strScreenLog[dwIndex]);
+		printf("%s", m_strScreenLog[dwIndex]);
 		memset(m_strScreenLog[dwIndex], 0, LOGLENGTH);
 	}
 
@@ -108,7 +108,7 @@ void LogThread::ThrdFunc()
 		Assert(pFile);
 		if (pFile)
 		{
-			int ret = fprintf(pFile, m_strFileLog[dwIndex]);
+			int ret = fprintf(pFile, "%s", m_strFileLog[dwIndex]);
 			if (ret <= 0)
 			{
 				printf("write to file failed errno : %d\n", ret);
@@ -185,12 +185,12 @@ void LogThread::ReadLog(unsigned int dwLogType, char* strLog)
 	if (dwLogType & LT_Screen)
 	{
 		char* pStr = (char*)(m_strScreenLog[m_dwCurrentIndex]) + dwScreenLogIndex;
-		dwScreenLogIndex += sprintf(pStr, strLog);
+		dwScreenLogIndex += sprintf(pStr, "%s", strLog);
 	}
 	if (dwLogType & LT_File)
 	{
 		char* pStr = (char*)(m_strFileLog[m_dwCurrentIndex]) + dwFileLogIndex;
-		dwFileLogIndex += sprintf(pStr, strLog);
+		dwFileLogIndex += sprintf(pStr, "%s", strLog);
 	}
 	m_pLock->UnLock();
 }
