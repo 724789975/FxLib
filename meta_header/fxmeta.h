@@ -21,12 +21,6 @@ typedef unsigned long long	UINT64;
 #define NULL 0
 #endif
 
-typedef struct
-{
-	UINT32 m_dwSec;		///< seconds
-	UINT32 m_dwUsec;	///< microsecond(1/1,000,000 second)
-} STimeVal;
-
 class ListDirAndLoadFile
 {
 public:
@@ -53,12 +47,6 @@ public:
 
 	virtual const char * GetModuleName(void) = 0;
 };
-
-//#define LOGLV_NONE			0x0000
-//#define LOGLV_DEBUG			0x0001
-//#define LOGLV_INFO			(0x0001<< 1)
-//#define LOGLV_WARN			(0x0001<< 2)
-//#define LOGLV_CRITICAL		(0x0001<< 3)
 
 enum LOGLEVEL
 {

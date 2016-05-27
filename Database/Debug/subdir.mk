@@ -3,6 +3,14 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
+O_SRCS += \
+../dbclient.o \
+../dbconnection.o \
+../dbmodule.o \
+../dbreader.o \
+../dbstmt.o \
+../fxdb.o 
+
 CPP_SRCS += \
 ../dbclient.cpp \
 ../dbconnection.cpp \

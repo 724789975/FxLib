@@ -3,6 +3,13 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
+O_SRCS += \
+/home/dengxiaobo/workspace/FxLib/common/fxmeta.o \
+/home/dengxiaobo/workspace/FxLib/common/fxtimer.o \
+/home/dengxiaobo/workspace/FxLib/common/log_thread.o \
+/home/dengxiaobo/workspace/FxLib/common/lua_engine.o \
+/home/dengxiaobo/workspace/FxLib/common/thread.o 
+
 CPP_SRCS += \
 /home/dengxiaobo/workspace/FxLib/common/fxmeta.cpp \
 /home/dengxiaobo/workspace/FxLib/common/fxtimer.cpp \

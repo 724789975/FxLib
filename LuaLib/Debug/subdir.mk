@@ -3,6 +3,43 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
+O_SRCS += \
+../lapi.o \
+../lauxlib.o \
+../lbaselib.o \
+../lcode.o \
+../ldblib.o \
+../ldebug.o \
+../ldo.o \
+../ldump.o \
+../lfunc.o \
+../lgc.o \
+../linit.o \
+../liolib.o \
+../llex.o \
+../lmathlib.o \
+../lmem.o \
+../loadlib.o \
+../lobject.o \
+../lopcodes.o \
+../loslib.o \
+../lparser.o \
+../lstate.o \
+../lstring.o \
+../lstrlib.o \
+../ltable.o \
+../ltablib.o \
+../ltm.o \
+../lundump.o \
+../lvm.o \
+../lzio.o \
+../print.o \
+../tolua_event.o \
+../tolua_is.o \
+../tolua_map.o \
+../tolua_push.o \
+../tolua_to.o 
+
 C_SRCS += \
 ../lapi.c \
 ../lauxlib.c \

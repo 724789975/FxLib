@@ -3,6 +3,16 @@
 ################################################################################
 
 # Add inputs and outputs from these tool invocations to the build variables 
+O_SRCS += \
+../connection.o \
+../connectionmgr.o \
+../ifnet.o \
+../iothread.o \
+../loopbuff.o \
+../mysock.o \
+../net.o \
+../sockmgr.o 
+
 CPP_SRCS += \
 ../connection.cpp \
 ../connectionmgr.cpp \
