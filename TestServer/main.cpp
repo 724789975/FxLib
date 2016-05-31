@@ -6,13 +6,13 @@
 
 #include <signal.h>
 
-bool bRun = true;
+bool g_bRun = true;
 
 void EndFun(int n)
 {
 	if (n == SIGINT || n == SIGTERM)
 	{
-		bRun = false;
+		g_bRun = false;
 	}
 	else
 	{
@@ -77,7 +77,7 @@ int main()
 
 	IFxListenSocket* pListenSocket = pNet->Listen(CSessionFactory::Instance(), 0, 0, 12000);
 
-	while (bRun)
+	while (g_bRun)
 	{
 		GetTimeHandler()->Run();
 		pNet->Run(0xffffffff);

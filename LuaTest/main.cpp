@@ -6,6 +6,8 @@
 
 #include "fxtimer.h"
 
+#include <signal.h>
+
 //#include<getopt.h>
 
 class TestTimer: public IFxTimer
@@ -49,8 +51,24 @@ Array* parray = &array;
 //{ "file", 1, 0, 0 },
 //{ 0, 0, 0, 0 } };
 
+bool g_bRun = true;
+
+void EndFun(int n)
+{
+	if (n == SIGINT || n == SIGTERM)
+	{
+		g_bRun = false;
+	}
+	else
+	{
+		printf("unknown signal : %d !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n", n);
+	}
+}
+
 int main(int argc, char **argv)
 {
+	signal(SIGINT, EndFun);
+	signal(SIGTERM, EndFun);
 	LogThread::CreateInstance();
 	LogThread::Instance()->Init();
 
@@ -108,14 +126,17 @@ int main(int argc, char **argv)
 	int aaa = (int)CLuaEngine::Instance()->CallNumberFunction<int, char>("add", 3,
 			4);
 
-	printf("%s",
-			CLuaEngine::Instance()->CallStringFunction<int, char*>("test1", 3,
-					"!!!!!!!!!11"));
+	//printf("%s",
+	//		CLuaEngine::Instance()->CallStringFunction<int, char*>("test1", 3,
+	//				"!!!!!!!!!11"));
 
 	Point* p1 = CLuaEngine::Instance()->CallUserFunction<Point, Point*, int>(
 			"test", &p[0], 4);
 
-	CLuaEngine::Instance()->CallVoidFunction("optest", argv);
+	if (!CLuaEngine::Instance()->CommandLineFunction(argv, argc))
+	{
+		return 0;
+	}
 
 	GetTimeHandler()->Init();
 	GetTimeHandler()->Run();
@@ -123,7 +144,7 @@ int main(int argc, char **argv)
 	TestTimer oTimer;
 	GetTimeHandler()->AddDelayTimer(10, &oTimer);
 	GetTimeHandler()->AddEveryFewMinuteTimer(5, &oTimer);
-	while (1)
+	while (g_bRun)
 	{
 		GetTimeHandler()->Run();
 		FxSleep(1000);

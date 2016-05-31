@@ -86,6 +86,34 @@ lua_State* CLuaEngine::GetLuaState()
 	return m_pState;
 }
 
+bool CLuaEngine::CommandLineFunction(char** ppstrArg, unsigned int dwArgNum)
+{
+	lua_newtable(GetLuaState());
+	for (int i = 0; i < dwArgNum; ++i)
+	{
+		lua_pushnumber(GetLuaState(), i);
+		lua_pushstring(GetLuaState(), ppstrArg[i]);
+		lua_settable(GetLuaState(), -3);
+	}
+	lua_setglobal(GetLuaState(), "tableCommandLine");
+	lua_settop(GetLuaState(), 0);
+
+	lua_getglobal(GetLuaState(), "GetoptLong");
+	int nRet = lua_pcall(GetLuaState(), 0, 1, 0);
+	if (nRet != 0)
+	{
+		//LogFun(LT_Screen | LT_File, LogLv_Error, "result : %d, error : %s", nRet, lua_tostring(GetLuaState(), -1));
+		printf("result : %d, error : %s\n", nRet, lua_tostring(GetLuaState(), -1));
+		lua_pop(GetLuaState(), 1);
+		lua_settop(GetLuaState(), 0);
+		return false;
+	}
+	bool bRet = lua_toboolean(GetLuaState(), -1);
+	lua_pop(GetLuaState(), 1);
+	lua_settop(GetLuaState(), 0);
+	return bRet;
+}
+
 void CLuaEngine::CallVoidFunction(const char* pFunctionName)
 {
 	Assert(CallFunction(pFunctionName, 0));

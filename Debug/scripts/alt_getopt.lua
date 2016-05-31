@@ -62,23 +62,17 @@ local function canonize (options, opt)
 end
 
 function get_ordered_opts (arg, sh_opts, long_opts)
-	print(debug.traceback())
 	local i = 1
 	local count = 1
 	local opts = {}
 	local optarg = {}
-	print("t1t1t1")
-	print(arg)
 
 	local options = convert_short2long (sh_opts)
 	for k,v in pairs (long_opts) do
 		options [k] = v
 	end
-	print("e1")
 
-	print(arg)
 	while i <= #arg do
-		print(i .. " " .. #arg)
 		local a = arg [i]
 
 		if a == "--" then
@@ -153,12 +147,10 @@ function get_ordered_opts (arg, sh_opts, long_opts)
 		i = i + 1
 	end
 
-	print("end")
 	return opts,i,optarg
 end
 
 function get_opts (arg, sh_opts, long_opts)
-	print(debug.traceback())
 	local ret = {}
 
 	local opts,optind,optarg = get_ordered_opts (arg, sh_opts, long_opts)

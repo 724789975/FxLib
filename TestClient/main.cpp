@@ -9,13 +9,13 @@
 
 #define CLIENTCOUNT 256
 
-bool bRun = true;
+bool g_bRun = true;
 
 void EndFun(int n)
 {
 	if (n == SIGINT || n == SIGTERM)
 	{
-		bRun = false;
+		g_bRun = false;
 	}
 	else
 	{
@@ -74,7 +74,7 @@ int main()
 
 	char szMsg[1024] = "";
 	int j = 0;
-	while (bRun)
+	while (g_bRun)
 	{
 		GetTimeHandler()->Run();
 		pNet->Run(0xffffffff);
