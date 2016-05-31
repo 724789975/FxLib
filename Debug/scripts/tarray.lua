@@ -1,4 +1,4 @@
-print("aaaaaaaaaaaaaaaaaaaaaaaaa")
+--print("aaaaaaaaaaaaaaaaaaaaaaaaa")
 for i=0,9 do
 	--print(a[i])
 end
@@ -35,4 +35,4 @@ for i=2,9 do
 	--assert(array.p[i].x==0 and array.p[i].y==1)
 end
 
-print("Array test OK")
+--print("Array test OK")

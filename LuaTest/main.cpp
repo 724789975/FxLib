@@ -115,6 +115,8 @@ int main(int argc, char **argv)
 	Point* p1 = CLuaEngine::Instance()->CallUserFunction<Point, Point*, int>(
 			"test", &p[0], 4);
 
+	CLuaEngine::Instance()->CallVoidFunction("optest", argv);
+
 	GetTimeHandler()->Init();
 	GetTimeHandler()->Run();
 
