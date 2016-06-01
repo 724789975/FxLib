@@ -47,7 +47,7 @@ bool CLuaEngine::Reload()
 	sprintf(strScriptPath, "%s%s%s%s", strExePath, "\\", WORK_PATH, "\\");
 #else
 	sprintf(strScriptPath, "%s%s%s%s", strExePath, "/", WORK_PATH, "/");
-#endif // WIN32
+
 	char strLuaPath[256] = {0};
 	sprintf(strLuaPath, "local p = '%s'\n"
 			"local m_package_path = package.path\n"
@@ -62,7 +62,7 @@ bool CLuaEngine::Reload()
 		return false;
 	}
 	lua_settop(m_pBackState, 0);
-
+#endif // WIN32
 	ListDir(strScriptPath, this);
 
 	lua_settop(m_pBackState, 0);
@@ -103,7 +103,7 @@ lua_State* CLuaEngine::GetLuaState()
 bool CLuaEngine::CommandLineFunction(char** ppstrArg, unsigned int dwArgNum)
 {
 	lua_newtable(GetLuaState());
-	for (int i = 0; i < dwArgNum; ++i)
+	for (unsigned int i = 0; i < dwArgNum; ++i)
 	{
 		lua_pushnumber(GetLuaState(), i);
 		lua_pushstring(GetLuaState(), ppstrArg[i]);
@@ -122,7 +122,7 @@ bool CLuaEngine::CommandLineFunction(char** ppstrArg, unsigned int dwArgNum)
 		lua_settop(GetLuaState(), 0);
 		return false;
 	}
-	bool bRet = lua_toboolean(GetLuaState(), -1);
+	bool bRet = lua_toboolean(GetLuaState(), -1) > 0;
 	lua_pop(GetLuaState(), 1);
 	lua_settop(GetLuaState(), 0);
 	return bRet;

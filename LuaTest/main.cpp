@@ -149,6 +149,6 @@ int main(int argc, char **argv)
 		GetTimeHandler()->Run();
 		FxSleep(1000);
 	}
-
+	LogThread::Instance()->Stop();
 	return 0;
 }
