@@ -1,3 +1,4 @@
+require "lua_path.lua"
 require "alt_getopt"
 
 --看命令行是干什么的 要是查看信息的话 就不进行游戏

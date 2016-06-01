@@ -16,8 +16,8 @@ C_FLAGS			= -g3 -O2 -rdynamic -Wall -D_DEBUG -DLINUX
 CXX_FLAGS 		= -g3 -O2 -rdynamic -Wall -Woverloaded-virtual -D_DEBUG -DLINUX 
 else
 D = 
-C_FLAGS			= -g -Wall -DNDEBUG -DLINUX
-CXX_FLAGS 		= -g -Wall -Woverloaded-virtual -DNDEBUG -DLINUX
+C_FLAGS			= -g -rdynamic -Wall -DNDEBUG -DLINUX
+CXX_FLAGS 		= -g -rdynamic -Wall -Woverloaded-virtual -DNDEBUG -DLINUX
 endif
 
 ARFLAGS			= -rc

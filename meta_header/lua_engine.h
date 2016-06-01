@@ -54,7 +54,7 @@ public:
 	void Close();
 	lua_State* GetLuaState();
 
-	// 这个函数调用的lua文件为 opt.lua 一定要保证有这个文件 并且相关的命令行设置都在那个文件
+	// 这个函数调用的lua文件为 cmd_param.lua 一定要保证有这个文件 并且相关的命令行设置都在那个文件
 	bool CommandLineFunction(char** ppstrArg, unsigned int dwArgNum);
 
 	void CallVoidFunction(const char* pFunctionName);
