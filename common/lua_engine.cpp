@@ -46,8 +46,22 @@ bool CLuaEngine::Reload()
 #ifdef WIN32
 	sprintf(strScriptPath, "%s%s%s%s", strExePath, "\\", WORK_PATH, "\\");
 #else
-	sprintf(strScriptPath, "%s%s%s", strExePath, "/", WORK_PATH);
+	sprintf(strScriptPath, "%s%s%s%s", strExePath, "/", WORK_PATH, "/");
 #endif // WIN32
+	char strLuaPath[256] = {0};
+	sprintf(strLuaPath, "local p = '%s'\n"
+			"local m_package_path = package.path\n"
+			"package.path = string.format('%%s;%%s?.lua;%%s?/init.lua', m_package_path, p, p)\n",
+			strScriptPath);
+	luaL_loadstring(m_pBackState, strLuaPath);
+	int ret = lua_pcall(m_pBackState, 0, 0, 0);
+	if (ret != 0)
+	{
+		printf("result : %d, error : %s", ret, lua_tostring(m_pBackState, -1));
+		lua_pop(m_pBackState, 1);
+		return false;
+	}
+	lua_settop(m_pBackState, 0);
 
 	ListDir(strScriptPath, this);
 
@@ -203,7 +217,7 @@ const char* CLuaEngine::LuaTraceBack()
 	// 打印lua调用栈开始//
 	lua_getglobal(GetLuaState(), "debug");
 	lua_getfield(GetLuaState(), -1, "traceback");
-	int iError = lua_pcall(GetLuaState(),    //VMachine
+	lua_pcall(GetLuaState(),    //VMachine
 			0,    //Argument Count
 			1,    //Return Value Count
 			0);
