@@ -7,7 +7,11 @@ end
 
 local function Version(strParam)
 	print("version info")
-	return TRUE
+end
+
+local function SetPortL(strParam)
+	--dwPort = strParam
+	SetPortC(15000)
 end
 
 local tableCmdOptions =
@@ -22,6 +26,8 @@ local tableCmdOptions =
 	["h"] = Help,
 	["v"] = Version,
 	["version"] = Version,
+	["port"] = SetPortL,
+	["p"] = SetPortL,
 }
 
 local function CommandOption(strCmd, strParam)
@@ -40,6 +46,7 @@ local long_opts =
 	--verbose = "v",
 	version = "v",
 	help = "h",
+	port = "p",
 	fake = 0,
 	len	= 1,
 	output = "o",
@@ -47,7 +54,7 @@ local long_opts =
 	["set-output"] = "o",
 	test = 2,
 	add = 3,
-	delete = 4
+	delete = 4,
 }
 
 tableCommandLine = {}
@@ -58,7 +65,7 @@ function GetoptLong()
 	local optarg = {}
 	local optind = 0
 	local opts = {}
-	opts,optind,optarg = alt_getopt.get_ordered_opts (tableCommandLine, "hVvo:n:S:", long_opts)
+	opts,optind,optarg = alt_getopt.get_ordered_opts (tableCommandLine, "hVvp:o:n:S:", long_opts)
 	for i,v in ipairs (opts) do
 		if v == "h" or v == "v" then
 			bRun = false

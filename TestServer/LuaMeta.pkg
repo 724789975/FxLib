@@ -1,0 +1,20 @@
+$#include "fxmeta.h"
+$#include "ifnet.h"
+$#include "SocketSession.h"
+
+class IFxNet
+{
+public:
+	~IFxNet();
+	bool		Init();
+	bool		Run(UINT32 dwCount);
+	void		Release();
+
+	SOCKET      Connect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect);
+	IFxListenSocket* Listen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort);
+};
+
+IFxNet* FxNetGetModule();
+
+void SetPortC(unsigned int dwPort);
+

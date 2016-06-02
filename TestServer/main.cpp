@@ -20,7 +20,7 @@ void EndFun(int n)
 	}
 }
 
-int main()
+int main(int argc, char **argv)
 {
 	//----------------------order can't change begin-----------------------//
 	signal(SIGINT, EndFun);
@@ -34,11 +34,21 @@ int main()
 	{
 		return 0;
 	}
+	std::vector<ToluaFunctionOpen*> vecFunctions;
+	int tolua_LuaMeta_open(lua_State*);
+	vecFunctions.push_back(tolua_LuaMeta_open);
+	if (!CLuaEngine::Instance()->Init(vecFunctions))
+	{
+		return 0;
+	}
 	if (!CLuaEngine::Instance()->Reload())
 	{
 		return 0;
 	}
-
+	if (!CLuaEngine::Instance()->CommandLineFunction(argv, argc))
+	{
+		return 0;
+	}
 	if (!GetTimeHandler()->Init())
 	{
 		return 0;
@@ -75,7 +85,7 @@ int main()
 	//	LogFun(LT_Screen, LogLv_Info, "%s", "db connected~~~~");
 	//}
 
-	IFxListenSocket* pListenSocket = pNet->Listen(CSessionFactory::Instance(), 0, 0, 12000);
+	IFxListenSocket* pListenSocket = pNet->Listen(CSessionFactory::Instance(), 0, 0, sg_dwPort);
 
 	while (g_bRun)
 	{
