@@ -1,5 +1,5 @@
 
-DIRS = Database LuaLib Net TestClient TestServer
+DIRS = Database LuaLib Net LuaTest TestClient TestServer
 
 all:
 	@for dir in ${DIRS}; do\
