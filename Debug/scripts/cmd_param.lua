@@ -13,6 +13,10 @@ local function SetPort(strParam)
 	g_dwPort = tonumber(strParam)
 end
 
+local function SetIp(strParam)
+	g_strIp = strParam
+end
+
 local tableCmdOptions =
 {
 	["add"] = function(strParam)
@@ -27,6 +31,7 @@ local tableCmdOptions =
 	["version"] = Version,
 	["port"] = SetPort,
 	["p"] = SetPort,
+	["ip"] = SetIp,
 }
 
 local function CommandOption(strCmd, strParam)
@@ -54,6 +59,7 @@ local long_opts =
 	test = 2,
 	add = 3,
 	delete = 4,
+	ip = 5,
 }
 
 tableCommandLine = {}

@@ -9,6 +9,8 @@
 
 #define CLIENTCOUNT 256
 
+char* g_strIp = "127.0.0.1";
+unsigned int g_dwPort = 12000;
 bool g_bRun = true;
 
 void EndFun(int n)
@@ -23,7 +25,7 @@ void EndFun(int n)
 	}
 }
 
-int main()
+int main(int argc, char **argv)
 {
 	//--------------------order can't change begin-------------------------//
 	signal(SIGINT, EndFun);
@@ -37,29 +39,43 @@ int main()
 	{
 		return 0;
 	}
+	std::vector<ToluaFunctionOpen*> vecFunctions;
+	int tolua_LuaMeta_open(lua_State*);
+	vecFunctions.push_back(tolua_LuaMeta_open);
+	if (!CLuaEngine::Instance()->Init(vecFunctions))
+	{
+		return 0;
+	}
 	if (!CLuaEngine::Instance()->Reload())
 	{
 		return 0;
 	}
-
+	if (!CLuaEngine::Instance()->CommandLineFunction(argv, argc))
+	{
+		g_bRun = false;
+		goto STOP;
+	}
 	if (!GetTimeHandler()->Init())
 	{
-		return 0;
+		g_bRun = false;
+		goto STOP;
 	}
 	GetTimeHandler()->Run();
 	if (!LogThread::Instance()->Init())
 	{
-		return 0;
+		g_bRun = false;
+		goto STOP;
 	}
 
 	IFxNet* pNet = FxNetGetModule();
 	if (!pNet)
 	{
-		return 0;
+		g_bRun = false;
+		goto STOP;
 	}
 	//--------------------order can't change end-------------------------//
 
-	UINT32 dwIP = inet_addr("127.0.0.1");
+	UINT32 dwIP = inet_addr(g_strIp);
 
 	FxSession* oSessions[CLIENTCOUNT] = { 0 };
 
@@ -113,5 +129,6 @@ int main()
 	pNet->Run(0xffffffff);
 	FxSleep(10);
 	pNet->Release();
+STOP:
 	LogThread::Instance()->Stop();
 }

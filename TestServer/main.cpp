@@ -115,6 +115,6 @@ int main(int argc, char **argv)
 	pNet->Run(0xffffffff);
 	FxSleep(10);
 	pNet->Release();
-	STOP:
+STOP:
 	LogThread::Instance()->Stop();
 }

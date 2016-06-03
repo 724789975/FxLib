@@ -153,10 +153,12 @@
     <ClCompile Include="..\common\log_thread.cpp" />
     <ClCompile Include="..\common\lua_engine.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
+    <ClCompile Include="LuaMeta.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SocketSession.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LuaMeta.h" />
     <ClInclude Include="SocketSession.h" />
   </ItemGroup>
   <ItemGroup>
