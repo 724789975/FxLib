@@ -170,6 +170,7 @@
     <ClCompile Include="SocketSession.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="LuaMeta.h" />
     <ClInclude Include="SocketSession.h" />
   </ItemGroup>
   <ItemGroup>

@@ -116,8 +116,8 @@ bool CLuaEngine::CommandLineFunction(char** ppstrArg, unsigned int dwArgNum)
 	int nRet = lua_pcall(GetLuaState(), 0, 1, 0);
 	if (nRet != 0)
 	{
-		//LogFun(LT_Screen | LT_File, LogLv_Error, "result : %d, error : %s", nRet, lua_tostring(GetLuaState(), -1));
-		printf("result : %d, error : %s\n", nRet, lua_tostring(GetLuaState(), -1));
+		LogFun(LT_Screen | LT_File, LogLv_Error, "result : %d, error : %s", nRet, lua_tostring(GetLuaState(), -1));
+		//printf("result : %d, error : %s\n", nRet, lua_tostring(GetLuaState(), -1));
 		lua_pop(GetLuaState(), 1);
 		lua_settop(GetLuaState(), 0);
 		return false;

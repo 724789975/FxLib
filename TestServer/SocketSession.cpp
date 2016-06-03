@@ -75,11 +75,6 @@ private:
 
 };
 
-void SetPortC(unsigned int dwPort)
-{
-	::sg_dwPort = dwPort;
-}
-
 void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);

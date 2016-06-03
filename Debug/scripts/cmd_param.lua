@@ -9,9 +9,8 @@ local function Version(strParam)
 	print("version info")
 end
 
-local function SetPortL(strParam)
-	--dwPort = strParam
-	SetPortC(15000)
+local function SetPort(strParam)
+	g_dwPort = tonumber(strParam)
 end
 
 local tableCmdOptions =
@@ -26,8 +25,8 @@ local tableCmdOptions =
 	["h"] = Help,
 	["v"] = Version,
 	["version"] = Version,
-	["port"] = SetPortL,
-	["p"] = SetPortL,
+	["port"] = SetPort,
+	["p"] = SetPort,
 }
 
 local function CommandOption(strCmd, strParam)

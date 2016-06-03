@@ -1,6 +1,6 @@
 $#include "fxmeta.h"
 $#include "ifnet.h"
-$#include "SocketSession.h"
+$#include "LuaMeta.h"
 
 class IFxNet
 {
@@ -16,5 +16,5 @@ public:
 
 IFxNet* FxNetGetModule();
 
-void SetPortC(unsigned int dwPort);
+extern unsigned int g_dwPort;
 

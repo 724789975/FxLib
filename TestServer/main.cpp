@@ -6,6 +6,7 @@
 
 #include <signal.h>
 
+unsigned int g_dwPort = 12000;
 bool g_bRun = true;
 
 void EndFun(int n)
@@ -85,7 +86,7 @@ int main(int argc, char **argv)
 	//	LogFun(LT_Screen, LogLv_Info, "%s", "db connected~~~~");
 	//}
 
-	IFxListenSocket* pListenSocket = pNet->Listen(CSessionFactory::Instance(), 0, 0, sg_dwPort);
+	IFxListenSocket* pListenSocket = pNet->Listen(CSessionFactory::Instance(), 0, 0, g_dwPort);
 
 	while (g_bRun)
 	{

@@ -86,8 +86,4 @@ private:
 
 static DataHeaderFactory oDataHeaderFactory;
 
-static unsigned int sg_dwPort = 12000;
-
-void SetPortC(unsigned int dwPort);
-
 #endif // !__SocketSession_H__

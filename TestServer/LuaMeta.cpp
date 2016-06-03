@@ -1,6 +1,6 @@
 /*
 ** Lua binding: LuaMeta
-** Generated automatically by tolua++-1.0.6 on 06/02/16 23:42:35.
+** Generated automatically by tolua++-1.0.6 on 06/03/16 21:31:04.
 */
 
 #ifndef __cplusplus
@@ -15,7 +15,7 @@ TOLUA_API int tolua_LuaMeta_open (lua_State* tolua_S);
 
 #include "fxmeta.h"
 #include "ifnet.h"
-#include "SocketSession.h"
+#include "LuaMeta.h"
 
 /* function to release collected object via destructor */
 #ifdef __cplusplus
@@ -275,30 +275,24 @@ static int tolua_LuaMeta_FxNetGetModule00(lua_State* tolua_S)
 #endif
 }
 
-/* function: SetPortC */
-static int tolua_LuaMeta_SetPortC00(lua_State* tolua_S)
+/* get function: g_dwPort */
+static int tolua_get_unsigned_g_dwPort(lua_State* tolua_S)
+{
+ tolua_pushnumber(tolua_S,(lua_Number)g_dwPort);
+ return 1;
+}
+
+/* set function: g_dwPort */
+static int tolua_set_unsigned_g_dwPort(lua_State* tolua_S)
 {
 #ifndef TOLUA_RELEASE
  tolua_Error tolua_err;
- if (
- !tolua_isnumber(tolua_S,1,0,&tolua_err) ||
- !tolua_isnoobj(tolua_S,2,&tolua_err)
- )
- goto tolua_lerror;
- else
+ if (!tolua_isnumber(tolua_S,2,0,&tolua_err))
+ tolua_error(tolua_S,"#vinvalid type in variable assignment.",&tolua_err);
 #endif
- {
-  unsigned int dwPort = ((unsigned int)  tolua_tonumber(tolua_S,1,0));
- {
-  SetPortC(dwPort);
- }
- }
+  g_dwPort = ((unsigned int)  tolua_tonumber(tolua_S,2,0))
+;
  return 0;
-#ifndef TOLUA_RELEASE
- tolua_lerror:
- tolua_error(tolua_S,"#ferror in function 'SetPortC'.",&tolua_err);
- return 0;
-#endif
 }
 
 /* Open function */
@@ -306,7 +300,7 @@ TOLUA_API int tolua_LuaMeta_open (lua_State* tolua_S)
 {
  tolua_open(tolua_S);
  tolua_reg_types(tolua_S);
- tolua_module(tolua_S,NULL,0);
+ tolua_module(tolua_S,NULL,1);
  tolua_beginmodule(tolua_S,NULL);
 #ifdef __cplusplus
  tolua_cclass(tolua_S,"IFxNet","IFxNet","",tolua_collect_IFxNet);
@@ -322,7 +316,7 @@ TOLUA_API int tolua_LuaMeta_open (lua_State* tolua_S)
  tolua_function(tolua_S,"Listen",tolua_LuaMeta_IFxNet_Listen00);
  tolua_endmodule(tolua_S);
  tolua_function(tolua_S,"FxNetGetModule",tolua_LuaMeta_FxNetGetModule00);
- tolua_function(tolua_S,"SetPortC",tolua_LuaMeta_SetPortC00);
+ tolua_variable(tolua_S,"g_dwPort",tolua_get_unsigned_g_dwPort,tolua_set_unsigned_g_dwPort);
  tolua_endmodule(tolua_S);
  return 1;
 }
