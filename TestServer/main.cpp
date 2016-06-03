@@ -48,27 +48,32 @@ int main(int argc, char **argv)
 	}
 	if (!CLuaEngine::Instance()->CommandLineFunction(argv, argc))
 	{
-		return 0;
+		g_bRun = false;
+		goto STOP;
 	}
 	if (!GetTimeHandler()->Init())
 	{
-		return 0;
+		g_bRun = false;
+		goto STOP;
 	}
 	GetTimeHandler()->Run();
 	if (!LogThread::Instance()->Init())
 	{
-		return 0;
+		g_bRun = false;
+		goto STOP;
 	}
 
 	if (!CSessionFactory::CreateInstance())
 	{
-		return 0;
+		g_bRun = false;
+		goto STOP;
 	}
 	CSessionFactory::Instance()->Init();
 	IFxNet* pNet = FxNetGetModule();
 	if (!pNet)
 	{
-		return 0;
+		g_bRun = false;
+		goto STOP;
 	}
 	//----------------------order can't change end-----------------------//
 
@@ -110,5 +115,6 @@ int main(int argc, char **argv)
 	pNet->Run(0xffffffff);
 	FxSleep(10);
 	pNet->Release();
+	STOP:
 	LogThread::Instance()->Stop();
 }
