@@ -46,6 +46,10 @@ int main(int argc, char **argv)
 	{
 		return 0;
 	}
+	// must define before goto
+	IFxNet* pNet = NULL;
+	IFxListenSocket* pListenSocket = NULL;
+
 	if (!CLuaEngine::Instance()->CommandLineFunction(argv, argc))
 	{
 		g_bRun = false;
@@ -69,7 +73,7 @@ int main(int argc, char **argv)
 		goto STOP;
 	}
 	CSessionFactory::Instance()->Init();
-	IFxNet* pNet = FxNetGetModule();
+	pNet = FxNetGetModule();
 	if (!pNet)
 	{
 		g_bRun = false;
@@ -91,7 +95,7 @@ int main(int argc, char **argv)
 	//	LogFun(LT_Screen, LogLv_Info, "%s", "db connected~~~~");
 	//}
 
-	IFxListenSocket* pListenSocket = pNet->Listen(CSessionFactory::Instance(), 0, 0, g_dwPort);
+	pListenSocket = pNet->Listen(CSessionFactory::Instance(), 0, 0, g_dwPort);
 
 	while (g_bRun)
 	{

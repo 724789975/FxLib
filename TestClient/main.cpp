@@ -50,6 +50,13 @@ int main(int argc, char **argv)
 	{
 		return 0;
 	}
+	// must defined before goto
+	IFxNet* pNet = NULL;
+	UINT32 dwIP = 0;
+	FxSession* oSessions[CLIENTCOUNT] = { 0 };
+	char szMsg[1024] = "";
+	int j = 0;
+
 	if (!CLuaEngine::Instance()->CommandLineFunction(argv, argc))
 	{
 		g_bRun = false;
@@ -67,7 +74,7 @@ int main(int argc, char **argv)
 		goto STOP;
 	}
 
-	IFxNet* pNet = FxNetGetModule();
+	pNet = FxNetGetModule();
 	if (!pNet)
 	{
 		g_bRun = false;
@@ -75,9 +82,7 @@ int main(int argc, char **argv)
 	}
 	//--------------------order can't change end-------------------------//
 
-	UINT32 dwIP = inet_addr(g_strIp);
-
-	FxSession* oSessions[CLIENTCOUNT] = { 0 };
+	dwIP = inet_addr(g_strIp);
 
 	for (int i = 0; i < CLIENTCOUNT; ++i)
 	{
@@ -85,11 +90,6 @@ int main(int argc, char **argv)
 		pNet->Connect(oSessions[i], dwIP, 12000, true);
 	}
 
-	//FxSession* pSession = oSessionFactory.CreateSession();
-	//pNet->Connect(pSession, dwIP, 12000, true);
-
-	char szMsg[1024] = "";
-	int j = 0;
 	while (g_bRun)
 	{
 		GetTimeHandler()->Run();
