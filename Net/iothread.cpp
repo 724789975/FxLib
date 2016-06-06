@@ -1,5 +1,5 @@
 ﻿#include "iothread.h"
-#include "mysock.h"
+#include "mytcpsock.h"
 #include <errno.h>
 #include <fcntl.h>
 #include "net.h"

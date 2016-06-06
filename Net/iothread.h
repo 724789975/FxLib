@@ -1,7 +1,7 @@
 #ifndef __IOThread_H__
 #define __IOThread_H__
 
-#include "mysock.h"
+#include "mytcpsock.h"
 #include <vector>
 #ifdef WIN32
 #else

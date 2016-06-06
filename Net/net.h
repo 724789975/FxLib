@@ -2,7 +2,7 @@
 #define __NET_H_2009_0825__
 
 #include "ifnet.h"
-#include "mysock.h"
+#include "mytcpsock.h"
 #include "dynamicpoolex.h"
 #include <map>
 #include <vector>

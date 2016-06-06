@@ -3,7 +3,7 @@
 
 #include <list>
 #include <map>
-#include "mysock.h"
+#include "mytcpsock.h"
 #include "dynamicpoolex.h"
 #include "ifnet.h"
 

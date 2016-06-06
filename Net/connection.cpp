@@ -1,5 +1,5 @@
 #include "connection.h"
-#include "mysock.h"
+#include "mytcpsock.h"
 #include "sockmgr.h"
 #include<string.h>
 //#include "sockmgr.h"
