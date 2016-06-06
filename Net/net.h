@@ -16,24 +16,27 @@ public:
 	virtual ~FxNetModule();
 	DECLARE_SINGLETON(FxNetModule);
 
-	virtual bool	Init();
-	virtual bool	Run(UINT32 dwCount = 0xffffffff);
-	virtual void	Release();
-	virtual bool	SetNetOpt(ENetOpt eOpt, int nValue);
+	virtual bool				Init();
+	virtual bool				Run(UINT32 dwCount = 0xffffffff);
+	virtual void				Release();
+	virtual bool				SetNetOpt(ENetOpt eOpt, int nValue);
 
-	virtual SOCKET			Connect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect = false);
-	virtual IFxListenSocket* Listen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort);
+	virtual SOCKET				TcpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect = false);
+	virtual IFxListenSocket*	TcpListen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort);
 
-	void				Uninit();
+	virtual SOCKET				UdpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect = false);
+	virtual IFxListenSocket*	UdpListen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort);
 
-	bool			PushNetEvent(IFxSocket* poSock);
-	FxIoThread*		FetchIoThread(UINT32 dwSockId);
+	void						Uninit();
+
+	bool						PushNetEvent(IFxSocket* poSock);
+	FxIoThread*					FetchIoThread(UINT32 dwSockId);
 
 private:
-	bool					__CreateComponent();
-	bool					__InitComponent();
-	void					__UninitComponent();
-	void					__DestroyComponent();
+	bool						__CreateComponent();
+	bool						__InitComponent();
+	void						__UninitComponent();
+	void						__DestroyComponent();
 
 private:
 	TEventQueue<IFxSocket*>*	m_pEventQueue;

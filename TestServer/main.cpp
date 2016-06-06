@@ -95,7 +95,7 @@ int main(int argc, char **argv)
 	//	LogFun(LT_Screen, LogLv_Info, "%s", "db connected~~~~");
 	//}
 
-	pListenSocket = pNet->Listen(CSessionFactory::Instance(), 0, 0, g_dwPort);
+	pListenSocket = pNet->TcpListen(CSessionFactory::Instance(), 0, 0, g_dwPort);
 
 	while (g_bRun)
 	{

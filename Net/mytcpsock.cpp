@@ -488,7 +488,7 @@ void FxTCPListenSock::OnAccept(SPerIoData* pstPerIoData)
 	}
 
 	{
-		FxTCPConnectSock* poSock = FxMySockMgr::Instance()->Create();
+		FxTCPConnectSock* poSock = FxMySockMgr::Instance()->CreateTcpSock();
 		if (NULL == poSock)
 		{
 			LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, create CCPSock failed");
@@ -515,7 +515,7 @@ void FxTCPListenSock::OnAccept(SPerIoData* pstPerIoData)
 
 			closesocket(hSock);
 			PostAccept(*pstPerIoData);
-			FxMySockMgr::Instance()->Release(poSock);
+			FxMySockMgr::Instance()->ReleaseTcpSock(poSock);
 			return;
 		}
 
@@ -556,7 +556,7 @@ void FxTCPListenSock::OnAccept(SPerIoData* pstPerIoData)
 
 			closesocket(hSock);
 			PostAccept(*pstPerIoData);
-			FxMySockMgr::Instance()->Release(poSock);
+			FxMySockMgr::Instance()->ReleaseTcpSock(poSock);
 			FxConnectionMgr::Instance()->Release(poConnection);
 			return;
 		}
@@ -659,7 +659,7 @@ void FxTCPListenSock::OnAccept()
 		return;
 	}
 
-	FxTCPConnectSock* poSock = FxMySockMgr::Instance()->Create();
+	FxTCPConnectSock* poSock = FxMySockMgr::Instance()->CreateTcpSock();
 	if (NULL == poSock)
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "create FxConnectSock failed");
@@ -683,7 +683,7 @@ void FxTCPListenSock::OnAccept()
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "NULL == poConnection");
 
 		close(hAcceptSock);
-		FxMySockMgr::Instance()->Release(poSock);
+		FxMySockMgr::Instance()->ReleaseTcpSock(poSock);
 		return;
 	}
 
@@ -693,7 +693,7 @@ void FxTCPListenSock::OnAccept()
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "NULL == poSession");
 
 		close(hAcceptSock);
-		FxMySockMgr::Instance()->Release(poSock);
+		FxMySockMgr::Instance()->ReleaseTcpSock(poSock);
 		FxConnectionMgr::Instance()->Release(poConnection);
 		return;
 	}
@@ -736,7 +736,7 @@ void FxTCPListenSock::OnAccept()
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "poSock->AddEvent() failed");
 
 		close(hAcceptSock);
-		FxMySockMgr::Instance()->Release(poSock);
+		FxMySockMgr::Instance()->ReleaseTcpSock(poSock);
 
 		poSession->Release();
 		return;
@@ -1422,7 +1422,7 @@ void FxTCPConnectSock::__ProcRelease()
 
 		SetConnection(NULL);
 	}
-	FxMySockMgr::Instance()->Release(this);
+	FxMySockMgr::Instance()->ReleaseTcpSock(this);
 }
 
 IFxDataHeader* FxTCPConnectSock::GetDataHeader()

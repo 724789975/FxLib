@@ -163,3 +163,14 @@ IFxNet* FxNetGetModule()
 	return FxNetModule::Instance();
 }
 
+int IFxDataHeader::ParsePacket(const char* pBuf, UINT32 dwLen)
+{
+	if (dwLen < GetHeaderLength())
+	{
+		return 0;
+	}
+
+	INT32 iPkgLen = __CheckPkgHeader(pBuf);
+
+	return iPkgLen;
+}

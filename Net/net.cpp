@@ -120,9 +120,26 @@ void FxNetModule::Uninit()
     __DestroyComponent();
 }
 
-IFxListenSocket* FxNetModule::Listen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort)
+SOCKET FxNetModule::TcpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect /*= false*/)
 {
-	IFxListenSocket* pListenSocket = FxMySockMgr::Instance()->Create(dwListenId, pSessionFactory);
+	FxConnection* poConnection = FxConnectionMgr::Instance()->Create();
+	if (NULL == poConnection)
+	{
+		return INVALID_SOCKET;
+	}
+
+	poConnection->SetRemoteIP(dwIP);
+	poConnection->SetRemotePort(wPort);
+	poConnection->SetReconnect(bReconnect);
+	poConnection->SetSession(poSession);
+	poSession->Init(poConnection);
+
+	return poConnection->Reconnect();
+}
+
+IFxListenSocket* FxNetModule::TcpListen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort)
+{
+	IFxListenSocket* pListenSocket = FxMySockMgr::Instance()->CreateTcpSock(dwListenId, pSessionFactory);
 	if (pListenSocket == NULL)
 	{
 		return NULL;
@@ -134,33 +151,16 @@ IFxListenSocket* FxNetModule::Listen(IFxSessionFactory* pSessionFactory, UINT32 
 	return NULL;
 }
 
-SOCKET FxNetModule::Connect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect /*= false*/)
+SOCKET FxNetModule::UdpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect /*= false*/)
 {
-	//FxConnectSock* poSock = FxMySockMgr::Instance()->Create();
-	//if (NULL == poSock)
-	//{
-	//	return INVALID_SOCKET;
-	//}
+	// todo
+	return INVALID_SOCKET;
+}
 
-	FxConnection* poConnection = FxConnectionMgr::Instance()->Create();
-	if (NULL == poConnection)
-	{
-		//FxMySockMgr::Instance()->Release(poSock);
-		return INVALID_SOCKET;
-	}
-
-	poConnection->SetRemoteIP(dwIP);
-	poConnection->SetRemotePort(wPort);
-	poConnection->SetReconnect(bReconnect);
-	poConnection->SetSession(poSession);
-	//poConnection->SetSock(poSock);
-	//poConnection->SetID(poSock->GetSockId());
-	poSession->Init(poConnection);
-
-	//poSock->SetConnection(poConnection);
-
-	//return poSock->Connect();
-	return poConnection->Reconnect();
+IFxListenSocket* FxNetModule::UdpListen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort)
+{
+	// todo
+	return NULL;
 }
 
 bool FxNetModule::PushNetEvent(IFxSocket* poSock)

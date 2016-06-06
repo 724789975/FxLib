@@ -6,12 +6,12 @@ class IFxNet
 {
 public:
 	~IFxNet();
-	bool		Init();
-	bool		Run(UINT32 dwCount);
-	void		Release();
+	bool				Init();
+	bool				Run(UINT32 dwCount);
+	void				Release();
 
-	SOCKET      Connect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect);
-	IFxListenSocket* Listen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort);
+	SOCKET				TcpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect);
+	IFxListenSocket*	TcpListen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort);
 };
 
 IFxNet* FxNetGetModule();

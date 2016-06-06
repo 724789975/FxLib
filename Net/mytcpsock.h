@@ -1,5 +1,5 @@
-﻿#ifndef __MySock_h__
-#define __MySock_h__
+﻿#ifndef __MyTcpSock_h__
+#define __MyTcpSock_h__
 
 #ifdef WIN32
 #include <WinSock2.h>
@@ -12,59 +12,6 @@
 #include "ifnet.h"
 #include "loopbuff.h"
 #include "lock.h"
-//#include "packetparser.h"
-
-enum ESocketState
-{
-	SSTATE_INVALID = 0,	// //
-	//SSTATE_START_LISTEN, // //
-	SSTATE_LISTEN,		// //
-	SSTATE_STOP_LISTEN,	// //
-	//SSTATE_ACCEPT,
-	SSTATE_CONNECT,		// //
-	SSTATE_ESTABLISH,	// //
-	//SSTATE_DATA,		 // //
-	SSTATE_CLOSE,		// //
-	//SSTATE_OK,
-	SSTATE_RELEASE,
-};
-
-enum ENetEvtType
-{
-	NETEVT_INVALID = 0,
-	NETEVT_ESTABLISH,
-	NETEVT_ASSOCIATE,
-	NETEVT_RECV,
-	NETEVT_CONN_ERR,
-	NETEVT_ERROR,
-	NETEVT_TERMINATE,
-	NETEVT_RELEASE,
-};
-
-#ifdef WIN32
-enum EIocpOperation
-{
-	IOCP_RECV = 1,
-	IOCP_SEND,
-	IOCP_ACCEPT,
-	IOCP_CONNECT,
-};
-
-struct SPerIoData
-{
-	OVERLAPPED		stOverlapped;
-	SOCKET			hSock;
-	EIocpOperation	nOp;
-	WSABUF			stWsaBuf;
-	char			Buf[128];
-};
-#endif // WIN32
-
-struct SNetEvent
-{
-	ENetEvtType		eType;
-	UINT32			dwValue;
-};
 
 class FxIoThread;
 
@@ -226,4 +173,4 @@ private:
 };
 
 
-#endif // !__MySock_h__
+#endif // !__MyTcpSock_h__

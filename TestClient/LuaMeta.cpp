@@ -1,6 +1,6 @@
 /*
 ** Lua binding: LuaMeta
-** Generated automatically by tolua++-1.0.6 on 06/03/16 22:19:11.
+** Generated automatically by tolua++-1.0.6 on 06/06/16 23:26:21.
 */
 
 #ifndef __cplusplus
@@ -166,8 +166,8 @@ static int tolua_LuaMeta_IFxNet_Release00(lua_State* tolua_S)
 #endif
 }
 
-/* method: Connect of class  IFxNet */
-static int tolua_LuaMeta_IFxNet_Connect00(lua_State* tolua_S)
+/* method: TcpConnect of class  IFxNet */
+static int tolua_LuaMeta_IFxNet_TcpConnect00(lua_State* tolua_S)
 {
 #ifndef TOLUA_RELEASE
  tolua_Error tolua_err;
@@ -189,10 +189,10 @@ static int tolua_LuaMeta_IFxNet_Connect00(lua_State* tolua_S)
   UINT16 wPort = *((UINT16*)  tolua_tousertype(tolua_S,4,0));
   bool bReconnect = ((bool)  tolua_toboolean(tolua_S,5,0));
 #ifndef TOLUA_RELEASE
- if (!self) tolua_error(tolua_S,"invalid 'self' in function 'Connect'",NULL);
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'TcpConnect'",NULL);
 #endif
  {
-  SOCKET tolua_ret = (SOCKET)  self->Connect(poSession,dwIP,wPort,bReconnect);
+  SOCKET tolua_ret = (SOCKET)  self->TcpConnect(poSession,dwIP,wPort,bReconnect);
  {
 #ifdef __cplusplus
  void* tolua_obj = new SOCKET(tolua_ret);
@@ -207,13 +207,13 @@ static int tolua_LuaMeta_IFxNet_Connect00(lua_State* tolua_S)
  return 1;
 #ifndef TOLUA_RELEASE
  tolua_lerror:
- tolua_error(tolua_S,"#ferror in function 'Connect'.",&tolua_err);
+ tolua_error(tolua_S,"#ferror in function 'TcpConnect'.",&tolua_err);
  return 0;
 #endif
 }
 
-/* method: Listen of class  IFxNet */
-static int tolua_LuaMeta_IFxNet_Listen00(lua_State* tolua_S)
+/* method: TcpListen of class  IFxNet */
+static int tolua_LuaMeta_IFxNet_TcpListen00(lua_State* tolua_S)
 {
 #ifndef TOLUA_RELEASE
  tolua_Error tolua_err;
@@ -235,17 +235,17 @@ static int tolua_LuaMeta_IFxNet_Listen00(lua_State* tolua_S)
   UINT32 dwIP = *((UINT32*)  tolua_tousertype(tolua_S,4,0));
   UINT16 dwPort = *((UINT16*)  tolua_tousertype(tolua_S,5,0));
 #ifndef TOLUA_RELEASE
- if (!self) tolua_error(tolua_S,"invalid 'self' in function 'Listen'",NULL);
+ if (!self) tolua_error(tolua_S,"invalid 'self' in function 'TcpListen'",NULL);
 #endif
  {
-  IFxListenSocket* tolua_ret = (IFxListenSocket*)  self->Listen(pSessionFactory,dwListenId,dwIP,dwPort);
+  IFxListenSocket* tolua_ret = (IFxListenSocket*)  self->TcpListen(pSessionFactory,dwListenId,dwIP,dwPort);
  tolua_pushusertype(tolua_S,(void*)tolua_ret,"IFxListenSocket");
  }
  }
  return 1;
 #ifndef TOLUA_RELEASE
  tolua_lerror:
- tolua_error(tolua_S,"#ferror in function 'Listen'.",&tolua_err);
+ tolua_error(tolua_S,"#ferror in function 'TcpListen'.",&tolua_err);
  return 0;
 #endif
 }
@@ -332,8 +332,8 @@ TOLUA_API int tolua_LuaMeta_open (lua_State* tolua_S)
  tolua_function(tolua_S,"Init",tolua_LuaMeta_IFxNet_Init00);
  tolua_function(tolua_S,"Run",tolua_LuaMeta_IFxNet_Run00);
  tolua_function(tolua_S,"Release",tolua_LuaMeta_IFxNet_Release00);
- tolua_function(tolua_S,"Connect",tolua_LuaMeta_IFxNet_Connect00);
- tolua_function(tolua_S,"Listen",tolua_LuaMeta_IFxNet_Listen00);
+ tolua_function(tolua_S,"TcpConnect",tolua_LuaMeta_IFxNet_TcpConnect00);
+ tolua_function(tolua_S,"TcpListen",tolua_LuaMeta_IFxNet_TcpListen00);
  tolua_endmodule(tolua_S);
  tolua_function(tolua_S,"FxNetGetModule",tolua_LuaMeta_FxNetGetModule00);
  tolua_variable(tolua_S,"g_strIp",tolua_get_g_strIp,tolua_set_g_strIp);

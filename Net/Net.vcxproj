@@ -153,6 +153,7 @@
     <ClCompile Include="iothread.cpp" />
     <ClCompile Include="loopbuff.cpp" />
     <ClCompile Include="mytcpsock.cpp" />
+    <ClCompile Include="myudpsock.cpp" />
     <ClCompile Include="net.cpp" />
     <ClCompile Include="sockmgr.cpp" />
   </ItemGroup>
@@ -163,6 +164,7 @@
     <ClInclude Include="iothread.h" />
     <ClInclude Include="loopbuff.h" />
     <ClInclude Include="mytcpsock.h" />
+    <ClInclude Include="myudpsock.h" />
     <ClInclude Include="net.h" />
     <ClInclude Include="sockmgr.h" />
   </ItemGroup>

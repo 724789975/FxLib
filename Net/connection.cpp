@@ -243,7 +243,7 @@ SOCKET FxConnection::Reconnect()
 	}
 	else
 	{
-		FxTCPConnectSock* poSock = FxMySockMgr::Instance()->Create();
+		FxTCPConnectSock* poSock = FxMySockMgr::Instance()->CreateTcpSock();
 		if (NULL == poSock)
 		{
 			return INVALID_SOCKET;
