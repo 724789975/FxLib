@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 	for (int i = 0; i < CLIENTCOUNT; ++i)
 	{
 		oSessions[i] = oSessionFactory.CreateSession();
-		pNet->Connect(oSessions[i], dwIP, 12000, true);
+		pNet->Connect(oSessions[i], dwIP, g_dwPort, true);
 	}
 
 	while (g_bRun)
