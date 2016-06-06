@@ -31,7 +31,7 @@ int     VAL_SO_SNDLOWAT = (64 * 1024);
 #define RECV_BUFF_SIZE 8*64*1024
 #define SEND_BUFF_SIZE 64*64*1024
 
-FxListenSock::FxListenSock()
+FxTCPListenSock::FxTCPListenSock()
 {
 	// 千万不要在这里有给指针赋值的操作 因为 会复制构造//
 	Reset();
@@ -44,7 +44,7 @@ FxListenSock::FxListenSock()
 }
 
 
-FxListenSock::~FxListenSock()
+FxTCPListenSock::~FxTCPListenSock()
 {
 	if (m_poSessionFactory)
 	{
@@ -53,20 +53,20 @@ FxListenSock::~FxListenSock()
 	}
 }
 
-bool FxListenSock::Init()
+bool FxTCPListenSock::Init()
 {
 	return m_oEvtQueue.Init(MAX_NETEVENT_PERSOCK);
 }
 
-void FxListenSock::OnRead()
+void FxTCPListenSock::OnRead()
 {
 }
 
-void FxListenSock::OnWrite()
+void FxTCPListenSock::OnWrite()
 {
 }
 
-bool FxListenSock::Listen(UINT32 dwIP, UINT16 wPort)
+bool FxTCPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 {
 	SetSock(socket(AF_INET, SOCK_STREAM, 0));
 	if (INVALID_SOCKET == GetSock())
@@ -155,7 +155,7 @@ bool FxListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 	return true;
 }
 
-bool FxListenSock::StopListen()
+bool FxTCPListenSock::StopListen()
 {
 	if (SSTATE_LISTEN != GetState())
 	{
@@ -181,7 +181,7 @@ bool FxListenSock::StopListen()
 	return true;
 }
 
-bool FxListenSock::Close()
+bool FxTCPListenSock::Close()
 {
 	m_oLock.Lock();
 	if (GetState() == SSTATE_CLOSE)
@@ -205,14 +205,14 @@ bool FxListenSock::Close()
 	return true;
 }
 
-void FxListenSock::Reset()
+void FxTCPListenSock::Reset()
 {
 	m_poSessionFactory = NULL;
 	SetState(SSTATE_INVALID);
 	SetSock(INVALID_SOCKET);
 }
 
-bool FxListenSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
+bool FxTCPListenSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
 {
 	if (SSTATE_INVALID == GetState())
 	{
@@ -237,7 +237,7 @@ bool FxListenSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
 	return true;
 }
 
-bool FxListenSock::AddEvent()
+bool FxTCPListenSock::AddEvent()
 {
 #ifdef WIN32
 	if (!m_poIoThreadHandler->AddEvent(GetSock(), this))
@@ -260,7 +260,7 @@ bool FxListenSock::AddEvent()
 
 }
 
-void FxListenSock::ProcEvent()
+void FxTCPListenSock::ProcEvent()
 {
 	SNetEvent* pEvent = m_oEvtQueue.PopFront();
 	if (pEvent)
@@ -294,22 +294,22 @@ void FxListenSock::ProcEvent()
 	}
 }
 
-void FxListenSock::__ProcAssociate()
+void FxTCPListenSock::__ProcAssociate()
 {
 
 }
 
-void FxListenSock::__ProcError(UINT32 dwErrorNo)
+void FxTCPListenSock::__ProcError(UINT32 dwErrorNo)
 {
 
 }
 
-void FxListenSock::__ProcTerminate()
+void FxTCPListenSock::__ProcTerminate()
 {
 }
 
 #ifdef WIN32
-bool FxListenSock::PostAccept(SPerIoData& oSPerIoData)
+bool FxTCPListenSock::PostAccept(SPerIoData& oSPerIoData)
 {
 	SOCKET hNewSock = WSASocket(
 		AF_INET,
@@ -377,7 +377,7 @@ bool FxListenSock::PostAccept(SPerIoData& oSPerIoData)
 	return true;
 }
 
-bool FxListenSock::InitAcceptEx()
+bool FxTCPListenSock::InitAcceptEx()
 {
 	DWORD dwbytes = 0;
 
@@ -428,7 +428,7 @@ bool FxListenSock::InitAcceptEx()
 	return true;
 }
 
-void FxListenSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred)
+void FxTCPListenSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred)
 {
 	switch (GetState())
 	{
@@ -475,7 +475,7 @@ void FxListenSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByte
 	}
 }
 
-void FxListenSock::OnAccept(SPerIoData* pstPerIoData)
+void FxTCPListenSock::OnAccept(SPerIoData* pstPerIoData)
 {
 	SOCKET hSock = pstPerIoData->hSock;
 
@@ -488,7 +488,7 @@ void FxListenSock::OnAccept(SPerIoData* pstPerIoData)
 	}
 
 	{
-		FxConnectSock* poSock = FxMySockMgr::Instance()->Create();
+		FxTCPConnectSock* poSock = FxMySockMgr::Instance()->Create();
 		if (NULL == poSock)
 		{
 			LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, create CCPSock failed");
@@ -629,7 +629,7 @@ void FxListenSock::OnAccept(SPerIoData* pstPerIoData)
 }
 
 #else
-void FxListenSock::OnParserIoEvent(int dwEvents)
+void FxTCPListenSock::OnParserIoEvent(int dwEvents)
 {
 	if (dwEvents & EPOLLERR)
 	{
@@ -646,7 +646,7 @@ void FxListenSock::OnParserIoEvent(int dwEvents)
 	}
 }
 
-void FxListenSock::OnAccept()
+void FxTCPListenSock::OnAccept()
 {
 	sockaddr_in stLocalAddr;
 	sockaddr_in stRemoteAddr;
@@ -659,7 +659,7 @@ void FxListenSock::OnAccept()
 		return;
 	}
 
-	FxConnectSock* poSock = FxMySockMgr::Instance()->Create();
+	FxTCPConnectSock* poSock = FxMySockMgr::Instance()->Create();
 	if (NULL == poSock)
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "create FxConnectSock failed");
@@ -752,7 +752,7 @@ void FxListenSock::OnAccept()
 /*                                                                      */
 /************************************************************************/
 
-FxConnectSock::FxConnectSock()
+FxTCPConnectSock::FxTCPConnectSock()
 {
 	//m_pListenSocket = NULL;
 	m_poSendBuf = NULL;
@@ -779,7 +779,7 @@ FxConnectSock::FxConnectSock()
 	Reset();
 }
 
-FxConnectSock::~FxConnectSock()
+FxTCPConnectSock::~FxTCPConnectSock()
 {
 	if (m_poConnection)
 	{
@@ -801,7 +801,7 @@ FxConnectSock::~FxConnectSock()
 
 }
 
-bool FxConnectSock::Init()
+bool FxTCPConnectSock::Init()
 {
 	if (!m_oEvtQueue.Init(MAX_NETEVENT_PERSOCK))
 	{
@@ -847,15 +847,15 @@ bool FxConnectSock::Init()
 	return true;
 }
 
-void FxConnectSock::OnRead()
+void FxTCPConnectSock::OnRead()
 {
 }
 
-void FxConnectSock::OnWrite()
+void FxTCPConnectSock::OnWrite()
 {
 }
 
-bool FxConnectSock::Close()
+bool FxTCPConnectSock::Close()
 {
 	// 首先 把数据先发过去//
 	m_oLock.Lock();
@@ -907,7 +907,7 @@ bool FxConnectSock::Close()
 	return true;
 }
 
-void FxConnectSock::Reset()
+void FxTCPConnectSock::Reset()
 {
 	if (NULL != m_poConnection)
 	{
@@ -945,7 +945,7 @@ void FxConnectSock::Reset()
 }
 
 // win下出现问题时 要投递关闭信息 因为需要一个post关闭的过程//
-bool FxConnectSock::Send(const char* pData, int dwLen)
+bool FxTCPConnectSock::Send(const char* pData, int dwLen)
 {
 	if (false == IsConnected())
 	{
@@ -1035,7 +1035,7 @@ bool FxConnectSock::Send(const char* pData, int dwLen)
 	return true;
 }
 
-bool FxConnectSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
+bool FxTCPConnectSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
 {
 	SNetEvent oEvent;
 	// 先扔网络事件进去，然后在报告上层有事件，先后顺序不能错，这样上层就不会错取事件//
@@ -1054,7 +1054,7 @@ bool FxConnectSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
 	return true;
 }
 
-bool FxConnectSock::PostSend()
+bool FxTCPConnectSock::PostSend()
 {
 #ifdef WIN32
 	if (false == IsConnected())
@@ -1188,7 +1188,7 @@ bool FxConnectSock::PostSend()
 
 }
 
-bool FxConnectSock::PostSendFree()
+bool FxTCPConnectSock::PostSendFree()
 {
 #ifdef WIN32
 	return PostSend();
@@ -1213,7 +1213,7 @@ bool FxConnectSock::PostSendFree()
 	return true;
 #endif // WIN32
 }
-bool FxConnectSock::SendImmediately()
+bool FxTCPConnectSock::SendImmediately()
 {
 	if (GetState() != SSTATE_CLOSE)
 	{
@@ -1315,7 +1315,7 @@ bool FxConnectSock::SendImmediately()
 	return true;
 }
 
-void FxConnectSock::__ProcEstablish()
+void FxTCPConnectSock::__ProcEstablish()
 {
 	if (m_poConnection)
 	{
@@ -1328,7 +1328,7 @@ void FxConnectSock::__ProcEstablish()
 	}
 }
 
-void FxConnectSock::__ProcAssociate()
+void FxTCPConnectSock::__ProcAssociate()
 {
 	if (m_poConnection)
 	{
@@ -1341,7 +1341,7 @@ void FxConnectSock::__ProcAssociate()
 	}
 }
 
-void FxConnectSock::__ProcConnectError(UINT32 dwErrorNo)
+void FxTCPConnectSock::__ProcConnectError(UINT32 dwErrorNo)
 {
 	if (m_poConnection)
 	{
@@ -1354,7 +1354,7 @@ void FxConnectSock::__ProcConnectError(UINT32 dwErrorNo)
 	}
 }
 
-void FxConnectSock::__ProcError(UINT32 dwErrorNo)
+void FxTCPConnectSock::__ProcError(UINT32 dwErrorNo)
 {
 	if (m_poConnection)
 	{
@@ -1367,12 +1367,12 @@ void FxConnectSock::__ProcError(UINT32 dwErrorNo)
 	}
 }
 
-void FxConnectSock::__ProcTerminate()
+void FxTCPConnectSock::__ProcTerminate()
 {
 	PushNetEvent(NETEVT_RELEASE, 0);
 }
 
-void FxConnectSock::__ProcRecv(UINT32 dwLen)
+void FxTCPConnectSock::__ProcRecv(UINT32 dwLen)
 {
 	if (m_poConnection)
 	{
@@ -1407,7 +1407,7 @@ void FxConnectSock::__ProcRecv(UINT32 dwLen)
 	}
 }
 
-void FxConnectSock::__ProcRelease()
+void FxTCPConnectSock::__ProcRelease()
 {
 	if (m_poConnection)
 	{
@@ -1425,7 +1425,7 @@ void FxConnectSock::__ProcRelease()
 	FxMySockMgr::Instance()->Release(this);
 }
 
-IFxDataHeader* FxConnectSock::GetDataHeader()
+IFxDataHeader* FxTCPConnectSock::GetDataHeader()
 {
 	if (m_poConnection)
 	{
@@ -1434,7 +1434,7 @@ IFxDataHeader* FxConnectSock::GetDataHeader()
 	return NULL;
 }
 
-bool FxConnectSock::AddEvent()
+bool FxTCPConnectSock::AddEvent()
 {
 #ifdef WIN32
 	if (!m_poIoThreadHandler->AddEvent(GetSock(), this))
@@ -1461,7 +1461,7 @@ bool FxConnectSock::AddEvent()
 
 }
 
-SOCKET FxConnectSock::Connect()
+SOCKET FxTCPConnectSock::Connect()
 {
 	if (IsConnected())
 	{
@@ -1663,7 +1663,7 @@ SOCKET FxConnectSock::Connect()
 	return GetSock();
 }
 
-void FxConnectSock::ProcEvent()
+void FxTCPConnectSock::ProcEvent()
 {
 	SNetEvent* pEvent = m_oEvtQueue.PopFront();
 	if (pEvent)
@@ -1720,7 +1720,7 @@ void FxConnectSock::ProcEvent()
 	}
 }
 
-void FxConnectSock::OnConnect()
+void FxTCPConnectSock::OnConnect()
 {
 #ifdef WIN32
 	sockaddr_in stAddr = {0};
@@ -1787,7 +1787,7 @@ void FxConnectSock::OnConnect()
 }
 
 #ifdef WIN32
-void FxConnectSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred)
+void FxTCPConnectSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred)
 {
 	if (NULL == pIoData)
 	{
@@ -1824,7 +1824,7 @@ void FxConnectSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByt
 	}
 }
 
-void FxConnectSock::OnRecv(bool bRet, int dwBytes)
+void FxTCPConnectSock::OnRecv(bool bRet, int dwBytes)
 {
 	if (0 == dwBytes)
 	{
@@ -2032,7 +2032,7 @@ void FxConnectSock::OnRecv(bool bRet, int dwBytes)
 	m_oLock.UnLock();
 }
 
-void FxConnectSock::OnSend(bool bRet, int dwBytes)
+void FxTCPConnectSock::OnSend(bool bRet, int dwBytes)
 {
 	if (false == bRet)
 	{
@@ -2094,7 +2094,7 @@ void FxConnectSock::OnSend(bool bRet, int dwBytes)
 	}
 }
 
-bool FxConnectSock::PostRecv()
+bool FxTCPConnectSock::PostRecv()
 {
 	if (false == IsConnected())
 	{
@@ -2146,7 +2146,7 @@ bool FxConnectSock::PostRecv()
 	return true;
 }
 
-bool FxConnectSock::PostClose()
+bool FxTCPConnectSock::PostClose()
 {
 	if (false == IsConnected())
 	{
@@ -2168,7 +2168,7 @@ bool FxConnectSock::PostClose()
 	return true;
 }
 
-bool FxConnectSock::PostRecvFree()
+bool FxTCPConnectSock::PostRecvFree()
 {
 	if (false == IsConnected())
 	{
@@ -2194,7 +2194,7 @@ bool FxConnectSock::PostRecvFree()
 }
 
 #else
-void FxConnectSock::OnParserIoEvent(int dwEvents)
+void FxTCPConnectSock::OnParserIoEvent(int dwEvents)
 {
 	if(GetState() == SSTATE_CONNECT)
 	{
@@ -2237,7 +2237,7 @@ void FxConnectSock::OnParserIoEvent(int dwEvents)
 	}
 }
 
-void FxConnectSock::OnRecv()
+void FxTCPConnectSock::OnRecv()
 {
 	if (false == IsConnected())
 	{
@@ -2422,7 +2422,7 @@ void FxConnectSock::OnRecv()
 	}
 }
 
-void FxConnectSock::OnSend()
+void FxTCPConnectSock::OnSend()
 {
 	if (!IsConnected())
 	{

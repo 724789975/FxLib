@@ -256,16 +256,6 @@ public:
 	virtual SOCKET      Connect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect = false) = 0;
 	virtual IFxListenSocket* Listen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort) = 0;
 
-	//public:
-	//	virtual ~IFxNet() {}
-	//	virtual bool		SetNetOpt(ENetOpt eOpt, int nValue) = 0;
-	//	virtual bool		Init(int nThread = 1) = 0;
-	//	virtual bool		Run(UINT32 dwCount) = 0;
-	//	virtual void		Release() = 0;
-	//
-	//	virtual SOCKET		Connect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, UINT32 dwRecvSize, UINT32 dwSendSize, bool bReconnect = false, int nEventPerSocket = MAX_NETEVENT_PERSOCK) = 0;
-	//	virtual bool		Listen(IFxSessionFactory* poFactory, UINT32 dwIP, UINT16 wPort, UINT32 dwRecvSize, UINT32 dwSendSize, int nEventPerSocket = MAX_NETEVENT_PERSOCK) = 0;
-
 private:
 
 };

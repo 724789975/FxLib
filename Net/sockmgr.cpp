@@ -33,9 +33,9 @@ void FxMySockMgr::Uninit()
 //     closesocket(hSock);
 }
 
-FxConnectSock* FxMySockMgr::Create()
+FxTCPConnectSock* FxMySockMgr::Create()
 {
-	FxConnectSock* poSock = m_oCPSockPool.FetchObj();
+	FxTCPConnectSock* poSock = m_oCPSockPool.FetchObj();
     if (NULL == poSock)
     {
         return NULL;
@@ -54,7 +54,7 @@ FxConnectSock* FxMySockMgr::Create()
     return poSock;
 }
 
-FxListenSock* FxMySockMgr::Create(UINT32 dwListenId, IFxSessionFactory* pSessionFactory)
+FxTCPListenSock* FxMySockMgr::Create(UINT32 dwListenId, IFxSessionFactory* pSessionFactory)
 {
 	if (m_mapListenSocks.find(dwListenId) != m_mapListenSocks.end())
 	{
@@ -76,7 +76,7 @@ FxListenSock* FxMySockMgr::Create(UINT32 dwListenId, IFxSessionFactory* pSession
 	return &m_mapListenSocks[dwListenId];
 }
 
-void FxMySockMgr::Release(FxConnectSock* poSock)
+void FxMySockMgr::Release(FxTCPConnectSock* poSock)
 {
 	if(NULL == poSock)
     {

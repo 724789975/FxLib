@@ -68,11 +68,11 @@ struct SNetEvent
 
 class FxIoThread;
 
-class FxListenSock : public IFxListenSocket
+class FxTCPListenSock : public IFxListenSocket
 {
 public:
-	FxListenSock();
-	virtual ~FxListenSock();
+	FxTCPListenSock();
+	virtual ~FxTCPListenSock();
 
 	virtual bool Init();
 	virtual void OnRead();
@@ -127,11 +127,11 @@ private:
 };
 
 class FxConnection;
-class FxConnectSock : public IFxConnectSocket
+class FxTCPConnectSock : public IFxConnectSocket
 {
 public:
-	FxConnectSock();
-	virtual ~FxConnectSock();
+	FxTCPConnectSock();
+	virtual ~FxTCPConnectSock();
 
 	virtual bool Init();
 	virtual void OnRead();
