@@ -2,9 +2,6 @@
 #include "mytcpsock.h"
 #include "sockmgr.h"
 #include<string.h>
-//#include "sockmgr.h"
-//#include "connectionmgr.h"
-//#include "connectthread.h"
 
 #ifndef WIN32
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
