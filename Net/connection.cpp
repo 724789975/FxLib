@@ -3,15 +3,11 @@
 #include "sockmgr.h"
 #include<string.h>
 
-#ifndef WIN32
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-#endif // WIN32
-
-
-FxConnection::FxConnection()
+FxConnection::FxConnection():
+	m_poSock(NULL),
+	m_poSession(NULL),
+	m_eSockType(SOCKTYPE_NONE)
 {
-	m_poSock = NULL;
-	m_poSession = NULL;
 	Reset();
 }
 
@@ -243,7 +239,30 @@ SOCKET FxConnection::Reconnect()
 	}
 	else
 	{
-		FxTCPConnectSock* poSock = FxMySockMgr::Instance()->CreateTcpSock();
+		IFxConnectSocket* poSock = NULL;
+		switch (m_eSockType)
+		{
+		case SOCKTYPE_NONE:
+		{
+			Assert(0);
+		}
+			break;
+		case SOCKTYPE_TCP:
+		{
+			poSock = FxMySockMgr::Instance()->CreateTcpSock();
+		}
+			break;
+		case SOCKTYPE_UDP:
+		{
+			poSock = FxMySockMgr::Instance()->CreateUdpSock();
+		}
+			break;
+		default:
+		{
+			Assert(0);
+		}
+			break;
+		}
 		if (NULL == poSock)
 		{
 			return INVALID_SOCKET;
@@ -266,7 +285,7 @@ bool FxConnection::SetConnectionOpt(ESessionOpt eOpt, bool bSetting)
 	//return m_poSock->SetSockOpt(eOpt, bSetting);
 }
 
-void FxConnection::SetSock(FxTCPConnectSock* poSock)
+void FxConnection::SetSock(IFxConnectSocket* poSock)
 {
 	m_poSock = poSock;
 }

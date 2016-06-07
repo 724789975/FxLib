@@ -128,6 +128,7 @@ SOCKET FxNetModule::TcpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, 
 		return INVALID_SOCKET;
 	}
 
+	poConnection->SetSockType(SOCKTYPE_TCP);
 	poConnection->SetRemoteIP(dwIP);
 	poConnection->SetRemotePort(wPort);
 	poConnection->SetReconnect(bReconnect);

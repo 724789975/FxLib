@@ -28,7 +28,6 @@
 
 #include <assert.h>
 #include "fxmeta.h"
-#include "ifsocket.h"
 
 class FxConnection;
 
@@ -272,13 +271,21 @@ public:
 
 	virtual bool					Send(const char* pData, int dwLen) = 0;
 
+	virtual void					SetConnection(FxConnection* poFxConnection) { m_poConnection = poFxConnection; }
+	virtual SOCKET					Connect() = 0;
+
+	virtual bool					IsConnected() = 0;
+	virtual IFxDataHeader*			GetDataHeader() = 0;
+
 #ifdef WIN32
+	virtual bool					PostClose() = 0;
 	virtual void					OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred) = 0;		//
 #else
 	virtual void					OnParserIoEvent(int dwEvents) = 0;		//
 #endif // WIN32
 
 protected:
+	FxConnection*					m_poConnection;
 private:
 
 };

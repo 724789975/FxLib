@@ -1,4 +1,4 @@
-#ifndef __MyUdpSock_h__
+ï»¿#ifndef __MyUdpSock_h__
 #define __MyUdpSock_h__
 
 #ifdef WIN32
@@ -66,8 +66,7 @@ private:
 	void OnAccept(SPerIoData* pstPerIoData);
 
 	SPerIoData m_oSPerIoDatas[128];
-	LPFN_ACCEPTEX       m_lpfnAcceptEx;
-	LPFN_GETACCEPTEXSOCKADDRS   m_lpfnGetAcceptExSockaddrs;
+	FxLoopBuff*         m_poRecvBuf;
 #else
 	void OnAccept();
 #endif // WIN32
@@ -99,7 +98,7 @@ public:
 	void SetState(ESocketState eState) { m_nState = eState; }
 	ESocketState GetState() { return m_nState; }
 
-	IFxDataHeader* GetDataHeader();
+	virtual IFxDataHeader* GetDataHeader();
 
 	void SetIoThread(FxIoThread* pIoThread) { m_poIoThreadHandler = pIoThread; }
 	bool AddEvent();
@@ -110,10 +109,10 @@ public:
 
 #ifdef WIN32
 	bool PostRecv();
-	bool PostClose();
 	bool PostRecvFree();
+	virtual bool PostClose();
 
-	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred);		// ´¦ÀíÍê³É¶Ë¿ÚÊÂ¼ş//
+	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred);		// å¤„ç†å®Œæˆç«¯å£äº‹ä»¶//
 #else
 	virtual void OnParserIoEvent(int dwEvents);		//  1/4 //
 #endif // WIN32
@@ -145,7 +144,7 @@ private:
 	ESocketState		m_nState;
 
 	TEventQueue<SNetEvent>	m_oEvtQueue;
-	bool					m_bSendLinger;		// ·¢ËÍÑÓ³Ù£¬Ö±µ½³É¹¦£¬»òÕß30´Îºó //
+	bool					m_bSendLinger;		// å‘é€å»¶è¿Ÿï¼Œç›´åˆ°æˆåŠŸï¼Œæˆ–è€…30æ¬¡å //
 
 	FxCriticalLock			m_oLock;
 
@@ -155,17 +154,17 @@ private:
 
 	FxIoThread* m_poIoThreadHandler;
 
-	int m_nNeedData;        // Î´´¦ÀíÍêµÄÂß¼­Êı¾İ°ü»¹ĞèÒªµÄ³¤¶È//
-	int m_nPacketLen;       // Î´´¦ÀíÍêµÄÂß¼­Êı¾İ°ü³¤¶È//
+	int m_nNeedData;        // æœªå¤„ç†å®Œçš„é€»è¾‘æ•°æ®åŒ…è¿˜éœ€è¦çš„é•¿åº¦//
+	int m_nPacketLen;       // æœªå¤„ç†å®Œçš„é€»è¾‘æ•°æ®åŒ…é•¿åº¦//
 
 private:
 #ifdef WIN32
 	SPerIoData			m_stRecvIoData;
 	SPerIoData			m_stSendIoData;
-	LONG                m_nPostRecv;        // Î´¾öµÄWSARecv²Ù×÷Êı//
-	LONG                m_nPostSend;        // Î´¾öµÄWSASend²Ù×÷Êı/
+	LONG                m_nPostRecv;        // æœªå†³çš„WSARecvæ“ä½œæ•°//
+	LONG                m_nPostSend;        // æœªå†³çš„WSASendæ“ä½œæ•°/
 
-	UINT32              m_dwLastError;      // ×îºóµÄ³ö´íĞÅÏ¢//
+	UINT32              m_dwLastError;      // æœ€åçš„å‡ºé”™ä¿¡æ¯//
 #else
 	bool				m_bSending;
 #endif // WIN32

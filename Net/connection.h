@@ -5,6 +5,13 @@
 
 class FxTCPConnectSock;
 
+enum ESockType
+{
+	SOCKTYPE_NONE = 0,
+	SOCKTYPE_TCP = 1,
+	SOCKTYPE_UDP = 2,
+};
+
 class FxConnection
 {
 	enum EConnStat
@@ -24,27 +31,27 @@ public:
 	bool						Send(const char* pBuf,UINT32 dwLen);
 	void						Close(void);
 	SOCKET						Reconnect();
-	const UINT32				GetRemoteIP(void)		 { return m_dwRemoteIP;	}
-	const char*					GetRemoteIPStr(void)	{ return m_szRemoteIP;	}
-	UINT16						GetRemotePort(void)		{ return m_wRemotePort; }
-	const UINT32				GetLocalIP(void)		{ return m_dwLocalIP;	}
-	const char*					GetLocalIPStr(void)		 { return m_szLocalIP;	}
-	UINT16						GetLocalPort(void)		{ return m_wLocalPort;	}
+	const UINT32				GetRemoteIP(void)				{ return m_dwRemoteIP;	}
+	const char*					GetRemoteIPStr(void)			{ return m_szRemoteIP;	}
+	UINT16						GetRemotePort(void)				{ return m_wRemotePort; }
+	const UINT32				GetLocalIP(void)				{ return m_dwLocalIP;	}
+	const char*					GetLocalIPStr(void)				{ return m_szLocalIP;	}
+	UINT16						GetLocalPort(void)				{ return m_wLocalPort;	}
 
 	void						SetRemoteIP(UINT32 dwIP);
-	void						SetRemotePort(UINT16 wPort)	{ m_wRemotePort = wPort; }
+	void						SetRemotePort(UINT16 wPort)		{ m_wRemotePort = wPort; }
 	void						SetLocalIP(UINT32 dwIP);
-	void						SetLocalPort(UINT16 wPort)	{ m_wLocalPort = wPort; }
-	void						SetSock(FxTCPConnectSock* poSock);
-	void						SetSession(FxSession* poSession)	{ m_poSession = poSession; }
+	void						SetLocalPort(UINT16 wPort)		{ m_wLocalPort = wPort; }
+	void						SetSock(IFxConnectSocket* poSock);
+	void						SetSession(FxSession* poSession){ m_poSession = poSession; }
 	void						SetReconnect(bool bReconnect);
-
+	void						SetSockType(ESockType eType)	{ m_eSockType = eType; }
 	bool						SetConnectionOpt(ESessionOpt eOpt, bool bSetting);
 
 	void						Reset();
 
-	void						SetID(UINT32 dwID)		{ m_dwID = dwID; }
-	UINT32						GetID()						{ return m_dwID; }
+	void						SetID(UINT32 dwID)				{ m_dwID = dwID; }
+	UINT32						GetID()							{ return m_dwID; }
 
 	void						OnConnect();
 	void						OnAssociate();
@@ -69,8 +76,9 @@ private:
 	UINT16						m_wRemotePort;
 	char						m_szLocalIP[16];
 	char						m_szRemoteIP[16];
-	FxTCPConnectSock*			m_poSock;
+	IFxConnectSocket*			m_poSock;
 	FxSession*					m_poSession;
+	ESockType					m_eSockType;
 };
 
 #endif	// __CONNECTION_H__

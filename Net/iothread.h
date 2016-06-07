@@ -26,18 +26,18 @@ public:
 	void					Uninit();
 
 #ifdef WIN32
-	bool AddEvent(int hSock, IFxSocket* poSock);
+	bool					AddEvent(int hSock, IFxSocket* poSock);
 #else
-	bool AddEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock);
-	bool ChangeEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock);
-	bool DelEvent(int hSock);
+	bool					AddEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock);
+	bool					ChangeEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock);
+	bool					DelEvent(int hSock);
 #endif // WIN32
 
 	// win下为完成端口 linux下为epoll
 #ifdef WIN32
-	HANDLE GetHandle();
+	HANDLE					GetHandle();
 #else
-	int GetHandle();
+	int						GetHandle();
 	int						WaitEvents(int nMilliSecond);
 	epoll_event*			GetEvent(int nIndex);
 #endif // WIN32
@@ -49,10 +49,10 @@ private:
 	bool					 __DealEpollData();
 
 protected:
-	IFxThreadHandler*	m_poThrdHandler;
+	IFxThreadHandler*		m_poThrdHandler;
 
-	UINT32				m_dwMaxSock;
-	bool				m_bStop;
+	UINT32					m_dwMaxSock;
+	bool					m_bStop;
 
 #ifdef WIN32
 #else

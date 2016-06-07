@@ -1,8 +1,27 @@
-#include "myudpsock.h"
+﻿#include "myudpsock.h"
+#include "sockmgr.h"
+#include <stdio.h>
+#include "connectionmgr.h"
+#include "connection.h"
+#include "iothread.h"
+#include "net.h"
+#include "netstream.h"
+
+struct PacketHeader
+{
+	char m_cStatus;
+	char m_cSyn;
+	char m_cAck;
+};
 
 FxUDPListenSock::FxUDPListenSock()
 {
+	Reset();
 
+	SetState(SSTATE_INVALID);
+	SetSock(INVALID_SOCKET);
+	m_poSessionFactory = NULL;
+	m_poRecvBuf = NULL;
 }
 
 FxUDPListenSock::~FxUDPListenSock()
@@ -12,7 +31,7 @@ FxUDPListenSock::~FxUDPListenSock()
 
 bool FxUDPListenSock::Init()
 {
-	return false;
+	return m_oEvtQueue.Init(MAX_NETEVENT_PERSOCK);
 }
 
 void FxUDPListenSock::OnRead()
@@ -27,8 +46,73 @@ void FxUDPListenSock::OnWrite()
 
 bool FxUDPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 {
+	SetSock(socket(AF_INET, SOCK_DGRAM, 0));
+	if (INVALID_SOCKET == GetSock())
+	{
+#ifdef WIN32
+		int dwErr = WSAGetLastError();
+		LogFun(LT_Screen | LT_File, LogLv_Error, "create socket error, %u:%u, errno %d", dwIP, wPort, dwErr);
+#else
+		LogFun(LT_Screen | LT_File, LogLv_Error, "create socket error, %u:%u, errno %d", dwIP, wPort, errno);
+#endif // WIN32
 
-	return false;
+		return false;
+	}
+
+	INT32 nReuse = 1;
+	setsockopt(GetSock(), SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(nReuse));
+
+	sockaddr_in stAddr = { 0 };
+	stAddr.sin_family = AF_INET;
+	if (0 == dwIP)
+	{
+		stAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	}
+	else
+	{
+		stAddr.sin_addr.s_addr = dwIP;
+	}
+	stAddr.sin_port = htons(wPort);
+
+#ifdef WIN32
+	unsigned long ul = 1;
+	if (SOCKET_ERROR == ioctlsocket(GetSock(), FIONBIO, (unsigned long*)&ul))
+	{
+		PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
+		closesocket(GetSock());
+		LogFun(LT_Screen | LT_File, LogLv_Error, "Set socket FIONBIO error : %d, socket : %d, socket id %d", WSAGetLastError(), GetSock(), GetSockId());
+		return false;
+	}
+#endif // WIN32
+
+	if (bind(GetSock(), (sockaddr*)&stAddr, sizeof(stAddr)) < 0)
+	{
+#ifdef WIN32
+		int dwErr = WSAGetLastError();
+		LogFun(LT_Screen | LT_File, LogLv_Error, "bind at %u:%d failed, errno %d", dwIP, wPort, dwErr);
+#else
+		LogFun(LT_Screen | LT_File, LogLv_Error, "bind at %u:%d failed, errno %d", dwIP, wPort, errno);
+#endif // WIN32
+		return false;
+	}
+
+	m_poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(GetSockId());
+	if (NULL == m_poIoThreadHandler)
+	{
+		Close();
+		return false;
+	}
+
+	SetState(SSTATE_LISTEN);
+
+	// 添加到事件 //
+	if (false == AddEvent())
+	{
+		return false;
+	}
+	LogFun(LT_Screen | LT_File, LogLv_Info, "listen at %u:%d success", dwIP, wPort);
+
+	return true;
 }
 
 bool FxUDPListenSock::StopListen()
@@ -62,7 +146,10 @@ void FxUDPListenSock::ProcEvent()
 #ifdef WIN32
 void FxUDPListenSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred)
 {
-
+	if (dwByteTransferred < sizeof(PacketHeader))
+	{
+		return;
+	}
 }
 #else
 void FxUDPListenSock::OnParserIoEvent(int dwEvents)

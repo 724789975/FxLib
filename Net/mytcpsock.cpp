@@ -13,9 +13,6 @@ struct tcp_keepalive {
 	u_long  keepalivetime;
 	u_long  keepaliveinterval;
 };
-#ifndef _WINSOCK_DEPRECATED_NO_WARNINGS
-#define _WINSOCK_DEPRECATED_NO_WARNINGS
-#endif // !_WINSOCK_DEPRECATED_NO_WARNINGS
 #define SIO_KEEPALIVE_VALS _WSAIOW(IOC_VENDOR,4)
 #else
 #include <unistd.h>
@@ -524,6 +521,7 @@ void FxTCPListenSock::OnAccept(SPerIoData* pstPerIoData)
 		poSock->SetSock(hSock);
 		poSock->SetConnection(poConnection);
 
+		poConnection->SetSockType(SOCKTYPE_TCP);
 		poConnection->SetSock(poSock);
 		poConnection->SetID(poSock->GetSockId());
 
@@ -705,6 +703,7 @@ void FxTCPListenSock::OnAccept()
 	getsockname(hAcceptSock, (sockaddr*)&stLocalAddr, &dwAddrLen);
 
 	poSession->Init(poConnection);
+	poConnection->SetSockType(SOCKTYPE_TCP);
 	poConnection->SetID(poSock->GetSockId());
 	poConnection->SetSock(poSock);
 	poConnection->SetSession(poSession);
@@ -1413,7 +1412,8 @@ void FxTCPConnectSock::__ProcRelease()
 	{
 		if (GetSockId() != m_poConnection->GetID())
 		{
-			LogFun(LT_Screen | LT_File, LogLv_Error, "socket : %d, socket id : %d, connection id : %d, connection addr : %p", GetSock(), GetSockId(), m_poConnection->GetID(), m_poConnection);
+			LogFun(LT_Screen | LT_File, LogLv_Error, "socket : %d, socket id : %d, connection id : %d, connection addr : %p",
+				GetSock(), GetSockId(), m_poConnection->GetID(), m_poConnection);
 			return;
 		}
 

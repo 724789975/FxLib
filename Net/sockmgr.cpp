@@ -97,3 +97,64 @@ void FxMySockMgr::ReleaseTcpSock(UINT32 dwListenId)
 	m_mapTcpListenSocks.erase(dwListenId);
 }
 
+FxUDPConnectSock * FxMySockMgr::CreateUdpSock()
+{
+	FxUDPConnectSock* poSock = m_oUDPSockPool.FetchObj();
+    if (NULL == poSock)
+    {
+        return NULL;
+    }
+
+	if (!poSock->Init())
+	{
+		ReleaseUdpSock(poSock);
+        return NULL;
+	}
+
+    poSock->SetState(SSTATE_INVALID);
+    poSock->SetSock(INVALID_SOCKET);
+    poSock->SetSockId(m_dwNextId++);
+
+    return poSock;
+}
+
+FxUDPListenSock* FxMySockMgr::CreateUdpSock(UINT32 dwListenId, IFxSessionFactory* pSessionFactory)
+{
+	if (m_mapUdpListenSocks.find(dwListenId) != m_mapUdpListenSocks.end())
+	{
+		return &m_mapUdpListenSocks[dwListenId];
+	}
+
+	if (!m_mapUdpListenSocks[dwListenId].IFxListenSocket::Init(pSessionFactory))
+	{
+		m_mapUdpListenSocks.erase(dwListenId);
+		return NULL;
+	}
+
+	m_mapUdpListenSocks[dwListenId].SetState(SSTATE_INVALID);
+	m_mapUdpListenSocks[dwListenId].SetSock(INVALID_SOCKET);
+	m_mapUdpListenSocks[dwListenId].SetSockId(m_dwNextId++);
+
+	return &m_mapUdpListenSocks[dwListenId];
+}
+
+void FxMySockMgr::ReleaseUdpSock(FxUDPConnectSock* poSock)
+{
+	if(NULL == poSock)
+    {
+		return;
+    }
+    poSock->Reset();
+    m_oUDPSockPool.ReleaseObj(poSock);
+}
+
+void FxMySockMgr::ReleaseUdpSock(UINT32 dwListenId)
+{
+	if (m_mapUdpListenSocks.find(dwListenId) == m_mapUdpListenSocks.end())
+	{
+		return;
+	}
+
+	m_mapUdpListenSocks.erase(dwListenId);
+}
+
