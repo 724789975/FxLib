@@ -5,6 +5,8 @@
 #include <WinSock2.h>
 #include <Windows.h>
 #include <mswsock.h>
+#else
+#include <errno.h>
 #endif
 
 #include "fxmeta.h"
@@ -60,13 +62,13 @@ private:
 
 	FxIoThread* m_poIoThreadHandler;
 
+	FxLoopBuff*         m_poRecvBuf;
 #ifdef WIN32
 	bool PostAccept(SPerIoData& oSPerIoData);
 	bool InitAcceptEx();
 	void OnAccept(SPerIoData* pstPerIoData);
 
 	SPerIoData m_oSPerIoDatas[128];
-	FxLoopBuff*         m_poRecvBuf;
 #else
 	void OnAccept();
 #endif // WIN32
