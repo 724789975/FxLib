@@ -7,13 +7,6 @@
 #include "net.h"
 #include "netstream.h"
 
-struct PacketHeader
-{
-	char m_cStatus;
-	char m_cSyn;
-	char m_cAck;
-};
-
 FxUDPListenSock::FxUDPListenSock()
 {
 	Reset();
@@ -112,6 +105,14 @@ bool FxUDPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 	}
 	LogFun(LT_Screen | LT_File, LogLv_Info, "listen at %u:%d success", dwIP, wPort);
 
+#ifdef WIN32
+	for (int i = 0; i < sizeof(m_oSPerIoDatas) / sizeof(SPerUDPIoData); ++i)
+	{
+		m_oSPerIoDatas[i].stWsaBuf.buf = (char*)(&m_oPacketHeaders[i]);
+		m_oSPerIoDatas[i].stWsaBuf.len = sizeof(m_oPacketHeaders[i]);
+		PostAccept(m_oSPerIoDatas[i]);
+	}
+#endif // WIN32
 	return true;
 }
 
@@ -146,7 +147,7 @@ void FxUDPListenSock::ProcEvent()
 #ifdef WIN32
 void FxUDPListenSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred)
 {
-	if (dwByteTransferred < sizeof(PacketHeader))
+	if (dwByteTransferred < sizeof(UDPPacketHeader))
 	{
 		return;
 	}
@@ -180,10 +181,46 @@ void FxUDPListenSock::__ProcTerminate()
 }
 
 #ifdef WIN32
-bool FxUDPListenSock::PostAccept(SPerIoData& oSPerIoData)
+bool FxUDPListenSock::PostAccept(SPerUDPIoData& oSPerIoData)
 {
-	// todo
-	return false;
+	LONG nPostRecv = InterlockedCompareExchange(&m_nPostRecv, 1, 0);
+	if (0 != nPostRecv)
+	{
+		return true;
+	}
+
+	if (m_poRecvBuf->IsEmpty())
+	{
+		m_poRecvBuf->Clear();
+	}
+
+	memset(&oSPerIoData.stOverlapped, 0, sizeof(oSPerIoData.stOverlapped));
+	int nLen = m_poRecvBuf->GetInCursorPtr(oSPerIoData.stWsaBuf.buf);
+	if (0 >= nLen)
+	{
+		return true;
+	}
+
+	nLen = 65536 < nLen ? 65536 : nLen;
+	oSPerIoData.stWsaBuf.len = nLen;
+
+	DWORD dwReadLen = 0;
+	DWORD dwFlags = 0;
+
+	int dwSockAddr = sizeof(oSPerIoData.stRemoteAddr);
+
+	if (WSARecvFrom(GetSock(), &oSPerIoData.stWsaBuf, 1, &dwReadLen, &dwFlags,
+		(sockaddr*)(&oSPerIoData.stRemoteAddr), &dwSockAddr, &oSPerIoData.stOverlapped, NULL) == SOCKET_ERROR)
+	{
+		if (WSAGetLastError() != WSA_IO_PENDING)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "WSARecvFrom errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+
+			InterlockedCompareExchange(&m_nPostRecv, 0, 1);
+			return false;
+		}
+	}
+	return true;
 }
 
 bool FxUDPListenSock::InitAcceptEx()

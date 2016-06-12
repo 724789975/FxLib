@@ -106,6 +106,15 @@ struct SPerIoData
 	WSABUF							stWsaBuf;
 	char							Buf[128];
 };
+
+struct SPerUDPIoData
+{
+	OVERLAPPED						stOverlapped;
+	SOCKET							hSock;
+	EIocpOperation					nOp;
+	WSABUF							stWsaBuf;
+	sockaddr_in						stRemoteAddr;
+};
 #endif // WIN32
 
 struct SNetEvent

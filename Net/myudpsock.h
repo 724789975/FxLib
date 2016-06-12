@@ -17,6 +17,13 @@
 
 class FxIoThread;
 
+struct UDPPacketHeader
+{
+	char m_cStatus;
+	char m_cSyn;
+	char m_cAck;
+};
+
 class FxUDPListenSock : public IFxListenSocket
 {
 public:
@@ -44,8 +51,6 @@ public:
 	virtual void OnParserIoEvent(int dwEvents);		//  1/4 //
 #endif // WIN32
 
-public:
-
 private:
 	bool AddEvent();
 
@@ -53,24 +58,24 @@ private:
 	void	__ProcError(UINT32 dwErrorNo);
 	void	__ProcTerminate();
 
-private:
-	ESocketState		m_nState;
-
-	FxCriticalLock			m_oLock;
-
-	TEventQueue<SNetEvent>	m_oEvtQueue;
-
-	FxIoThread* m_poIoThreadHandler;
-
-	FxLoopBuff*         m_poRecvBuf;
 #ifdef WIN32
-	bool PostAccept(SPerIoData& oSPerIoData);
+	bool PostAccept(SPerUDPIoData& oSPerIoData);
 	bool InitAcceptEx();
 	void OnAccept(SPerIoData* pstPerIoData);
-
-	SPerIoData m_oSPerIoDatas[128];
 #else
 	void OnAccept();
+#endif // WIN32
+
+private:
+	ESocketState		m_nState;
+	FxCriticalLock			m_oLock;
+	TEventQueue<SNetEvent>	m_oEvtQueue;
+	FxIoThread* m_poIoThreadHandler;
+	FxLoopBuff*         m_poRecvBuf;
+#ifdef WIN32
+	LONG            				    m_nPostRecv;        // 未决的WSARecvFrom操作数//
+	SPerUDPIoData m_oSPerIoDatas[128];
+	UDPPacketHeader m_oPacketHeaders[128];
 #endif // WIN32
 };
 
