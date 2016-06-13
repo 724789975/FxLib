@@ -118,30 +118,118 @@ bool FxUDPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 
 bool FxUDPListenSock::StopListen()
 {
+	if (SSTATE_LISTEN != GetState())
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "state : %d != SSTATE_LISTEN", (UINT32)GetState());
+		return false;
+	}
 
-	return false;
+	if (INVALID_SOCKET == GetSock())
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "socket : %d == INVALID_SOCKET", GetSock());
+		return false;
+	}
+
+#ifdef WIN32
+	shutdown(GetSock(), SD_RECEIVE);
+#else
+	shutdown(GetSock(), SHUT_RD);
+#endif // WIN32
+
+	SetState(SSTATE_STOP_LISTEN);
+
+	// 不close 如需要 另外close
+	return true;
 }
 
 bool FxUDPListenSock::Close()
 {
+	m_oLock.Lock();
+	if (GetState() == SSTATE_CLOSE)
+	{
+		m_oLock.UnLock();
+		return true;
+	}
+	SetState(SSTATE_CLOSE);
+#ifdef WIN32
+	closesocket(GetSock());
+#else
+	m_poIoThreadHandler->DelEvent(GetSock());
+	close(GetSock());
+#endif // WIN32
 
-	return false;
+	SetSock(INVALID_SOCKET);
+
+	PushNetEvent(NETEVT_TERMINATE, 0);
+	m_oLock.UnLock();
+
+	return true;
 }
 
 void FxUDPListenSock::Reset()
 {
-
+	m_poSessionFactory = NULL;
+	SetState(SSTATE_INVALID);
+	SetSock(INVALID_SOCKET);
 }
 
 bool FxUDPListenSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
 {
+	if (SSTATE_INVALID == GetState())
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "state : %d == SSTATE_INVALID", (UINT32)GetState());
 
-	return false;
+		return false;
+	}
+	SNetEvent oEvent;
+	// 先扔网络事件进去，然后在报告上层有事件，先后顺序不能错，这样上层就不会错取事件//
+	oEvent.eType = eType;
+	oEvent.dwValue = dwValue;
+	while (!m_oEvtQueue.PushBack(oEvent))
+	{
+		FxSleep(1);
+	}
+
+	while (!FxNetModule::Instance()->PushNetEvent(this))
+	{
+		FxSleep(1);
+	}
+
+	return true;
 }
 
 void FxUDPListenSock::ProcEvent()
 {
+	SNetEvent* pEvent = m_oEvtQueue.PopFront();
+	if (pEvent)
+	{
+		switch (pEvent->eType)
+		{
+		case NETEVT_ASSOCIATE:
+		{
+			__ProcAssociate();
+		}
+		break;
 
+		case NETEVT_ERROR:
+		{
+			__ProcError(pEvent->dwValue);
+		}
+		break;
+
+		case NETEVT_TERMINATE:
+		{
+			__ProcTerminate();
+		}
+		break;
+
+		default:
+		{
+			Assert(0);
+		}
+		break;
+		}
+	}
 }
 
 #ifdef WIN32
@@ -151,6 +239,7 @@ void FxUDPListenSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwB
 	{
 		return;
 	}
+	// todo
 }
 #else
 void FxUDPListenSock::OnParserIoEvent(int dwEvents)
@@ -161,8 +250,24 @@ void FxUDPListenSock::OnParserIoEvent(int dwEvents)
 
 bool FxUDPListenSock::AddEvent()
 {
+#ifdef WIN32
+	if (!m_poIoThreadHandler->AddEvent(GetSock(), this))
+	{
+		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
+		Close();
+		return false;
+	}
+#else
+	if (!m_poIoThreadHandler->AddEvent(GetSock(), EPOLLIN, this))
+	{
+		PushNetEvent(NETEVT_ERROR, errno);
+		Close();
+		return false;
+	}
+#endif // WIN32
 
-	return false;
+	PushNetEvent(NETEVT_ASSOCIATE, 0);
+	return true;
 }
 
 void FxUDPListenSock::__ProcAssociate()
