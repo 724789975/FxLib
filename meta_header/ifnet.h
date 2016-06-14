@@ -197,7 +197,7 @@ public:
 	unsigned int					GetSockId(){ return m_dwSockId; }
 
 #ifdef WIN32
-	virtual void					OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred) = 0;    // 
+	virtual void					OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred) = 0;    // 
 #else
 	virtual void					OnParserIoEvent(int dwEvents) = 0;    // 
 #endif // WIN32
@@ -254,7 +254,7 @@ public:
 	virtual void					ProcEvent() = 0;
 
 #ifdef WIN32
-	virtual void					OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred) = 0;		//
+	virtual void					OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred) = 0;		//
 #else
 	virtual void					OnParserIoEvent(int dwEvents) = 0;		//
 #endif // WIN32
@@ -288,7 +288,7 @@ public:
 
 #ifdef WIN32
 	virtual bool					PostClose() = 0;
-	virtual void					OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred) = 0;		//
+	virtual void					OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred) = 0;		//
 #else
 	virtual void					OnParserIoEvent(int dwEvents) = 0;		//
 #endif // WIN32

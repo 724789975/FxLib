@@ -425,8 +425,9 @@ bool FxTCPListenSock::InitAcceptEx()
 	return true;
 }
 
-void FxTCPListenSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred)
+void FxTCPListenSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred)
 {
+	SPerIoData* pSPerIoData = (SPerIoData*)pIoData;
 	switch (GetState())
 	{
 	case SSTATE_LISTEN:
@@ -437,12 +438,12 @@ void FxTCPListenSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwB
 			int dwErr = WSAGetLastError();
 			LogFun(LT_Screen | LT_File, LogLv_Error, "OnParserIoEvent failed, errno %d", dwErr);
 
-			closesocket(pIoData->hSock);
-			PostAccept(*pIoData);
+			closesocket(pSPerIoData->hSock);
+			PostAccept(*pSPerIoData);
 		}
 		else
 		{
-			OnAccept(pIoData);
+			OnAccept(pSPerIoData);
 		}
 		m_oLock.UnLock();
 	}
@@ -453,11 +454,11 @@ void FxTCPListenSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwB
 		m_oLock.Lock();
 		if (bRet)
 		{
-			LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "listen socket has stoped but rei is true");
+			LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "listen socket has stoped but ret is true");
 		}
 		else
 		{
-			pIoData->hSock = INVALID_SOCKET;
+			pSPerIoData->hSock = INVALID_SOCKET;
 		}
 		m_oLock.UnLock();
 	}
@@ -1787,38 +1788,39 @@ void FxTCPConnectSock::OnConnect()
 }
 
 #ifdef WIN32
-void FxTCPConnectSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred)
+void FxTCPConnectSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred)
 {
-	if (NULL == pIoData)
+	SPerIoData* pSPerIoData = (SPerIoData*)pIoData;
+	if (NULL == pSPerIoData)
 	{
 		Close();
 		return;
 	}
 
-	switch (pIoData->nOp)
+	switch (pSPerIoData->nOp)
 	{
 	case IOCP_RECV:
 	{
-					  OnRecv(bRet, dwByteTransferred);
+		OnRecv(bRet, dwByteTransferred);
 	}
 		break;
 	case IOCP_SEND:
 	{
-					  OnSend(bRet, dwByteTransferred);
+		OnSend(bRet, dwByteTransferred);
 	}
 		break;
 	case IOCP_CONNECT:
 	{
-						 if (GetState() != SSTATE_CONNECT)
-						 {
-							 Assert(0);
-						 }
-						 OnConnect();
+		if (GetState() != SSTATE_CONNECT)
+		{
+			Assert(0);
+		}
+		OnConnect();
 	}
 		break;
 	default:
 	{
-			   Close();
+		Close();
 	}
 		break;
 	}

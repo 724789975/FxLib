@@ -225,7 +225,7 @@ void FxIoThread::ThrdFunc()
 bool FxIoThread::__DealEpollData()
 {
 #ifdef WIN32
-	SPerIoData* pstPerIoData = NULL;
+	void* pstPerIoData = NULL;
 	IFxSocket* poSock = NULL;
 	BOOL bRet = false;
 	DWORD dwByteTransferred = 0;
@@ -237,11 +237,11 @@ bool FxIoThread::__DealEpollData()
 		dwByteTransferred = 0;
 
 		bRet = GetQueuedCompletionStatus(
-				GetHandle(),
-				&dwByteTransferred,
-				(PULONG_PTR)&poSock,
-				(LPOVERLAPPED*)&pstPerIoData,
-				INFINITE);
+			GetHandle(),
+			&dwByteTransferred,
+			(PULONG_PTR)&poSock,
+			(LPOVERLAPPED*)&pstPerIoData,
+			INFINITE);
 
 		// 
 		if (NULL == poSock)

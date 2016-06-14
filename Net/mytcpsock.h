@@ -37,7 +37,7 @@ public:
 	virtual void						ProcEvent();
 
 #ifdef WIN32
-	virtual void						OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred);		//
+	virtual void						OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred);		//
 #else
 	virtual void						OnParserIoEvent(int dwEvents);		//  1/4 //
 #endif // WIN32
@@ -110,7 +110,7 @@ public:
 	bool								PostRecvFree();
 	virtual bool						PostClose();
 
-	virtual void						OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred);		// 处理完成端口事件//
+	virtual void						OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred);		// 处理完成端口事件//
 #else
 	virtual void						OnParserIoEvent(int dwEvents);		//  1/4 //
 #endif // WIN32

@@ -22,6 +22,7 @@ struct UDPPacketHeader
 	char m_cStatus;
 	char m_cSyn;
 	char m_cAck;
+	char m_cParam;						// 占位
 };
 
 class FxUDPListenSock : public IFxListenSocket
@@ -46,7 +47,7 @@ public:
 	virtual void ProcEvent();
 
 #ifdef WIN32
-	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred);		//
+	virtual void OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred);		//
 #else
 	virtual void OnParserIoEvent(int dwEvents);		//  1/4 //
 #endif // WIN32
@@ -61,7 +62,7 @@ private:
 #ifdef WIN32
 	bool PostAccept(SPerUDPIoData& oSPerIoData);
 	bool InitAcceptEx();
-	void OnAccept(SPerIoData* pstPerIoData);
+	void OnAccept(SPerUDPIoData* pstPerIoData);
 #else
 	void OnAccept();
 #endif // WIN32
@@ -119,7 +120,7 @@ public:
 	bool PostRecvFree();
 	virtual bool PostClose();
 
-	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred);		// 处理完成端口事件//
+	virtual void OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred);		// 处理完成端口事件//
 #else
 	virtual void OnParserIoEvent(int dwEvents);		//  1/4 //
 #endif // WIN32
