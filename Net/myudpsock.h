@@ -165,10 +165,13 @@ private:
 	int m_nNeedData;        // 未处理完的逻辑数据包还需要的长度//
 	int m_nPacketLen;       // 未处理完的逻辑数据包长度//
 
+	char m_cSyn;
+	char m_cAck;
+
 private:
 #ifdef WIN32
-	SPerIoData			m_stRecvIoData;
-	SPerIoData			m_stSendIoData;
+	SPerUDPIoData			m_stRecvIoData;
+	SPerUDPIoData			m_stSendIoData;
 	LONG                m_nPostRecv;        // 未决的WSARecv操作数//
 	LONG                m_nPostSend;        // 未决的WSASend操作数/
 

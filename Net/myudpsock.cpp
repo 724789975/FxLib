@@ -14,7 +14,6 @@ FxUDPListenSock::FxUDPListenSock()
 	SetState(SSTATE_INVALID);
 	SetSock(INVALID_SOCKET);
 	m_poSessionFactory = NULL;
-	m_poRecvBuf = NULL;
 }
 
 FxUDPListenSock::~FxUDPListenSock()
@@ -360,20 +359,7 @@ bool FxUDPListenSock::PostAccept(SPerUDPIoData& oSPerIoData)
 		return true;
 	}
 
-	if (m_poRecvBuf->IsEmpty())
-	{
-		m_poRecvBuf->Clear();
-	}
-
 	memset(&oSPerIoData.stOverlapped, 0, sizeof(oSPerIoData.stOverlapped));
-	int nLen = m_poRecvBuf->GetInCursorPtr(oSPerIoData.stWsaBuf.buf);
-	if (0 >= nLen)
-	{
-		return true;
-	}
-
-	nLen = 65536 < nLen ? 65536 : nLen;
-	oSPerIoData.stWsaBuf.len = nLen;
 
 	memset(oSPerIoData.stWsaBuf.buf, 0, oSPerIoData.stWsaBuf.len);
 
@@ -433,6 +419,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 
 			closesocket(hSock);
 			PostAccept(*pstPerIoData);
+			FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
 			return;
 		}
 
@@ -460,11 +447,12 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		if (getsockname(GetSock(), (sockaddr*)(&stLocalAddr), &nLocalAddrLen) == SOCKET_ERROR)
 		{
 			int dwErr = WSAGetLastError();
-			LogFun(LT_Screen | LT_File, LogLv_Error, "Set keep alive error: %d", dwErr);
+			LogFun(LT_Screen | LT_File, LogLv_Error, "getsockname error: %d", dwErr);
 
+			closesocket(hSock);
 			PostAccept(*pstPerIoData);
-			poSock->PushNetEvent(NETEVT_ERROR, dwErr);
-			poSock->Close();
+			FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
+			FxConnectionMgr::Instance()->Release(poConnection);
 			return;
 		}
 
@@ -492,7 +480,20 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 
 		poSock->SetState(SSTATE_ESTABLISH);
 
-		// todo  这个时候不能说是已经establish 了 要发个消息确认下
+		if (connect(poSock->GetSock(), (sockaddr*)(&pstPerIoData->stRemoteAddr), sizeof(pstPerIoData->stRemoteAddr)) == SOCKET_ERROR)
+		{
+			if (WSAGetLastError() != WSA_IO_PENDING)
+			{
+				LogFun(LT_Screen | LT_File, LogLv_Error, "connect errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+
+				closesocket(hSock);
+				PostAccept(*pstPerIoData);
+				FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
+				FxConnectionMgr::Instance()->Release(poConnection);
+				return;
+			}
+		}
+		// 这个时候不能说是已经establish 了 要发个消息确认下
 		UDPPacketHeader oUDPPacketHeader;
 		oUDPPacketHeader.m_cAck = 1;
 		oUDPPacketHeader.m_cSyn = ((UDPPacketHeader*)(pstPerIoData->stWsaBuf.buf))->m_cSyn;
@@ -501,29 +502,12 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		// todo send的时候 可能要修改 因为 udp tcp 有区别
 		poSock->Send((char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader));
 
-		////
-		//// 应该先投递连接事件再关联套接口，否则可能出现第一个Recv事件先于连接事件入队列
-		////
+		if (false == poSock->AddEvent())
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "poSock->AddEvent failed");
 
-		//if (false == poSock->AddEvent())
-		//{
-		//	LogFun(LT_Screen | LT_File, LogLv_Error, "poSock->AddEvent failed");
-
-		//	poSock->Close();
-		//}
-		//else
-		//{
-		//	poSock->PushNetEvent(NETEVT_ESTABLISH, 0);
-
-		//	if (false == poSock->PostRecv())
-		//	{
-		//		int dwErr = WSAGetLastError();
-		//		poSock->PushNetEvent(NETEVT_ERROR, dwErr);
-		//		LogFun(LT_Screen | LT_File, LogLv_Error, "poSock->PostRecv failed, errno : %d", dwErr);
-
-		//		poSock->Close();
-		//	}
-		//}
+			poSock->Close();
+		}
 
 		PostAccept(*pstPerIoData);
 	}
@@ -549,6 +533,9 @@ FxUDPConnectSock::~FxUDPConnectSock()
 
 bool FxUDPConnectSock::Init()
 {
+	m_cSyn = 1;
+	m_cAck = 0;
+	return true;
 
 	return false;
 }
@@ -610,8 +597,56 @@ SOCKET FxUDPConnectSock::Connect()
 #ifdef WIN32
 bool FxUDPConnectSock::PostRecv()
 {
+	if (false == IsConnected())
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
 
-	return false;
+		return false;
+	}
+
+	LONG nPostRecv = InterlockedCompareExchange(&m_nPostRecv, 1, 0);
+	if (0 != nPostRecv)
+	{
+		return true;
+	}
+
+	if (m_poRecvBuf->IsEmpty())
+	{
+		m_poRecvBuf->Clear();
+	}
+
+	ZeroMemory(&m_stRecvIoData.stOverlapped, sizeof(m_stRecvIoData.stOverlapped));
+	int nLen = m_poRecvBuf->GetInCursorPtr(m_stRecvIoData.stWsaBuf.buf);
+	if (0 >= nLen)
+	{
+		//LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetInCursorPtr() = %d, socket : %d, socket id : %d", nLen, GetSock(), GetSockId());
+
+		// 接受缓存不够 等会继续接收 //
+		InterlockedCompareExchange(&m_nPostRecv, 0, 1);
+		PushNetEvent(NETEVT_RECV, -1);
+		return true;
+	}
+
+	nLen = 65536 < nLen ? 65536 : nLen;
+	m_stRecvIoData.stWsaBuf.len = nLen;
+
+	DWORD dwReadLen = 0;
+	DWORD dwFlags = 0;
+
+	int nSockAddr = sizeof(m_stRecvIoData.stRemoteAddr);
+	if (SOCKET_ERROR == WSARecvFrom(GetSock(), &m_stRecvIoData.stWsaBuf, 1, &dwReadLen, &dwFlags,
+		(sockaddr*)(&m_stRecvIoData.stWsaBuf), &nSockAddr, &m_stRecvIoData.stOverlapped, NULL))
+	{
+		if (WSAGetLastError() != WSA_IO_PENDING)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "WSARecvFrom errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+
+			InterlockedCompareExchange(&m_nPostRecv, 0, 1);
+			return false;
+		}
+	}
+
+	return true;
 }
 
 bool FxUDPConnectSock::PostClose()
@@ -628,7 +663,99 @@ bool FxUDPConnectSock::PostRecvFree()
 
 void FxUDPConnectSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred)
 {
+	SPerUDPIoData* pSPerUDPIoData = (SPerUDPIoData*)pIoData;
 
+	switch (GetState())
+	{
+	case SSTATE_ESTABLISH:
+	{
+		// todo
+	}
+	break;
+	case SSTATE_CONNECT:
+	{
+		// connect后 收到的第一条消息肯定是服务器发过来的确认
+		if (dwByteTransferred < sizeof(UDPPacketHeader))
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "recv size error");
+			Close();
+			return;
+		}
+		UDPPacketHeader* pUDPPacketHeader = (UDPPacketHeader*)pSPerUDPIoData->stWsaBuf.buf;
+		if (pUDPPacketHeader->m_cAck != 1)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "ack error want : 1, recv : %d", pUDPPacketHeader->m_cAck);
+			Close();
+			return;
+		}
+		if (pUDPPacketHeader->m_cSyn!= 1)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "syn error want : 1, recv : %d", pUDPPacketHeader->m_cSyn);
+			Close();
+			return;
+		}
+		if (pUDPPacketHeader->m_cStatus != SSTATE_ESTABLISH)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "statu error want : SSTATE_ESTABLISH, recv : %d", pUDPPacketHeader->m_cStatus);
+			Close();
+			return;
+		}
+
+		sockaddr_in stLocalAddr;
+		INT32 nLocalAddrLen = sizeof(sockaddr_in);
+
+		if (getsockname(GetSock(), (sockaddr*)(&stLocalAddr), &nLocalAddrLen) == SOCKET_ERROR)
+		{
+			int dwErr = WSAGetLastError();
+			LogFun(LT_Screen | LT_File, LogLv_Error, "getsockname error: %d", dwErr);
+
+			Close();
+			return;
+		}
+
+		GetConnection()->SetLocalIP(stLocalAddr.sin_addr.s_addr);
+		GetConnection()->SetLocalPort(ntohs(stLocalAddr.sin_port));
+
+		GetConnection()->SetRemoteIP(pSPerUDPIoData->stRemoteAddr.sin_addr.s_addr);
+		GetConnection()->SetRemotePort(ntohs(pSPerUDPIoData->stRemoteAddr.sin_port));
+
+		//
+		// 应该先投递连接事件再关联套接口，否则可能出现第一个Recv事件先于连接事件入队列
+		//
+		if (connect(GetSock(), (sockaddr*)(&pSPerUDPIoData->stRemoteAddr), sizeof(pSPerUDPIoData->stRemoteAddr)) == SOCKET_ERROR)
+		{
+			if (WSAGetLastError() != WSA_IO_PENDING)
+			{
+				LogFun(LT_Screen | LT_File, LogLv_Error, "connect errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+
+				Close();
+				return;
+			}
+		}
+		{
+			SetState(SSTATE_ESTABLISH);
+			PushNetEvent(NETEVT_ESTABLISH, 0);			// 到了这个时候才算是连接成功
+
+			if (false == PostRecv())
+			{
+				int dwErr = WSAGetLastError();
+				PushNetEvent(NETEVT_ERROR, dwErr);
+				LogFun(LT_Screen | LT_File, LogLv_Error, "poSock->PostRecv failed, errno : %d", dwErr);
+
+				Close();
+				return;
+			}
+		}
+	}
+	break;
+	default:
+	{
+		// 如果其他状态收到消息 肯定不对
+		LogFun(LT_Screen | LT_File, LogLv_Error, "state : %d, error", (UINT32)GetState());
+		Close();        // 未知错误，不应该发生//
+	}
+		break;
+	}
 }
 #else
 void FxUDPConnectSock::OnParserIoEvent(int dwEvents)
