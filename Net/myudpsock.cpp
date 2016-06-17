@@ -485,11 +485,9 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 			if (WSAGetLastError() != WSA_IO_PENDING)
 			{
 				LogFun(LT_Screen | LT_File, LogLv_Error, "connect errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
-
-				closesocket(hSock);
+				
 				PostAccept(*pstPerIoData);
-				FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
-				FxConnectionMgr::Instance()->Release(poConnection);
+				poSock->Close();
 				return;
 			}
 		}
