@@ -7,6 +7,9 @@
 #include "net.h"
 #include "netstream.h"
 
+#define RECV_BUFF_SIZE 8*64*1024
+#define SEND_BUFF_SIZE 64*64*1024
+
 FxUDPListenSock::FxUDPListenSock()
 {
 	Reset();
@@ -18,7 +21,11 @@ FxUDPListenSock::FxUDPListenSock()
 
 FxUDPListenSock::~FxUDPListenSock()
 {
-
+	if (m_poSessionFactory)
+	{
+		delete m_poSessionFactory;
+		m_poSessionFactory = NULL;
+	}
 }
 
 bool FxUDPListenSock::Init()
@@ -383,12 +390,6 @@ bool FxUDPListenSock::PostAccept(SPerUDPIoData& oSPerIoData)
 	return true;
 }
 
-bool FxUDPListenSock::InitAcceptEx()
-{
-	// todo
-	return false;
-}
-
 void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 {
 	SOCKET hSock = pstPerIoData->hSock;
@@ -500,7 +501,22 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		oUDPPacketHeader.m_cStatus = poSock->GetState();
 
 		// todo send的时候 可能要修改 因为 udp tcp 有区别
-		poSock->Send((char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader));
+		if (sendto(poSock->GetSock(), (char*)(&oUDPPacketHeader),
+			sizeof(oUDPPacketHeader), 0, (sockaddr*)(&pstPerIoData->stRemoteAddr),
+			sizeof(pstPerIoData->stRemoteAddr)) == SOCKET_ERROR)
+		{
+			if (WSAGetLastError() != WSA_IO_PENDING)
+			{
+				LogFun(LT_Screen | LT_File, LogLv_Error, "sendto errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+
+				closesocket(hSock);
+				PostAccept(*pstPerIoData);
+				FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
+				FxConnectionMgr::Instance()->Release(poConnection);
+				return;
+			}
+		}
+		//poSock->Send((char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader));
 
 		if (false == poSock->AddEvent())
 		{
@@ -523,21 +539,97 @@ void FxUDPListenSock::OnAccept()
 
 FxUDPConnectSock::FxUDPConnectSock()
 {
+	m_poSendBuf = NULL;
+	m_poRecvBuf = NULL;
+	m_poConnection = NULL;
+	SetState(SSTATE_INVALID);
+	SetSock(INVALID_SOCKET);
+	m_nNeedData = 0;
+	m_nPacketLen = 0;
+#ifdef WIN32
+	m_dwLastError = 0;
+	m_stRecvIoData.nOp = IOCP_RECV;
+	m_stSendIoData.nOp = IOCP_SEND;
+	m_nPostRecv = 0;
+	m_nPostSend = 0;
+	m_dwLastError = 0;
+#else
+	m_bSending = false;
+#endif // WIN32
 
+	m_bSendLinger = false;     // 发送延迟，直到成功，或者30次后，这时默认设置//
+	m_oEvtQueue.Init(MAX_NETEVENT_PERSOCK);
+
+	Reset();
 }
 
 FxUDPConnectSock::~FxUDPConnectSock()
 {
+	if (m_poConnection)
+	{
+		// 既然是要销毁 那么应该通知 将相应指针置零//
+		m_poConnection->OnSocketDestroy();
+		m_poConnection = NULL;
+	}
 
+	if (m_poRecvBuf)
+	{
+		FxLoopBuffMgr::Instance()->Release(m_poRecvBuf);
+		m_poRecvBuf = NULL;
+	}
+	if (m_poSendBuf)
+	{
+		FxLoopBuffMgr::Instance()->Release(m_poSendBuf);
+		m_poSendBuf = NULL;
+	}
 }
 
 bool FxUDPConnectSock::Init()
 {
 	m_cSyn = 1;
 	m_cAck = 0;
-	return true;
+	if (!m_oEvtQueue.Init(MAX_NETEVENT_PERSOCK))
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "m_oEvtQueue.Init failed, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-	return false;
+		return false;
+	}
+
+	if (NULL == m_poSendBuf)
+	{
+		m_poSendBuf = FxLoopBuffMgr::Instance()->Fetch();
+		if (NULL == m_poSendBuf)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "NULL == m_poSendBuf, socket : %d, socket id : %d", GetSock(), GetSockId());
+			return false;
+		}
+	}
+
+	if (NULL == m_poRecvBuf)
+	{
+		m_poRecvBuf = FxLoopBuffMgr::Instance()->Fetch();
+		if (NULL == m_poRecvBuf)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "NULL == m_poRecvBuf, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+			return false;
+		}
+	}
+
+	if (!m_poRecvBuf->Init(RECV_BUFF_SIZE))
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->Init failed, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		return false;
+	}
+
+	if (!m_poSendBuf->Init(SEND_BUFF_SIZE))
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "m_poSendBuf->Init failed, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		return false;
+	}
+	return true;
 }
 
 void FxUDPConnectSock::OnRead()
@@ -552,19 +644,177 @@ void FxUDPConnectSock::OnWrite()
 
 void FxUDPConnectSock::Reset()
 {
+	if (NULL != m_poConnection)
+	{
+		// 既然是要销毁 那么应该通知 将相应指针置零//
+		m_poConnection->OnSocketDestroy();
+		SetConnection(NULL);
+	}
 
+	//m_pListenSocket = NULL;
+	SetState(SSTATE_INVALID);
+	SetSock(INVALID_SOCKET);
+	m_nNeedData = 0;
+	m_nPacketLen = 0;
+
+	if (m_poRecvBuf)
+	{
+		FxLoopBuffMgr::Instance()->Release(m_poRecvBuf);
+		m_poRecvBuf = NULL;
+	}
+	if (m_poSendBuf)
+	{
+		FxLoopBuffMgr::Instance()->Release(m_poSendBuf);
+		m_poSendBuf = NULL;
+	}
+
+#ifdef WIN32
+	m_dwLastError = 0;
+	m_nPostRecv = 0;
+	m_nPostSend = 0;
+	m_dwLastError = 0;
+#else
+	m_bSending = false;
+#endif // WIN32
+	m_bSendLinger = false;     //发送延迟，直到成功，或者30次后，这时默认设置//
 }
 
 bool FxUDPConnectSock::Close()
 {
+	// 首先 把数据先发过去//
+	m_oLock.Lock();
 
-	return false;
+	if (GetState() == SSTATE_RELEASE || GetState() == SSTATE_CLOSE)
+	{
+		m_oLock.UnLock();
+		return true;
+	}
+
+	if (IsConnected())
+	{
+		SetState(SSTATE_CLOSE);
+	}
+	if (GetSock() == INVALID_SOCKET)
+	{
+		m_oLock.UnLock();
+		return true;
+	}
+
+#ifdef WIN32
+	shutdown(GetSock(), SD_RECEIVE);
+#else
+	shutdown(GetSock(), SHUT_RD);
+	m_poIoThreadHandler->DelEvent(GetSock());
+	// 有bug 就不发了 修改后再说//
+	//SendImmediately();
+#endif	//WIN32
+
+#ifdef WIN32
+	if (0 != m_dwLastError)
+	{
+		PushNetEvent(NETEVT_ERROR, m_dwLastError);
+		m_dwLastError = 0;
+	}
+#endif // WIN32
+
+#ifdef WIN32
+	closesocket(GetSock());
+#else
+	close(GetSock());
+#endif // WIN32
+
+	SetSock(INVALID_SOCKET);
+
+	PushNetEvent(NETEVT_TERMINATE, 0);
+	m_oLock.UnLock();
+
+	return true;
 }
 
 bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 {
+	if (false == IsConnected())
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "socket not connected, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-	return false;
+		return false;
+	}
+
+	if (m_poSendBuf->IsEmpty())
+	{
+		m_poSendBuf->Clear();
+	}
+
+	IFxDataHeader* pDataHeader = GetDataHeader();
+	if (pDataHeader == NULL)
+	{
+#ifdef WIN32
+		m_dwLastError = NET_SEND_OVERFLOW;
+		LogFun(LT_Screen | LT_File, LogLv_Error, "send error pDataHeader == NULL, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		PostClose();
+#else
+		PushNetEvent(NETEVT_ERROR, NET_SEND_OVERFLOW);
+		LogFun(LT_Screen | LT_File, LogLv_Error, "send error pDataHeader == NULL, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		Close();
+#endif // WIN32
+		return false;
+	}
+
+	if (dwLen + pDataHeader->GetHeaderLength() + sizeof(UDPPacketHeader) > m_poSendBuf->GetTotalLen())
+	{
+#ifdef WIN32
+		m_dwLastError = NET_SEND_OVERFLOW;
+		LogFun(LT_Screen | LT_File, LogLv_Error, "send error NET_SEND_OVERFLOW, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		PostClose();
+#else
+		PushNetEvent(NETEVT_ERROR, NET_SEND_OVERFLOW);
+		LogFun(LT_Screen | LT_File, LogLv_Error, "send error NET_SEND_OVERFLOW, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		Close();
+#endif // WIN32
+		return false;
+	}
+
+	// 这个是在主线程调用 所以 声明为静态就可以了 防止重复生成 占用空间
+	static char pTemData[RECV_BUFF_SIZE] = { 0 };
+	UDPPacketHeader oUDPPacketHeader = {0};
+	// todo syn ack 数值到底如何定义
+	CNetStream oNetStream(ENetStreamType_Write, pTemData, dwLen + pDataHeader->GetHeaderLength());
+	oNetStream.WriteData((char*)(pDataHeader->BuildSendPkgHeader(dwLen + sizeof(oUDPPacketHeader))), pDataHeader->GetHeaderLength());
+	oNetStream.WriteData((char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader));
+	oNetStream.WriteData(pData, dwLen);
+
+	int nSendCount = 0;
+	while (!m_poSendBuf->PushBuff(pTemData, dwLen + pDataHeader->GetHeaderLength()))
+	{
+		if (!m_bSendLinger || 30 < ++nSendCount)  // 连续30次还没发出去，就认为失败，失败结果逻辑层处理//
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Critical, "send buffer overflow!!!!!!!!, socket : %d, socket id : %d", GetSock(), GetSockId());
+			return false;
+		}
+		FxSleep(10);
+	}
+
+	if (false == PostSendFree())
+	{
+#ifdef WIN32
+		m_dwLastError = WSAGetLastError();
+		LogFun(LT_Screen | LT_File, LogLv_Error, "false == PostSendFree(), socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		PostClose();
+#else
+		PushNetEvent(NETEVT_ERROR, NET_SEND_OVERFLOW);
+		LogFun(LT_Screen | LT_File, LogLv_Error, "false == PostSendFree(), socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		Close();
+#endif // WIN32
+		return false;
+	}
+
+	return true;
 }
 
 bool FxUDPConnectSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)

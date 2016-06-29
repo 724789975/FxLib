@@ -954,35 +954,11 @@ bool FxTCPConnectSock::Send(const char* pData, int dwLen)
 		return false;
 	}
 
-	if (GetState() != SSTATE_ESTABLISH)
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "socket state : %d != SSTATE_ESTABLISH, socket : %d, socket id : %d", (UINT32)GetState(), GetSock(), GetSockId());
-
-		return false;
-	}
-
 	if (m_poSendBuf->IsEmpty())
 	{
 		m_poSendBuf->Clear();
 	}
 
-	if (dwLen > m_poSendBuf->GetTotalLen())
-	{
-#ifdef WIN32
-		m_dwLastError = NET_SEND_OVERFLOW;
-		LogFun(LT_Screen | LT_File, LogLv_Error, "send error NET_SEND_OVERFLOW, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		PostClose();
-#else
-		PushNetEvent(NETEVT_ERROR, NET_SEND_OVERFLOW);
-		LogFun(LT_Screen | LT_File, LogLv_Error, "send error NET_SEND_OVERFLOW, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		Close();
-#endif // WIN32
-		return false;
-	}
-
-	int nSendCount = 0;
 	IFxDataHeader* pDataHeader = GetDataHeader();
 	if (pDataHeader == NULL)
 	{
@@ -1000,12 +976,29 @@ bool FxTCPConnectSock::Send(const char* pData, int dwLen)
 		return false;
 	}
 
+	if (dwLen + pDataHeader->GetHeaderLength() > m_poSendBuf->GetTotalLen())
+	{
+#ifdef WIN32
+		m_dwLastError = NET_SEND_OVERFLOW;
+		LogFun(LT_Screen | LT_File, LogLv_Error, "send error NET_SEND_OVERFLOW, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		PostClose();
+#else
+		PushNetEvent(NETEVT_ERROR, NET_SEND_OVERFLOW);
+		LogFun(LT_Screen | LT_File, LogLv_Error, "send error NET_SEND_OVERFLOW, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		Close();
+#endif // WIN32
+		return false;
+	}
+
 	// 这个是在主线程调用 所以 声明为静态就可以了 防止重复生成 占用空间
 	static char pTemData[RECV_BUFF_SIZE] = {0};
 	CNetStream oNetStream(ENetStreamType_Write, pTemData, dwLen + pDataHeader->GetHeaderLength());
 	oNetStream.WriteData((char*)(pDataHeader->BuildSendPkgHeader(dwLen)), pDataHeader->GetHeaderLength());
 	oNetStream.WriteData(pData, dwLen);
 
+	int nSendCount = 0;
 	while (!m_poSendBuf->PushBuff(pTemData, dwLen + pDataHeader->GetHeaderLength()))
 	{
 		if (!m_bSendLinger || 30 < ++nSendCount)  // 连续30次还没发出去，就认为失败，失败结果逻辑层处理//

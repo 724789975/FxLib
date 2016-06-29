@@ -25,7 +25,6 @@ FxIoThread::FxIoThread()
 FxIoThread::~FxIoThread()
 {
 #ifdef WIN32
-	// todo
 #else
 	if (m_hEpoll != (int) INVALID_SOCKET)
 	{

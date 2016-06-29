@@ -61,7 +61,6 @@ private:
 
 #ifdef WIN32
 	bool PostAccept(SPerUDPIoData& oSPerIoData);
-	bool InitAcceptEx();
 	void OnAccept(SPerUDPIoData* pstPerIoData);
 #else
 	void OnAccept();
@@ -165,8 +164,8 @@ private:
 	int m_nNeedData;        // 未处理完的逻辑数据包还需要的长度//
 	int m_nPacketLen;       // 未处理完的逻辑数据包长度//
 
-	char m_cSyn;
-	char m_cAck;
+	char m_cSyn;			// 
+	char m_cAck;			//
 
 private:
 #ifdef WIN32
