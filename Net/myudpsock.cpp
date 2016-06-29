@@ -507,10 +507,8 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 			{
 				LogFun(LT_Screen | LT_File, LogLv_Error, "sendto errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
-				closesocket(hSock);
 				PostAccept(*pstPerIoData);
-				FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
-				FxConnectionMgr::Instance()->Release(poConnection);
+				poSock->Close();
 				return;
 			}
 		}
