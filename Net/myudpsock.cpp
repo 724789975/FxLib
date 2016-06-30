@@ -494,8 +494,8 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		}
 		// 这个时候不能说是已经establish 了 要发个消息确认下
 		UDPPacketHeader oUDPPacketHeader;
-		oUDPPacketHeader.m_cAck = 1;
-		oUDPPacketHeader.m_cSyn = ((UDPPacketHeader*)(pstPerIoData->stWsaBuf.buf))->m_cSyn;
+		oUDPPacketHeader.m_cAck = ((UDPPacketHeader*)(pstPerIoData->stWsaBuf.buf))->m_cSyn;
+		oUDPPacketHeader.m_cSyn = 1;
 		oUDPPacketHeader.m_cStatus = poSock->GetState();
 
 		// todo send的时候 可能要修改 因为 udp tcp 有区别
