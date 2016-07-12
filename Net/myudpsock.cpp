@@ -10,6 +10,8 @@
 #define RECV_BUFF_SIZE 8*64*1024
 #define SEND_BUFF_SIZE 64*64*1024
 
+#define MAX_LOST_PACKET 10
+
 FxUDPListenSock::FxUDPListenSock()
 {
 	Reset();
@@ -1067,6 +1069,26 @@ void FxUDPConnectSock::__ProcRelease()
 void FxUDPConnectSock::OnConnect()
 {
 
+}
+
+bool FxUDPConnectSock::IsValidAck(char cAck)
+{
+	m_oLock.Lock();
+	if (cAck <= m_cAck)
+	{
+		m_oLock.UnLock();
+		return false;
+	}
+	if (cAck > m_cAck + MAX_LOST_PACKET)
+	{
+		m_oLock.UnLock();
+		return false;
+	}
+
+	m_cAck = cAck;
+	m_oLock.UnLock();
+	m_oLock.UnLock();
+	return true;
 }
 
 #ifdef WIN32

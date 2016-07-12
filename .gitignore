@@ -72,3 +72,25 @@ Release/TestClient.iobj
 Release/TestClient.exe_exe_log.txt
 Release/LuaTest.iobj
 
+/Debug/TestClient.exe_exe_log.txt
+/Debug/TestServer.exe_exe_log.txt
+/Database/x64/Release/Database.log
+/Database/x64/Debug/Database.log
+/Database/x64/Debug/Database.Build.CppClean.log
+/LuaTest/x64/Release/LuaTest.log
+/LuaTest/x64/Debug/LuaTest.log
+/LuaTest/x64/Debug/LuaTest.Build.CppClean.log
+/LuaTest/LuaTest.vcxproj.filters
+/LuaLib/x64/Release/LuaLib.log
+/LuaLib/x64/Debug/LuaLib.log
+/LuaLib/x64/Debug/LuaLib.Build.CppClean.log
+/FxLib.VC.VC.opendb
+/FxLib.VC.db
+/TestServer/x64/Debug/TestServer.log
+/TestServer/x64/Debug/TestServer.Build.CppClean.log
+/TestServer/TestServer.vcxproj.filters
+/TestClient/x64/Debug/TestClient.log
+/TestClient/x64/Debug/TestClient.Build.CppClean.log
+/TestClient/TestClient.vcxproj.filters
+/Net/x64/Debug/Net.log
+/Net/x64/Debug/Net.Build.CppClean.log

@@ -139,6 +139,8 @@ private:
 	void	__ProcRelease();
 private:
 	void OnConnect();
+
+	bool IsValidAck(char cAck);
 #ifdef WIN32
 	void OnRecv(bool bRet, int dwBytes);
 	void OnSend(bool bRet, int dwBytes);
