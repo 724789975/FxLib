@@ -495,12 +495,12 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 			}
 		}
 		// 这个时候不能说是已经establish 了 要发个消息确认下
-		UDPPacketHeader oUDPPacketHeader;
+		UDPPacketHeader oUDPPacketHeader = {0};
 		oUDPPacketHeader.m_cAck = ((UDPPacketHeader*)(pstPerIoData->stWsaBuf.buf))->m_cSyn;
 		oUDPPacketHeader.m_cSyn = 1;
 		oUDPPacketHeader.m_cStatus = poSock->GetState();
 
-		// todo send的时候 可能要修改 因为 udp tcp 有区别
+		// send的时候 可能要修改 因为 udp tcp 有区别
 		if (sendto(poSock->GetSock(), (char*)(&oUDPPacketHeader),
 			sizeof(oUDPPacketHeader), 0, (sockaddr*)(&pstPerIoData->stRemoteAddr),
 			sizeof(pstPerIoData->stRemoteAddr)) == SOCKET_ERROR)
@@ -642,10 +642,10 @@ void FxUDPConnectSock::OnWrite()
 
 void FxUDPConnectSock::Reset()
 {
-	if (NULL != m_poConnection)
+	if (NULL != GetConnection())
 	{
 		// 既然是要销毁 那么应该通知 将相应指针置零//
-		m_poConnection->OnSocketDestroy();
+		GetConnection()->OnSocketDestroy();
 		SetConnection(NULL);
 	}
 
@@ -779,7 +779,10 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 	// 这个是在主线程调用 所以 声明为静态就可以了 防止重复生成 占用空间
 	static char pTemData[RECV_BUFF_SIZE] = { 0 };
 	UDPPacketHeader oUDPPacketHeader = {0};
-	// todo syn ack 数值到底如何定义
+	oUDPPacketHeader.m_cSyn = ++m_cSyn;
+	oUDPPacketHeader.m_cAck = m_cAck;
+	oUDPPacketHeader.m_cStatus = (char)GetState();
+
 	CNetStream oNetStream(ENetStreamType_Write, pTemData, dwLen + pDataHeader->GetHeaderLength());
 	oNetStream.WriteData((char*)(pDataHeader->BuildSendPkgHeader(dwLen + sizeof(oUDPPacketHeader))), pDataHeader->GetHeaderLength());
 	oNetStream.WriteData((char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader));
@@ -1058,7 +1061,55 @@ void FxUDPConnectSock::__ProcTerminate()
 
 void FxUDPConnectSock::__ProcRecv(UINT32 dwLen)
 {
+	if (GetConnection())
+	{
+		if (UINT32(-1) == dwLen)
+		{
+#ifdef WIN32
+			PostRecvFree();
+#else
+			PushNetEvent(NETEVT_ERROR, NET_RECV_ERROR);
+			Close();
+#endif
+			return;
+		}
 
+		if (GetSockId() != GetConnection()->GetID())
+		{
+			return;
+		}
+
+		if (GetConnection()->GetRecvSize() < dwLen)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "session recv_size error need : %d, but : %d", dwLen, GetConnection()->GetRecvSize());
+			PushNetEvent(NETEVT_ERROR, NET_RECV_ERROR);
+#ifdef WIN32
+			PostClose();
+#else
+			Close();
+#endif // WIN32
+			return;
+		}
+
+		if (!m_poRecvBuf->PopBuff(GetConnection()->GetRecvBuf(), dwLen))
+		{
+			return;
+		}
+
+		UDPPacketHeader* pUDPPacketHeader = (UDPPacketHeader*)(GetConnection()->GetRecvBuf() + GetDataHeader()->GetHeaderLength());
+		// 参数一定要是syn
+		if (!IsValidAck(pUDPPacketHeader->m_cSyn))
+		{
+#ifdef WIN32
+			PostClose();
+#else
+			Close();
+#endif // WIN32
+			return;
+		}
+
+		GetConnection()->OnRecv(dwLen);
+	}
 }
 
 void FxUDPConnectSock::__ProcRelease()
@@ -1073,27 +1124,230 @@ void FxUDPConnectSock::OnConnect()
 
 bool FxUDPConnectSock::IsValidAck(char cAck)
 {
-	m_oLock.Lock();
+	//m_oLock.Lock();
 	if (cAck <= m_cAck)
 	{
-		m_oLock.UnLock();
+		//m_oLock.UnLock();
 		return false;
 	}
 	if (cAck >= (m_cAck + MAX_LOST_PACKET))
 	{
-		m_oLock.UnLock();
+		//m_oLock.UnLock();
 		return false;
 	}
 
 	m_cAck = cAck;
-	m_oLock.UnLock();
+	//m_oLock.UnLock();
 	return true;
 }
 
 #ifdef WIN32
 void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 {
+	if (0 == dwBytes)
+	{
+		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+		Close();
+		return;
+	}
 
+	if (UINT32(-1) == dwBytes)
+	{
+		InterlockedCompareExchange(&m_nPostRecv, m_nPostRecv - 1, m_nPostRecv);
+		if (0 == m_nPostRecv)
+		{
+			if (false == PostRecv())
+			{
+				PushNetEvent(NETEVT_ERROR, WSAGetLastError());
+				Close();
+			}
+		}
+		return;
+	}
+
+	if (false == bRet)
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "false == bRet errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+
+		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+		m_dwLastError = WSAGetLastError();
+		PostClose();
+		return;
+	}
+
+	if (!IsConnected())
+	{
+		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+		return;
+	}
+
+	m_oLock.Lock();
+	int nUsedLen = 0;
+	int nParserLen = 0;
+	int nLen = int(dwBytes);
+	if (m_poRecvBuf->CostBuff(nLen))
+	{
+		//LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->CostBuff error");
+		//
+		//InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+		//m_dwLastError = NET_RECVBUFF_ERROR;
+		//PostClose();
+		//return;
+	}
+
+	char *pUseBuf = NULL;
+	nLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
+	if (nLen <= 0)
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetUsedCursorPtr <= 0, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+		m_dwLastError = NET_RECVBUFF_ERROR;
+		PostClose();
+		m_oLock.UnLock();
+		return;
+	}
+
+	while (0 < nLen)
+	{
+		if (0 != m_nNeedData)
+		{
+			if (nLen >= m_nNeedData)
+			{
+				nLen -= m_nNeedData;
+				nUsedLen += m_nNeedData;
+				nParserLen += m_nNeedData;
+				m_poRecvBuf->CostUsedBuff(nUsedLen);
+				nUsedLen = 0;
+				PushNetEvent(NETEVT_RECV, m_nPacketLen);
+				m_nPacketLen = 0;
+				m_nNeedData = 0;
+			}
+			else
+			{
+				m_nNeedData -= nLen;
+				nUsedLen += nLen;
+				nLen = 0;
+			}
+		}
+		else
+		{
+			char* pParseBuf = pUseBuf + nParserLen;
+			UINT32 dwHeaderLen = GetDataHeader()->GetHeaderLength();
+			GetDataHeader()->BuildRecvPkgHeader(pParseBuf, (int)dwHeaderLen > nLen ? nLen : dwHeaderLen, 0);
+			m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen);
+			if (-1 == m_nPacketLen)
+			{
+				LogFun(LT_Screen | LT_File, LogLv_Error, "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+				InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+				m_dwLastError = NET_RECVBUFF_ERROR;
+				PostClose();
+				m_oLock.UnLock();
+				return;
+			}
+			else if (0 == m_nPacketLen)
+			{
+				m_poRecvBuf->CostUsedBuff(nUsedLen);
+				nUsedLen = 0;
+				m_nNeedData = 0;
+
+				if ((int)(GetDataHeader()->GetHeaderLength()) > nLen)
+				{
+					// 判断是否在循环buff的头部还有数据//
+					int nHasData = m_poRecvBuf->GetUseLen();
+					if ((int)(GetDataHeader()->GetHeaderLength()) <= nHasData)
+					{
+						GetDataHeader()->BuildRecvPkgHeader(pParseBuf, nLen, 0);
+						if (false == m_poRecvBuf->CostUsedBuff(nLen))
+						{
+							break;
+						}
+						int nNewLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
+						if ((int)(GetDataHeader()->GetHeaderLength()) - nLen > nNewLen)
+						{
+							LogFun(LT_Screen | LT_File, LogLv_Error, "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+							InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+							m_dwLastError = NET_RECVBUFF_ERROR;
+							PostClose();
+							m_oLock.UnLock();
+							return;
+						}
+						GetDataHeader()->BuildRecvPkgHeader(pUseBuf, GetDataHeader()->GetHeaderLength() - nLen, nLen);
+						pParseBuf = (char*)(GetDataHeader()->GetPkgHeader());
+						m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, GetDataHeader()->GetHeaderLength());
+						if (0 >= m_nPacketLen)
+						{
+							LogFun(LT_Screen | LT_File, LogLv_Error, "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+							InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+							m_dwLastError = NET_RECVBUFF_ERROR;
+							PostClose();
+							m_oLock.UnLock();
+							return;
+						}
+
+						m_nNeedData = m_nPacketLen - GetDataHeader()->GetHeaderLength();
+						nUsedLen = GetDataHeader()->GetHeaderLength() - nLen;
+						nParserLen = nUsedLen;
+						nLen = nNewLen - nUsedLen;
+						pParseBuf = pUseBuf + nUsedLen;
+						if (0 == m_nNeedData)
+						{
+							m_poRecvBuf->CostUsedBuff(nUsedLen);
+							nUsedLen = 0;
+							PushNetEvent(NETEVT_RECV, m_nPacketLen);
+							m_nPacketLen = 0;
+						}
+					}
+					else
+					{
+						nLen = 0;
+						break;
+					}
+				}
+			}
+			else
+			{
+				if (nLen >= m_nPacketLen)
+				{
+					nLen -= m_nPacketLen;
+					nUsedLen += m_nPacketLen;
+					nParserLen += nUsedLen;
+					m_poRecvBuf->CostUsedBuff(nUsedLen);
+					nUsedLen = 0;
+					PushNetEvent(NETEVT_RECV, m_nPacketLen);
+					m_nPacketLen = 0;
+					m_nNeedData = 0;
+				}
+				else
+				{
+					m_nNeedData = m_nPacketLen - nLen;
+					nUsedLen += nLen;
+					nLen = 0;
+				}
+			}
+		}
+	}
+
+	if (0 != nUsedLen)
+	{
+		m_poRecvBuf->CostUsedBuff(nUsedLen);
+	}
+
+	InterlockedCompareExchange(&m_nPostRecv, m_nPostRecv - 1, m_nPostRecv);
+	if (0 == m_nPostRecv)
+	{
+		if (false == PostRecv())
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "false == PostRecv, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+			m_dwLastError = WSAGetLastError();
+			PostClose();
+		}
+	}
+	m_oLock.UnLock();
 }
 
 void FxUDPConnectSock::OnSend(bool bRet, int dwBytes)

@@ -909,10 +909,10 @@ bool FxTCPConnectSock::Close()
 
 void FxTCPConnectSock::Reset()
 {
-	if (NULL != m_poConnection)
+	if (NULL != GetConnection())
 	{
 		// 既然是要销毁 那么应该通知 将相应指针置零//
-		m_poConnection->OnSocketDestroy();
+		GetConnection()->OnSocketDestroy();
 		SetConnection(NULL);
 	}
 
@@ -1310,53 +1310,53 @@ bool FxTCPConnectSock::SendImmediately()
 
 void FxTCPConnectSock::__ProcEstablish()
 {
-	if (m_poConnection)
+	if (GetConnection())
 	{
-		if (GetSockId() != m_poConnection->GetID())
+		if (GetSockId() != GetConnection()->GetID())
 		{
 			return;
 		}
 
-		m_poConnection->OnConnect();
+		GetConnection()->OnConnect();
 	}
 }
 
 void FxTCPConnectSock::__ProcAssociate()
 {
-	if (m_poConnection)
+	if (GetConnection())
 	{
-		if (GetSockId() != m_poConnection->GetID())
+		if (GetSockId() != GetConnection()->GetID())
 		{
 			return;
 		}
 
-		m_poConnection->OnAssociate();
+		GetConnection()->OnAssociate();
 	}
 }
 
 void FxTCPConnectSock::__ProcConnectError(UINT32 dwErrorNo)
 {
-	if (m_poConnection)
+	if (GetConnection())
 	{
-		if (GetSockId() != m_poConnection->GetID())
+		if (GetSockId() != GetConnection()->GetID())
 		{
 			return;
 		}
 
-		m_poConnection->OnConnError(dwErrorNo);
+		GetConnection()->OnConnError(dwErrorNo);
 	}
 }
 
 void FxTCPConnectSock::__ProcError(UINT32 dwErrorNo)
 {
-	if (m_poConnection)
+	if (GetConnection())
 	{
-		if (GetSockId() != m_poConnection->GetID())
+		if (GetSockId() != GetConnection()->GetID())
 		{
 			return;
 		}
 
-		m_poConnection->OnError(dwErrorNo);
+		GetConnection()->OnError(dwErrorNo);
 	}
 }
 
@@ -1367,7 +1367,7 @@ void FxTCPConnectSock::__ProcTerminate()
 
 void FxTCPConnectSock::__ProcRecv(UINT32 dwLen)
 {
-	if (m_poConnection)
+	if (GetConnection())
 	{
 		if (UINT32(-1) == dwLen)
 		{
@@ -1380,39 +1380,43 @@ void FxTCPConnectSock::__ProcRecv(UINT32 dwLen)
 			return;
 		}
 
-		if (GetSockId() != m_poConnection->GetID())
+		if (GetSockId() != GetConnection()->GetID())
 		{
 			return;
 		}
 
-		if (m_poConnection->GetRecvSize() < dwLen)
+		if (GetConnection()->GetRecvSize() < dwLen)
 		{
 			PushNetEvent(NETEVT_ERROR, NET_RECV_ERROR);
+#ifdef WIN32
+			PostClose();
+#else
 			Close();
+#endif // WIN32
 			return;
 		}
 
-		if (!m_poRecvBuf->PopBuff(m_poConnection->GetRecvBuf(), dwLen))
+		if (!m_poRecvBuf->PopBuff(GetConnection()->GetRecvBuf(), dwLen))
 		{
 			return;
 		}
-		m_poConnection->OnRecv(dwLen);
+		GetConnection()->OnRecv(dwLen);
 	}
 }
 
 void FxTCPConnectSock::__ProcRelease()
 {
-	if (m_poConnection)
+	if (GetConnection())
 	{
-		if (GetSockId() != m_poConnection->GetID())
+		if (GetSockId() != GetConnection()->GetID())
 		{
 			LogFun(LT_Screen | LT_File, LogLv_Error, "socket : %d, socket id : %d, connection id : %d, connection addr : %p",
-				GetSock(), GetSockId(), m_poConnection->GetID(), m_poConnection);
+				GetSock(), GetSockId(), GetConnection()->GetID(), GetConnection());
 			return;
 		}
 
-		m_poConnection->OnSocketDestroy();
-		m_poConnection->OnClose();
+		GetConnection()->OnSocketDestroy();
+		GetConnection()->OnClose();
 
 		SetConnection(NULL);
 	}
@@ -1421,9 +1425,9 @@ void FxTCPConnectSock::__ProcRelease()
 
 IFxDataHeader* FxTCPConnectSock::GetDataHeader()
 {
-	if (m_poConnection)
+	if (GetConnection())
 	{
-		return m_poConnection->GetDataHeader();
+		return GetConnection()->GetDataHeader();
 	}
 	return NULL;
 }
@@ -1462,12 +1466,12 @@ SOCKET FxTCPConnectSock::Connect()
 		return INVALID_SOCKET;
 	}
 
-	if (NULL == m_poConnection)
+	if (NULL == GetConnection())
 	{
 		return INVALID_SOCKET;
 	}
 
-	if (m_poConnection->IsConnected())
+	if (GetConnection()->IsConnected())
 	{
 		return INVALID_SOCKET;
 	}
@@ -1570,8 +1574,8 @@ SOCKET FxTCPConnectSock::Connect()
 
 	sockaddr_in stAddr = { 0 };
 	stAddr.sin_family = AF_INET;
-	stAddr.sin_addr.s_addr = m_poConnection->GetRemoteIP();
-	stAddr.sin_port = htons(m_poConnection->GetRemotePort());
+	stAddr.sin_addr.s_addr = GetConnection()->GetRemoteIP();
+	stAddr.sin_port = htons(GetConnection()->GetRemotePort());
 
 	SetState(SSTATE_CONNECT);
 
