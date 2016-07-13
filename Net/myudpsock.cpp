@@ -1079,14 +1079,13 @@ bool FxUDPConnectSock::IsValidAck(char cAck)
 		m_oLock.UnLock();
 		return false;
 	}
-	if (cAck > m_cAck + MAX_LOST_PACKET)
+	if (cAck >= (m_cAck + MAX_LOST_PACKET))
 	{
 		m_oLock.UnLock();
 		return false;
 	}
 
 	m_cAck = cAck;
-	m_oLock.UnLock();
 	m_oLock.UnLock();
 	return true;
 }
