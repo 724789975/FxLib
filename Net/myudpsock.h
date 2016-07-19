@@ -73,7 +73,6 @@ private:
 	FxIoThread* m_poIoThreadHandler;
 	FxLoopBuff*         m_poRecvBuf;
 #ifdef WIN32
-	LONG            				    m_nPostRecv;        // 未决的WSARecvFrom操作数//
 	SPerUDPIoData m_oSPerIoDatas[128];
 	UDPPacketHeader m_oPacketHeaders[128];
 #endif // WIN32

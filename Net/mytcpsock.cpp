@@ -1668,51 +1668,51 @@ void FxTCPConnectSock::ProcEvent()
 	{
 		switch (pEvent->eType)
 		{
-		case NETEVT_ESTABLISH:
-		{
-			__ProcEstablish();
-		}
+			case NETEVT_ESTABLISH:
+			{
+				__ProcEstablish();
+			}
 			break;
 
-		case NETEVT_ASSOCIATE:
-		{
-			__ProcAssociate();
-		}
+			case NETEVT_ASSOCIATE:
+			{
+				__ProcAssociate();
+			}
 			break;
-		case NETEVT_CONN_ERR:
-		{
-			__ProcConnectError(pEvent->dwValue);
-		}
-			break;
-
-		case NETEVT_ERROR:
-		{
-			__ProcError(pEvent->dwValue);
-		}
+			case NETEVT_CONN_ERR:
+			{
+				__ProcConnectError(pEvent->dwValue);
+			}
 			break;
 
-		case NETEVT_TERMINATE:
-		{
-			__ProcTerminate();
-		}
+			case NETEVT_ERROR:
+			{
+				__ProcError(pEvent->dwValue);
+			}
 			break;
 
-		case NETEVT_RECV:
-		{
-			__ProcRecv(pEvent->dwValue);
-		}
+			case NETEVT_TERMINATE:
+			{
+				__ProcTerminate();
+			}
 			break;
 
-		case NETEVT_RELEASE:
-		{
-							   __ProcRelease();
-		}
+			case NETEVT_RECV:
+			{
+				__ProcRecv(pEvent->dwValue);
+			}
 			break;
 
-		default:
-		{
-				   Assert(0);
-		}
+			case NETEVT_RELEASE:
+			{
+				__ProcRelease();
+			}
+			break;
+
+			default:
+			{
+				Assert(0);
+			}
 			break;
 		}
 	}
