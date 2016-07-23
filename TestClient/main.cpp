@@ -7,7 +7,7 @@
 
 #include <signal.h>
 
-#define CLIENTCOUNT 256
+#define CLIENTCOUNT 16
 
 char* g_strIp = "127.0.0.1";
 unsigned int g_dwPort = 12000;
@@ -87,7 +87,7 @@ int main(int argc, char **argv)
 	for (int i = 0; i < CLIENTCOUNT; ++i)
 	{
 		oSessions[i] = oSessionFactory.CreateSession();
-		pNet->TcpConnect(oSessions[i], dwIP, g_dwPort, true);
+		pNet->UdpConnect(oSessions[i], dwIP, g_dwPort, true);
 	}
 
 	while (g_bRun)

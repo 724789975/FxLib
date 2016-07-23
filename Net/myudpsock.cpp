@@ -1174,12 +1174,43 @@ bool FxUDPConnectSock::PostRecvFree()
 void FxUDPConnectSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred)
 {
 	SPerUDPIoData* pSPerUDPIoData = (SPerUDPIoData*)pIoData;
+	if (NULL == pSPerUDPIoData)
+	{
+		Close();
+		return;
+	}
 
 	switch (GetState())
 	{
 		case SSTATE_ESTABLISH:
 		{
-			// todo
+			switch (pSPerUDPIoData->nOp)
+			{
+				case IOCP_RECV:
+				{
+					OnRecv(bRet, dwByteTransferred);
+				}
+				break;
+				case IOCP_SEND:
+				{
+					OnSend(bRet, dwByteTransferred);
+				}
+				break;
+				case IOCP_CONNECT:
+				{
+					if (GetState() != SSTATE_CONNECT)
+					{
+						Assert(0);
+					}
+					OnConnect();
+				}
+				break;
+				default:
+				{
+					Close();
+				}
+				break;
+			}
 		}
 		break;
 		case SSTATE_CONNECT:
@@ -1211,8 +1242,9 @@ void FxUDPConnectSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTr
 				return;
 			}
 
-			GetConnection()->SetRemoteIP(pSPerUDPIoData->stRemoteAddr.sin_addr.s_addr);
-			GetConnection()->SetRemotePort(ntohs(pSPerUDPIoData->stRemoteAddr.sin_port));
+			// 之所以不再设置 远程IP 端口 是因为 重连的时候 不是用的这个IP跟端口
+			//GetConnection()->SetRemoteIP(pSPerUDPIoData->stRemoteAddr.sin_addr.s_addr);
+			//GetConnection()->SetRemotePort(ntohs(pSPerUDPIoData->stRemoteAddr.sin_port));
 
 			//
 			// 应该先投递连接事件再关联套接口，否则可能出现第一个Recv事件先于连接事件入队列

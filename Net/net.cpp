@@ -154,14 +154,34 @@ IFxListenSocket* FxNetModule::TcpListen(IFxSessionFactory* pSessionFactory, UINT
 
 SOCKET FxNetModule::UdpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect /*= false*/)
 {
-	// todo
-	return INVALID_SOCKET;
+	FxConnection* poConnection = FxConnectionMgr::Instance()->Create();
+	if (NULL == poConnection)
+	{
+		return INVALID_SOCKET;
+	}
+
+	poConnection->SetSockType(SOCKTYPE_UDP);
+	poConnection->SetRemoteIP(dwIP);
+	poConnection->SetRemotePort(wPort);
+	poConnection->SetReconnect(bReconnect);
+	poConnection->SetSession(poSession);
+	poSession->Init(poConnection);
+
+	return poConnection->Reconnect();
 }
 
 IFxListenSocket* FxNetModule::UdpListen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort)
 {
-	// todo
-	return NULL;
+	IFxListenSocket* pListenSocket = FxMySockMgr::Instance()->CreateUdpSock(dwListenId, pSessionFactory);
+	if (pListenSocket == NULL)
+	{
+		return NULL;
+	}
+	if (pListenSocket->Listen(dwIP, dwPort))
+	{
+		return pListenSocket;
+	}
+	return NULL;;
 }
 
 bool FxNetModule::PushNetEvent(IFxSocket* poSock)
