@@ -364,8 +364,8 @@ bool FxUDPListenSock::PostAccept(SPerUDPIoData& oSPerIoData)
 {
 	SOCKET hNewSock = WSASocket(
 		AF_INET,
-		SOCK_STREAM,
-		0,
+		SOCK_DGRAM,
+		IPPROTO_UDP,
 		NULL,
 		0,
 		WSA_FLAG_OVERLAPPED);
@@ -959,13 +959,13 @@ SOCKET FxUDPConnectSock::Connect()
 #ifdef WIN32
 	SetSock(WSASocket(
 		AF_INET,
-		SOCK_STREAM,
-		0,
+		SOCK_DGRAM,
+		IPPROTO_UDP,
 		NULL,
 		0,
 		WSA_FLAG_OVERLAPPED));
 #else
-	SetSock(socket(AF_INET, SOCK_STREAM, 0));
+	SetSock(socket(AF_INET, SOCK_DGRAM, 0));
 #endif // WIN32
 
 	if (INVALID_SOCKET == GetSock())
@@ -976,10 +976,6 @@ SOCKET FxUDPConnectSock::Connect()
 	}
 
 #ifdef WIN32
-	sockaddr_in local_addr;
-	ZeroMemory(&local_addr, sizeof(sockaddr_in));
-	local_addr.sin_family = AF_INET;
-
 	int nSendBuffSize = 256 * 1024;
 	int nRecvBuffSize = 8 * nSendBuffSize;
 	if ((0 != setsockopt(GetSock(), SOL_SOCKET, SO_RCVBUF, (char*)&nRecvBuffSize, sizeof(int))) ||
@@ -1024,18 +1020,19 @@ SOCKET FxUDPConnectSock::Connect()
 		return INVALID_SOCKET;
 	}
 #endif // WIN32
-
 	//请求连接时 Windows跟linux是有区别的//
 #ifdef WIN32
 	if (-1 == connect(GetSock(), (sockaddr*)&stAddr, sizeof(stAddr)))
 	{
 		PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
 		closesocket(GetSock());
+		LogFun(LT_Screen | LT_File, LogLv_Error, "socket connect error : %d, socket : %d, socket id %d", WSAGetLastError(), GetSock(), GetSockId());
 		return INVALID_SOCKET;
 	}
 	else
 	{
 		m_stRecvIoData.nOp = IOCP_RECV;
+		memcpy(&(m_stRecvIoData.stRemoteAddr), &stAddr, sizeof(stAddr));
 		unsigned long ul = 1;
 		if (SOCKET_ERROR == ioctlsocket(GetSock(), FIONBIO, (unsigned long*)&ul))
 		{
@@ -1050,7 +1047,6 @@ SOCKET FxUDPConnectSock::Connect()
 			closesocket(GetSock());
 			return INVALID_SOCKET;
 		}
-		OnConnect();
 	}
 #else
 	if (-1 == connect(GetSock(), (sockaddr*)&stAddr, sizeof(stAddr)))
@@ -1065,6 +1061,22 @@ SOCKET FxUDPConnectSock::Connect()
 		}
 	}
 #endif // WIN32
+	UDPPacketHeader oUDPPacketHeader = { 0 };
+	oUDPPacketHeader.m_cAck = 1;
+	oUDPPacketHeader.m_cSyn = 1;
+	oUDPPacketHeader.m_cStatus = GetState();
+
+	// send的时候 可能要修改 因为 udp tcp 有区别
+	if (sendto(GetSock(), (char*)(&oUDPPacketHeader),
+		sizeof(oUDPPacketHeader), 0, (sockaddr*)(&stAddr),
+		sizeof(stAddr)) == SOCKET_ERROR)
+	{
+		if (WSAGetLastError() != WSA_IO_PENDING)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "sendto errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+			return INVALID_SOCKET;
+		}
+	}
 
 	return GetSock();
 }
@@ -1110,7 +1122,7 @@ bool FxUDPConnectSock::PostRecv()
 
 	int nSockAddr = sizeof(m_stRecvIoData.stRemoteAddr);
 	if (SOCKET_ERROR == WSARecvFrom(GetSock(), &m_stRecvIoData.stWsaBuf, 1, &dwReadLen, &dwFlags,
-		(sockaddr*)(&m_stRecvIoData.stWsaBuf), &nSockAddr, &m_stRecvIoData.stOverlapped, NULL))
+		(sockaddr*)(&m_stRecvIoData.stRemoteAddr), &nSockAddr, &m_stRecvIoData.stOverlapped, NULL))
 	{
 		if (WSAGetLastError() != WSA_IO_PENDING)
 		{
