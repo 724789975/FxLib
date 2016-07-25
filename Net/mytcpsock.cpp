@@ -430,45 +430,45 @@ void FxTCPListenSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTra
 	SPerIoData* pSPerIoData = (SPerIoData*)pIoData;
 	switch (GetState())
 	{
-	case SSTATE_LISTEN:
-	{
-		m_oLock.Lock();
-		if (false == bRet)
+		case SSTATE_LISTEN:
 		{
-			int dwErr = WSAGetLastError();
-			LogFun(LT_Screen | LT_File, LogLv_Error, "OnParserIoEvent failed, errno %d", dwErr);
+			m_oLock.Lock();
+			if (false == bRet)
+			{
+				int dwErr = WSAGetLastError();
+				LogFun(LT_Screen | LT_File, LogLv_Error, "OnParserIoEvent failed, errno %d", dwErr);
 
-			closesocket(pSPerIoData->hSock);
-			PostAccept(*pSPerIoData);
+				closesocket(pSPerIoData->hSock);
+				PostAccept(*pSPerIoData);
+			}
+			else
+			{
+				OnAccept(pSPerIoData);
+			}
+			m_oLock.UnLock();
 		}
-		else
-		{
-			OnAccept(pSPerIoData);
-		}
-		m_oLock.UnLock();
-	}
 		break;
-	case SSTATE_CLOSE:
-	case SSTATE_STOP_LISTEN:
-	{
-		m_oLock.Lock();
-		if (bRet)
+		case SSTATE_CLOSE:
+		case SSTATE_STOP_LISTEN:
 		{
-			LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "listen socket has stoped but ret is true");
+			m_oLock.Lock();
+			if (bRet)
+			{
+				LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "listen socket has stoped but ret is true");
+			}
+			else
+			{
+				pSPerIoData->hSock = INVALID_SOCKET;
+			}
+			m_oLock.UnLock();
 		}
-		else
-		{
-			pSPerIoData->hSock = INVALID_SOCKET;
-		}
-		m_oLock.UnLock();
-	}
 		break;
-	default:
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "state : %d != SSTATE_LISTEN", (UINT32)GetState());
+		default:
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "state : %d != SSTATE_LISTEN", (UINT32)GetState());
 
-		Close();        // 未知错误，不应该发生//
-	}
+			Close();        // 未知错误，不应该发生//
+		}
 		break;
 	}
 }

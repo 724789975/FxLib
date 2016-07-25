@@ -115,9 +115,9 @@ int main(int argc, char **argv)
 
 	while (CSessionFactory::Instance()->m_setSessions.size())
 	{
+		pNet->Run(0xffffffff);
 		FxSleep(10);
 	}
-	pNet->Run(0xffffffff);
 	FxSleep(10);
 	pNet->Release();
 STOP:

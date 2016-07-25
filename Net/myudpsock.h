@@ -113,6 +113,7 @@ public:
 
 	SOCKET Connect();
 
+	void SetRemoteAddr(sockaddr_in& refstRemoteAddr);
 #ifdef WIN32
 	bool PostRecv();
 	bool PostRecvFree();

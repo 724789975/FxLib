@@ -447,27 +447,9 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		poSock->SetSock(hSock);
 		poSock->SetConnection(poConnection);
 
-		poConnection->SetSockType(SOCKTYPE_TCP);
+		poConnection->SetSockType(SOCKTYPE_UDP);
 		poConnection->SetSock(poSock);
 		poConnection->SetID(poSock->GetSockId());
-
-		sockaddr_in stLocalAddr;
-		INT32 nLocalAddrLen = sizeof(sockaddr_in);
-		
-		if (getsockname(GetSock(), (sockaddr*)(&stLocalAddr), &nLocalAddrLen) == SOCKET_ERROR)
-		{
-			int dwErr = WSAGetLastError();
-			LogFun(LT_Screen | LT_File, LogLv_Error, "getsockname error: %d", dwErr);
-
-			closesocket(hSock);
-			PostAccept(*pstPerIoData);
-			FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
-			FxConnectionMgr::Instance()->Release(poConnection);
-			return;
-		}
-
-		poConnection->SetLocalIP(stLocalAddr.sin_addr.s_addr);
-		poConnection->SetLocalPort(ntohs(stLocalAddr.sin_port));
 
 		poConnection->SetRemoteIP(pstPerIoData->stRemoteAddr.sin_addr.s_addr);
 		poConnection->SetRemotePort(ntohs(pstPerIoData->stRemoteAddr.sin_port));
@@ -501,6 +483,26 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 				return;
 			}
 		}
+		sockaddr_in stLocalAddr;
+		INT32 nLocalAddrLen = sizeof(sockaddr_in);
+		
+		if (getsockname(GetSock(), (sockaddr*)(&stLocalAddr), &nLocalAddrLen) == SOCKET_ERROR)
+		{
+			int dwErr = WSAGetLastError();
+			LogFun(LT_Screen | LT_File, LogLv_Error, "getsockname error: %d", dwErr);
+
+			closesocket(hSock);
+			PostAccept(*pstPerIoData);
+			FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
+			FxConnectionMgr::Instance()->Release(poConnection);
+			return;
+		}
+
+		poConnection->SetLocalIP(stLocalAddr.sin_addr.s_addr);
+		poConnection->SetLocalPort(ntohs(stLocalAddr.sin_port));
+
+		poSock->SetRemoteAddr(pstPerIoData->stRemoteAddr);
+
 		// 这个时候不能说是已经establish 了 要发个消息确认下
 		UDPPacketHeader oUDPPacketHeader = {0};
 		oUDPPacketHeader.m_cAck = ((UDPPacketHeader*)(pstPerIoData->stWsaBuf.buf))->m_cSyn;
@@ -526,6 +528,16 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		if (false == poSock->AddEvent())
 		{
 			LogFun(LT_Screen | LT_File, LogLv_Error, "poSock->AddEvent failed");
+
+			poSock->Close();
+		}
+		poSock->PushNetEvent(NETEVT_ESTABLISH, 0);
+
+		if (false == poSock->PostRecv())
+		{
+			int dwErr = WSAGetLastError();
+			poSock->PushNetEvent(NETEVT_ERROR, dwErr);
+			LogFun(LT_Screen | LT_File, LogLv_Error, "poSock->PostRecv failed, errno : %d", dwErr);
 
 			poSock->Close();
 		}
@@ -593,6 +605,9 @@ bool FxUDPConnectSock::Init()
 {
 	m_cSyn = 1;
 	m_cAck = 0;
+
+	memset(&m_stRecvIoData.stRemoteAddr, 0, sizeof(m_stRecvIoData.stRemoteAddr));
+	memset(&m_stSendIoData.stRemoteAddr, 0, sizeof(m_stSendIoData.stRemoteAddr));
 	if (!m_oEvtQueue.Init(MAX_NETEVENT_PERSOCK))
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "m_oEvtQueue.Init failed, socket : %d, socket id : %d", GetSock(), GetSockId());
@@ -988,7 +1003,6 @@ SOCKET FxUDPConnectSock::Connect()
 	}
 
 	//todo
-	//int irt = ::bind(GetSock(), (sockaddr *)(&local_addr), sizeof (sockaddr_in));
 #else
 	setsockopt(GetSock(), SOL_SOCKET, SO_SNDLOWAT, &VAL_SO_SNDLOWAT, sizeof(VAL_SO_SNDLOWAT));
 	setsockopt(GetSock(), SOL_SOCKET, SO_SNDBUF, &MAX_SYS_SEND_BUF, sizeof(MAX_SYS_SEND_BUF));
@@ -1002,12 +1016,31 @@ SOCKET FxUDPConnectSock::Connect()
 		return INVALID_SOCKET;
 	}
 
-	sockaddr_in stAddr = { 0 };
-	stAddr.sin_family = AF_INET;
-	stAddr.sin_addr.s_addr = GetConnection()->GetRemoteIP();
-	stAddr.sin_port = htons(GetConnection()->GetRemotePort());
+	sockaddr_in stLocalAddr = { 0 };
+	stLocalAddr.sin_family = AF_INET;
+	stLocalAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	stLocalAddr.sin_port = 0;
+	if (bind(GetSock(), (sockaddr*)&stLocalAddr, sizeof(stLocalAddr)) == SOCKET_ERROR)
+	{
+#ifdef WIN32
+		int dwErr = WSAGetLastError();
+#else
+		int dwErr = errno;
+#endif // WIN32
+		LogFun(LT_Screen | LT_File, LogLv_Error, "connect bind failed, errno %d", dwErr);
+		return INVALID_SOCKET;
+	}
+	INT32 nLocalAddrLen = sizeof(stLocalAddr);
+	if (getsockname(GetSock(), (sockaddr*)&stLocalAddr, &nLocalAddrLen) == SOCKET_ERROR)
+	{
+		PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
+		closesocket(GetSock());
+		LogFun(LT_Screen | LT_File, LogLv_Error, "socket getsockname error : %d, socket : %d, socket id %d", WSAGetLastError(), GetSock(), GetSockId());
+		return INVALID_SOCKET;
+	}
 
-	SetState(SSTATE_CONNECT);
+	GetConnection()->SetLocalIP(stLocalAddr.sin_addr.s_addr);
+	GetConnection()->SetLocalPort(ntohs(stLocalAddr.sin_port));
 
 #ifdef WIN32
 	// todo connectEX暂时不能用 所以暂时不加到完成端口中//
@@ -1020,6 +1053,13 @@ SOCKET FxUDPConnectSock::Connect()
 		return INVALID_SOCKET;
 	}
 #endif // WIN32
+	sockaddr_in stAddr = { 0 };
+	stAddr.sin_family = AF_INET;
+	stAddr.sin_addr.s_addr = GetConnection()->GetRemoteIP();
+	stAddr.sin_port = htons(GetConnection()->GetRemotePort());
+
+	SetState(SSTATE_CONNECT);
+
 	//请求连接时 Windows跟linux是有区别的//
 #ifdef WIN32
 	if (-1 == connect(GetSock(), (sockaddr*)&stAddr, sizeof(stAddr)))
@@ -1032,7 +1072,6 @@ SOCKET FxUDPConnectSock::Connect()
 	else
 	{
 		m_stRecvIoData.nOp = IOCP_RECV;
-		memcpy(&(m_stRecvIoData.stRemoteAddr), &stAddr, sizeof(stAddr));
 		unsigned long ul = 1;
 		if (SOCKET_ERROR == ioctlsocket(GetSock(), FIONBIO, (unsigned long*)&ul))
 		{
@@ -1078,7 +1117,56 @@ SOCKET FxUDPConnectSock::Connect()
 		}
 	}
 
+#ifdef WIN32
+	LONG nPostRecv = InterlockedCompareExchange(&m_nPostRecv, 1, 0);
+	if (0 != nPostRecv)
+	{
+		return INVALID_SOCKET;
+	}
+
+	if (m_poRecvBuf->IsEmpty())
+	{
+		m_poRecvBuf->Clear();
+	}
+
+	ZeroMemory(&m_stRecvIoData.stOverlapped, sizeof(m_stRecvIoData.stOverlapped));
+	int nLen = m_poRecvBuf->GetInCursorPtr(m_stRecvIoData.stWsaBuf.buf);
+	if (0 >= nLen)
+	{
+		//LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetInCursorPtr() = %d, socket : %d, socket id : %d", nLen, GetSock(), GetSockId());
+
+		// 接受缓存不够 等会继续接收 //
+		InterlockedCompareExchange(&m_nPostRecv, 0, 1);
+		PushNetEvent(NETEVT_RECV, -1);
+		return INVALID_SOCKET;
+	}
+
+	nLen = 65536 < nLen ? 65536 : nLen;
+	m_stRecvIoData.stWsaBuf.len = nLen;
+
+	DWORD dwReadLen = 0;
+	DWORD dwFlags = 0;
+
+	int nSockAddr = sizeof(m_stRecvIoData.stRemoteAddr);
+	if (SOCKET_ERROR == WSARecvFrom(GetSock(), &m_stRecvIoData.stWsaBuf, 1, &dwReadLen, &dwFlags,
+		(sockaddr*)(&m_stRecvIoData.stRemoteAddr), &nSockAddr, &m_stRecvIoData.stOverlapped, NULL))
+	{
+		if (WSAGetLastError() != WSA_IO_PENDING)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "WSARecvFrom errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+
+			InterlockedCompareExchange(&m_nPostRecv, 0, 1);
+			return INVALID_SOCKET;
+		}
+	}
+#endif // WIN32
 	return GetSock();
+}
+
+void FxUDPConnectSock::SetRemoteAddr(sockaddr_in& refstRemoteAddr)
+{
+	memcpy(&m_stRecvIoData.stRemoteAddr, &refstRemoteAddr, sizeof(refstRemoteAddr));
+	memcpy(&m_stSendIoData.stRemoteAddr, &refstRemoteAddr, sizeof(refstRemoteAddr));
 }
 
 #ifdef WIN32
@@ -1271,6 +1359,8 @@ void FxUDPConnectSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTr
 					return;
 				}
 			}
+
+			SetRemoteAddr(pSPerUDPIoData->stRemoteAddr);
 			OnConnect();
 		}
 		break;
@@ -1589,13 +1679,6 @@ void FxUDPConnectSock::__ProcRelease()
 void FxUDPConnectSock::OnConnect()
 {
 #ifdef WIN32
-	sockaddr_in stAddr = { 0 };
-	INT32 nAddrLen = sizeof(stAddr);
-	getsockname(GetSock(), (sockaddr*)&stAddr, &nAddrLen);
-
-	GetConnection()->SetLocalIP(stAddr.sin_addr.s_addr);
-	GetConnection()->SetLocalPort(ntohs(stAddr.sin_port));
-
 	GetConnection()->SetID(GetSockId());
 
 	SetState(SSTATE_ESTABLISH);
@@ -1631,13 +1714,6 @@ void FxUDPConnectSock::OnConnect()
 		Close();
 		return;
 	}
-
-	sockaddr_in stAddr = { 0 };
-	UINT32 dwAddrLen = sizeof(stAddr);
-	getsockname(GetSock(), (sockaddr*)&stAddr, &dwAddrLen);
-
-	GetConnection()->SetLocalIP(stAddr.sin_addr.s_addr);
-	GetConnection()->SetLocalPort(ntohs(stAddr.sin_port));
 
 	GetConnection()->SetID(GetSockId());
 
