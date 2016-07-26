@@ -106,7 +106,7 @@ IMPLEMENT_SINGLETON(CSessionFactory)
 CSessionFactory::CSessionFactory()
 {
 	m_pLock = FxCreateThreadLock();
-	for(int i = 0; i < 1024; ++i)
+	for(int i = 0; i < 64; ++i)
 	{
 		CSocketSession* pSession = new CSocketSession;
 		pSession->SetDataHeader(oDataHeaderFactory.CreateDataHeader());

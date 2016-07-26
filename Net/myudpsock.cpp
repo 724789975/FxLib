@@ -472,26 +472,6 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 
 		poSock->SetState(SSTATE_ESTABLISH);
 
-		sockaddr_in stLocalAddr;
-		INT32 nLocalAddrLen = sizeof(sockaddr_in);
-		
-		if (getsockname(poSock->GetSock(), (sockaddr*)(&stLocalAddr), &nLocalAddrLen) == SOCKET_ERROR)
-		{
-			int dwErr = WSAGetLastError();
-			LogFun(LT_Screen | LT_File, LogLv_Error, "getsockname error: %d", dwErr);
-
-			closesocket(hSock);
-			PostAccept(*pstPerIoData);
-			FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
-			FxConnectionMgr::Instance()->Release(poConnection);
-			return;
-		}
-
-		poConnection->SetLocalIP(stLocalAddr.sin_addr.s_addr);
-		poConnection->SetLocalPort(ntohs(stLocalAddr.sin_port));
-
-		poSock->SetRemoteAddr(pstPerIoData->stRemoteAddr);
-
 		// 这个时候不能说是已经establish 了 要发个消息确认下
 		UDPPacketHeader oUDPPacketHeader = {0};
 		oUDPPacketHeader.m_cAck = ((UDPPacketHeader*)(pstPerIoData->stWsaBuf.buf))->m_cSyn;
@@ -513,6 +493,26 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 			}
 		}
 		//poSock->Send((char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader));
+
+		sockaddr_in stLocalAddr;
+		INT32 nLocalAddrLen = sizeof(sockaddr_in);
+		
+		if (getsockname(poSock->GetSock(), (sockaddr*)(&stLocalAddr), &nLocalAddrLen) == SOCKET_ERROR)
+		{
+			int dwErr = WSAGetLastError();
+			LogFun(LT_Screen | LT_File, LogLv_Error, "getsockname error: %d", dwErr);
+
+			closesocket(hSock);
+			PostAccept(*pstPerIoData);
+			FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
+			FxConnectionMgr::Instance()->Release(poConnection);
+			return;
+		}
+
+		poConnection->SetLocalIP(stLocalAddr.sin_addr.s_addr);
+		poConnection->SetLocalPort(ntohs(stLocalAddr.sin_port));
+
+		poSock->SetRemoteAddr(pstPerIoData->stRemoteAddr);
 
 		if (false == poSock->AddEvent())
 		{
@@ -1130,11 +1130,11 @@ bool FxUDPConnectSock::PostRecv()
 
 	ZeroMemory(&m_stRecvIoData.stOverlapped, sizeof(m_stRecvIoData.stOverlapped));
 	int nLen = m_poRecvBuf->GetInCursorPtr(m_stRecvIoData.stWsaBuf.buf);
-	if (0 >= nLen)
+	if (2048 >= nLen)
 	{
 		//LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetInCursorPtr() = %d, socket : %d, socket id : %d", nLen, GetSock(), GetSockId());
 
-		// 接受缓存不够 等会继续接收 //
+		// 接受缓存不够 等会继续接收 udp与tcp不一样 一个包必须一次接完 不然会出问题 就是错误码为234的错误 接收长度后期调整//
 		InterlockedCompareExchange(&m_nPostRecv, 0, 1);
 		PushNetEvent(NETEVT_RECV, -1);
 		return true;
@@ -1658,20 +1658,22 @@ void FxUDPConnectSock::OnConnect()
 
 bool FxUDPConnectSock::IsValidAck(char cAck)
 {
-	//m_oLock.Lock();
 	if (cAck <= m_cAck)
 	{
-		//m_oLock.UnLock();
-		return false;
+		if (cAck >= (m_cAck + MAX_LOST_PACKET))
+		{
+			return false;
+		}
 	}
 	if (cAck >= (m_cAck + MAX_LOST_PACKET))
 	{
-		//m_oLock.UnLock();
-		return false;
+		if (cAck <= m_cAck)
+		{
+			return false;
+		}
 	}
-
+	
 	m_cAck = cAck;
-	//m_oLock.UnLock();
 	return true;
 }
 
@@ -1701,10 +1703,11 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 
 	if (false == bRet)
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "false == bRet errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+		int nErr = WSAGetLastError();
+		LogFun(LT_Screen | LT_File, LogLv_Error, "false == bRet errno : %d, socket : %d, socket id : %d", nErr, GetSock(), GetSockId());
 
 		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-		m_dwLastError = WSAGetLastError();
+		m_dwLastError = nErr;
 		PostClose();
 		return;
 	}
