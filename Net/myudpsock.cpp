@@ -475,7 +475,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		sockaddr_in stLocalAddr;
 		INT32 nLocalAddrLen = sizeof(sockaddr_in);
 		
-		if (getsockname(GetSock(), (sockaddr*)(&stLocalAddr), &nLocalAddrLen) == SOCKET_ERROR)
+		if (getsockname(poSock->GetSock(), (sockaddr*)(&stLocalAddr), &nLocalAddrLen) == SOCKET_ERROR)
 		{
 			int dwErr = WSAGetLastError();
 			LogFun(LT_Screen | LT_File, LogLv_Error, "getsockname error: %d", dwErr);
