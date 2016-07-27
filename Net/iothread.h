@@ -57,8 +57,8 @@ protected:
 #ifdef WIN32
 	HANDLE					m_hCompletionPort;
 #else
-	int					m_hEpoll;
-	epoll_event*		m_pEvents;
+	int						m_hEpoll;
+	epoll_event*			m_pEvents;
 #endif // WIN32
 
 };
