@@ -726,6 +726,7 @@ bool FxUDPConnectSock::Close()
 #endif // WIN32
 
 #ifdef WIN32
+	CancelIo((HANDLE)GetSock());
 	closesocket(GetSock());
 #else
 	close(GetSock());
@@ -770,7 +771,7 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 		return false;
 	}
 
-	if (dwLen + pDataHeader->GetHeaderLength() + sizeof(UDPPacketHeader) > m_poSendBuf->GetTotalLen())
+	if ((unsigned int)dwLen + pDataHeader->GetHeaderLength() + sizeof(UDPPacketHeader) > (unsigned int)m_poSendBuf->GetTotalLen())
 	{
 #ifdef WIN32
 		m_dwLastError = NET_SEND_OVERFLOW;

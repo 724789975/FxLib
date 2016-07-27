@@ -55,6 +55,7 @@ protected:
 	bool					m_bStop;
 
 #ifdef WIN32
+	HANDLE					m_hCompletionPort;
 #else
 	int					m_hEpoll;
 	epoll_event*		m_pEvents;

@@ -894,6 +894,7 @@ bool FxTCPConnectSock::Close()
 #endif // WIN32
 
 #ifdef WIN32
+	CancelIo((HANDLE)GetSock());
 	closesocket(GetSock());
 #else
 	close(GetSock());
@@ -976,7 +977,7 @@ bool FxTCPConnectSock::Send(const char* pData, int dwLen)
 		return false;
 	}
 
-	if (dwLen + pDataHeader->GetHeaderLength() > m_poSendBuf->GetTotalLen())
+	if ((unsigned int)dwLen + pDataHeader->GetHeaderLength() > (unsigned int)m_poSendBuf->GetTotalLen())
 	{
 #ifdef WIN32
 		m_dwLastError = NET_SEND_OVERFLOW;
