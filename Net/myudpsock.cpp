@@ -1342,7 +1342,7 @@ bool FxUDPConnectSock::PostSend()
 		return true;
 	}
 
-	nLen = 65536 < nLen ? 65536 : nLen;     // ???64K
+	nLen = 65536 < nLen ? 65536 : nLen;     // 最大64K
 
 	m_stSendIoData.stWsaBuf.len = nLen;
 	DWORD dwNumberOfBytesSent = 0;
