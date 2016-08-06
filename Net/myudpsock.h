@@ -97,9 +97,6 @@ public:
 
 	bool PushNetEvent(ENetEvtType eType, UINT32 dwValue);
 
-	void SetConnection(FxConnection* poConnection) { m_poConnection = poConnection; }
-	FxConnection* GetConnection() { return m_poConnection; }
-
 	bool IsConnected() { return m_nState == SSTATE_ESTABLISH; }
 	void SetState(ESocketState eState) { m_nState = eState; }
 	ESocketState GetState() { return m_nState; }
@@ -136,6 +133,7 @@ private:
 	void	__ProcError(UINT32 dwErrorNo);
 	void	__ProcTerminate();
 	void	__ProcRecv(UINT32 dwLen);
+	void	__ProcRecvPackageError(UINT32 dwLen);
 	void	__ProcRelease();
 private:
 	void OnConnect();
@@ -159,7 +157,6 @@ private:
 
 	FxLoopBuff*         m_poSendBuf;
 	FxLoopBuff*         m_poRecvBuf;
-	FxConnection*		m_poConnection;
 
 	FxIoThread* m_poIoThreadHandler;
 
@@ -168,6 +165,10 @@ private:
 
 	char m_cSyn;			// 
 	char m_cAck;			//
+
+	char m_cDelay;			// 延迟接收次数
+
+	sockaddr m_stRemoteAddr;
 
 private:
 #ifdef WIN32

@@ -89,9 +89,6 @@ public:
 
 	bool								PushNetEvent(ENetEvtType eType, UINT32 dwValue);
 
-	void								SetConnection(FxConnection* poConnection)		{ m_poConnection = poConnection; }
-	FxConnection*						GetConnection()									{ return m_poConnection; }
-
 	bool								IsConnected()									{ return m_nState == SSTATE_ESTABLISH; }
 	void								SetState(ESocketState eState)					{ m_nState = eState; }
 	ESocketState						GetState()										{ return m_nState; }

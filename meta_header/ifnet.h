@@ -83,6 +83,7 @@ enum ENetEvtType
 	NETEVT_ESTABLISH,
 	NETEVT_ASSOCIATE,
 	NETEVT_RECV,
+	NETEVT_RECV_PACKAGE_ERROR,
 	NETEVT_CONN_ERR,
 	NETEVT_ERROR,
 	NETEVT_TERMINATE,
@@ -281,6 +282,7 @@ public:
 	virtual bool					Send(const char* pData, int dwLen) = 0;
 
 	virtual void					SetConnection(FxConnection* poFxConnection) { m_poConnection = poFxConnection; }
+	FxConnection*					GetConnection()								{ return m_poConnection; }
 	virtual SOCKET					Connect() = 0;
 
 	virtual bool					IsConnected() = 0;

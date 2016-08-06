@@ -7,8 +7,8 @@
 #include "net.h"
 #include "netstream.h"
 
-#define RECV_BUFF_SIZE 8*64*1024
-#define SEND_BUFF_SIZE 64*64*1024
+#define RECV_BUFF_SIZE 32*64*1024
+#define SEND_BUFF_SIZE 64*1024
 
 #define MAX_LOST_PACKET 10
 
@@ -522,6 +522,18 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		}
 		poSock->PushNetEvent(NETEVT_ESTABLISH, 0);
 
+		if (connect(poSock->GetSock(), (sockaddr*)(&pstPerIoData->stRemoteAddr), sizeof(pstPerIoData->stRemoteAddr)) == SOCKET_ERROR)
+		{
+			if (WSAGetLastError() != WSA_IO_PENDING)
+			{
+				LogFun(LT_Screen | LT_File, LogLv_Error, "connect errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+
+				PostAccept(*pstPerIoData);
+				poSock->PostClose();
+				return;
+			}
+		}
+
 		if (false == poSock->PostRecv())
 		{
 			int dwErr = WSAGetLastError();
@@ -595,6 +607,8 @@ bool FxUDPConnectSock::Init()
 	Reset();
 	m_cSyn = 1;
 	m_cAck = 0;
+
+	m_cDelay = 0;
 
 	memset(&m_stRecvIoData.stRemoteAddr, 0, sizeof(m_stRecvIoData.stRemoteAddr));
 	memset(&m_stSendIoData.stRemoteAddr, 0, sizeof(m_stSendIoData.stRemoteAddr));
@@ -925,6 +939,12 @@ void FxUDPConnectSock::ProcEvent()
 			}
 			break;
 
+			case NETEVT_RECV_PACKAGE_ERROR:
+			{
+				__ProcRecvPackageError(pEvent->dwValue);
+			}
+			break;
+
 			case NETEVT_RELEASE:
 			{
 				__ProcRelease();
@@ -1056,7 +1076,7 @@ SOCKET FxUDPConnectSock::Connect()
 			LogFun(LT_Screen | LT_File, LogLv_Error, "ack error want : 1, recv : %d", oUDPPacketHeader.m_cAck);
 			Close();
 			return INVALID_SOCKET;
-			}
+		}
 		if (oUDPPacketHeader.m_cSyn != 1)
 		{
 			LogFun(LT_Screen | LT_File, LogLv_Error, "syn error want : 1, recv : %d", oUDPPacketHeader.m_cSyn);
@@ -1104,8 +1124,7 @@ SOCKET FxUDPConnectSock::Connect()
 
 void FxUDPConnectSock::SetRemoteAddr(sockaddr_in& refstRemoteAddr)
 {
-	memcpy(&m_stRecvIoData.stRemoteAddr, &refstRemoteAddr, sizeof(refstRemoteAddr));
-	memcpy(&m_stSendIoData.stRemoteAddr, &refstRemoteAddr, sizeof(refstRemoteAddr));
+	memcpy(&m_stRemoteAddr, &refstRemoteAddr, sizeof(refstRemoteAddr));
 }
 
 #ifdef WIN32
@@ -1131,14 +1150,19 @@ bool FxUDPConnectSock::PostRecv()
 
 	ZeroMemory(&m_stRecvIoData.stOverlapped, sizeof(m_stRecvIoData.stOverlapped));
 	int nLen = m_poRecvBuf->GetInCursorPtr(m_stRecvIoData.stWsaBuf.buf);
-	if (2048 >= nLen)
+	if (32 * 1024 >= nLen)
 	{
-		//LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetInCursorPtr() = %d, socket : %d, socket id : %d", nLen, GetSock(), GetSockId());
+		++m_cDelay;
+		m_cDelay %= 10;
+		if (m_cDelay)
+		{
+			//LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetInCursorPtr() = %d, socket : %d, socket id : %d", nLen, GetSock(), GetSockId());
 
-		// 接受缓存不够 等会继续接收 udp与tcp不一样 一个包必须一次接完 不然会出问题 就是错误码为234的错误 接收长度后期调整//
-		InterlockedCompareExchange(&m_nPostRecv, 0, 1);
-		PushNetEvent(NETEVT_RECV, -1);
-		return true;
+			// 接受缓存不够 等会继续接收 udp与tcp不一样 一个包必须一次接完 不然会出问题 就是错误码为234的错误 接收长度后期调整//
+			InterlockedCompareExchange(&m_nPostRecv, 0, 1);
+			PushNetEvent(NETEVT_RECV, -1);
+			return true;
+		}
 	}
 
 	nLen = 65536 < nLen ? 65536 : nLen;
@@ -1148,8 +1172,8 @@ bool FxUDPConnectSock::PostRecv()
 	DWORD dwFlags = 0;
 
 	int nSockAddr = sizeof(m_stRecvIoData.stRemoteAddr);
-	if (SOCKET_ERROR == WSARecvFrom(GetSock(), &m_stRecvIoData.stWsaBuf, 1, &dwReadLen, &dwFlags,
-		(sockaddr*)(&m_stRecvIoData.stRemoteAddr), &nSockAddr, &m_stRecvIoData.stOverlapped, NULL))
+	if (SOCKET_ERROR == WSARecv(GetSock(), &m_stRecvIoData.stWsaBuf, 1, &dwReadLen, &dwFlags,
+		&m_stRecvIoData.stOverlapped, NULL))
 	{
 		if (WSAGetLastError() != WSA_IO_PENDING)
 		{
@@ -1344,11 +1368,17 @@ bool FxUDPConnectSock::PostSend()
 
 	nLen = 65536 < nLen ? 65536 : nLen;     // 最大64K
 
+	if (m_poSendBuf->GetFreeLen() < 32 * 1024)
+	{
+		InterlockedCompareExchange(&m_nPostSend, 0, 1);
+		return true;
+	}
+
 	m_stSendIoData.stWsaBuf.len = nLen;
 	DWORD dwNumberOfBytesSent = 0;
 
-	int nRet = WSASendTo(GetSock(), &m_stSendIoData.stWsaBuf, 1, &dwNumberOfBytesSent, 0,
-		(sockaddr*)(&(m_stSendIoData.stRemoteAddr)), sizeof((m_stSendIoData.stRemoteAddr)), &m_stSendIoData.stOverlapped, NULL);
+	int nRet = WSASend(GetSock(), &m_stSendIoData.stWsaBuf, 1, &dwNumberOfBytesSent, 0,
+		&m_stSendIoData.stOverlapped, NULL);
 	if (0 != nRet)
 	{
 		if (WSAGetLastError() != WSA_IO_PENDING)
@@ -1592,6 +1622,23 @@ void FxUDPConnectSock::__ProcRecv(UINT32 dwLen)
 	}
 }
 
+void FxUDPConnectSock::__ProcRecvPackageError(UINT32 dwLen)
+{
+	if (GetConnection())
+	{
+		if (GetSockId() != GetConnection()->GetID())
+		{
+			return;
+		}
+
+		static char strPopBuf[64 * 1024];
+		if (!m_poRecvBuf->PopBuff(strPopBuf, dwLen))
+		{
+			return;
+		}
+	}
+}
+
 void FxUDPConnectSock::__ProcRelease()
 {
 	if (GetConnection())
@@ -1617,6 +1664,17 @@ void FxUDPConnectSock::OnConnect()
 
 	SetState(SSTATE_ESTABLISH);
 	PushNetEvent(NETEVT_ESTABLISH, 0);
+
+	if (connect(GetSock(), (sockaddr*)(&m_stRemoteAddr), sizeof(m_stRemoteAddr)) == SOCKET_ERROR)
+	{
+		if (WSAGetLastError() != WSA_IO_PENDING)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "connect errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+
+			PostClose();
+			return;
+		}
+	}
 
 #ifdef WIN32
 	if (false == PostRecv())
@@ -1719,12 +1777,17 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 		return;
 	}
 
-	m_oLock.Lock();
 	int nUsedLen = 0;
 	int nParserLen = 0;
 	int nLen = int(dwBytes);
-	if (m_poRecvBuf->CostBuff(nLen))
+	if (!m_poRecvBuf->CostBuff(nLen))
 	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->CostBuff error, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+		m_dwLastError = NET_RECVBUFF_ERROR;
+		PostClose();
+		return;
 	}
 
 	char *pUseBuf = NULL;
@@ -1736,7 +1799,6 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
 		m_dwLastError = NET_RECVBUFF_ERROR;
 		PostClose();
-		m_oLock.UnLock();
 		return;
 	}
 
@@ -1772,11 +1834,14 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 			{
 				LogFun(LT_Screen | LT_File, LogLv_Error, "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-				InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-				m_dwLastError = NET_RECVBUFF_ERROR;
-				PostClose();
-				m_oLock.UnLock();
-				return;
+				nUsedLen += nLen;
+				m_poRecvBuf->CostUsedBuff(nUsedLen);
+				nUsedLen = 0;
+				PushNetEvent(NETEVT_RECV_PACKAGE_ERROR, nLen);
+				nLen = 0;
+				//InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+				//m_dwLastError = NET_RECVBUFF_ERROR;
+				//PostClose();
 			}
 			else if (0 == m_nPacketLen)
 			{
@@ -1800,11 +1865,14 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 						{
 							LogFun(LT_Screen | LT_File, LogLv_Error, "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-							InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-							m_dwLastError = NET_RECVBUFF_ERROR;
-							PostClose();
-							m_oLock.UnLock();
-							return;
+							nUsedLen += nLen;
+							m_poRecvBuf->CostUsedBuff(nUsedLen);
+							nUsedLen = 0;
+							PushNetEvent(NETEVT_RECV_PACKAGE_ERROR, nLen);
+							nLen = 0;
+							//InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+							//m_dwLastError = NET_RECVBUFF_ERROR;
+							//PostClose();
 						}
 						GetDataHeader()->BuildRecvPkgHeader(pUseBuf, GetDataHeader()->GetHeaderLength() - nLen, nLen);
 						pParseBuf = (char*)(GetDataHeader()->GetPkgHeader());
@@ -1813,11 +1881,14 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 						{
 							LogFun(LT_Screen | LT_File, LogLv_Error, "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-							InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-							m_dwLastError = NET_RECVBUFF_ERROR;
-							PostClose();
-							m_oLock.UnLock();
-							return;
+							nUsedLen += nLen;
+							m_poRecvBuf->CostUsedBuff(nUsedLen);
+							nUsedLen = 0;
+							PushNetEvent(NETEVT_RECV_PACKAGE_ERROR, nLen);
+							nLen = 0;
+							//InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+							//m_dwLastError = NET_RECVBUFF_ERROR;
+							//PostClose();
 						}
 
 						m_nNeedData = m_nPacketLen - GetDataHeader()->GetHeaderLength();
@@ -1879,7 +1950,6 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 			PostClose();
 		}
 	}
-	m_oLock.UnLock();
 }
 
 void FxUDPConnectSock::OnSend(bool bRet, int dwBytes)

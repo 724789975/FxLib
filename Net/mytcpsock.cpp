@@ -8,7 +8,8 @@
 #include "netstream.h"
 
 #ifdef WIN32
-struct tcp_keepalive {
+struct tcp_keepalive
+{
 	u_long  onoff;
 	u_long  keepalivetime;
 	u_long  keepaliveinterval;
