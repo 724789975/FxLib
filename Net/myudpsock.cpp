@@ -529,7 +529,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 				LogFun(LT_Screen | LT_File, LogLv_Error, "connect errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
 				PostAccept(*pstPerIoData);
-				poSock->PostClose();
+				poSock->Close();
 				return;
 			}
 		}
