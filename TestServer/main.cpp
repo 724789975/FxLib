@@ -108,7 +108,7 @@ int main(int argc, char **argv)
 	pListenSocket->StopListen();
 	pListenSocket->Close();
 	for (std::set<FxSession*>::iterator it = CSessionFactory::Instance()->m_setSessions.begin();
-	it != CSessionFactory::Instance()->m_setSessions.end(); ++it)
+		it != CSessionFactory::Instance()->m_setSessions.end(); ++it)
 	{
 		(*it)->Close();
 	}
