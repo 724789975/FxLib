@@ -168,7 +168,7 @@ FILE* GetLogFile()
 #ifdef WIN32
 	sprintf(strLogPath, "%s%s%s%s", GetExePath(), "\\", GetExeName(), "_exe_log.txt");
 #else
-	sprintf(strLogPath, "%s%s%s%s", GetExePath(), "/", GetExeName(), "exe_log.txt");
+	sprintf(strLogPath, "%s%s%s%s", GetExePath(), "/", GetExeName(), "_exe_log.txt");
 #endif // WIN32
 
 	if (strcmp(strLogPath, sstrPath) != 0)
