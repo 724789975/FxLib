@@ -1254,6 +1254,10 @@ SOCKET FxUDPConnectSock::Connect()
 	}
 
 	sockaddr_in stRemoteAddr = { 0 };
+#ifdef WIN32
+#else
+	unsigned
+#endif	//WIN32
 	int nRemoteAddrLen = sizeof(stRemoteAddr);
 
 	oUDPPacketHeader = {0};
