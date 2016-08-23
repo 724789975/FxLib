@@ -581,7 +581,7 @@ void FxUDPListenSock::OnAccept()
 			LogFun(LT_Screen | LT_File, LogLv_Error, "ack error want : 1, recv : %d", oUDPPacketHeader.m_cAck);
 			Close();
 			return;
-}
+		}
 		if (oUDPPacketHeader.m_cSyn != 1)
 		{
 			LogFun(LT_Screen | LT_File, LogLv_Error, "syn error want : 1, recv : %d", oUDPPacketHeader.m_cSyn);
@@ -648,7 +648,7 @@ void FxUDPListenSock::OnAccept()
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, CreateSession failed");
 
-		close(hSock);
+		close(hAcceptSock);
 		FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
 		FxConnectionMgr::Instance()->Release(poConnection);
 		return;
@@ -659,7 +659,7 @@ void FxUDPListenSock::OnAccept()
 	poSock->SetIoThread(poIoThreadHandler);
 
 	setsockopt(GetSock(), SOL_SOCKET, SO_SNDLOWAT, &UDP_VAL_SO_SNDLOWAT, sizeof(UDP_VAL_SO_SNDLOWAT));
-	setsockopt(GetSock(), SOL_SOCKET, SO_SNDBUF, &UDP_MAX_SYS_SEND_BUF, sizeof(UDP_MAX_SYS_SEND_BUF))
+	setsockopt(GetSock(), SOL_SOCKET, SO_SNDBUF, &UDP_MAX_SYS_SEND_BUF, sizeof(UDP_MAX_SYS_SEND_BUF));
 
 	poSock->SetState(SSTATE_ESTABLISH);
 
