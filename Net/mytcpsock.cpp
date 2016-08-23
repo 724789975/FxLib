@@ -1752,7 +1752,7 @@ void FxTCPConnectSock::OnConnect()
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "getsockopt errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
 
-		PushNetEvent(NETEVT_CONN_ERR, errno);
+		PushNetEvent(NETEVT_ERROR, errno);
 		Close();
 		return;
 	}
@@ -1761,7 +1761,7 @@ void FxTCPConnectSock::OnConnect()
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "getsockopt errno : %d, socket : %d, socket id : %d", nError, GetSock(), GetSockId());
 
-		PushNetEvent(NETEVT_CONN_ERR, nError);
+		PushNetEvent(NETEVT_ERROR, nError);
 		Close();
 		return;
 	}
@@ -1779,7 +1779,7 @@ void FxTCPConnectSock::OnConnect()
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-		PushNetEvent(NETEVT_CONN_ERR, errno);
+		PushNetEvent(NETEVT_ERROR, errno);
 		Close();
 	}
 #endif // WIN32
