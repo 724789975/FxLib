@@ -86,7 +86,6 @@ bool FxUDPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 	unsigned long ul = 1;
 	if (SOCKET_ERROR == ioctlsocket(GetSock(), FIONBIO, (unsigned long*)&ul))
 	{
-		PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
 		closesocket(GetSock());
 		LogFun(LT_Screen | LT_File, LogLv_Error, "Set socket FIONBIO error : %d, socket : %d, socket id %d",
 			WSAGetLastError(), GetSock(), GetSockId());
@@ -108,7 +107,6 @@ bool FxUDPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 	m_poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(GetSockId());
 	if (NULL == m_poIoThreadHandler)
 	{
-		Close();
 		return false;
 	}
 
@@ -579,19 +577,16 @@ void FxUDPListenSock::OnAccept()
 		if (oUDPPacketHeader.m_cAck != 1)
 		{
 			LogFun(LT_Screen | LT_File, LogLv_Error, "ack error want : 1, recv : %d", oUDPPacketHeader.m_cAck);
-			Close();
 			return;
 		}
 		if (oUDPPacketHeader.m_cSyn != 1)
 		{
 			LogFun(LT_Screen | LT_File, LogLv_Error, "syn error want : 1, recv : %d", oUDPPacketHeader.m_cSyn);
-			Close();
 			return;
 		}
 		if (oUDPPacketHeader.m_cStatus != SSTATE_CONNECT)
 		{
 			LogFun(LT_Screen | LT_File, LogLv_Error, "statu error want : SSTATE_CONNECT, recv : %d", oUDPPacketHeader.m_cStatus);
-			Close();
 			return;
 		}
 	}
@@ -599,8 +594,6 @@ void FxUDPListenSock::OnAccept()
 	SOCKET hAcceptSock = socket(AF_INET, SOCK_DGRAM, 0);
 	if (INVALID_SOCKET == hAcceptSock)
 	{
-		PushNetEvent(NETEVT_ERROR, errno);
-		Close();
 		return;
 	}
 
@@ -688,11 +681,9 @@ void FxUDPListenSock::OnAccept()
 	unsigned int nLocalAddrLen = sizeof(stLocalAddr);
 	if (getsockname(poSock->GetSock(), (sockaddr*)&stLocalAddr, &nLocalAddrLen) < 0)
 	{
-		PushNetEvent(NETEVT_CONN_ERR, errno);
 		close(hAcceptSock);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "socket getsockname error : %d, socket : %d, socket id %d", errno, GetSock(), GetSockId());
-		FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
-		FxConnectionMgr::Instance()->Release(poConnection);
+		poSock->Close();
 		return;
 	}
 
