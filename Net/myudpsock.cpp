@@ -658,8 +658,8 @@ void FxUDPListenSock::OnAccept()
 	poConnection->SetSession(poSession);
 	poSock->SetIoThread(poIoThreadHandler);
 
-	setsockopt(GetSock(), SOL_SOCKET, SO_SNDLOWAT, &UDP_VAL_SO_SNDLOWAT, sizeof(UDP_VAL_SO_SNDLOWAT));
-	setsockopt(GetSock(), SOL_SOCKET, SO_SNDBUF, &UDP_MAX_SYS_SEND_BUF, sizeof(UDP_MAX_SYS_SEND_BUF));
+	setsockopt(poSock->GetSock(), SOL_SOCKET, SO_SNDLOWAT, &UDP_VAL_SO_SNDLOWAT, sizeof(UDP_VAL_SO_SNDLOWAT));
+	setsockopt(poSock->GetSock(), SOL_SOCKET, SO_SNDBUF, &UDP_MAX_SYS_SEND_BUF, sizeof(UDP_MAX_SYS_SEND_BUF));
 
 	poSock->SetState(SSTATE_ESTABLISH);
 
