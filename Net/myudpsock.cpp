@@ -609,8 +609,7 @@ void FxUDPListenSock::OnAccept()
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, create CCPSock failed");
 
-		closesocket(hSock);
-		PostAccept(*pstPerIoData);
+		close(hAcceptSock);
 		return;
 	}
 
@@ -641,8 +640,8 @@ void FxUDPListenSock::OnAccept()
 	poConnection->SetSock(poSock);
 	poConnection->SetID(poSock->GetSockId());
 
-	poConnection->SetRemoteIP(pstPerIoData->stRemoteAddr.sin_addr.s_addr);
-	poConnection->SetRemotePort(ntohs(pstPerIoData->stRemoteAddr.sin_port));
+	poConnection->SetRemoteIP(stRemoteAddr.sin_addr.s_addr);
+	poConnection->SetRemotePort(ntohs(stRemoteAddr.sin_port));
 
 	FxSession* poSession = m_poSessionFactory->CreateSession();
 	if (NULL == poSession)
@@ -687,7 +686,7 @@ void FxUDPListenSock::OnAccept()
 
 	sockaddr_in stLocalAddr = { 0 };
 	unsigned int nLocalAddrLen = sizeof(stLocalAddr);
-	if (getsockname(GetSock(), (sockaddr*)&stLocalAddr, &nLocalAddrLen) < 0)
+	if (getsockname(poSock->GetSock(), (sockaddr*)&stLocalAddr, &nLocalAddrLen) < 0)
 	{
 		PushNetEvent(NETEVT_CONN_ERR, errno);
 		close(hAcceptSock);
@@ -697,8 +696,8 @@ void FxUDPListenSock::OnAccept()
 		return;
 	}
 
-	poConnection()->SetLocalIP(stLocalAddr.sin_addr.s_addr);
-	poConnection()->SetLocalPort(ntohs(stLocalAddr.sin_port));
+	poConnection->SetLocalIP(stLocalAddr.sin_addr.s_addr);
+	poConnection->SetLocalPort(ntohs(stLocalAddr.sin_port));
 
 	poSock->SetRemoteAddr(stRemoteAddr);
 
@@ -1249,7 +1248,7 @@ SOCKET FxUDPConnectSock::Connect()
 		if (errno != EINPROGRESS && errno != EINTR && errno != EAGAIN)
 #endif // WIN32
 		{
-			LogFun(LT_Screen | LT_File, LogLv_Error, "sendto errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+			LogFun(LT_Screen | LT_File, LogLv_Error, "sendto errno : %d, socket : %d, socket id : %d", dwErr, GetSock(), GetSockId());
 			return INVALID_SOCKET;
 		}
 	}
@@ -2270,7 +2269,7 @@ void FxUDPConnectSock::OnRecv()
 		}
 		return;
 	}
-	else if (0 == nLen)
+	if (0 == nLen)
 	{
 		Close();
 		return;
