@@ -34,7 +34,7 @@ public:
 	void								SetState(ESocketState eState)					{ m_nState = eState; }
 	ESocketState						GetState()										{ return m_nState; }
 
-	virtual void						ProcEvent();
+	virtual void ProcEvent(SNetEvent oEvent);
 
 #ifdef WIN32
 	virtual void						OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred);		//
@@ -52,10 +52,11 @@ private:
 	void								__ProcTerminate();
 
 private:
-	ESocketState						m_nState;
-	FxCriticalLock						m_oLock;
-	TEventQueue<SNetEvent>				m_oEvtQueue;
-	FxIoThread*							m_poIoThreadHandler;
+	ESocketState		m_nState;
+
+	FxCriticalLock			m_oLock;
+
+	FxIoThread* m_poIoThreadHandler;
 
 #ifdef WIN32
 	bool								PostAccept(SPerIoData& oSPerIoData);
@@ -98,7 +99,7 @@ public:
 	void								SetIoThread(FxIoThread* pIoThread)				{ m_poIoThreadHandler = pIoThread;}
 	bool								AddEvent();
 
-	virtual void						ProcEvent();
+	virtual void ProcEvent(SNetEvent oEvent);
 
 	SOCKET								Connect();
 
@@ -138,8 +139,7 @@ private:
 private:
 	ESocketState						m_nState;
 
-	TEventQueue<SNetEvent>				m_oEvtQueue;
-	bool								m_bSendLinger;		// 发送延迟，直到成功，或者30次后 //
+	bool					m_bSendLinger;		// 发送延迟，直到成功，或者30次后 //
 
 	FxCriticalLock						m_oLock;
 

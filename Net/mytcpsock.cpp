@@ -53,7 +53,7 @@ FxTCPListenSock::~FxTCPListenSock()
 
 bool FxTCPListenSock::Init()
 {
-	return m_oEvtQueue.Init(MAX_NETEVENT_PERSOCK);
+	return true;
 }
 
 void FxTCPListenSock::OnRead()
@@ -222,12 +222,8 @@ bool FxTCPListenSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
 	// 先扔网络事件进去，然后在报告上层有事件，先后顺序不能错，这样上层就不会错取事件//
 	oEvent.eType = eType;
 	oEvent.dwValue = dwValue;
-	while (!m_oEvtQueue.PushBack(oEvent))
-	{
-		FxSleep(1);
-	}
 
-	while (!FxNetModule::Instance()->PushNetEvent(this))
+	while (!FxNetModule::Instance()->PushNetEvent(this, oEvent))
 	{
 		FxSleep(1);
 	}
@@ -258,12 +254,10 @@ bool FxTCPListenSock::AddEvent()
 
 }
 
-void FxTCPListenSock::ProcEvent()
+void FxTCPListenSock::ProcEvent(SNetEvent oEvent)
 {
-	SNetEvent* pEvent = m_oEvtQueue.PopFront();
-	if (pEvent)
 	{
-		switch (pEvent->eType)
+		switch (oEvent.eType)
 		{
 		case NETEVT_ASSOCIATE:
 		{
@@ -273,7 +267,7 @@ void FxTCPListenSock::ProcEvent()
 
 		case NETEVT_ERROR:
 		{
-			__ProcError(pEvent->dwValue);
+			__ProcError(oEvent.dwValue);
 		}
 			break;
 
@@ -775,7 +769,6 @@ FxTCPConnectSock::FxTCPConnectSock()
 #endif // WIN32
 
 	m_bSendLinger = false;     // 发送延迟，直到成功，或者30次后，这时默认设置//
-	m_oEvtQueue.Init(MAX_NETEVENT_PERSOCK);
 
 	Reset();
 }
@@ -804,13 +797,6 @@ FxTCPConnectSock::~FxTCPConnectSock()
 
 bool FxTCPConnectSock::Init()
 {
-	if (!m_oEvtQueue.Init(MAX_NETEVENT_PERSOCK))
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "m_oEvtQueue.Init failed, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		return false;
-	}
-
 	if (NULL == m_poSendBuf)
 	{
 		m_poSendBuf = FxLoopBuffMgr::Instance()->Fetch();
@@ -1037,12 +1023,7 @@ bool FxTCPConnectSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
 	oEvent.eType = eType;
 	oEvent.dwValue = dwValue;
 
-	while (!m_oEvtQueue.PushBack(oEvent))
-	{
-		FxSleep(1);
-	}
-
-	while (!FxNetModule::Instance()->PushNetEvent(this))
+	while (!FxNetModule::Instance()->PushNetEvent(this, oEvent))
 	{
 		FxSleep(1);
 	}
@@ -1547,7 +1528,6 @@ SOCKET FxTCPConnectSock::Connect()
 		return INVALID_SOCKET;
 	}
 
-	//todo
 	//int irt = ::bind(GetSock(), (sockaddr *)(&local_addr), sizeof (sockaddr_in));
 #else
 	setsockopt(GetSock(), SOL_SOCKET, SO_SNDLOWAT, &VAL_SO_SNDLOWAT, sizeof(VAL_SO_SNDLOWAT));
@@ -1663,12 +1643,10 @@ SOCKET FxTCPConnectSock::Connect()
 	return GetSock();
 }
 
-void FxTCPConnectSock::ProcEvent()
+void FxTCPConnectSock::ProcEvent(SNetEvent oEvent)
 {
-	SNetEvent* pEvent = m_oEvtQueue.PopFront();
-	if (pEvent)
 	{
-		switch (pEvent->eType)
+		switch (oEvent.eType)
 		{
 			case NETEVT_ESTABLISH:
 			{
@@ -1681,16 +1659,16 @@ void FxTCPConnectSock::ProcEvent()
 				__ProcAssociate();
 			}
 			break;
-			case NETEVT_CONN_ERR:
-			{
-				__ProcConnectError(pEvent->dwValue);
-			}
+		case NETEVT_CONN_ERR:
+		{
+			__ProcConnectError(oEvent.dwValue);
+		}
 			break;
 
-			case NETEVT_ERROR:
-			{
-				__ProcError(pEvent->dwValue);
-			}
+		case NETEVT_ERROR:
+		{
+			__ProcError(oEvent.dwValue);
+		}
 			break;
 
 			case NETEVT_TERMINATE:
@@ -1699,16 +1677,16 @@ void FxTCPConnectSock::ProcEvent()
 			}
 			break;
 
-			case NETEVT_RECV:
-			{
-				__ProcRecv(pEvent->dwValue);
-			}
+		case NETEVT_RECV:
+		{
+			__ProcRecv(oEvent.dwValue);
+		}
 			break;
 
-			case NETEVT_RELEASE:
-			{
-				__ProcRelease();
-			}
+		case NETEVT_RELEASE:
+		{
+			__ProcRelease();
+		}
 			break;
 
 			default:
