@@ -7,6 +7,12 @@
 #include <map>
 #include <vector>
 
+struct SSockNetEvent
+{
+	IFxSocket* poSock;
+	SNetEvent oEvent;
+};
+
 class FxIoThread;
 
 class FxNetModule : public IFxNet
@@ -26,7 +32,7 @@ public:
 
 	void				Uninit();
 
-	bool			PushNetEvent(IFxSocket* poSock);
+	bool PushNetEvent(IFxSocket* poSock, SNetEvent oEvent);
 	FxIoThread*		FetchIoThread(UINT32 dwSockId);
 
 private:
@@ -36,7 +42,7 @@ private:
 	void					__DestroyComponent();
 
 private:
-	TEventQueue<IFxSocket*>*	m_pEventQueue;
+	TEventQueue<SSockNetEvent>*	m_pEventQueue;
 	int							m_nNetThreadCount;
 	FxIoThread*					m_pEpollHandlers;
 	int							m_nMaxConnectionCount;

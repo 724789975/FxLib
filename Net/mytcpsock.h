@@ -14,33 +14,6 @@
 #include "lock.h"
 //#include "packetparser.h"
 
-enum ESocketState
-{
-	SSTATE_INVALID = 0,	// //
-	//SSTATE_START_LISTEN, // //
-	SSTATE_LISTEN,		// //
-	SSTATE_STOP_LISTEN,	// //
-	//SSTATE_ACCEPT,
-	SSTATE_CONNECT,		// //
-	SSTATE_ESTABLISH,	// //
-	//SSTATE_DATA,		 // //
-	SSTATE_CLOSE,		// //
-	//SSTATE_OK,
-	SSTATE_RELEASE,
-};
-
-enum ENetEvtType
-{
-	NETEVT_INVALID = 0,
-	NETEVT_ESTABLISH,
-	NETEVT_ASSOCIATE,
-	NETEVT_RECV,
-	NETEVT_CONN_ERR,
-	NETEVT_ERROR,
-	NETEVT_TERMINATE,
-	NETEVT_RELEASE,
-};
-
 #ifdef WIN32
 enum EIocpOperation
 {
@@ -59,12 +32,6 @@ struct SPerIoData
 	char			Buf[128];
 };
 #endif // WIN32
-
-struct SNetEvent
-{
-	ENetEvtType		eType;
-	UINT32			dwValue;
-};
 
 class FxIoThread;
 
@@ -87,7 +54,7 @@ public:
 	void SetState(ESocketState eState){ m_nState = eState; }
 	ESocketState GetState(){ return m_nState; }
 
-	virtual void ProcEvent();
+	virtual void ProcEvent(SNetEvent oEvent);
 
 #ifdef WIN32
 	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred);		//
@@ -108,8 +75,6 @@ private:
 	ESocketState		m_nState;
 
 	FxCriticalLock			m_oLock;
-
-	TEventQueue<SNetEvent>	m_oEvtQueue;
 
 	FxIoThread* m_poIoThreadHandler;
 
@@ -157,7 +122,7 @@ public:
 	void SetIoThread(FxIoThread* pIoThread){ m_poIoThreadHandler = pIoThread;}
 	bool AddEvent();
 
-	virtual void ProcEvent();
+	virtual void ProcEvent(SNetEvent oEvent);
 
 	SOCKET Connect();
 
@@ -197,7 +162,6 @@ private:
 private:
 	ESocketState		m_nState;
 
-	TEventQueue<SNetEvent>	m_oEvtQueue;
 	bool					m_bSendLinger;		// 发送延迟，直到成功，或者30次后 //
 
 	FxCriticalLock			m_oLock;

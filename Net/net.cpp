@@ -89,7 +89,7 @@ bool FxNetModule::__InitComponent()
       	poEpollHandler->Init(m_nMaxConnectionCount);
     }
 
-	m_pEventQueue = new TEventQueue<IFxSocket*>;
+	m_pEventQueue = new TEventQueue<SSockNetEvent>;
 	m_pEventQueue->Init(m_nTotalEventCount);
 
     return true;
@@ -163,9 +163,12 @@ SOCKET FxNetModule::Connect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, boo
 	return poConnection->Reconnect();
 }
 
-bool FxNetModule::PushNetEvent(IFxSocket* poSock)
+bool FxNetModule::PushNetEvent(IFxSocket* poSock, SNetEvent oEvent)
 {
-	if(m_pEventQueue->PushBack(poSock))
+	SSockNetEvent oSockEvent;
+	oSockEvent.poSock = poSock;
+	oSockEvent.oEvent = oEvent;
+	if(m_pEventQueue->PushBack(oSockEvent))
 	{
 		return true;
 	}
@@ -177,24 +180,24 @@ bool FxNetModule::Run(UINT32 dwCount)
 {
     bool bRet = true;
 
-	IFxSocket** ppSock = NULL;
+	SSockNetEvent* pEvent = NULL;
     for (UINT32 i = 0; i < dwCount; i++)
     {
-        ppSock = m_pEventQueue->PopFront();
-        if (NULL == ppSock)
+		pEvent = m_pEventQueue->PopFront();
+        if (NULL == pEvent)
         {
             bRet = false;
 			break;
         }
 
-		IFxSocket* poSock = *ppSock;
+		IFxSocket* poSock = pEvent->poSock;
         if (NULL == poSock)
         {
             bRet = false;
 			break;
         }
 
-        poSock->ProcEvent();
+        poSock->ProcEvent(pEvent->oEvent);
     }
 
 	//FxMySockMgr::Instance()->CheckDelayRelease();

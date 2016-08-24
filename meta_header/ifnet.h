@@ -63,6 +63,39 @@ enum ENetOpt
 	ENET_MAX_TOTALEVENT,		// 每个Socket的最大事件数量
 };
 
+enum ESocketState
+{
+	SSTATE_INVALID = 0,	// //
+	//SSTATE_START_LISTEN, // //
+	SSTATE_LISTEN,		// //
+	SSTATE_STOP_LISTEN,	// //
+	//SSTATE_ACCEPT,
+	SSTATE_CONNECT,		// //
+	SSTATE_ESTABLISH,	// //
+	//SSTATE_DATA,		 // //
+	SSTATE_CLOSE,		// //
+	//SSTATE_OK,
+	SSTATE_RELEASE,
+};
+
+enum ENetEvtType
+{
+	NETEVT_INVALID = 0,
+	NETEVT_ESTABLISH,
+	NETEVT_ASSOCIATE,
+	NETEVT_RECV,
+	NETEVT_CONN_ERR,
+	NETEVT_ERROR,
+	NETEVT_TERMINATE,
+	NETEVT_RELEASE,
+};
+
+struct SNetEvent
+{
+	ENetEvtType		eType;
+	UINT32			dwValue;
+};
+
 class FxSession
 {
 public:
@@ -130,7 +163,7 @@ public:
 	virtual void OnRead() = 0;
 	virtual void OnWrite() = 0;
 	virtual bool Close() = 0;
-	virtual void ProcEvent() = 0;
+	virtual void ProcEvent(SNetEvent oEvent) = 0;
 	
 	void SetSock(SOCKET hSock){ m_hSock = hSock; }
 	SOCKET& GetSock(){ return m_hSock; }
@@ -202,7 +235,7 @@ public:
 	virtual bool Listen(UINT32 dwIP, UINT16 wPort) = 0;
 	virtual bool StopListen() = 0;
 	virtual bool Close() = 0;
-	virtual void ProcEvent() = 0;
+	virtual void ProcEvent(SNetEvent oEvent) = 0;
 
 #ifdef WIN32
 	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred) = 0;		//
@@ -228,7 +261,7 @@ public:
 	virtual void OnRead() = 0;
 	virtual void OnWrite() = 0;
 	virtual bool Close() = 0;
-	virtual void ProcEvent() = 0;
+	virtual void ProcEvent(SNetEvent oEvent) = 0;
 
 	//IFxListenSocket* GetListenSocket(){ return m_pListenSocket; }
 
