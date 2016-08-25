@@ -103,10 +103,10 @@ public:
 
 	SOCKET								Connect();
 
+	bool PostClose();
 #ifdef WIN32
-	bool								PostRecv();
-	bool								PostRecvFree();
-	virtual bool						PostClose();
+	bool PostRecv();
+	bool PostRecvFree();
 
 	virtual void						OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred);		// 处理完成端口事件//
 #else

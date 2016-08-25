@@ -52,7 +52,6 @@ protected:
 	bool m_bIsStop;
 };
 
-
-IFxThreadHandler* FxCreateThreadHandler(IFxThread* poThread, bool bNeedWaitfor);
+bool FxCreateThreadHandler(IFxThread* poThread, bool bNeedWaitfor, IFxThreadHandler* & refpIFxThreadHandler);
 
 #endif // !__THREAD_H__

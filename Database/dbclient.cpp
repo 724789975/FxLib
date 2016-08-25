@@ -27,7 +27,7 @@ void FxMySqlClient::__Reset()
 
 bool FxMySqlClient::Start()
 {
-	m_poThrdHandler = FxCreateThreadHandler(this, true);
+	FxCreateThreadHandler(this, true, m_poThrdHandler);
 	if(NULL == m_poThrdHandler)
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "FxCreateThreadHandler failed");
