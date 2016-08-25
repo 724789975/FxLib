@@ -928,7 +928,7 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 		PushNetEvent(NETEVT_ERROR, NET_SEND_OVERFLOW);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "send error pDataHeader == NULL, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-		Close();
+		PostClose();
 #endif // WIN32
 		return false;
 	}
@@ -944,7 +944,7 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 		PushNetEvent(NETEVT_ERROR, NET_SEND_OVERFLOW);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "send error NET_SEND_OVERFLOW, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-		Close();
+		PostClose();
 #endif // WIN32
 		return false;
 	}
@@ -983,7 +983,7 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 		PushNetEvent(NETEVT_ERROR, NET_SEND_OVERFLOW);
 		LogFun(LT_Screen | LT_File, LogLv_Error, "false == PostSendFree(), socket : %d, socket id : %d", GetSock(), GetSockId());
 
-		Close();
+		PostClose();
 #endif // WIN32
 		return false;
 	}
@@ -1126,9 +1126,13 @@ SOCKET FxUDPConnectSock::Connect()
 	SetSock(socket(AF_INET, SOCK_DGRAM, 0));
 	if (INVALID_SOCKET == GetSock())
 	{
-		PushNetEvent(NETEVT_ERROR, errno);
-		Close();
-		return INVALID_SOCKET;
+#ifdef WIN32
+		int dwErr = WSAGetLastError();
+#else
+		int dwErr = errno;
+#endif // WIN32
+		LogFun(LT_Screen | LT_File, LogLv_Error, "create socket failed, errno %d", dwErr);
+		return INVALID_SOCKET;;
 	}
 
 #ifdef WIN32
@@ -1137,8 +1141,7 @@ SOCKET FxUDPConnectSock::Connect()
 	if ((0 != setsockopt(GetSock(), SOL_SOCKET, SO_RCVBUF, (char*)&nRecvBuffSize, sizeof(int))) &&
 		(0 != setsockopt(GetSock(), SOL_SOCKET, SO_SNDBUF, (char*)&nSendBuffSize, sizeof(int))))
 	{
-		int nError = WSAGetLastError();
-		PushNetEvent(NETEVT_ERROR, nError);
+		LogFun(LT_Screen | LT_File, LogLv_Error, "setsockopt failed, errno %d", WSAGetLastError());
 		closesocket(GetSock());
 		return INVALID_SOCKET;
 	}
@@ -1185,7 +1188,6 @@ SOCKET FxUDPConnectSock::Connect()
 		close(GetSock());
 		int dwErr = errno;
 #endif // WIN32
-		PushNetEvent(NETEVT_CONN_ERR, dwErr);
 		
 		LogFun(LT_Screen | LT_File, LogLv_Error, "socket getsockname error : %d, socket : %d, socket id %d", dwErr, GetSock(), GetSockId());
 		return INVALID_SOCKET;
@@ -1236,19 +1238,16 @@ SOCKET FxUDPConnectSock::Connect()
 		if (oUDPPacketHeader.m_cAck != 1)
 		{
 			LogFun(LT_Screen | LT_File, LogLv_Error, "ack error want : 1, recv : %d", oUDPPacketHeader.m_cAck);
-			Close();
 			return INVALID_SOCKET;
 		}
 		if (oUDPPacketHeader.m_cSyn != 1)
 		{
 			LogFun(LT_Screen | LT_File, LogLv_Error, "syn error want : 1, recv : %d", oUDPPacketHeader.m_cSyn);
-			Close();
 			return INVALID_SOCKET;
 		}
 		if (oUDPPacketHeader.m_cStatus != SSTATE_ESTABLISH)
 		{
 			LogFun(LT_Screen | LT_File, LogLv_Error, "statu error want : SSTATE_ESTABLISH, recv : %d", oUDPPacketHeader.m_cStatus);
-			Close();
 			return INVALID_SOCKET;
 		}
 
@@ -1280,13 +1279,97 @@ SOCKET FxUDPConnectSock::Connect()
 #endif // WIN32
 		return INVALID_SOCKET;
 	}
-	OnConnect();
+
+	GetConnection()->SetID(GetSockId());
+
+	SetState(SSTATE_ESTABLISH);
+	PushNetEvent(NETEVT_ESTABLISH, 0);
+
+#ifdef WIN32
+	if (connect(GetSock(), (sockaddr*)(&m_stRemoteAddr), sizeof(m_stRemoteAddr)) == SOCKET_ERROR)
+	{
+		if (WSAGetLastError() != WSA_IO_PENDING)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "connect errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+
+			return INVALID_SOCKET;
+		}
+	}
+
+	if (false == PostRecv())
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "false == PostRecv(), socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		return INVALID_SOCKET;
+	}
+#else
+	if (connect(GetSock(), (sockaddr*)(&m_stRemoteAddr), sizeof(m_stRemoteAddr)) < 0)
+	{
+		if (errno != EINPROGRESS && errno != EINTR && errno != EAGAIN)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "connect errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+
+			return INVALID_SOCKET;
+		}
+	}
+
+	INT32 nError = 0;
+	socklen_t nLen = sizeof(nError);
+	if (getsockopt(GetSock(), SOL_SOCKET, SO_ERROR, &nError, &nLen) < 0)
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "getsockopt errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+
+		return INVALID_SOCKET;
+	}
+
+	if (nError != 0)
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "getsockopt errno : %d, socket : %d, socket id : %d", nError, GetSock(), GetSockId());
+
+		return INVALID_SOCKET;
+	}
+
+	if (!m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		return INVALID_SOCKET;
+	}
+#endif // WIN32
+
 	return GetSock();
 }
 
 void FxUDPConnectSock::SetRemoteAddr(sockaddr_in& refstRemoteAddr)
 {
 	memcpy(&m_stRemoteAddr, &refstRemoteAddr, sizeof(refstRemoteAddr));
+}
+
+bool FxUDPConnectSock::PostClose()
+{
+#ifdef WIN32
+	if (false == IsConnected())
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		return false;
+	}
+
+	ZeroMemory(&m_stRecvIoData.stOverlapped, sizeof(m_stRecvIoData.stOverlapped));
+	// Post失败的时候再进入这个函数时可能会丢失一次//
+
+	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(0), (ULONG_PTR)this, &m_stRecvIoData.stOverlapped))
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "PostQueuedCompletionStatus errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+
+		return false;
+	}
+
+	return true;
+#else
+	m_poIoThreadHandler->PushDelayCloseSock(this);
+	return true;
+#endif // WIN32
 }
 
 #ifdef WIN32
@@ -1349,28 +1432,6 @@ bool FxUDPConnectSock::PostRecv()
 	return true;
 }
 
-bool FxUDPConnectSock::PostClose()
-{
-	if (false == IsConnected())
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		return false;
-	}
-
-	ZeroMemory(&m_stRecvIoData.stOverlapped, sizeof(m_stRecvIoData.stOverlapped));
-	// Post失败的时候再进入这个函数时可能会丢失一次//
-
-	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(0), (ULONG_PTR)this, &m_stRecvIoData.stOverlapped))
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "PostQueuedCompletionStatus errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
-
-		return false;
-	}
-
-	return true;
-}
-
 bool FxUDPConnectSock::PostRecvFree()
 {
 	if (false == IsConnected())
@@ -1421,68 +1482,12 @@ void FxUDPConnectSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTr
 					OnSend(bRet, dwByteTransferred);
 				}
 				break;
-				case IOCP_CONNECT:
-				{
-					if (GetState() != SSTATE_CONNECT)
-					{
-						Assert(0);
-					}
-					OnConnect();
-				}
-				break;
 				default:
 				{
 					Close();
 				}
 				break;
 			}
-		}
-		break;
-		case SSTATE_CONNECT:
-		{
-			// connect后 收到的第一条消息肯定是服务器发过来的确认
-			if (dwByteTransferred < sizeof(UDPPacketHeader))
-			{
-				LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "recv size error");
-				Close();
-				return;
-			}
-			UDPPacketHeader* pUDPPacketHeader = (UDPPacketHeader*)pSPerUDPIoData->stWsaBuf.buf;
-			if (pUDPPacketHeader->m_cAck != 1)
-			{
-				LogFun(LT_Screen | LT_File, LogLv_Error, "ack error want : 1, recv : %d", pUDPPacketHeader->m_cAck);
-				Close();
-				return;
-			}
-			if (pUDPPacketHeader->m_cSyn != 1)
-			{
-				LogFun(LT_Screen | LT_File, LogLv_Error, "syn error want : 1, recv : %d", pUDPPacketHeader->m_cSyn);
-				Close();
-				return;
-			}
-			if (pUDPPacketHeader->m_cStatus != SSTATE_ESTABLISH)
-			{
-				LogFun(LT_Screen | LT_File, LogLv_Error, "statu error want : SSTATE_ESTABLISH, recv : %d", pUDPPacketHeader->m_cStatus);
-				Close();
-				return;
-			}
-
-			//
-			// 应该先投递连接事件再关联套接口，否则可能出现第一个Recv事件先于连接事件入队列
-			//
-			if (connect(GetSock(), (sockaddr*)(&pSPerUDPIoData->stRemoteAddr), sizeof(pSPerUDPIoData->stRemoteAddr)) == SOCKET_ERROR)
-			{
-				if (WSAGetLastError() != WSA_IO_PENDING)
-				{
-					LogFun(LT_Screen | LT_File, LogLv_Error, "connect errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
-
-					Close();
-					return;
-				}
-			}
-
-			SetRemoteAddr(pSPerUDPIoData->stRemoteAddr);
-			OnConnect();
 		}
 		break;
 		default:
@@ -1843,75 +1848,6 @@ void FxUDPConnectSock::__ProcRelease()
 		SetConnection(NULL);
 	}
 	FxMySockMgr::Instance()->ReleaseUdpSock(this);
-}
-
-void FxUDPConnectSock::OnConnect()
-{
-	GetConnection()->SetID(GetSockId());
-
-	SetState(SSTATE_ESTABLISH);
-	PushNetEvent(NETEVT_ESTABLISH, 0);
-
-#ifdef WIN32
-	if (connect(GetSock(), (sockaddr*)(&m_stRemoteAddr), sizeof(m_stRemoteAddr)) == SOCKET_ERROR)
-	{
-		if (WSAGetLastError() != WSA_IO_PENDING)
-		{
-			LogFun(LT_Screen | LT_File, LogLv_Error, "connect errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
-
-			PostClose();
-			return;
-		}
-	}
-
-	if (false == PostRecv())
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "false == PostRecv(), socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
-		Close();
-	}
-#else
-	if (connect(GetSock(), (sockaddr*)(&m_stRemoteAddr), sizeof(m_stRemoteAddr)) < 0)
-	{
-		if (errno != EINPROGRESS && errno != EINTR && errno != EAGAIN)
-		{
-			LogFun(LT_Screen | LT_File, LogLv_Error, "connect errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
-
-			PushNetEvent(NETEVT_ERROR, errno);
-			Close();
-			return;
-		}
-	}
-
-	INT32 nError = 0;
-	socklen_t nLen = sizeof(nError);
-	if (getsockopt(GetSock(), SOL_SOCKET, SO_ERROR, &nError, &nLen) < 0)
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "getsockopt errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
-
-		PushNetEvent(NETEVT_CONN_ERR, errno);
-		Close();
-		return;
-	}
-
-	if (nError != 0)
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "getsockopt errno : %d, socket : %d, socket id : %d", nError, GetSock(), GetSockId());
-
-		PushNetEvent(NETEVT_CONN_ERR, nError);
-		Close();
-		return;
-	}
-
-	if (!m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		PushNetEvent(NETEVT_CONN_ERR, errno);
-		Close();
-	}
-#endif // WIN32
 }
 
 bool FxUDPConnectSock::IsValidAck(char cAck)

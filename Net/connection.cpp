@@ -103,11 +103,7 @@ void FxConnection::Close(void)
 
 	m_nConnStat = CONN_CLOSING;
 
-#ifdef WIN32
 	m_poSock->PostClose();
-#else
-	m_poSock->Close();
-#endif //WIN32
 }
 
 void FxConnection::OnConnect()

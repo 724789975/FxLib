@@ -110,10 +110,10 @@ public:
 	SOCKET Connect();
 
 	void SetRemoteAddr(sockaddr_in& refstRemoteAddr);
+	virtual bool PostClose();
 #ifdef WIN32
 	bool PostRecv();
 	bool PostRecvFree();
-	virtual bool PostClose();
 
 	virtual void OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred);		// 处理完成端口事件//
 #else
@@ -135,7 +135,6 @@ private:
 	void	__ProcRecvPackageError(UINT32 dwLen);
 	void	__ProcRelease();
 private:
-	void OnConnect();
 
 	bool IsValidAck(char cAck);
 #ifdef WIN32
