@@ -63,6 +63,7 @@ bool FxIoThread::Init(UINT32 dwMaxSock)
 	{
 		return false;
 	}
+	m_oDelayCloseSockQueue.Init(2 * dwMaxSock);
 #endif // WIN32
 	if (!Start())
 	{
@@ -253,6 +254,22 @@ bool FxIoThread::__DealEpollData()
 		poSock->OnParserIoEvent((FALSE != bRet), pstPerIoData, dwByteTransferred);
 	}
 #else
+	while (true);
+	{
+		IFxSocket** ppSock = m_oDelayCloseSockQueue.PopFront();
+		if (ppSock == NULL)
+		{
+			break;
+		}
+
+		IFxSocket* poSock = *ppSock;
+		if (poSock == NULL)
+		{
+			break;
+		}
+		poSock->Close();
+	}
+
 	INT32 nCount = WaitEvents(1);
 	if (nCount < 0)
 	{
@@ -292,7 +309,7 @@ void FxIoThread::Stop()
 
 bool FxIoThread::Start()
 {
-	m_poThrdHandler = FxCreateThreadHandler(this, true);
+	FxCreateThreadHandler(this, true, m_poThrdHandler);
 	if (NULL == m_poThrdHandler)
 	{
 		return false;
@@ -342,6 +359,15 @@ epoll_event* FxIoThread::GetEvent(int nIndex)
 	}
 
 	return &m_pEvents[nIndex];
+}
+
+
+void FxIoThread::PushDelayCloseSock(IFxSocket* poSock)
+{
+	while (!m_oDelayCloseSockQueue.PushBack(poSock))
+	{
+		FxSleep(10);
+	}
 }
 
 #endif // WIN32

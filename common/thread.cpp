@@ -191,22 +191,21 @@ protected:
 	IFxThread* m_pThread;
 };
 
-IFxThreadHandler*
-FxCreateThreadHandler(IFxThread* poThread, bool bNeedWaitfor)
+bool FxCreateThreadHandler(IFxThread* poThread, bool bNeedWaitfor, IFxThreadHandler* & refpIFxThreadHandler)
 {
 	FxThreadHandler *pThreadCtrl = new FxThreadHandler(poThread, bNeedWaitfor);
+	refpIFxThreadHandler = pThreadCtrl;
 	if (NULL == pThreadCtrl)
 	{
-		return NULL;
+		return false;
 	}
 
 	if (false == pThreadCtrl->Start())
 	{
 		delete pThreadCtrl;
-		return NULL;
+		refpIFxThreadHandler = NULL;
+		return false;
 	}
-
-	return pThreadCtrl;
+	return true;
 }
-
 

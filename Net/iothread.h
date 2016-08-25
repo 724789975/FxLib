@@ -40,9 +40,8 @@ public:
 	int						GetHandle();
 	int						WaitEvents(int nMilliSecond);
 	epoll_event*			GetEvent(int nIndex);
+	void					PushDelayCloseSock(IFxSocket* poSock);
 #endif // WIN32
-		
-
 
 private:
 	void					 __DealEpollSock();
@@ -59,6 +58,7 @@ protected:
 #else
 	int						m_hEpoll;
 	epoll_event*			m_pEvents;
+	TEventQueue<IFxSocket*>	m_oDelayCloseSockQueue;
 #endif // WIN32
 
 };

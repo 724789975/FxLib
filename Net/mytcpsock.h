@@ -126,9 +126,9 @@ public:
 
 	SOCKET Connect();
 
+	bool PostClose();
 #ifdef WIN32
 	bool PostRecv();
-	bool PostClose();
 	bool PostRecvFree();
 
 	virtual void OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred);		// 处理完成端口事件//

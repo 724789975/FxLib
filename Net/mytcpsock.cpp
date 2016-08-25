@@ -1764,6 +1764,32 @@ void FxTCPConnectSock::OnConnect()
 
 }
 
+bool FxTCPConnectSock::PostClose()
+{
+#ifdef WIN32
+	if (false == IsConnected())
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		return false;
+	}
+
+	ZeroMemory(&m_stRecvIoData.stOverlapped, sizeof(m_stRecvIoData.stOverlapped));
+	// Post失败的时候再进入这个函数时可能会丢失一次//
+
+	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(0), (ULONG_PTR)this, &m_stRecvIoData.stOverlapped))
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "PostQueuedCompletionStatus errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+
+		return false;
+	}
+
+	return true;
+#else
+	return false;
+#endif // WIN32
+}
+
 #ifdef WIN32
 void FxTCPConnectSock::OnParserIoEvent(bool bRet, SPerIoData* pIoData, UINT32 dwByteTransferred)
 {
@@ -2119,28 +2145,6 @@ bool FxTCPConnectSock::PostRecv()
 			InterlockedCompareExchange(&m_nPostRecv, 0, 1);
 			return false;
 		}
-	}
-
-	return true;
-}
-
-bool FxTCPConnectSock::PostClose()
-{
-	if (false == IsConnected())
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		return false;
-	}
-
-	ZeroMemory(&m_stRecvIoData.stOverlapped, sizeof(m_stRecvIoData.stOverlapped));
-	// Post失败的时候再进入这个函数时可能会丢失一次//
-
-	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(0), (ULONG_PTR)this, &m_stRecvIoData.stOverlapped))
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "PostQueuedCompletionStatus errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
-
-		return false;
 	}
 
 	return true;

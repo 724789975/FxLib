@@ -140,7 +140,7 @@ void LogThread::Stop()
 
 bool LogThread::Start()
 {
-	m_poThrdHandler = FxCreateThreadHandler(this, true);
+	FxCreateThreadHandler(this, true, m_poThrdHandler);
 	if (NULL == m_poThrdHandler)
 	{
 		printf("%s", "FxCreateThreadHandler failed");
