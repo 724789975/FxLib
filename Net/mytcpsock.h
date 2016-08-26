@@ -103,7 +103,7 @@ public:
 
 	SOCKET								Connect();
 
-	bool PostClose();
+	virtual bool PostClose();
 #ifdef WIN32
 	bool PostRecv();
 	bool PostRecvFree();
