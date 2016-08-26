@@ -1155,7 +1155,11 @@ SOCKET FxUDPConnectSock::Connect()
 	if (NULL == m_poIoThreadHandler)
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "SetIoThread failed");
+#ifdef WIN32
 		closesocket(GetSock());
+#else
+		close(GetSock());
+#endif // WIN32
 		return INVALID_SOCKET;
 	}
 
