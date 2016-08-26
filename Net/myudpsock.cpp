@@ -1132,7 +1132,7 @@ SOCKET FxUDPConnectSock::Connect()
 		int dwErr = errno;
 #endif // WIN32
 		LogFun(LT_Screen | LT_File, LogLv_Error, "create socket failed, errno %d", dwErr);
-		return INVALID_SOCKET;;
+		return INVALID_SOCKET;
 	}
 
 #ifdef WIN32
@@ -1154,8 +1154,8 @@ SOCKET FxUDPConnectSock::Connect()
 	SetIoThread(FxNetModule::Instance()->FetchIoThread(GetSockId()));
 	if (NULL == m_poIoThreadHandler)
 	{
-		PushNetEvent(NETEVT_ERROR, 0);
-		Close();
+		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "SetIoThread failed");
+		closesocket(GetSock());
 		return INVALID_SOCKET;
 	}
 
@@ -1298,7 +1298,7 @@ SOCKET FxUDPConnectSock::Connect()
 
 	if (false == PostRecv())
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "false == PostRecv(), socket : %d, socket id : %d", GetSock(), GetSockId());
+		LogFun(LT_Screen | LT_File, LogLv_Error, "false == PostRecv(), socket : %d, socket id : %d, errno : %d", GetSock(), GetSockId(), WSAGetLastError());
 
 		return INVALID_SOCKET;
 	}
