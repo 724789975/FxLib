@@ -288,8 +288,8 @@ public:
 	virtual bool					IsConnected() = 0;
 	virtual IFxDataHeader*			GetDataHeader() = 0;
 
-#ifdef WIN32
 	virtual bool					PostClose() = 0;
+#ifdef WIN32
 	virtual void					OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred) = 0;		//
 #else
 	virtual void					OnParserIoEvent(int dwEvents) = 0;		//

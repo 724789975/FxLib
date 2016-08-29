@@ -254,7 +254,7 @@ bool FxIoThread::__DealEpollData()
 		poSock->OnParserIoEvent((FALSE != bRet), pstPerIoData, dwByteTransferred);
 	}
 #else
-	while (true);
+	while (true)
 	{
 		IFxSocket** ppSock = m_oDelayCloseSockQueue.PopFront();
 		if (ppSock == NULL)
