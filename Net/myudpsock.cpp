@@ -1692,6 +1692,10 @@ bool FxUDPConnectSock::PostSendFree()
 		return false;
 	}
 
+	if (m_poSendBuf->GetFreeLen() < 32 * 1024)
+	{
+		return true;
+	}
 	return m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLOUT | EPOLLIN, this);
 
 	return true;

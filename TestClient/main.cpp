@@ -118,7 +118,7 @@ int main(int argc, char **argv)
 				}
 			}
 		}
-		FxSleep(1);
+		FxSleep(10);
 		++j;
 	}
 	for (int i = 0; i < CLIENTCOUNT; ++i)
