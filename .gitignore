@@ -94,3 +94,9 @@ Release/LuaTest.iobj
 /TestClient/TestClient.vcxproj.filters
 /Net/x64/Debug/Net.log
 /Net/x64/Debug/Net.Build.CppClean.log
+
+.vscode/*
+
+
+
+
