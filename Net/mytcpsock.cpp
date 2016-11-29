@@ -1874,12 +1874,6 @@ void FxTCPConnectSock::OnRecv(bool bRet, int dwBytes)
 	int nLen = int(dwBytes);
 	if (m_poRecvBuf->CostBuff(nLen))
 	{
-		//LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->CostBuff error");
-		//
-		//InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-		//m_dwLastError = NET_RECVBUFF_ERROR;
-		//PostClose();
-		//return;
 	}
 
 	char *pUseBuf = NULL;
