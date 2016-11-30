@@ -90,6 +90,14 @@ enum ENetEvtType
 	NETEVT_RELEASE,
 };
 
+enum ESocketType
+{
+	SLT_None = 0,
+	SLT_CommonTcp,
+	SLT_WebSocket,
+	SLT_Udp,
+};
+
 #ifdef WIN32
 enum EIocpOperation
 {
@@ -310,10 +318,9 @@ public:
 	virtual void					Release() = 0;
 
 	virtual SOCKET					TcpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect = false) = 0;
-	virtual IFxListenSocket*		TcpListen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort) = 0;
+	virtual IFxListenSocket*		Listen(IFxSessionFactory* pSessionFactory, ESocketType eSocketListenType, UINT32 dwIP, UINT16 dwPort) = 0;
 
 	virtual SOCKET					UdpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect = false) = 0;
-	virtual IFxListenSocket*		UdpListen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort) = 0;
 
 private:
 

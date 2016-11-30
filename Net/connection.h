@@ -5,13 +5,6 @@
 
 class FxTCPConnectSock;
 
-enum ESockType
-{
-	SOCKTYPE_NONE = 0,
-	SOCKTYPE_TCP = 1,
-	SOCKTYPE_UDP = 2,
-};
-
 class FxConnection
 {
 	enum EConnStat
@@ -45,7 +38,7 @@ public:
 	void						SetSock(IFxConnectSocket* poSock);
 	void						SetSession(FxSession* poSession){ m_poSession = poSession; }
 	void						SetReconnect(bool bReconnect);
-	void						SetSockType(ESockType eType)	{ m_eSockType = eType; }
+	void						SetSockType(ESocketType eType)	{ m_eSockType = eType; }
 	bool						SetConnectionOpt(ESessionOpt eOpt, bool bSetting);
 
 	void						Reset();
@@ -78,7 +71,7 @@ private:
 	char						m_szRemoteIP[16];
 	IFxConnectSocket*			m_poSock;
 	FxSession*					m_poSession;
-	ESockType					m_eSockType;
+	ESocketType					m_eSockType;
 };
 
 #endif	// __CONNECTION_H__

@@ -440,7 +440,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 
 			closesocket(hSock);
 			PostAccept(*pstPerIoData);
-			FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
+			FxMySockMgr::Instance()->Release(poSock);
 			return;
 		}
 
@@ -451,14 +451,14 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 
 			closesocket(hSock);
 			PostAccept(*pstPerIoData);
-			FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
+			FxMySockMgr::Instance()->Release(poSock);
 			return;
 		}
 
 		poSock->SetSock(hSock);
 		poSock->SetConnection(poConnection);
 
-		poConnection->SetSockType(SOCKTYPE_UDP);
+		poConnection->SetSockType(SLT_Udp);
 		poConnection->SetSock(poSock);
 		poConnection->SetID(poSock->GetSockId());
 
@@ -472,7 +472,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 
 			closesocket(hSock);
 			PostAccept(*pstPerIoData);
-			FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
+			FxMySockMgr::Instance()->Release(poSock);
 			FxConnectionMgr::Instance()->Release(poConnection);
 			return;
 		}
@@ -515,7 +515,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 
 			closesocket(hSock);
 			PostAccept(*pstPerIoData);
-			FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
+			FxMySockMgr::Instance()->Release(poSock);
 			FxConnectionMgr::Instance()->Release(poConnection);
 			return;
 		}
@@ -606,7 +606,7 @@ void FxUDPListenSock::OnAccept()
 		LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, get iothread failed");
 
 		close(hAcceptSock);
-		FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
+		FxMySockMgr::Instance()->Release(poSock);
 		return;
 	}
 
@@ -616,14 +616,14 @@ void FxUDPListenSock::OnAccept()
 		LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, create Connection failed");
 
 		close(hAcceptSock);
-		FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
+		FxMySockMgr::Instance()->Release(poSock);
 		return;
 	}
 
 	poSock->SetSock(hAcceptSock);
 	poSock->SetConnection(poConnection);
 
-	poConnection->SetSockType(SOCKTYPE_UDP);
+	poConnection->SetSockType(SLT_Udp);
 	poConnection->SetSock(poSock);
 	poConnection->SetID(poSock->GetSockId());
 
@@ -636,7 +636,7 @@ void FxUDPListenSock::OnAccept()
 		LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, CreateSession failed");
 
 		close(hAcceptSock);
-		FxMySockMgr::Instance()->ReleaseUdpSock(poSock);
+		FxMySockMgr::Instance()->Release(poSock);
 		FxConnectionMgr::Instance()->Release(poConnection);
 		return;
 	}
@@ -1855,7 +1855,7 @@ void FxUDPConnectSock::__ProcRelease()
 
 		SetConnection(NULL);
 	}
-	FxMySockMgr::Instance()->ReleaseUdpSock(this);
+	FxMySockMgr::Instance()->Release(this);
 }
 
 bool FxUDPConnectSock::IsValidAck(char cAck)

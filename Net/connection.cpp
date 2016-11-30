@@ -7,7 +7,7 @@
 FxConnection::FxConnection():
 	m_poSock(NULL),
 	m_poSession(NULL),
-	m_eSockType(SOCKTYPE_NONE)
+	m_eSockType(SLT_None)
 {
 	Reset();
 }
@@ -175,12 +175,12 @@ void FxConnection::OnRecv(UINT32 dwLen)
 	unsigned int dwHeaderLen = m_poSock->GetDataHeader()->GetHeaderLength();
 	switch (m_eSockType)
 	{
-		case SOCKTYPE_TCP:
+		case SLT_CommonTcp:
 		{
 			m_poSession->OnRecv(m_poSession->GetRecvBuf() + dwHeaderLen, dwLen - dwHeaderLen);
 		}
 		break;
-		case SOCKTYPE_UDP:
+		case SLT_Udp:
 		{
 			m_poSession->OnRecv(m_poSession->GetRecvBuf() + dwHeaderLen + sizeof(UDPPacketHeader), dwLen - dwHeaderLen - sizeof(UDPPacketHeader));
 		}
@@ -256,17 +256,17 @@ SOCKET FxConnection::Reconnect()
 		IFxConnectSocket* poSock = NULL;
 		switch (m_eSockType)
 		{
-		case SOCKTYPE_NONE:
+		case SLT_None:
 		{
 			Assert(0);
 		}
 			break;
-		case SOCKTYPE_TCP:
+		case SLT_CommonTcp:
 		{
-			poSock = FxMySockMgr::Instance()->CreateTcpSock();
+			poSock = FxMySockMgr::Instance()->CreateCommonTcp();
 		}
 			break;
-		case SOCKTYPE_UDP:
+		case SLT_Udp:
 		{
 			poSock = FxMySockMgr::Instance()->CreateUdpSock();
 		}

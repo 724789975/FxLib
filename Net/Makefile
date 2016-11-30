@@ -26,7 +26,7 @@ ARFLAGS			= -rc
 #==========================================================
 #  Commands
 CODE_DIR = ./
-INCLUDE_DIR =./ ../meta_header/
+INCLUDE_DIR =./ ../meta_header/ ../lua ../tolua
 LIB_FILE = -lpthread
 OUTPUT_DIR =../Debug
 OUTPUT = libNet.a

@@ -34,7 +34,7 @@ void FxMySockMgr::Uninit()
 //     closesocket(hSock);
 }
 
-FxTCPConnectSock* FxMySockMgr::CreateTcpSock()
+FxTCPConnectSock* FxMySockMgr::CreateCommonTcp()
 {
 	FxTCPConnectSock* poSock = m_oTCPSockPool.FetchObj();
     if (NULL == poSock)
@@ -44,7 +44,7 @@ FxTCPConnectSock* FxMySockMgr::CreateTcpSock()
 
 	if (!poSock->Init())
 	{
-		ReleaseTcpSock(poSock);
+		Release(poSock);
         return NULL;
 	}
 
@@ -55,29 +55,67 @@ FxTCPConnectSock* FxMySockMgr::CreateTcpSock()
     return poSock;
 }
 
-FxTCPListenSock* FxMySockMgr::CreateTcpSock(UINT32 dwListenId, IFxSessionFactory* pSessionFactory)
+FxWebSocketConnect* FxMySockMgr::CreateWebSocket()
 {
-	if (m_mapTcpListenSocks.find(dwListenId) != m_mapTcpListenSocks.end())
-	{
-		return &m_mapTcpListenSocks[dwListenId];
-	}
+	FxWebSocketConnect* poSock = m_oWebSockPool.FetchObj();
 
-	//这里的拷贝构造有问题~~~~//
-//	m_mapListenSocks[dwListenId] = FxListenSock();
-	if (!m_mapTcpListenSocks[dwListenId].IFxListenSocket::Init(pSessionFactory))
+	if (NULL == poSock)
 	{
-		m_mapTcpListenSocks.erase(dwListenId);
 		return NULL;
 	}
+	if (!poSock->Init())
+	{
+		Release(poSock);
+		return NULL;
+	}
+	poSock->SetState(SSTATE_INVALID);
+	poSock->SetSock(INVALID_SOCKET);
+	poSock->SetSockId(m_dwNextId++);
 
-	m_mapTcpListenSocks[dwListenId].SetState(SSTATE_INVALID);
-	m_mapTcpListenSocks[dwListenId].SetSock(INVALID_SOCKET);
-	m_mapTcpListenSocks[dwListenId].SetSockId(m_dwNextId++);
-
-	return &m_mapTcpListenSocks[dwListenId];
+	return poSock;
 }
 
-void FxMySockMgr::ReleaseTcpSock(FxTCPConnectSock* poSock)
+FxTCPListenSock* FxMySockMgr::CreateCommonTcpListen(UINT32 dwPort, IFxSessionFactory* pSessionFactory)
+{
+	static std::map<UINT32, FxTCPListenSock> s_mapListenSocks;
+	if (m_mapListenSocks.find(dwPort) != m_mapListenSocks.end())
+	{
+		return NULL;
+	}
+	if (!s_mapListenSocks[dwPort].IFxListenSocket::Init(pSessionFactory))
+	{
+		s_mapListenSocks.erase(dwPort);
+		return NULL;
+	}
+	m_mapListenSocks[dwPort] = &s_mapListenSocks[dwPort];
+
+	s_mapListenSocks[dwPort].SetState(SSTATE_INVALID);
+	s_mapListenSocks[dwPort].SetSock(INVALID_SOCKET);
+	s_mapListenSocks[dwPort].SetSockId(m_dwNextId++);
+	return &s_mapListenSocks[dwPort];
+}
+
+FxWebSocketListen* FxMySockMgr::CreateWebSocketListen(UINT32 dwPort, IFxSessionFactory* pSessionFactory)
+{
+	static std::map<UINT32, FxWebSocketListen> s_mapListenSocks;
+	if (m_mapListenSocks.find(dwPort) != m_mapListenSocks.end())
+	{
+		return NULL;
+	}
+	if (!s_mapListenSocks[dwPort].IFxListenSocket::Init(pSessionFactory))
+	{
+		s_mapListenSocks.erase(dwPort);
+		return NULL;
+	}
+	m_mapListenSocks[dwPort] = &s_mapListenSocks[dwPort];
+
+	s_mapListenSocks[dwPort].SetState(SSTATE_INVALID);
+	s_mapListenSocks[dwPort].SetSock(INVALID_SOCKET);
+	s_mapListenSocks[dwPort].SetSockId(m_dwNextId++);
+	return &s_mapListenSocks[dwPort];
+}
+
+void FxMySockMgr::Release(FxTCPConnectSock* poSock)
 {
 	if(NULL == poSock)
     {
@@ -87,14 +125,14 @@ void FxMySockMgr::ReleaseTcpSock(FxTCPConnectSock* poSock)
     m_oTCPSockPool.ReleaseObj(poSock);
 }
 
-void FxMySockMgr::ReleaseTcpSock(UINT32 dwListenId)
+void FxMySockMgr::Release(FxWebSocketConnect* poSock)
 {
-	if (m_mapTcpListenSocks.find(dwListenId) == m_mapTcpListenSocks.end())
+	if (NULL == poSock)
 	{
 		return;
 	}
-
-	m_mapTcpListenSocks.erase(dwListenId);
+	poSock->Reset();
+	m_oWebSockPool.ReleaseObj(poSock);
 }
 
 FxUDPConnectSock * FxMySockMgr::CreateUdpSock()
@@ -107,7 +145,7 @@ FxUDPConnectSock * FxMySockMgr::CreateUdpSock()
 
 	if (!poSock->Init())
 	{
-		ReleaseUdpSock(poSock);
+		Release(poSock);
         return NULL;
 	}
 
@@ -118,27 +156,27 @@ FxUDPConnectSock * FxMySockMgr::CreateUdpSock()
     return poSock;
 }
 
-FxUDPListenSock* FxMySockMgr::CreateUdpSock(UINT32 dwListenId, IFxSessionFactory* pSessionFactory)
+FxUDPListenSock* FxMySockMgr::CreateUdpSockListen(UINT32 dwPort, IFxSessionFactory* pSessionFactory)
 {
-	if (m_mapUdpListenSocks.find(dwListenId) != m_mapUdpListenSocks.end())
+	static std::map<UINT32, FxUDPListenSock> s_mapListenSocks;
+	if (m_mapListenSocks.find(dwPort) != m_mapListenSocks.end())
 	{
-		return &m_mapUdpListenSocks[dwListenId];
-	}
-
-	if (!m_mapUdpListenSocks[dwListenId].IFxListenSocket::Init(pSessionFactory))
-	{
-		m_mapUdpListenSocks.erase(dwListenId);
 		return NULL;
 	}
+	if (!s_mapListenSocks[dwPort].IFxListenSocket::Init(pSessionFactory))
+	{
+		s_mapListenSocks.erase(dwPort);
+		return NULL;
+	}
+	m_mapListenSocks[dwPort] = &s_mapListenSocks[dwPort];
 
-	m_mapUdpListenSocks[dwListenId].SetState(SSTATE_INVALID);
-	m_mapUdpListenSocks[dwListenId].SetSock(INVALID_SOCKET);
-	m_mapUdpListenSocks[dwListenId].SetSockId(m_dwNextId++);
-
-	return &m_mapUdpListenSocks[dwListenId];
+	s_mapListenSocks[dwPort].SetState(SSTATE_INVALID);
+	s_mapListenSocks[dwPort].SetSock(INVALID_SOCKET);
+	s_mapListenSocks[dwPort].SetSockId(m_dwNextId++);
+	return &s_mapListenSocks[dwPort];
 }
 
-void FxMySockMgr::ReleaseUdpSock(FxUDPConnectSock* poSock)
+void FxMySockMgr::Release(FxUDPConnectSock* poSock)
 {
 	if(NULL == poSock)
     {
@@ -146,15 +184,5 @@ void FxMySockMgr::ReleaseUdpSock(FxUDPConnectSock* poSock)
     }
     poSock->Reset();
     m_oUDPSockPool.ReleaseObj(poSock);
-}
-
-void FxMySockMgr::ReleaseUdpSock(UINT32 dwListenId)
-{
-	if (m_mapUdpListenSocks.find(dwListenId) == m_mapUdpListenSocks.end())
-	{
-		return;
-	}
-
-	m_mapUdpListenSocks.erase(dwListenId);
 }
 

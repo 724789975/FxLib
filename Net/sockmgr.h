@@ -19,24 +19,25 @@ public:
 	bool								Init(INT32 nMax);
 	void								Uninit();
 
-	FxTCPConnectSock *					CreateTcpSock();
-	FxTCPListenSock*					CreateTcpSock(UINT32 dwListenId, IFxSessionFactory* pSessionFactory);
-	void								ReleaseTcpSock(FxTCPConnectSock* poSock);
-	void								ReleaseTcpSock(UINT32 dwListenId);
+	FxTCPConnectSock *					CreateCommonTcp();
+	FxWebSocketConnect*					CreateWebSocket();
+	FxTCPListenSock*					CreateCommonTcpListen(UINT32 dwPort, IFxSessionFactory* pSessionFactory);
+	FxWebSocketListen*					CreateWebSocketListen(UINT32 dwPort, IFxSessionFactory* pSessionFactory);
+	void								Release(FxTCPConnectSock* poSock);
+	void								Release(FxWebSocketConnect* poSock);
 
 	FxUDPConnectSock *					CreateUdpSock();
-	FxUDPListenSock*					CreateUdpSock(UINT32 dwListenId, IFxSessionFactory* pSessionFactory);
-	void								ReleaseUdpSock(FxUDPConnectSock* poSock);
-	void								ReleaseUdpSock(UINT32 dwListenId);
+	FxUDPListenSock*					CreateUdpSockListen(UINT32 dwPort, IFxSessionFactory* pSessionFactory);
+	void								Release(FxUDPConnectSock* poSock);
 
 protected:
 	UINT32								m_dwNextId;
 
 	TDynamicPoolEx<FxTCPConnectSock>	m_oTCPSockPool;
-	std::map<UINT32, FxTCPListenSock>	m_mapTcpListenSocks;
+	TDynamicPoolEx<FxWebSocketConnect>	m_oWebSockPool;
 
 	TDynamicPoolEx<FxUDPConnectSock>	m_oUDPSockPool;
-	std::map<UINT32, FxUDPListenSock>	m_mapUdpListenSocks;
+	std::map<UINT32, IFxListenSocket*>	m_mapListenSocks;
 };
 
 #endif	// __CPSOCKMGR_H__

@@ -10,8 +10,6 @@ public:
 	bool				Run(UINT32 dwCount);
 	void				Release();
 
-	SOCKET				TcpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect);
-	IFxListenSocket*	TcpListen(IFxSessionFactory* pSessionFactory, UINT32 dwListenId, UINT32 dwIP, UINT16 dwPort);
 };
 
 IFxNet* FxNetGetModule();
