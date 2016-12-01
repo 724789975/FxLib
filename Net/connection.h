@@ -10,6 +10,7 @@ class FxConnection
 	enum EConnStat
 	{
 		CONN_NONE = 0,
+		CONN_CONN,
 		CONN_OK,
 		CONN_ASSOCIATE,
 		CONN_CLOSING,

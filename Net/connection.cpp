@@ -51,7 +51,7 @@ bool FxConnection::IsConnected(void)
 
 bool FxConnection::IsConnecting(void)
 {
-	return (CONN_ASSOCIATE == m_nConnStat || CONN_NONE == m_nConnStat);
+	return (CONN_ASSOCIATE == m_nConnStat ||  CONN_CONN== m_nConnStat);
 }
 
 void FxConnection::SetRemoteIP(UINT32 dwIP)
@@ -125,7 +125,7 @@ void FxConnection::OnConnect()
 
 void FxConnection::OnAssociate()
 {
-	if (CONN_NONE != m_nConnStat)
+	if (CONN_NONE != m_nConnStat && CONN_CONN != m_nConnStat)
 	{
 		return;
 	}
@@ -248,11 +248,13 @@ SOCKET FxConnection::Reconnect()
 {
 	if (m_poSock)
 	{
+		m_nConnStat = CONN_CLOSING;
 		m_poSock->Close();
 		return INVALID_SOCKET;
 	}
 	else
 	{
+		m_nConnStat = CONN_CONN;
 		IFxConnectSocket* poSock = NULL;
 		switch (m_eSockType)
 		{
@@ -284,7 +286,12 @@ SOCKET FxConnection::Reconnect()
 		poSock->SetConnection(this);
 		SetSock(poSock);
 		SetID(poSock->GetSockId());
-		return poSock->Connect();
+		SOCKET dwSock = poSock->Connect();
+		if (dwSock == INVALID_SOCKET)
+		{
+			m_nConnStat = CONN_CONN;
+		}
+		return dwSock;
 	}
 }
 
