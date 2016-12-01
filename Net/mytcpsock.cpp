@@ -2757,9 +2757,9 @@ void FxWebSocketConnect::__ProcRecv(UINT32 dwLen)
 				"Connection : Upgrade\r\n"
 				"Upgrade: websocket\r\n"
 				"Server: %s\r\n"
-				"Sec - WebSocket - Accept: %s\r\n"
+				"Sec-WebSocket-Accept: %s\r\n"
 				"\r\n\r\n",
-				GetExeName();
+				GetExeName(),
 				CLuaEngine::Instance()->CallStringFunction("ResponseKey", m_szWebInfo)
 			);
 			if (m_poSendBuf->IsEmpty())
@@ -2786,6 +2786,7 @@ void FxWebSocketConnect::__ProcRecv(UINT32 dwLen)
 #endif // WIN32
 				return;
 			}
+			m_eWebSocketHandShakeState = WSHSS_Connected;
 			return;
 		}
 		m_poConnection->OnRecv(dwLen);
@@ -2922,93 +2923,79 @@ void FxWebSocketConnect::OnRecv()
 {
 	if (m_eWebSocketHandShakeState == WSHSS_Request)
 	{
-		if (0 == dwBytes)
+		if (false == IsConnected())
 		{
-			InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+			LogFun(LT_Screen | LT_File, LogLv_Error, "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
+
+			return;
+		}
+
+		if (m_poRecvBuf->IsEmpty())
+		{
+			m_poRecvBuf->Clear();
+		}
+
+		char* pRecvBuff = NULL;
+		int nLen = m_poRecvBuf->GetInCursorPtr(pRecvBuff);
+		if (0 >= nLen)
+		{
+			//LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetInCursorPtr() = %d, socket : %d, socket id : %d", nLen, GetSock(), GetSockId());
+			return;
+		}
+
+		nLen = VAL_SO_SNDLOWAT < nLen ? VAL_SO_SNDLOWAT : nLen;
+
+		nLen = recv(GetSock(), pRecvBuff, nLen, 0);
+
+		if (0 > nLen)
+		{
+			if ((errno != EAGAIN) && (errno != EINPROGRESS) && (errno != EINTR))
+			{
+				LogFun(LT_Screen | LT_File, LogLv_Error, "recv errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+
+				PushNetEvent(NETEVT_ERROR, errno);
+				Close();
+				return;
+			}
+			return;
+		}
+		else if (0 == nLen)
+		{
 			Close();
 			return;
 		}
-
-		if (UINT32(-1) == dwBytes)
+		else
 		{
-			InterlockedCompareExchange(&m_nPostRecv, m_nPostRecv - 1, m_nPostRecv);
-			if (0 == m_nPostRecv)
+			int nUsedLen = 0;
+			int nParserLen = 0;
+			m_poRecvBuf->CostBuff(nLen);
+
+			char *pUseBuf = NULL;
+			nLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
+			if (nLen <= 0)
 			{
-				if (false == PostRecv())
-				{
-					PushNetEvent(NETEVT_ERROR, WSAGetLastError());
-					Close();
-				}
+				LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetUsedCursorPtr() <= 0, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+				PushNetEvent(NETEVT_ERROR, NET_RECVBUFF_ERROR);
+				Close();
+				return;
 			}
-			return;
-		}
-
-		if (false == bRet)
-		{
-			LogFun(LT_Screen | LT_File, LogLv_Error, "false == bRet errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
-
-			InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-			m_dwLastError = WSAGetLastError();
-			PostClose();
-			return;
-		}
-
-		if (!IsConnected())
-		{
-			InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-			return;
-		}
-
-		int nUsedLen = 0;
-		int nParserLen = 0;
-		int nLen = int(dwBytes);
-		if (m_poRecvBuf->CostBuff(nLen))
-		{
-		}
-
-		char *pUseBuf = NULL;
-		nLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
-		if (nLen <= 0)
-		{
-			LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetUsedCursorPtr <= 0, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-			InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-			m_dwLastError = NET_RECVBUFF_ERROR;
-			PostClose();
-			return;
-		}
-		if (nLen <= 4)
-		{
-			InterlockedCompareExchange(&m_nPostRecv, m_nPostRecv - 1, m_nPostRecv);
-			if (0 == m_nPostRecv)
+			if (nLen <= 4)
 			{
-				if (false == PostRecv())
-				{
-					PushNetEvent(NETEVT_ERROR, WSAGetLastError());
-					Close();
-				}
+				m_poRecvBuf->CostUsedBuff(nLen);
+				return;
 			}
-			return;
-		}
-		//判断pUseBuf 最后四位是不是"\r\n\r\n" 就可以了
-		if (strncmp(pUseBuf + nLen - 4, "\r\n\r\n", 4) != 0)
-		{
-			InterlockedCompareExchange(&m_nPostRecv, m_nPostRecv - 1, m_nPostRecv);
-			if (0 == m_nPostRecv)
+			if (strncmp(pUseBuf + nLen - 4, "\r\n\r\n", 4) != 0)
 			{
-				if (false == PostRecv())
-				{
-					PushNetEvent(NETEVT_ERROR, WSAGetLastError());
-					Close();
-				}
+				m_poRecvBuf->CostUsedBuff(nLen);
+				return;
 			}
-			return;
+
+			m_eWebSocketHandShakeState = WSHSS_Response;
+			memcpy(m_szWebInfo, pUseBuf, nLen);
+			PushNetEvent(NETEVT_RECV, nLen);
+			m_poRecvBuf->CostUsedBuff(nLen);
 		}
-		m_eWebSocketHandShakeState = WSHSS_Response;
-		memcpy(m_szWebInfo, pUseBuf, nLen);
-		PushNetEvent(NETEVT_RECV, nLen);
-		m_poRecvBuf->CostUsedBuff(nLen);
-		return;
 	}
 
 	FxTCPConnectSockBase::OnRecv();

@@ -19,6 +19,10 @@ bool FxMySockMgr::Init(INT32 nMax)
     {
         return false;
     }
+	if (!m_oWebSockPool.Init(nMax, nMax / 2, false, MAX_SOCKET_COUNT))
+	{
+		return false;
+	}
     if (!m_oUDPSockPool.Init(nMax, nMax / 2, false, MAX_SOCKET_COUNT))
     {
         return false;
