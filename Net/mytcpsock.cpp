@@ -2786,6 +2786,7 @@ void FxWebSocketConnect::__ProcRecv(UINT32 dwLen)
 #endif // WIN32
 				return;
 			}
+			return;
 		}
 		m_poConnection->OnRecv(dwLen);
 	}
