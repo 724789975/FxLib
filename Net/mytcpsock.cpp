@@ -2901,6 +2901,17 @@ void FxWebSocketConnect::OnRecv(bool bRet, int dwBytes)
 		memcpy(m_szWebInfo, pUseBuf, nLen);
 		PushNetEvent(NETEVT_RECV, nLen);
 		m_poRecvBuf->CostUsedBuff(nLen);
+		
+		InterlockedCompareExchange(&m_nPostRecv, m_nPostRecv - 1, m_nPostRecv);
+		if (0 == m_nPostRecv)
+		{
+			if (false == PostRecv())
+			{
+				PushNetEvent(NETEVT_ERROR, WSAGetLastError());
+				Close();
+			}
+		}
+		
 		return;
 	}
 
