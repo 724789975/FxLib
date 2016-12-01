@@ -2756,8 +2756,10 @@ void FxWebSocketConnect::__ProcRecv(UINT32 dwLen)
 			sprintf(szResponse, "HTTP/1.1 101 Switching Protocols\r\n"
 				"Connection : Upgrade\r\n"
 				"Upgrade: websocket\r\n"
-				"Sec - WebSocket - Accept : %s\r\n"
+				"Server: %s\r\n"
+				"Sec - WebSocket - Accept: %s\r\n"
 				"\r\n\r\n",
+				GetExeName();
 				CLuaEngine::Instance()->CallStringFunction("ResponseKey", m_szWebInfo)
 			);
 			if (m_poSendBuf->IsEmpty())
