@@ -211,7 +211,7 @@ end
 
 -------------------------------------------------
 
-function Sha1(str)
+function Sha1Fun(str)
 	str = PreProcess(str)
 	h0  = 1732584193
 	h1  = 4023233417
