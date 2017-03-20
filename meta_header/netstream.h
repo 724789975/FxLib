@@ -1,4 +1,4 @@
-#ifndef __NetStream_H__
+﻿#ifndef __NetStream_H__
 #define __NetStream_H__
 
 #ifdef WIN32
@@ -115,6 +115,50 @@ public:
 		{
 			memcpy(&dwData, pData, sizeof(dwData));
 			dwData = ntohl(dwData);
+			return true;
+		}
+		return false;
+	}
+
+	bool ReadInt64(long long& llData)
+	{
+		char* pData = ReadData(sizeof(llData));
+		if (pData)
+		{
+			memcpy(&llData, pData, sizeof(llData));
+			union
+			{
+				unsigned short wByte;
+				unsigned char ucByte[2];
+			} oByteOrder;
+			oByteOrder.wByte = 0x0102;
+			if (oByteOrder.ucByte[0] != 0x01)
+			{
+				// 小端
+				llData = (long long)htonl((int)(llData >> 32)) | ((long long)htonl((int)llData) << 32);
+			}
+			return true;
+		}
+		return false;
+	}
+
+	bool ReadInt64(unsigned long long& ullData)
+	{
+		char* pData = ReadData(sizeof(ullData));
+		if (pData)
+		{
+			memcpy(&ullData, pData, sizeof(ullData));
+			union
+			{
+				unsigned short wByte;
+				unsigned char ucByte[2];
+			} oByteOrder;
+			oByteOrder.wByte = 0x0102;
+			if (oByteOrder.ucByte[0] != 0x01)
+			{
+				// 小端
+				ullData = (unsigned long long)htonl((int)(ullData >> 32)) | ((unsigned long long)htonl((int)ullData) << 32);
+			}
 			return true;
 		}
 		return false;
