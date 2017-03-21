@@ -2813,16 +2813,16 @@ void FxWebSocketConnect::__ProcRecv(UINT32 dwLen)
 			unsigned long long ullTemp = 0;
 			oHeaderStream.ReadInt64(ullTemp);
 		}
+		memmove(GetConnection()->GetRecvBuf(), GetConnection()->GetRecvBuf() + dwHeaderLen, dwLen - dwHeaderLen);
 		char ucMaskingKey[4] = { 0 };
 		if (ucMask)
 		{
 			dwHeaderLen += 4;
 			memcpy(ucMaskingKey, oHeaderStream.ReadData(sizeof(ucMaskingKey)), sizeof(ucMaskingKey));
-		}
-		memmove(GetConnection()->GetRecvBuf(), GetConnection()->GetRecvBuf() + dwHeaderLen, dwLen - dwHeaderLen);
-		for (unsigned int i = 0; i < dwLen - dwHeaderLen; ++i)
-		{
-			GetConnection()->GetRecvBuf()[i] = GetConnection()->GetRecvBuf()[i] ^ ucMaskingKey[i % 4];
+			for (unsigned int i = 0; i < dwLen - dwHeaderLen; ++i)
+			{
+				GetConnection()->GetRecvBuf()[i] = GetConnection()->GetRecvBuf()[i] ^ ucMaskingKey[i % 4];
+			}
 		}
 		GetConnection()->GetRecvBuf()[dwLen - dwHeaderLen] = 0;
 		m_poConnection->OnRecv(dwLen - dwHeaderLen);
