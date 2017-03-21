@@ -187,6 +187,7 @@ class IFxSessionFactory
 public:
 	virtual							~IFxSessionFactory() {}
 	virtual FxSession*				CreateSession() = 0;
+	virtual void					Release(FxSession* pSession){}
 };
 
 class IFxSocket

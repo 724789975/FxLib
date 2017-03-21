@@ -28,8 +28,11 @@ public:
 
 	virtual UINT32		GetRecvSize(){ return 64 * 1024; };
 
+	void				SetFxSessionFactory(IFxSessionFactory* pFxSessionFactory) { m_pFxSessionFactory = pFxSessionFactory; }
+
 private:
 	char m_dataRecvBuf[1024* 1024];
+	IFxSessionFactory* m_pFxSessionFactory;
 };
 
 class CSessionFactory : public IFxSessionFactory
@@ -43,14 +46,14 @@ public:
 	virtual FxSession*	CreateSession();
 
 	void Init(){}
-	void Release(CSocketSession* pSession);
+	virtual void Release(FxSession* pSession);
 
 	std::set<FxSession*> m_setSessions;
 
 private:
 //	TDynamicPoolEx<CSocketSession> m_poolSessions;
 
-	std::deque<CSocketSession* > m_listSession;
+	std::deque<FxSession* > m_listSession;
 
 	IFxLock*			m_pLock;
 };
@@ -66,14 +69,14 @@ public:
 	virtual FxSession*	CreateSession();
 
 	void Init() {}
-	void Release(CSocketSession* pSession);
+	virtual void Release(FxSession* pSession);
 
 	std::set<FxSession*> m_setSessions;
 
 private:
 	//	TDynamicPoolEx<CSocketSession> m_poolSessions;
 
-	std::deque<CSocketSession* > m_listSession;
+	std::deque<FxSession*> m_listSession;
 
 	IFxLock*			m_pLock;
 };

@@ -77,14 +77,14 @@ private:
 
 void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
-	//LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
-	printf("time : %s ip : %s, port : %d, recv %s", GetTimeHandler()->GetTimeStr(), GetRemoteIPStr(), GetRemotePort(), pBuf);
+	LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
+	//printf("time : %s ip : %s, port : %d, recv %s", GetTimeHandler()->GetTimeStr(), GetRemoteIPStr(), GetRemotePort(), pBuf);
 
-	//if (!Send(pBuf, dwLen))
-	//{
-	//	LogFun(LT_Screen | LT_File, LogLv_Debug, "ip : %s, port : %d, recv %s send error", GetRemoteIPStr(), GetRemotePort(), pBuf);
-	//	Close();
-	//}
+	if (!Send(pBuf, dwLen))
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Debug, "ip : %s, port : %d, recv %s send error", GetRemoteIPStr(), GetRemotePort(), pBuf);
+		Close();
+	}
 
 	//DBQuery * pQuery = new DBQuery;
 	//pQuery->m_strQuery = pBuf;
@@ -99,7 +99,7 @@ void CSocketSession::Release(void)
 
 	Init(NULL);
 
-	CWebSocketSessionFactory::Instance()->Release(this);
+	m_pFxSessionFactory->Release(this);
 }
 
 IMPLEMENT_SINGLETON(CSessionFactory)
@@ -111,6 +111,7 @@ CSessionFactory::CSessionFactory()
 	{
 		CSocketSession* pSession = new CSocketSession;
 		pSession->SetDataHeader(oDataHeaderFactory.CreateDataHeader());
+		pSession->SetFxSessionFactory(this);
 		m_listSession.push_back(pSession);
 	}
 //	m_poolSessions.Init(100, 10, false, 100);
@@ -139,7 +140,7 @@ FxSession*	CSessionFactory::CreateSession()
 	return pSession;
 }
 
-void CSessionFactory::Release(CSocketSession* pSession)
+void CSessionFactory::Release(FxSession* pSession)
 {
 	m_pLock->Lock();
 //	m_poolSessions.ReleaseObj(pSession);
@@ -158,6 +159,7 @@ CWebSocketSessionFactory::CWebSocketSessionFactory()
 	{
 		CSocketSession* pSession = new CSocketSession;
 		pSession->SetDataHeader(oWebSocketDataHeaderFactory.CreateDataHeader());
+		pSession->SetFxSessionFactory(this);
 		m_listSession.push_back(pSession);
 	}
 }
@@ -185,7 +187,7 @@ FxSession * CWebSocketSessionFactory::CreateSession()
 	return pSession;
 }
 
-void CWebSocketSessionFactory::Release(CSocketSession * pSession)
+void CWebSocketSessionFactory::Release(FxSession * pSession)
 {
 	m_pLock->Lock();
 	//	m_poolSessions.ReleaseObj(pSession);
@@ -275,34 +277,30 @@ void * WebSocketDataHeader::GetPkgHeader()
 void* WebSocketDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen)
 {
 	dwHeaderLen = 2;
-	UINT32 dwBuffLen = 2;
-	if (dwDataLen > 126 && dwDataLen <= 0xFFFF)
-	{
-		dwBuffLen += 2;
-	}
-	else if (dwDataLen > 0xFFFF)
-	{
-		dwBuffLen += 8;
-	}
-	dwBuffLen += dwDataLen;
 	CNetStream oNetStream(ENetStreamType_Write, m_dataSendBuffer, sizeof(m_dataSendBuffer));
 	unsigned char ucFinOpCode = 0x82;
+	unsigned char ucFin = (ucFinOpCode >> 7) & 0xff;
+	unsigned char ucOpCode = (ucFinOpCode) & 0x0f;
 	oNetStream.WriteByte(ucFinOpCode);
-	if (dwBuffLen <= 126)
+	if (dwDataLen <= 126)
 	{
-		unsigned char ucLen = dwBuffLen;
+		unsigned char ucLen = dwDataLen;
 		oNetStream.WriteByte(ucLen);
 	}
-	else if (dwBuffLen > 126 && dwBuffLen < 0xFFFF)
+	else if (dwDataLen > 126 && dwDataLen < 0xFFFF)
 	{
+		unsigned char ucLen = 126;
+		oNetStream.WriteByte(ucLen);
 		dwHeaderLen += 2;
-		unsigned short wLen = dwBuffLen;
+		unsigned short wLen = dwDataLen;
 		oNetStream.WriteShort(wLen);
 	}
 	else
 	{
+		unsigned char ucLen = 127;
+		oNetStream.WriteByte(ucLen);
 		dwHeaderLen += 8;
-		unsigned long long ullLen = dwBuffLen;
+		unsigned long long ullLen = dwDataLen;
 		oNetStream.WriteInt64(ullLen);
 	}
 	return (void*)m_dataSendBuffer;

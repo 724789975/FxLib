@@ -1232,7 +1232,9 @@ bool FxTCPConnectSockBase::Send(const char* pData, int dwLen)
 		return false;
 	}
 
-	if ((unsigned int)dwLen + pDataHeader->GetHeaderLength() > (unsigned int)m_poSendBuf->GetTotalLen())
+	UINT32 dwHeaderLen = 0;
+	char* pDataHeaderBuff = (char*)(pDataHeader->BuildSendPkgHeader(dwHeaderLen, dwLen));
+	if ((unsigned int)dwLen + dwHeaderLen > (unsigned int)m_poSendBuf->GetTotalLen())
 	{
 #ifdef WIN32
 		m_dwLastError = NET_SEND_OVERFLOW;
@@ -1250,9 +1252,7 @@ bool FxTCPConnectSockBase::Send(const char* pData, int dwLen)
 
 	// 这个是在主线程调用 所以 声明为静态就可以了 防止重复生成 占用空间
 	static char pTemData[RECV_BUFF_SIZE] = {0};
-	CNetStream oNetStream(ENetStreamType_Write, pTemData, dwLen + pDataHeader->GetHeaderLength());
-	UINT32 dwHeaderLen = 0;
-	char* pDataHeaderBuff = (char*)(pDataHeader->BuildSendPkgHeader(dwHeaderLen, dwLen));
+	CNetStream oNetStream(ENetStreamType_Write, pTemData, dwLen + dwHeaderLen);
 	oNetStream.WriteData(pDataHeaderBuff, dwHeaderLen);
 	oNetStream.WriteData(pData, dwLen);
 
@@ -2804,16 +2804,26 @@ void FxWebSocketConnect::__ProcRecv(UINT32 dwLen)
 		if (ucPayloadLen == 126)
 		{
 			dwHeaderLen += 2;
+			unsigned short wTemp = 0;
+			oHeaderStream.ReadShort(wTemp);
 		}
 		else if (ucPayloadLen == 127)
 		{
 			dwHeaderLen += 8;
+			unsigned long long ullTemp = 0;
+			oHeaderStream.ReadInt64(ullTemp);
 		}
+		char ucMaskingKey[4] = { 0 };
 		if (ucMask)
 		{
 			dwHeaderLen += 4;
+			memcpy(ucMaskingKey, oHeaderStream.ReadData(sizeof(ucMaskingKey)), sizeof(ucMaskingKey));
 		}
-		memmove(GetConnection()->GetRecvBuf(), GetConnection() + dwHeaderLen, dwLen - dwHeaderLen);
+		memmove(GetConnection()->GetRecvBuf(), GetConnection()->GetRecvBuf() + dwHeaderLen, dwLen - dwHeaderLen);
+		for (unsigned int i = 0; i < dwLen - dwHeaderLen; ++i)
+		{
+			GetConnection()->GetRecvBuf()[i] = GetConnection()->GetRecvBuf()[i] ^ ucMaskingKey[i % 4];
+		}
 		GetConnection()->GetRecvBuf()[dwLen - dwHeaderLen] = 0;
 		m_poConnection->OnRecv(dwLen - dwHeaderLen);
 	}
