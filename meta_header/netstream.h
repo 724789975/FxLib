@@ -246,6 +246,38 @@ public:
 		return WriteData((char*)(&dwData), sizeof(dwData));
 	}
 
+	bool WriteInt64(long long& llData)
+	{
+		union
+		{
+			unsigned short wByte;
+			unsigned char ucByte[2];
+		} oByteOrder;
+		oByteOrder.wByte = 0x0102;
+		if (oByteOrder.ucByte[0] != 0x01)
+		{
+			// 小端
+			llData = (long long)htonl((int)(llData >> 32)) | ((long long)htonl((int)llData) << 32);
+		}
+		return WriteData((char*)(&llData), sizeof(llData));
+	}
+
+	bool WriteInt64(unsigned long long& ullData)
+	{
+		union
+		{
+			unsigned short wByte;
+			unsigned char ucByte[2];
+		} oByteOrder;
+		oByteOrder.wByte = 0x0102;
+		if (oByteOrder.ucByte[0] != 0x01)
+		{
+			// 小端
+			ullData = (unsigned long long)htonl((int)(ullData >> 32)) | ((unsigned long long)htonl((int)ullData) << 32);
+		}
+		return WriteData((char*)(&ullData), sizeof(ullData));
+	}
+
 	bool WriteFloat(float fData)
 	{
 		int nData = (int)(fData * 256);

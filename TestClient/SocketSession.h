@@ -49,7 +49,7 @@ public:
 	virtual ~DataHeader();
 	virtual unsigned int GetHeaderLength(){ return sizeof(m_dataBuffer); }		// 消息头长度
 	virtual void* GetPkgHeader();
-	virtual void* BuildSendPkgHeader(UINT32 dwDataLen);
+	virtual void* BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen);
 	virtual bool BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset);
 	virtual int __CheckPkgHeader(const char* pBuf);
 private:

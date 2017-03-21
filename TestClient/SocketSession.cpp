@@ -66,8 +66,9 @@ void* DataHeader::GetPkgHeader()
 	return (void*)m_dataBuffer;
 }
 
-void* DataHeader::BuildSendPkgHeader(UINT32 dwDataLen)
+void* DataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen)
 {
+	dwHeaderLen = sizeof(m_dataBuffer);
 	//*((UINT32*)m_dataBuffer) = htonl(dwDataLen);
 	CNetStream oNetStream(ENetStreamType_Write, m_dataBuffer, sizeof(m_dataBuffer));
 	oNetStream.WriteInt(dwDataLen);

@@ -228,8 +228,8 @@ public:
 
 	virtual int						ParsePacket(const char* pBuf, UINT32 dwLen);
 
-	virtual void*					GetPkgHeader() = 0;
-	virtual void*					BuildSendPkgHeader(UINT32 dwDataLen) = 0;
+	virtual void*					GetPkgHeader() = 0;			//有歧义了 现在只代表接收到的包头
+	virtual void*					BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen) = 0;
 	virtual bool					BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset) = 0;
 	virtual int						__CheckPkgHeader(const char* pBuf) = 0;
 

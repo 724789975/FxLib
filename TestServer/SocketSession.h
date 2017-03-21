@@ -55,6 +55,29 @@ private:
 	IFxLock*			m_pLock;
 };
 
+class CWebSocketSessionFactory : public IFxSessionFactory
+{
+public:
+	CWebSocketSessionFactory();
+	~CWebSocketSessionFactory(){}
+
+	DECLARE_SINGLETON(CWebSocketSessionFactory)
+
+	virtual FxSession*	CreateSession();
+
+	void Init() {}
+	void Release(CSocketSession* pSession);
+
+	std::set<FxSession*> m_setSessions;
+
+private:
+	//	TDynamicPoolEx<CSocketSession> m_poolSessions;
+
+	std::deque<CSocketSession* > m_listSession;
+
+	IFxLock*			m_pLock;
+};
+
 //static CSessionFactory oSessionFactory;
 
 class DataHeader : public IFxDataHeader
@@ -62,14 +85,15 @@ class DataHeader : public IFxDataHeader
 public:
 	DataHeader();
 	virtual ~DataHeader();
-	virtual unsigned int GetHeaderLength(){ return sizeof(m_dataBuffer); }		// 消息头长度
+	virtual unsigned int GetHeaderLength(){ return sizeof(m_dataRecvBuffer); }		// 消息头长度
 	virtual void* GetPkgHeader();
-	virtual void* BuildSendPkgHeader(UINT32 dwDataLen);
+	virtual void* BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen);
 	virtual bool BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset);
 	virtual int __CheckPkgHeader(const char* pBuf);
 private:
 	// // 消息头 为网络字节序
-	char m_dataBuffer[8];
+	char m_dataRecvBuffer[8];
+	char m_dataSendBuffer[8];
 	static const UINT32 s_dwMagic = 'T' << 24 | 'E' << 16 | 'S' << 8 | 'T';
 	//static const UINT32 s_dwMagic = 12345678;
 };
@@ -81,7 +105,7 @@ public:
 	virtual ~WebSocketDataHeader();
 	virtual unsigned int GetHeaderLength() { return m_dwHeaderLength; }		// 消息头长度 这个只能BuildRecvPkgHeader之后调用
 	virtual void* GetPkgHeader();
-	virtual void* BuildSendPkgHeader(UINT32 dwDataLen);
+	virtual void* BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen);
 	virtual bool BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset);
 	virtual int __CheckPkgHeader(const char* pBuf);
 	virtual int	ParsePacket(const char* pBuf, UINT32 dwLen);
@@ -104,7 +128,8 @@ private:
 	unsigned char m_ucMaskingKey[4];
 private:
 	// // 消息头 为网络字节序
-	char m_dataBuffer[16];
+	char m_dataRecvBuffer[16];
+	char m_dataSendBuffer[16];
 	static const UINT32 s_dwMagic = 'T' << 24 | 'E' << 16 | 'S' << 8 | 'T';
 
 	unsigned int m_dwHeaderLength;
@@ -122,5 +147,17 @@ private:
 };
 
 static DataHeaderFactory oDataHeaderFactory;
+
+class WebSocketDataHeaderFactory : public IFxDataHeaderFactory
+{
+public:
+	WebSocketDataHeaderFactory(){}
+	virtual ~WebSocketDataHeaderFactory(){}
+	virtual IFxDataHeader* CreateDataHeader(){ return new WebSocketDataHeader; }
+private:
+
+};
+
+static WebSocketDataHeaderFactory oWebSocketDataHeaderFactory;
 
 #endif // !__SocketSession_H__

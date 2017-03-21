@@ -2,7 +2,8 @@
 #include "mytcpsock.h"
 #include "myudpsock.h"
 #include "sockmgr.h"
-#include<string.h>
+#include <string.h>
+#include "netstream.h"
 
 FxConnection::FxConnection():
 	m_poSock(NULL),
@@ -169,28 +170,12 @@ void FxConnection::OnRecv(UINT32 dwLen)
 		return;
 	}
 
-	if(m_nConnStat != CONN_OK)
-		return;
-
-	unsigned int dwHeaderLen = m_poSock->GetDataHeader()->GetHeaderLength();
-	switch (m_eSockType)
+	if (m_nConnStat != CONN_OK)
 	{
-		case SLT_CommonTcp:
-		{
-			m_poSession->OnRecv(m_poSession->GetRecvBuf() + dwHeaderLen, dwLen - dwHeaderLen);
-		}
-		break;
-		case SLT_Udp:
-		{
-			m_poSession->OnRecv(m_poSession->GetRecvBuf() + dwHeaderLen + sizeof(UDPPacketHeader), dwLen - dwHeaderLen - sizeof(UDPPacketHeader));
-		}
-		break;
-		default:
-		{
-			LogFun(LT_Screen | LT_File, LogLv_Error, "error socket type : %d", m_eSockType);
-		}
-		break;
+		return;
 	}
+
+	m_poSession->OnRecv(m_poSession->GetRecvBuf(), dwLen);
 }
 
 void FxConnection::OnError(UINT32 dwErrorNo)

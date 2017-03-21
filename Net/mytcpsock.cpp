@@ -1251,11 +1251,13 @@ bool FxTCPConnectSockBase::Send(const char* pData, int dwLen)
 	// 这个是在主线程调用 所以 声明为静态就可以了 防止重复生成 占用空间
 	static char pTemData[RECV_BUFF_SIZE] = {0};
 	CNetStream oNetStream(ENetStreamType_Write, pTemData, dwLen + pDataHeader->GetHeaderLength());
-	oNetStream.WriteData((char*)(pDataHeader->BuildSendPkgHeader(dwLen)), pDataHeader->GetHeaderLength());
+	UINT32 dwHeaderLen = 0;
+	char* pDataHeaderBuff = (char*)(pDataHeader->BuildSendPkgHeader(dwHeaderLen, dwLen));
+	oNetStream.WriteData(pDataHeaderBuff, dwHeaderLen);
 	oNetStream.WriteData(pData, dwLen);
 
 	int nSendCount = 0;
-	while (!m_poSendBuf->PushBuff(pTemData, dwLen + pDataHeader->GetHeaderLength()))
+	while (!m_poSendBuf->PushBuff(pTemData, dwLen + dwHeaderLen))
 	{
 		if (!m_bSendLinger || 30 < ++nSendCount)  // 连续30次还没发出去，就认为失败，失败结果逻辑层处理//
 		{
@@ -2649,7 +2651,7 @@ FxTCPConnectSock::~FxTCPConnectSock()
 
 void FxTCPConnectSock::__ProcRecv(UINT32 dwLen)
 {
-	if (m_poConnection)
+	if (GetConnection())
 	{
 		if (UINT32(-1) == dwLen)
 		{
@@ -2662,12 +2664,12 @@ void FxTCPConnectSock::__ProcRecv(UINT32 dwLen)
 			return;
 		}
 
-		if (GetSockId() != m_poConnection->GetID())
+		if (GetSockId() != GetConnection()->GetID())
 		{
 			return;
 		}
 
-		if (m_poConnection->GetRecvSize() < dwLen)
+		if (GetConnection()->GetRecvSize() < dwLen)
 		{
 			PushNetEvent(NETEVT_ERROR, NET_RECV_ERROR);
 			Close();
@@ -2678,7 +2680,8 @@ void FxTCPConnectSock::__ProcRecv(UINT32 dwLen)
 		{
 			return;
 		}
-		m_poConnection->OnRecv(dwLen);
+		memmove(GetConnection()->GetRecvBuf(), GetConnection()->GetRecvBuf() + GetDataHeader()->GetHeaderLength(), dwLen - GetDataHeader()->GetHeaderLength());
+		m_poConnection->OnRecv(dwLen - GetDataHeader()->GetHeaderLength());
 	}
 }
 
@@ -2700,7 +2703,6 @@ void FxTCPConnectSock::__ProcRelease()
 	FxMySockMgr::Instance()->Release(this);
 }
 
-
 FxWebSocketConnect::FxWebSocketConnect()
 {
 	m_eWebSocketHandShakeState = WSHSS_Request;
@@ -2721,7 +2723,7 @@ void FxWebSocketConnect::Reset()
 
 void FxWebSocketConnect::__ProcRecv(UINT32 dwLen)
 {
-	if (m_poConnection)
+	if (GetConnection())
 	{
 		if (UINT32(-1) == dwLen)
 		{
@@ -2734,12 +2736,12 @@ void FxWebSocketConnect::__ProcRecv(UINT32 dwLen)
 			return;
 		}
 
-		if (GetSockId() != m_poConnection->GetID())
+		if (GetSockId() != GetConnection()->GetID())
 		{
 			return;
 		}
 
-		if (m_poConnection->GetRecvSize() < dwLen)
+		if (GetConnection()->GetRecvSize() < dwLen)
 		{
 			PushNetEvent(NETEVT_ERROR, NET_RECV_ERROR);
 			Close();
@@ -2789,7 +2791,31 @@ void FxWebSocketConnect::__ProcRecv(UINT32 dwLen)
 			m_eWebSocketHandShakeState = WSHSS_Connected;
 			return;
 		}
-		m_poConnection->OnRecv(dwLen);
+
+		unsigned int dwHeaderLen = 0;
+		CNetStream oHeaderStream(m_poConnection->GetRecvBuf(), dwLen);
+
+		unsigned char uc1, uc2;
+		oHeaderStream.ReadByte(uc1);
+		oHeaderStream.ReadByte(uc2);
+		dwHeaderLen += 2;
+		unsigned char ucMask = (uc2 >> 7) & 0xff;
+		unsigned char ucPayloadLen = uc2 & 0x7f;
+		if (ucPayloadLen == 126)
+		{
+			dwHeaderLen += 2;
+		}
+		else if (ucPayloadLen == 127)
+		{
+			dwHeaderLen += 8;
+		}
+		if (ucMask)
+		{
+			dwHeaderLen += 4;
+		}
+		memmove(GetConnection()->GetRecvBuf(), GetConnection() + dwHeaderLen, dwLen - dwHeaderLen);
+		GetConnection()->GetRecvBuf()[dwLen - dwHeaderLen] = 0;
+		m_poConnection->OnRecv(dwLen - dwHeaderLen);
 	}
 }
 

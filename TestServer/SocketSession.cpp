@@ -77,13 +77,14 @@ private:
 
 void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
-	LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
+	//LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
+	printf("time : %s ip : %s, port : %d, recv %s", GetTimeHandler()->GetTimeStr(), GetRemoteIPStr(), GetRemotePort(), pBuf);
 
-	if (!Send(pBuf, dwLen))
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Debug, "ip : %s, port : %d, recv %s send error", GetRemoteIPStr(), GetRemotePort(), pBuf);
-		Close();
-	}
+	//if (!Send(pBuf, dwLen))
+	//{
+	//	LogFun(LT_Screen | LT_File, LogLv_Debug, "ip : %s, port : %d, recv %s send error", GetRemoteIPStr(), GetRemotePort(), pBuf);
+	//	Close();
+	//}
 
 	//DBQuery * pQuery = new DBQuery;
 	//pQuery->m_strQuery = pBuf;
@@ -98,7 +99,7 @@ void CSocketSession::Release(void)
 
 	Init(NULL);
 
-	CSessionFactory::Instance()->Release(this);
+	CWebSocketSessionFactory::Instance()->Release(this);
 }
 
 IMPLEMENT_SINGLETON(CSessionFactory)
@@ -148,6 +149,52 @@ void CSessionFactory::Release(CSocketSession* pSession)
 	m_pLock->UnLock();
 }
 
+IMPLEMENT_SINGLETON(CWebSocketSessionFactory)
+
+CWebSocketSessionFactory::CWebSocketSessionFactory()
+{
+	m_pLock = FxCreateThreadLock();
+	for (int i = 0; i < 64; ++i)
+	{
+		CSocketSession* pSession = new CSocketSession;
+		pSession->SetDataHeader(oWebSocketDataHeaderFactory.CreateDataHeader());
+		m_listSession.push_back(pSession);
+	}
+}
+
+FxSession * CWebSocketSessionFactory::CreateSession()
+{
+	m_pLock->Lock();
+	FxSession* pSession = NULL;
+	if (m_listSession.size() > 0)
+	{
+		pSession = *(m_listSession.begin());
+		m_listSession.pop_front();
+	}
+	if (pSession)
+	{
+		if (pSession->GetDataHeader() == NULL)
+		{
+			pSession->SetDataHeader(oWebSocketDataHeaderFactory.CreateDataHeader());
+		}
+
+		m_setSessions.insert(pSession);
+	}
+	LogFun(LT_Screen | LT_File, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
+	m_pLock->UnLock();
+	return pSession;
+}
+
+void CWebSocketSessionFactory::Release(CSocketSession * pSession)
+{
+	m_pLock->Lock();
+	//	m_poolSessions.ReleaseObj(pSession);
+	m_listSession.push_back(pSession);
+	m_setSessions.erase(pSession);
+	LogFun(LT_Screen | LT_File, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
+	m_pLock->UnLock();
+}
+
 DataHeader::DataHeader()
 {
 }
@@ -159,16 +206,17 @@ DataHeader::~DataHeader()
 
 void* DataHeader::GetPkgHeader()
 {
-	return (void*)m_dataBuffer;
+	return (void*)m_dataRecvBuffer;
 }
 
-void* DataHeader::BuildSendPkgHeader(UINT32 dwDataLen)
+void* DataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen)
 {
 	//*((UINT32*)m_dataBuffer) = htonl(dwDataLen);
-	CNetStream oNetStream(ENetStreamType_Write, m_dataBuffer, sizeof(m_dataBuffer));
+	dwHeaderLen = sizeof(m_dataSendBuffer);
+	CNetStream oNetStream(ENetStreamType_Write, m_dataSendBuffer, sizeof(m_dataSendBuffer));
 	oNetStream.WriteInt(dwDataLen);
 	oNetStream.WriteInt(s_dwMagic);
-	return (void*)m_dataBuffer;
+	return (void*)m_dataSendBuffer;
 }
 
 bool DataHeader::BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset)
@@ -178,14 +226,14 @@ bool DataHeader::BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset)
 		return false;
 	}
 
-	memcpy(m_dataBuffer + dwOffset, pBuff, dwLen);
+	memcpy(m_dataRecvBuffer + dwOffset, pBuff, dwLen);
 	return true;
 }
 
 int DataHeader::__CheckPkgHeader(const char* pBuf)
 {
-	CNetStream oHeaderStream(m_dataBuffer, sizeof(m_dataBuffer));
-	CNetStream oRecvStream(pBuf, sizeof(m_dataBuffer));
+	CNetStream oHeaderStream(m_dataRecvBuffer, sizeof(m_dataRecvBuffer));
+	CNetStream oRecvStream(pBuf, sizeof(m_dataRecvBuffer));
 
 	UINT32 dwHeaderLength = 0;
 	UINT32 dwBufferLength = 0;
@@ -221,17 +269,48 @@ WebSocketDataHeader::~WebSocketDataHeader()
 
 void * WebSocketDataHeader::GetPkgHeader()
 {
-	return NULL;
+	return (void*)m_dataRecvBuffer;
 }
 
-void * WebSocketDataHeader::BuildSendPkgHeader(UINT32 dwDataLen)
+void* WebSocketDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen)
 {
-	return NULL;
+	dwHeaderLen = 2;
+	UINT32 dwBuffLen = 2;
+	if (dwDataLen > 126 && dwDataLen <= 0xFFFF)
+	{
+		dwBuffLen += 2;
+	}
+	else if (dwDataLen > 0xFFFF)
+	{
+		dwBuffLen += 8;
+	}
+	dwBuffLen += dwDataLen;
+	CNetStream oNetStream(ENetStreamType_Write, m_dataSendBuffer, sizeof(m_dataSendBuffer));
+	unsigned char ucFinOpCode = 0x82;
+	oNetStream.WriteByte(ucFinOpCode);
+	if (dwBuffLen <= 126)
+	{
+		unsigned char ucLen = dwBuffLen;
+		oNetStream.WriteByte(ucLen);
+	}
+	else if (dwBuffLen > 126 && dwBuffLen < 0xFFFF)
+	{
+		dwHeaderLen += 2;
+		unsigned short wLen = dwBuffLen;
+		oNetStream.WriteShort(wLen);
+	}
+	else
+	{
+		dwHeaderLen += 8;
+		unsigned long long ullLen = dwBuffLen;
+		oNetStream.WriteInt64(ullLen);
+	}
+	return (void*)m_dataSendBuffer;
 }
 
 bool WebSocketDataHeader::BuildRecvPkgHeader(char * pBuff, UINT32 dwLen, UINT32 dwOffset)
 {
-	memcpy(m_dataBuffer + dwOffset, pBuff, sizeof(m_dataBuffer) - dwOffset > dwLen ? dwLen : sizeof(m_dataBuffer) - dwOffset);
+	memcpy(m_dataRecvBuffer + dwOffset, pBuff, sizeof(m_dataRecvBuffer) - dwOffset > dwLen ? dwLen : sizeof(m_dataRecvBuffer) - dwOffset);
 	m_dwHeaderLength = 0;
 	if (dwLen + dwOffset > 2)
 	{
@@ -243,7 +322,7 @@ bool WebSocketDataHeader::BuildRecvPkgHeader(char * pBuff, UINT32 dwLen, UINT32 
 int WebSocketDataHeader::__CheckPkgHeader(const char * pBuf)
 {
 	m_dwHeaderLength = 0;
-	CNetStream oHeaderStream(m_dataBuffer, sizeof(m_dataBuffer));
+	CNetStream oHeaderStream(m_dataRecvBuffer, sizeof(m_dataRecvBuffer));
 	
 	unsigned char uc1, uc2;
 	oHeaderStream.ReadByte(uc1);
@@ -272,6 +351,7 @@ int WebSocketDataHeader::__CheckPkgHeader(const char * pBuf)
 	if (m_ucMask)
 	{
 		memcpy(m_ucMaskingKey, oHeaderStream.ReadData(sizeof(m_ucMaskingKey)), sizeof(m_ucMaskingKey));
+		m_dwHeaderLength += 4;
 	}
 
 	return (int)(m_ullPayloadLen + m_dwHeaderLength);

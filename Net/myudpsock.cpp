@@ -957,7 +957,9 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 	oUDPPacketHeader.m_cStatus = (char)GetState();
 
 	CNetStream oNetStream(ENetStreamType_Write, pTemData, dwLen + pDataHeader->GetHeaderLength() + sizeof(oUDPPacketHeader));
-	oNetStream.WriteData((char*)(pDataHeader->BuildSendPkgHeader(dwLen + sizeof(oUDPPacketHeader))), pDataHeader->GetHeaderLength());
+	UINT32 dwHeaderLen = 0;
+	char* pDataHeaderBuff = (char*)(pDataHeader->BuildSendPkgHeader(dwHeaderLen, dwLen + sizeof(oUDPPacketHeader)));
+	oNetStream.WriteData(pDataHeaderBuff, dwHeaderLen);
 	oNetStream.WriteData((char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader));
 	oNetStream.WriteData(pData, dwLen);
 
@@ -1818,7 +1820,8 @@ void FxUDPConnectSock::__ProcRecv(UINT32 dwLen)
 			return;
 		}
 
-		GetConnection()->OnRecv(dwLen);
+		memmove(GetConnection()->GetRecvBuf(), GetConnection()->GetRecvBuf() + GetDataHeader()->GetHeaderLength() + sizeof(UDPPacketHeader), dwLen - GetDataHeader()->GetHeaderLength() - sizeof(UDPPacketHeader));
+		GetConnection()->OnRecv(dwLen - GetDataHeader()->GetHeaderLength() - sizeof(UDPPacketHeader));
 	}
 }
 
