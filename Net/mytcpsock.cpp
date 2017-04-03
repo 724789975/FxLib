@@ -3034,8 +3034,8 @@ void FxWebSocketConnect::OnRecv(bool bRet, int dwBytes)
 					m_nNeedData -= nLen;
 					nUsedLen += nLen;
 					nLen = 0;
+				}
 			}
-		}
 			else
 			{
 				char* pParseBuf = pUseBuf + nParserLen;
@@ -3133,7 +3133,7 @@ void FxWebSocketConnect::OnRecv(bool bRet, int dwBytes)
 					}
 				}
 			}
-	}
+		}
 
 		if (0 != nUsedLen)
 		{
@@ -3232,9 +3232,190 @@ void FxWebSocketConnect::OnRecv()
 			PushNetEvent(NETEVT_RECV, nLen);
 			m_poRecvBuf->CostUsedBuff(nLen);
 		}
+		return;
 	}
 
-	FxTCPConnectSockBase::OnRecv();
+	{
+		if (false == IsConnected())
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
+
+			return;
+		}
+
+		if (m_poRecvBuf->IsEmpty())
+		{
+			m_poRecvBuf->Clear();
+		}
+
+		char* pRecvBuff = NULL;
+		int nLen = m_poRecvBuf->GetInCursorPtr(pRecvBuff);
+		if (0 >= nLen)
+		{
+			//LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetInCursorPtr() = %d, socket : %d, socket id : %d", nLen, GetSock(), GetSockId());
+			return;
+		}
+
+		nLen = VAL_SO_SNDLOWAT < nLen ? VAL_SO_SNDLOWAT : nLen;
+
+		nLen = recv(GetSock(), pRecvBuff, nLen, 0);
+
+		if(0 > nLen)
+		{
+			if ((errno != EAGAIN) && (errno != EINPROGRESS) && (errno != EINTR))
+			{
+				LogFun(LT_Screen | LT_File, LogLv_Error, "recv errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+
+				PushNetEvent(NETEVT_ERROR, errno);
+				Close();
+				return;
+			}
+			return;
+		}
+		else if (0 == nLen)
+		{
+			Close();
+			return;
+		}
+		else
+		{
+			int nUsedLen = 0;
+			int nParserLen = 0;
+			m_poRecvBuf->CostBuff(nLen);
+
+			char *pUseBuf = NULL;
+			nLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
+			if (nLen <= 0)
+			{
+				LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetUsedCursorPtr() <= 0, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+				PushNetEvent(NETEVT_ERROR, NET_RECVBUFF_ERROR);
+				Close();
+				return;
+			}
+
+
+			while (0 < nLen)
+			{
+				if (0 != m_nNeedData)
+				{
+					if (nLen >= m_nNeedData)
+					{
+						nLen -= m_nNeedData;
+						nUsedLen += m_nNeedData;
+						nParserLen += m_nNeedData;
+						m_poRecvBuf->CostUsedBuff(nUsedLen);
+						nUsedLen = 0;
+						PushNetEvent(NETEVT_RECV, m_nPacketLen);
+						m_nPacketLen = 0;
+						m_nNeedData = 0;
+					}
+					else
+					{
+						m_nNeedData -= nLen;
+						nUsedLen += nLen;
+						nLen = 0;
+					}
+				}
+				else
+				{
+					char* pParseBuf = pUseBuf + nParserLen;
+					GetDataHeader()->BuildRecvPkgHeader(pParseBuf, nLen, 0);
+					m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen);
+					if (-1 == m_nPacketLen)
+					{
+						LogFun(LT_Screen | LT_File, LogLv_Error, "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+						PushNetEvent(NETEVT_ERROR, NET_RECV_ERROR);
+						Close();
+						return;
+					}
+					else if (0 == m_nPacketLen)
+					{
+						m_poRecvBuf->CostUsedBuff(nUsedLen);
+						nUsedLen = 0;
+						m_nNeedData = 0;
+
+						// 判断是否在循环buff的头部还有数据//
+						int nHasData = m_poRecvBuf->GetUseLen();
+						if (nHasData > 2)
+						{
+							GetDataHeader()->BuildRecvPkgHeader(pParseBuf, nLen, 0);
+							if (false == m_poRecvBuf->CostUsedBuff(nLen))
+							{
+								break;
+							}
+
+							int nNewLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
+							GetDataHeader()->BuildRecvPkgHeader(pUseBuf, nNewLen, nLen);
+							if ((int)(GetDataHeader()->GetHeaderLength()) - nLen > nNewLen)
+							{
+								LogFun(LT_Screen | LT_File, LogLv_Error, "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+								PushNetEvent(NETEVT_ERROR, NET_RECVBUFF_ERROR);
+								Close();
+								return;
+							}
+
+							pParseBuf = (char*)(GetDataHeader()->GetPkgHeader());
+							m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen + nNewLen);
+							if (0 >= m_nPacketLen)
+							{
+								LogFun(LT_Screen | LT_File, LogLv_Error, "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+								PushNetEvent(NETEVT_ERROR, NET_RECVBUFF_ERROR);
+								Close();
+								return;
+							}
+
+							m_nNeedData = m_nPacketLen - GetDataHeader()->GetHeaderLength();
+							nUsedLen = GetDataHeader()->GetHeaderLength() - nLen;
+							nParserLen = nUsedLen;
+							nLen = nNewLen - nUsedLen;
+							pParseBuf = pUseBuf + nUsedLen;
+							if (0 == m_nNeedData)
+							{
+								m_poRecvBuf->CostUsedBuff(nUsedLen);
+								nUsedLen = 0;
+								PushNetEvent(NETEVT_RECV, m_nPacketLen);
+								m_nPacketLen = 0;
+							}
+						}
+						else
+						{
+							nLen = 0;
+							break;
+						}
+					}
+					else
+					{
+						if (nLen >= m_nPacketLen)
+						{
+							nLen -= m_nPacketLen;
+							nUsedLen += m_nPacketLen;
+							nParserLen += nUsedLen;
+							m_poRecvBuf->CostUsedBuff(nUsedLen);
+							nUsedLen = 0;
+							PushNetEvent(NETEVT_RECV, m_nPacketLen);
+							m_nPacketLen = 0;
+							m_nNeedData = 0;
+						}
+						else
+						{
+							m_nNeedData = m_nPacketLen - nLen;
+							nUsedLen += nLen;
+							nLen = 0;
+						}
+					}
+				}
+			}
+
+			if (0 != nUsedLen)
+			{
+				m_poRecvBuf->CostUsedBuff(nUsedLen);
+			}
+		}
+	}
 }
 #endif // WIN32
 

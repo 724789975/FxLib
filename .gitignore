@@ -2,6 +2,8 @@ LuaLib/Debug/LuaLib.log
 Database/Debug/Database.tlog/CL.read.1.tlog
 *.suo
 *.user
+*.d
+*.o
 Database/Debug/Database.Build.CppClean.log
 Database/Debug/Database.log
 Debug/TestClient.exe_log.txt
