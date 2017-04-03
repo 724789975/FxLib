@@ -2760,7 +2760,7 @@ void FxWebSocketConnect::__ProcRecv(UINT32 dwLen)
 				"Upgrade: WebSocket\r\n"
 				"Server: %s\r\n"
 				"Sec-WebSocket-Accept: %s\r\n"
-				"\r\n\r\n",
+				"\r\n",
 				GetExeName(),
 				CLuaEngine::Instance()->CallStringFunction("ResponseKey", m_szWebInfo)
 			);
@@ -2813,12 +2813,15 @@ void FxWebSocketConnect::__ProcRecv(UINT32 dwLen)
 			unsigned long long ullTemp = 0;
 			oHeaderStream.ReadInt64(ullTemp);
 		}
-		memmove(GetConnection()->GetRecvBuf(), GetConnection()->GetRecvBuf() + dwHeaderLen, dwLen - dwHeaderLen);
 		char ucMaskingKey[4] = { 0 };
 		if (ucMask)
 		{
 			dwHeaderLen += 4;
 			memcpy(ucMaskingKey, oHeaderStream.ReadData(sizeof(ucMaskingKey)), sizeof(ucMaskingKey));
+		}
+		memmove(GetConnection()->GetRecvBuf(), GetConnection()->GetRecvBuf() + dwHeaderLen, dwLen - dwHeaderLen);
+		if (ucMask)
+		{
 			for (unsigned int i = 0; i < dwLen - dwHeaderLen; ++i)
 			{
 				GetConnection()->GetRecvBuf()[i] = GetConnection()->GetRecvBuf()[i] ^ ucMaskingKey[i % 4];
