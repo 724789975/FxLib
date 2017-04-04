@@ -41,6 +41,10 @@ public:\
 		}\
 		return (m_pData[e / 8] & (1 << (e % 8))) != 0;\
 	}\
+	void Reset()\
+	{\
+		memset(m_pData, 0, sizeof(m_pData));\
+	}\
 private:\
 	char m_pData[EnumName##Count / 8 + 1];\
 };\
