@@ -2795,32 +2795,32 @@ void FxWebSocketConnect::__ProcRecv(UINT32 dwLen)
 		unsigned int dwHeaderLen = 0;
 		CNetStream oHeaderStream(m_poConnection->GetRecvBuf(), dwLen);
 
-		unsigned char uc1, uc2;
-		oHeaderStream.ReadByte(uc1);
-		oHeaderStream.ReadByte(uc2);
+		unsigned char bt1, bt2;
+		oHeaderStream.ReadByte(bt1);
+		oHeaderStream.ReadByte(bt2);
 		dwHeaderLen += 2;
-		unsigned char ucMask = (uc2 >> 7) & 0xff;
-		unsigned char ucPayloadLen = uc2 & 0x7f;
-		if (ucPayloadLen == 126)
+		unsigned char btMask = (bt2 >> 7) & 0xff;
+		unsigned char btPayloadLen = bt2 & 0x7f;
+		if (btPayloadLen == 126)
 		{
 			dwHeaderLen += 2;
 			unsigned short wTemp = 0;
 			oHeaderStream.ReadShort(wTemp);
 		}
-		else if (ucPayloadLen == 127)
+		else if (btPayloadLen == 127)
 		{
 			dwHeaderLen += 8;
-			unsigned long long ullTemp = 0;
-			oHeaderStream.ReadInt64(ullTemp);
+			unsigned long long dwpTemp = 0;
+			oHeaderStream.ReadInt64(dwpTemp);
 		}
 		char ucMaskingKey[4] = { 0 };
-		if (ucMask)
+		if (btMask)
 		{
 			dwHeaderLen += 4;
 			memcpy(ucMaskingKey, oHeaderStream.ReadData(sizeof(ucMaskingKey)), sizeof(ucMaskingKey));
 		}
 		memmove(GetConnection()->GetRecvBuf(), GetConnection()->GetRecvBuf() + dwHeaderLen, dwLen - dwHeaderLen);
-		if (ucMask)
+		if (btMask)
 		{
 			for (unsigned int i = 0; i < dwLen - dwHeaderLen; ++i)
 			{
