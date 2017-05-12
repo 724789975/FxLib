@@ -127,7 +127,7 @@ private:
 	unsigned char m_btOpCode;
 	unsigned char m_btFin;
 	unsigned char m_btMask;
-	unsigned long long m_dwpPayloadLen;
+	unsigned long long m_qwPayloadLen;
 	unsigned char m_btMaskingKey[4];
 private:
 	// // 消息头 为网络字节序

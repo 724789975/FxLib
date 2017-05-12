@@ -2810,8 +2810,8 @@ void FxWebSocketConnect::__ProcRecv(UINT32 dwLen)
 		else if (btPayloadLen == 127)
 		{
 			dwHeaderLen += 8;
-			unsigned long long dwpTemp = 0;
-			oHeaderStream.ReadInt64(dwpTemp);
+			unsigned long long qwTemp = 0;
+			oHeaderStream.ReadInt64(qwTemp);
 		}
 		char ucMaskingKey[4] = { 0 };
 		if (btMask)
