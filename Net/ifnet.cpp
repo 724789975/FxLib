@@ -6,7 +6,7 @@
 FxSession::FxSession()
 {
 	m_poConnection = NULL;
-	m_pDataHeader = NULL;
+	//m_pDataHeader = NULL;
 }
 
 FxSession::~FxSession()
@@ -17,11 +17,11 @@ FxSession::~FxSession()
 		FxConnectionMgr::Instance()->Release(m_poConnection);
 		m_poConnection = NULL;
 	}
-	if (m_pDataHeader)
-	{
-		delete m_pDataHeader;
-		m_pDataHeader = NULL;
-	}
+	//if (m_pDataHeader)
+	//{
+	//	delete m_pDataHeader;
+	//	m_pDataHeader = NULL;
+	//}
 }
 
 bool FxSession::Send(const char* pBuf,UINT32 dwLen)
@@ -132,10 +132,10 @@ bool FxSession::OnDestroy()
 	return true;
 }
 
-void FxSession::SetDataHeader(IFxDataHeader* pDataHeader)
-{
-	m_pDataHeader = pDataHeader;
-}
+//void FxSession::SetDataHeader(IFxDataHeader* pDataHeader)
+//{
+//	m_pDataHeader = pDataHeader;
+//}
 
 IFxNet* FxNetGetModule()
 {

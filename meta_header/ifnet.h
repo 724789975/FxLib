@@ -169,9 +169,10 @@ public:
 
 	virtual bool					SetSessionOpt(ESessionOpt eOpt, bool bSetting);
 
-	virtual void					SetDataHeader(IFxDataHeader* pDataHeader);
+	//virtual void					SetDataHeader(IFxDataHeader* pDataHeader);
 
-	virtual IFxDataHeader*			GetDataHeader(){ return m_pDataHeader; }
+	//virtual IFxDataHeader*			GetDataHeader(){ return m_pDataHeader; }
+	virtual IFxDataHeader*			GetDataHeader() = 0;
 
 	virtual bool					OnDestroy();
 
@@ -179,7 +180,7 @@ public:
 private:
 	FxConnection*					m_poConnection;
 
-	IFxDataHeader*					m_pDataHeader;
+	//IFxDataHeader*					m_pDataHeader;
 };
 
 class IFxSessionFactory

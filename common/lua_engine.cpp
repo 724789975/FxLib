@@ -2,7 +2,7 @@
 #include "string.h"
 #include <string>
 
-IMPLEMENT_SINGLETON(CLuaEngine)
+//IMPLEMENT_SINGLETON(CLuaEngine)
 
 CLuaEngine::CLuaEngine()
 {

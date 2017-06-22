@@ -1,7 +1,7 @@
 #include "sockmgr.h"
 #include <time.h>
 
-IMPLEMENT_SINGLETON(FxMySockMgr)
+//IMPLEMENT_SINGLETON(FxMySockMgr)
 
 FxMySockMgr::FxMySockMgr()
 {

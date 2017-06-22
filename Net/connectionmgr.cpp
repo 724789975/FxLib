@@ -1,6 +1,6 @@
 #include "connectionmgr.h"
 
-IMPLEMENT_SINGLETON(FxConnectionMgr)
+//IMPLEMENT_SINGLETON(FxConnectionMgr)
 
 FxConnectionMgr::FxConnectionMgr()
 {

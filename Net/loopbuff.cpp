@@ -421,7 +421,7 @@ void FxLoopBuff::Clear()
 }
 //////////////////////////////////////////////////////////////////////////
 
-IMPLEMENT_SINGLETON(FxLoopBuffMgr);
+//IMPLEMENT_SINGLETON(FxLoopBuffMgr);
 
 FxLoopBuffMgr::FxLoopBuffMgr()
 {

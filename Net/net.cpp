@@ -4,7 +4,7 @@
 #include "loopbuff.h"
 #include "iothread.h"
 
-IMPLEMENT_SINGLETON(FxNetModule);
+//IMPLEMENT_SINGLETON(FxNetModule);
 FxNetModule::FxNetModule()
 {
     m_nNetThreadCount = 0;
@@ -111,7 +111,9 @@ void FxNetModule::__UninitComponent()
 
 void FxNetModule::__DestroyComponent()
 {
-    FxConnectionMgr::DestroyInstance();
+	FxConnectionMgr o1;
+	o1.DestroyInstance();
+	FxConnectionMgr::DestroyInstance();
 }
 
 void FxNetModule::Uninit()

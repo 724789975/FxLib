@@ -7,14 +7,14 @@
 
 typedef std::list<FxConnection*> TpListConnection;
 
-class FxConnectionMgr
+class FxConnectionMgr : public TSingleton<FxConnectionMgr>
 {
-	FxConnectionMgr();
-	~FxConnectionMgr();
-
-	DECLARE_SINGLETON(FxConnectionMgr)
-
 public:
+	FxConnectionMgr();
+	virtual ~FxConnectionMgr();
+
+	//DECLARE_SINGLETON(FxConnectionMgr)
+
 	bool                    Init(INT32 nMax);
 	void                    Uninit();
 

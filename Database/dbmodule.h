@@ -9,14 +9,14 @@
 #include "dynamicpoolex.h"
 #include "lock.h"
 
-class FxDBModule : public IDBModule
+class FxDBModule : public TSingleton<FxDBModule>, public IDBModule
 {
+public:
 	FxDBModule(void);
 	virtual ~FxDBModule();
     friend class FxMySqlClient;
 
-	DECLARE_SINGLETON(FxDBModule)
-public:
+	//DECLARE_SINGLETON(FxDBModule)
 	virtual void        Release(void);
 	virtual const char* GetModuleName(void);
 

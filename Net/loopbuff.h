@@ -44,12 +44,12 @@ private:
 
 //////////////////////////////////////////////////////////////////////////
 
-class FxLoopBuffMgr
+class FxLoopBuffMgr : public TSingleton<FxLoopBuffMgr>
 {
 public:
 	 FxLoopBuffMgr();
 	 ~FxLoopBuffMgr();
-	 DECLARE_SINGLETON(FxLoopBuffMgr);
+	 //DECLARE_SINGLETON(FxLoopBuffMgr);
 
 	 bool					 Init(UINT32 dwCount);
 	 FxLoopBuff*			 Fetch();

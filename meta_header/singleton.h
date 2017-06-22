@@ -25,10 +25,10 @@ public:\
     cls* cls::m_poInstance = 0;
 
 template<class T>
-class TSingletion
+class TSingleton
 {
 public:
-	virtual ~TSingletion() {}
+	virtual ~TSingleton() {}
 	//static volatile T* Instance() { return (T*)(m_pInstance); }
 	static T* Instance() { return (T*)(m_pInstance); }
 	static bool CreateInstance()
@@ -56,10 +56,10 @@ private:
 	//static volatile T* m_pInstance;
 	static T* m_pInstance;
 protected:
-	TSingletion() {}
+	TSingleton() {}
 };
 
 template<class T>
-T* TSingletion<T>::m_pInstance = 0;
+T* TSingleton<T>::m_pInstance = 0;
 
 #endif

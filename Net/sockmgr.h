@@ -7,15 +7,16 @@
 #include "myudpsock.h"
 #include "dynamicpoolex.h"
 #include "ifnet.h"
+#include "singleton.h"
 
-class FxMySockMgr
+class FxMySockMgr : public TSingleton<FxMySockMgr>
 {
-	FxMySockMgr();
-	~FxMySockMgr();
-
-	DECLARE_SINGLETON(FxMySockMgr)
-
 public:
+	FxMySockMgr();
+	virtual ~FxMySockMgr();
+
+	//DECLARE_SINGLETON(FxMySockMgr)
+
 	bool								Init(INT32 nMax);
 	void								Uninit();
 

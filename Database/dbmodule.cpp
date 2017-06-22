@@ -1,6 +1,6 @@
 #include "dbmodule.h"
 
-IMPLEMENT_SINGLETON(FxDBModule)
+//IMPLEMENT_SINGLETON(FxDBModule)
 
 FxDBModule::FxDBModule(void)
 {

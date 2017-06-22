@@ -41,9 +41,9 @@ typedef int ToluaFunctionOpen(lua_State*);
 #define DLLCLASS_DECL
 #endif
 
-class CLuaEngine: public ListDirAndLoadFile
+class CLuaEngine : public TSingleton<CLuaEngine>, public ListDirAndLoadFile
 {
-DECLARE_SINGLETON(CLuaEngine)
+//DECLARE_SINGLETON(CLuaEngine)
 public:
 	CLuaEngine();
 	virtual ~CLuaEngine();

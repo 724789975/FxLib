@@ -42,11 +42,11 @@ private:
 
 static CSessionFactory oSessionFactory;
 
-class DataHeader : public IFxDataHeader
+class BinaryDataHeader : public IFxDataHeader
 {
 public:
-	DataHeader();
-	virtual ~DataHeader();
+	BinaryDataHeader();
+	virtual ~BinaryDataHeader();
 	virtual unsigned int GetHeaderLength(){ return sizeof(m_dataBuffer); }		// 消息头长度
 	virtual void* GetPkgHeader();
 	virtual void* BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen);
@@ -64,11 +64,26 @@ class DataHeaderFactory : public IFxDataHeaderFactory
 public:
 	DataHeaderFactory(){}
 	virtual ~DataHeaderFactory(){}
-	virtual IFxDataHeader* CreateDataHeader(){ return new DataHeader; }
+	virtual IFxDataHeader* CreateDataHeader(){ return new BinaryDataHeader; }
 private:
 
 };
+class CBinarySocketSession : public CSocketSession
+{
+public:
+	CBinarySocketSession()
+	{
+	}
 
+	~CBinarySocketSession()
+	{
+	}
+
+	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
+	//virtual void Release(void);
+private:
+	BinaryDataHeader m_oBinaryDataHeader;
+};
 static DataHeaderFactory oDataHeaderFactory;
 
 #endif // !__SocketSession_H__

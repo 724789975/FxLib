@@ -46,27 +46,27 @@ void CSocketSession::Release(void)
 
 FxSession*	CSessionFactory::CreateSession()
 {
-	FxSession* pSession = new CSocketSession();
-	pSession->SetDataHeader(oDataHeaderFactory.CreateDataHeader());
+	FxSession* pSession = new CBinarySocketSession();
+	//pSession->SetDataHeader(oDataHeaderFactory.CreateDataHeader());
 	return pSession;
 }
 
-DataHeader::DataHeader()
+BinaryDataHeader::BinaryDataHeader()
 {
 
 }
 
-DataHeader::~DataHeader()
+BinaryDataHeader::~BinaryDataHeader()
 {
 
 }
 
-void* DataHeader::GetPkgHeader()
+void* BinaryDataHeader::GetPkgHeader()
 {
 	return (void*)m_dataBuffer;
 }
 
-void* DataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen)
+void* BinaryDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen)
 {
 	dwHeaderLen = sizeof(m_dataBuffer);
 	//*((UINT32*)m_dataBuffer) = htonl(dwDataLen);
@@ -76,7 +76,7 @@ void* DataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen)
 	return (void*)m_dataBuffer;
 }
 
-bool DataHeader::BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset)
+bool BinaryDataHeader::BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset)
 {
 	if (dwLen + dwOffset > GetHeaderLength())
 	{
@@ -87,7 +87,7 @@ bool DataHeader::BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset)
 	return true;
 }
 
-int DataHeader::__CheckPkgHeader(const char* pBuf)
+int BinaryDataHeader::__CheckPkgHeader(const char* pBuf)
 {
 	CNetStream oHeaderStream(m_dataBuffer, sizeof(m_dataBuffer));
 	CNetStream oRecvStream(pBuf, sizeof(m_dataBuffer));

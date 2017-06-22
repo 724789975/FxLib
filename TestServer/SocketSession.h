@@ -28,20 +28,21 @@ public:
 
 	virtual UINT32		GetRecvSize(){ return 64 * 1024; };
 
-	void				SetFxSessionFactory(IFxSessionFactory* pFxSessionFactory) { m_pFxSessionFactory = pFxSessionFactory; }
+	//void				SetFxSessionFactory(IFxSessionFactory* pFxSessionFactory) { m_pFxSessionFactory = pFxSessionFactory; }
 
 private:
 	char m_dataRecvBuf[1024* 1024];
-	IFxSessionFactory* m_pFxSessionFactory;
+	//IFxSessionFactory* m_pFxSessionFactory;
 };
 
-class CSessionFactory : public IFxSessionFactory
+
+class CSessionFactory : public TSingleton<CSessionFactory>, public IFxSessionFactory
 {
 public:
 	CSessionFactory();
 	virtual ~CSessionFactory(){}
 
-	DECLARE_SINGLETON(CSessionFactory)
+	//DECLARE_SINGLETON(CSessionFactory)
 
 	virtual FxSession*	CreateSession();
 
@@ -58,13 +59,13 @@ private:
 	IFxLock*			m_pLock;
 };
 
-class CWebSocketSessionFactory : public IFxSessionFactory
+class CWebSocketSessionFactory : public TSingleton<CWebSocketSessionFactory>, public IFxSessionFactory
 {
 public:
 	CWebSocketSessionFactory();
 	~CWebSocketSessionFactory(){}
 
-	DECLARE_SINGLETON(CWebSocketSessionFactory)
+	//DECLARE_SINGLETON(CWebSocketSessionFactory)
 
 	virtual FxSession*	CreateSession();
 
@@ -83,11 +84,11 @@ private:
 
 //static CSessionFactory oSessionFactory;
 
-class DataHeader : public IFxDataHeader
+class BinaryDataHeader : public IFxDataHeader
 {
 public:
-	DataHeader();
-	virtual ~DataHeader();
+	BinaryDataHeader();
+	virtual ~BinaryDataHeader();
 	virtual unsigned int GetHeaderLength(){ return sizeof(m_dataRecvBuffer); }		// 消息头长度
 	virtual void* GetPkgHeader();
 	virtual void* BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen);
@@ -144,7 +145,7 @@ class DataHeaderFactory : public IFxDataHeaderFactory
 public:
 	DataHeaderFactory(){}
 	virtual ~DataHeaderFactory(){}
-	virtual IFxDataHeader* CreateDataHeader(){ return new DataHeader; }
+	virtual IFxDataHeader* CreateDataHeader(){ return new BinaryDataHeader; }
 private:
 
 };
@@ -162,5 +163,40 @@ private:
 };
 
 static WebSocketDataHeaderFactory oWebSocketDataHeaderFactory;
+
+class CBinarySocketSession : public CSocketSession
+{
+public:
+	CBinarySocketSession()
+	{
+	}
+
+	~CBinarySocketSession()
+	{
+	}
+
+	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
+	virtual void Release(void);
+private:
+	BinaryDataHeader m_oBinaryDataHeader;
+};
+
+class CWebSocketSession : public CSocketSession
+{
+public:
+	CWebSocketSession()
+	{
+	}
+
+	~CWebSocketSession()
+	{
+	}
+
+	virtual IFxDataHeader* GetDataHeader() { return &m_oWebSocketDataHeader; }
+	virtual void Release(void);
+private:
+	WebSocketDataHeader m_oWebSocketDataHeader;
+};
+
 
 #endif // !__SocketSession_H__

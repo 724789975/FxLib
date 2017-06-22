@@ -15,12 +15,12 @@ struct SSockNetEvent
 
 class FxIoThread;
 
-class FxNetModule : public IFxNet
+class FxNetModule : public TSingleton<FxNetModule>, public IFxNet
 {
 public:
 	FxNetModule();
 	virtual ~FxNetModule();
-	DECLARE_SINGLETON(FxNetModule);
+	//DECLARE_SINGLETON(FxNetModule);
 
 	virtual bool				Init();
 	virtual bool				Run(UINT32 dwCount = 0xffffffff);
