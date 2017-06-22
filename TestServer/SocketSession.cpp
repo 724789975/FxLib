@@ -278,30 +278,30 @@ void* WebSocketDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwData
 {
 	dwHeaderLen = 1;
 	CNetStream oNetStream(ENetStreamType_Write, m_dataSendBuffer, sizeof(m_dataSendBuffer));
-	unsigned char ucFinOpCode = 0x81;
-	unsigned char ucFin = (ucFinOpCode >> 7) & 0xff;
-	unsigned char ucOpCode = (ucFinOpCode) & 0x0f;
-	oNetStream.WriteByte(ucFinOpCode);
+	unsigned char btFinOpCode = 0x81;
+	unsigned char btFin = (btFinOpCode >> 7) & 0xff;
+	unsigned char btOpCode = (btFinOpCode) & 0x0f;
+	oNetStream.WriteByte(btFinOpCode);
 	if (dwDataLen < 126 && dwDataLen <= 0xFFFF)
 	{
-		unsigned char ucLen = dwDataLen;
-		oNetStream.WriteByte(ucLen);
+		unsigned char btLen = dwDataLen;
+		oNetStream.WriteByte(btLen);
 		dwHeaderLen += 1;
 	}
 	else if (dwDataLen >= 126 && dwDataLen <= 0xFFFF)
 	{
-		unsigned char ucLen = 126;
-		oNetStream.WriteByte(ucLen);
+		unsigned char btLen = 126;
+		oNetStream.WriteByte(btLen);
 		unsigned short wLen = dwDataLen;
 		oNetStream.WriteShort(wLen);
 		dwHeaderLen += 3;
 	}
 	else
 	{
-		unsigned char ucLen = 127;
-		oNetStream.WriteByte(ucLen);
-		unsigned long long ullLen = dwDataLen;
-		oNetStream.WriteInt64(ullLen);
+		unsigned char btLen = 127;
+		oNetStream.WriteByte(btLen);
+		unsigned long long qwLen = dwDataLen;
+		oNetStream.WriteInt64(qwLen);
 		dwHeaderLen += 9;
 	}
 	return (void*)m_dataSendBuffer;
@@ -323,37 +323,37 @@ int WebSocketDataHeader::__CheckPkgHeader(const char * pBuf)
 	m_dwHeaderLength = 0;
 	CNetStream oHeaderStream(pBuf, sizeof(m_dataRecvBuffer));
 	
-	unsigned char uc1, uc2;
-	oHeaderStream.ReadByte(uc1);
-	oHeaderStream.ReadByte(uc2);
+	unsigned char bt1, bt2;
+	oHeaderStream.ReadByte(bt1);
+	oHeaderStream.ReadByte(bt2);
 	m_dwHeaderLength += 2;
-	m_ucFin = (uc1 >> 7) & 0xff;
-	m_ucOpCode = (uc1) & 0x0f;
-	m_ucMask = (uc2 >> 7) & 0xff;
-	m_ullPayloadLen = uc2 & 0x7f;
+	m_btFin = (bt1 >> 7) & 0xff;
+	m_btOpCode = (bt1) & 0x0f;
+	m_btMask = (bt2 >> 7) & 0xff;
+	m_qwPayloadLen = bt2 & 0x7f;
 
-	if (m_ullPayloadLen == 126)
+	if (m_qwPayloadLen == 126)
 	{
 		unsigned short wTemp = 0;
 		oHeaderStream.ReadShort(wTemp);
-		m_ullPayloadLen = wTemp;
+		m_qwPayloadLen = wTemp;
 		m_dwHeaderLength += 2;
 	}
-	else if (m_ullPayloadLen == 127)
+	else if (m_qwPayloadLen == 127)
 	{
-		unsigned long long ullTemp = 0;
-		oHeaderStream.ReadInt64(ullTemp);
-		m_ullPayloadLen = ullTemp;
+		unsigned long long qwTemp = 0;
+		oHeaderStream.ReadInt64(qwTemp);
+		m_qwPayloadLen = qwTemp;
 		m_dwHeaderLength += 8;
 	}
 	
-	if (m_ucMask)
+	if (m_btMask)
 	{
-		memcpy(m_ucMaskingKey, oHeaderStream.ReadData(sizeof(m_ucMaskingKey)), sizeof(m_ucMaskingKey));
+		memcpy(m_btMaskingKey, oHeaderStream.ReadData(sizeof(m_btMaskingKey)), sizeof(m_btMaskingKey));
 		m_dwHeaderLength += 4;
 	}
 
-	return (int)(m_ullPayloadLen + m_dwHeaderLength);
+	return (int)(m_qwPayloadLen + m_dwHeaderLength);
 }
 
 int WebSocketDataHeader::ParsePacket(const char * pBuf, UINT32 dwLen)

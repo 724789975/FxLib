@@ -125,11 +125,11 @@ private:
 	/* 0xA		pong		*/
 	/* 0xB-F	保留		*/
 	/************************/
-	unsigned char m_ucOpCode;
-	unsigned char m_ucFin;
-	unsigned char m_ucMask;
-	unsigned long long m_ullPayloadLen;
-	unsigned char m_ucMaskingKey[4];
+	unsigned char m_btOpCode;
+	unsigned char m_btFin;
+	unsigned char m_btMask;
+	unsigned long long m_qwPayloadLen;
+	unsigned char m_btMaskingKey[4];
 private:
 	// // 消息头 为网络字节序
 	char m_dataRecvBuffer[16];
