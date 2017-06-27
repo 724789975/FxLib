@@ -98,11 +98,7 @@ void CSocketSession::Release(void)
 	OnDestroy();
 
 	Init(NULL);
-
-	//m_pFxSessionFactory->Release(this);
 }
-
-//IMPLEMENT_SINGLETON(CSessionFactory)
 
 CSessionFactory::CSessionFactory()
 {
@@ -110,8 +106,6 @@ CSessionFactory::CSessionFactory()
 	for(int i = 0; i < 64; ++i)
 	{
 		CBinarySocketSession* pSession = new CBinarySocketSession;
-		//pSession->SetDataHeader(oDataHeaderFactory.CreateDataHeader());
-		//pSession->SetFxSessionFactory(this);
 		m_listSession.push_back(pSession);
 	}
 //	m_poolSessions.Init(100, 10, false, 100);
@@ -128,11 +122,6 @@ FxSession*	CSessionFactory::CreateSession()
 	}
 	if(pSession)
 	{
-		//if(pSession->GetDataHeader() == NULL)
-		//{
-		//	pSession->SetDataHeader(oDataHeaderFactory.CreateDataHeader());
-		//}
-
 		m_setSessions.insert(pSession);
 	}
 	LogFun(LT_Screen | LT_File, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
@@ -150,16 +139,12 @@ void CSessionFactory::Release(FxSession* pSession)
 	m_pLock->UnLock();
 }
 
-//IMPLEMENT_SINGLETON(CWebSocketSessionFactory)
-
 CWebSocketSessionFactory::CWebSocketSessionFactory()
 {
 	m_pLock = FxCreateThreadLock();
 	for (int i = 0; i < 64; ++i)
 	{
 		CWebSocketSession* pSession = new CWebSocketSession;
-		//pSession->SetDataHeader(oWebSocketDataHeaderFactory.CreateDataHeader());
-		//pSession->SetFxSessionFactory(this);
 		m_listSession.push_back(pSession);
 	}
 }
@@ -175,11 +160,6 @@ FxSession * CWebSocketSessionFactory::CreateSession()
 	}
 	if (pSession)
 	{
-		//if (pSession->GetDataHeader() == NULL)
-		//{
-		//	pSession->SetDataHeader(oWebSocketDataHeaderFactory.CreateDataHeader());
-		//}
-
 		m_setSessions.insert(pSession);
 	}
 	LogFun(LT_Screen | LT_File, LogLv_Debug, "left free session : %d", (int)m_listSession.size());

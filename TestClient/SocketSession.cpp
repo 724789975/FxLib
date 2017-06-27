@@ -47,7 +47,6 @@ void CSocketSession::Release(void)
 FxSession*	CSessionFactory::CreateSession()
 {
 	FxSession* pSession = new CBinarySocketSession();
-	//pSession->SetDataHeader(oDataHeaderFactory.CreateDataHeader());
 	return pSession;
 }
 

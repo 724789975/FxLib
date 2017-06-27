@@ -42,8 +42,6 @@ public:
 	CSessionFactory();
 	virtual ~CSessionFactory(){}
 
-	//DECLARE_SINGLETON(CSessionFactory)
-
 	virtual FxSession*	CreateSession();
 
 	void Init(){}
@@ -64,8 +62,6 @@ class CWebSocketSessionFactory : public TSingleton<CWebSocketSessionFactory>, pu
 public:
 	CWebSocketSessionFactory();
 	~CWebSocketSessionFactory(){}
-
-	//DECLARE_SINGLETON(CWebSocketSessionFactory)
 
 	virtual FxSession*	CreateSession();
 
@@ -139,30 +135,6 @@ private:
 	unsigned int m_dwHeaderLength;
 	//static const UINT32 s_dwMagic = 12345678;
 };
-
-class DataHeaderFactory : public IFxDataHeaderFactory
-{
-public:
-	DataHeaderFactory(){}
-	virtual ~DataHeaderFactory(){}
-	virtual IFxDataHeader* CreateDataHeader(){ return new BinaryDataHeader; }
-private:
-
-};
-
-static DataHeaderFactory oDataHeaderFactory;
-
-class WebSocketDataHeaderFactory : public IFxDataHeaderFactory
-{
-public:
-	WebSocketDataHeaderFactory(){}
-	virtual ~WebSocketDataHeaderFactory(){}
-	virtual IFxDataHeader* CreateDataHeader(){ return new WebSocketDataHeader; }
-private:
-
-};
-
-static WebSocketDataHeaderFactory oWebSocketDataHeaderFactory;
 
 class CBinarySocketSession : public CSocketSession
 {

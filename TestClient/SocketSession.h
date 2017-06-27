@@ -59,15 +59,6 @@ private:
 	//static const UINT32 s_dwMagic = 12345678;
 };
 
-class DataHeaderFactory : public IFxDataHeaderFactory
-{
-public:
-	DataHeaderFactory(){}
-	virtual ~DataHeaderFactory(){}
-	virtual IFxDataHeader* CreateDataHeader(){ return new BinaryDataHeader; }
-private:
-
-};
 class CBinarySocketSession : public CSocketSession
 {
 public:
@@ -84,6 +75,5 @@ public:
 private:
 	BinaryDataHeader m_oBinaryDataHeader;
 };
-static DataHeaderFactory oDataHeaderFactory;
 
 #endif // !__SocketSession_H__
