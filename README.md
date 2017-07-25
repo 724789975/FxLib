@@ -25,3 +25,5 @@ if want release use "make"
 可以使用FxLib下的Makefile生成
 "make debug"用来生成debug版
 "make" 用来生成release版
+
+不能提交
