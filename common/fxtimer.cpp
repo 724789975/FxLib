@@ -5,15 +5,34 @@
 #include "fxmeta.h"
 #include "lua_engine.h"
 #include "lock.h"
+#ifdef WIN32
+#include <time.h>
+#else
+#include <sys/time.h>
+#endif // WIN32
+
+double GetTimeOfDay()
+{
+	static double qwTime = 0;
+	qwTime = (double)time(NULL);
+#ifdef WIN32
+	SYSTEMTIME st;
+	GetSystemTime(&st);
+	return qwTime + st.wMilliseconds / 1000.0f;
+#else
+	static struct timeval tv;
+	gettimeofday(&tv, NULL);
+	qwTime = tv.tv_usec + tv.tv_usec / 1000000.0f;
+#endif
+}
 
 class FxTimerHandler: public IFxTimerHandler/*, IFxThread*/
 {
 public:
 	FxTimerHandler() :
-		m_dwSecond(0)
+		m_qwSecond(0)
 	{
 		m_strTime[0] = 0;
-		m_vdwSeq = 0;
 //		m_bStop = false;
 	}
 
@@ -40,7 +59,7 @@ public:
 
 	virtual bool AddDelayTimer(unsigned int dwSecond, IFxTimer* pFxTimer)
 	{
-		unsigned int dwInvokeTime = m_dwSecond + dwSecond;
+		unsigned int dwInvokeTime = (unsigned int)m_qwSecond + dwSecond;
 		if (m_mapDelayTimers[dwInvokeTime].find(pFxTimer)
 				!= m_mapDelayTimers[dwInvokeTime].end())
 		{
@@ -109,7 +128,7 @@ public:
 
 	virtual int GetSecond()
 	{
-		return m_dwSecond;
+		return (int)m_qwSecond;
 	}
 
 	virtual char* GetTimeStr()
@@ -119,38 +138,40 @@ public:
 
 	virtual unsigned int GetTimeSeq()
 	{
-		return m_vdwSeq++;
+		return (unsigned int)((m_qwSecond - (unsigned int)m_qwSecond) * 1000);
 	}
 
 private:
 	void __Refresh()
 	{
-		static unsigned int sdwSecond = 0;
-		sdwSecond = (unsigned int) (CLuaEngine::Instance()->CallNumberFunction(
-				"GetTimeSecond"));
+		static double s_qwSecond = 0;
+		s_qwSecond = GetTimeOfDay();
 
-		if(sdwSecond == m_dwSecond)
+		if((unsigned int)s_qwSecond == (unsigned int)m_qwSecond)
 		{
-			// ͬһ���� ��Щ����ִֻ��һ��//
+			m_qwSecond = s_qwSecond;
 			return;
 		}
 
-		m_dwSecond = sdwSecond;
-		sprintf(m_strTime, "%s",
-				CLuaEngine::Instance()->CallStringFunction<unsigned int>(
-						"GetTimeStr", m_dwSecond));
+		m_qwSecond = s_qwSecond;
 
-		m_vdwSeq = 0;
+		time_t dwTime = (time_t)m_qwSecond;
+		tm* tmLocal = localtime(&dwTime); //转为本地时间  
+		strftime(m_strTime, 64, "%Y-%m-%d %H:%M:%S", tmLocal);
+		//sprintf(m_strTime, "%s",
+		//		CLuaEngine::Instance()->CallStringFunction<unsigned int>(
+		//				"GetTimeStr", m_qwSecond));
+
 
 		for (std::map<unsigned int, std::set<IFxTimer*> >::iterator it =
 				m_mapTimers.begin(); it != m_mapTimers.end(); ++it)
 		{
-			if (m_dwSecond % it->first == 0)
+			if ((unsigned int)m_qwSecond % it->first == 0)
 			{
 				for (std::set<IFxTimer*>::iterator itTimer = it->second.begin();
 						itTimer != it->second.end(); ++itTimer)
 				{
-					(*itTimer)->OnTimer(m_dwSecond);
+					(*itTimer)->OnTimer((unsigned int)m_qwSecond);
 				}
 			}
 		}
@@ -158,12 +179,12 @@ private:
 		for (std::map<unsigned int, std::set<IFxTimer*> >::iterator it =
 				m_mapDelayTimers.begin(); it != m_mapDelayTimers.end();)
 		{
-			if (it->first <= m_dwSecond)
+			if (it->first <= m_qwSecond)
 			{
 				for (std::set<IFxTimer*>::iterator itTimer = it->second.begin();
 						itTimer != it->second.end(); ++itTimer)
 				{
-					(*itTimer)->OnTimer(m_dwSecond);
+					(*itTimer)->OnTimer((unsigned int)m_qwSecond);
 				}
 				m_mapDelayTimers.erase(it++);
 			}
@@ -176,10 +197,9 @@ private:
 
 private:
 //	bool m_bStop;
-	unsigned int m_dwSecond;
+	double m_qwSecond;
 	char m_strTime[64];
 
-	volatile unsigned int m_vdwSeq;
 	FxCriticalLock m_oLock;
 
 	std::map<unsigned int, std::set<IFxTimer*> > m_mapTimers;
