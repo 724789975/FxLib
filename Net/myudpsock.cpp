@@ -104,7 +104,7 @@ bool FxUDPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 		return false;
 	}
 
-	m_poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(GetSockId());
+	m_poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(GetSock());
 	if (NULL == m_poIoThreadHandler)
 	{
 		return false;
@@ -433,17 +433,6 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 			return;
 		}
 
-		FxIoThread* poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSockId());
-		if (NULL == poIoThreadHandler)
-		{
-			LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, get iothread failed");
-
-			closesocket(hSock);
-			PostAccept(*pstPerIoData);
-			FxMySockMgr::Instance()->Release(poSock);
-			return;
-		}
-
 		FxConnection* poConnection = FxConnectionMgr::Instance()->Create();
 		if (NULL == poConnection)
 		{
@@ -474,6 +463,17 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 			PostAccept(*pstPerIoData);
 			FxMySockMgr::Instance()->Release(poSock);
 			FxConnectionMgr::Instance()->Release(poConnection);
+			return;
+		}
+
+		FxIoThread* poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSock());
+		if (NULL == poIoThreadHandler)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, get iothread failed");
+
+			closesocket(hSock);
+			PostAccept(*pstPerIoData);
+			FxMySockMgr::Instance()->Release(poSock);
 			return;
 		}
 
@@ -600,16 +600,6 @@ void FxUDPListenSock::OnAccept()
 		return;
 	}
 
-	FxIoThread* poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSockId());
-	if (NULL == poIoThreadHandler)
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, get iothread failed");
-
-		close(hAcceptSock);
-		FxMySockMgr::Instance()->Release(poSock);
-		return;
-	}
-
 	FxConnection* poConnection = FxConnectionMgr::Instance()->Create();
 	if (NULL == poConnection)
 	{
@@ -643,6 +633,16 @@ void FxUDPListenSock::OnAccept()
 
 	poSession->Init(poConnection);
 	poConnection->SetSession(poSession);
+
+	FxIoThread* poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSock());
+	if (NULL == poIoThreadHandler)
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, get iothread failed");
+
+		close(hAcceptSock);
+		FxMySockMgr::Instance()->Release(poSock);
+		return;
+	}
 	poSock->SetIoThread(poIoThreadHandler);
 
 	setsockopt(poSock->GetSock(), SOL_SOCKET, SO_SNDLOWAT, &UDP_VAL_SO_SNDLOWAT, sizeof(UDP_VAL_SO_SNDLOWAT));
@@ -1153,7 +1153,7 @@ SOCKET FxUDPConnectSock::Connect()
 	setsockopt(GetSock(), SOL_SOCKET, SO_SNDBUF, &UDP_MAX_SYS_SEND_BUF, sizeof(UDP_MAX_SYS_SEND_BUF));
 #endif // WIN32
 
-	SetIoThread(FxNetModule::Instance()->FetchIoThread(GetSockId()));
+	SetIoThread(FxNetModule::Instance()->FetchIoThread(GetSock()));
 	if (NULL == m_poIoThreadHandler)
 	{
 		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "SetIoThread failed");

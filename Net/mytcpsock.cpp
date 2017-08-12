@@ -117,7 +117,7 @@ bool FxTCPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 		return false;
 	}
 
-	m_poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(GetSockId());
+	m_poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(GetSock());
 	if (NULL == m_poIoThreadHandler)
 	{
 		Close();
@@ -492,16 +492,6 @@ void FxTCPListenSock::OnAccept(SPerIoData* pstPerIoData)
 			return;
 		}
 
-		FxIoThread* poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSockId());
-		if (NULL == poIoThreadHandler)
-		{
-			LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, get iothread failed");
-
-			closesocket(hSock);
-			PostAccept(*pstPerIoData);
-			return;
-		}
-
 		FxConnection* poConnection = FxConnectionMgr::Instance()->Create();
 		if (NULL == poConnection)
 		{
@@ -553,6 +543,16 @@ void FxTCPListenSock::OnAccept(SPerIoData* pstPerIoData)
 			PostAccept(*pstPerIoData);
 			FxMySockMgr::Instance()->Release(poSock);
 			FxConnectionMgr::Instance()->Release(poConnection);
+			return;
+		}
+
+		FxIoThread* poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSock());
+		if (NULL == poIoThreadHandler)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, get iothread failed");
+
+			closesocket(hSock);
+			PostAccept(*pstPerIoData);
 			return;
 		}
 
@@ -663,15 +663,6 @@ void FxTCPListenSock::OnAccept()
 		return;
 	}
 
-	FxIoThread* poEpollHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSockId());
-	if (NULL == poEpollHandler)
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "NULL == poEpollHandler");
-
-		close(hAcceptSock);
-		return;
-	}
-
 	FxConnection* poConnection = FxConnectionMgr::Instance()->Create();
 	if (NULL == poConnection)
 	{
@@ -709,9 +700,18 @@ void FxTCPListenSock::OnAccept()
 	poConnection->SetLocalPort(ntohs(stLocalAddr.sin_port));
 	poConnection->SetRemoteIP(stRemoteAddr.sin_addr.s_addr);
 	poConnection->SetRemotePort(ntohs(stRemoteAddr.sin_port));
-
 	poSock->SetSock(hAcceptSock);
 	poSock->SetConnection(poConnection);
+
+	FxIoThread* poEpollHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSock());
+	if (NULL == poEpollHandler)
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "NULL == poEpollHandler");
+
+		close(hAcceptSock);
+		return;
+	}
+
 	poSock->SetIoThread(poEpollHandler);
 
 	poSock->SetState(SSTATE_ESTABLISH);
@@ -778,16 +778,6 @@ void FxWebSocketListen::OnAccept(SPerIoData* pstPerIoData)
 			return;
 		}
 
-		FxIoThread* poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSockId());
-		if (NULL == poIoThreadHandler)
-		{
-			LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, get iothread failed");
-
-			closesocket(hSock);
-			PostAccept(*pstPerIoData);
-			return;
-		}
-
 		FxConnection* poConnection = FxConnectionMgr::Instance()->Create();
 		if (NULL == poConnection)
 		{
@@ -839,6 +829,16 @@ void FxWebSocketListen::OnAccept(SPerIoData* pstPerIoData)
 			PostAccept(*pstPerIoData);
 			FxMySockMgr::Instance()->Release(poSock);
 			FxConnectionMgr::Instance()->Release(poConnection);
+			return;
+		}
+
+		FxIoThread* poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSock());
+		if (NULL == poIoThreadHandler)
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "CCPSock::OnAccept, get iothread failed");
+
+			closesocket(hSock);
+			PostAccept(*pstPerIoData);
 			return;
 		}
 
@@ -931,15 +931,6 @@ void FxWebSocketListen::OnAccept()
 		return;
 	}
 
-	FxIoThread* poEpollHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSockId());
-	if (NULL == poEpollHandler)
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "NULL == poEpollHandler");
-
-		close(hAcceptSock);
-		return;
-	}
-
 	FxConnection* poConnection = FxConnectionMgr::Instance()->Create();
 	if (NULL == poConnection)
 	{
@@ -977,9 +968,18 @@ void FxWebSocketListen::OnAccept()
 	poConnection->SetLocalPort(ntohs(stLocalAddr.sin_port));
 	poConnection->SetRemoteIP(stRemoteAddr.sin_addr.s_addr);
 	poConnection->SetRemotePort(ntohs(stRemoteAddr.sin_port));
-
 	poSock->SetSock(hAcceptSock);
 	poSock->SetConnection(poConnection);
+
+	FxIoThread* poEpollHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSock());
+	if (NULL == poEpollHandler)
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "NULL == poEpollHandler");
+
+		close(hAcceptSock);
+		return;
+	}
+
 	poSock->SetIoThread(poEpollHandler);
 
 	poSock->SetState(SSTATE_ESTABLISH);
@@ -1757,7 +1757,7 @@ SOCKET FxTCPConnectSockBase::Connect()
 #endif // WIN32
 	// [end]
 
-	SetIoThread(FxNetModule::Instance()->FetchIoThread(GetSockId()));
+	SetIoThread(FxNetModule::Instance()->FetchIoThread(GetSock()));
 	if (NULL == m_poIoThreadHandler)
 	{
 //		m_pLock.UnLock();
@@ -1814,7 +1814,6 @@ SOCKET FxTCPConnectSockBase::Connect()
 
 	if(-1 == connect(GetSock(), (sockaddr*)&stAddr, sizeof(stAddr)))
 	{
-		// todo ֱ������ס������
 		PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
 		closesocket(GetSock());
 		return INVALID_SOCKET;
@@ -2080,7 +2079,7 @@ void FxTCPConnectSockBase::OnRecv(bool bRet, int dwBytes)
 		return;
 	}
 
-	m_oLock.Lock();
+	//m_oLock.Lock();
 	int nUsedLen = 0;
 	int nParserLen = 0;
 	int nLen = int(dwBytes);
@@ -2103,7 +2102,7 @@ void FxTCPConnectSockBase::OnRecv(bool bRet, int dwBytes)
 		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
 		m_dwLastError = NET_RECVBUFF_ERROR;
 		PostClose();
-		m_oLock.UnLock();
+		//m_oLock.UnLock();
 		return;
 	}
 
@@ -2142,7 +2141,7 @@ void FxTCPConnectSockBase::OnRecv(bool bRet, int dwBytes)
 				InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
 				m_dwLastError = NET_RECVBUFF_ERROR;
 				PostClose();
-				m_oLock.UnLock();
+				//m_oLock.UnLock();
 				return;
 			}
 			else if (0 == m_nPacketLen)
@@ -2170,7 +2169,7 @@ void FxTCPConnectSockBase::OnRecv(bool bRet, int dwBytes)
 							InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
 							m_dwLastError = NET_RECVBUFF_ERROR;
 							PostClose();
-							m_oLock.UnLock();
+							//m_oLock.UnLock();
 							return;
 						}
 						GetDataHeader()->BuildRecvPkgHeader(pUseBuf, GetDataHeader()->GetHeaderLength() - nLen, nLen);
@@ -2183,7 +2182,7 @@ void FxTCPConnectSockBase::OnRecv(bool bRet, int dwBytes)
 							InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
 							m_dwLastError = NET_RECVBUFF_ERROR;
 							PostClose();
-							m_oLock.UnLock();
+							//m_oLock.UnLock();
 							return;
 						}
 
@@ -2246,7 +2245,7 @@ void FxTCPConnectSockBase::OnRecv(bool bRet, int dwBytes)
 			PostClose();
 		}
 	}
-	m_oLock.UnLock();
+	//m_oLock.UnLock();
 }
 
 void FxTCPConnectSockBase::OnSend(bool bRet, int dwBytes)
@@ -2955,74 +2954,169 @@ void FxWebSocketConnect::OnRecv(bool bRet, int dwBytes)
 		return;
 	}
 
+	if (0 == dwBytes)
 	{
-		if (0 == dwBytes)
-		{
-			InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-			Close();
-			return;
-		}
+		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+		Close();
+		return;
+	}
 
-		if (UINT32(-1) == dwBytes)
+	if (UINT32(-1) == dwBytes)
+	{
+		InterlockedCompareExchange(&m_nPostRecv, m_nPostRecv - 1, m_nPostRecv);
+		if (0 == m_nPostRecv)
 		{
-			InterlockedCompareExchange(&m_nPostRecv, m_nPostRecv - 1, m_nPostRecv);
-			if (0 == m_nPostRecv)
+			if (false == PostRecv())
 			{
-				if (false == PostRecv())
+				PushNetEvent(NETEVT_ERROR, WSAGetLastError());
+				Close();
+			}
+		}
+		return;
+	}
+
+	if (false == bRet)
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "false == bRet errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+
+		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+		m_dwLastError = WSAGetLastError();
+		PostClose();
+		return;
+	}
+
+	if (!IsConnected())
+	{
+		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+		return;
+	}
+
+	//m_oLock.Lock();
+	int nUsedLen = 0;
+	int nParserLen = 0;
+	int nLen = int(dwBytes);
+	if (m_poRecvBuf->CostBuff(nLen))
+	{
+	}
+
+	char *pUseBuf = NULL;
+	nLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
+	if (nLen <= 0)
+	{
+		LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetUsedCursorPtr <= 0, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+		m_dwLastError = NET_RECVBUFF_ERROR;
+		PostClose();
+		//m_oLock.UnLock();
+		return;
+	}
+
+	while (0 < nLen)
+	{
+		if (0 != m_nNeedData)
+		{
+			if (nLen >= m_nNeedData)
+			{
+				nLen -= m_nNeedData;
+				nUsedLen += m_nNeedData;
+				nParserLen += m_nNeedData;
+				m_poRecvBuf->CostUsedBuff(nUsedLen);
+				nUsedLen = 0;
+				PushNetEvent(NETEVT_RECV, m_nPacketLen);
+				m_nPacketLen = 0;
+				m_nNeedData = 0;
+			}
+			else
+			{
+				m_nNeedData -= nLen;
+				nUsedLen += nLen;
+				nLen = 0;
+			}
+		}
+		else
+		{
+			char* pParseBuf = pUseBuf + nParserLen;
+			GetDataHeader()->BuildRecvPkgHeader(pParseBuf, nLen, 0);
+			m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen);
+			if (-1 == m_nPacketLen)
+			{
+				LogFun(LT_Screen | LT_File, LogLv_Error, "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+				InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+				m_dwLastError = NET_RECVBUFF_ERROR;
+				PostClose();
+				//m_oLock.UnLock();
+				return;
+			}
+			else if (0 == m_nPacketLen)
+			{
+				m_poRecvBuf->CostUsedBuff(nUsedLen);
+				nUsedLen = 0;
+				m_nNeedData = 0;
+
+				// 判断是否在循环buff的头部还有数据//
+				int nHasData = m_poRecvBuf->GetUseLen();
+				if (nHasData > 2)
 				{
-					PushNetEvent(NETEVT_ERROR, WSAGetLastError());
-					Close();
+					GetDataHeader()->BuildRecvPkgHeader(pParseBuf, nLen, 0);
+					if (false == m_poRecvBuf->CostUsedBuff(nLen))
+					{
+						break;
+					}
+					int nNewLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
+					GetDataHeader()->BuildRecvPkgHeader(pUseBuf, nNewLen, nLen);
+
+					if ((int)(GetDataHeader()->GetHeaderLength()) - nLen > nNewLen)
+					{
+						LogFun(LT_Screen | LT_File, LogLv_Error, "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+						InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+						m_dwLastError = NET_RECVBUFF_ERROR;
+						PostClose();
+						//m_oLock.UnLock();
+						return;
+					}
+
+					pParseBuf = (char*)(GetDataHeader()->GetPkgHeader());
+					m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen + nNewLen);
+					if (0 >= m_nPacketLen)
+					{
+						LogFun(LT_Screen | LT_File, LogLv_Error, "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+						InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+						m_dwLastError = NET_RECVBUFF_ERROR;
+						PostClose();
+						//m_oLock.UnLock();
+						return;
+					}
+
+					m_nNeedData = m_nPacketLen - GetDataHeader()->GetHeaderLength();
+					nUsedLen = GetDataHeader()->GetHeaderLength() - nLen;
+					nParserLen = nUsedLen;
+					nLen = nNewLen - nUsedLen;
+					pParseBuf = pUseBuf + nUsedLen;
+					if (0 == m_nNeedData)
+					{
+						m_poRecvBuf->CostUsedBuff(nUsedLen);
+						nUsedLen = 0;
+						PushNetEvent(NETEVT_RECV, m_nPacketLen);
+						m_nPacketLen = 0;
+					}
+				}
+				else
+				{
+					nLen = 0;
+					break;
 				}
 			}
-			return;
-		}
-
-		if (false == bRet)
-		{
-			LogFun(LT_Screen | LT_File, LogLv_Error, "false == bRet errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
-
-			InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-			m_dwLastError = WSAGetLastError();
-			PostClose();
-			return;
-		}
-
-		if (!IsConnected())
-		{
-			InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-			return;
-		}
-
-		m_oLock.Lock();
-		int nUsedLen = 0;
-		int nParserLen = 0;
-		int nLen = int(dwBytes);
-		if (m_poRecvBuf->CostBuff(nLen))
-		{
-		}
-
-		char *pUseBuf = NULL;
-		nLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
-		if (nLen <= 0)
-		{
-			LogFun(LT_Screen | LT_File, LogLv_Error, "m_poRecvBuf->GetUsedCursorPtr <= 0, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-			InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-			m_dwLastError = NET_RECVBUFF_ERROR;
-			PostClose();
-			m_oLock.UnLock();
-			return;
-		}
-
-		while (0 < nLen)
-		{
-			if (0 != m_nNeedData)
+			else
 			{
-				if (nLen >= m_nNeedData)
+				if (nLen >= m_nPacketLen)
 				{
-					nLen -= m_nNeedData;
-					nUsedLen += m_nNeedData;
-					nParserLen += m_nNeedData;
+					nLen -= m_nPacketLen;
+					nUsedLen += m_nPacketLen;
+					nParserLen += nUsedLen;
 					m_poRecvBuf->CostUsedBuff(nUsedLen);
 					nUsedLen = 0;
 					PushNetEvent(NETEVT_RECV, m_nPacketLen);
@@ -3031,128 +3125,31 @@ void FxWebSocketConnect::OnRecv(bool bRet, int dwBytes)
 				}
 				else
 				{
-					m_nNeedData -= nLen;
+					m_nNeedData = m_nPacketLen - nLen;
 					nUsedLen += nLen;
 					nLen = 0;
 				}
 			}
-			else
-			{
-				char* pParseBuf = pUseBuf + nParserLen;
-				GetDataHeader()->BuildRecvPkgHeader(pParseBuf, nLen, 0);
-				m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen);
-				if (-1 == m_nPacketLen)
-				{
-					LogFun(LT_Screen | LT_File, LogLv_Error, "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-					InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-					m_dwLastError = NET_RECVBUFF_ERROR;
-					PostClose();
-					m_oLock.UnLock();
-					return;
-				}
-				else if (0 == m_nPacketLen)
-				{
-					m_poRecvBuf->CostUsedBuff(nUsedLen);
-					nUsedLen = 0;
-					m_nNeedData = 0;
-
-					// 判断是否在循环buff的头部还有数据//
-					int nHasData = m_poRecvBuf->GetUseLen();
-					if (nHasData > 2)
-					{
-						GetDataHeader()->BuildRecvPkgHeader(pParseBuf, nLen, 0);
-						if (false == m_poRecvBuf->CostUsedBuff(nLen))
-						{
-							break;
-						}
-						int nNewLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
-						GetDataHeader()->BuildRecvPkgHeader(pUseBuf, nNewLen, nLen);
-
-						if ((int)(GetDataHeader()->GetHeaderLength()) - nLen > nNewLen)
-						{
-							LogFun(LT_Screen | LT_File, LogLv_Error, "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-							InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-							m_dwLastError = NET_RECVBUFF_ERROR;
-							PostClose();
-							m_oLock.UnLock();
-							return;
-						}
-
-						pParseBuf = (char*)(GetDataHeader()->GetPkgHeader());
-						m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen + nNewLen);
-						if (0 >= m_nPacketLen)
-						{
-							LogFun(LT_Screen | LT_File, LogLv_Error, "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-							InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-							m_dwLastError = NET_RECVBUFF_ERROR;
-							PostClose();
-							m_oLock.UnLock();
-							return;
-						}
-
-						m_nNeedData = m_nPacketLen - GetDataHeader()->GetHeaderLength();
-						nUsedLen = GetDataHeader()->GetHeaderLength() - nLen;
-						nParserLen = nUsedLen;
-						nLen = nNewLen - nUsedLen;
-						pParseBuf = pUseBuf + nUsedLen;
-						if (0 == m_nNeedData)
-						{
-							m_poRecvBuf->CostUsedBuff(nUsedLen);
-							nUsedLen = 0;
-							PushNetEvent(NETEVT_RECV, m_nPacketLen);
-							m_nPacketLen = 0;
-						}
-					}
-					else
-					{
-						nLen = 0;
-						break;
-					}
-				}
-				else
-				{
-					if (nLen >= m_nPacketLen)
-					{
-						nLen -= m_nPacketLen;
-						nUsedLen += m_nPacketLen;
-						nParserLen += nUsedLen;
-						m_poRecvBuf->CostUsedBuff(nUsedLen);
-						nUsedLen = 0;
-						PushNetEvent(NETEVT_RECV, m_nPacketLen);
-						m_nPacketLen = 0;
-						m_nNeedData = 0;
-					}
-					else
-					{
-						m_nNeedData = m_nPacketLen - nLen;
-						nUsedLen += nLen;
-						nLen = 0;
-					}
-				}
-			}
 		}
-
-		if (0 != nUsedLen)
-		{
-			m_poRecvBuf->CostUsedBuff(nUsedLen);
-		}
-
-		InterlockedCompareExchange(&m_nPostRecv, m_nPostRecv - 1, m_nPostRecv);
-		if (0 == m_nPostRecv)
-		{
-			if (false == PostRecv())
-			{
-				LogFun(LT_Screen | LT_File, LogLv_Error, "false == PostRecv, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-				m_dwLastError = WSAGetLastError();
-				PostClose();
-			}
-		}
-		m_oLock.UnLock();
 	}
+
+	if (0 != nUsedLen)
+	{
+		m_poRecvBuf->CostUsedBuff(nUsedLen);
+	}
+
+	InterlockedCompareExchange(&m_nPostRecv, m_nPostRecv - 1, m_nPostRecv);
+	if (0 == m_nPostRecv)
+	{
+		if (false == PostRecv())
+		{
+			LogFun(LT_Screen | LT_File, LogLv_Error, "false == PostRecv, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+			m_dwLastError = WSAGetLastError();
+			PostClose();
+		}
+	}
+	//m_oLock.UnLock();
 }
 #else
 void FxWebSocketConnect::OnRecv()

@@ -113,14 +113,14 @@ public:
 	void								SetIoThread(FxIoThread* pIoThread)				{ m_poIoThreadHandler = pIoThread;}
 	bool								AddEvent();
 
-	virtual void ProcEvent(SNetEvent oEvent);
+	virtual void						ProcEvent(SNetEvent oEvent);
 
 	SOCKET								Connect();
 
-	virtual bool PostClose();
+	virtual bool						PostClose();
 #ifdef WIN32
-	bool PostRecv();
-	bool PostRecvFree();
+	bool								PostRecv();
+	bool								PostRecvFree();
 
 	virtual void						OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred);		// 处理完成端口事件//
 #else
@@ -138,8 +138,8 @@ protected:
 	void								__ProcConnectError(UINT32 dwErrorNo);
 	void								__ProcError(UINT32 dwErrorNo);
 	void								__ProcTerminate();
-	virtual void	__ProcRecv(UINT32 dwLen) = 0;
-	virtual void	__ProcRelease() = 0;
+	virtual void						__ProcRecv(UINT32 dwLen) = 0;
+	virtual void						__ProcRelease() = 0;
 protected:
 	void								OnConnect();
 #ifdef WIN32
