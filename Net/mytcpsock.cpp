@@ -2794,7 +2794,7 @@ void FxWebSocketConnect::__ProcRecv(UINT32 dwLen)
 		unsigned int dwHeaderLen = 0;
 		CNetStream oHeaderStream(m_poConnection->GetRecvBuf(), dwLen);
 
-		unsigned char bt1, bt2;
+		unsigned char bt1 = 0, bt2 = 0;
 		oHeaderStream.ReadByte(bt1);
 		oHeaderStream.ReadByte(bt2);
 		dwHeaderLen += 2;
@@ -3199,8 +3199,6 @@ void FxWebSocketConnect::OnRecv()
 		}
 		else
 		{
-			int nUsedLen = 0;
-			int nParserLen = 0;
 			m_poRecvBuf->CostBuff(nLen);
 
 			char *pUseBuf = NULL;

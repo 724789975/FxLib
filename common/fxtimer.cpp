@@ -13,17 +13,17 @@
 
 double GetTimeOfDay()
 {
-	static double qwTime = 0;
-	qwTime = (double)time(NULL);
+	static double s_qwTime = 0;
 #ifdef WIN32
 	SYSTEMTIME st;
 	GetSystemTime(&st);
-	return qwTime + st.wMilliseconds / 1000.0f;
+	s_qwTime = s_qwTime + st.wMilliseconds / 1000.0f;
 #else
 	static struct timeval tv;
 	gettimeofday(&tv, NULL);
-	qwTime = tv.tv_usec + tv.tv_usec / 1000000.0f;
+	s_qwTime = tv.tv_sec / 1.0 + tv.tv_usec / 1000000.0;
 #endif
+	return s_qwTime;
 }
 
 class FxTimerHandler: public IFxTimerHandler/*, IFxThread*/
@@ -42,9 +42,7 @@ public:
 
 	virtual void Run()
 	{
-		{
-			__Refresh();
-		}
+		__Refresh();
 	}
 
 	virtual bool Init()
@@ -145,6 +143,7 @@ private:
 	void __Refresh()
 	{
 		static double s_qwSecond = 0;
+		static time_t s_dwTime = 0;
 		s_qwSecond = GetTimeOfDay();
 
 		if((unsigned int)s_qwSecond == (unsigned int)m_qwSecond)
@@ -155,8 +154,8 @@ private:
 
 		m_qwSecond = s_qwSecond;
 
-		time_t dwTime = (time_t)m_qwSecond;
-		tm* tmLocal = localtime(&dwTime); //转为本地时间  
+		s_dwTime = (time_t)m_qwSecond;
+		tm* tmLocal = localtime(&s_dwTime); //转为本地时间  
 		strftime(m_strTime, 64, "%Y-%m-%d %H:%M:%S", tmLocal);
 		//sprintf(m_strTime, "%s",
 		//		CLuaEngine::Instance()->CallStringFunction<unsigned int>(

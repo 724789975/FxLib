@@ -96,6 +96,11 @@ int main(int argc, char **argv)
 	//}
 
 	pListenSocket = pNet->Listen(CSessionFactory::Instance(), SLT_CommonTcp, 0, g_dwPort);
+	if(pListenSocket == NULL)
+	{
+		g_bRun = false;
+		goto STOP;
+	}
 	while (g_bRun)
 	{
 		GetTimeHandler()->Run();

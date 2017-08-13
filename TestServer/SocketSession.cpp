@@ -259,8 +259,8 @@ void* WebSocketDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwData
 	dwHeaderLen = 1;
 	CNetStream oNetStream(ENetStreamType_Write, m_dataSendBuffer, sizeof(m_dataSendBuffer));
 	unsigned char btFinOpCode = 0x81;
-	unsigned char btFin = (btFinOpCode >> 7) & 0xff;
-	unsigned char btOpCode = (btFinOpCode) & 0x0f;
+	// unsigned char btFin = (btFinOpCode >> 7) & 0xff;
+	// unsigned char btOpCode = (btFinOpCode) & 0x0f;
 	oNetStream.WriteByte(btFinOpCode);
 	if (dwDataLen < 126 && dwDataLen <= 0xFFFF)
 	{
@@ -303,7 +303,7 @@ int WebSocketDataHeader::__CheckPkgHeader(const char * pBuf)
 	m_dwHeaderLength = 0;
 	CNetStream oHeaderStream(pBuf, sizeof(m_dataRecvBuffer));
 	
-	unsigned char bt1, bt2;
+	unsigned char bt1 = 0, bt2 = 0;
 	oHeaderStream.ReadByte(bt1);
 	oHeaderStream.ReadByte(bt2);
 	m_dwHeaderLength += 2;
