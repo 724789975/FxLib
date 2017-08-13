@@ -2891,8 +2891,8 @@ void FxWebSocketConnect::OnRecv(bool bRet, int dwBytes)
 			return;
 		}
 
-		int nUsedLen = 0;
-		int nParserLen = 0;
+		//int nUsedLen = 0;
+		//int nParserLen = 0;
 		int nLen = int(dwBytes);
 		if (m_poRecvBuf->CostBuff(nLen))
 		{
