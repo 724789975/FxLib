@@ -17,6 +17,10 @@ local function SetIp(strParam)
 	g_strIp = strParam
 end
 
+local function SetIndex_l(strParam)
+	SetIndex(tonumber(strParam))
+end
+
 local tableCmdOptions =
 {
 	["add"] = function(strParam)
@@ -32,6 +36,7 @@ local tableCmdOptions =
 	["port"] = SetPort,
 	["p"] = SetPort,
 	["ip"] = SetIp,
+	["index"] = SetIndex_l,
 }
 
 local function CommandOption(strCmd, strParam)
@@ -60,6 +65,7 @@ local long_opts =
 	add = 3,
 	delete = 4,
 	ip = 5,
+	index = 6,
 }
 
 tableCommandLine = {}

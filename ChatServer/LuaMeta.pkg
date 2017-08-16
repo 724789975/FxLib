@@ -1,6 +1,7 @@
 $#include "fxmeta.h"
 $#include "ifnet.h"
 $#include "LuaMeta.h"
+$#include "utility.h"
 
 class IFxNet
 {
@@ -15,4 +16,5 @@ public:
 IFxNet* FxNetGetModule();
 
 extern unsigned int g_dwPort;
+void SetIndex(double qwIndex);
 

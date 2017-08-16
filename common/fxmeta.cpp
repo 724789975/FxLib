@@ -37,8 +37,6 @@
 #define PATH_MAX 256
 #endif
 
-#define EPOCHFILETIME (116444736000000000i64)
-
 class FxCriticalLock: public IFxLock
 {
 	// Can't be copied

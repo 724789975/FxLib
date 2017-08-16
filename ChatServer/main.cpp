@@ -52,13 +52,11 @@ int main(int argc, char **argv)
 
 	if (!CLuaEngine::Instance()->CommandLineFunction(argv, argc))
 	{
-		g_bRun = false;
-		goto STOP;
+		return 0;
 	}
 	if (!GetTimeHandler()->Init())
 	{
-		g_bRun = false;
-		goto STOP;
+		return 0;
 	}
 	GetTimeHandler()->Run();
 	if (!LogThread::Instance()->Init())
