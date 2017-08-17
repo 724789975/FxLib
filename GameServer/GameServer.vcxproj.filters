@@ -19,10 +19,14 @@
       <Filter>common</Filter>
     </ClCompile>
     <ClCompile Include="LuaMeta.cpp" />
+    <ClCompile Include="GameServer.cpp" />
+    <ClCompile Include="ChatSession.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SocketSession.h" />
     <ClInclude Include="LuaMeta.h" />
+    <ClInclude Include="GameServer.h" />
+    <ClInclude Include="ChatSession.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="common">

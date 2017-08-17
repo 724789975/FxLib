@@ -20,7 +20,7 @@ bool CLuaEngine::Init(std::vector<ToluaFunctionOpen*>& vecToLuaFunctions)
 	return true;
 }
 
-bool CLuaEngine::Reload()
+bool CLuaEngine::Reload(char* szScriptPath)
 {
 	if (m_pBackState != NULL)
 	{
@@ -44,9 +44,9 @@ bool CLuaEngine::Reload()
 
 	char strScriptPath[256];
 #ifdef WIN32
-	sprintf(strScriptPath, "%s%s%s%s", strExePath, "\\", WORK_PATH, "\\");
+	sprintf(strScriptPath, "%s\\%s\\", strExePath, szScriptPath);
 #else
-	sprintf(strScriptPath, "%s%s%s%s", strExePath, "/", WORK_PATH, "/");
+	sprintf(strScriptPath, "%s/%s/", strExePath, szScriptPath);
 
 	char strLuaPath[256] = {0};
 	sprintf(strLuaPath, "local p = '%s'\n"

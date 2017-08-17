@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 	{
 		return 0;
 	}
-	if (!CLuaEngine::Instance()->Reload())
+	if (!CLuaEngine::Instance()->Reload("GameServerScripts"))
 	{
 		return 0;
 	}

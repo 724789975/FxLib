@@ -217,9 +217,9 @@ int BinaryDataHeader::__CheckPkgHeader(const char* pBuf)
 	CNetStream oHeaderStream(m_dataRecvBuffer, sizeof(m_dataRecvBuffer));
 	CNetStream oRecvStream(pBuf, sizeof(m_dataRecvBuffer));
 
-	UINT32 dwHeaderLength = 0;
+	UINT32 dwDataLength = 0;
 	UINT32 dwBufferLength = 0;
-	oHeaderStream.ReadInt(dwHeaderLength);
+	oHeaderStream.ReadInt(dwDataLength);
 	oRecvStream.ReadInt(dwBufferLength);
 
 	UINT32 dwHeaderMagic = 0;
@@ -227,7 +227,7 @@ int BinaryDataHeader::__CheckPkgHeader(const char* pBuf)
 	oHeaderStream.ReadInt(dwHeaderMagic);
 	oRecvStream.ReadInt(dwBufferMagic);
 
-	if (dwHeaderLength != dwBufferLength)
+	if (dwDataLength != dwBufferLength)
 	{
 		return -1;
 	}
@@ -237,7 +237,7 @@ int BinaryDataHeader::__CheckPkgHeader(const char* pBuf)
 		return -1;
 	}
 
-	return (GetHeaderLength() + dwHeaderLength);
+	return (GetHeaderLength() + dwDataLength);
 }
 
 WebSocketDataHeader::WebSocketDataHeader()

@@ -12,4 +12,4 @@ unsigned char HashToIndex(unsigned long long qwData);
 void SetIndex(double qwIndex);
 bool CheckIndex(unsigned char btIndex);
 
-#endif
+#endif	//!__UTILITY_H__

@@ -402,6 +402,10 @@ char* GetExeName()
 		//??????   
 		for (int i = strlen(strExePath); i >= 0; i--)
 		{
+			if (strExePath[i] == '.')
+			{
+				strExePath[i] = 0;
+			}
 			if (strExePath[i] == '\\')
 			{
 				memcpy(strExePath, &(strExePath[i + 1]), 256 - (i + 1) - 1);

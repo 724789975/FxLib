@@ -46,7 +46,7 @@ int main(int argc, char **argv)
 	{
 		return 0;
 	}
-	if (!CLuaEngine::Instance()->Reload())
+	if (!CLuaEngine::Instance()->Reload(WORK_PATH))
 	{
 		return 0;
 	}

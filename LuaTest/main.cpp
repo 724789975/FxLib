@@ -94,7 +94,7 @@ int main(int argc, char **argv)
 		array.pp[i] = pp[i];
 	}
 
-	CLuaEngine::Instance()->Reload();
+	CLuaEngine::Instance()->Reload(WORK_PATH);
 
 	//while (1)
 	//{

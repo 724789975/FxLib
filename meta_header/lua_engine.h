@@ -49,7 +49,7 @@ public:
 	virtual ~CLuaEngine();
 
 	bool Init(std::vector<ToluaFunctionOpen*>& vecToLuaFunctions);
-	bool Reload();
+	bool Reload(char* szScriptPath);
 
 	void Close();
 	lua_State* GetLuaState();

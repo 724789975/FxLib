@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{BA42325F-F9F3-40AC-9BA4-9D148DD415FC}</ProjectGuid>
+    <ProjectGuid>{0D21F42D-19A9-426F-BDBC-A44D05D98467}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-	<RootNamespace>GameServer</RootNamespace>
+    <RootNamespace>GameServer</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -165,11 +165,15 @@
     <ClCompile Include="..\common\log_thread.cpp" />
     <ClCompile Include="..\common\lua_engine.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
+    <ClCompile Include="ChatSession.cpp" />
+    <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="LuaMeta.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SocketSession.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ChatSession.h" />
+    <ClInclude Include="GameServer.h" />
     <ClInclude Include="LuaMeta.h" />
     <ClInclude Include="SocketSession.h" />
   </ItemGroup>
