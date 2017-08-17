@@ -1,0 +1,18 @@
+$#include "fxmeta.h"
+$#include "ifnet.h"
+$#include "LuaMeta.h"
+
+class IFxNet
+{
+public:
+	~IFxNet();
+	bool				Init();
+	bool				Run(UINT32 dwCount);
+	void				Release();
+
+};
+
+IFxNet* FxNetGetModule();
+
+extern unsigned int g_dwPort;
+
