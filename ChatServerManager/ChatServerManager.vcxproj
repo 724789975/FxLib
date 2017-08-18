@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{27BE56EE-9E4F-483F-A3D1-FF62ABDB5C7F}</ProjectGuid>
+    <ProjectGuid>{6E2B00BC-8E31-4038-BB85-C0E7295F8F5A}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>ChatServer</RootNamespace>
+    <RootNamespace>ChatServerManager</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -165,20 +165,16 @@
     <ClCompile Include="..\common\log_thread.cpp" />
     <ClCompile Include="..\common\lua_engine.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
-    <ClCompile Include="ChatServerSession.cpp" />
     <ClCompile Include="ChatSession.cpp" />
-    <ClCompile Include="GameSession.cpp" />
-    <ClCompile Include="ChatServer.cpp" />
+    <ClCompile Include="ChatServerManager.cpp" />
     <ClCompile Include="LuaMeta.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SocketSession.cpp" />
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ChatServerSession.h" />
     <ClInclude Include="ChatSession.h" />
-    <ClInclude Include="GameSession.h" />
-    <ClInclude Include="ChatServer.h" />
+    <ClInclude Include="ChatServerManager.h" />
     <ClInclude Include="LuaMeta.h" />
     <ClInclude Include="SocketSession.h" />
     <ClInclude Include="utility.h" />

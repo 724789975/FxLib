@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 	{
 		return 0;
 	}
-	if (!CLuaEngine::Instance()->Reload(WORK_PATH))
+	if (!CLuaEngine::Instance()->Reload("ChatServerManagerScripts"))
 	{
 		return 0;
 	}
@@ -83,9 +83,9 @@ int main(int argc, char **argv)
 	//memset(&oInfo, 0, sizeof(oInfo));
 	//oInfo.m_dwDBId = 0;
 	//strcpy(oInfo.m_stAccount.m_szCharactSet, "utf8");
-	//strcpy(oInfo.m_stAccount.m_szDBName, "chat");
-	//strcpy(oInfo.m_stAccount.m_szHostName, "127.0.0.1");
-	//strcpy(oInfo.m_stAccount.m_szLoginName, "test");
+	//strcpy(oInfo.m_stAccount.m_szDBName, "jianghu");
+	//strcpy(oInfo.m_stAccount.m_szHostName, "192.168.5.6");
+	//strcpy(oInfo.m_stAccount.m_szLoginName, "root");
 	//strcpy(oInfo.m_stAccount.m_szLoginPwd, "test");
 	//oInfo.m_stAccount.m_wConnPort = 3306;
 	//if (FxDBGetModule()->Open(oInfo))
