@@ -1,41 +1,76 @@
 #ifndef __CHatSession_H__
 #define __CHatSession_H__
 
+#include <map>
 #include "SocketSession.h"
 
-class ChatServerSession : public CSocketSession
+class ChatServerSession : public FxSession
 {
 public:
 	ChatServerSession();
 	virtual ~ChatServerSession();
 
-	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
-	virtual void Release(void);
+	virtual void		OnConnect(void);
 
-	virtual void OnRecv(const char* pBuf, UINT32 dwLen);
+	virtual void		OnClose(void);
+
+	virtual void		OnError(UINT32 dwErrorNo);
+
+	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
+
+	virtual void		Release(void);
+
+	virtual char*		GetRecvBuf() { return m_dataRecvBuf; }
+
+	virtual UINT32		GetRecvSize() { return 64 * 1024; };
+
+	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
+
 private:
 	BinaryDataHeader m_oBinaryDataHeader;
+	char m_dataRecvBuf[1024 * 1024];
 private:
 	char m_szId[32];
 };
 
-class ChatServerFactory : public TSingleton<ChatServerFactory>, public IFxSessionFactory
+class ChatServerConnectedSession : public ChatServerSession
 {
 public:
-	ChatServerFactory();
-	virtual ~ChatServerFactory() {}
+	virtual void		OnClose(void);
+protected:
+private:
+};
 
-	virtual FxSession*	CreateSession();
+class ChatServerConnectSession : public ChatServerSession
+{
+public:
+	virtual void		OnClose(void);
+protected:
+private:
+};
+
+class ChatServerSessionManager : public TSingleton<ChatServerSessionManager>
+{
+public:
+	ChatServerSessionManager(){}
+	virtual ~ChatServerSessionManager() {}
+
+	ChatServerConnectSession*	CreateConnectSession();
+	ChatServerConnectedSession*	CreateConnectedSession();
 
 	void Init() {}
 	virtual void Release(FxSession* pSession);
 
-	std::set<FxSession*> m_setSessions;
 
 private:
-	//	TDynamicPoolEx<CSocketSession> m_poolSessions;
+	struct ChatServerSessionIpPort
+	{
+		unsigned int m_dwIP;
+		unsigned int m_dwPort;
+		ChatServerSession m_oSession;
+	};
 
-	std::deque<FxSession* > m_listSession;
+	std::map<unsigned char, ChatServerSessionIpPort*> m_mapSessionIpPort;
 
 	IFxLock*			m_pLock;
 };

@@ -9,10 +9,19 @@ ChatServerSession::~ChatServerSession()
 {
 }
 
-void ChatServerSession::Release(void)
+void ChatServerSession::OnConnect(void)
 {
-	CSocketSession::Release();
-	CSessionFactory::Instance()->Release(this);
+
+}
+
+void ChatServerSession::OnClose(void)
+{
+
+}
+
+void ChatServerSession::OnError(UINT32 dwErrorNo)
+{
+
 }
 
 void ChatServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
@@ -20,3 +29,20 @@ void ChatServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 
 }
 
+void ChatServerSession::Release(void)
+{
+	//CSocketSession::Release();
+	//CSessionFactory::Instance()->Release(this);
+}
+
+
+//----------------------------------------------------------------------------
+void ChatServerConnectedSession::OnClose(void)
+{
+
+}
+//----------------------------------------------------------------------------
+void ChatServerConnectSession::OnClose(void)
+{
+
+}
