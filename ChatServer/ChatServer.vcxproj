@@ -90,7 +90,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../meta_header;../mysql/include;../tolua;../lua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../meta_header;../mysql/include;../tolua;../lua;../chatdefine;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <SDLCheck>
       </SDLCheck>
     </ClCompile>
@@ -165,6 +165,7 @@
     <ClCompile Include="..\common\log_thread.cpp" />
     <ClCompile Include="..\common\lua_engine.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
+    <ClCompile Include="ChatManagerSession.cpp" />
     <ClCompile Include="ChatServerSession.cpp" />
     <ClCompile Include="ChatSession.cpp" />
     <ClCompile Include="GameSession.cpp" />
@@ -175,6 +176,7 @@
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ChatManagerSession.h" />
     <ClInclude Include="ChatServerSession.h" />
     <ClInclude Include="ChatSession.h" />
     <ClInclude Include="GameSession.h" />

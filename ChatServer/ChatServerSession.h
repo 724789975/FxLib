@@ -2,7 +2,9 @@
 #define __CHatSession_H__
 
 #include <map>
+#include "lock.h"
 #include "SocketSession.h"
+#include "chatdefine.h"
 
 class ChatServerSession : public FxSession
 {
@@ -33,46 +35,23 @@ private:
 	char m_szId[32];
 };
 
-class ChatServerConnectedSession : public ChatServerSession
-{
-public:
-	virtual void		OnClose(void);
-protected:
-private:
-};
-
-class ChatServerConnectSession : public ChatServerSession
-{
-public:
-	virtual void		OnClose(void);
-protected:
-private:
-};
-
-class ChatServerSessionManager : public TSingleton<ChatServerSessionManager>
+class ChatServerSessionManager : public TSingleton<ChatServerSessionManager>//, public IFxSessionFactory
 {
 public:
 	ChatServerSessionManager(){}
 	virtual ~ChatServerSessionManager() {}
 
-	ChatServerConnectSession*	CreateConnectSession();
-	ChatServerConnectedSession*	CreateConnectedSession();
+	virtual FxSession*	CreateSession();
 
 	void Init() {}
 	virtual void Release(FxSession* pSession);
-
-
+	
 private:
-	struct ChatServerSessionIpPort
-	{
-		unsigned int m_dwIP;
-		unsigned int m_dwPort;
-		ChatServerSession m_oSession;
-	};
+	std::map<unsigned char, ChatServerSession*> m_mapSessionIpPort;
 
-	std::map<unsigned char, ChatServerSessionIpPort*> m_mapSessionIpPort;
+	ChatServerSession m_oChatServerSessions[ChatConstant::ChatServerNum];
 
-	IFxLock*			m_pLock;
+	FxCriticalLock m_oLock;
 };
 
 

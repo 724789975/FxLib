@@ -26,7 +26,7 @@ ARFLAGS			= -rc
 #==========================================================
 #  Commands
 CODE_DIR = ./ ../common
-INCLUDE_DIR =./ ../meta_header/ ../lua ../tolua ../mysql/include
+INCLUDE_DIR =./ ../meta_header/ ../lua ../tolua ../mysql/include ../chatdefine
 LIB_FILE = -L../Debug -Lcrypto -lpthread -lLuaLib -lNet -lDatabase
 OUTPUT_DIR =../Debug
 OUTPUT = ChatServer
