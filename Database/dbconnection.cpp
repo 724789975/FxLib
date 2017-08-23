@@ -53,7 +53,7 @@ bool FxMySQLConnection::Connect()
         m_oAccount.m_szLoginPwd, m_oAccount.m_szDBName, m_oAccount.m_wConnPort, NULL, CLIENT_MULTI_STATEMENTS|CLIENT_MULTI_RESULTS);
 	if (NULL == myConn)
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "connect error : %s", mysql_error(m_myConnection));
+		LogExe(LogLv_Error, "connect error : %s", mysql_error(m_myConnection));
 		Close();
 		return false;
 	}

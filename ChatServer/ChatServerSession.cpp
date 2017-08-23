@@ -11,7 +11,7 @@ ChatServerSession::~ChatServerSession()
 
 void ChatServerSession::OnConnect(void)
 {
-
+	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
 }
 
 void ChatServerSession::OnClose(void)
@@ -32,8 +32,8 @@ void ChatServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 void ChatServerSession::Release(void)
 {
 	OnDestroy();
-	Init(NULL);
-	ChatServerSessionManager::Instance()->Release(this);
+	//Init(NULL);
+	//ChatServerSessionManager::Instance()->Release(this);
 }
 
 

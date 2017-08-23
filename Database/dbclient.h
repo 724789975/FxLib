@@ -39,6 +39,8 @@ private:
 	time_t				m_nLastReconnectTime;
 	bool				m_bTerminate;
 	bool				m_bDbOK;
+
+	FILE*				m_pFile;
 };
 
 #endif	// __DBCLIENT_H_2009_0824__

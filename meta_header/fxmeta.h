@@ -74,6 +74,7 @@ static const char* LogLevelString[LogLv_Count] =
 };
 
 FILE* GetLogFile();
+void GetLogFile(unsigned int dwThreadId, FILE*& refpFile);
 
 void PrintTrace(char* strTrace);
 
@@ -88,7 +89,7 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 			int nLenStr = 0;\
 			nLenStr += sprintf(strLog + nLenStr, "%s:%d ", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
 			nLenStr += sprintf(strLog + nLenStr, "%s", LogLevelString[eLevel]);\
-			nLenStr += sprintf(strLog + nLenStr, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__);\
+			nLenStr += sprintf(strLog + nLenStr, "[%s,%d,%s] ", __FILE__, __LINE__, __FUNCTION__);\
 			nLenStr += sprintf(strLog + nLenStr, strFmt, ##__VA_ARGS__);\
 			nLenStr += sprintf(strLog + nLenStr, "%s", "\n");\
 			if(eLevel == LogLv_Error)\
@@ -118,7 +119,41 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 				int nLenStr = 0;\
 				nLenStr += sprintf(strLog + nLenStr, "%s:%d ", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
 				nLenStr += sprintf(strLog + nLenStr, "%s", LogLevelString[eLevel]);\
-				nLenStr += sprintf(strLog + nLenStr, "[%s,%s,%d] ", __FILE__, __FUNCTION__, __LINE__);\
+				nLenStr += sprintf(strLog + nLenStr, "[%s,%d,%s] ", __FILE__, __LINE__, __FUNCTION__);\
+				nLenStr += sprintf(strLog + nLenStr, strFmt, ##__VA_ARGS__);\
+				nLenStr += sprintf(strLog + nLenStr, "%s", "\n");\
+				if(eLevel == LogLv_Error)\
+				{\
+					PrintTrace(strLog + nLenStr);\
+				}\
+				fprintf(pFile, "%s", strLog);\
+			}\
+			else\
+			{\
+				printf("error log fun !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");\
+			}\
+		}\
+		else\
+		{\
+			printf("error pFile !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");\
+		}\
+	}\
+}
+
+#define ThreadLog(eLevel, pFile, dwThreadId, strFmt, ...)\
+{\
+	{\
+		char strLog[2048] = {0};\
+		GetLogFile(dwThreadId, pFile);\
+		Assert(pFile);\
+		if (pFile)\
+		{\
+			if((eLevel < LogLv_Count))\
+			{\
+				int nLenStr = 0;\
+				nLenStr += sprintf(strLog + nLenStr, "%s:%d ", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
+				nLenStr += sprintf(strLog + nLenStr, "%s", LogLevelString[eLevel]);\
+				nLenStr += sprintf(strLog + nLenStr, "[%s,%d,%s] ", __FILE__, __LINE__, __FUNCTION__);\
 				nLenStr += sprintf(strLog + nLenStr, strFmt, ##__VA_ARGS__);\
 				nLenStr += sprintf(strLog + nLenStr, "%s", "\n");\
 				if(eLevel == LogLv_Error)\

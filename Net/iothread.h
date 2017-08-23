@@ -25,6 +25,9 @@ public:
 	bool					Init(UINT32 dwMaxSock);
 	void					Uninit();
 
+	UINT32					GetThreadId();
+	FILE*&					GetFile() { return m_pFile; }
+
 #ifdef WIN32
 	bool					AddEvent(int hSock, IFxSocket* poSock);
 #else
@@ -60,6 +63,8 @@ protected:
 	epoll_event*			m_pEvents;
 	TEventQueue<IFxSocket*>	m_oDelayCloseSockQueue;
 #endif // WIN32
+
+	FILE*					m_pFile;
 
 };
 

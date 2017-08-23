@@ -31,8 +31,7 @@ bool FxSession::Send(const char* pBuf,UINT32 dwLen)
 	    return m_poConnection->Send(pBuf, dwLen);
 	}
 	
-	LogFun(LT_Screen | LT_File, LogLv_Error, "connection : %p, IsConnected() : %d",
-		m_poConnection, (int)m_poConnection->IsConnected());
+	LogExe(LogLv_Error, "connection : %p, IsConnected() : %d", m_poConnection, (int)m_poConnection->IsConnected());
 	return false;
 }
 
@@ -146,7 +145,7 @@ IFxNet* FxNetGetModule()
 		int nErr = WSAStartup(MAKEWORD(2, 2), &data);
 		if (nErr != 0)
 		{
-			LogFun(LT_Screen | LT_File, LogLv_Error, "WSAStartup failed error no : %d", nErr);
+			LogExe(LogLv_Error, "WSAStartup failed error no : %d", nErr);
 		}
 #endif
 	    if(false == FxNetModule::CreateInstance())
@@ -154,7 +153,7 @@ IFxNet* FxNetGetModule()
 
 	     if(false == FxNetModule::Instance()->Init())
 	     {
-			 LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "SDNetGetModule, Init CSDNetWin failed");
+			 LogExe(LogLv_Error, "%s", "SDNetGetModule, Init CSDNetWin failed");
 	         FxNetModule::DestroyInstance();
 	         return NULL;
 	     }

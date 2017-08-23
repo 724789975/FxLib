@@ -116,7 +116,7 @@ bool CLuaEngine::CommandLineFunction(char** ppstrArg, unsigned int dwArgNum)
 	int nRet = lua_pcall(GetLuaState(), 0, 1, 0);
 	if (nRet != 0)
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "result : %d, error : %s", nRet, lua_tostring(GetLuaState(), -1));
+		LogExe(LogLv_Error, "result : %d, error : %s", nRet, lua_tostring(GetLuaState(), -1));
 		//printf("result : %d, error : %s\n", nRet, lua_tostring(GetLuaState(), -1));
 		lua_pop(GetLuaState(), 1);
 		lua_settop(GetLuaState(), 0);
@@ -159,7 +159,7 @@ bool CLuaEngine::CallFunction(const char* pFunctionName,
 	int ret = lua_pcall(GetLuaState(), 0, nReturnNum, 0);
 	if (ret != 0)
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
+		LogExe(LogLv_Error, "result : %d, error : %s", ret, lua_tostring(GetLuaState(), -1));
 		lua_pop(GetLuaState(), 1);
 		printf("false\n");
 		return false;
@@ -182,7 +182,7 @@ bool CLuaEngine::LoadFile(const char* pFileName)
 	int nRet = 0;
 	if (NULL == m_pBackState)
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "lua_State is NULL");
+		LogExe(LogLv_Error, "%s", "lua_State is NULL");
 		return false;
 	}
 
@@ -205,7 +205,7 @@ bool CLuaEngine::LoadFile(const char* pFileName)
 	nRet = luaL_dofile(m_pBackState, pFileName);
 	if (nRet != 0)
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "lua_loadfile : %s, result : %d, err : %s", pFileName, nRet, lua_tostring(m_pBackState, -1));
+		LogExe(LogLv_Error, "lua_loadfile : %s, result : %d, err : %s", pFileName, nRet, lua_tostring(m_pBackState, -1));
 		return false;
 	}
 

@@ -30,14 +30,14 @@ bool FxDBModule::Open(SDBConnInfo& DBInfo)
 	FxMySqlClient *poMySqlClient = FindDBClient(DBInfo.m_dwDBId);
 	if(poMySqlClient != NULL)
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "db id = %d already exist", DBInfo.m_dwDBId);
+		LogExe(LogLv_Error, "db id = %d already exist", DBInfo.m_dwDBId);
 		return false;
 	}
 
 	poMySqlClient = new FxMySqlClient;
 	if(NULL == poMySqlClient)
 	{
-		LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "FxDBModule::Open, new CMySqlClient error");
+		LogExe(LogLv_Error, "%s", "FxDBModule::Open, new CMySqlClient error");
 		return false;
 	}
 
@@ -141,7 +141,7 @@ void FxDBModule::AddResult(IQuery* poQuery)
 {
     if (NULL == poQuery)
     {
-        LogFun(LT_Screen | LT_File, LogLv_Error, "%s", "FxDBModule::AddResult : NULL Query");
+        LogExe(LogLv_Error, "%s", "FxDBModule::AddResult : NULL Query");
         return;
     }
     m_oLock.Lock();
