@@ -906,7 +906,7 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 {
 	if (false == IsConnected())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "socket not connected, socket : %d, socket id : %d", GetSock(), GetSockId());
+		LogExe(LogLv_Error, "socket not connected, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		return false;
 	}
@@ -921,12 +921,12 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 	{
 #ifdef WIN32
 		m_dwLastError = NET_SEND_OVERFLOW;
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "send error pDataHeader == NULL, socket : %d, socket id : %d", GetSock(), GetSockId());
+		LogExe(LogLv_Error, "send error pDataHeader == NULL, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		PostClose();
 #else
 		PushNetEvent(NETEVT_ERROR, NET_SEND_OVERFLOW);
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "send error pDataHeader == NULL, socket : %d, socket id : %d", GetSock(), GetSockId());
+		LogExe(LogLv_Error, "send error pDataHeader == NULL, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		PostClose();
 #endif // WIN32
@@ -937,12 +937,12 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 	{
 #ifdef WIN32
 		m_dwLastError = NET_SEND_OVERFLOW;
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "send error NET_SEND_OVERFLOW, socket : %d, socket id : %d", GetSock(), GetSockId());
+		LogExe(LogLv_Error, "send error NET_SEND_OVERFLOW, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		PostClose();
 #else
 		PushNetEvent(NETEVT_ERROR, NET_SEND_OVERFLOW);
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "send error NET_SEND_OVERFLOW, socket : %d, socket id : %d", GetSock(), GetSockId());
+		LogExe(LogLv_Error, "send error NET_SEND_OVERFLOW, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		PostClose();
 #endif // WIN32
@@ -968,7 +968,7 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 	{
 		if (!m_bSendLinger || 30 < ++nSendCount)  // 连续30次还没发出去，就认为失败，失败结果逻辑层处理//
 		{
-			ThreadLog(LogLv_Critical, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "send buffer overflow!!!!!!!!, socket : %d, socket id : %d", GetSock(), GetSockId());
+			LogExe(LogLv_Error, "send buffer overflow!!!!!!!!, socket : %d, socket id : %d", GetSock(), GetSockId());
 			return false;
 		}
 		FxSleep(10);
@@ -978,7 +978,7 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 	{
 #ifdef WIN32
 		m_dwLastError = WSAGetLastError();
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "false == PostSendFree(), socket : %d, socket id : %d", GetSock(), GetSockId());
+		LogExe(LogLv_Error, "false == PostSendFree(), socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		PostClose();
 #else
@@ -1543,7 +1543,7 @@ bool FxUDPConnectSock::PostSend()
 #ifdef WIN32
 	if (false == IsConnected())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "false == IsConnect(), socket : %d, socket id : %d", GetSock(), GetSockId());
+		LogExe(LogLv_Error, "false == IsConnect(), socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		return false;
 	}
@@ -1584,7 +1584,7 @@ bool FxUDPConnectSock::PostSend()
 			InterlockedCompareExchange(&m_nPostSend, 0, 1);
 
 			UINT32 dwErr = WSAGetLastError();
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "WSASend errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+			LogExe(LogLv_Error, "WSASend errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
 			return false;
 		}
@@ -1685,14 +1685,14 @@ bool FxUDPConnectSock::PostSendFree()
 #else
 	if (false == IsConnected())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
+		LogExe(LogLv_Error, "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		return false;
 	}
 
 	if (NULL == m_poIoThreadHandler)
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "NULL == m_poIoThreadHandler, socket : %d, socket id : %d", GetSock(), GetSockId());
+		LogExe(LogLv_Error, "NULL == m_poIoThreadHandler, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		Close();
 		return false;
