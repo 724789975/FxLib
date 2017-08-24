@@ -7,6 +7,8 @@
 #include <signal.h>
 
 unsigned int g_dwPort = 12000;
+unsigned int g_dwChatSessionPort = 20000;
+unsigned int g_dwChatServerSessionPort = 20001;
 bool g_bRun = true;
 
 void EndFun(int n)

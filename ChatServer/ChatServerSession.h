@@ -1,5 +1,5 @@
-#ifndef __CHatSession_H__
-#define __CHatSession_H__
+#ifndef __CHatServerSession_H__
+#define __CHatServerSession_H__
 
 #include <map>
 #include "lock.h"
@@ -35,7 +35,7 @@ private:
 	char m_szId[32];
 };
 
-class ChatServerSessionManager : public TSingleton<ChatServerSessionManager>//, public IFxSessionFactory
+class ChatServerSessionManager : public TSingleton<ChatServerSessionManager>, public IFxSessionFactory
 {
 public:
 	ChatServerSessionManager(){}
@@ -55,4 +55,4 @@ private:
 };
 
 
-#endif // !__CHatSession_H__
+#endif // !__CHatServerSession_H__

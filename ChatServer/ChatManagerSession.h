@@ -28,6 +28,9 @@ public:
 private:
 	BinaryDataHeader m_oBinaryDataHeader;
 	char m_dataRecvBuf[1024 * 1024];
+
+private:
+	void OnNotifyChatInfo(const char* pBuf, UINT32 dwLen);
 };
 
 #endif // !__ChatManagerSession_H__
