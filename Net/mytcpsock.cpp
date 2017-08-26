@@ -73,9 +73,9 @@ bool FxTCPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 
 #ifdef WIN32
 		int dwErr = WSAGetLastError();
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "create socket error, %u:%u, errno %d", dwIP, wPort, dwErr);
+		LogExe(LogLv_Error, "create socket error, %u:%u, errno %d", dwIP, wPort, dwErr);
 #else
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "create socket error, %u:%u, errno %d", dwIP, wPort, errno);
+		LogExe(LogLv_Error, "create socket error, %u:%u, errno %d", dwIP, wPort, errno);
 #endif // WIN32
 
 		return false;
@@ -100,9 +100,9 @@ bool FxTCPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 	{
 #ifdef WIN32
 		int dwErr = WSAGetLastError();
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "bind at %u:%d failed, errno %d", dwIP, wPort, dwErr);
+		LogExe(LogLv_Error, "bind at %u:%d failed, errno %d", dwIP, wPort, dwErr);
 #else
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "bind at %u:%d failed, errno %d", dwIP, wPort, errno);
+		LogExe(LogLv_Error, "bind at %u:%d failed, errno %d", dwIP, wPort, errno);
 #endif // WIN32
 		return false;
 	}
@@ -110,9 +110,9 @@ bool FxTCPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 	{
 #ifdef WIN32
 		int dwErr = WSAGetLastError();
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "listen at %u:%d failed, errno %d", dwIP, wPort, dwErr);
+		LogExe(LogLv_Error, "listen at %u:%d failed, errno %d", dwIP, wPort, dwErr);
 #else
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "listen at %u:%d failed, errno %d", dwIP, wPort, errno);
+		LogExe(LogLv_Error, "listen at %u:%d failed, errno %d", dwIP, wPort, errno);
 #endif // WIN32
 		return false;
 	}
@@ -135,7 +135,7 @@ bool FxTCPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 
 	if (false == InitAcceptEx())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "CCpListener::Start, InitAcceptEx failed");
+		LogExe(LogLv_Error, "CCpListener::Start, InitAcceptEx failed");
 
 		return false;
 	}
@@ -144,13 +144,13 @@ bool FxTCPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 	{
 		if (false == PostAccept(m_oSPerIoDatas[i]))
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "CCpListener::Start, PostAccept failed");
+			LogExe(LogLv_Error, "CCpListener::Start, PostAccept failed");
 			return false;
 		}
 	}
 #else
 #endif // WIN32
-	ThreadLog(LogLv_Info, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "listen at %u:%d success", dwIP, wPort);
+	LogExe(LogLv_Info, "listen at %u:%d success", dwIP, wPort);
 	return true;
 }
 
@@ -390,7 +390,7 @@ bool FxTCPListenSock::InitAcceptEx()
 	if (SOCKET_ERROR == nRt)
 	{
 		int dwErr = WSAGetLastError();
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "WSAIoctl WSAID_ACCEPTEX failed, errno %d", dwErr);
+		LogExe(LogLv_Error, "WSAIoctl WSAID_ACCEPTEX failed, errno %d", dwErr);
 
 		return false;
 	}
@@ -413,7 +413,7 @@ bool FxTCPListenSock::InitAcceptEx()
 	if (SOCKET_ERROR == nRt)
 	{
 		int dwErr = WSAGetLastError();
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "WSAIoctl WSAID_GETACCEPTEXSOCKADDRS failed, errno %d", dwErr);
+		LogExe(LogLv_Error, "WSAIoctl WSAID_GETACCEPTEXSOCKADDRS failed, errno %d", dwErr);
 
 		return false;
 	}
@@ -1654,206 +1654,6 @@ bool FxTCPConnectSockBase::AddEvent()
 
 }
 
-SOCKET FxTCPConnectSockBase::Connect()
-{
-	if (IsConnected())
-	{
-		return INVALID_SOCKET;
-	}
-
-	if (NULL == GetConnection())
-	{
-		return INVALID_SOCKET;
-	}
-
-	if (GetConnection()->IsConnected())
-	{
-		return INVALID_SOCKET;
-	}
-
-	if (INVALID_SOCKET != GetSock())
-	{
-		return INVALID_SOCKET;
-	}
-
-#ifdef WIN32
-	SetSock(WSASocket(
-		AF_INET,
-		SOCK_STREAM,
-		0,
-		NULL,
-		0,
-		WSA_FLAG_OVERLAPPED));
-#else
-	SetSock(socket(AF_INET, SOCK_STREAM, 0));
-#endif // WIN32
-
-	if (INVALID_SOCKET == GetSock())
-	{
-		PushNetEvent(NETEVT_ERROR, errno);
-		Close();
-		return INVALID_SOCKET;
-	}
-
-#ifdef WIN32
-	// keep alive
-	struct tcp_keepalive keepAliveIn;
-	struct tcp_keepalive keepAliveOut;
-
-	unsigned long ulBytesReturn = 0;
-
-	keepAliveIn.keepaliveinterval = 10000;//
-	keepAliveIn.keepalivetime = 1000 * 30;//
-	keepAliveIn.onoff = 1;
-
-	int ret = WSAIoctl
-		(
-		GetSock(),
-		SIO_KEEPALIVE_VALS,
-		&keepAliveIn,
-		sizeof(keepAliveIn),
-		&keepAliveOut,
-		sizeof(keepAliveOut),
-		&ulBytesReturn,
-		NULL,
-		NULL
-		);
-	if (ret == SOCKET_ERROR)
-	{
-		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
-		Close();
-		return INVALID_SOCKET;
-	}
-
-	sockaddr_in local_addr;
-	ZeroMemory(&local_addr, sizeof (sockaddr_in));
-	local_addr.sin_family = AF_INET;
-
-	int nSendBuffSize = 256 * 1024;
-	int nRecvBuffSize = 8 * nSendBuffSize;
-	if ((0 != setsockopt(GetSock(), SOL_SOCKET, SO_RCVBUF, (char*)&nRecvBuffSize, sizeof(int))) ||
-		(0 != setsockopt(GetSock(), SOL_SOCKET, SO_SNDBUF, (char*)&nSendBuffSize, sizeof(int))))
-	{
-		int nError = WSAGetLastError();
-		PushNetEvent(NETEVT_CONN_ERR, nError);
-		closesocket(GetSock());
-		return INVALID_SOCKET;
-	}
-
-	//int irt = ::bind(GetSock(), (sockaddr *)(&local_addr), sizeof (sockaddr_in));
-#else
-	setsockopt(GetSock(), SOL_SOCKET, SO_SNDLOWAT, &VAL_SO_SNDLOWAT, sizeof(VAL_SO_SNDLOWAT));
-	setsockopt(GetSock(), SOL_SOCKET, SO_SNDBUF, &MAX_SYS_SEND_BUF, sizeof(MAX_SYS_SEND_BUF));
-
-	int keepAlive = 1;
-	setsockopt(GetSock(), SOL_SOCKET, SO_KEEPALIVE, (void*)&keepAlive, sizeof(keepAlive));
-
-	int keepIdle = 30;
-	int keepInterval = 5;
-	int keepCount = 6;
-	setsockopt(GetSock(), SOL_TCP, TCP_KEEPIDLE, (void *)&keepIdle, sizeof(keepIdle));
-	setsockopt(GetSock(), SOL_TCP, TCP_KEEPINTVL, (void *)&keepInterval, sizeof(keepInterval));
-	setsockopt(GetSock(), SOL_TCP, TCP_KEEPCNT, (void *)&keepCount, sizeof(keepCount));
-#endif // WIN32
-	// [end]
-
-	SetIoThread(FxNetModule::Instance()->FetchIoThread(GetSock()));
-	if (NULL == m_poIoThreadHandler)
-	{
-//		m_pLock.UnLock();
-		PushNetEvent(NETEVT_ERROR, 0);
-		Close();
-		return INVALID_SOCKET;
-	}
-
-	sockaddr_in stAddr = { 0 };
-	stAddr.sin_family = AF_INET;
-	stAddr.sin_addr.s_addr = GetConnection()->GetRemoteIP();
-	stAddr.sin_port = htons(GetConnection()->GetRemotePort());
-
-	SetState(SSTATE_CONNECT);
-
-#ifdef WIN32
-	// todo connectEX暂时不能用 所以暂时不加到完成端口中//
-#else
-	if (!AddEvent())
-	{
-//		m_pLock.UnLock();
-		PushNetEvent(NETEVT_ERROR, errno);
-		Close();
-		return INVALID_SOCKET;
-	}
-#endif // WIN32
-
-	//请求连接时 Windows跟linux是有区别的//
-#ifdef WIN32
-	//LPFN_CONNECTEX m_lpfnConnectEx = NULL ;
-	//DWORD dwBytes = 0;
-	//GUID GuidConnectEx = WSAID_CONNECTEX;
-
-	//if (SOCKET_ERROR == WSAIoctl(GetSock(), SIO_GET_EXTENSION_FUNCTION_POINTER,
-	//	&GuidConnectEx, sizeof (GuidConnectEx),
-	//	&m_lpfnConnectEx, sizeof (m_lpfnConnectEx), &dwBytes, 0, 0))
-	//{
-	//	PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
-	//	closesocket(GetSock());
-	//	return INVALID_SOCKET;
-	//}
-
-	//// 这个时候 还没有连上 所以 将这个改成IOCP_CONNECT 等连完以后再改回来
-	//m_stRecvIoData.nOp = IOCP_CONNECT;
-
-	//int bResult = m_lpfnConnectEx(GetSock(),
-	//	(sockaddr *)&stAddr,  // [in] 对方地址
-	//	sizeof(stAddr),               // [in] 对方地址长度
-	//	NULL,       // [in] 连接后要发送的内容，这里不用
-	//	0,   // [in] 发送内容的字节数 ，这里不用
-	//	NULL,       // [out] 发送了多少个字节，这里不用
-	//	&m_stRecvIoData.stOverlapped); // [in]
-	//if (!bResult)      // 返回值处//
-
-	if(-1 == connect(GetSock(), (sockaddr*)&stAddr, sizeof(stAddr)))
-	{
-		PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
-		closesocket(GetSock());
-		return INVALID_SOCKET;
-	}
-	else
-	{
-		m_stRecvIoData.nOp = IOCP_RECV;
-		unsigned long ul = 1;
-		if (SOCKET_ERROR == ioctlsocket(GetSock(), FIONBIO, (unsigned long*)&ul))
-		{
-			PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
-			closesocket(GetSock());
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "Set socket FIONBIO error : %d, socket : %d, socket id %d", WSAGetLastError(), GetSock(), GetSockId());
-			return INVALID_SOCKET;
-		}
-		if (!AddEvent())
-		{
-			PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
-			closesocket(GetSock());
-			return INVALID_SOCKET;
-		}
-		OnConnect();
-	}
-#else
-	if (-1 == connect(GetSock(), (sockaddr*)&stAddr, sizeof(stAddr)))
-	{
-		if (errno != EINPROGRESS && errno!= EINTR && errno != EAGAIN)
-		{
-//			m_pLock.UnLock();
-			PushNetEvent(NETEVT_CONN_ERR, errno);
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "connect error id : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
-			Close();
-			return INVALID_SOCKET;
-		}
-	}
-#endif // WIN32
-
-	return GetSock();
-}
-
 void FxTCPConnectSockBase::ProcEvent(SNetEvent oEvent)
 {
 	{
@@ -2646,6 +2446,203 @@ FxTCPConnectSock::FxTCPConnectSock()
 FxTCPConnectSock::~FxTCPConnectSock()
 {
 
+}
+
+SOCKET FxTCPConnectSock::Connect()
+{
+	if (IsConnected())
+	{
+		return INVALID_SOCKET;
+	}
+
+	if (NULL == GetConnection())
+	{
+		return INVALID_SOCKET;
+	}
+
+	if (GetConnection()->IsConnected())
+	{
+		return INVALID_SOCKET;
+	}
+
+	if (INVALID_SOCKET != GetSock())
+	{
+		return INVALID_SOCKET;
+	}
+
+#ifdef WIN32
+	SetSock(WSASocket(
+		AF_INET,
+		SOCK_STREAM,
+		0,
+		NULL,
+		0,
+		WSA_FLAG_OVERLAPPED));
+#else
+	SetSock(socket(AF_INET, SOCK_STREAM, 0));
+#endif // WIN32
+
+	if (INVALID_SOCKET == GetSock())
+	{
+		PushNetEvent(NETEVT_ERROR, errno);
+		Close();
+		return INVALID_SOCKET;
+	}
+
+#ifdef WIN32
+	// keep alive
+	struct tcp_keepalive keepAliveIn;
+	struct tcp_keepalive keepAliveOut;
+
+	unsigned long ulBytesReturn = 0;
+
+	keepAliveIn.keepaliveinterval = 10000;//
+	keepAliveIn.keepalivetime = 1000 * 30;//
+	keepAliveIn.onoff = 1;
+
+	int ret = WSAIoctl
+		(
+		GetSock(),
+		SIO_KEEPALIVE_VALS,
+		&keepAliveIn,
+		sizeof(keepAliveIn),
+		&keepAliveOut,
+		sizeof(keepAliveOut),
+		&ulBytesReturn,
+		NULL,
+		NULL
+		);
+	if (ret == SOCKET_ERROR)
+	{
+		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
+		Close();
+		return INVALID_SOCKET;
+	}
+
+	sockaddr_in local_addr;
+	ZeroMemory(&local_addr, sizeof (sockaddr_in));
+	local_addr.sin_family = AF_INET;
+
+	int nSendBuffSize = 256 * 1024;
+	int nRecvBuffSize = 8 * nSendBuffSize;
+	if ((0 != setsockopt(GetSock(), SOL_SOCKET, SO_RCVBUF, (char*)&nRecvBuffSize, sizeof(int))) ||
+		(0 != setsockopt(GetSock(), SOL_SOCKET, SO_SNDBUF, (char*)&nSendBuffSize, sizeof(int))))
+	{
+		int nError = WSAGetLastError();
+		PushNetEvent(NETEVT_CONN_ERR, nError);
+		closesocket(GetSock());
+		return INVALID_SOCKET;
+	}
+
+	int irt = ::bind(GetSock(), (sockaddr *)(&local_addr), sizeof (sockaddr_in));
+#else
+	setsockopt(GetSock(), SOL_SOCKET, SO_SNDLOWAT, &VAL_SO_SNDLOWAT, sizeof(VAL_SO_SNDLOWAT));
+	setsockopt(GetSock(), SOL_SOCKET, SO_SNDBUF, &MAX_SYS_SEND_BUF, sizeof(MAX_SYS_SEND_BUF));
+
+	int keepAlive = 1;
+	setsockopt(GetSock(), SOL_SOCKET, SO_KEEPALIVE, (void*)&keepAlive, sizeof(keepAlive));
+
+	int keepIdle = 30;
+	int keepInterval = 5;
+	int keepCount = 6;
+	setsockopt(GetSock(), SOL_TCP, TCP_KEEPIDLE, (void *)&keepIdle, sizeof(keepIdle));
+	setsockopt(GetSock(), SOL_TCP, TCP_KEEPINTVL, (void *)&keepInterval, sizeof(keepInterval));
+	setsockopt(GetSock(), SOL_TCP, TCP_KEEPCNT, (void *)&keepCount, sizeof(keepCount));
+#endif // WIN32
+	// [end]
+
+	SetIoThread(FxNetModule::Instance()->FetchIoThread(GetSock()));
+	if (NULL == m_poIoThreadHandler)
+	{
+//		m_pLock.UnLock();
+		PushNetEvent(NETEVT_ERROR, 0);
+		Close();
+		return INVALID_SOCKET;
+	}
+
+	sockaddr_in stAddr = { 0 };
+	stAddr.sin_family = AF_INET;
+	stAddr.sin_addr.s_addr = GetConnection()->GetRemoteIP();
+	stAddr.sin_port = htons(GetConnection()->GetRemotePort());
+
+	SetState(SSTATE_CONNECT);
+
+#ifdef WIN32
+	if (!AddEvent())
+	{
+		//		m_pLock.UnLock();
+		PushNetEvent(NETEVT_ERROR, errno);
+		Close();
+		return INVALID_SOCKET;
+	}
+#else
+	if (!AddEvent())
+	{
+//		m_pLock.UnLock();
+		PushNetEvent(NETEVT_ERROR, errno);
+		Close();
+		return INVALID_SOCKET;
+	}
+#endif // WIN32
+
+	//请求连接时 Windows跟linux是有区别的//
+#ifdef WIN32
+	LPFN_CONNECTEX m_lpfnConnectEx = NULL ;
+	DWORD dwBytes = 0;
+	GUID GuidConnectEx = WSAID_CONNECTEX;
+
+	if (SOCKET_ERROR == WSAIoctl(GetSock(), SIO_GET_EXTENSION_FUNCTION_POINTER,
+		&GuidConnectEx, sizeof (GuidConnectEx),
+		&m_lpfnConnectEx, sizeof (m_lpfnConnectEx), &dwBytes, 0, 0))
+	{
+		PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
+		closesocket(GetSock());
+		return INVALID_SOCKET;
+	}
+
+	memset(&m_stRecvIoData.stOverlapped, 0, sizeof(m_stRecvIoData.stOverlapped));
+	// 这个时候 还没有连上 所以 将这个改成IOCP_CONNECT 等连完以后再改回来
+	m_stRecvIoData.nOp = IOCP_CONNECT;
+
+	int bResult = m_lpfnConnectEx(GetSock(),
+		(sockaddr *)&stAddr,  // [in] 对方地址
+		sizeof(stAddr),               // [in] 对方地址长度
+		NULL,       // [in] 连接后要发送的内容，这里不用
+		0,   // [in] 发送内容的字节数 ，这里不用
+		NULL,       // [out] 发送了多少个字节，这里不用
+		&m_stRecvIoData.stOverlapped); // [in]
+	if (0 == bResult)      // 返回值处//
+	{
+		int dwError = (UINT32)WSAGetLastError();
+		if (dwError != ERROR_IO_PENDING)
+		{
+			PushNetEvent(NETEVT_CONN_ERR, dwError);
+			closesocket(GetSock());
+			return INVALID_SOCKET;
+		}
+	}
+
+#else
+	if (-1 == connect(GetSock(), (sockaddr*)&stAddr, sizeof(stAddr)))
+	{
+		if (errno != EINPROGRESS && errno!= EINTR && errno != EAGAIN)
+		{
+//			m_pLock.UnLock();
+			PushNetEvent(NETEVT_CONN_ERR, errno);
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetThreadId(), "connect error id : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+			Close();
+			return INVALID_SOCKET;
+		}
+	}
+#endif // WIN32
+
+	return GetSock();
+}
+
+void FxTCPConnectSock::OnConnect()
+{
+	FxTCPConnectSockBase::OnConnect();
+	m_stRecvIoData.nOp = IOCP_RECV;
 }
 
 void FxTCPConnectSock::__ProcRecv(UINT32 dwLen)

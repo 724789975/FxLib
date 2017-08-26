@@ -115,7 +115,7 @@ public:
 
 	virtual void						ProcEvent(SNetEvent oEvent);
 
-	SOCKET								Connect();
+	SOCKET								Connect() = 0;
 
 	virtual bool						PostClose();
 #ifdef WIN32
@@ -141,7 +141,7 @@ protected:
 	virtual void						__ProcRecv(UINT32 dwLen) = 0;
 	virtual void						__ProcRelease() = 0;
 protected:
-	void								OnConnect();
+	virtual void						OnConnect();
 #ifdef WIN32
 	virtual void						OnRecv(bool bRet, int dwBytes);
 	void								OnSend(bool bRet, int dwBytes);
@@ -185,6 +185,9 @@ public:
 	FxTCPConnectSock();
 	virtual ~FxTCPConnectSock();
 
+	SOCKET								Connect();
+protected:
+	virtual void						OnConnect();
 private:
 	void __ProcRecv(UINT32 dwLen);
 	void __ProcRelease();
@@ -204,6 +207,7 @@ public:
 	FxWebSocketConnect();
 	virtual ~FxWebSocketConnect();
 
+	SOCKET Connect() { Assert(0); return INVALID_SOCKET; }
 	virtual void Reset();
 private:
 	void __ProcRecv(UINT32 dwLen);
