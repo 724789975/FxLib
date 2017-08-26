@@ -1,6 +1,7 @@
 #ifndef __GameServer_H__
 #define __GameServer_H__
 
+#include <set>
 #include "singleton.h"
 #include "GameSession.h"
 #include "ChatManagerSession.h"
@@ -22,6 +23,11 @@ private:
 
 	UINT32 m_dwChatSessionPort;
 	UINT32 m_dwChatServerSessionPort;
+
+	IFxListenSocket* m_pChatSessionListener;
+	IFxListenSocket* m_pChatServerSessionListener;
+
+	std::set<char> m_setHashIndex;
 };
 
 #endif // !__GameServer_H__

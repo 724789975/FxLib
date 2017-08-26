@@ -30,7 +30,7 @@ public:
 
 private:
 	BinaryDataHeader m_oBinaryDataHeader;
-	char m_dataRecvBuf[1024 * 1024];
+	char m_dataRecvBuf[64 * 1024];
 private:
 	char m_szId[32];
 };

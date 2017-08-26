@@ -1,6 +1,7 @@
 #include "ChatManagerSession.h"
 #include "chatdefine.h"
 #include "netstream.h"
+#include "ChatServer.h"
 
 
 ChatManagerSession::ChatManagerSession()
