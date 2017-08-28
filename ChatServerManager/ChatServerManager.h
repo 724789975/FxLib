@@ -10,10 +10,10 @@ public:
 	ChatServerManager();
 	virtual ~ChatServerManager();
 
-	ChatSession& GetChatSession() { return m_oChatSession; }
+	ChatServerSession& GetChatSession() { return m_oChatSession; }
 
 private:
-	ChatSession m_oChatSession;
+	ChatServerSession m_oChatSession;
 };
 
 #endif // !__GameServer_H__

@@ -21,6 +21,9 @@ local function SetIndex_l(strParam)
 	SetIndex(tonumber(strParam))
 end
 
+local function SetChatConnection(strParam)
+end
+
 local tableCmdOptions =
 {
 	["add"] = function(strParam)
