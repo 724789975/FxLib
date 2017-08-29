@@ -8,24 +8,18 @@
 
 class ChatServerSession : public FxSession
 {
+	friend class ChatServerSessionManager;
 public:
 	ChatServerSession();
 	virtual ~ChatServerSession();
 
 	virtual void		OnConnect(void);
-
 	virtual void		OnClose(void);
-
 	virtual void		OnError(UINT32 dwErrorNo);
-
 	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
-
 	virtual void		Release(void);
-
 	virtual char*		GetRecvBuf() { return m_dataRecvBuf; }
-
 	virtual UINT32		GetRecvSize() { return 64 * 1024; };
-
 	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
 
 private:
@@ -35,6 +29,8 @@ private:
 	char m_szId[32];
 	UINT32 m_dwChatServerPort;
 	UINT32 m_dwChatPort;
+private:
+	void OnChatServerInfo(const char* pBuf, UINT32 dwLen);
 };
 
 class ChatServerSessionManager : public TSingleton<ChatServerSessionManager>, public IFxSessionFactory
@@ -48,10 +44,12 @@ public:
 	void Init() {}
 	virtual void Release(FxSession* pSession);
 
-private:
-	std::map<unsigned char, ChatServerSession*> m_mapSessionIpPort;
+	void OnChatServerInfo(ChatServerSession* pChatServerSession);
 
-	ChatServerSession m_oChatServerSessions[ChatConstant::ChatServerNum];
+private:
+	std::map<unsigned int, ChatServerSession*> m_mapSessionIpPort;
+
+	ChatServerSession m_oChatServerSessions[ChatConstant::g_dwChatServerNum];
 
 	FxCriticalLock m_oLock;
 };

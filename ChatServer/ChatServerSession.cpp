@@ -41,7 +41,7 @@ FxSession* ChatServerSessionManager::CreateSession()
 {
 	m_oLock.Lock();
 	FxSession* pSession = NULL;
-	for (int i = 0; i < ChatConstant::ChatServerNum; ++i)
+	for (int i = 0; i < ChatConstant::g_dwChatServerNum; ++i)
 	{
 		if (m_oChatServerSessions[i].GetConnection() == NULL)
 		{

@@ -3,7 +3,8 @@
 
 namespace ChatConstant
 {
-	static const unsigned int ChatServerNum = 4;
+	static const unsigned int g_dwChatServerNum = 4;
+	static const unsigned int g_dwHashGen = 256;
 }
 
 namespace Protocol
@@ -16,6 +17,7 @@ namespace Protocol
 
 		//chat --->chatmanager 20001 25000
 		CHAT_TO_CHAT_MANAGER_BEGIN = 20001,
+		CHAT_SEND_CHAT_MANAGER_INFO,
 		CHAT_TO_CHAT_MANAGER_END = 25000,
 
 		//chatmanager --->chat 25001 29999

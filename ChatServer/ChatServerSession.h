@@ -49,7 +49,7 @@ public:
 private:
 	std::map<unsigned char, ChatServerSession*> m_mapSessionIpPort;
 
-	ChatServerSession m_oChatServerSessions[ChatConstant::ChatServerNum];
+	ChatServerSession m_oChatServerSessions[ChatConstant::g_dwChatServerNum- 1];
 
 	FxCriticalLock m_oLock;
 };
