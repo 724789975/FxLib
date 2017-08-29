@@ -1,4 +1,4 @@
-#include "ChatSession.h"
+#include "ChatServerSession.h"
 
 ChatServerSession::ChatServerSession()
 	: m_dwChatPort(0)

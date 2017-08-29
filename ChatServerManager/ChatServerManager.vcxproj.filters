@@ -29,14 +29,14 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SocketSession.cpp" />
     <ClCompile Include="utility.cpp" />
-    <ClCompile Include="ChatSession.cpp" />
     <ClCompile Include="ChatServerManager.cpp" />
+    <ClCompile Include="ChatServerSession.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LuaMeta.h" />
     <ClInclude Include="SocketSession.h" />
     <ClInclude Include="utility.h" />
-    <ClInclude Include="ChatSession.h" />
     <ClInclude Include="ChatServerManager.h" />
+    <ClInclude Include="ChatServerSession.h" />
   </ItemGroup>
 </Project>

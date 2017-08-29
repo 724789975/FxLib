@@ -2,7 +2,7 @@
 #define __GameServer_H__
 
 #include "singleton.h"
-#include "ChatSession.h"
+#include "ChatServerSession.h"
 
 class ChatServerManager : public TSingleton<ChatServerManager>
 {
