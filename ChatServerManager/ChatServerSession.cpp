@@ -1,6 +1,9 @@
 #include "ChatServerSession.h"
 #include "netstream.h"
 
+const static unsigned int g_dwChatServerSessionBuffLen = 64 * 1024;
+static char g_pChatServerSessionBuf[g_dwChatServerSessionBuffLen];
+
 ChatServerSession::ChatServerSession()
 	: m_dwChatPort(0)
 	, m_dwChatServerPort(0)
@@ -27,13 +30,11 @@ void ChatServerSession::OnError(UINT32 dwErrorNo)
 
 }
 
-void ChatServerSession::Release(void)
-{
-}
-
 void ChatServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
-	Protocol::EChatProtocol eProrocol = (Protocol::EChatProtocol)(*((UINT32*)pBuf));
+	CNetStream oStream(pBuf, dwLen);
+	Protocol::EChatProtocol eProrocol;
+	oStream.ReadInt((int&)eProrocol);
 	const char* pData = pBuf + sizeof(UINT32);
 	dwLen -= sizeof(UINT32);
 
@@ -44,11 +45,17 @@ void ChatServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	}
 }
 
+void ChatServerSession::Release(void)
+{
+}
+
 void ChatServerSession::OnChatServerInfo(const char* pBuf, UINT32 dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	oStream.ReadInt(m_dwChatPort);
 	oStream.ReadInt(m_dwChatServerPort);
+
+	ChatServerSessionManager::Instance()->OnChatServerInfo(this);
 }
 
 //----------------------------------------------------------------------
@@ -74,6 +81,7 @@ void ChatServerSessionManager::Release(FxSession* pSession)
 
 void ChatServerSessionManager::OnChatServerInfo(ChatServerSession* pChatServerSession)
 {
+	stCHAT_MANAGER_NOTIFY_CHAT_INFO oCHAT_MANAGER_NOTIFY_CHAT_INFO;
 	for (unsigned int i = 0; i < ChatConstant::g_dwChatServerNum; ++i)
 	{
 		if (pChatServerSession == m_oChatServerSessions + i)
@@ -86,15 +94,21 @@ void ChatServerSessionManager::OnChatServerInfo(ChatServerSession* pChatServerSe
 					m_mapSessionIpPort[j] = pChatServerSession;
 				}
 			}
+			oCHAT_MANAGER_NOTIFY_CHAT_INFO.dwHashIndex = i;
 		}
 		else
 		{
 			if (m_oChatServerSessions[i].m_dwChatPort && m_oChatServerSessions[i].m_dwChatServerPort)
 			{
-				// todo 发送这个服的信息
-				//pChatServerSession->Send()
+				stCHAT_MANAGER_NOTIFY_CHAT_INFO::stRemoteChatInfo oInfo;
+				oInfo.dwIp = m_oChatServerSessions[i].GetRemoteIP();
+				oInfo.dwPort = m_oChatServerSessions[i].GetRemotePort();
+				oInfo.dwHashIndex = i;
 			}
 		}
 	}
-	
+	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
+	oStream.WriteInt(Protocol::CHAT_MANAGER_NOTIFY_CHAT_INFO);
+	oCHAT_MANAGER_NOTIFY_CHAT_INFO.Write(oStream);
+	pChatServerSession->Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
 }

@@ -36,7 +36,6 @@ void ChatServerSession::Release(void)
 	//ChatServerSessionManager::Instance()->Release(this);
 }
 
-
 FxSession* ChatServerSessionManager::CreateSession()
 {
 	m_oLock.Lock();

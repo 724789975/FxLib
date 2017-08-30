@@ -1,6 +1,9 @@
 #ifndef __ChatDefine_H__
 #define __ChatDefine_H__
 
+#include <vector>
+#include "../meta_header/netstream.h"
+
 namespace ChatConstant
 {
 	static const unsigned int g_dwChatServerNum = 4;
@@ -26,5 +29,58 @@ namespace Protocol
 		CHAT_MANAGER_TO_CHAT_END = 29999,
 	};
 }
+
+//----------------------------------------------------------------------
+struct stCHAT_MANAGER_NOTIFY_CHAT_INFO
+{
+	struct stRemoteChatInfo
+	{
+		unsigned int dwIp;
+		unsigned int dwPort;
+		unsigned int dwHashIndex;
+	};
+	unsigned int dwHashIndex;
+	std::vector<stRemoteChatInfo> vecRemoteInfo;
+
+	bool Write(CNetStream& refStream)
+	{
+		if (!refStream.WriteInt(dwHashIndex)) return false;
+		if (!refStream.WriteInt(vecRemoteInfo.size())) return false;
+		for (std::vector<stRemoteChatInfo>::iterator it = vecRemoteInfo.begin();
+			it != vecRemoteInfo.end(); ++it)
+		{
+			if (!refStream.WriteInt(it->dwIp)) return false;
+			if (!refStream.WriteInt(it->dwPort)) return false;
+			if (!refStream.WriteInt(it->dwHashIndex)) return false;
+		}
+		return true;
+	}
+
+	bool Read(CNetStream& refStream)
+	{
+		vecRemoteInfo.clear();
+		if (!refStream.ReadInt(dwHashIndex)) return false;
+		unsigned int dwLen = 0;
+		if (!refStream.ReadInt(dwLen)) return false;
+		for (unsigned int i = 0; i < dwLen; ++i)
+		{
+			stRemoteChatInfo oRemoteChatInfo;
+			if (!refStream.ReadInt(oRemoteChatInfo.dwIp)) return false;
+			if (!refStream.ReadInt(oRemoteChatInfo.dwPort)) return false;
+			if (!refStream.ReadInt(oRemoteChatInfo.dwHashIndex)) return false;
+			vecRemoteInfo.push_back(oRemoteChatInfo);
+		}
+		return true;
+	}
+};
+
+
+
+
+
+
+
+
+
 
 #endif // !__ChatDefine_H__
