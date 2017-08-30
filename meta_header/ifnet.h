@@ -137,6 +137,8 @@ public:
 
 	virtual UINT32					GetRecvSize() = 0;
 
+	virtual UINT32		 			GetRemoteIP();
+
 	virtual const char* 			GetRemoteIPStr();
 
 	virtual UINT32					GetRemotePort();

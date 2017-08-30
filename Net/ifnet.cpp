@@ -88,6 +88,16 @@ SOCKET FxSession::Reconnect(void)
 	return m_poConnection->Reconnect();
 }
 
+UINT32 FxSession::GetRemoteIP()
+{
+	if (NULL != m_poConnection)
+	{
+		return m_poConnection->GetRemoteIP();
+	}
+
+	return 0;
+}
+
 const char* FxSession::GetRemoteIPStr()
 {
 	if (NULL != m_poConnection)
