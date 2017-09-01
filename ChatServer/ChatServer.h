@@ -5,6 +5,7 @@
 #include "singleton.h"
 #include "GameSession.h"
 #include "ChatManagerSession.h"
+#include "ChatServerSession.h"
 
 class ChatServer : public TSingleton<ChatServer>
 {
@@ -16,6 +17,7 @@ public:
 
 	//GameSession& GetGameSession() { return m_oChatSession; }
 	ChatManagerSession& GetChatManagerSession() { return m_oChatManagerSession; }
+	ChatServerSessionManager& GetChatServerSessionManager() { return m_oChatServerSessionManager; }
 
 private:
 	//GameSession m_oChatSession;
@@ -26,6 +28,8 @@ private:
 
 	IFxListenSocket* m_pChatSessionListener;
 	IFxListenSocket* m_pChatServerSessionListener;
+
+	ChatServerSessionManager m_oChatServerSessionManager;
 
 	std::set<char> m_setHashIndex;
 };

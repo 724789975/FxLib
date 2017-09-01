@@ -35,7 +35,7 @@ private:
 	char m_szId[32];
 };
 
-class ChatServerSessionManager : public TSingleton<ChatServerSessionManager>, public IFxSessionFactory
+class ChatServerSessionManager : public IFxSessionFactory
 {
 public:
 	ChatServerSessionManager(){}
@@ -43,15 +43,22 @@ public:
 
 	virtual FxSession*	CreateSession();
 
+	ChatServerSession* GetChatServerSession();
+
 	void Init() {}
 	virtual void Release(FxSession* pSession);
+
+	void SetHashIndex(UINT32 dwIndex);
+	void SetHashIndex(UINT32 dwIndex, ChatServerSession* pChatServerSession);
 	
 private:
-	std::map<unsigned char, ChatServerSession*> m_mapSessionIpPort;
+	std::map<unsigned int, ChatServerSession*> m_mapSessionIpPort;
 
 	ChatServerSession m_oChatServerSessions[ChatConstant::g_dwChatServerNum- 1];
 
 	FxCriticalLock m_oLock;
+
+	std::set<unsigned int> m_setHashIndex;
 };
 
 

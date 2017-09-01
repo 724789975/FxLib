@@ -38,8 +38,13 @@ void ChatServerSession::Release(void)
 
 FxSession* ChatServerSessionManager::CreateSession()
 {
+	return GetChatServerSession();
+}
+
+ChatServerSession* ChatServerSessionManager::GetChatServerSession()
+{
 	m_oLock.Lock();
-	FxSession* pSession = NULL;
+	ChatServerSession* pSession = NULL;
 	for (int i = 0; i < ChatConstant::g_dwChatServerNum; ++i)
 	{
 		if (m_oChatServerSessions[i].GetConnection() == NULL)
@@ -54,4 +59,20 @@ FxSession* ChatServerSessionManager::CreateSession()
 void ChatServerSessionManager::Release(FxSession* pSession)
 {
 
+}
+
+void ChatServerSessionManager::SetHashIndex(UINT32 dwIndex)
+{
+	for (unsigned int i = 0; i < ChatConstant::g_dwHashGen; ++i)
+	{
+		m_setHashIndex.insert(i % ChatConstant::g_dwHashGen);
+	}
+}
+
+void ChatServerSessionManager::SetHashIndex(UINT32 dwIndex, ChatServerSession* pChatServerSession)
+{
+	for (unsigned int i = 0; i < ChatConstant::g_dwHashGen; ++i)
+	{
+		m_mapSessionIpPort[i % ChatConstant::g_dwHashGen] = pChatServerSession;
+	}
 }

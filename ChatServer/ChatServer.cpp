@@ -25,12 +25,12 @@ bool ChatServer::Init(UINT32 dwChatSessionPort, UINT32 dwChatServerSessionPort)
 	{
 		return false;
 	}
-	m_pChatSessionListener = pNet->Listen(ChatServerSessionManager::Instance(), SLT_CommonTcp, 0, m_dwChatSessionPort);
+	m_pChatSessionListener = pNet->Listen(&m_oChatServerSessionManager, SLT_CommonTcp, 0, m_dwChatSessionPort);
 	if (m_pChatSessionListener  == NULL)
 	{
 		return false;
 	}
-	m_pChatServerSessionListener = pNet->Listen(ChatServerSessionManager::Instance(), SLT_CommonTcp, 0, m_dwChatServerSessionPort);
+	m_pChatServerSessionListener = pNet->Listen(&m_oChatServerSessionManager, SLT_CommonTcp, 0, m_dwChatServerSessionPort);
 	if (m_pChatSessionListener == NULL)
 	{
 		return false;
