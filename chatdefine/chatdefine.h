@@ -16,6 +16,7 @@ namespace Protocol
 	{
 		//chat<--->chat 10001 11000
 		CHAT_TO_CHAT_BEGIN = 10001,
+		CHAT_TO_CHAT_HASH_INDEX = 10002,
 		CHAT_TO_CHAT_END = 11000,
 
 		//chat --->chatmanager 20001 25000
@@ -71,6 +72,19 @@ struct stCHAT_MANAGER_NOTIFY_CHAT_INFO
 			vecRemoteInfo.push_back(oRemoteChatInfo);
 		}
 		return true;
+	}
+};
+
+struct stCHAT_TO_CHAT_HASH_INDEX
+{
+	unsigned int dwHashIndex;
+	bool Write(CNetStream& refStream)
+	{
+		return refStream.WriteInt(dwHashIndex);
+	}
+	bool Read(CNetStream& refStream)
+	{
+		return refStream.ReadInt(dwHashIndex);
 	}
 };
 

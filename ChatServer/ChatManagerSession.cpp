@@ -71,6 +71,6 @@ void ChatManagerSession::OnNotifyChatInfo(const char* pBuf, UINT32 dwLen)
 		}
 		stCHAT_MANAGER_NOTIFY_CHAT_INFO::stRemoteChatInfo& refInfo = oCHAT_MANAGER_NOTIFY_CHAT_INFO.vecRemoteInfo[i];
 		pNet->TcpConnect(pChatServerSession, refInfo.dwIp, refInfo.dwPort, true);
-		ChatServer::Instance()->GetChatServerSessionManager().SetHashIndex(refInfo.dwHashIndex, pChatServerSession);
+		//ChatServer::Instance()->GetChatServerSessionManager().SetHashIndex(refInfo.dwHashIndex, pChatServerSession);
 	}
 }
