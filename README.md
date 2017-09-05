@@ -26,4 +26,5 @@ if want release use "make"
 "make debug"用来生成debug版
 "make" 用来生成release版
 
-不能提交
+加入了gflags 需要到git上下载相应的源代码
+
