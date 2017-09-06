@@ -12,13 +12,11 @@
 #include <process.h>
 
 #include <psapi.h>
-#include <cstddef>  
+#include <cstddef>
 #include <dbghelp.h>
-#include <io.h>
 #else
 #include <pthread.h>
 #include <signal.h>
-#include <unistd.h>
 
 #include <dirent.h>
 #include <sys/stat.h>
@@ -141,12 +139,6 @@ void FxSleep(UINT32 dwMilliseconds)
 #endif // WIN32
 
 }
-
-#ifdef WIN32
-#define Access _access
-#else
-#define Access access
-#endif
 
 FILE* GetLogFile()
 {

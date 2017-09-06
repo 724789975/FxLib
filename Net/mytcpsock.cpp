@@ -47,7 +47,6 @@ FxTCPListenSock::~FxTCPListenSock()
 {
 	if (m_poSessionFactory)
 	{
-		delete m_poSessionFactory;
 		m_poSessionFactory = NULL;
 	}
 }

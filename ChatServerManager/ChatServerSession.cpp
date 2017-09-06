@@ -1,5 +1,6 @@
 #include "ChatServerSession.h"
 #include "netstream.h"
+#include "ChatServerManager.h"
 
 const static unsigned int g_dwChatServerSessionBuffLen = 64 * 1024;
 static char g_pChatServerSessionBuf[g_dwChatServerSessionBuffLen];
@@ -47,6 +48,7 @@ void ChatServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 
 void ChatServerSession::Release(void)
 {
+	OnDestroy();
 }
 
 void ChatServerSession::OnChatServerInfo(const char* pBuf, UINT32 dwLen)
@@ -55,7 +57,7 @@ void ChatServerSession::OnChatServerInfo(const char* pBuf, UINT32 dwLen)
 	oStream.ReadInt(m_dwChatPort);
 	oStream.ReadInt(m_dwChatServerPort);
 
-	ChatServerSessionManager::Instance()->OnChatServerInfo(this);
+	ChatServerManager::Instance()->GetChatSessionManager().OnChatServerInfo(this);
 }
 
 //----------------------------------------------------------------------
@@ -72,6 +74,27 @@ FxSession* ChatServerSessionManager::CreateSession()
 	}
 	m_oLock.UnLock();
 	return pSession;
+}
+
+void ChatServerSessionManager::CloseSessions()
+{
+	for (int i = 0; i < ChatConstant::g_dwChatServerNum; ++i)
+	{
+		m_oChatServerSessions[i].Close();
+	}
+	bool bClosed = true;
+	do 
+	{
+		FxNetGetModule()->Run(0xffffffff);
+		FxSleep(10);
+		for (int i = 0; i < ChatConstant::g_dwChatServerNum; ++i)
+		{
+			if (m_oChatServerSessions[i].GetConnection())
+			{
+				bClosed = false;
+			}
+		}
+	} while (!bClosed);
 }
 
 void ChatServerSessionManager::Release(FxSession* pSession)

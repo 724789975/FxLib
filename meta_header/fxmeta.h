@@ -9,6 +9,12 @@
 #include "log_thread.h"
 #include "redef_assert.h"
 
+#ifdef WIN32
+#include <io.h>
+#else
+#include <unistd.h>
+#endif // WIN32
+
 typedef signed char			INT8;
 typedef unsigned char		UINT8;
 typedef signed short		INT16;
@@ -140,12 +146,37 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 	}\
 }
 
-#define ThreadLog(eLevel, pFile, dwThreadId, strFmt, ...)\
+inline const char* GetSeparator()
+{
+#ifdef WIN32
+	return "\\";
+#else
+	return "/";
+#endif // WIN32
+}
+
+#ifdef WIN32
+#define Access _access
+#else
+#define Access access
+#endif
+
+#define ThreadLog(eLevel, pFile, dwThreadId, strFmt, ...)
+#define ThreadLog1(eLevel, pFile, dwThreadId, strFmt, ...)\
 {\
 	{\
 		char strLog[2048] = {0};\
-		GetLogFile(dwThreadId, pFile);\
-		Assert(pFile);\
+		char strLogPath[512] = { 0 };\
+		sprintf(strLogPath, "%s%s%s_%u_log.txt", GetSeparator(), GetExePath(), GetExeName(), dwThreadId);\
+		if (pFile == NULL)\
+		{\
+			pFile = fopen(strLogPath, "a+");\
+		}\
+		if (Access(strLogPath, 0) == -1)\
+		{\
+			fclose(pFile);\
+			pFile = fopen(strLogPath, "a+");\
+		}\
 		if (pFile)\
 		{\
 			if((eLevel < LogLv_Count))\

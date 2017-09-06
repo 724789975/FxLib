@@ -33,7 +33,7 @@ private:
 	void OnChatServerInfo(const char* pBuf, UINT32 dwLen);
 };
 
-class ChatServerSessionManager : public TSingleton<ChatServerSessionManager>, public IFxSessionFactory
+class ChatServerSessionManager : public IFxSessionFactory
 {
 public:
 	ChatServerSessionManager() {}
@@ -41,11 +41,12 @@ public:
 
 	virtual FxSession*	CreateSession();
 
-	void Init() {}
+	bool Init() { return true; };
+	void CloseSessions();
+
 	virtual void Release(FxSession* pSession);
 
 	void OnChatServerInfo(ChatServerSession* pChatServerSession);
-
 private:
 	std::map<unsigned int, ChatServerSession*> m_mapSessionIpPort;
 

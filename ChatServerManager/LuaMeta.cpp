@@ -1,6 +1,6 @@
 /*
 ** Lua binding: LuaMeta
-** Generated automatically by tolua++-1.0.6 on 08/17/17 00:40:51.
+** Generated automatically by tolua++-1.0.6 on 09/07/17 00:20:13.
 */
 
 #ifndef __cplusplus
@@ -180,58 +180,12 @@ static int tolua_LuaMeta_FxNetGetModule00(lua_State* tolua_S)
 #endif
 }
 
-/* get function: g_dwPort */
-static int tolua_get_unsigned_g_dwPort(lua_State* tolua_S)
-{
- tolua_pushnumber(tolua_S,(lua_Number)g_dwPort);
- return 1;
-}
-
-/* set function: g_dwPort */
-static int tolua_set_unsigned_g_dwPort(lua_State* tolua_S)
-{
-#ifndef TOLUA_RELEASE
- tolua_Error tolua_err;
- if (!tolua_isnumber(tolua_S,2,0,&tolua_err))
- tolua_error(tolua_S,"#vinvalid type in variable assignment.",&tolua_err);
-#endif
-  g_dwPort = ((unsigned int)  tolua_tonumber(tolua_S,2,0))
-;
- return 0;
-}
-
-/* function: SetIndex */
-static int tolua_LuaMeta_SetIndex00(lua_State* tolua_S)
-{
-#ifndef TOLUA_RELEASE
- tolua_Error tolua_err;
- if (
- !tolua_isnumber(tolua_S,1,0,&tolua_err) ||
- !tolua_isnoobj(tolua_S,2,&tolua_err)
- )
- goto tolua_lerror;
- else
-#endif
- {
-  double qwIndex = ((double)  tolua_tonumber(tolua_S,1,0));
- {
-  SetIndex(qwIndex);
- }
- }
- return 0;
-#ifndef TOLUA_RELEASE
- tolua_lerror:
- tolua_error(tolua_S,"#ferror in function 'SetIndex'.",&tolua_err);
- return 0;
-#endif
-}
-
 /* Open function */
 TOLUA_API int tolua_LuaMeta_open (lua_State* tolua_S)
 {
  tolua_open(tolua_S);
  tolua_reg_types(tolua_S);
- tolua_module(tolua_S,NULL,1);
+ tolua_module(tolua_S,NULL,0);
  tolua_beginmodule(tolua_S,NULL);
 #ifdef __cplusplus
  tolua_cclass(tolua_S,"IFxNet","IFxNet","",tolua_collect_IFxNet);
@@ -245,8 +199,6 @@ TOLUA_API int tolua_LuaMeta_open (lua_State* tolua_S)
  tolua_function(tolua_S,"Release",tolua_LuaMeta_IFxNet_Release00);
  tolua_endmodule(tolua_S);
  tolua_function(tolua_S,"FxNetGetModule",tolua_LuaMeta_FxNetGetModule00);
- tolua_variable(tolua_S,"g_dwPort",tolua_get_unsigned_g_dwPort,tolua_set_unsigned_g_dwPort);
- tolua_function(tolua_S,"SetIndex",tolua_LuaMeta_SetIndex00);
  tolua_endmodule(tolua_S);
  return 1;
 }
