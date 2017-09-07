@@ -155,11 +155,7 @@ FILE* GetLogFile()
 		}
 		return pFile;
 	}
-#ifdef WIN32
-	sprintf(strLogPath, "%s%s%s%s", GetExePath(), "\\", GetExeName(), "_exe_log.txt");
-#else
-	sprintf(strLogPath, "%s%s%s%s", GetExePath(), "/", GetExeName(), "_exe_log.txt");
-#endif // WIN32
+	sprintf(strLogPath, "./%s_exe_log.txt", GetExeName());
 
 	if (strcmp(strLogPath, sstrPath) != 0)
 	{
@@ -176,27 +172,6 @@ FILE* GetLogFile()
 		}
 	}
 	return pFile;
-}
-
-void GetLogFile(unsigned int dwThreadId, FILE*& refpFile)
-{
-	char strLogPath[512] = { 0 };
-#ifdef WIN32
-	sprintf(strLogPath, "%s\\%s_%u_log.txt", GetExePath(), GetExeName(), dwThreadId);
-#else
-	sprintf(strLogPath, "%s/%s_%u_log.txt", GetExePath(), GetExeName(), dwThreadId);
-#endif // WIN32
-	if (refpFile == NULL)
-	{
-		refpFile = fopen(strLogPath, "a+");
-		return;
-	}
-	if (Access(strLogPath, 0) == -1)
-	{
-		fclose(refpFile);
-		refpFile = fopen(strLogPath, "a+");
-		return;
-	}
 }
 
 bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...)

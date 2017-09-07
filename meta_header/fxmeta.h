@@ -80,7 +80,6 @@ static const char* LogLevelString[LogLv_Count] =
 };
 
 FILE* GetLogFile();
-void GetLogFile(unsigned int dwThreadId, FILE*& refpFile);
 
 void PrintTrace(char* strTrace);
 
@@ -161,21 +160,19 @@ inline const char* GetSeparator()
 #define Access access
 #endif
 
-#define ThreadLog(eLevel, pFile, dwThreadId, strFmt, ...)
-#define ThreadLog1(eLevel, pFile, dwThreadId, strFmt, ...)\
+//#define ThreadLog(eLevel, pFile, dwThreadId, strFmt, ...)
+#define ThreadLog(eLevel, pFile, szLogFile, strFmt, ...)\
 {\
 	{\
 		char strLog[2048] = {0};\
-		char strLogPath[512] = { 0 };\
-		sprintf(strLogPath, "%s%s%s_%u_log.txt", GetSeparator(), GetExePath(), GetExeName(), dwThreadId);\
 		if (pFile == NULL)\
 		{\
-			pFile = fopen(strLogPath, "a+");\
+			pFile = fopen(szLogFile, "a+");\
 		}\
-		if (Access(strLogPath, 0) == -1)\
+		if (Access(szLogFile, 0) == -1)\
 		{\
 			fclose(pFile);\
-			pFile = fopen(strLogPath, "a+");\
+			pFile = fopen(szLogFile, "a+");\
 		}\
 		if (pFile)\
 		{\

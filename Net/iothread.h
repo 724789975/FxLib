@@ -27,6 +27,7 @@ public:
 
 	UINT32					GetThreadId();
 	FILE*&					GetFile() { return m_pFile; }
+	const char*				GetLogFile() { return m_szLogPath; }
 
 #ifdef WIN32
 	bool					AddEvent(int hSock, IFxSocket* poSock);
@@ -65,7 +66,7 @@ protected:
 #endif // WIN32
 
 	FILE*					m_pFile;
-
+	char					m_szLogPath[64];
 };
 
 #endif // __IOThread_H__

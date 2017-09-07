@@ -5,6 +5,7 @@
 FxMySqlClient::FxMySqlClient()
 {
     __Reset();
+	sprintf(m_szLogPath, "./%s_%p_log.txt", GetExeName(), this);
 }
 
 FxMySqlClient::~FxMySqlClient()
@@ -30,7 +31,7 @@ bool FxMySqlClient::Start()
 	FxCreateThreadHandler(this, true, m_poThrdHandler);
 	if(NULL == m_poThrdHandler)
 	{
-		ThreadLog(LogLv_Error, m_pFile, m_poThrdHandler->GetThreadId(), "%s", "FxCreateThreadHandler failed");
+		ThreadLog(LogLv_Error, m_pFile, m_szLogPath, "%s", "FxCreateThreadHandler failed");
         return false;
 	}
 
@@ -54,13 +55,13 @@ bool FxMySqlClient::ConnectDB(SDBAccount& account)
 	m_poMySqlConn = new FxMySQLConnection;
 	if(NULL == m_poMySqlConn)
 	{
-		ThreadLog(LogLv_Error, m_pFile, m_poThrdHandler->GetThreadId(), "%s", "CMySqlClient::ConnectDB, new CMySQLConnection failed");
+		ThreadLog(LogLv_Error, m_pFile, m_szLogPath, "%s", "CMySqlClient::ConnectDB, new CMySQLConnection failed");
 		return false;
 	}
 
 	if(!m_poMySqlConn->Connect(account))                                                                              
 	{
-		ThreadLog(LogLv_Error, m_pFile, m_poThrdHandler->GetThreadId(), "Connect to Database %s error: %d, %s", account.m_szDBName, m_poMySqlConn->GetLastError(), m_poMySqlConn->GetLastErrorString());
+		ThreadLog(LogLv_Error, m_pFile, m_szLogPath, "Connect to Database %s error: %d, %s", account.m_szDBName, m_poMySqlConn->GetLastError(), m_poMySqlConn->GetLastErrorString());
 		return false;
 	}
 

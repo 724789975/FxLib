@@ -21,6 +21,7 @@ FxIoThread::FxIoThread()
 #endif // WIN32
 	m_dwMaxSock = 0;
 	m_bStop = false;
+	sprintf(m_szLogPath, "./%s_%p_log.txt", GetExeName(), this);
 }
 
 FxIoThread::~FxIoThread()
@@ -115,20 +116,20 @@ bool FxIoThread::AddEvent(int hSock, IFxSocket* poSock)
 {
 	if (hSock < 0)
 	{
-		ThreadLog(LogLv_Error, GetFile(), GetThreadId(), "hSock : %d, socket id : %d", hSock, poSock->GetSockId());
+		ThreadLog(LogLv_Error, GetFile(), GetLogFile(), "hSock : %d, socket id : %d", hSock, poSock->GetSockId());
 		return false;
 	}
 
 	if (NULL == GetHandle())
 	{
-		ThreadLog(LogLv_Error, GetFile(), GetThreadId(), "%s", "GetHandle failed");
+		ThreadLog(LogLv_Error, GetFile(), GetLogFile(), "%s", "GetHandle failed");
 		return false;
 	}
 
 	if (NULL == CreateIoCompletionPort((HANDLE)hSock, GetHandle(), (ULONG_PTR)poSock, 0))
 	{
 		int dwErr = WSAGetLastError();
-		ThreadLog(LogLv_Error, GetFile(), GetThreadId(), "CreateIoCompletionPort errno %d", dwErr);
+		ThreadLog(LogLv_Error, GetFile(), GetLogFile(), "CreateIoCompletionPort errno %d", dwErr);
 		return false;
 	}
 
@@ -139,13 +140,13 @@ bool FxIoThread::AddEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 {
 	if (hSock < 0)
 	{
-		ThreadLog(LogLv_Error, GetFile(), GetThreadId(), "hSock : %d, socket id : %d", hSock, poSock->GetSockId());
+		ThreadLog(LogLv_Error, GetFile(), GetLogFile(), "hSock : %d, socket id : %d", hSock, poSock->GetSockId());
 		return false;
 	}
 
 	if (m_hEpoll < 0)
 	{
-		ThreadLog(LogLv_Error, GetFile(), GetThreadId(), "%s", "m_hEpoll < 0");
+		ThreadLog(LogLv_Error, GetFile(), GetLogFile(), "%s", "m_hEpoll < 0");
 		return false;
 	}
 
@@ -159,7 +160,7 @@ bool FxIoThread::AddEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 
 	if (epoll_ctl(m_hEpoll, EPOLL_CTL_ADD, hSock, &e) < 0)
 	{
-		ThreadLog(LogLv_Error, GetFile(), GetThreadId(), "epoll_ctl errno %d", errno);
+		ThreadLog(LogLv_Error, GetFile(), GetLogFile(), "epoll_ctl errno %d", errno);
 		return false;
 	}
 
@@ -170,13 +171,13 @@ bool FxIoThread::ChangeEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 {
 	if (m_hEpoll < 0)
 	{
-		ThreadLog(LogLv_Error, GetFile(), GetThreadId(), "%s", "m_hEpoll < 0");
+		ThreadLog(LogLv_Error, GetFile(), GetLogFile(), "%s", "m_hEpoll < 0");
 		return false;
 	}
 
 	if (hSock < 0)
 	{
-		ThreadLog(LogLv_Error, GetFile(), GetThreadId(), "socket : %d", hSock);
+		ThreadLog(LogLv_Error, GetFile(), GetLogFile(), "socket : %d", hSock);
 		return false;
 	}
 
@@ -186,7 +187,7 @@ bool FxIoThread::ChangeEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 
 	if (epoll_ctl(m_hEpoll, EPOLL_CTL_MOD, hSock, &e) < 0)
 	{
-		ThreadLog(LogLv_Error, GetFile(), GetThreadId(), "epoll_ctl errno : %d", errno);
+		ThreadLog(LogLv_Error, GetFile(), GetLogFile(), "epoll_ctl errno : %d", errno);
 		return false;
 	}
 
@@ -197,20 +198,20 @@ bool FxIoThread::DelEvent(int hSock)
 {
 	if (m_hEpoll < 0)
 	{
-		ThreadLog(LogLv_Error, GetFile(), GetThreadId(), "%s", "m_hEpoll < 0");
+		ThreadLog(LogLv_Error, GetFile(), GetLogFile(), "%s", "m_hEpoll < 0");
 		return false;
 	}
 
 	if (hSock < 0)
 	{
-		ThreadLog(LogLv_Error, GetFile(), GetThreadId(), "socket : %d", hSock);
+		ThreadLog(LogLv_Error, GetFile(), GetLogFile(), "socket : %d", hSock);
 		return false;
 	}
 
 	epoll_event e;
 	if (epoll_ctl(m_hEpoll, EPOLL_CTL_DEL, hSock, &e) < 0)
 	{
-		ThreadLog(LogLv_Error, GetFile(), GetThreadId(), "epoll_ctl errno : %d", errno);
+		ThreadLog(LogLv_Error, GetFile(), GetLogFile(), "epoll_ctl errno : %d", errno);
 		return false;
 	}
 	return true;
@@ -220,7 +221,8 @@ bool FxIoThread::DelEvent(int hSock)
 
 void FxIoThread::ThrdFunc()
 {
-	ThreadLog(LogLv_Info, GetFile(), GetThreadId(), "thread id %d start", m_poThrdHandler->GetThreadId());
+	ThreadLog(LogLv_Info, GetFile(), GetLogFile(), "thread id %d start", m_poThrdHandler->GetThreadId());
+	int i = 0;
 	while (!m_bStop)
 	{
 		if (!__DealEpollData())
@@ -230,9 +232,10 @@ void FxIoThread::ThrdFunc()
 
 		__DealEpollSock();
 
+		ThreadLog(LogLv_Info, GetFile(), GetLogFile(), "seq %d in %d run!!!!!", i++, m_poThrdHandler->GetThreadId());
 		FxSleep(1);
 	}
-	ThreadLog(LogLv_Info, GetFile(), GetThreadId(), "thread id %d end", m_poThrdHandler->GetThreadId());
+	ThreadLog(LogLv_Info, GetFile(), GetLogFile(), "thread id %d end", m_poThrdHandler->GetThreadId());
 }
 
 bool FxIoThread::__DealEpollData()

@@ -41,6 +41,7 @@ private:
 	bool				m_bDbOK;
 
 	FILE*				m_pFile;
+	char				m_szLogPath[64];
 };
 
 #endif	// __DBCLIENT_H_2009_0824__

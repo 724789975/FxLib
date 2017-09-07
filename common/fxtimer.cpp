@@ -15,6 +15,7 @@ double GetTimeOfDay()
 {
 	static double s_qwTime = 0;
 #ifdef WIN32
+	s_qwTime = (double)time(NULL);
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	s_qwTime = s_qwTime + st.wMilliseconds / 1000.0f;
@@ -129,12 +130,12 @@ public:
 		return (int)m_qwSecond;
 	}
 
-	virtual char* GetTimeStr()
+	virtual const char* GetTimeStr()
 	{
 		return m_strTime;
 	}
 
-	virtual unsigned int GetTimeSeq()
+	virtual const unsigned int GetTimeSeq()
 	{
 		return (unsigned int)((m_qwSecond - (unsigned int)m_qwSecond) * 1000);
 	}

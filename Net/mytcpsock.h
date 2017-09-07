@@ -130,6 +130,9 @@ public:
 protected:
 
 	bool								PostSend();
+#ifdef WIN32
+	bool								PostSendThread();	//其实就是PostSend 不过在线程中执行
+#endif // WIN32
 	bool								PostSendFree();
 	bool								SendImmediately();						// //
 
