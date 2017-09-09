@@ -53,7 +53,6 @@ int main(int argc, char **argv)
 	}
 	// must define before goto
 	IFxNet* pNet = NULL;
-	IFxListenSocket* pChatServerListenSocket = NULL;
 
 	//if (!CLuaEngine::Instance()->CommandLineFunction(argv, argc))
 	//{
@@ -75,7 +74,6 @@ int main(int argc, char **argv)
 		g_bRun = false;
 		goto STOP;
 	}
-	ChatServerManager::Instance()->Init();
 	pNet = FxNetGetModule();
 	if (!pNet)
 	{
@@ -84,12 +82,7 @@ int main(int argc, char **argv)
 	}
 	//----------------------order can't change end-----------------------//
 
-	pChatServerListenSocket = pNet->Listen(&ChatServerManager::Instance()->GetChatSessionManager(), SLT_CommonTcp, 0, FLAGS_chat_server_port);
-	if(pChatServerListenSocket == NULL)
-	{
-		g_bRun = false;
-		goto STOP;
-	}
+	ChatServerManager::Instance()->Init(FLAGS_chat_server_port);
 	while (g_bRun)
 	{
 		GetTimeHandler()->Run();
@@ -97,10 +90,8 @@ int main(int argc, char **argv)
 		//LogFun(LT_Screen, LogLv_Info, "%s", PrintTrace());
 		FxSleep(1);
 	}
-	pChatServerListenSocket->StopListen();
-	pChatServerListenSocket->Close();
 
-	ChatServerManager::Instance()->GetChatSessionManager().CloseSessions();
+	ChatServerManager::Instance()->Close();
 
 	FxSleep(10);
 	pNet->Release();

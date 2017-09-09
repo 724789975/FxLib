@@ -10,12 +10,17 @@ public:
 	ChatServerManager();
 	virtual ~ChatServerManager();
 
-	bool Init();
+	bool Init(UINT32 dwPort);
+
+	void Close();
 
 	ChatServerSessionManager& GetChatSessionManager() { return m_oChatSessionManager; }
 
+	IFxListenSocket* GetChatServerListenSocket() { return m_pChatServerListenSocket; }
+
 private:
 	ChatServerSessionManager m_oChatSessionManager;
+	IFxListenSocket* m_pChatServerListenSocket;
 };
 
 #endif // !__GameServer_H__

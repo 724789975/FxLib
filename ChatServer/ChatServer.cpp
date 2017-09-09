@@ -38,3 +38,14 @@ bool ChatServer::Init(UINT32 dwChatSessionPort, UINT32 dwChatServerSessionPort)
 
 	return true;
 }
+
+void ChatServer::Close()
+{
+	m_pChatSessionListener->StopListen();
+	m_pChatSessionListener->Close();
+
+	m_pChatServerSessionListener->StopListen();
+	m_pChatServerSessionListener->Close();
+
+	m_oChatManagerSession.Close();
+}

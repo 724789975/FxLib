@@ -49,6 +49,8 @@ public:
 	void SetHashIndex(UINT32 dwIndex, ChatServerSession* pChatServerSession);
 
 	UINT32 GetHashIndex() { return m_dwHashIndex; }
+
+	void CloseSessions();
 	
 private:
 	std::map<unsigned int, ChatServerSession*> m_mapSessionIpPort;

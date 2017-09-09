@@ -1,5 +1,5 @@
-#ifndef __CHatSession_H__
-#define __CHatSession_H__
+#ifndef __GameSession_H__
+#define __GameSession_H__
 
 #include "SocketSession.h"
 

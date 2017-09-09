@@ -18,7 +18,7 @@ ChatServerSession::~ChatServerSession()
 
 void ChatServerSession::OnConnect(void)
 {
-
+	LogExe(LogLv_Debug, "remote ip : %s, remote port : %d", GetRemoteIPStr(), GetRemotePort());
 }
 
 void ChatServerSession::OnClose(void)
@@ -54,8 +54,10 @@ void ChatServerSession::Release(void)
 void ChatServerSession::OnChatServerInfo(const char* pBuf, UINT32 dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
-	oStream.ReadInt(m_dwChatPort);
-	oStream.ReadInt(m_dwChatServerPort);
+	stCHAT_SEND_CHAT_MANAGER_INFO oCHAT_SEND_CHAT_MANAGER_INFO;
+	oCHAT_SEND_CHAT_MANAGER_INFO.Read(oStream);
+	m_dwChatPort = oCHAT_SEND_CHAT_MANAGER_INFO.m_dwChatPort;
+	m_dwChatServerPort = oCHAT_SEND_CHAT_MANAGER_INFO.m_dwChatServerPort;
 
 	ChatServerManager::Instance()->GetChatSessionManager().OnChatServerInfo(this);
 }
@@ -112,7 +114,7 @@ void ChatServerSessionManager::OnChatServerInfo(ChatServerSession* pChatServerSe
 			// 同一个连接
 			for (unsigned int j = 0; j < ChatConstant::g_dwHashGen; ++j)
 			{
-				if (j % ChatConstant::g_dwHashGen == i)
+				if (j % ChatConstant::g_dwChatServerNum == i)
 				{
 					m_mapSessionIpPort[j] = pChatServerSession;
 				}

@@ -1,11 +1,12 @@
-#ifndef __GameServer_H__
-#define __GameServer_H__
+#ifndef __ChatServer_H__
+#define __ChatServer_H__
 
 #include <set>
 #include "singleton.h"
 #include "GameSession.h"
 #include "ChatManagerSession.h"
 #include "ChatServerSession.h"
+#include "ChatSession.h"
 
 class ChatServer : public TSingleton<ChatServer>
 {
@@ -19,6 +20,10 @@ public:
 	ChatManagerSession& GetChatManagerSession() { return m_oChatManagerSession; }
 	ChatServerSessionManager& GetChatServerSessionManager() { return m_oChatServerSessionManager; }
 
+	void Close();
+
+	UINT32 GetChatSessionPort() { return m_dwChatSessionPort; }
+	UINT32 GetChatServerSessionPort() { return m_dwChatServerSessionPort; }
 private:
 	//GameSession m_oChatSession;
 	ChatManagerSession m_oChatManagerSession;
@@ -30,8 +35,9 @@ private:
 	IFxListenSocket* m_pChatServerSessionListener;
 
 	ChatServerSessionManager m_oChatServerSessionManager;
+	ChatSessionManager m_oChatSessionManager;
 
 	std::set<char> m_setHashIndex;
 };
 
-#endif // !__GameServer_H__
+#endif // !__ChatServer_H__

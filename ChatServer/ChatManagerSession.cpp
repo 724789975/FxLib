@@ -4,6 +4,8 @@
 #include "ChatServer.h"
 #include "ChatServerSession.h"
 
+const static unsigned int g_dwChatServerManagerSessionBuffLen = 64 * 1024;
+static char g_pChatServerManagerSessionBuf[g_dwChatServerManagerSessionBuffLen];
 
 ChatManagerSession::ChatManagerSession()
 {
@@ -16,7 +18,14 @@ ChatManagerSession::~ChatManagerSession()
 
 void ChatManagerSession::OnConnect(void)
 {
-
+	LogExe(LogLv_Debug, "remote ip : %s, remote port : %d", GetRemoteIPStr(), GetRemotePort());
+	stCHAT_SEND_CHAT_MANAGER_INFO oCHAT_SEND_CHAT_MANAGER_INFO;
+	oCHAT_SEND_CHAT_MANAGER_INFO.m_dwChatPort = ChatServer::Instance()->GetChatSessionPort();
+	oCHAT_SEND_CHAT_MANAGER_INFO.m_dwChatServerPort = ChatServer::Instance()->GetChatServerSessionPort();
+	CNetStream oStream(ENetStreamType_Write, g_pChatServerManagerSessionBuf, g_dwChatServerManagerSessionBuffLen);
+	oStream.WriteInt(Protocol::CHAT_SEND_CHAT_MANAGER_INFO);
+	oCHAT_SEND_CHAT_MANAGER_INFO.Write(oStream);
+	Send(g_pChatServerManagerSessionBuf, g_dwChatServerManagerSessionBuffLen - oStream.GetDataLength());
 }
 
 void ChatManagerSession::OnClose(void)
@@ -31,7 +40,9 @@ void ChatManagerSession::OnError(UINT32 dwErrorNo)
 
 void ChatManagerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
-	Protocol::EChatProtocol eProrocol = (Protocol::EChatProtocol)(*((UINT32*)pBuf));
+	CNetStream oNetStream(pBuf, dwLen);
+	Protocol::EChatProtocol eProrocol;
+	oNetStream.ReadInt((int&)eProrocol);
 	const char* pData = pBuf + sizeof(UINT32);
 	dwLen -= sizeof(UINT32);
 

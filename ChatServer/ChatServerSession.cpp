@@ -16,7 +16,7 @@ ChatServerSession::~ChatServerSession()
 
 void ChatServerSession::OnConnect(void)
 {
-	//LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
+	LogExe(LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
 	stCHAT_TO_CHAT_HASH_INDEX oCHAT_TO_CHAT_HASH_INDEX;
 	oCHAT_TO_CHAT_HASH_INDEX.dwHashIndex = ChatServer::Instance()->GetChatServerSessionManager().GetHashIndex();
 	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
@@ -112,4 +112,25 @@ void ChatServerSessionManager::SetHashIndex(UINT32 dwIndex, ChatServerSession* p
 			m_mapSessionIpPort[i] = pChatServerSession;
 		}
 	}
+}
+
+void ChatServerSessionManager::CloseSessions()
+{
+	for (int i = 0; i < ChatConstant::g_dwChatServerNum - 1; ++i)
+	{
+		m_oChatServerSessions[i].Close();
+	}
+	bool bClosed = true;
+	do
+	{
+		FxNetGetModule()->Run(0xffffffff);
+		FxSleep(10);
+		for (int i = 0; i < ChatConstant::g_dwChatServerNum - 1; ++i)
+		{
+			if (m_oChatServerSessions[i].GetConnection())
+			{
+				bClosed = false;
+			}
+		}
+	} while (!bClosed);
 }

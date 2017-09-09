@@ -3,12 +3,16 @@
 #include "fxtimer.h"
 #include "fxdb.h"
 #include "fxmeta.h"
+#include "gflags/gflags.h"
+#include "ChatServer.h"
 
 #include <signal.h>
 
-unsigned int g_dwPort = 12000;
-unsigned int g_dwChatSessionPort = 20000;
-unsigned int g_dwChatServerSessionPort = 20001;
+DEFINE_uint32(chat_session_port, 20000, "Chat Session Port");
+DEFINE_uint32(chat_server_session_port, 20001, "Chat Server Session Port");
+DEFINE_string(chat_server_manager_ip, "127.0.0.1", "Chat Server Manager Ip");
+DEFINE_uint32(chat_server_manager_port, 13000, "Chat Server Manager Port");
+
 bool g_bRun = true;
 
 void EndFun(int n)
@@ -26,6 +30,8 @@ void EndFun(int n)
 int main(int argc, char **argv)
 {
 	//----------------------order can't change begin-----------------------//
+	gflags::SetUsageMessage("ChatServer");
+	gflags::ParseCommandLineFlags(&argc, &argv, false);
 	signal(SIGINT, EndFun);
 	signal(SIGTERM, EndFun);
 	if (!LogThread::CreateInstance())
@@ -50,12 +56,12 @@ int main(int argc, char **argv)
 	}
 	// must define before goto
 	IFxNet* pNet = NULL;
-	IFxListenSocket* pListenSocket = NULL;
+	//IFxListenSocket* pListenSocket = NULL;
 
-	if (!CLuaEngine::Instance()->CommandLineFunction(argv, argc))
-	{
-		return 0;
-	}
+	//if (!CLuaEngine::Instance()->CommandLineFunction(argv, argc))
+	//{
+	//	return 0;
+	//}
 	if (!GetTimeHandler()->Init())
 	{
 		return 0;
@@ -67,12 +73,11 @@ int main(int argc, char **argv)
 		goto STOP;
 	}
 
-	if (!CSessionFactory::CreateInstance())
+	if (!ChatServer::CreateInstance())
 	{
 		g_bRun = false;
 		goto STOP;
 	}
-	CSessionFactory::Instance()->Init();
 	pNet = FxNetGetModule();
 	if (!pNet)
 	{
@@ -95,12 +100,25 @@ int main(int argc, char **argv)
 	//	LogFun(LT_Screen, LogLv_Info, "%s", "db connected~~~~");
 	//}
 
-	pListenSocket = pNet->Listen(CSessionFactory::Instance(), SLT_CommonTcp, 0, g_dwPort);
-	if(pListenSocket == NULL)
+	//pListenSocket = pNet->Listen(CSessionFactory::Instance(), SLT_CommonTcp, 0, FLAGS_chat_session_port);
+	//if(pListenSocket == NULL)
+	//{
+	//	g_bRun = false;
+	//	goto STOP;
+	//}
+
+	if (pNet->TcpConnect(&ChatServer::Instance()->GetChatManagerSession(), inet_addr(FLAGS_chat_server_manager_ip.c_str()), FLAGS_chat_server_manager_port) == INVALID_SOCKET)
 	{
 		g_bRun = false;
 		goto STOP;
 	}
+
+	if (!ChatServer::Instance()->Init(FLAGS_chat_session_port, FLAGS_chat_server_session_port))
+	{
+		g_bRun = false;
+		goto STOP;
+	}
+
 	while (g_bRun)
 	{
 		GetTimeHandler()->Run();
@@ -108,19 +126,7 @@ int main(int argc, char **argv)
 		//LogFun(LT_Screen, LogLv_Info, "%s", PrintTrace());
 		FxSleep(1);
 	}
-	pListenSocket->StopListen();
-	pListenSocket->Close();
-	for (std::set<FxSession*>::iterator it = CSessionFactory::Instance()->m_setSessions.begin();
-		it != CSessionFactory::Instance()->m_setSessions.end(); ++it)
-	{
-		(*it)->Close();
-	}
-
-	while (CSessionFactory::Instance()->m_setSessions.size())
-	{
-		pNet->Run(0xffffffff);
-		FxSleep(10);
-	}
+	ChatServer::Instance()->Close();
 	FxSleep(10);
 	pNet->Release();
 STOP:

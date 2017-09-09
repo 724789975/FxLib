@@ -232,7 +232,6 @@ void FxIoThread::ThrdFunc()
 
 		__DealEpollSock();
 
-		ThreadLog(LogLv_Info, GetFile(), GetLogFile(), "seq %d in %d run!!!!!", i++, m_poThrdHandler->GetThreadId());
 		FxSleep(1);
 	}
 	ThreadLog(LogLv_Info, GetFile(), GetLogFile(), "thread id %d end", m_poThrdHandler->GetThreadId());
