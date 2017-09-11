@@ -37,7 +37,6 @@ private:
 	ChatServerSessionManager m_oChatServerSessionManager;
 	ChatSessionManager m_oChatSessionManager;
 
-	std::set<char> m_setHashIndex;
 };
 
 #endif // !__ChatServer_H__

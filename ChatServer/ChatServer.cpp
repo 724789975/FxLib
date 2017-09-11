@@ -49,3 +49,4 @@ void ChatServer::Close()
 
 	m_oChatManagerSession.Close();
 }
+
