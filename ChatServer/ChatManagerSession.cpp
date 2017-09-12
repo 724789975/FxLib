@@ -11,7 +11,6 @@ ChatManagerSession::ChatManagerSession()
 {
 }
 
-
 ChatManagerSession::~ChatManagerSession()
 {
 }

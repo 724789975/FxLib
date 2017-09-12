@@ -72,6 +72,7 @@ FxSession* ChatServerSessionManager::CreateSession()
 		if (m_oChatServerSessions[i].GetConnection() == NULL)
 		{
 			pSession = &m_oChatServerSessions[i];
+			break;
 		}
 	}
 	m_oLock.UnLock();
@@ -127,8 +128,9 @@ void ChatServerSessionManager::OnChatServerInfo(ChatServerSession* pChatServerSe
 			{
 				stCHAT_MANAGER_NOTIFY_CHAT_INFO::stRemoteChatInfo oInfo;
 				oInfo.dwIp = m_oChatServerSessions[i].GetRemoteIP();
-				oInfo.dwPort = m_oChatServerSessions[i].GetRemotePort();
+				oInfo.dwPort = m_oChatServerSessions[i].m_dwChatPort;
 				oInfo.dwHashIndex = i;
+				oCHAT_MANAGER_NOTIFY_CHAT_INFO.vecRemoteInfo.push_back(oInfo);
 			}
 		}
 	}

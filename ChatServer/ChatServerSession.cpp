@@ -75,11 +75,12 @@ ChatServerSession* ChatServerSessionManager::GetChatServerSession()
 {
 	m_oLock.Lock();
 	ChatServerSession* pSession = NULL;
-	for (int i = 0; i < ChatConstant::g_dwChatServerNum; ++i)
+	for (int i = 0; i < ChatConstant::g_dwChatServerNum - 1; ++i)
 	{
 		if (m_oChatServerSessions[i].GetConnection() == NULL)
 		{
 			pSession = &m_oChatServerSessions[i];
+			break;
 		}
 	}
 	m_oLock.UnLock();

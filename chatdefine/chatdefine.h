@@ -6,7 +6,7 @@
 
 namespace ChatConstant
 {
-	static const unsigned int g_dwChatServerNum = 4;
+	static const unsigned int g_dwChatServerNum = 3;
 	static const unsigned int g_dwHashGen = 256;
 }
 

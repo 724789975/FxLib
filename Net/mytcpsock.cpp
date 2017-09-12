@@ -822,7 +822,7 @@ void FxWebSocketListen::OnAccept(SPerIoData* pstPerIoData)
 		FxSession* poSession = m_poSessionFactory->CreateSession();
 		if (NULL == poSession)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "CCPSock::OnAccept, CreateSession failed");
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "CreateSession failed");
 
 			closesocket(hSock);
 			PostAccept(*pstPerIoData);
@@ -834,7 +834,7 @@ void FxWebSocketListen::OnAccept(SPerIoData* pstPerIoData)
 		FxIoThread* poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSock());
 		if (NULL == poIoThreadHandler)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "CCPSock::OnAccept, get iothread failed");
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "get iothread failed");
 
 			closesocket(hSock);
 			PostAccept(*pstPerIoData);
