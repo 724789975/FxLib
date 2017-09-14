@@ -80,7 +80,7 @@ bool FxTCPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 		return false;
 	}
 
-	INT32 nReuse = 1;
+	INT32 nReuse = 0;
 	setsockopt(GetSock(), SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(nReuse));
 
 	sockaddr_in stAddr = { 0 };

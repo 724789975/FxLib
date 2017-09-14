@@ -7,7 +7,7 @@
 #include <arpa/inet.h>
 #endif // WIN32
 
-#include <string.h>
+#include <string>
 
 
 enum ENetStreamType
@@ -40,139 +40,176 @@ public:
 	char* ReadData(unsigned int dwLen)
 	{
 		assert(m_eType == ENetStreamType_Read);
-		if (dwLen <= m_dwLen)
+		if (dwLen > m_dwLen)
 		{
-			char* pTemp = m_pData;
-			m_pData += dwLen;
-			m_dwLen -= dwLen;
-			return pTemp;
+			return NULL;
 		}
-		return NULL;
+		char* pTemp = m_pData;
+		m_pData += dwLen;
+		m_dwLen -= dwLen;
+		return pTemp;
 	}
 
 	bool ReadByte(char& cData)
 	{
 		char* pData = ReadData(sizeof(cData));
-		if (pData)
+		if (!pData)
 		{
-			memcpy(&cData, pData, sizeof(cData));
-			return true;
+			return false;
 		}
-		return false;
+		memcpy(&cData, pData, sizeof(cData));
+		return true;
 	}
 
 	bool ReadByte(unsigned char& cData)
 	{
 		char* pData = ReadData(sizeof(cData));
-		if (pData)
+		if (!pData)
 		{
-			memcpy(&cData, pData, sizeof(cData));
-			return true;
+			return false;
 		}
-		return false;
+		memcpy(&cData, pData, sizeof(cData));
+		return true;
 	}
 
 	bool ReadShort(short& wData)
 	{
 		char* pData = ReadData(sizeof(wData));
-		if (pData)
+		if (!pData)
 		{
-			memcpy(&wData, pData, sizeof(wData));
-			wData = ntohs(wData);
-			return true;
+			return false;
 		}
-		return false;
+		memcpy(&wData, pData, sizeof(wData));
+		wData = ntohs(wData);
+		return true;
 	}
 
 	bool ReadShort(unsigned short& wData)
 	{
 		char* pData = ReadData(sizeof(wData));
-		if (pData)
+		if (!pData)
 		{
-			memcpy(&wData, pData, sizeof(wData));
-			wData = ntohs(wData);
-			return true;
+			return false;
 		}
-		return false;
+		memcpy(&wData, pData, sizeof(wData));
+		wData = ntohs(wData);
+		return true;
 	}
 
 	bool ReadInt(int& dwData)
 	{
 		char* pData = ReadData(sizeof(dwData));
-		if (pData)
+		if (!pData)
 		{
-			memcpy(&dwData, pData, sizeof(dwData));
-			dwData = ntohl(dwData);
-			return true;
+			return false;
 		}
-		return false;
+		memcpy(&dwData, pData, sizeof(dwData));
+		dwData = ntohl(dwData);
+		return true;
 	}
 
 	bool ReadInt(unsigned int& dwData)
 	{
 		char* pData = ReadData(sizeof(dwData));
-		if (pData)
+		if (!pData)
 		{
-			memcpy(&dwData, pData, sizeof(dwData));
-			dwData = ntohl(dwData);
-			return true;
+			return false;
 		}
-		return false;
+		memcpy(&dwData, pData, sizeof(dwData));
+		dwData = ntohl(dwData);
+		return true;
 	}
 
 	bool ReadInt64(long long& llData)
 	{
 		char* pData = ReadData(sizeof(llData));
-		if (pData)
+		if (!pData)
 		{
-			memcpy(&llData, pData, sizeof(llData));
-			union
-			{
-				unsigned short wByte;
-				unsigned char ucByte[2];
-			} oByteOrder;
-			oByteOrder.wByte = 0x0102;
-			if (oByteOrder.ucByte[0] != 0x01)
-			{
-				// 小端
-				llData = (long long)htonl((int)(llData >> 32)) | ((long long)htonl((int)llData) << 32);
-			}
-			return true;
+			return false;
 		}
-		return false;
+		memcpy(&llData, pData, sizeof(llData));
+		union ByteOrder
+		{
+			unsigned short wByte;
+			unsigned char ucByte[2];
+		};
+		static const short wByte = 0x0102;
+		static const ByteOrder& oByteOrder = (ByteOrder&)wByte;
+		if (oByteOrder.ucByte[0] != 0x01)
+		{
+			// 小端
+			llData = (long long)htonl((int)(llData >> 32)) | ((long long)htonl((int)llData) << 32);
+		}
+		return true;
 	}
 
 	bool ReadInt64(unsigned long long& ullData)
 	{
 		char* pData = ReadData(sizeof(ullData));
-		if (pData)
+		if (!pData)
 		{
-			memcpy(&ullData, pData, sizeof(ullData));
-			union
-			{
-				unsigned short wByte;
-				unsigned char ucByte[2];
-			} oByteOrder;
-			oByteOrder.wByte = 0x0102;
-			if (oByteOrder.ucByte[0] != 0x01)
-			{
-				// 小端
-				ullData = (unsigned long long)htonl((int)(ullData >> 32)) | ((unsigned long long)htonl((int)ullData) << 32);
-			}
-			return true;
+			return false;
 		}
-		return false;
+		memcpy(&ullData, pData, sizeof(ullData));
+		union ByteOrder
+		{
+			unsigned short wByte;
+			unsigned char ucByte[2];
+		};
+		static const short wByte = 0x0102;
+		static const ByteOrder& oByteOrder = (ByteOrder&)wByte;
+		if (oByteOrder.ucByte[0] != 0x01)
+		{
+			// 小端
+			ullData = (unsigned long long)htonl((int)(ullData >> 32)) | ((unsigned long long)htonl((int)ullData) << 32);
+		}
+		return true;
 	}
 
 	bool ReadFloat(float& fData)
 	{
 		int dwFloat = 0;
-		if (ReadInt(dwFloat))
+		if (!ReadInt(dwFloat))
 		{
-			fData = dwFloat / 256.0f;
-			return true;
+			return false;
 		}
-		return false;
+		fData = dwFloat / 256.0f;
+		return true;
+	}
+
+	bool ReadString(char* pStr, unsigned int dwLen)
+	{
+		unsigned int dwStrLen = 0;
+		if (!ReadInt(dwStrLen))
+		{
+			return false;
+		}
+		if (dwStrLen > dwLen)
+		{
+			return false;
+		}
+		char* pData = ReadData(dwStrLen);
+		if (!pData)
+		{
+			return false;
+		}
+		memcpy(pStr, pData, dwStrLen);
+	}
+
+	bool ReadString(std::string& refStr)
+	{
+		unsigned int dwStrLen = 0;
+		if (!ReadInt(dwStrLen))
+		{
+			return false;
+		}
+		char* pData = ReadData(dwStrLen);
+		if (!pData)
+		{
+			return false;
+		}
+		refStr = std::string(pData, dwStrLen);
+		return true;
 	}
 
 	//  //
@@ -189,27 +226,27 @@ public:
 	bool WriteData(char* pData, unsigned int dwLen)
 	{
 		assert(m_eType == ENetStreamType_Write);
-		if (dwLen <= m_dwLen)
+		if (dwLen > m_dwLen)
 		{
-			memcpy(m_pData, pData, dwLen);
-			m_pData += dwLen;
-			m_dwLen -= dwLen;
-			return true;
+			return false;
 		}
-		return false;
+		memcpy(m_pData, pData, dwLen);
+		m_pData += dwLen;
+		m_dwLen -= dwLen;
+		return true;
 	}
 
 	bool WriteData(const char* pData, unsigned int dwLen)
 	{
 		assert(m_eType == ENetStreamType_Write);
-		if (dwLen <= m_dwLen)
+		if (dwLen > m_dwLen)
 		{
-			memcpy(m_pData, pData, dwLen);
-			m_pData += dwLen;
-			m_dwLen -= dwLen;
-			return true;
+			return false;
 		}
-		return false;
+		memcpy(m_pData, pData, dwLen);
+		m_pData += dwLen;
+		m_dwLen -= dwLen;
+		return true;
 	}
 
 	bool WriteByte(char cData)
@@ -246,14 +283,15 @@ public:
 		return WriteData((char*)(&dwData), sizeof(dwData));
 	}
 
-	bool WriteInt64(long long& llData)
+	bool WriteInt64(long long llData)
 	{
-		union
+		union ByteOrder
 		{
 			unsigned short wByte;
 			unsigned char ucByte[2];
-		} oByteOrder;
-		oByteOrder.wByte = 0x0102;
+		};
+		static const short wByte = 0x0102;
+		static const ByteOrder& oByteOrder = (ByteOrder&)wByte;
 		if (oByteOrder.ucByte[0] != 0x01)
 		{
 			// 小端
@@ -262,14 +300,15 @@ public:
 		return WriteData((char*)(&llData), sizeof(llData));
 	}
 
-	bool WriteInt64(unsigned long long& ullData)
+	bool WriteInt64(unsigned long long ullData)
 	{
-		union
+		union ByteOrder
 		{
 			unsigned short wByte;
 			unsigned char ucByte[2];
-		} oByteOrder;
-		oByteOrder.wByte = 0x0102;
+		};
+		static const short wByte = 0x0102;
+		static const ByteOrder& oByteOrder = (ByteOrder&)wByte;
 		if (oByteOrder.ucByte[0] != 0x01)
 		{
 			// 小端
@@ -282,6 +321,13 @@ public:
 	{
 		int nData = (int)(fData * 256);
 		return WriteInt(nData);
+	}
+
+	bool WriteString(std::string refStr)
+	{
+		if (!WriteInt(refStr.size())) return false;
+		if (!WriteData(refStr.c_str(), refStr.size())) return false;
+		return true;
 	}
 
 private:
