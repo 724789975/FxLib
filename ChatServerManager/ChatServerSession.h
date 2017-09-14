@@ -29,6 +29,7 @@ private:
 	char m_szId[32];
 	UINT32 m_dwChatServerPort;
 	UINT32 m_dwChatPort;
+	std::string m_szChatIp;
 private:
 	void OnChatServerInfo(const char* pBuf, UINT32 dwLen);
 };

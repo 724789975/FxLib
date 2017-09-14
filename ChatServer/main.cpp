@@ -8,6 +8,7 @@
 
 #include <signal.h>
 
+DEFINE_string(chat_server_ip, "127.0.0.1", "Chat Server Ip");
 DEFINE_uint32(chat_session_port, 20000, "Chat Session Port");
 DEFINE_uint32(chat_server_session_port, 20001, "Chat Server Session Port");
 DEFINE_string(chat_server_manager_ip, "127.0.0.1", "Chat Server Manager Ip");
@@ -113,7 +114,7 @@ int main(int argc, char **argv)
 		goto STOP;
 	}
 
-	if (!ChatServer::Instance()->Init(FLAGS_chat_session_port, FLAGS_chat_server_session_port))
+	if (!ChatServer::Instance()->Init(FLAGS_chat_server_ip, FLAGS_chat_session_port, FLAGS_chat_server_session_port))
 	{
 		g_bRun = false;
 		goto STOP;

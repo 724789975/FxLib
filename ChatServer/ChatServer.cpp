@@ -16,8 +16,9 @@ ChatServer::~ChatServer()
 {
 }
 
-bool ChatServer::Init(UINT32 dwChatSessionPort, UINT32 dwChatServerSessionPort)
+bool ChatServer::Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UINT32 dwChatServerSessionPort)
 {
+	m_szChatSessionIp = szChatSessionIp;
 	m_dwChatServerSessionPort = dwChatServerSessionPort;
 	m_dwChatSessionPort = dwChatSessionPort;
 	IFxNet* pNet = FxNetGetModule();
@@ -25,7 +26,16 @@ bool ChatServer::Init(UINT32 dwChatSessionPort, UINT32 dwChatServerSessionPort)
 	{
 		return false;
 	}
-	m_pChatSessionListener = pNet->Listen(&m_oChatServerSessionManager, SLT_CommonTcp, 0, m_dwChatSessionPort);
+	struct hostent* pHost = gethostbyname(m_szChatSessionIp.c_str());
+	unsigned int dwIp = 0;
+	if (pHost)
+	{
+		for (int i = 0; (pHost->h_addr_list)[i] != NULL; i++)
+		{
+			dwIp = *(u_long*)pHost->h_addr_list[i];
+		}
+	}
+	m_pChatSessionListener = pNet->Listen(&m_oChatServerSessionManager, SLT_CommonTcp, dwIp, m_dwChatSessionPort);
 	if (m_pChatSessionListener  == NULL)
 	{
 		return false;

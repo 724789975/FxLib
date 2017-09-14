@@ -58,6 +58,7 @@ void ChatServerSession::OnChatServerInfo(const char* pBuf, UINT32 dwLen)
 	oCHAT_SEND_CHAT_MANAGER_INFO.Read(oStream);
 	m_dwChatPort = oCHAT_SEND_CHAT_MANAGER_INFO.m_dwChatPort;
 	m_dwChatServerPort = oCHAT_SEND_CHAT_MANAGER_INFO.m_dwChatServerPort;
+	m_szChatIp = oCHAT_SEND_CHAT_MANAGER_INFO.m_szChatIp;
 
 	ChatServerManager::Instance()->GetChatSessionManager().OnChatServerInfo(this);
 }

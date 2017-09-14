@@ -14,7 +14,7 @@ public:
 	ChatServer();
 	virtual ~ChatServer();
 
-	bool Init(UINT32 dwChatSessionPort, UINT32 dwChatServerSessionPort);
+	bool Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UINT32 dwChatServerSessionPort);
 
 	//GameSession& GetGameSession() { return m_oChatSession; }
 	ChatManagerSession& GetChatManagerSession() { return m_oChatManagerSession; }
@@ -24,10 +24,12 @@ public:
 
 	UINT32 GetChatSessionPort() { return m_dwChatSessionPort; }
 	UINT32 GetChatServerSessionPort() { return m_dwChatServerSessionPort; }
+	std::string GetChatSessionIp() { return m_szChatSessionIp; }
 private:
 	//GameSession m_oChatSession;
 	ChatManagerSession m_oChatManagerSession;
 
+	std::string m_szChatSessionIp;
 	UINT32 m_dwChatSessionPort;
 	UINT32 m_dwChatServerSessionPort;
 
