@@ -23,10 +23,10 @@ private:
 	char m_dataRecvBuf[64 * 1024];
 };
 
-class ChatSessionManager : public TSingleton<ChatSessionManager>, public IFxSessionFactory
+class ChatSessionManager : public IFxSessionFactory
 {
 public:
-	ChatSessionManager() {}
+	ChatSessionManager(){}
 	virtual ~ChatSessionManager() {}
 
 	virtual FxSession* CreateSession();

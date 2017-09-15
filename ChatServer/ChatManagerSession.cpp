@@ -30,7 +30,9 @@ void ChatManagerSession::OnConnect(void)
 
 void ChatManagerSession::OnClose(void)
 {
-
+	LogExe(LogLv_Error, "will close!!!!!!!!!");
+	extern bool g_bRun;
+	g_bRun = false;
 }
 
 void ChatManagerSession::OnError(UINT32 dwErrorNo)

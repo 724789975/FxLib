@@ -18,6 +18,8 @@ ChatServer::~ChatServer()
 
 bool ChatServer::Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UINT32 dwChatServerSessionPort)
 {
+	m_oChatSessionManager.Init();
+
 	m_szChatSessionIp = szChatSessionIp;
 	m_dwChatServerSessionPort = dwChatServerSessionPort;
 	m_dwChatSessionPort = dwChatSessionPort;
@@ -35,7 +37,7 @@ bool ChatServer::Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UIN
 			dwIp = *(u_long*)pHost->h_addr_list[i];
 		}
 	}
-	m_pChatSessionListener = pNet->Listen(&m_oChatServerSessionManager, SLT_CommonTcp, dwIp, m_dwChatSessionPort);
+	m_pChatSessionListener = pNet->Listen(&m_oChatSessionManager, SLT_CommonTcp, dwIp, m_dwChatSessionPort);
 	if (m_pChatSessionListener  == NULL)
 	{
 		return false;

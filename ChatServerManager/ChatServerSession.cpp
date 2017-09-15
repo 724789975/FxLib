@@ -129,7 +129,7 @@ void ChatServerSessionManager::OnChatServerInfo(ChatServerSession* pChatServerSe
 			{
 				stCHAT_MANAGER_NOTIFY_CHAT_INFO::stRemoteChatInfo oInfo;
 				oInfo.dwIp = m_oChatServerSessions[i].GetRemoteIP();
-				oInfo.dwPort = m_oChatServerSessions[i].m_dwChatPort;
+				oInfo.dwPort = m_oChatServerSessions[i].m_dwChatServerPort;
 				oInfo.dwHashIndex = i;
 				oCHAT_MANAGER_NOTIFY_CHAT_INFO.vecRemoteInfo.push_back(oInfo);
 			}
