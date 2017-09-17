@@ -194,6 +194,11 @@ public:
 			return false;
 		}
 		memcpy(pStr, pData, dwStrLen);
+		if (dwStrLen != std::string(pStr).size())
+		{
+			return false;
+		}
+		return true;
 	}
 
 	bool ReadString(std::string& refStr)
@@ -209,6 +214,10 @@ public:
 			return false;
 		}
 		refStr = std::string(pData, dwStrLen);
+		if (dwStrLen != refStr.size())
+		{
+			return false;
+		}
 		return true;
 	}
 

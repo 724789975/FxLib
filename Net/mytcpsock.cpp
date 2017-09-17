@@ -1845,7 +1845,8 @@ bool FxTCPConnectSockBase::PostClose()
 
 	return true;
 #else
-	return false;
+	m_poIoThreadHandler->PushDelayCloseSock(this);
+	return true;
 #endif // WIN32
 }
 

@@ -48,8 +48,8 @@ public:
 #endif // WIN32
 
 private:
-	void					 __DealEpollSock();
-	bool					 __DealEpollData();
+	void					 __DealSock();
+	bool					 __DealData();
 
 protected:
 	IFxThreadHandler*		m_poThrdHandler;

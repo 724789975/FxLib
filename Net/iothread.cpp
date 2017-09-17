@@ -107,7 +107,7 @@ UINT32 FxIoThread::GetThreadId()
 	return 0;
 }
 
-void FxIoThread::__DealEpollSock()
+void FxIoThread::__DealSock()
 {
 }
 
@@ -225,19 +225,19 @@ void FxIoThread::ThrdFunc()
 	int i = 0;
 	while (!m_bStop)
 	{
-		if (!__DealEpollData())
+		if (!__DealData())
 		{
 			break;
 		}
 
-		__DealEpollSock();
+		__DealSock();
 
 		FxSleep(1);
 	}
 	ThreadLog(LogLv_Info, GetFile(), GetLogFile(), "thread id %d end", m_poThrdHandler->GetThreadId());
 }
 
-bool FxIoThread::__DealEpollData()
+bool FxIoThread::__DealData()
 {
 #ifdef WIN32
 	void* pstPerIoData = NULL;
