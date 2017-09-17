@@ -79,7 +79,7 @@ void ChatSession::OnLogin(const char* pBuf, UINT32 dwLen)
 	stPLAYER_LOGIN oPLAYER_LOGIN;
 	oPLAYER_LOGIN.Read(oNetStream);
 
-	if (ChatServer::Instance()->CheckHashIndex(HashToIndex(oPLAYER_LOGIN.szId, IDLENTH)))
+	if (ChatServer::Instance()->CheckHashIndex(HashToIndex(oPLAYER_LOGIN.szId, strlen(oPLAYER_LOGIN.szId))))
 	{
 		ChatServer::Instance()->GetChatPlayerManager().OnPlayerLogin(oPLAYER_LOGIN.szId, this);
 	}
