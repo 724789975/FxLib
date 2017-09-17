@@ -9,7 +9,5 @@ unsigned char HashToIndex(unsigned int dwData);
 unsigned char HashToIndex(long long qwData);
 unsigned char HashToIndex(unsigned long long qwData);
 
-void SetIndex(double qwIndex);
-bool CheckIndex(unsigned char btIndex);
 
 #endif	//!__UTILITY_H__

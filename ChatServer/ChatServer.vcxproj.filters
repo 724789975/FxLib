@@ -34,6 +34,8 @@
     <ClCompile Include="ChatSession.cpp" />
     <ClCompile Include="utility.cpp" />
     <ClCompile Include="ChatManagerSession.cpp" />
+    <ClCompile Include="ChatPlayer.cpp" />
+    <ClCompile Include="ChatPlayerManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LuaMeta.h" />
@@ -44,5 +46,7 @@
     <ClInclude Include="ChatSession.h" />
     <ClInclude Include="utility.h" />
     <ClInclude Include="ChatManagerSession.h" />
+    <ClInclude Include="ChatPlayer.h" />
+    <ClInclude Include="ChatPlayerManager.h" />
   </ItemGroup>
 </Project>

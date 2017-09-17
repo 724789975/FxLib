@@ -43,15 +43,5 @@ unsigned char HashToIndex(unsigned long long qwData)
 }
 
 //-------------------------------------------
-static std::set<unsigned char> g_setIndex;
-void SetIndex(double qwIndex)
-{
-	g_setIndex.insert((unsigned char)qwIndex);
-}
 
-bool CheckIndex(unsigned char btIndex)
-{
-	return g_setIndex.find(btIndex) != g_setIndex.end();
-}
-//-------------------------------------------
 

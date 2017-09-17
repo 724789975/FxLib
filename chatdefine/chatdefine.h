@@ -4,6 +4,8 @@
 #include <vector>
 #include "../meta_header/netstream.h"
 
+#define IDLENTH 64
+
 namespace ChatConstant
 {
 	static const unsigned int g_dwChatServerNum = 3;
@@ -28,6 +30,11 @@ namespace Protocol
 		CHAT_MANAGER_TO_CHAT_BEGIN = 25001,
 		CHAT_MANAGER_NOTIFY_CHAT_INFO,
 		CHAT_MANAGER_TO_CHAT_END = 29999,
+
+		//player<--->chat 30000 39999
+		PLAYER_CHAT_BEGIN = 30000,
+		PLAYER_LOGIN,
+		PLAYER_CHAT_END = 39999,
 	};
 }
 
@@ -109,6 +116,20 @@ struct stCHAT_MANAGER_NOTIFY_CHAT_INFO
 	}
 };
 
+//----------------------------------------------------------------------
+struct stPLAYER_LOGIN
+{
+	stPLAYER_LOGIN() { memset(szId, 0, IDLENTH); memset(szSign, 0, 128); }
+	char szId[IDLENTH];
+	char szSign[128];
+
+	bool Read(CNetStream& refStream)
+	{
+		if(!refStream.ReadString(szId, IDLENTH)) return false;
+		if (!refStream.ReadString(szSign, 128)) return false;
+		return true;
+	}
+};
 
 
 

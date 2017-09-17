@@ -7,6 +7,7 @@
 #include "ChatManagerSession.h"
 #include "ChatServerSession.h"
 #include "ChatSession.h"
+#include "ChatPlayerManager.h"
 
 class ChatServer : public TSingleton<ChatServer>
 {
@@ -19,12 +20,19 @@ public:
 	//GameSession& GetGameSession() { return m_oChatSession; }
 	ChatManagerSession& GetChatManagerSession() { return m_oChatManagerSession; }
 	ChatServerSessionManager& GetChatServerSessionManager() { return m_oChatServerSessionManager; }
+	ChatSessionManager& GetChatSessionManager() { return m_oChatSessionManager; }
+	ChatPlayerManager& GetChatPlayerManager() { return m_oChatPlayerManager; }
 
 	void Close();
 
 	UINT32 GetChatSessionPort() { return m_dwChatSessionPort; }
 	UINT32 GetChatServerSessionPort() { return m_dwChatServerSessionPort; }
 	std::string GetChatSessionIp() { return m_szChatSessionIp; }
+
+	void SetHashIndex(UINT32 dwIndex);
+	UINT32 GetHashIndex() { return m_dwHashIndex; }
+
+	bool CheckHashIndex(unsigned int dwIndex);
 private:
 	//GameSession m_oChatSession;
 	ChatManagerSession m_oChatManagerSession;
@@ -39,6 +47,10 @@ private:
 	ChatServerSessionManager m_oChatServerSessionManager;
 	ChatSessionManager m_oChatSessionManager;
 
+	ChatPlayerManager m_oChatPlayerManager;
+
+	std::set<unsigned int> m_setHashIndex;
+	UINT32 m_dwHashIndex;
 };
 
 #endif // !__ChatServer_H__

@@ -166,6 +166,8 @@
     <ClCompile Include="..\common\lua_engine.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
     <ClCompile Include="ChatManagerSession.cpp" />
+    <ClCompile Include="ChatPlayer.cpp" />
+    <ClCompile Include="ChatPlayerManager.cpp" />
     <ClCompile Include="ChatServerSession.cpp" />
     <ClCompile Include="ChatSession.cpp" />
     <ClCompile Include="GameSession.cpp" />
@@ -177,6 +179,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ChatManagerSession.h" />
+    <ClInclude Include="ChatPlayer.h" />
+    <ClInclude Include="ChatPlayerManager.h" />
     <ClInclude Include="ChatServerSession.h" />
     <ClInclude Include="ChatSession.h" />
     <ClInclude Include="GameSession.h" />

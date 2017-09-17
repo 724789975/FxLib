@@ -3,6 +3,7 @@
 
 #include "lock.h"
 #include "SocketSession.h"
+#include "chatdefine.h"
 
 class ChatSession : public FxSession
 {
@@ -18,9 +19,16 @@ public:
 	virtual char*		GetRecvBuf() { return m_dataRecvBuf; }
 	virtual UINT32		GetRecvSize() { return 64 * 1024; };
 	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
+
+	void				Reset();
+
+	void				OnMsg(const char* pBuf, UINT32 dwLen);
+	void				OnLogin(const char* pBuf, UINT32 dwLen);
 private:
 	BinaryDataHeader m_oBinaryDataHeader;
 	char m_dataRecvBuf[64 * 1024];
+
+	char m_szId[IDLENTH];
 };
 
 class ChatSessionManager : public IFxSessionFactory
@@ -31,7 +39,7 @@ public:
 
 	virtual FxSession* CreateSession();
 
-	void Init();
+	bool Init();
 	virtual void Release(FxSession* pSession);
 	void Release(ChatSession* pSession);
 

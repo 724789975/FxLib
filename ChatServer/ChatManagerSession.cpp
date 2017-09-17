@@ -66,7 +66,7 @@ void ChatManagerSession::OnNotifyChatInfo(const char* pBuf, UINT32 dwLen)
 	stCHAT_MANAGER_NOTIFY_CHAT_INFO oCHAT_MANAGER_NOTIFY_CHAT_INFO;
 	oCHAT_MANAGER_NOTIFY_CHAT_INFO.Read(oStream);
 
-	ChatServer::Instance()->GetChatServerSessionManager().SetHashIndex(oCHAT_MANAGER_NOTIFY_CHAT_INFO.dwHashIndex);
+	ChatServer::Instance()->SetHashIndex(oCHAT_MANAGER_NOTIFY_CHAT_INFO.dwHashIndex);
 
 	IFxNet* pNet = FxNetGetModule();
 	if (!pNet)

@@ -8,9 +8,9 @@ ChatServer::ChatServer()
 	, m_dwChatServerSessionPort(0)
 	, m_pChatSessionListener(NULL)
 	, m_pChatServerSessionListener(NULL)
+	, m_dwHashIndex(0xFFFFFFFF)
 {
 }
-
 
 ChatServer::~ChatServer()
 {
@@ -19,6 +19,8 @@ ChatServer::~ChatServer()
 bool ChatServer::Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UINT32 dwChatServerSessionPort)
 {
 	m_oChatSessionManager.Init();
+	m_oChatPlayerManager.Init();
+	m_oChatServerSessionManager.Init();
 
 	m_szChatSessionIp = szChatSessionIp;
 	m_dwChatServerSessionPort = dwChatServerSessionPort;
@@ -60,5 +62,26 @@ void ChatServer::Close()
 	m_pChatServerSessionListener->Close();
 
 	m_oChatManagerSession.Close();
+}
+
+void ChatServer::SetHashIndex(UINT32 dwIndex)
+{
+	m_dwHashIndex = dwIndex;
+	for (unsigned int i = 0; i < ChatConstant::g_dwHashGen; ++i)
+	{
+		if (i % ChatConstant::g_dwChatServerNum == dwIndex)
+		{
+			m_setHashIndex.insert(i);
+		}
+	}
+}
+
+bool ChatServer::CheckHashIndex(unsigned int dwIndex)
+{
+	if (m_setHashIndex.find(dwIndex) == m_setHashIndex.end())
+	{
+		return false;
+	}
+	return true;
 }
 

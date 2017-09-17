@@ -18,7 +18,7 @@ void ChatServerSession::OnConnect(void)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
 	stCHAT_TO_CHAT_HASH_INDEX oCHAT_TO_CHAT_HASH_INDEX;
-	oCHAT_TO_CHAT_HASH_INDEX.dwHashIndex = ChatServer::Instance()->GetChatServerSessionManager().GetHashIndex();
+	oCHAT_TO_CHAT_HASH_INDEX.dwHashIndex = ChatServer::Instance()->GetHashIndex();
 	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
 	oStream.WriteInt(Protocol::CHAT_TO_CHAT_HASH_INDEX);
 	oCHAT_TO_CHAT_HASH_INDEX.Write(oStream);
@@ -90,18 +90,6 @@ ChatServerSession* ChatServerSessionManager::GetChatServerSession()
 void ChatServerSessionManager::Release(FxSession* pSession)
 {
 
-}
-
-void ChatServerSessionManager::SetHashIndex(UINT32 dwIndex)
-{
-	m_dwHashIndex = dwIndex;
-	for (unsigned int i = 0; i < ChatConstant::g_dwHashGen; ++i)
-	{
-		if (i % ChatConstant::g_dwChatServerNum == dwIndex)
-		{
-			m_setHashIndex.insert(i);
-		}
-	}
 }
 
 void ChatServerSessionManager::SetHashIndex(UINT32 dwIndex, ChatServerSession* pChatServerSession)

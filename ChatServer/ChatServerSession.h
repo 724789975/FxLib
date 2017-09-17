@@ -35,20 +35,17 @@ private:
 class ChatServerSessionManager : public IFxSessionFactory
 {
 public:
-	ChatServerSessionManager() : m_dwHashIndex(0xFFFFFFFF) {}
+	ChatServerSessionManager(){}
 	virtual ~ChatServerSessionManager() {}
 
 	virtual FxSession*	CreateSession();
 
 	ChatServerSession* GetChatServerSession();
 
-	void Init() {}
+	bool Init() { return true; }
 	virtual void Release(FxSession* pSession);
 
-	void SetHashIndex(UINT32 dwIndex);
 	void SetHashIndex(UINT32 dwIndex, ChatServerSession* pChatServerSession);
-
-	UINT32 GetHashIndex() { return m_dwHashIndex; }
 
 	void CloseSessions();
 	
@@ -59,9 +56,6 @@ private:
 
 	FxCriticalLock m_oLock;
 
-	std::set<unsigned int> m_setHashIndex;
-
-	UINT32 m_dwHashIndex;
 };
 
 

@@ -4,30 +4,6 @@
 #include "fxdb.h"
 #include "netstream.h"
 
-CSocketSession::CSocketSession()
-{
-}
-
-
-CSocketSession::~CSocketSession()
-{
-}
-
-void CSocketSession::OnConnect(void)
-{
-//	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
-}
-
-void CSocketSession::OnClose(void)
-{
-//	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
-}
-
-void CSocketSession::OnError(UINT32 dwErrorNo)
-{
-	LogFun(LT_Screen | LT_File, LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
-}
-
 class DBQuery : public IQuery
 {
 public:
@@ -53,8 +29,6 @@ public:
 				dwLen += sprintf(strValue + dwLen, "%s", pReader->GetFieldValue(2));
 				dwLen += sprintf(strValue + dwLen, "%s", " clan ");
 				dwLen += sprintf(strValue + dwLen, "%s", pReader->GetFieldValue(3));
-
-				pSession->Send(strValue, 1024);
 			}
 			pReader->Release();
 		}
@@ -69,113 +43,10 @@ public:
 	}
 
 	std::string m_strQuery;
-	CSocketSession* pSession;
 
 private:
 
 };
-
-void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
-{
-	LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
-	//printf("time : %s ip : %s, port : %d, recv %s", GetTimeHandler()->GetTimeStr(), GetRemoteIPStr(), GetRemotePort(), pBuf);
-
-	if (!Send(pBuf, dwLen))
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Debug, "ip : %s, port : %d, recv %s send error", GetRemoteIPStr(), GetRemotePort(), pBuf);
-		Close();
-	}
-
-	//DBQuery * pQuery = new DBQuery;
-	//pQuery->m_strQuery = pBuf;
-	//FxDBGetModule()->AddQuery(pQuery);
-	//pQuery->pSession = this;
-}
-
-void CSocketSession::Release(void)
-{
-	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
-	OnDestroy();
-
-	Init(NULL);
-}
-
-CSessionFactory::CSessionFactory()
-{
-	m_pLock = FxCreateThreadLock();
-	for(int i = 0; i < 64; ++i)
-	{
-		CBinarySocketSession* pSession = new CBinarySocketSession;
-		m_listSession.push_back(pSession);
-	}
-//	m_poolSessions.Init(100, 10, false, 100);
-}
-
-FxSession*	CSessionFactory::CreateSession()
-{
-	m_pLock->Lock();
-	FxSession* pSession = NULL;
-	if(m_listSession.size() > 0)
-	{
-		pSession = *(m_listSession.begin());
-		m_listSession.pop_front();
-	}
-	if(pSession)
-	{
-		m_setSessions.insert(pSession);
-	}
-	LogFun(LT_Screen | LT_File, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
-	m_pLock->UnLock();
-	return pSession;
-}
-
-void CSessionFactory::Release(FxSession* pSession)
-{
-	m_pLock->Lock();
-//	m_poolSessions.ReleaseObj(pSession);
-	m_listSession.push_back(pSession);
-	m_setSessions.erase(pSession);
-	LogFun(LT_Screen | LT_File, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
-	m_pLock->UnLock();
-}
-
-CWebSocketSessionFactory::CWebSocketSessionFactory()
-{
-	m_pLock = FxCreateThreadLock();
-	for (int i = 0; i < 64; ++i)
-	{
-		CWebSocketSession* pSession = new CWebSocketSession;
-		m_listSession.push_back(pSession);
-	}
-}
-
-FxSession * CWebSocketSessionFactory::CreateSession()
-{
-	m_pLock->Lock();
-	FxSession* pSession = NULL;
-	if (m_listSession.size() > 0)
-	{
-		pSession = *(m_listSession.begin());
-		m_listSession.pop_front();
-	}
-	if (pSession)
-	{
-		m_setSessions.insert(pSession);
-	}
-	LogFun(LT_Screen | LT_File, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
-	m_pLock->UnLock();
-	return pSession;
-}
-
-void CWebSocketSessionFactory::Release(FxSession * pSession)
-{
-	m_pLock->Lock();
-	//	m_poolSessions.ReleaseObj(pSession);
-	m_listSession.push_back(pSession);
-	m_setSessions.erase(pSession);
-	LogFun(LT_Screen | LT_File, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
-	m_pLock->UnLock();
-}
 
 BinaryDataHeader::BinaryDataHeader()
 {
@@ -351,16 +222,4 @@ int WebSocketDataHeader::ParsePacket(const char * pBuf, UINT32 dwLen)
 	}
 
 	return nPkgLen;
-}
-
-void CBinarySocketSession::Release(void)
-{
-	CSocketSession::Release();
-	CSessionFactory::Instance()->Release(this);
-}
-
-void CWebSocketSession::Release(void)
-{
-	CSocketSession::Release();
-	CWebSocketSessionFactory::Instance()->Release(this);
 }
