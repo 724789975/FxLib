@@ -33,7 +33,8 @@ namespace Protocol
 
 		//player<--->chat 30000 39999
 		PLAYER_CHAT_BEGIN = 30000,
-		PLAYER_LOGIN,
+		PLAYER_REQUEST_CHAT_LOGIN,
+		CHAT_ACK_PLAYER_LOGIN,
 		PLAYER_CHAT_END = 39999,
 	};
 }
@@ -117,9 +118,9 @@ struct stCHAT_MANAGER_NOTIFY_CHAT_INFO
 };
 
 //----------------------------------------------------------------------
-struct stPLAYER_LOGIN
+struct stPLAYER_REQUEST_CHAT_LOGIN
 {
-	stPLAYER_LOGIN() { memset(szId, 0, IDLENTH); memset(szSign, 0, 128); }
+	stPLAYER_REQUEST_CHAT_LOGIN() { memset(szId, 0, IDLENTH); memset(szSign, 0, 128); }
 	char szId[IDLENTH];
 	char szSign[128];
 
@@ -127,6 +128,23 @@ struct stPLAYER_LOGIN
 	{
 		if(!refStream.ReadString(szId, IDLENTH)) return false;
 		if (!refStream.ReadString(szSign, 128)) return false;
+		return true;
+	}
+};
+
+struct stCHAT_ACK_PLAYER_LOGIN
+{
+	unsigned int dwResult;
+
+	bool Write(CNetStream& refStream)
+	{
+		if (!refStream.WriteInt(dwResult)) return false;
+		return true;
+	}
+
+	bool Read(CNetStream& refStream)
+	{
+		if (!refStream.ReadInt(dwResult)) return false;
 		return true;
 	}
 };

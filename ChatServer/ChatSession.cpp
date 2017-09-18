@@ -3,6 +3,9 @@
 #include "utility.h"
 #include "chatdefine.h"
 
+const static unsigned int g_dwChatSessionBuffLen = 64 * 1024;
+static char g_pChatSessionBuff[g_dwChatSessionBuffLen];
+
 ChatSession::ChatSession()
 {
 	Reset();
@@ -68,7 +71,7 @@ void ChatSession::OnMsg(const char* pBuf, UINT32 dwLen)
 
 	switch (eProrocol)
 	{
-		case Protocol::PLAYER_LOGIN:	OnLogin(pData, dwLen);	break;
+		case Protocol::PLAYER_REQUEST_CHAT_LOGIN:	OnLogin(pData, dwLen);	break;
 		default: {LogExe(LogLv_Critical, "error protocot : %d", (unsigned int)eProrocol); Close(); }	break;
 	}
 }
@@ -76,12 +79,19 @@ void ChatSession::OnMsg(const char* pBuf, UINT32 dwLen)
 void ChatSession::OnLogin(const char* pBuf, UINT32 dwLen)
 {
 	CNetStream oNetStream(pBuf, dwLen);
-	stPLAYER_LOGIN oPLAYER_LOGIN;
-	oPLAYER_LOGIN.Read(oNetStream);
+	stPLAYER_REQUEST_CHAT_LOGIN oPLAYER_REQUEST_CHAT_LOGIN;
+	oPLAYER_REQUEST_CHAT_LOGIN.Read(oNetStream);
 
-	if (ChatServer::Instance()->CheckHashIndex(HashToIndex(oPLAYER_LOGIN.szId, strlen(oPLAYER_LOGIN.szId))))
+	if (ChatServer::Instance()->CheckHashIndex(HashToIndex(oPLAYER_REQUEST_CHAT_LOGIN.szId, strlen(oPLAYER_REQUEST_CHAT_LOGIN.szId))))
 	{
-		ChatServer::Instance()->GetChatPlayerManager().OnPlayerLogin(oPLAYER_LOGIN.szId, this);
+		ChatServer::Instance()->GetChatPlayerManager().OnPlayerLogin(oPLAYER_REQUEST_CHAT_LOGIN.szId, this);
+
+		CNetStream oStream(ENetStreamType_Write, g_pChatSessionBuff, g_dwChatSessionBuffLen);
+		oStream.WriteInt(Protocol::CHAT_ACK_PLAYER_LOGIN);
+		stCHAT_ACK_PLAYER_LOGIN oCHAT_ACK_PLAYER_LOGIN;
+		oCHAT_ACK_PLAYER_LOGIN.dwResult = 0;
+		oCHAT_ACK_PLAYER_LOGIN.Write(oStream);
+		Send(g_pChatSessionBuff, g_dwChatSessionBuffLen - oStream.GetDataLength());
 	}
 }
 
