@@ -14,6 +14,13 @@ namespace ChatConstant
 
 namespace Protocol
 {
+	enum EChatType
+	{
+		ECT_NONE,
+		ECT_String,
+		ECT_Image,
+		ECT_Voice
+	};
 	enum EChatProtocol
 	{
 		//chat<--->chat 10001 11000
@@ -24,6 +31,7 @@ namespace Protocol
 		//chat --->chatmanager 20001 25000
 		CHAT_TO_CHAT_MANAGER_BEGIN = 20001,
 		CHAT_SEND_CHAT_MANAGER_INFO,
+		CHAT_SENF_CHAT_PRIVATE_CHAT,
 		CHAT_TO_CHAT_MANAGER_END = 25000,
 
 		//chatmanager --->chat 25001 29999
@@ -35,6 +43,7 @@ namespace Protocol
 		PLAYER_CHAT_BEGIN = 30000,
 		PLAYER_REQUEST_CHAT_LOGIN,
 		CHAT_ACK_PLAYER_LOGIN,
+		PLAYER_REQUEST_PRIVATE_CHAT,
 		PLAYER_CHAT_END = 39999,
 	};
 }
@@ -70,6 +79,33 @@ struct stCHAT_SEND_CHAT_MANAGER_INFO
 		if (!refStream.ReadInt(m_dwChatPort)) return false;
 		if (!refStream.ReadInt(m_dwChatServerPort)) return false;
 		if (!refStream.ReadString(m_szChatIp)) return false;
+		return true;
+	}
+};
+
+struct stCHAT_SENF_CHAT_PRIVATE_CHAT
+{
+	stCHAT_SENF_CHAT_PRIVATE_CHAT() { memset(szSenderId, 0, IDLENTH); memset(szRecverId, 0, IDLENTH); eChatType = Protocol::ECT_NONE; }
+	char szSenderId[IDLENTH];
+	char szRecverId[IDLENTH];
+	Protocol::EChatType eChatType;
+	std::string szContent;
+
+	bool Write(CNetStream& refStream)
+	{
+		if (!refStream.WriteString(szSenderId)) return false;
+		if (!refStream.WriteString(szRecverId)) return false;
+		if (!refStream.WriteInt((unsigned int&)eChatType)) return false;
+		if (!refStream.WriteString(szContent)) return false;
+		return true;
+	}
+
+	bool Read(CNetStream& refStream)
+	{
+		if (!refStream.ReadString(szSenderId, IDLENTH)) return false;
+		if (!refStream.ReadString(szRecverId, IDLENTH)) return false;
+		if (!refStream.ReadInt((unsigned int&)eChatType)) return false;
+		if (!refStream.ReadString(szContent)) return false;
 		return true;
 	}
 };
@@ -145,6 +181,22 @@ struct stCHAT_ACK_PLAYER_LOGIN
 	bool Read(CNetStream& refStream)
 	{
 		if (!refStream.ReadInt(dwResult)) return false;
+		return true;
+	}
+};
+
+struct stPLAYER_REQUEST_PRIVATE_CHAT
+{
+	stPLAYER_REQUEST_PRIVATE_CHAT() { memset(szRecverId, 0, IDLENTH); eChatType = Protocol::ECT_NONE; }
+	char szRecverId[IDLENTH];
+	Protocol::EChatType eChatType;
+	std::string szContent;
+
+	bool Read(CNetStream& refStream)
+	{
+		if (!refStream.ReadString(szRecverId, IDLENTH)) return false;
+		if (!refStream.ReadInt((unsigned int&)eChatType)) return false;
+		if (!refStream.ReadString(szContent)) return false;
 		return true;
 	}
 };

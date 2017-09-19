@@ -40,7 +40,7 @@ public:
 
 	virtual FxSession*	CreateSession();
 
-	ChatServerSession* GetChatServerSession();
+	ChatServerSession* GetChatServerSession(unsigned int dwIndex);
 
 	bool Init() { return true; }
 	virtual void Release(FxSession* pSession);

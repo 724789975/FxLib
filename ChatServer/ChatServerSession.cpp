@@ -68,11 +68,6 @@ void ChatServerSession::OnChatToChatHashIndex(const char* pBuf, UINT32 dwLen)
 
 FxSession* ChatServerSessionManager::CreateSession()
 {
-	return GetChatServerSession();
-}
-
-ChatServerSession* ChatServerSessionManager::GetChatServerSession()
-{
 	m_oLock.Lock();
 	ChatServerSession* pSession = NULL;
 	for (int i = 0; i < ChatConstant::g_dwChatServerNum - 1; ++i)
@@ -85,6 +80,15 @@ ChatServerSession* ChatServerSessionManager::GetChatServerSession()
 	}
 	m_oLock.UnLock();
 	return pSession;
+}
+
+ChatServerSession* ChatServerSessionManager::GetChatServerSession(unsigned int dwIndex)
+{
+	if (m_mapSessionIpPort.find(dwIndex) != m_mapSessionIpPort.end())
+	{
+		return m_mapSessionIpPort[dwIndex];
+	}
+	return NULL;
 }
 
 void ChatServerSessionManager::Release(FxSession* pSession)

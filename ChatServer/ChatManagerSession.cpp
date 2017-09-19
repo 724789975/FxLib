@@ -76,7 +76,7 @@ void ChatManagerSession::OnNotifyChatInfo(const char* pBuf, UINT32 dwLen)
 	}
 	for (unsigned int i = 0; i < oCHAT_MANAGER_NOTIFY_CHAT_INFO.vecRemoteInfo.size(); ++i)
 	{
-		ChatServerSession* pChatServerSession = ChatServer::Instance()->GetChatServerSessionManager().GetChatServerSession();
+		FxSession* pChatServerSession = ChatServer::Instance()->GetChatServerSessionManager().CreateSession();
 		if (!pChatServerSession)
 		{
 			LogExe(LogLv_Error, "%s", "can't create ChatServerSession");
