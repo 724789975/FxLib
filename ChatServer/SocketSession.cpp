@@ -4,11 +4,11 @@
 #include "fxdb.h"
 #include "netstream.h"
 
-class DBQuery : public IQuery
+class DBChatQuery : public IQuery
 {
 public:
-	DBQuery(){}
-	virtual ~DBQuery(){}
+	DBChatQuery(){}
+	virtual ~DBChatQuery(){}
 
 	virtual INT32 GetDBId(void) { return 0; }
 

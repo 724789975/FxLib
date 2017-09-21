@@ -87,26 +87,20 @@ int main(int argc, char **argv)
 	}
 	//----------------------order can't change end-----------------------//
 
-	//SDBConnInfo oInfo;
-	//memset(&oInfo, 0, sizeof(oInfo));
-	//oInfo.m_dwDBId = 0;
-	//strcpy(oInfo.m_stAccount.m_szCharactSet, "utf8");
-	//strcpy(oInfo.m_stAccount.m_szDBName, "chat");
-	//strcpy(oInfo.m_stAccount.m_szHostName, "127.0.0.1");
-	//strcpy(oInfo.m_stAccount.m_szLoginName, "test");
-	//strcpy(oInfo.m_stAccount.m_szLoginPwd, "test");
-	//oInfo.m_stAccount.m_wConnPort = 3306;
-	//if (FxDBGetModule()->Open(oInfo))
-	//{
-	//	LogFun(LT_Screen, LogLv_Info, "%s", "db connected~~~~");
-	//}
-
-	//pListenSocket = pNet->Listen(CSessionFactory::Instance(), SLT_CommonTcp, 0, FLAGS_chat_session_port);
-	//if(pListenSocket == NULL)
-	//{
-	//	g_bRun = false;
-	//	goto STOP;
-	//}
+	SDBConnInfo oInfo;
+	memset(&oInfo, 0, sizeof(oInfo));
+	oInfo.m_dwDBId = 0;
+	strcpy(oInfo.m_stAccount.m_szCharactSet, "utf8");
+	strcpy(oInfo.m_stAccount.m_szDBName, "chat");
+	strcpy(oInfo.m_stAccount.m_szHostName, "127.0.0.1");
+	strcpy(oInfo.m_stAccount.m_szLoginName, "test");
+	strcpy(oInfo.m_stAccount.m_szLoginPwd, "test");
+	oInfo.m_stAccount.m_wConnPort = 3306;
+	if (!FxDBGetModule()->Open(oInfo))
+	{
+		LogExe(LogLv_Info, "%s", "db connected failed~~~~");
+		goto STOP;
+	}
 
 	if (pNet->TcpConnect(&ChatServer::Instance()->GetChatManagerSession(), inet_addr(FLAGS_chat_server_manager_ip.c_str()), FLAGS_chat_server_manager_port) == INVALID_SOCKET)
 	{
