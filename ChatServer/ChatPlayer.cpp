@@ -52,13 +52,15 @@ public:
 
 	void Init(stCHAT_SENF_CHAT_PRIVATE_CHAT& oCHAT_SENF_CHAT_PRIVATE_CHAT)
 	{
-		char szTemp[2048 * 3 + 1] = { 0 };
-		char szContentEacape[2048 * 3 + 1];
+		static char szTemp[2048 * 3 + 1] = { 0 };
+		static char szContentEacape[2048 * 3 + 1] = { 0 };
+		memset(szTemp, 0, 2048);
+		memset(szContentEacape, 0, 2048 * 3 + 1);
 		mysql_escape_string(szContentEacape, oCHAT_SENF_CHAT_PRIVATE_CHAT.szContent.c_str(), oCHAT_SENF_CHAT_PRIVATE_CHAT.szContent.size());
 		sprintf(szTemp, "INSERT INTO private_chat (`sender_id`, `recver_id`, `chat_type`, `content`, `send_time`) "
 			"VALUES('%s', '%s', %u, '%s', %u)", oCHAT_SENF_CHAT_PRIVATE_CHAT.szSenderId,
 			oCHAT_SENF_CHAT_PRIVATE_CHAT.szRecverId, (int)oCHAT_SENF_CHAT_PRIVATE_CHAT.eChatType,
-			szContentEacape);
+			szContentEacape, GetTimeHandler()->GetSecond());
 		m_strQuery = szContentEacape;
 	}
 	virtual void OnQuery(IDBConnection *poDBConnection)
@@ -109,16 +111,23 @@ void ChatPlayer::OnPrivateChat(const char* pBuf, UINT32 dwLen)
 			return;
 		}
 		DBChatQuery * pQuery = new DBChatQuery;
-		pQuery->m_strQuery = pBuf;
+		pQuery->Init(oCHAT_SENF_CHAT_PRIVATE_CHAT);
 		FxDBGetModule()->AddQuery(pQuery);
+		return;
 	}
 
 	ChatServerSession* pChatServerSession = ChatServer::Instance()->GetChatServerSessionManager().GetChatServerSession(HashToIndex(oPLAYER_REQUEST_PRIVATE_CHAT.szRecverId, IDLENTH));
-	if (!pChatServerSession)
+	if (!(pChatServerSession && pChatServerSession->GetConnection()))
 	{
+		DBChatQuery * pQuery = new DBChatQuery;
+		pQuery->Init(oCHAT_SENF_CHAT_PRIVATE_CHAT);
+		FxDBGetModule()->AddQuery(pQuery);
 		LogExe(LogLv_Critical, "can't find chat server session recver id : %s", oPLAYER_REQUEST_PRIVATE_CHAT.szRecverId);
 		return;
 	}
-	// todo
 
+	CNetStream oStream(ENetStreamType_Write, g_pChatPlayerBuff, g_dwChatPlayerBuffLen);
+	oStream.WriteInt(Protocol::CHAT_SENF_CHAT_PRIVATE_CHAT);
+	oCHAT_SENF_CHAT_PRIVATE_CHAT.Write(oStream);
+	pChatServerSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
 }
