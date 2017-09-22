@@ -85,6 +85,7 @@ void ChatSession::OnLogin(const char* pBuf, UINT32 dwLen)
 	if (ChatServer::Instance()->CheckHashIndex(HashToIndex(oPLAYER_REQUEST_CHAT_LOGIN.szId, strlen(oPLAYER_REQUEST_CHAT_LOGIN.szId))))
 	{
 		ChatServer::Instance()->GetChatPlayerManager().OnPlayerLogin(oPLAYER_REQUEST_CHAT_LOGIN.szId, this);
+		memcpy(m_szId, oPLAYER_REQUEST_CHAT_LOGIN.szId, IDLENTH);
 
 		CNetStream oStream(ENetStreamType_Write, g_pChatSessionBuff, g_dwChatSessionBuffLen);
 		oStream.WriteInt(Protocol::CHAT_ACK_PLAYER_LOGIN);

@@ -30,6 +30,7 @@ private:
 	char m_szId[32];
 private:
 	void OnChatToChatHashIndex(const char* pBuf, UINT32 dwLen);
+	void OnChatToChatPrivateChat(const char* pBuf, UINT32 dwLen);
 };
 
 class ChatServerSessionManager : public IFxSessionFactory

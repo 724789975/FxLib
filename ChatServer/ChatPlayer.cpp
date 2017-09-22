@@ -42,61 +42,17 @@ void ChatPlayer::OnMsg(const char* pBuf, UINT32 dwLen)
 	}
 }
 
-class DBChatQuery : public IQuery
-{
-public:
-	DBChatQuery() {}
-	virtual ~DBChatQuery() {}
-
-	virtual INT32 GetDBId(void) { return 0; }
-
-	void Init(stCHAT_SENF_CHAT_PRIVATE_CHAT& oCHAT_SENF_CHAT_PRIVATE_CHAT)
-	{
-		static char szTemp[2048 * 3 + 1] = { 0 };
-		static char szContentEacape[2048 * 3 + 1] = { 0 };
-		memset(szTemp, 0, 2048);
-		memset(szContentEacape, 0, 2048 * 3 + 1);
-		mysql_escape_string(szContentEacape, oCHAT_SENF_CHAT_PRIVATE_CHAT.szContent.c_str(), oCHAT_SENF_CHAT_PRIVATE_CHAT.szContent.size());
-		sprintf(szTemp, "INSERT INTO private_chat (`sender_id`, `recver_id`, `chat_type`, `content`, `send_time`) "
-			"VALUES('%s', '%s', %u, '%s', %u)", oCHAT_SENF_CHAT_PRIVATE_CHAT.szSenderId,
-			oCHAT_SENF_CHAT_PRIVATE_CHAT.szRecverId, (int)oCHAT_SENF_CHAT_PRIVATE_CHAT.eChatType,
-			szContentEacape, GetTimeHandler()->GetSecond());
-		m_strQuery = szContentEacape;
-	}
-	virtual void OnQuery(IDBConnection *poDBConnection)
-	{
-		IDataReader* pReader = NULL;
-		if (poDBConnection->Query(m_strQuery.c_str(), &pReader) == FXDB_HAS_RESULT)
-		{
-			pReader->Release();
-		}
-	}
-
-	virtual void OnResult(void)
-	{}
-
-	virtual void Release(void)
-	{
-		delete this;
-	}
-
-	std::string m_strQuery;
-
-private:
-
-};
-
 void ChatPlayer::OnPrivateChat(const char* pBuf, UINT32 dwLen)
 {
 	CNetStream oNetStream(pBuf, dwLen);
 	stPLAYER_REQUEST_PRIVATE_CHAT oPLAYER_REQUEST_PRIVATE_CHAT;
 	oPLAYER_REQUEST_PRIVATE_CHAT.Read(oNetStream);
 
-	stCHAT_SENF_CHAT_PRIVATE_CHAT oCHAT_SENF_CHAT_PRIVATE_CHAT;
-	memcpy(oCHAT_SENF_CHAT_PRIVATE_CHAT.szSenderId, m_szPyayerId, IDLENTH);
-	memcpy(oCHAT_SENF_CHAT_PRIVATE_CHAT.szRecverId, oPLAYER_REQUEST_PRIVATE_CHAT.szRecverId, IDLENTH);
-	oCHAT_SENF_CHAT_PRIVATE_CHAT.eChatType = oPLAYER_REQUEST_PRIVATE_CHAT.eChatType;
-	oCHAT_SENF_CHAT_PRIVATE_CHAT.szContent = oPLAYER_REQUEST_PRIVATE_CHAT.szContent;
+	stCHAT_SEND_CHAT_PRIVATE_CHAT oCHAT_SEND_CHAT_PRIVATE_CHAT;
+	memcpy(oCHAT_SEND_CHAT_PRIVATE_CHAT.szSenderId, m_szPyayerId, IDLENTH);
+	memcpy(oCHAT_SEND_CHAT_PRIVATE_CHAT.szRecverId, oPLAYER_REQUEST_PRIVATE_CHAT.szRecverId, IDLENTH);
+	oCHAT_SEND_CHAT_PRIVATE_CHAT.eChatType = oPLAYER_REQUEST_PRIVATE_CHAT.eChatType;
+	oCHAT_SEND_CHAT_PRIVATE_CHAT.szContent = oPLAYER_REQUEST_PRIVATE_CHAT.szContent;
 
 	if (ChatServer::Instance()->CheckHashIndex(HashToIndex(oPLAYER_REQUEST_PRIVATE_CHAT.szRecverId, IDLENTH)))
 	{
@@ -104,14 +60,18 @@ void ChatPlayer::OnPrivateChat(const char* pBuf, UINT32 dwLen)
 		ChatPlayer* pPlayer = ChatServer::Instance()->GetChatPlayerManager().GetChatPlayer(oPLAYER_REQUEST_PRIVATE_CHAT.szRecverId);
 		if (pPlayer)
 		{
+			if (pPlayer == this)
+			{
+				LogExe(LogLv_Critical, "send to self");
+				return;
+			}
 			CNetStream oStream(ENetStreamType_Write, g_pChatPlayerBuff, g_dwChatPlayerBuffLen);
 			oStream.WriteInt(Protocol::CHAT_SENF_CHAT_PRIVATE_CHAT);
-			oCHAT_SENF_CHAT_PRIVATE_CHAT.Write(oStream);
+			oCHAT_SEND_CHAT_PRIVATE_CHAT.Write(oStream);
 			pPlayer->m_pSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
-			return;
 		}
 		DBChatQuery * pQuery = new DBChatQuery;
-		pQuery->Init(oCHAT_SENF_CHAT_PRIVATE_CHAT);
+		pQuery->Init(oCHAT_SEND_CHAT_PRIVATE_CHAT, pPlayer != NULL);
 		FxDBGetModule()->AddQuery(pQuery);
 		return;
 	}
@@ -120,7 +80,7 @@ void ChatPlayer::OnPrivateChat(const char* pBuf, UINT32 dwLen)
 	if (!(pChatServerSession && pChatServerSession->GetConnection()))
 	{
 		DBChatQuery * pQuery = new DBChatQuery;
-		pQuery->Init(oCHAT_SENF_CHAT_PRIVATE_CHAT);
+		pQuery->Init(oCHAT_SEND_CHAT_PRIVATE_CHAT, false);
 		FxDBGetModule()->AddQuery(pQuery);
 		LogExe(LogLv_Critical, "can't find chat server session recver id : %s", oPLAYER_REQUEST_PRIVATE_CHAT.szRecverId);
 		return;
@@ -128,6 +88,6 @@ void ChatPlayer::OnPrivateChat(const char* pBuf, UINT32 dwLen)
 
 	CNetStream oStream(ENetStreamType_Write, g_pChatPlayerBuff, g_dwChatPlayerBuffLen);
 	oStream.WriteInt(Protocol::CHAT_SENF_CHAT_PRIVATE_CHAT);
-	oCHAT_SENF_CHAT_PRIVATE_CHAT.Write(oStream);
+	oCHAT_SEND_CHAT_PRIVATE_CHAT.Write(oStream);
 	pChatServerSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
 }

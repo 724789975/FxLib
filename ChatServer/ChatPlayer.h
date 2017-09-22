@@ -11,6 +11,7 @@ public:
 	virtual ~ChatPlayer();
 
 	bool Init(ChatSession* pSession, std::string szID);
+	ChatSession* GetSession() { return m_pSession; }
 
 	void OnMsg(const char* pBuf, UINT32 dwLen);
 

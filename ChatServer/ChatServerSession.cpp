@@ -1,5 +1,6 @@
 #include "ChatServerSession.h"
 #include "ChatServer.h"
+#include "utility.h"
 
 const static unsigned int g_dwChatServerSessionBuffLen = 64 * 1024;
 static char g_pChatServerSessionBuf[g_dwChatServerSessionBuffLen];
@@ -46,6 +47,7 @@ void ChatServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	switch (eProrocol)
 	{
 		case Protocol::CHAT_TO_CHAT_HASH_INDEX:	OnChatToChatHashIndex(pData, dwLen);	break;
+		case Protocol::CHAT_SENF_CHAT_PRIVATE_CHAT: OnChatToChatPrivateChat(pData, dwLen);	break;
 		default:	Assert(0);	break;
 	}
 }
@@ -64,6 +66,30 @@ void ChatServerSession::OnChatToChatHashIndex(const char* pBuf, UINT32 dwLen)
 	oCHAT_TO_CHAT_HASH_INDEX.Read(oStream);
 	m_dwHashIndex = oCHAT_TO_CHAT_HASH_INDEX.dwHashIndex;
 	ChatServer::Instance()->GetChatServerSessionManager().SetHashIndex(m_dwHashIndex, this);
+}
+
+void ChatServerSession::OnChatToChatPrivateChat(const char* pBuf, UINT32 dwLen)
+{
+	CNetStream oStream(pBuf, dwLen);
+	stCHAT_SEND_CHAT_PRIVATE_CHAT oCHAT_SEND_CHAT_PRIVATE_CHAT;
+	oCHAT_SEND_CHAT_PRIVATE_CHAT.Read(oStream);
+
+	if (ChatServer::Instance()->CheckHashIndex(HashToIndex(oCHAT_SEND_CHAT_PRIVATE_CHAT.szRecverId, IDLENTH)))
+	{
+		//属于本服务器
+		ChatPlayer* pPlayer = ChatServer::Instance()->GetChatPlayerManager().GetChatPlayer(oCHAT_SEND_CHAT_PRIVATE_CHAT.szRecverId);
+		if (pPlayer)
+		{
+			CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
+			oStream.WriteInt(Protocol::CHAT_SENF_CHAT_PRIVATE_CHAT);
+			oCHAT_SEND_CHAT_PRIVATE_CHAT.Write(oStream);
+			pPlayer->GetSession()->Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
+		}
+		DBChatQuery * pQuery = new DBChatQuery;
+		pQuery->Init(oCHAT_SEND_CHAT_PRIVATE_CHAT, pPlayer != NULL);
+		FxDBGetModule()->AddQuery(pQuery);
+		return;
+	}
 }
 
 FxSession* ChatServerSessionManager::CreateSession()

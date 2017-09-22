@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "netstream.h"
+#include "fxdb.h"
 
 #define IDLENTH 64
 
@@ -83,9 +84,9 @@ struct stCHAT_SEND_CHAT_MANAGER_INFO
 	}
 };
 
-struct stCHAT_SENF_CHAT_PRIVATE_CHAT
+struct stCHAT_SEND_CHAT_PRIVATE_CHAT
 {
-	stCHAT_SENF_CHAT_PRIVATE_CHAT() { memset(szSenderId, 0, IDLENTH); memset(szRecverId, 0, IDLENTH); eChatType = Protocol::ECT_NONE; }
+	stCHAT_SEND_CHAT_PRIVATE_CHAT() { memset(szSenderId, 0, IDLENTH); memset(szRecverId, 0, IDLENTH); eChatType = Protocol::ECT_NONE; }
 	char szSenderId[IDLENTH];
 	char szRecverId[IDLENTH];
 	Protocol::EChatType eChatType;
@@ -202,6 +203,54 @@ struct stPLAYER_REQUEST_PRIVATE_CHAT
 };
 
 
+
+
+//----------------------------------------------------------------------
+class DBChatQuery : public IQuery
+{
+public:
+	DBChatQuery() {}
+	virtual ~DBChatQuery() {}
+
+	virtual INT32 GetDBId(void) { return 0; }
+
+	void Init(stCHAT_SEND_CHAT_PRIVATE_CHAT& refCHAT_SEND_CHAT_PRIVATE_CHAT, bool bReaded)
+	{
+		static char szTemp[2048 * 3 + 1] = { 0 };
+		static char szContentEacape[2048 * 3 + 1] = { 0 };
+		memset(szTemp, 0, 2048);
+		memset(szContentEacape, 0, 2048 * 3 + 1);
+		m_bReader = bReaded ? 1 : 0;
+		mysql_escape_string(szContentEacape, refCHAT_SEND_CHAT_PRIVATE_CHAT.szContent.c_str(), refCHAT_SEND_CHAT_PRIVATE_CHAT.szContent.size());
+		sprintf(szTemp, "INSERT INTO private_chat (`sender_id`, `recver_id`, `chat_type`, `content`, `send_time`, `readed`) "
+			"VALUES('%s', '%s', %u, '%s', %u, %u)", refCHAT_SEND_CHAT_PRIVATE_CHAT.szSenderId,
+			refCHAT_SEND_CHAT_PRIVATE_CHAT.szRecverId, (int)refCHAT_SEND_CHAT_PRIVATE_CHAT.eChatType,
+			szContentEacape, GetTimeHandler()->GetSecond(), m_bReader);
+		m_strQuery = szTemp;
+	}
+	virtual void OnQuery(IDBConnection *poDBConnection)
+	{
+		IDataReader* pReader = NULL;
+		if (poDBConnection->Query(m_strQuery.c_str(), &pReader) == FXDB_HAS_RESULT)
+		{
+			pReader->Release();
+		}
+	}
+
+	virtual void OnResult(void)
+	{}
+
+	virtual void Release(void)
+	{
+		delete this;
+	}
+
+	std::string m_strQuery;
+	UINT32 m_bReader;
+
+private:
+
+};
 
 
 
