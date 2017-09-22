@@ -178,6 +178,7 @@
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="chatdefine.h" />
     <ClInclude Include="ChatManagerSession.h" />
     <ClInclude Include="ChatPlayer.h" />
     <ClInclude Include="ChatPlayerManager.h" />

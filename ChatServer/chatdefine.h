@@ -2,7 +2,7 @@
 #define __ChatDefine_H__
 
 #include <vector>
-#include "../meta_header/netstream.h"
+#include "netstream.h"
 
 #define IDLENTH 64
 

@@ -38,5 +38,6 @@
     <ClInclude Include="utility.h" />
     <ClInclude Include="ChatServerManager.h" />
     <ClInclude Include="ChatServerSession.h" />
+    <ClInclude Include="chatdefine.h" />
   </ItemGroup>
 </Project>

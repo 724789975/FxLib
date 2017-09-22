@@ -173,6 +173,7 @@
     <ClCompile Include="utility.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="chatdefine.h" />
     <ClInclude Include="ChatServerManager.h" />
     <ClInclude Include="ChatServerSession.h" />
     <ClInclude Include="LuaMeta.h" />
