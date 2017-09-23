@@ -21,6 +21,7 @@ void ChatManagerSession::OnConnect(void)
 	stCHAT_SEND_CHAT_MANAGER_INFO oCHAT_SEND_CHAT_MANAGER_INFO;
 	oCHAT_SEND_CHAT_MANAGER_INFO.m_szChatIp = ChatServer::Instance()->GetChatSessionIp();
 	oCHAT_SEND_CHAT_MANAGER_INFO.m_dwChatPort = ChatServer::Instance()->GetChatSessionPort();
+	oCHAT_SEND_CHAT_MANAGER_INFO.m_dwWebSocketChatPort = ChatServer::Instance()->GetChatWebSocketSessionPort();
 	oCHAT_SEND_CHAT_MANAGER_INFO.m_dwChatServerPort = ChatServer::Instance()->GetChatServerSessionPort();
 	CNetStream oStream(ENetStreamType_Write, g_pChatServerManagerSessionBuf, g_dwChatServerManagerSessionBuffLen);
 	oStream.WriteInt(Protocol::CHAT_SEND_CHAT_MANAGER_INFO);

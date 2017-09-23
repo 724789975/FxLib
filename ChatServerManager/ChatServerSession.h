@@ -22,13 +22,18 @@ public:
 	virtual UINT32		GetRecvSize() { return 64 * 1024; };
 	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
 
+	UINT32 GetChatServerPort() { return m_dwChatServerPort; }
+	UINT32 GetChatPort() { return m_dwChatPort; }
+	UINT32 GetWebSocketChatPort() { return m_dwWebSocketChatPort; }
+	std::string GetChatIp() { return m_szChatIp; }
+
 private:
 	BinaryDataHeader m_oBinaryDataHeader;
 	char m_dataRecvBuf[1024 * 1024];
 private:
-	char m_szId[32];
 	UINT32 m_dwChatServerPort;
 	UINT32 m_dwChatPort;
+	UINT32 m_dwWebSocketChatPort;
 	std::string m_szChatIp;
 private:
 	void OnChatServerInfo(const char* pBuf, UINT32 dwLen);
@@ -46,6 +51,7 @@ public:
 	void CloseSessions();
 
 	virtual void Release(FxSession* pSession);
+	ChatServerSession* GetChatServerSessions() { return m_oChatServerSessions; }
 
 	void OnChatServerInfo(ChatServerSession* pChatServerSession);
 private:

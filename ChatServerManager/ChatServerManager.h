@@ -3,6 +3,7 @@
 
 #include "singleton.h"
 #include "ChatServerSession.h"
+#include "GMSession.h"
 
 class ChatServerManager : public TSingleton<ChatServerManager>
 {
@@ -10,17 +11,20 @@ public:
 	ChatServerManager();
 	virtual ~ChatServerManager();
 
-	bool Init(UINT32 dwPort);
+	bool Init(UINT32 dwPort, UINT32 dwGMPort);
 
 	void Close();
 
-	ChatServerSessionManager& GetChatSessionManager() { return m_oChatSessionManager; }
+	ChatServerSessionManager& GetChatServerSessionManager() { return m_oChatSessionManager; }
 
 	IFxListenSocket* GetChatServerListenSocket() { return m_pChatServerListenSocket; }
 
 private:
 	ChatServerSessionManager m_oChatSessionManager;
+	GMSessionManager m_oGMSessionManager;
+
 	IFxListenSocket* m_pChatServerListenSocket;
+	IFxListenSocket* m_pGMListenSocket;
 };
 
 #endif // !__GameServer_H__

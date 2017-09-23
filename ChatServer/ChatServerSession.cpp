@@ -100,6 +100,7 @@ FxSession* ChatServerSessionManager::CreateSession()
 	{
 		if (m_oChatServerSessions[i].GetConnection() == NULL)
 		{
+			m_oChatServerSessions[i].Init((FxConnection*)0xFFFFFFFF);
 			pSession = &m_oChatServerSessions[i];
 			break;
 		}

@@ -66,11 +66,13 @@ struct stCHAT_TO_CHAT_HASH_INDEX
 struct stCHAT_SEND_CHAT_MANAGER_INFO
 {
 	unsigned int m_dwChatPort;
+	unsigned int m_dwWebSocketChatPort;
 	unsigned int m_dwChatServerPort;
 	std::string m_szChatIp;
 	bool Write(CNetStream& refStream)
 	{
 		if (!refStream.WriteInt(m_dwChatPort)) return false;
+		if (!refStream.WriteInt(m_dwWebSocketChatPort)) return false;
 		if (!refStream.WriteInt(m_dwChatServerPort)) return false;
 		if (!refStream.WriteString(m_szChatIp)) return false;
 		return true;
@@ -78,6 +80,7 @@ struct stCHAT_SEND_CHAT_MANAGER_INFO
 	bool Read(CNetStream& refStream)
 	{
 		if (!refStream.ReadInt(m_dwChatPort)) return false;
+		if (!refStream.ReadInt(m_dwWebSocketChatPort)) return false;
 		if (!refStream.ReadInt(m_dwChatServerPort)) return false;
 		if (!refStream.ReadString(m_szChatIp)) return false;
 		return true;

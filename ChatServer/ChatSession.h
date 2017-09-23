@@ -15,36 +15,74 @@ public:
 	virtual void		OnClose(void);
 	virtual void		OnError(UINT32 dwErrorNo);
 	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
-	virtual void		Release(void);
+	virtual void		Release(void) = 0;
 	virtual char*		GetRecvBuf() { return m_dataRecvBuf; }
 	virtual UINT32		GetRecvSize() { return 64 * 1024; };
-	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
+	virtual IFxDataHeader* GetDataHeader() = 0;
 
 	void				Reset();
 
 	void				OnMsg(const char* pBuf, UINT32 dwLen);
 	void				OnLogin(const char* pBuf, UINT32 dwLen);
 private:
-	BinaryDataHeader m_oBinaryDataHeader;
+	
 	char m_dataRecvBuf[64 * 1024];
 
 	char m_szId[IDLENTH];
 };
 
-class ChatSessionManager : public IFxSessionFactory
+class ChatBinarySession : public ChatSession
 {
 public:
-	ChatSessionManager(){}
-	virtual ~ChatSessionManager() {}
+	virtual void		Release(void);
+	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
+protected:
+private:
+	BinaryDataHeader m_oBinaryDataHeader;
+};
+
+class ChatBinarySessionManager : public IFxSessionFactory
+{
+public:
+	ChatBinarySessionManager(){}
+	virtual ~ChatBinarySessionManager() {}
 
 	virtual FxSession* CreateSession();
 
 	bool Init();
 	virtual void Release(FxSession* pSession);
-	void Release(ChatSession* pSession);
+	void Release(ChatBinarySession* pSession);
 
 private:
-	TDynamicPoolEx<ChatSession> m_poolSessions;
+	TDynamicPoolEx<ChatBinarySession> m_poolSessions;
+
+	FxCriticalLock m_oLock;
+};
+
+class ChatWebSocketSession : public ChatSession
+{
+public:
+	virtual void		Release(void);
+	virtual IFxDataHeader* GetDataHeader() { return &m_oWebSocketDataHeader; }
+protected:
+private:
+	WebSocketDataHeader m_oWebSocketDataHeader;
+};
+
+class ChatWebSocketSessionManager : public IFxSessionFactory
+{
+public:
+	ChatWebSocketSessionManager() {}
+	virtual ~ChatWebSocketSessionManager() {}
+
+	virtual FxSession* CreateSession();
+
+	bool Init();
+	virtual void Release(FxSession* pSession);
+	void Release(ChatWebSocketSession* pSession);
+
+private:
+	TDynamicPoolEx<ChatWebSocketSession> m_poolSessions;
 
 	FxCriticalLock m_oLock;
 };

@@ -56,11 +56,12 @@ void ChatServerSession::OnChatServerInfo(const char* pBuf, UINT32 dwLen)
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_SEND_CHAT_MANAGER_INFO oCHAT_SEND_CHAT_MANAGER_INFO;
 	oCHAT_SEND_CHAT_MANAGER_INFO.Read(oStream);
+	m_dwWebSocketChatPort = oCHAT_SEND_CHAT_MANAGER_INFO.m_dwWebSocketChatPort;
 	m_dwChatPort = oCHAT_SEND_CHAT_MANAGER_INFO.m_dwChatPort;
 	m_dwChatServerPort = oCHAT_SEND_CHAT_MANAGER_INFO.m_dwChatServerPort;
 	m_szChatIp = oCHAT_SEND_CHAT_MANAGER_INFO.m_szChatIp;
 
-	ChatServerManager::Instance()->GetChatSessionManager().OnChatServerInfo(this);
+	ChatServerManager::Instance()->GetChatServerSessionManager().OnChatServerInfo(this);
 }
 
 //----------------------------------------------------------------------
@@ -72,6 +73,7 @@ FxSession* ChatServerSessionManager::CreateSession()
 	{
 		if (m_oChatServerSessions[i].GetConnection() == NULL)
 		{
+			m_oChatServerSessions[i].Init((FxConnection*)0xFFFFFFFF);
 			pSession = &m_oChatServerSessions[i];
 			break;
 		}

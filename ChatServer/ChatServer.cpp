@@ -16,15 +16,16 @@ ChatServer::~ChatServer()
 {
 }
 
-bool ChatServer::Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UINT32 dwChatServerSessionPort)
+bool ChatServer::Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UINT32 dwChatWebSocketSessionPort, UINT32 dwChatServerSessionPort)
 {
-	m_oChatSessionManager.Init();
+	m_oChatBinarySessionManager.Init();
 	m_oChatPlayerManager.Init();
 	m_oChatServerSessionManager.Init();
 
 	m_szChatSessionIp = szChatSessionIp;
 	m_dwChatServerSessionPort = dwChatServerSessionPort;
 	m_dwChatSessionPort = dwChatSessionPort;
+	m_dwChatWebSocketSessionPort = dwChatWebSocketSessionPort;
 	IFxNet* pNet = FxNetGetModule();
 	if (pNet == NULL)
 	{
@@ -39,8 +40,13 @@ bool ChatServer::Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UIN
 			dwIp = *(u_long*)pHost->h_addr_list[i];
 		}
 	}
-	m_pChatSessionListener = pNet->Listen(&m_oChatSessionManager, SLT_CommonTcp, dwIp, m_dwChatSessionPort);
+	m_pChatSessionListener = pNet->Listen(&m_oChatBinarySessionManager, SLT_CommonTcp, dwIp, m_dwChatSessionPort);
 	if (m_pChatSessionListener  == NULL)
+	{
+		return false;
+	}
+	m_pChatWebSocketSessionListener = pNet->Listen(&m_oChatWebSocketSessionManager, SLT_WebSocket, dwIp, dwChatWebSocketSessionPort);
+	if (m_pChatWebSocketSessionListener == NULL)
 	{
 		return false;
 	}
@@ -57,6 +63,9 @@ void ChatServer::Close()
 {
 	m_pChatSessionListener->StopListen();
 	m_pChatSessionListener->Close();
+
+	m_pChatWebSocketSessionListener->StopListen();
+	m_pChatWebSocketSessionListener->Close();
 
 	m_pChatServerSessionListener->StopListen();
 	m_pChatServerSessionListener->Close();

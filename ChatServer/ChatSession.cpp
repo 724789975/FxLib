@@ -45,17 +45,6 @@ void ChatSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	}
 }
 
-void ChatSession::Release(void)
-{
-	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
-	OnDestroy();
-
-	Init(NULL);
-	Reset();
-
-	ChatServer::Instance()->GetChatSessionManager().Release(this);
-}
-
 void ChatSession::Reset()
 {
 	memset(m_szId, 0, IDLENTH);
@@ -95,24 +84,70 @@ void ChatSession::OnLogin(const char* pBuf, UINT32 dwLen)
 		Send(g_pChatSessionBuff, g_dwChatSessionBuffLen - oStream.GetDataLength());
 	}
 }
+//--------------------------------------------------------------
+void ChatBinarySession::Release(void)
+{
+	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
+	OnDestroy();
 
-FxSession* ChatSessionManager::CreateSession()
+	Init(NULL);
+	Reset();
+
+	ChatServer::Instance()->GetChatBinarySessionManager().Release(this);
+}
+
+//--------------------------------------------------------------
+FxSession* ChatBinarySessionManager::CreateSession()
 {
 	return m_poolSessions.FetchObj();
 }
 
-bool ChatSessionManager::Init()
+bool ChatBinarySessionManager::Init()
 {
 	return m_poolSessions.Init(64, 64);
 }
 
-void ChatSessionManager::Release(FxSession* pSession)
+void ChatBinarySessionManager::Release(FxSession* pSession)
 {
 	Assert(0);
 	//m_poolSessions.ReleaseObj()
 }
 
-void ChatSessionManager::Release(ChatSession* pSession)
+void ChatBinarySessionManager::Release(ChatBinarySession* pSession)
+{
+	m_poolSessions.ReleaseObj(pSession);
+}
+
+//--------------------------------------------------------------
+
+void ChatWebSocketSession::Release(void)
+{
+	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
+	OnDestroy();
+
+	Init(NULL);
+	Reset();
+
+	ChatServer::Instance()->GetChatWebSocketSessionManager().Release(this);
+}
+//--------------------------------------------------------------
+
+FxSession* ChatWebSocketSessionManager::CreateSession()
+{
+	return m_poolSessions.FetchObj();
+}
+
+bool ChatWebSocketSessionManager::Init()
+{
+	return m_poolSessions.Init(64, 64);
+}
+
+void ChatWebSocketSessionManager::Release(FxSession* pSession)
+{
+	Assert(0);
+}
+
+void ChatWebSocketSessionManager::Release(ChatWebSocketSession* pSession)
 {
 	m_poolSessions.ReleaseObj(pSession);
 }

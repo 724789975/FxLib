@@ -4,49 +4,41 @@
 #include "fxdb.h"
 #include "netstream.h"
 
-class DBQuery : public IQuery
+
+TextDataHeader::TextDataHeader()
 {
-public:
-	DBQuery(){}
-	virtual ~DBQuery(){}
 
-	virtual INT32 GetDBId(void) { return 0; }
+}
 
-	virtual void OnQuery(IDBConnection *poDBConnection)
-	{
-		IDataReader* pReader = NULL;
-		if (poDBConnection->Query(m_strQuery.c_str(), &pReader) == FXDB_HAS_RESULT)
-		{
-			while(pReader->GetNextRecord())
-			{
-				char strValue[1024] = { 0 };
-				UINT32 dwLen = 0;
-				dwLen += sprintf(strValue + dwLen, "%s", "role id : ");
-				dwLen += sprintf(strValue + dwLen, "%s", pReader->GetFieldValue(0));
-				dwLen += sprintf(strValue + dwLen, "%s", " user id : ");
-				dwLen += sprintf(strValue + dwLen, "%s", pReader->GetFieldValue(1));
-				dwLen += sprintf(strValue + dwLen, "%s", " role name ");
-				dwLen += sprintf(strValue + dwLen, "%s", pReader->GetFieldValue(2));
-				dwLen += sprintf(strValue + dwLen, "%s", " clan ");
-				dwLen += sprintf(strValue + dwLen, "%s", pReader->GetFieldValue(3));
-			}
-			pReader->Release();
-		}
-	}
+TextDataHeader::~TextDataHeader()
+{
 
-	virtual void OnResult(void)
-	{}
+}
 
-	virtual void Release(void)
-	{
-		delete this;
-	}
+void* TextDataHeader::GetPkgHeader()
+{
+	return NULL;
+}
 
-	std::string m_strQuery;
+void* TextDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen)
+{
+	return NULL;
+}
 
-private:
+bool TextDataHeader::BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset)
+{
+	return true;
+}
 
-};
+int TextDataHeader::__CheckPkgHeader(const char* pBuf)
+{
+	return 0;
+}
+
+int TextDataHeader::ParsePacket(const char* pBuf, UINT32 dwLen)
+{
+	return dwLen;
+}
 
 BinaryDataHeader::BinaryDataHeader()
 {

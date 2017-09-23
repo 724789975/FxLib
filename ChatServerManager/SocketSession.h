@@ -8,6 +8,22 @@
 #include <list>
 #include <deque>
 
+class TextDataHeader : public IFxDataHeader
+{
+public:
+	TextDataHeader();
+	virtual ~TextDataHeader();
+	virtual unsigned int GetHeaderLength() { return 0; }		// 消息头长度
+	virtual void* GetPkgHeader();
+	virtual void* BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen);
+	virtual bool BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset);
+	virtual int __CheckPkgHeader(const char* pBuf);
+	virtual int	ParsePacket(const char* pBuf, UINT32 dwLen);
+private:
+	// // 消息头 为网络字节序
+	//static const UINT32 s_dwMagic = 12345678;
+};
+
 class BinaryDataHeader : public IFxDataHeader
 {
 public:
