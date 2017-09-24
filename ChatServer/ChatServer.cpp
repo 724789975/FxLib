@@ -21,6 +21,7 @@ bool ChatServer::Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UIN
 	m_oChatBinarySessionManager.Init();
 	m_oChatPlayerManager.Init();
 	m_oChatServerSessionManager.Init();
+	m_oChatWebSocketSessionManager.Init();
 
 	m_szChatSessionIp = szChatSessionIp;
 	m_dwChatServerSessionPort = dwChatServerSessionPort;

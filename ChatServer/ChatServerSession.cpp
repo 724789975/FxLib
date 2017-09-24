@@ -85,8 +85,7 @@ void ChatServerSession::OnChatToChatPrivateChat(const char* pBuf, UINT32 dwLen)
 			oCHAT_SEND_CHAT_PRIVATE_CHAT.Write(oStream);
 			pPlayer->GetSession()->Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
 		}
-		DBChatQuery * pQuery = new DBChatQuery;
-		pQuery->Init(oCHAT_SEND_CHAT_PRIVATE_CHAT, pPlayer != NULL);
+		DBChatQuery * pQuery = new DBChatQuery(oCHAT_SEND_CHAT_PRIVATE_CHAT, pPlayer != NULL);
 		FxDBGetModule()->AddQuery(pQuery);
 		return;
 	}

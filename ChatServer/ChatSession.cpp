@@ -61,7 +61,7 @@ void ChatSession::OnMsg(const char* pBuf, UINT32 dwLen)
 	switch (eProrocol)
 	{
 		case Protocol::PLAYER_REQUEST_CHAT_LOGIN:	OnLogin(pData, dwLen);	break;
-		default: {LogExe(LogLv_Critical, "error protocot : %d", (unsigned int)eProrocol); Close(); }	break;
+		default: {LogExe(LogLv_Critical, "error protocol : %d", (unsigned int)eProrocol); Close(); }	break;
 	}
 }
 

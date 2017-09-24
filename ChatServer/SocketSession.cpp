@@ -4,50 +4,6 @@
 #include "fxdb.h"
 #include "netstream.h"
 
-class DBChatQuery : public IQuery
-{
-public:
-	DBChatQuery(){}
-	virtual ~DBChatQuery(){}
-
-	virtual INT32 GetDBId(void) { return 0; }
-
-	virtual void OnQuery(IDBConnection *poDBConnection)
-	{
-		IDataReader* pReader = NULL;
-		if (poDBConnection->Query(m_strQuery.c_str(), &pReader) == FXDB_HAS_RESULT)
-		{
-			while(pReader->GetNextRecord())
-			{
-				char strValue[1024] = { 0 };
-				UINT32 dwLen = 0;
-				dwLen += sprintf(strValue + dwLen, "%s", "role id : ");
-				dwLen += sprintf(strValue + dwLen, "%s", pReader->GetFieldValue(0));
-				dwLen += sprintf(strValue + dwLen, "%s", " user id : ");
-				dwLen += sprintf(strValue + dwLen, "%s", pReader->GetFieldValue(1));
-				dwLen += sprintf(strValue + dwLen, "%s", " role name ");
-				dwLen += sprintf(strValue + dwLen, "%s", pReader->GetFieldValue(2));
-				dwLen += sprintf(strValue + dwLen, "%s", " clan ");
-				dwLen += sprintf(strValue + dwLen, "%s", pReader->GetFieldValue(3));
-			}
-			pReader->Release();
-		}
-	}
-
-	virtual void OnResult(void)
-	{}
-
-	virtual void Release(void)
-	{
-		delete this;
-	}
-
-	std::string m_strQuery;
-
-private:
-
-};
-
 BinaryDataHeader::BinaryDataHeader()
 {
 }

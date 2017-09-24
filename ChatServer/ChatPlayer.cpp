@@ -38,7 +38,7 @@ void ChatPlayer::OnMsg(const char* pBuf, UINT32 dwLen)
 	switch (eProrocol)
 	{
 		case Protocol::PLAYER_REQUEST_PRIVATE_CHAT:	OnPrivateChat(pData, dwLen);	break;
-		default: {LogExe(LogLv_Critical, "error protocot : %d", (unsigned int)eProrocol); m_pSession->Close(); }	break;
+		default: {LogExe(LogLv_Critical, "error protocol : %d", (unsigned int)eProrocol); m_pSession->Close(); }	break;
 	}
 }
 
@@ -70,8 +70,7 @@ void ChatPlayer::OnPrivateChat(const char* pBuf, UINT32 dwLen)
 			oCHAT_SEND_CHAT_PRIVATE_CHAT.Write(oStream);
 			pPlayer->m_pSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
 		}
-		DBChatQuery * pQuery = new DBChatQuery;
-		pQuery->Init(oCHAT_SEND_CHAT_PRIVATE_CHAT, pPlayer != NULL);
+		DBChatQuery * pQuery = new DBChatQuery(oCHAT_SEND_CHAT_PRIVATE_CHAT, pPlayer != NULL);
 		FxDBGetModule()->AddQuery(pQuery);
 		return;
 	}
@@ -79,8 +78,7 @@ void ChatPlayer::OnPrivateChat(const char* pBuf, UINT32 dwLen)
 	ChatServerSession* pChatServerSession = ChatServer::Instance()->GetChatServerSessionManager().GetChatServerSession(HashToIndex(oPLAYER_REQUEST_PRIVATE_CHAT.szRecverId, IDLENTH));
 	if (!(pChatServerSession && pChatServerSession->GetConnection()))
 	{
-		DBChatQuery * pQuery = new DBChatQuery;
-		pQuery->Init(oCHAT_SEND_CHAT_PRIVATE_CHAT, false);
+		DBChatQuery * pQuery = new DBChatQuery(oCHAT_SEND_CHAT_PRIVATE_CHAT, false);
 		FxDBGetModule()->AddQuery(pQuery);
 		LogExe(LogLv_Critical, "can't find chat server session recver id : %s", oPLAYER_REQUEST_PRIVATE_CHAT.szRecverId);
 		return;

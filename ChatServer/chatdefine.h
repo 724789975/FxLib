@@ -212,12 +212,7 @@ struct stPLAYER_REQUEST_PRIVATE_CHAT
 class DBChatQuery : public IQuery
 {
 public:
-	DBChatQuery() {}
-	virtual ~DBChatQuery() {}
-
-	virtual INT32 GetDBId(void) { return 0; }
-
-	void Init(stCHAT_SEND_CHAT_PRIVATE_CHAT& refCHAT_SEND_CHAT_PRIVATE_CHAT, bool bReaded)
+	DBChatQuery(stCHAT_SEND_CHAT_PRIVATE_CHAT& refCHAT_SEND_CHAT_PRIVATE_CHAT, bool bReaded)
 	{
 		static char szTemp[2048 * 3 + 1] = { 0 };
 		static char szContentEacape[2048 * 3 + 1] = { 0 };
@@ -231,6 +226,10 @@ public:
 			szContentEacape, GetTimeHandler()->GetSecond(), m_bReader);
 		m_strQuery = szTemp;
 	}
+	virtual ~DBChatQuery() {}
+
+	virtual INT32 GetDBId(void) { return 0; }
+
 	virtual void OnQuery(IDBConnection *poDBConnection)
 	{
 		IDataReader* pReader = NULL;
