@@ -5,7 +5,10 @@
 #include "lock.h"
 #include "SocketSession.h"
 #include "chatdefine.h"
+#include "json.h"
 
+class GMSession;
+typedef void (*Operate)(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck);
 class GMSession : public FxSession
 {
 public:
@@ -21,9 +24,13 @@ public:
 	virtual UINT32		GetRecvSize() { return 64 * 1024; };
 	virtual IFxDataHeader* GetDataHeader() { return &m_oTextDataHeader; }
 
+	void				GetInfos(Json::Value& refjReq, Json::Value& refjAck);
+
 private:
 	TextDataHeader m_oTextDataHeader;
 	char m_dataRecvBuf[1024 * 1024];
+
+	std::map<std::string, Operate> m_mapOperate;
 };
 
 class GMSessionManager : public IFxSessionFactory

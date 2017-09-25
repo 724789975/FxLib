@@ -1,9 +1,16 @@
 #include "GMSession.h"
 #include <sstream>
 #include "ChatServerManager.h"
+#include "json.h"
+
+void GetInfo(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck)
+{
+	pSession->GetInfos(refjReq, refjAck);
+}
 
 GMSession::GMSession()
 {
+	m_mapOperate["get_info"] = GetInfo;
 }
 
 
@@ -30,8 +37,50 @@ void GMSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
 	const_cast<char*>(pBuf)[dwLen] = 0;
 	LogExe(LogLv_Debug, "%s", pBuf);
-	std::stringstream sStream;
-	sStream << GetExeName() << ", connections \n";
+
+	Json::Value jReq;
+	Json::Reader jReader;
+
+	Json::Value jAck;
+	Json::FastWriter jWriter;
+
+	jAck["name"] = GetExeName();
+	if (jReader.parse(pBuf, jReq))
+	{
+		if(jReq["opcode"].isString())
+		{
+			std::string szOpCode = jReq["opcode"].asString();
+			if (m_mapOperate.find(szOpCode) == m_mapOperate.end())
+			{
+				jAck["ret"] = "opcode not found";
+			}
+			else
+			{
+				m_mapOperate[szOpCode](this, jReq, jAck);
+			}
+		}
+		else
+		{
+			jAck["ret"] = "opcode error";
+		}
+	}
+	else
+	{
+		jAck["ret"] = "request parse error";
+	}
+
+	std::string szAck = jWriter.write(jAck);
+
+	Send(szAck.c_str(), szAck.size());
+}
+
+void GMSession::Release(void)
+{
+	OnDestroy();
+}
+
+void GMSession::GetInfos(Json::Value& refjReq, Json::Value& refjAck)
+{
 	ChatServerSessionManager& refSessionManager = ChatServerManager::Instance()->GetChatServerSessionManager();
 	for (int i = 0; i < ChatConstant::g_dwChatServerNum; ++i)
 	{
@@ -39,18 +88,14 @@ void GMSession::OnRecv(const char* pBuf, UINT32 dwLen)
 		{
 			continue;
 		}
-		sStream << i << ", ChatIp : " << refSessionManager.GetChatServerSessions()[i].GetChatIp();
-		sStream << ", ChatPort : " << refSessionManager.GetChatServerSessions()[i].GetChatPort();
-		sStream << ", WebSocketChatPort : " << refSessionManager.GetChatServerSessions()[i].GetWebSocketChatPort();
-		sStream << ", ChatServerPort : " << refSessionManager.GetChatServerSessions()[i].GetChatServerPort() << "\n";
+		Json::Value jInfo;
+		jInfo["ChatIp"] = refSessionManager.GetChatServerSessions()[i].GetChatIp();
+		jInfo["ChatPort"] = refSessionManager.GetChatServerSessions()[i].GetChatPort();
+		jInfo["WebSocketChatPort"] = refSessionManager.GetChatServerSessions()[i].GetWebSocketChatPort();
+		jInfo["ChatServerPort"] = refSessionManager.GetChatServerSessions()[i].GetChatServerPort();
+
+		refjAck["info"].append(jInfo);
 	}
-
-	Send(sStream.str().c_str(), sStream.str().size());
-}
-
-void GMSession::Release(void)
-{
-	OnDestroy();
 }
 
 FxSession* GMSessionManager::CreateSession()
