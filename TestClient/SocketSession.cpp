@@ -15,9 +15,12 @@ CSocketSession::~CSocketSession()
 void CSocketSession::OnConnect(void)
 {
 	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
-	//char szMsg[1024] = "";
-	//sprintf(szMsg, "%d", 0);
-	//Send(szMsg, 1024);
+	char szMsg[1024] = {0};
+	CNetStream oStream(ENetStreamType_Write, szMsg, 1024);
+	oStream.WriteInt(30001);
+	oStream.WriteString("asdg");
+	oStream.WriteString("sign");
+	Send(szMsg, 1024 - oStream.GetDataLength());
 }
 
 void CSocketSession::OnClose(void)
@@ -34,9 +37,22 @@ void CSocketSession::OnError(UINT32 dwErrorNo)
 void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
+	CNetStream oStream1(pBuf, 1024);
+	UINT32 dwProtocol;
+	oStream1.ReadInt(dwProtocol);
+	UINT32 dwResult;
+	oStream1.ReadInt(dwResult);
 	//char szMsg[1024] = "";
 	//sprintf(szMsg, "%d", atoi(pBuf) + 1);
 	//Send(szMsg, 1024);
+
+	char szMsg[1024] = { 0 };
+	CNetStream oStream(ENetStreamType_Write, szMsg, 1024);
+	oStream.WriteInt(30003);
+	oStream.WriteString("asdg1");
+	oStream.WriteInt(1);
+	oStream.WriteString("ggggggggggasdg1");
+	Send(szMsg, 1024 - oStream.GetDataLength());
 }
 
 void CSocketSession::Release(void)

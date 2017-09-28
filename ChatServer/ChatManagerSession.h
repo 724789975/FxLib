@@ -24,6 +24,7 @@ private:
 
 private:
 	void OnNotifyChatInfo(const char* pBuf, UINT32 dwLen);
+	void OnBroadcastMsg(const char* pBuf, UINT32 dwLen);
 };
 
 #endif // !__ChatManagerSession_H__

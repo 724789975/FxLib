@@ -18,6 +18,7 @@ public:
 	ChatPlayer* OnPlayerLogin(std::string szPlayerId, ChatSession* pSession);
 	void OnSessionClose(std::string szPlayerId);
 
+	void OnBroadCastMsg(const Protocol::EChatType& eChatType, const std::string& szContent);
 private:
 	std::map<std::string, ChatPlayer> m_mapPlayers;
 };

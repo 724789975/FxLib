@@ -20,24 +20,25 @@ namespace Protocol
 		ECT_NONE,
 		ECT_String,
 		ECT_Image,
-		ECT_Voice
+		ECT_Voice,
 	};
 	enum EChatProtocol
 	{
 		//chat<--->chat 10001 11000
 		CHAT_TO_CHAT_BEGIN = 10001,
 		CHAT_TO_CHAT_HASH_INDEX = 10002,
+		CHAT_SENF_CHAT_PRIVATE_CHAT,
 		CHAT_TO_CHAT_END = 11000,
 
 		//chat --->chatmanager 20001 25000
 		CHAT_TO_CHAT_MANAGER_BEGIN = 20001,
 		CHAT_SEND_CHAT_MANAGER_INFO,
-		CHAT_SENF_CHAT_PRIVATE_CHAT,
 		CHAT_TO_CHAT_MANAGER_END = 25000,
 
 		//chatmanager --->chat 25001 29999
 		CHAT_MANAGER_TO_CHAT_BEGIN = 25001,
 		CHAT_MANAGER_NOTIFY_CHAT_INFO,
+		CHAT_MANAGER_NOTIFY_CHAT_BROADCAST,
 		CHAT_MANAGER_TO_CHAT_END = 29999,
 
 		//player<--->chat 30000 39999
@@ -45,6 +46,7 @@ namespace Protocol
 		PLAYER_REQUEST_CHAT_LOGIN,
 		CHAT_ACK_PLAYER_LOGIN,
 		PLAYER_REQUEST_PRIVATE_CHAT,
+		CHAT_SEND_PLAYER_PRIVATE_CHAT,
 		PLAYER_CHAT_END = 39999,
 	};
 }
@@ -157,6 +159,25 @@ struct stCHAT_MANAGER_NOTIFY_CHAT_INFO
 	}
 };
 
+struct stCHAT_MANAGER_NOTIFY_CHAT_BROADCAST
+{
+	Protocol::EChatType eChatType;
+	std::string szContent;
+	bool Write(CNetStream& refStream)
+	{
+		if (!refStream.WriteInt((UINT32&)eChatType)) return false;
+		if (!refStream.WriteString(szContent)) return false;
+		return true;
+	}
+
+	bool Read(CNetStream& refStream)
+	{
+		if (!refStream.ReadInt((UINT32&)eChatType)) return false;
+		if (!refStream.ReadString(szContent)) return false;
+		return true;
+	}
+};
+
 //----------------------------------------------------------------------
 struct stPLAYER_REQUEST_CHAT_LOGIN
 {
@@ -203,6 +224,33 @@ struct stPLAYER_REQUEST_PRIVATE_CHAT
 		if (!refStream.ReadString(szContent)) return false;
 		return true;
 	}
+};
+
+struct stCHAT_SEND_PLAYER_PRIVATE_CHAT : public stCHAT_SEND_CHAT_PRIVATE_CHAT
+{
+	//stCHAT_SEND_PLAYER_PRIVATE_CHAT() { memset(szSenderId, 0, IDLENTH); memset(szRecverId, 0, IDLENTH); eChatType = Protocol::ECT_NONE; }
+	//char szSenderId[IDLENTH];
+	//char szRecverId[IDLENTH];
+	//Protocol::EChatType eChatType;
+	//std::string szContent;
+
+	//bool Write(CNetStream& refStream)
+	//{
+	//	if (!refStream.WriteString(szSenderId)) return false;
+	//	if (!refStream.WriteString(szRecverId)) return false;
+	//	if (!refStream.WriteInt((unsigned int&)eChatType)) return false;
+	//	if (!refStream.WriteString(szContent)) return false;
+	//	return true;
+	//}
+
+	//bool Read(CNetStream& refStream)
+	//{
+	//	if (!refStream.ReadString(szSenderId, IDLENTH)) return false;
+	//	if (!refStream.ReadString(szRecverId, IDLENTH)) return false;
+	//	if (!refStream.ReadInt((unsigned int&)eChatType)) return false;
+	//	if (!refStream.ReadString(szContent)) return false;
+	//	return true;
+	//}
 };
 
 

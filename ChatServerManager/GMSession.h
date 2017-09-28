@@ -24,7 +24,8 @@ public:
 	virtual UINT32		GetRecvSize() { return 64 * 1024; };
 	virtual IFxDataHeader* GetDataHeader() { return &m_oTextDataHeader; }
 
-	void				GetInfos(Json::Value& refjReq, Json::Value& refjAck);
+	void				GetInfo(Json::Value& refjReq, Json::Value& refjAck);
+	void				Broadcast(Json::Value& refjReq, Json::Value& refjAck);
 
 private:
 	TextDataHeader m_oTextDataHeader;

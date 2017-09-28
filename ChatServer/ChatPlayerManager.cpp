@@ -32,3 +32,16 @@ void ChatPlayerManager::OnSessionClose(std::string szPlayerId)
 {
 	m_mapPlayers.erase(szPlayerId);
 }
+
+void ChatPlayerManager::OnBroadCastMsg(const Protocol::EChatType& eChatType, const std::string& szContent)
+{
+	//stCHAT_SEND_CHAT_PRIVATE_CHAT oCHAT_SEND_CHAT_PRIVATE_CHAT;
+	//oCHAT_SEND_CHAT_PRIVATE_CHAT.szSenderId[0] = '0';
+	//oCHAT_SEND_CHAT_PRIVATE_CHAT.eChatType = eChatType;
+	//oCHAT_SEND_CHAT_PRIVATE_CHAT.szContent = szContent;
+
+	for (std::map<std::string, ChatPlayer>::iterator it = m_mapPlayers.begin(); it != m_mapPlayers.end(); ++it)
+	{
+		it->second.OnChat("0", eChatType, szContent);
+	}
+}

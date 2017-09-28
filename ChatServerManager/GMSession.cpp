@@ -2,15 +2,26 @@
 #include <sstream>
 #include "ChatServerManager.h"
 #include "json.h"
+#include "chatdefine.h"
+#include "ChatServerManager.h"
 
-void GetInfo(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck)
+const static unsigned int g_dwGMSessionBuffLen = 64 * 1024;
+static char g_pGMSessionBuf[g_dwGMSessionBuffLen];
+
+void GMGetInfo(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck)
 {
-	pSession->GetInfos(refjReq, refjAck);
+	pSession->GetInfo(refjReq, refjAck);
+}
+
+void GMBroadcast(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck)
+{
+	pSession->Broadcast(refjReq, refjAck);
 }
 
 GMSession::GMSession()
 {
-	m_mapOperate["get_info"] = GetInfo;
+	m_mapOperate["get_info"] = GMGetInfo;
+	m_mapOperate["broadcast"] = GMBroadcast;
 }
 
 
@@ -47,7 +58,7 @@ void GMSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	jAck["name"] = GetExeName();
 	if (jReader.parse(pBuf, jReq))
 	{
-		if(jReq["opcode"].isString())
+		if (jReq["opcode"].isString())
 		{
 			std::string szOpCode = jReq["opcode"].asString();
 			if (m_mapOperate.find(szOpCode) == m_mapOperate.end())
@@ -79,7 +90,7 @@ void GMSession::Release(void)
 	OnDestroy();
 }
 
-void GMSession::GetInfos(Json::Value& refjReq, Json::Value& refjAck)
+void GMSession::GetInfo(Json::Value& refjReq, Json::Value& refjAck)
 {
 	ChatServerSessionManager& refSessionManager = ChatServerManager::Instance()->GetChatServerSessionManager();
 	for (int i = 0; i < ChatConstant::g_dwChatServerNum; ++i)
@@ -96,6 +107,27 @@ void GMSession::GetInfos(Json::Value& refjReq, Json::Value& refjAck)
 
 		refjAck["info"].append(jInfo);
 	}
+}
+
+void GMSession::Broadcast(Json::Value& refjReq, Json::Value& refjAck)
+{
+	if (!refjReq["chat_type"].isInt())
+	{
+		refjAck["ret"] = "error chat type";
+		return;
+	}
+	Protocol::EChatType eChatType = (Protocol::EChatType)refjReq["chat_type"].asInt();
+
+	if (!refjReq["content"].isString())
+	{
+		refjAck["ret"] = "error content";
+		return;
+	}
+	std::string szContent = refjReq["content"].asString();
+
+	ChatServerManager::Instance()->GetChatServerSessionManager().BroadcastMsg(eChatType, szContent);
+
+	refjAck["ret"] = "ok";
 }
 
 FxSession* GMSessionManager::CreateSession()

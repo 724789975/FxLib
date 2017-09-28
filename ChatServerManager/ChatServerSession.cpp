@@ -142,3 +142,18 @@ void ChatServerSessionManager::OnChatServerInfo(ChatServerSession* pChatServerSe
 	oCHAT_MANAGER_NOTIFY_CHAT_INFO.Write(oStream);
 	pChatServerSession->Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
 }
+
+void ChatServerSessionManager::BroadcastMsg(const Protocol::EChatType& eChatType, const std::string& szContent)
+{
+	stCHAT_MANAGER_NOTIFY_CHAT_BROADCAST oCHAT_MANAGER_NOTIFY_CHAT_BROADCAST;
+
+	oCHAT_MANAGER_NOTIFY_CHAT_BROADCAST.eChatType = eChatType;
+	oCHAT_MANAGER_NOTIFY_CHAT_BROADCAST.szContent = szContent;
+	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
+	oStream.WriteInt(Protocol::CHAT_MANAGER_NOTIFY_CHAT_BROADCAST);
+	oCHAT_MANAGER_NOTIFY_CHAT_BROADCAST.Write(oStream);
+	for (int i = 0; i < ChatConstant::g_dwChatServerNum; ++i)
+	{
+		m_oChatServerSessions[i].Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
+	}
+}

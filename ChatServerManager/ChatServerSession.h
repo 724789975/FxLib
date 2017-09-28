@@ -54,6 +54,8 @@ public:
 	ChatServerSession* GetChatServerSessions() { return m_oChatServerSessions; }
 
 	void OnChatServerInfo(ChatServerSession* pChatServerSession);
+
+	void BroadcastMsg(const Protocol::EChatType& eChatType, const std::string& szContent);
 private:
 	std::map<unsigned int, ChatServerSession*> m_mapSessionIpPort;
 

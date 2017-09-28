@@ -24,7 +24,6 @@ void ChatSession::OnConnect(void)
 void ChatSession::OnClose(void)
 {
 	ChatServer::Instance()->GetChatPlayerManager().OnSessionClose(m_szId);
-	memset(m_szId, 0, IDLENTH);
 }
 
 void ChatSession::OnError(UINT32 dwErrorNo)

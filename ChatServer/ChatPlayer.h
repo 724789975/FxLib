@@ -17,6 +17,7 @@ public:
 
 	void OnPrivateChat(const char* pBuf, UINT32 dwLen);
 
+	void OnChat(const char* szSender, const Protocol::EChatType eChatType, const std::string szContent);
 private:
 	ChatSession* m_pSession;
 

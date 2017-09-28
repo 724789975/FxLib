@@ -7,10 +7,10 @@
 
 #include <signal.h>
 
-#define CLIENTCOUNT 16
+#define CLIENTCOUNT 1
 
 char* g_strIp = "127.0.0.1";
-unsigned int g_dwPort = 12000;
+unsigned int g_dwPort = 30000;
 bool g_bRun = true;
 
 void EndFun(int n)
@@ -94,30 +94,30 @@ int main(int argc, char **argv)
 	{
 		GetTimeHandler()->Run();
 		pNet->Run(0xffffffff);
-		for (int i = 0; i < CLIENTCOUNT; ++i)
-		{
-			if (oSessions[i]->IsConnected())
-			{
-				sprintf(szMsg, "%d", j);
-				if (!oSessions[i]->Send(szMsg, 1024))
-				{
-					//pSession->Close();
-				}
-				else
-				{
-					LogExe(LogLv_Debug, "send : %s", szMsg);
-					//++i;
-				}
-				//FxSleep(1);
-			}
-			else
-			{
-				if (!oSessions[i]->IsConnecting())
-				{
-					oSessions[i]->Reconnect();
-				}
-			}
-		}
+		//for (int i = 0; i < CLIENTCOUNT; ++i)
+		//{
+		//	if (oSessions[i]->IsConnected())
+		//	{
+		//		sprintf(szMsg, "%d", j);
+		//		if (!oSessions[i]->Send(szMsg, 1024))
+		//		{
+		//			//pSession->Close();
+		//		}
+		//		else
+		//		{
+		//			LogExe(LogLv_Debug, "send : %s", szMsg);
+		//			//++i;
+		//		}
+		//		//FxSleep(1);
+		//	}
+		//	else
+		//	{
+		//		if (!oSessions[i]->IsConnecting())
+		//		{
+		//			oSessions[i]->Reconnect();
+		//		}
+		//	}
+		//}
 		FxSleep(10);
 		++j;
 	}

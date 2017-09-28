@@ -48,12 +48,11 @@ void ChatPlayer::OnPrivateChat(const char* pBuf, UINT32 dwLen)
 	stPLAYER_REQUEST_PRIVATE_CHAT oPLAYER_REQUEST_PRIVATE_CHAT;
 	oPLAYER_REQUEST_PRIVATE_CHAT.Read(oNetStream);
 
-	stCHAT_SEND_CHAT_PRIVATE_CHAT oCHAT_SEND_CHAT_PRIVATE_CHAT;
-	memcpy(oCHAT_SEND_CHAT_PRIVATE_CHAT.szSenderId, m_szPyayerId, IDLENTH);
-	memcpy(oCHAT_SEND_CHAT_PRIVATE_CHAT.szRecverId, oPLAYER_REQUEST_PRIVATE_CHAT.szRecverId, IDLENTH);
-	oCHAT_SEND_CHAT_PRIVATE_CHAT.eChatType = oPLAYER_REQUEST_PRIVATE_CHAT.eChatType;
-	oCHAT_SEND_CHAT_PRIVATE_CHAT.szContent = oPLAYER_REQUEST_PRIVATE_CHAT.szContent;
-
+	stCHAT_SEND_PLAYER_PRIVATE_CHAT oCHAT_SEND_PLAYER_PRIVATE_CHAT;
+	memcpy(oCHAT_SEND_PLAYER_PRIVATE_CHAT.szSenderId, m_szPyayerId, IDLENTH);
+	memcpy(oCHAT_SEND_PLAYER_PRIVATE_CHAT.szRecverId, oPLAYER_REQUEST_PRIVATE_CHAT.szRecverId, IDLENTH);
+	oCHAT_SEND_PLAYER_PRIVATE_CHAT.eChatType = oPLAYER_REQUEST_PRIVATE_CHAT.eChatType;
+	oCHAT_SEND_PLAYER_PRIVATE_CHAT.szContent = oPLAYER_REQUEST_PRIVATE_CHAT.szContent;
 	if (ChatServer::Instance()->CheckHashIndex(HashToIndex(oPLAYER_REQUEST_PRIVATE_CHAT.szRecverId, IDLENTH)))
 	{
 		//属于本服务器
@@ -67,13 +66,15 @@ void ChatPlayer::OnPrivateChat(const char* pBuf, UINT32 dwLen)
 			}
 			CNetStream oStream(ENetStreamType_Write, g_pChatPlayerBuff, g_dwChatPlayerBuffLen);
 			oStream.WriteInt(Protocol::CHAT_SENF_CHAT_PRIVATE_CHAT);
-			oCHAT_SEND_CHAT_PRIVATE_CHAT.Write(oStream);
+			oCHAT_SEND_PLAYER_PRIVATE_CHAT.Write(oStream);
 			pPlayer->m_pSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
 		}
-		DBChatQuery * pQuery = new DBChatQuery(oCHAT_SEND_CHAT_PRIVATE_CHAT, pPlayer != NULL);
+		DBChatQuery * pQuery = new DBChatQuery(oCHAT_SEND_PLAYER_PRIVATE_CHAT, pPlayer != NULL);
 		FxDBGetModule()->AddQuery(pQuery);
 		return;
 	}
+
+	stCHAT_SEND_CHAT_PRIVATE_CHAT& oCHAT_SEND_CHAT_PRIVATE_CHAT = oCHAT_SEND_PLAYER_PRIVATE_CHAT;
 
 	ChatServerSession* pChatServerSession = ChatServer::Instance()->GetChatServerSessionManager().GetChatServerSession(HashToIndex(oPLAYER_REQUEST_PRIVATE_CHAT.szRecverId, IDLENTH));
 	if (!(pChatServerSession && pChatServerSession->GetConnection()))
@@ -88,4 +89,18 @@ void ChatPlayer::OnPrivateChat(const char* pBuf, UINT32 dwLen)
 	oStream.WriteInt(Protocol::CHAT_SENF_CHAT_PRIVATE_CHAT);
 	oCHAT_SEND_CHAT_PRIVATE_CHAT.Write(oStream);
 	pChatServerSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
+}
+
+void ChatPlayer::OnChat(const char* szSender, const Protocol::EChatType eChatType, const std::string szContent)
+{
+	stCHAT_SEND_CHAT_PRIVATE_CHAT oCHAT_SEND_CHAT_PRIVATE_CHAT;
+	memcpy(oCHAT_SEND_CHAT_PRIVATE_CHAT.szSenderId, szSender, IDLENTH);
+	oCHAT_SEND_CHAT_PRIVATE_CHAT.eChatType = eChatType;
+	oCHAT_SEND_CHAT_PRIVATE_CHAT.szContent = szContent;
+	memcpy(oCHAT_SEND_CHAT_PRIVATE_CHAT.szRecverId, m_szPyayerId, IDLENTH);
+
+	CNetStream oStream(ENetStreamType_Write, g_pChatPlayerBuff, g_dwChatPlayerBuffLen);
+	oStream.WriteInt(Protocol::CHAT_SENF_CHAT_PRIVATE_CHAT);
+	oCHAT_SEND_CHAT_PRIVATE_CHAT.Write(oStream);
+	m_pSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
 }

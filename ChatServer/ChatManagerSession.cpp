@@ -51,7 +51,8 @@ void ChatManagerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 
 	switch (eProrocol)
 	{
-		case Protocol::CHAT_MANAGER_NOTIFY_CHAT_INFO:	OnNotifyChatInfo(pData, dwLen);	break;
+		case Protocol::CHAT_MANAGER_NOTIFY_CHAT_INFO:			OnNotifyChatInfo(pData, dwLen);		break;
+		case Protocol::CHAT_MANAGER_NOTIFY_CHAT_BROADCAST:		OnBroadcastMsg(pData, dwLen);		break;
 		default:	Assert(0);	break;
 	}
 }
@@ -87,4 +88,18 @@ void ChatManagerSession::OnNotifyChatInfo(const char* pBuf, UINT32 dwLen)
 		pNet->TcpConnect(pChatServerSession, refInfo.dwIp, refInfo.dwPort, true);
 		//ChatServer::Instance()->GetChatServerSessionManager().SetHashIndex(refInfo.dwHashIndex, pChatServerSession);
 	}
+}
+
+void ChatManagerSession::OnBroadcastMsg(const char* pBuf, UINT32 dwLen)
+{
+	CNetStream oStream(pBuf, dwLen);
+	stCHAT_MANAGER_NOTIFY_CHAT_BROADCAST oCHAT_MANAGER_NOTIFY_CHAT_BROADCAST;
+	if (!oCHAT_MANAGER_NOTIFY_CHAT_BROADCAST.Read(oStream))
+	{
+		LogExe(LogLv_Critical, "error read msg");
+		return;
+	}
+
+	ChatServer::Instance()->GetChatPlayerManager().OnBroadCastMsg(oCHAT_MANAGER_NOTIFY_CHAT_BROADCAST.eChatType, oCHAT_MANAGER_NOTIFY_CHAT_BROADCAST.szContent);
+
 }
