@@ -34,6 +34,15 @@ public:
 		m_qwSecond(0)
 	{
 		m_strTime[0] = 0;
+		tm tmLocal, tmGM;
+		time_t t = time(NULL);
+		tmLocal = *localtime(&t);
+		tmGM = *gmtime(&t);
+		tmLocal.tm_isdst = 0;
+		tmGM.tm_isdst = 0;
+		m_dwTimeZone = (int)(mktime(&tmGM) - mktime(&tmLocal)) / 3600;
+
+		m_dwDayZeroTime = (unsigned int)(t - (t - m_dwTimeZone * 3600) % 86400);
 //		m_bStop = false;
 	}
 
@@ -140,6 +149,16 @@ public:
 		return (unsigned int)((m_qwSecond - (unsigned int)m_qwSecond) * 1000);
 	}
 
+	virtual const int GetTimeZone()
+	{
+		return m_dwTimeZone;
+	}
+
+	virtual const int GetDayZeroTime()
+	{
+		return m_dwDayZeroTime;
+	}
+
 private:
 	void __Refresh()
 	{
@@ -156,6 +175,11 @@ private:
 		m_qwSecond = s_qwSecond;
 
 		s_dwTime = (time_t)m_qwSecond;
+		if (s_dwTime - m_dwDayZeroTime >= 86400)
+		{
+			m_dwDayZeroTime += 86400;
+		}
+
 		tm* tmLocal = localtime(&s_dwTime); //转为本地时间  
 		strftime(m_strTime, 64, "%Y-%m-%d %H:%M:%S", tmLocal);
 		//sprintf(m_strTime, "%s",
@@ -200,6 +224,9 @@ private:
 	double m_qwSecond;
 	char m_strTime[64];
 
+	int m_dwTimeZone;
+	unsigned int m_dwDayZeroTime;
+
 	FxCriticalLock m_oLock;
 
 	std::map<unsigned int, std::set<IFxTimer*> > m_mapTimers;
@@ -212,3 +239,14 @@ IFxTimerHandler* GetTimeHandler()
 	return &oTimerHandler;
 }
 
+unsigned int IFxTimerHandler::GetTimeStampFromStr(const char* szTimeStr)
+{
+	tm _tm;
+	sscanf_s(szTimeStr, "%4d-%2d-%2d %2d:%2d:%2d",
+		&_tm.tm_year, &_tm.tm_mon, &_tm.tm_mday, &_tm.tm_hour, &_tm.tm_min, &_tm.tm_sec);
+	_tm.tm_year -= 1900;
+	_tm.tm_mon -= 1;
+	_tm.tm_isdst = 0;
+
+	return (unsigned int)mktime(&_tm);
+}

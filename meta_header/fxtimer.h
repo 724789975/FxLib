@@ -35,6 +35,14 @@ public:
 	virtual int GetSecond() = 0;
 	virtual const char* GetTimeStr() = 0;
 	virtual const unsigned int GetTimeSeq() = 0;
+
+	//获取时区
+	virtual const int GetTimeZone() = 0;
+
+	//获取今天0点的时间戳(当地时区)
+	virtual const int GetDayZeroTime() = 0;
+
+	unsigned int GetTimeStampFromStr(const char* szTimeStr);
 };
 
 IFxTimerHandler* GetTimeHandler();
