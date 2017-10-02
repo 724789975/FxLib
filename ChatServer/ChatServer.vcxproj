@@ -171,7 +171,6 @@
     <ClCompile Include="ChatPlayerManager.cpp" />
     <ClCompile Include="ChatServerSession.cpp" />
     <ClCompile Include="ChatSession.cpp" />
-    <ClCompile Include="GameSession.cpp" />
     <ClCompile Include="ChatServer.cpp" />
     <ClCompile Include="LuaMeta.cpp" />
     <ClCompile Include="main.cpp" />
@@ -185,7 +184,6 @@
     <ClInclude Include="ChatPlayerManager.h" />
     <ClInclude Include="ChatServerSession.h" />
     <ClInclude Include="ChatSession.h" />
-    <ClInclude Include="GameSession.h" />
     <ClInclude Include="ChatServer.h" />
     <ClInclude Include="LuaMeta.h" />
     <ClInclude Include="SocketSession.h" />

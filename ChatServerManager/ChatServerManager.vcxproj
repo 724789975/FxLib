@@ -168,6 +168,7 @@
     <ClCompile Include="..\common\thread.cpp" />
     <ClCompile Include="ChatServerManager.cpp" />
     <ClCompile Include="ChatServerSession.cpp" />
+    <ClCompile Include="GameSession.cpp" />
     <ClCompile Include="GMSession.cpp" />
     <ClCompile Include="LuaMeta.cpp" />
     <ClCompile Include="main.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="chatdefine.h" />
     <ClInclude Include="ChatServerManager.h" />
     <ClInclude Include="ChatServerSession.h" />
+    <ClInclude Include="GameSession.h" />
     <ClInclude Include="GMSession.h" />
     <ClInclude Include="LuaMeta.h" />
     <ClInclude Include="SocketSession.h" />

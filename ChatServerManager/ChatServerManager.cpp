@@ -11,7 +11,7 @@ ChatServerManager::~ChatServerManager()
 {
 }
 
-bool ChatServerManager::Init(UINT32 dwPort, UINT32 dwGMPort)
+bool ChatServerManager::Init(UINT32 dwPort, UINT32 dwGamePort, UINT32 dwGMPort)
 {
 	m_pChatServerListenSocket = FxNetGetModule()->Listen(&m_oChatSessionManager, SLT_CommonTcp, 0, dwPort);
 	if (m_pChatServerListenSocket == NULL)
@@ -19,6 +19,16 @@ bool ChatServerManager::Init(UINT32 dwPort, UINT32 dwGMPort)
 		return false;
 	}
 	if (m_oChatSessionManager.Init() == false)
+	{
+		return false;
+	}
+
+	m_pGameServerListenSocket= FxNetGetModule()->Listen(&m_oGameSessionManager, SLT_CommonTcp, 0, dwGamePort);
+	if (m_pGameServerListenSocket == NULL)
+	{
+		return false;
+	}
+	if (m_oGameSessionManager.Init() == false)
 	{
 		return false;
 	}

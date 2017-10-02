@@ -49,13 +49,23 @@ namespace Protocol
 		PLAYER_CHAT_BEGIN = 30000,
 		PLAYER_REQUEST_CHAT_LOGIN,
 		PLAYER_REQUEST_PRIVATE_CHAT,
-		PLAYER_CHAT_END = 35000,
+		PLAYER_CHAT_END = 34999,
 
-		//chat--->player 35001 35999
-		CHAT_PLAYER_BEGIN = 35001,
+		//chat--->player 35000 35999
+		CHAT_PLAYER_BEGIN = 35000,
 		CHAT_ACK_PLAYER_LOGIN,
 		CHAT_SEND_PLAYER_PRIVATE_CHAT,
 		CHAT_PLAYER_END = 39999,
+
+		//game--->chatmanager 40000 44999
+		GAME_CHAT_MANAGER_BEGIN = 40000,
+		GAME_REQUEST_CHAT_MANAGER_LOGIN,
+		GAME_CHAT_MANAGER_END = 44999,
+
+		//chatmanager--->game 45000 49999
+		CHAT_MANAGER_GAME_BEGIN = 45000,
+		CHAT_MANAGER_ACK_GAME_LOGIN,
+		CHAT_MANAGER_GAME_END = 49999,
 	};
 }
 
@@ -281,29 +291,37 @@ struct stPLAYER_REQUEST_PRIVATE_CHAT
 
 struct stCHAT_SEND_PLAYER_PRIVATE_CHAT : public stCHAT_SEND_CHAT_PRIVATE_CHAT
 {
-	//stCHAT_SEND_PLAYER_PRIVATE_CHAT() { memset(szSenderId, 0, IDLENTH); memset(szRecverId, 0, IDLENTH); eChatType = Protocol::ECT_NONE; }
-	//char szSenderId[IDLENTH];
-	//char szRecverId[IDLENTH];
-	//Protocol::EChatType eChatType;
-	//std::string szContent;
+};
 
-	//bool Write(CNetStream& refStream)
-	//{
-	//	if (!refStream.WriteString(szSenderId)) return false;
-	//	if (!refStream.WriteString(szRecverId)) return false;
-	//	if (!refStream.WriteInt((unsigned int&)eChatType)) return false;
-	//	if (!refStream.WriteString(szContent)) return false;
-	//	return true;
-	//}
+//----------------------------------------------------------------------
+struct stGAME_REQUEST_CHAT_MANAGER_LOGIN
+{
+	stGAME_REQUEST_CHAT_MANAGER_LOGIN() {}
+	std::string szId;
 
-	//bool Read(CNetStream& refStream)
-	//{
-	//	if (!refStream.ReadString(szSenderId, IDLENTH)) return false;
-	//	if (!refStream.ReadString(szRecverId, IDLENTH)) return false;
-	//	if (!refStream.ReadInt((unsigned int&)eChatType)) return false;
-	//	if (!refStream.ReadString(szContent)) return false;
-	//	return true;
-	//}
+	bool Read(CNetStream& refStream)
+	{
+		if (!refStream.ReadString(szId)) return false;
+		return true;
+	}
+};
+
+//----------------------------------------------------------------------
+struct stCHAT_MANAGER_ACK_GAME_LOGIN
+{
+	unsigned int dwResult;
+
+	bool Write(CNetStream& refStream)
+	{
+		if (!refStream.WriteInt(dwResult)) return false;
+		return true;
+	}
+
+	bool Read(CNetStream& refStream)
+	{
+		if (!refStream.ReadInt(dwResult)) return false;
+		return true;
+	}
 };
 
 

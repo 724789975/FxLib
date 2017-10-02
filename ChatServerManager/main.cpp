@@ -11,6 +11,7 @@
 bool g_bRun = true;
 
 DEFINE_uint32(chat_server_port, 13000, "chat server listen port");
+DEFINE_uint32(game_server_port, 13001, "game server listen port");
 DEFINE_uint32(gm_port, 12000, "gm listen port");
 
 void EndFun(int n)
@@ -83,7 +84,7 @@ int main(int argc, char **argv)
 	}
 	//----------------------order can't change end-----------------------//
 
-	ChatServerManager::Instance()->Init(FLAGS_chat_server_port, FLAGS_gm_port);
+	ChatServerManager::Instance()->Init(FLAGS_chat_server_port, FLAGS_game_server_port, FLAGS_gm_port);
 	while (g_bRun)
 	{
 		GetTimeHandler()->Run();

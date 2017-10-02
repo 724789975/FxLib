@@ -3,7 +3,6 @@
 
 #include <set>
 #include "singleton.h"
-#include "GameSession.h"
 #include "ChatManagerSession.h"
 #include "ChatServerSession.h"
 #include "ChatSession.h"

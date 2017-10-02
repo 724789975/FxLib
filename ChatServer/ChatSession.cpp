@@ -99,7 +99,10 @@ void ChatBinarySession::Release(void)
 //--------------------------------------------------------------
 FxSession* ChatBinarySessionManager::CreateSession()
 {
-	return m_poolSessions.FetchObj();
+	m_oLock.Lock();
+	ChatBinarySession* pSession = m_poolSessions.FetchObj();
+	m_oLock.UnLock();
+	return pSession;
 }
 
 bool ChatBinarySessionManager::Init()
