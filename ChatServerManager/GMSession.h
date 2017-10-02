@@ -8,7 +8,7 @@
 #include "json.h"
 
 class GMSession;
-typedef void (*Operate)(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck);
+typedef bool (*Operate)(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck);
 class GMSession : public FxSession
 {
 public:
@@ -26,6 +26,8 @@ public:
 
 	void				GetInfo(Json::Value& refjReq, Json::Value& refjAck);
 	void				Broadcast(Json::Value& refjReq, Json::Value& refjAck);
+	bool				LoginTest(Json::Value& refjReq, Json::Value& refjAck);
+	void				OnLoginSign(std::string szChatIp, unsigned int dwChatPort, unsigned int dwWebSocketChatPort, std::string szPlayerId, std::string szSign);
 
 private:
 	TextDataHeader m_oTextDataHeader;
@@ -45,6 +47,8 @@ public:
 	bool Init() { return true; };
 
 	virtual void Release(FxSession* pSession);
+
+	GMSession& GetGMSession() { return m_oGMSession; }
 
 private:
 	GMSession m_oGMSession;

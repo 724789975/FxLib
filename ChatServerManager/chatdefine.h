@@ -33,21 +33,29 @@ namespace Protocol
 		//chat --->chatmanager 20001 25000
 		CHAT_TO_CHAT_MANAGER_BEGIN = 20001,
 		CHAT_SEND_CHAT_MANAGER_INFO,
+		CHAT_SEND_CHAT_MANAGER_LOGIN_SIGN,
+		CHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM,
 		CHAT_TO_CHAT_MANAGER_END = 25000,
 
 		//chatmanager --->chat 25001 29999
 		CHAT_MANAGER_TO_CHAT_BEGIN = 25001,
 		CHAT_MANAGER_NOTIFY_CHAT_INFO,
 		CHAT_MANAGER_NOTIFY_CHAT_BROADCAST,
+		CHAT_MANAGER_NOTIFY_CHAT_LOGIN,
+		CHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM,		//Í¨¹ýGMµÇÂ¼µÄ
 		CHAT_MANAGER_TO_CHAT_END = 29999,
 
-		//player<--->chat 30000 39999
+		//player--->chat 30000 35000
 		PLAYER_CHAT_BEGIN = 30000,
 		PLAYER_REQUEST_CHAT_LOGIN,
-		CHAT_ACK_PLAYER_LOGIN,
 		PLAYER_REQUEST_PRIVATE_CHAT,
+		PLAYER_CHAT_END = 35000,
+
+		//chat--->player 35001 35999
+		CHAT_PLAYER_BEGIN = 35001,
+		CHAT_ACK_PLAYER_LOGIN,
 		CHAT_SEND_PLAYER_PRIVATE_CHAT,
-		PLAYER_CHAT_END = 39999,
+		CHAT_PLAYER_END = 39999,
 	};
 }
 
@@ -89,31 +97,27 @@ struct stCHAT_SEND_CHAT_MANAGER_INFO
 	}
 };
 
-struct stCHAT_SEND_CHAT_PRIVATE_CHAT
+struct stCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN
 {
-	stCHAT_SEND_CHAT_PRIVATE_CHAT() { memset(szSenderId, 0, IDLENTH); memset(szRecverId, 0, IDLENTH); eChatType = Protocol::ECT_NONE; }
-	char szSenderId[IDLENTH];
-	char szRecverId[IDLENTH];
-	Protocol::EChatType eChatType;
-	std::string szContent;
-
+	std::string szPlayerId;
+	std::string szSign;
 	bool Write(CNetStream& refStream)
 	{
-		if (!refStream.WriteString(szSenderId)) return false;
-		if (!refStream.WriteString(szRecverId)) return false;
-		if (!refStream.WriteInt((unsigned int&)eChatType)) return false;
-		if (!refStream.WriteString(szContent)) return false;
+		if (!refStream.WriteString(szPlayerId)) return false;
+		if (!refStream.WriteString(szSign)) return false;
 		return true;
 	}
-
 	bool Read(CNetStream& refStream)
 	{
-		if (!refStream.ReadString(szSenderId, IDLENTH)) return false;
-		if (!refStream.ReadString(szRecverId, IDLENTH)) return false;
-		if (!refStream.ReadInt((unsigned int&)eChatType)) return false;
-		if (!refStream.ReadString(szContent)) return false;
+		if (!refStream.ReadString(szPlayerId)) return false;
+		if (!refStream.ReadString(szSign)) return false;
 		return true;
 	}
+};
+
+struct stCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM : public stCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN
+{
+
 };
 
 struct stCHAT_MANAGER_NOTIFY_CHAT_INFO
@@ -176,6 +180,55 @@ struct stCHAT_MANAGER_NOTIFY_CHAT_BROADCAST
 		if (!refStream.ReadString(szContent)) return false;
 		return true;
 	}
+};
+
+struct stCHAT_SEND_CHAT_PRIVATE_CHAT
+{
+	stCHAT_SEND_CHAT_PRIVATE_CHAT() { memset(szSenderId, 0, IDLENTH); memset(szRecverId, 0, IDLENTH); eChatType = Protocol::ECT_NONE; }
+	char szSenderId[IDLENTH];
+	char szRecverId[IDLENTH];
+	Protocol::EChatType eChatType;
+	std::string szContent;
+
+	bool Write(CNetStream& refStream)
+	{
+		if (!refStream.WriteString(szSenderId)) return false;
+		if (!refStream.WriteString(szRecverId)) return false;
+		if (!refStream.WriteInt((unsigned int&)eChatType)) return false;
+		if (!refStream.WriteString(szContent)) return false;
+		return true;
+	}
+
+	bool Read(CNetStream& refStream)
+	{
+		if (!refStream.ReadString(szSenderId, IDLENTH)) return false;
+		if (!refStream.ReadString(szRecverId, IDLENTH)) return false;
+		if (!refStream.ReadInt((unsigned int&)eChatType)) return false;
+		if (!refStream.ReadString(szContent)) return false;
+		return true;
+	}
+};
+
+struct stCHAT_MANAGER_NOTIFY_CHAT_LOGIN
+{
+	std::string szPlayerId;
+	
+	bool Write(CNetStream& refStream)
+	{
+		if (!refStream.WriteString(szPlayerId)) return false;
+		return true;
+	}
+
+	bool Read(CNetStream& refStream)
+	{
+		if (!refStream.ReadString(szPlayerId)) return false;
+		return true;
+	}
+};
+
+struct stCHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM : public stCHAT_MANAGER_NOTIFY_CHAT_LOGIN
+{
+
 };
 
 //----------------------------------------------------------------------

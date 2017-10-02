@@ -2,7 +2,7 @@
 
 #include <set>
 
-unsigned char HashToIndex(char* pData, unsigned int dwLen)
+unsigned char HashToIndex(const char* pData, unsigned int dwLen)
 {
 	unsigned char btHash = 0;
 	for (unsigned int i = 0; i < dwLen; i++)

@@ -53,6 +53,8 @@ void ChatManagerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	{
 		case Protocol::CHAT_MANAGER_NOTIFY_CHAT_INFO:			OnNotifyChatInfo(pData, dwLen);		break;
 		case Protocol::CHAT_MANAGER_NOTIFY_CHAT_BROADCAST:		OnBroadcastMsg(pData, dwLen);		break;
+		case Protocol::CHAT_MANAGER_NOTIFY_CHAT_LOGIN:			OnLoginSign(pData, dwLen);	break;
+		case Protocol::CHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM:		OnLoginSignByGM(pData, dwLen);	break;
 		default:	Assert(0);	break;
 	}
 }
@@ -102,4 +104,48 @@ void ChatManagerSession::OnBroadcastMsg(const char* pBuf, UINT32 dwLen)
 
 	ChatServer::Instance()->GetChatPlayerManager().OnBroadCastMsg(oCHAT_MANAGER_NOTIFY_CHAT_BROADCAST.eChatType, oCHAT_MANAGER_NOTIFY_CHAT_BROADCAST.szContent);
 
+}
+
+void ChatManagerSession::OnLoginSign(const char* pBuf, UINT32 dwLen)
+{
+	CNetStream oStream(pBuf, dwLen);
+	stCHAT_MANAGER_NOTIFY_CHAT_LOGIN oCHAT_MANAGER_NOTIFY_CHAT_LOGIN;
+	if (!oCHAT_MANAGER_NOTIFY_CHAT_LOGIN.Read(oStream))
+	{
+		LogExe(LogLv_Critical, "error read msg");
+		return;
+	}
+
+	std::string szSign = ChatServer::Instance()->GetChatPlayerManager().CreateLoginSign(oCHAT_MANAGER_NOTIFY_CHAT_LOGIN.szPlayerId);
+
+	stCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM;
+	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM.szPlayerId = oCHAT_MANAGER_NOTIFY_CHAT_LOGIN.szPlayerId;
+	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM.szSign = szSign;
+
+	CNetStream oStreamSign(ENetStreamType_Write, g_pChatServerManagerSessionBuf, g_dwChatServerManagerSessionBuffLen);
+	oStreamSign.WriteInt(Protocol::CHAT_SEND_CHAT_MANAGER_LOGIN_SIGN);
+	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM.Write(oStreamSign);
+	Send(g_pChatServerManagerSessionBuf, g_dwChatServerManagerSessionBuffLen - oStreamSign.GetDataLength());
+}
+
+void ChatManagerSession::OnLoginSignByGM(const char* pBuf, UINT32 dwLen)
+{
+	CNetStream oStream(pBuf, dwLen);
+	stCHAT_MANAGER_NOTIFY_CHAT_LOGIN oCHAT_MANAGER_NOTIFY_CHAT_LOGIN;
+	if (!oCHAT_MANAGER_NOTIFY_CHAT_LOGIN.Read(oStream))
+	{
+		LogExe(LogLv_Critical, "error read msg");
+		return;
+	}
+
+	std::string szSign = ChatServer::Instance()->GetChatPlayerManager().CreateLoginSign(oCHAT_MANAGER_NOTIFY_CHAT_LOGIN.szPlayerId);
+
+	stCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM;
+	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM.szPlayerId = oCHAT_MANAGER_NOTIFY_CHAT_LOGIN.szPlayerId;
+	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM.szSign = szSign;
+
+	CNetStream oStreamSign(ENetStreamType_Write, g_pChatServerManagerSessionBuf, g_dwChatServerManagerSessionBuffLen);
+	oStreamSign.WriteInt(Protocol::CHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM);
+	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM.Write(oStreamSign);
+	Send(g_pChatServerManagerSessionBuf, g_dwChatServerManagerSessionBuffLen - oStreamSign.GetDataLength());
 }

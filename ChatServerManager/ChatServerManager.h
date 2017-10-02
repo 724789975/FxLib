@@ -16,8 +16,8 @@ public:
 	void Close();
 
 	ChatServerSessionManager& GetChatServerSessionManager() { return m_oChatSessionManager; }
-
 	IFxListenSocket* GetChatServerListenSocket() { return m_pChatServerListenSocket; }
+	GMSessionManager& GetGMSessionManager() { return m_oGMSessionManager; }
 
 private:
 	ChatServerSessionManager m_oChatSessionManager;

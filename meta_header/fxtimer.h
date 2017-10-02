@@ -40,7 +40,7 @@ public:
 	virtual const int GetTimeZone() = 0;
 
 	//获取今天0点的时间戳(当地时区)
-	virtual const int GetDayZeroTime() = 0;
+	virtual const int GetDayTimeStart() = 0;
 
 	unsigned int GetTimeStampFromStr(const char* szTimeStr);
 };

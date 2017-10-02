@@ -4,26 +4,34 @@
 #include "json.h"
 #include "chatdefine.h"
 #include "ChatServerManager.h"
+#include "utility.h"
 
 const static unsigned int g_dwGMSessionBuffLen = 64 * 1024;
 static char g_pGMSessionBuf[g_dwGMSessionBuffLen];
 
-void GMGetInfo(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck)
+bool GMGetInfo(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck)
 {
 	pSession->GetInfo(refjReq, refjAck);
+	return true;
 }
 
-void GMBroadcast(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck)
+bool GMBroadcast(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck)
 {
 	pSession->Broadcast(refjReq, refjAck);
+	return true;
+}
+
+bool GMLoginTest(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck)
+{
+	return pSession->LoginTest(refjReq, refjAck);
 }
 
 GMSession::GMSession()
 {
 	m_mapOperate["get_info"] = GMGetInfo;
 	m_mapOperate["broadcast"] = GMBroadcast;
+	m_mapOperate["login"] = GMLoginTest;
 }
-
 
 GMSession::~GMSession()
 {
@@ -67,7 +75,10 @@ void GMSession::OnRecv(const char* pBuf, UINT32 dwLen)
 			}
 			else
 			{
-				m_mapOperate[szOpCode](this, jReq, jAck);
+				if(!m_mapOperate[szOpCode](this, jReq, jAck))
+				{
+					return;
+				}
 			}
 		}
 		else
@@ -130,6 +141,48 @@ void GMSession::Broadcast(Json::Value& refjReq, Json::Value& refjAck)
 	refjAck["ret"] = "ok";
 }
 
+bool GMSession::LoginTest(Json::Value& refjReq, Json::Value& refjAck)
+{
+	if (!refjReq["player_id"].isString())
+	{
+		refjAck["ret"] = "error player id";
+		return true;
+	}
+
+	std::string szPlayerId = refjReq["player_id"].asString();
+	if (szPlayerId.size() > IDLENTH)
+	{
+		refjAck["ret"] = "id too long";
+		return true;
+	}
+
+	UINT32 dwHashIndex =  HashToIndex(szPlayerId.c_str(), szPlayerId.size());
+	ChatServerSession* pServerSession = ChatServerManager::Instance()->GetChatServerSessionManager().GetChatServerSession(dwHashIndex);
+	if (!pServerSession)
+	{
+		refjAck["ret"] = "error hash index";
+		return true;
+	}
+
+	pServerSession->ChatLoginByGM(szPlayerId);
+	return false;
+}
+
+void GMSession::OnLoginSign(std::string szChatIp, unsigned int dwChatPort, unsigned int dwWebSocketChatPort, std::string szPlayerId, std::string szSign)
+{
+	Json::Value jAck;
+	Json::FastWriter jWriter;
+
+	jAck["player_id"] = szPlayerId;
+	jAck["sign"] = szSign;
+	jAck["chat_ip"] = szChatIp;
+	jAck["chat_port"] = dwChatPort;
+	jAck["web_scoket_chat_port"] = dwWebSocketChatPort;
+
+	std::string szAck = jWriter.write(jAck);
+	Send(szAck.c_str(), szAck.size());
+}
+
 FxSession* GMSessionManager::CreateSession()
 {
 	m_oLock.Lock();
@@ -145,5 +198,4 @@ FxSession* GMSessionManager::CreateSession()
 
 void GMSessionManager::Release(FxSession* pSession)
 {
-
 }

@@ -41,7 +41,9 @@ void ChatServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 
 	switch (eProrocol)
 	{
-		case Protocol::CHAT_SEND_CHAT_MANAGER_INFO:	OnChatServerInfo(pData, dwLen);	break;
+		case Protocol::CHAT_SEND_CHAT_MANAGER_INFO:				OnChatServerInfo(pData, dwLen);	break;
+		case Protocol::CHAT_SEND_CHAT_MANAGER_LOGIN_SIGN:		OnChatLoginSign(pData, dwLen); break;
+		case Protocol::CHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM:	OnChatLoginSignGM(pData, dwLen); break;
 		default:	Assert(0);	break;
 	}
 }
@@ -49,6 +51,28 @@ void ChatServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 void ChatServerSession::Release(void)
 {
 	OnDestroy();
+}
+
+void ChatServerSession::ChatLogin(std::string szPlayerId)
+{
+	stCHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM oCHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM;
+	oCHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM.szPlayerId = szPlayerId;
+
+	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
+	oStream.WriteInt(Protocol::CHAT_MANAGER_NOTIFY_CHAT_LOGIN);
+	oCHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM.Write(oStream);
+	Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
+}
+
+void ChatServerSession::ChatLoginByGM(std::string szPlayerId)
+{
+	stCHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM oCHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM;
+	oCHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM.szPlayerId = szPlayerId;
+
+	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
+	oStream.WriteInt(Protocol::CHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM);
+	oCHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM.Write(oStream);
+	Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
 }
 
 void ChatServerSession::OnChatServerInfo(const char* pBuf, UINT32 dwLen)
@@ -62,6 +86,24 @@ void ChatServerSession::OnChatServerInfo(const char* pBuf, UINT32 dwLen)
 	m_szChatIp = oCHAT_SEND_CHAT_MANAGER_INFO.m_szChatIp;
 
 	ChatServerManager::Instance()->GetChatServerSessionManager().OnChatServerInfo(this);
+}
+
+void ChatServerSession::OnChatLoginSign(const char* pBuf, UINT32 dwLen)
+{
+	CNetStream oStream(pBuf, dwLen);
+	stCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN;
+	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN.Read(oStream);
+
+	// todo
+}
+
+void ChatServerSession::OnChatLoginSignGM(const char* pBuf, UINT32 dwLen)
+{
+	CNetStream oStream(pBuf, dwLen);
+	stCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM;
+	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM.Read(oStream);
+
+	ChatServerManager::Instance()->GetGMSessionManager().GetGMSession().OnLoginSign(m_szChatIp, m_dwChatPort, m_dwWebSocketChatPort,oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM.szPlayerId, oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM.szSign);
 }
 
 //----------------------------------------------------------------------
@@ -91,6 +133,7 @@ void ChatServerSessionManager::CloseSessions()
 	bool bClosed = true;
 	do 
 	{
+		bClosed = true;
 		FxNetGetModule()->Run(0xffffffff);
 		FxSleep(10);
 		for (int i = 0; i < ChatConstant::g_dwChatServerNum; ++i)
@@ -106,6 +149,15 @@ void ChatServerSessionManager::CloseSessions()
 void ChatServerSessionManager::Release(FxSession* pSession)
 {
 
+}
+
+ChatServerSession* ChatServerSessionManager::GetChatServerSession(UINT32 dwHashIndex)
+{
+	if (m_mapSessionIpPort.find(dwHashIndex) == m_mapSessionIpPort.end())
+	{
+		return NULL;
+	}
+	return m_mapSessionIpPort[dwHashIndex];
 }
 
 void ChatServerSessionManager::OnChatServerInfo(ChatServerSession* pChatServerSession)

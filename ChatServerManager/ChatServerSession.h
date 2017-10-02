@@ -27,6 +27,9 @@ public:
 	UINT32 GetWebSocketChatPort() { return m_dwWebSocketChatPort; }
 	std::string GetChatIp() { return m_szChatIp; }
 
+	void ChatLogin(std::string szPlayerId);
+	void ChatLoginByGM(std::string szPlayerId);
+
 private:
 	BinaryDataHeader m_oBinaryDataHeader;
 	char m_dataRecvBuf[1024 * 1024];
@@ -37,6 +40,8 @@ private:
 	std::string m_szChatIp;
 private:
 	void OnChatServerInfo(const char* pBuf, UINT32 dwLen);
+	void OnChatLoginSign(const char* pBuf, UINT32 dwLen);
+	void OnChatLoginSignGM(const char* pBuf, UINT32 dwLen);
 };
 
 class ChatServerSessionManager : public IFxSessionFactory
@@ -52,6 +57,7 @@ public:
 
 	virtual void Release(FxSession* pSession);
 	ChatServerSession* GetChatServerSessions() { return m_oChatServerSessions; }
+	ChatServerSession* GetChatServerSession(UINT32 dwHashIndex);
 
 	void OnChatServerInfo(ChatServerSession* pChatServerSession);
 

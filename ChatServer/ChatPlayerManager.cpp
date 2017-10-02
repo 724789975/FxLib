@@ -20,7 +20,7 @@ ChatPlayer* ChatPlayerManager::GetChatPlayer(std::string szPlayerId)
 	return &m_mapPlayers[szPlayerId];
 }
 
-ChatPlayer* ChatPlayerManager::OnPlayerLogin(std::string szPlayerId, ChatSession* pSession)
+ChatPlayer* ChatPlayerManager::OnPlayerLogin(std::string szPlayerId, std::string szSign, ChatSession* pSession)
 {
 	ChatPlayer* pPlayer = &m_mapPlayers[szPlayerId];
 	pPlayer->Init(pSession, szPlayerId);
@@ -44,4 +44,11 @@ void ChatPlayerManager::OnBroadCastMsg(const Protocol::EChatType& eChatType, con
 	{
 		it->second.OnChat("0", eChatType, szContent);
 	}
+}
+
+std::string ChatPlayerManager::CreateLoginSign(std::string szPlayerId)
+{
+	std::string szSign = szPlayerId + "_sign";
+	m_mapLoginSign[szPlayerId] = szSign;
+	return szSign;
 }

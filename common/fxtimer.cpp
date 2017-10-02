@@ -42,7 +42,7 @@ public:
 		tmGM.tm_isdst = 0;
 		m_dwTimeZone = (int)(mktime(&tmGM) - mktime(&tmLocal)) / 3600;
 
-		m_dwDayZeroTime = (unsigned int)(t - (t - m_dwTimeZone * 3600) % 86400);
+		m_dwDayTimeStart = (unsigned int)(t - (t - m_dwTimeZone * 3600) % 86400);
 //		m_bStop = false;
 	}
 
@@ -154,9 +154,9 @@ public:
 		return m_dwTimeZone;
 	}
 
-	virtual const int GetDayZeroTime()
+	virtual const int GetDayTimeStart()
 	{
-		return m_dwDayZeroTime;
+		return m_dwDayTimeStart;
 	}
 
 private:
@@ -175,9 +175,9 @@ private:
 		m_qwSecond = s_qwSecond;
 
 		s_dwTime = (time_t)m_qwSecond;
-		if (s_dwTime - m_dwDayZeroTime >= 86400)
+		if (s_dwTime - m_dwDayTimeStart >= 86400)
 		{
-			m_dwDayZeroTime += 86400;
+			m_dwDayTimeStart += 86400;
 		}
 
 		tm* tmLocal = localtime(&s_dwTime); //转为本地时间  
@@ -225,7 +225,7 @@ private:
 	char m_strTime[64];
 
 	int m_dwTimeZone;
-	unsigned int m_dwDayZeroTime;
+	unsigned int m_dwDayTimeStart;
 
 	FxCriticalLock m_oLock;
 
