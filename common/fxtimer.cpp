@@ -242,7 +242,12 @@ IFxTimerHandler* GetTimeHandler()
 unsigned int IFxTimerHandler::GetTimeStampFromStr(const char* szTimeStr)
 {
 	tm _tm;
+
+#ifdef WIN32
 	sscanf_s(szTimeStr, "%4d-%2d-%2d %2d:%2d:%2d",
+#else
+	sscanf(szTimeStr, "%4d-%2d-%2d %2d:%2d:%2d",
+#endif //!WIN32
 		&_tm.tm_year, &_tm.tm_mon, &_tm.tm_mday, &_tm.tm_hour, &_tm.tm_min, &_tm.tm_sec);
 	_tm.tm_year -= 1900;
 	_tm.tm_mon -= 1;

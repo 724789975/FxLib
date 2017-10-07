@@ -9,7 +9,7 @@
 
 
 // Define if you build this library for a MS Windows OS.
-#define OS_WINDOWS
+/* #undef OS_WINDOWS */
 
 // Define if you have the <stdint.h> header file.
 #define HAVE_STDINT_H
@@ -24,25 +24,25 @@
 #define HAVE_SYS_STAT_H
 
 // Define if you have the <unistd.h> header file.
-/* #undef HAVE_UNISTD_H */
+#define HAVE_UNISTD_H
 
 // Define if you have the <fnmatch.h> header file.
-/* #undef HAVE_FNMATCH_H */
+#define HAVE_FNMATCH_H
 
 // Define if you have the <shlwapi.h> header file (Windows 2000/XP).
-//#define HAVE_SHLWAPI_H
+/* #undef HAVE_SHLWAPI_H */
 
 // Define if you have the strtoll function.
-/* #undef HAVE_STRTOLL */
+#define HAVE_STRTOLL
 
 // Define if you have the strtoq function.
 /* #undef HAVE_STRTOQ */
 
 // Define if you have the <pthread.h> header file.
-/* #undef HAVE_PTHREAD */
+#define HAVE_PTHREAD
 
 // Define if your pthread library defines the type pthread_rwlock_t
-/* #undef HAVE_RWLOCK */
+#define HAVE_RWLOCK
 
 
 #endif // GFLAGS_DEFINES_H_
