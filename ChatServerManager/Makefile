@@ -26,10 +26,10 @@ ARFLAGS			= -rc
 #==========================================================
 #  Commands
 CODE_DIR = ./ ../common
-INCLUDE_DIR =./ ../meta_header/ ../lua ../tolua ../mysql/include
-LIB_FILE = -L../Debug -Lcrypto -lpthread -lLuaLib -lNet -lDatabase
+INCLUDE_DIR =./ ../meta_header/ ../lua ../tolua ../mysql/include ../gflags
+LIB_FILE = -L../Debug -Lcrypto -lpthread -lLuaLib -lNet -lDatabase -lgflags
 OUTPUT_DIR =../Debug
-OUTPUT = ChatServer
+OUTPUT = ChatServerManager
 #==========================================================
 
 OBJS = $(foreach i, $(CODE_DIR), $(shell find $(i) -name "*.cpp"))
