@@ -26,7 +26,12 @@ FxSession::~FxSession()
 
 bool FxSession::Send(const char* pBuf,UINT32 dwLen)
 {
-	if (m_poConnection && m_poConnection->IsConnected())
+	if (!m_poConnection)
+	{
+		LogExe(LogLv_Error, "m_poConnection == NULL");
+		return false;
+	}
+	if (m_poConnection->IsConnected())
 	{
 	    return m_poConnection->Send(pBuf, dwLen);
 	}
