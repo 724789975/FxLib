@@ -85,7 +85,7 @@ void* WebSocketDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwData
 {
 	dwHeaderLen = 1;
 	CNetStream oNetStream(ENetStreamType_Write, m_dataSendBuffer, sizeof(m_dataSendBuffer));
-	unsigned char btFinOpCode = 0x81;
+	unsigned char btFinOpCode = 0x82;
 	// unsigned char btFin = (btFinOpCode >> 7) & 0xff;
 	// unsigned char btOpCode = (btFinOpCode) & 0x0f;
 	oNetStream.WriteByte(btFinOpCode);

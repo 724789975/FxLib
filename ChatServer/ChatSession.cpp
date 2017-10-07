@@ -70,19 +70,22 @@ void ChatSession::OnLogin(const char* pBuf, UINT32 dwLen)
 	stPLAYER_REQUEST_CHAT_LOGIN oPLAYER_REQUEST_CHAT_LOGIN;
 	oPLAYER_REQUEST_CHAT_LOGIN.Read(oNetStream);
 
+	stCHAT_ACK_PLAYER_LOGIN oCHAT_ACK_PLAYER_LOGIN;
+	oCHAT_ACK_PLAYER_LOGIN.dwResult = 1;
 	if (ChatServer::Instance()->CheckHashIndex(HashToIndex(oPLAYER_REQUEST_CHAT_LOGIN.szId, strlen(oPLAYER_REQUEST_CHAT_LOGIN.szId))))
 	{
-		ChatServer::Instance()->GetChatPlayerManager().OnPlayerLogin(oPLAYER_REQUEST_CHAT_LOGIN.szId, oPLAYER_REQUEST_CHAT_LOGIN.szSign, this);
-		//todo
-		memcpy(m_szId, oPLAYER_REQUEST_CHAT_LOGIN.szId, IDLENTH);
-
-		CNetStream oStream(ENetStreamType_Write, g_pChatSessionBuff, g_dwChatSessionBuffLen);
-		oStream.WriteInt(Protocol::CHAT_ACK_PLAYER_LOGIN);
-		stCHAT_ACK_PLAYER_LOGIN oCHAT_ACK_PLAYER_LOGIN;
-		oCHAT_ACK_PLAYER_LOGIN.dwResult = 0;
-		oCHAT_ACK_PLAYER_LOGIN.Write(oStream);
-		Send(g_pChatSessionBuff, g_dwChatSessionBuffLen - oStream.GetDataLength());
+		ChatPlayer* pPlayer = ChatServer::Instance()->GetChatPlayerManager().OnPlayerLogin(oPLAYER_REQUEST_CHAT_LOGIN.szId, oPLAYER_REQUEST_CHAT_LOGIN.szSign, this);
+		if (pPlayer)
+		{
+			oCHAT_ACK_PLAYER_LOGIN.dwResult = 0;
+			memcpy(m_szId, oPLAYER_REQUEST_CHAT_LOGIN.szId, IDLENTH);
+		}
 	}
+	CNetStream oStream(ENetStreamType_Write, g_pChatSessionBuff, g_dwChatSessionBuffLen);
+	oStream.WriteInt(Protocol::CHAT_ACK_PLAYER_LOGIN);
+	
+	oCHAT_ACK_PLAYER_LOGIN.Write(oStream);
+	Send(g_pChatSessionBuff, g_dwChatSessionBuffLen - oStream.GetDataLength());
 }
 //--------------------------------------------------------------
 void ChatBinarySession::Release(void)

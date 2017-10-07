@@ -22,7 +22,16 @@ ChatPlayer* ChatPlayerManager::GetChatPlayer(std::string szPlayerId)
 
 ChatPlayer* ChatPlayerManager::OnPlayerLogin(std::string szPlayerId, std::string szSign, ChatSession* pSession)
 {
-	ChatPlayer* pPlayer = &m_mapPlayers[szPlayerId];
+	ChatPlayer* pPlayer = NULL;
+	if (m_mapLoginSign.find(szPlayerId) == m_mapLoginSign.end())
+	{
+		return pPlayer;
+	}
+	if (szSign != m_mapLoginSign[szPlayerId])
+	{
+		return pPlayer;
+	}
+	pPlayer = &m_mapPlayers[szPlayerId];
 	pPlayer->Init(pSession, szPlayerId);
 
 	return pPlayer;

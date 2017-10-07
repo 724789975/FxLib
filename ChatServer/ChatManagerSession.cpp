@@ -118,13 +118,14 @@ void ChatManagerSession::OnLoginSign(const char* pBuf, UINT32 dwLen)
 
 	std::string szSign = ChatServer::Instance()->GetChatPlayerManager().CreateLoginSign(oCHAT_MANAGER_NOTIFY_CHAT_LOGIN.szPlayerId);
 
-	stCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM;
-	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM.szPlayerId = oCHAT_MANAGER_NOTIFY_CHAT_LOGIN.szPlayerId;
-	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM.szSign = szSign;
+	stCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN;
+	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN.szPlayerId = oCHAT_MANAGER_NOTIFY_CHAT_LOGIN.szPlayerId;
+	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN.szServerId = oCHAT_MANAGER_NOTIFY_CHAT_LOGIN.szServerId;
+	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN.szSign = szSign;
 
 	CNetStream oStreamSign(ENetStreamType_Write, g_pChatServerManagerSessionBuf, g_dwChatServerManagerSessionBuffLen);
 	oStreamSign.WriteInt(Protocol::CHAT_SEND_CHAT_MANAGER_LOGIN_SIGN);
-	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM.Write(oStreamSign);
+	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN.Write(oStreamSign);
 	Send(g_pChatServerManagerSessionBuf, g_dwChatServerManagerSessionBuffLen - oStreamSign.GetDataLength());
 }
 

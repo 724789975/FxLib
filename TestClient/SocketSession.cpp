@@ -17,9 +17,9 @@ void CSocketSession::OnConnect(void)
 	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
 	char szMsg[1024] = {0};
 	CNetStream oStream(ENetStreamType_Write, szMsg, 1024);
-	oStream.WriteInt(30001);
+	oStream.WriteInt(40001);
 	oStream.WriteString("asdg");
-	oStream.WriteString("sign");
+	//oStream.WriteString("sign");
 	Send(szMsg, 1024 - oStream.GetDataLength());
 }
 

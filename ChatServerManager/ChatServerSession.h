@@ -27,7 +27,7 @@ public:
 	UINT32 GetWebSocketChatPort() { return m_dwWebSocketChatPort; }
 	std::string GetChatIp() { return m_szChatIp; }
 
-	void ChatLogin(std::string szPlayerId);
+	void ChatLogin(std::string szServerId, std::string szPlayerId);
 	void ChatLoginByGM(std::string szPlayerId);
 
 private:

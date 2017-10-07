@@ -53,14 +53,15 @@ void ChatServerSession::Release(void)
 	OnDestroy();
 }
 
-void ChatServerSession::ChatLogin(std::string szPlayerId)
+void ChatServerSession::ChatLogin(std::string szServerId, std::string szPlayerId)
 {
-	stCHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM oCHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM;
-	oCHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM.szPlayerId = szPlayerId;
+	stCHAT_MANAGER_NOTIFY_CHAT_LOGIN oCHAT_MANAGER_NOTIFY_CHAT_LOGIN;
+	oCHAT_MANAGER_NOTIFY_CHAT_LOGIN.szPlayerId = szPlayerId;
+	oCHAT_MANAGER_NOTIFY_CHAT_LOGIN.szServerId = szServerId;
 
 	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
 	oStream.WriteInt(Protocol::CHAT_MANAGER_NOTIFY_CHAT_LOGIN);
-	oCHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM.Write(oStream);
+	oCHAT_MANAGER_NOTIFY_CHAT_LOGIN.Write(oStream);
 	Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
 }
 
@@ -94,7 +95,13 @@ void ChatServerSession::OnChatLoginSign(const char* pBuf, UINT32 dwLen)
 	stCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN;
 	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN.Read(oStream);
 
-	// todo
+	GameSession* pSession = ChatServerManager::Instance()->GetGameSessionManager().GetGameSession(oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN.szServerId);
+	if (!pSession)
+	{
+		LogExe(LogLv_Critical, "error");
+		return;
+	}
+	pSession->OnLoginSign(m_szChatIp, m_dwChatPort, m_dwWebSocketChatPort, oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN.szPlayerId, oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN.szSign);
 }
 
 void ChatServerSession::OnChatLoginSignGM(const char* pBuf, UINT32 dwLen)

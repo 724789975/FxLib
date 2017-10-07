@@ -170,5 +170,17 @@ private:
 	WebSocketDataHeader m_oWebSocketDataHeader;
 };
 
+class CChatManagerSession : public TSingleton<CChatManagerSession>, public CBinarySocketSession
+{
+public:
+	virtual void		OnConnect(void);
+	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
+	virtual void		Release(void);
+protected:
+private:
+};
+
+//static CChatManagerSession g_oChatManagerSession;
+
 
 #endif // !__SocketSession_H__

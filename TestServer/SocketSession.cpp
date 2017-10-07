@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include "fxdb.h"
 #include "netstream.h"
+#include <map>
 
 CSocketSession::CSocketSession()
 {
@@ -75,16 +76,28 @@ private:
 
 };
 
+std::map<std::string, CSocketSession*> mapSocket;
 void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
 	//printf("time : %s ip : %s, port : %d, recv %s", GetTimeHandler()->GetTimeStr(), GetRemoteIPStr(), GetRemotePort(), pBuf);
 
-	if (!Send(pBuf, dwLen))
-	{
-		LogFun(LT_Screen | LT_File, LogLv_Debug, "ip : %s, port : %d, recv %s send error", GetRemoteIPStr(), GetRemotePort(), pBuf);
-		Close();
-	}
+	CNetStream oStream(pBuf, dwLen);
+	std::string szPlayerId;
+	oStream.ReadString(szPlayerId);
+
+	char szPlayerInfo[1024];
+	CNetStream oGameStream(ENetStreamType_Write, szPlayerInfo, 1024);
+	oGameStream.WriteInt(40002);
+	oGameStream.WriteString(szPlayerId);
+	mapSocket[szPlayerId] = this;
+	CChatManagerSession::Instance()->Send(szPlayerInfo, 1024 - oGameStream.GetDataLength());
+
+	//if (!Send(pBuf, dwLen))
+	//{
+	//	LogFun(LT_Screen | LT_File, LogLv_Debug, "ip : %s, port : %d, recv %s send error", GetRemoteIPStr(), GetRemotePort(), pBuf);
+	//	Close();
+	//}
 
 	//DBQuery * pQuery = new DBQuery;
 	//pQuery->m_strQuery = pBuf;
@@ -258,7 +271,7 @@ void* WebSocketDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwData
 {
 	dwHeaderLen = 1;
 	CNetStream oNetStream(ENetStreamType_Write, m_dataSendBuffer, sizeof(m_dataSendBuffer));
-	unsigned char btFinOpCode = 0x81;
+	unsigned char btFinOpCode = 0x82;
 	// unsigned char btFin = (btFinOpCode >> 7) & 0xff;
 	// unsigned char btOpCode = (btFinOpCode) & 0x0f;
 	oNetStream.WriteByte(btFinOpCode);
@@ -363,4 +376,47 @@ void CWebSocketSession::Release(void)
 {
 	CSocketSession::Release();
 	CWebSocketSessionFactory::Instance()->Release(this);
+}
+
+void CChatManagerSession::OnConnect(void)
+{
+	char szPlayerInfo[1024];
+	CNetStream oGameStream(ENetStreamType_Write, szPlayerInfo, 1024);
+	oGameStream.WriteInt(40001);
+	oGameStream.WriteString("test");
+	Send(szPlayerInfo, 1024 - oGameStream.GetDataLength());
+}
+
+void CChatManagerSession::OnRecv(const char* pBuf, UINT32 dwLen)
+{
+	CNetStream oStream(pBuf, dwLen);
+	UINT32 dwProtocol = 0;
+	oStream.ReadInt(dwProtocol);
+	if (dwProtocol != 45002)
+	{
+		return;
+	}
+	std::string szPlayerId;
+	oStream.ReadString(szPlayerId);
+	std::string szIp;
+	oStream.ReadString(szIp);
+	std::string szSign;
+	oStream.ReadString(szSign);
+	UINT32 dwPort = 0;
+	oStream.ReadInt(dwPort);
+	UINT32 dwWebPort = 0;
+	oStream.ReadInt(dwWebPort);
+
+	if (mapSocket.find(szPlayerId) == mapSocket.end())
+	{
+		LogExe(LogLv_Critical, "error");
+		return;
+	}
+
+	mapSocket[szPlayerId]->Send(pBuf, dwLen);
+}
+
+void CChatManagerSession::Release(void)
+{
+	CSocketSession::Release();
 }

@@ -10,7 +10,7 @@
 #define CLIENTCOUNT 1
 
 char* g_strIp = "127.0.0.1";
-unsigned int g_dwPort = 30000;
+unsigned int g_dwPort = 13001;
 bool g_bRun = true;
 
 void EndFun(int n)

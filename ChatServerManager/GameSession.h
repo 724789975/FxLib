@@ -3,6 +3,7 @@
 
 #include "lock.h"
 #include "SocketSession.h"
+#include <map>
 
 class GameSession : public FxSession
 {
@@ -19,8 +20,12 @@ public:
 	virtual UINT32		GetRecvSize() { return 64 * 1024; };
 	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
 
+	std::string			GetServerId() { return m_szServerId; }
+	void				OnLoginSign(std::string szChatIp, unsigned int dwChatPort, unsigned int dwWebSocketChatPort, std::string szPlayerId, std::string szSign);
+
 private:
 	void				OnLogin(const char* pBuf, UINT32 dwLen);
+	void				OnPlayerLogin(const char* pBuf, UINT32 dwLen);
 private:
 	BinaryDataHeader m_oBinaryDataHeader;
 	char m_dataRecvBuf[64 * 1024];
@@ -39,11 +44,15 @@ public:
 	bool Init();
 	void CloseSessions();
 
+	void SetGameSession(std::string szServerId, GameSession* pSession);
+	GameSession* GetGameSession(std::string szServerId);
+
 	virtual void Release(FxSession* pSession);
-	virtual void Release(GameSession* pSession);
+	virtual void Release(std::string szServerId);
 
 private:
 	TDynamicPoolEx<GameSession> m_poolSessions;
+	std::map<std::string, GameSession*> m_mapGameSessions;
 	FxCriticalLock m_oLock;
 };
 
