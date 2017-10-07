@@ -8,6 +8,7 @@
 #endif // WIN32
 
 #include <string>
+#include <string.h>
 
 
 enum ENetStreamType
@@ -334,7 +335,7 @@ public:
 
 	bool WriteString(std::string refStr)
 	{
-		if (!WriteInt(refStr.size())) return false;
+		if (!WriteInt((unsigned int)refStr.size())) return false;
 		if (!WriteData(refStr.c_str(), refStr.size())) return false;
 		return true;
 	}

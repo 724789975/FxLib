@@ -1779,6 +1779,7 @@ void FxTCPConnectSockBase::OnConnect()
 		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
 		Close();
 	}
+	m_stRecvIoData.nOp = IOCP_RECV;
 #else
 	SetState(SSTATE_ESTABLISH);
 	PushNetEvent(NETEVT_ESTABLISH, 0);
@@ -2691,7 +2692,6 @@ SOCKET FxTCPConnectSock::Connect()
 void FxTCPConnectSock::OnConnect()
 {
 	FxTCPConnectSockBase::OnConnect();
-	m_stRecvIoData.nOp = IOCP_RECV;
 }
 
 void FxTCPConnectSock::__ProcRecv(UINT32 dwLen)

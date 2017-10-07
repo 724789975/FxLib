@@ -85,7 +85,7 @@
 
 namespace GFLAGS_NAMESPACE {
 
-#if 0 // C99
+#if 1 // C99
 typedef int32_t          int32;
 typedef uint32_t         uint32;
 typedef int64_t          int64;
@@ -95,7 +95,7 @@ typedef int32_t          int32;
 typedef u_int32_t        uint32;
 typedef int64_t          int64;
 typedef u_int64_t        uint64;
-#elif 1 // Windows
+#elif 0 // Windows
 typedef __int32          int32;
 typedef unsigned __int32 uint32;
 typedef __int64          int64;
