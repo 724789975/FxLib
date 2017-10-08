@@ -2,6 +2,11 @@
 #include "ChatManagerSession.h"
 #include "ChatServerSession.h"
 
+#ifndef WIN32
+#include <netdb.h>
+#include <sys/socket.h>
+#endif
+
 
 ChatServer::ChatServer()
 	: m_dwChatSessionPort(0)

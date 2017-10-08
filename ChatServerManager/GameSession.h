@@ -4,6 +4,7 @@
 #include "lock.h"
 #include "SocketSession.h"
 #include <map>
+#include <string>
 
 class GameSession : public FxSession
 {

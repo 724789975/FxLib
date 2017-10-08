@@ -27,7 +27,7 @@ ARFLAGS			= -rc
 #  Commands
 CODE_DIR = ./ ../common
 INCLUDE_DIR =./ ../meta_header/ ../lua ../tolua ../mysql/include ../gflags
-LIB_FILE = -L../Debug -Lcrypto -lpthread -lLuaLib -lNet -lDatabase -lgflags
+LIB_FILE = -L../Debug -Lcrypto -lpthread -lLuaLib -lNet -lDatabase -lgflags -L../mysql/lib/linux -lmysqlclient
 OUTPUT_DIR =../Debug
 OUTPUT = ChatServer
 #==========================================================
@@ -53,3 +53,4 @@ clean:
 	rm -f $(OBJS:.cpp=.d)
 	
 	@echo Clean ...done!
+

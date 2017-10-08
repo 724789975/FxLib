@@ -2,10 +2,11 @@
 #define __GMSession_H__
 
 #include <map>
+#include <string>
 #include "lock.h"
 #include "SocketSession.h"
 #include "chatdefine.h"
-#include "json.h"
+#include "../json/json.h"
 
 class GMSession;
 typedef bool (*Operate)(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck);

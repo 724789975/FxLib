@@ -42,7 +42,7 @@ namespace Protocol
 		CHAT_MANAGER_NOTIFY_CHAT_INFO,
 		CHAT_MANAGER_NOTIFY_CHAT_BROADCAST,
 		CHAT_MANAGER_NOTIFY_CHAT_LOGIN,
-		CHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM,		//Í¨¹ýGMµÇÂ¼µÄ
+		CHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM,		//Í¨ï¿½ï¿½GMï¿½ï¿½Â¼ï¿½ï¿½
 		CHAT_MANAGER_TO_CHAT_END = 29999,
 
 		//player--->chat 30000 35000
@@ -149,7 +149,7 @@ struct stCHAT_MANAGER_NOTIFY_CHAT_INFO
 	bool Write(CNetStream& refStream)
 	{
 		if (!refStream.WriteInt(dwHashIndex)) return false;
-		if (!refStream.WriteInt(vecRemoteInfo.size())) return false;
+		if (!refStream.WriteInt((unsigned int)vecRemoteInfo.size())) return false;
 		for (std::vector<stRemoteChatInfo>::iterator it = vecRemoteInfo.begin();
 			it != vecRemoteInfo.end(); ++it)
 		{

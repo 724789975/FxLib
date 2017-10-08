@@ -63,9 +63,9 @@ bool FxMySQLConnection::Connect()
     char pszSql[1024] = {0};
 
 #ifdef WIN32
-	_snprintf(pszSql, 1024, "set names %s", m_oAccount.m_szCharactSet);
+	_snprintf(pszSql, 1024, "set names %s;", m_oAccount.m_szCharactSet);
 #else
-	snprintf(pszSql, 1024, "set names %s", m_oAccount.m_szCharactSet);
+	snprintf(pszSql, 1024, "set names %s;set character_set_database=%s; set character_set_server=%s;", m_oAccount.m_szCharactSet, m_oAccount.m_szCharactSet, m_oAccount.m_szCharactSet);
 #endif // WIN32
 
     
