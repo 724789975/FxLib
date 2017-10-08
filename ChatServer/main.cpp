@@ -113,6 +113,7 @@ int main(int argc, char **argv)
 	while (g_bRun)
 	{
 		GetTimeHandler()->Run();
+		FxDBGetModule()->Run();
 		pNet->Run(0xffffffff);
 		//LogFun(LT_Screen, LogLv_Info, "%s", PrintTrace());
 		FxSleep(1);

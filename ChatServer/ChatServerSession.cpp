@@ -80,10 +80,11 @@ void ChatServerSession::OnChatToChatPrivateChat(const char* pBuf, UINT32 dwLen)
 		ChatPlayer* pPlayer = ChatServer::Instance()->GetChatPlayerManager().GetChatPlayer(oCHAT_SEND_CHAT_PRIVATE_CHAT.szRecverId);
 		if (pPlayer)
 		{
-			CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
-			oStream.WriteInt(Protocol::CHAT_SENF_CHAT_PRIVATE_CHAT);
-			oCHAT_SEND_CHAT_PRIVATE_CHAT.Write(oStream);
-			pPlayer->GetSession()->Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
+			pPlayer->OnPrivateChat(oCHAT_SEND_CHAT_PRIVATE_CHAT.szSenderId, oCHAT_SEND_CHAT_PRIVATE_CHAT.eChatType, oCHAT_SEND_CHAT_PRIVATE_CHAT.szContent, oCHAT_SEND_CHAT_PRIVATE_CHAT.dwTimeStamp);
+			//CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
+			//oStream.WriteInt(Protocol::CHAT_SEND_PLAYER_PRIVATE_CHAT);
+			//oCHAT_SEND_CHAT_PRIVATE_CHAT.Write(oStream);
+			//pPlayer->GetSession()->Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
 		}
 		DBChatQuery * pQuery = new DBChatQuery(oCHAT_SEND_CHAT_PRIVATE_CHAT, pPlayer != NULL);
 		FxDBGetModule()->AddQuery(pQuery);

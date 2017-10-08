@@ -49,9 +49,11 @@ void ChatPlayerManager::OnBroadCastMsg(const Protocol::EChatType& eChatType, con
 	//oCHAT_SEND_CHAT_PRIVATE_CHAT.eChatType = eChatType;
 	//oCHAT_SEND_CHAT_PRIVATE_CHAT.szContent = szContent;
 
+	UINT32 dwTimeStamp = GetTimeHandler()->GetSecond();
+
 	for (std::map<std::string, ChatPlayer>::iterator it = m_mapPlayers.begin(); it != m_mapPlayers.end(); ++it)
 	{
-		it->second.OnChat("0", eChatType, szContent);
+		it->second.OnPrivateChat("0", eChatType, szContent, dwTimeStamp);
 	}
 }
 

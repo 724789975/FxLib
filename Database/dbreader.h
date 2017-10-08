@@ -26,7 +26,7 @@ public:
 
 protected:
 	MYSQL_RES*          m_res;
-	MYSQL_ROW           m_row; 
+	MYSQL_ROW           m_row;
 	unsigned long *	    m_adwLengths;
 };
 

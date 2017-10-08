@@ -64,6 +64,59 @@ void ChatSession::OnMsg(const char* pBuf, UINT32 dwLen)
 	}
 }
 
+class DBUnreadChatQuery : public IQuery
+{
+public:
+	DBUnreadChatQuery(std::string szPlayerId)
+	{
+		m_pReader = NULL;
+		m_szPlayerId = szPlayerId;
+		static char szTemp[512] = { 0 };
+		memset(szTemp, 0, 2048);
+		sprintf(szTemp, "SELECT * FROM private_chat WHERE `readed` = 0 AND `recver_id` = '%s';"
+			"UPDATE private_chat SET `readed` = 1 WHERE recver_id = '%s';",
+			m_szPlayerId.c_str(), m_szPlayerId.c_str());
+		m_strQuery = szTemp;
+	}
+	virtual ~DBUnreadChatQuery() {}
+
+	virtual INT32 GetDBId(void) { return 0; }
+
+	virtual void OnQuery(IDBConnection *poDBConnection)
+	{
+		if (poDBConnection->Query(m_strQuery.c_str(), &m_pReader) != FXDB_HAS_RESULT)
+		{
+			m_pReader->Release();
+		}
+	}
+
+	virtual void OnResult(void)
+	{
+		ChatPlayer* pPlayer = ChatServer::Instance()->GetChatPlayerManager().GetChatPlayer(m_szPlayerId);
+		while (m_pReader->GetNextRecord())
+		{
+			//stCHAT_SEND_PLAYER_PRIVATE_CHAT oCHAT_SEND_PLAYER_PRIVATE_CHAT;
+			//memcpy(oCHAT_SEND_PLAYER_PRIVATE_CHAT.szSenderId, m_pReader->GetFieldValue(0), IDLENTH);
+			//memcpy(oCHAT_SEND_PLAYER_PRIVATE_CHAT.szRecverId, m_pReader->GetFieldValue(1), IDLENTH);
+			//oCHAT_SEND_PLAYER_PRIVATE_CHAT.eChatType = (Protocol::EChatType)atoi(m_pReader->GetFieldValue(2));
+			//oCHAT_SEND_PLAYER_PRIVATE_CHAT.szContent = m_pReader->GetFieldValue(3);
+			//oCHAT_SEND_PLAYER_PRIVATE_CHAT.dwTimeStamp = atoi(m_pReader->GetFieldValue(4));
+			
+			pPlayer->OnPrivateChat(m_pReader->GetFieldValue(1), (Protocol::EChatType)atoi(m_pReader->GetFieldValue(3)), m_pReader->GetFieldValue(4), atoi(m_pReader->GetFieldValue(5)));
+		}
+	}
+
+	virtual void Release(void)
+	{
+		m_pReader->Release();
+		delete this;
+	}
+private:
+	std::string m_szPlayerId;
+	std::string m_strQuery;
+	IDataReader* m_pReader;
+};
+
 void ChatSession::OnLogin(const char* pBuf, UINT32 dwLen)
 {
 	CNetStream oNetStream(pBuf, dwLen);
@@ -79,6 +132,9 @@ void ChatSession::OnLogin(const char* pBuf, UINT32 dwLen)
 		{
 			oCHAT_ACK_PLAYER_LOGIN.dwResult = 0;
 			memcpy(m_szId, oPLAYER_REQUEST_CHAT_LOGIN.szId, IDLENTH);
+
+			DBUnreadChatQuery* pQuery = new DBUnreadChatQuery(oPLAYER_REQUEST_CHAT_LOGIN.szId);
+			FxDBGetModule()->AddQuery(pQuery);
 		}
 	}
 	CNetStream oStream(ENetStreamType_Write, g_pChatSessionBuff, g_dwChatSessionBuffLen);

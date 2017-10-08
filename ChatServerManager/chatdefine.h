@@ -199,7 +199,8 @@ struct stCHAT_MANAGER_NOTIFY_CHAT_BROADCAST
 
 struct stCHAT_SEND_CHAT_PRIVATE_CHAT
 {
-	stCHAT_SEND_CHAT_PRIVATE_CHAT() { memset(szSenderId, 0, IDLENTH); memset(szRecverId, 0, IDLENTH); eChatType = Protocol::ECT_NONE; }
+	stCHAT_SEND_CHAT_PRIVATE_CHAT() { memset(szSenderId, 0, IDLENTH); memset(szRecverId, 0, IDLENTH); eChatType = Protocol::ECT_NONE; dwTimeStamp = 0; }
+	unsigned int dwTimeStamp;
 	char szSenderId[IDLENTH];
 	char szRecverId[IDLENTH];
 	Protocol::EChatType eChatType;
@@ -207,6 +208,7 @@ struct stCHAT_SEND_CHAT_PRIVATE_CHAT
 
 	bool Write(CNetStream& refStream)
 	{
+		if (!refStream.WriteInt(dwTimeStamp)) return false;
 		if (!refStream.WriteString(szSenderId)) return false;
 		if (!refStream.WriteString(szRecverId)) return false;
 		if (!refStream.WriteInt((unsigned int&)eChatType)) return false;
@@ -216,6 +218,7 @@ struct stCHAT_SEND_CHAT_PRIVATE_CHAT
 
 	bool Read(CNetStream& refStream)
 	{
+		if (!refStream.ReadInt(dwTimeStamp)) return false;
 		if (!refStream.ReadString(szSenderId, IDLENTH)) return false;
 		if (!refStream.ReadString(szRecverId, IDLENTH)) return false;
 		if (!refStream.ReadInt((unsigned int&)eChatType)) return false;
@@ -390,7 +393,7 @@ public:
 		sprintf(szTemp, "INSERT INTO private_chat (`sender_id`, `recver_id`, `chat_type`, `content`, `send_time`, `readed`) "
 			"VALUES('%s', '%s', %u, '%s', %u, %u)", refCHAT_SEND_CHAT_PRIVATE_CHAT.szSenderId,
 			refCHAT_SEND_CHAT_PRIVATE_CHAT.szRecverId, (int)refCHAT_SEND_CHAT_PRIVATE_CHAT.eChatType,
-			szContentEacape, GetTimeHandler()->GetSecond(), m_bReader);
+			szContentEacape, refCHAT_SEND_CHAT_PRIVATE_CHAT.dwTimeStamp, m_bReader);
 		m_strQuery = szTemp;
 	}
 	virtual ~DBChatQuery() {}
@@ -399,10 +402,9 @@ public:
 
 	virtual void OnQuery(IDBConnection *poDBConnection)
 	{
-		IDataReader* pReader = NULL;
-		if (poDBConnection->Query(m_strQuery.c_str(), &pReader) == FXDB_HAS_RESULT)
+		if (poDBConnection->Query(m_strQuery.c_str()) == FXDB_HAS_RESULT)
 		{
-			pReader->Release();
+			LogExe(LogLv_Critical, "error");
 		}
 	}
 
@@ -413,13 +415,11 @@ public:
 	{
 		delete this;
 	}
-
+private:
 	std::string m_strQuery;
 	UINT32 m_bReader;
-
-private:
-
 };
+
 
 
 
