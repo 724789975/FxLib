@@ -18,6 +18,8 @@ public:
 	void OnPrivateChat(const char* pBuf, UINT32 dwLen);
 
 	void OnPrivateChat(const char* szSender, const Protocol::EChatType eChatType, const std::string szContent, unsigned int dwTimeStamp);
+
+	void OnRequestCreateChatGroup(const char* pBuf, UINT32 dwLen);
 private:
 	ChatSession* m_pSession;
 

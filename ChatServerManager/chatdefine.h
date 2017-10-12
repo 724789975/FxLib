@@ -42,13 +42,14 @@ namespace Protocol
 		CHAT_MANAGER_NOTIFY_CHAT_INFO,
 		CHAT_MANAGER_NOTIFY_CHAT_BROADCAST,
 		CHAT_MANAGER_NOTIFY_CHAT_LOGIN,
-		CHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM,		//Í¨ï¿½ï¿½GMï¿½ï¿½Â¼ï¿½ï¿½
+		CHAT_MANAGER_NOTIFY_CHAT_LOGIN_GM,		//Í¨¹ýGMµÇÂ¼µÄ
 		CHAT_MANAGER_TO_CHAT_END = 29999,
 
 		//player--->chat 30000 35000
 		PLAYER_CHAT_BEGIN = 30000,
 		PLAYER_REQUEST_CHAT_LOGIN,
 		PLAYER_REQUEST_PRIVATE_CHAT,
+		PLAYER_REQUEST_CREATE_CHAT_GROUP,
 		PLAYER_CHAT_END = 34999,
 
 		//chat--->player 35000 35999
@@ -302,6 +303,19 @@ struct stPLAYER_REQUEST_PRIVATE_CHAT
 
 struct stCHAT_SEND_PLAYER_PRIVATE_CHAT : public stCHAT_SEND_CHAT_PRIVATE_CHAT
 {
+};
+
+struct stPLAYER_REQUEST_CREATE_CHAT_GROUP
+{
+	bool Write(CNetStream& refStream)
+	{
+		return true;
+	}
+
+	bool Read(CNetStream& refStream)
+	{
+		return true;
+	}
 };
 
 //----------------------------------------------------------------------

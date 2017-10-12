@@ -38,6 +38,7 @@ void ChatPlayer::OnMsg(const char* pBuf, UINT32 dwLen)
 	switch (eProrocol)
 	{
 		case Protocol::PLAYER_REQUEST_PRIVATE_CHAT:	OnPrivateChat(pData, dwLen);	break;
+		case Protocol::PLAYER_REQUEST_CREATE_CHAT_GROUP:	OnRequestCreateChatGroup(pData, dwLen);	break;
 		default: {LogExe(LogLv_Critical, "error protocol : %d", (unsigned int)eProrocol); m_pSession->Close(); }	break;
 	}
 }
@@ -105,4 +106,9 @@ void ChatPlayer::OnPrivateChat(const char* szSender, const Protocol::EChatType e
 	oStream.WriteInt(Protocol::CHAT_SEND_PLAYER_PRIVATE_CHAT);
 	oCHAT_SEND_CHAT_PRIVATE_CHAT.Write(oStream);
 	m_pSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
+}
+
+void ChatPlayer::OnRequestCreateChatGroup(const char* pBuf, UINT32 dwLen)
+{
+
 }
