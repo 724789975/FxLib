@@ -41,9 +41,9 @@ void ChatServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 
 	switch (eProrocol)
 	{
-		case Protocol::CHAT_SEND_CHAT_MANAGER_INFO:				OnChatServerInfo(pData, dwLen);	break;
-		case Protocol::CHAT_SEND_CHAT_MANAGER_LOGIN_SIGN:		OnChatLoginSign(pData, dwLen); break;
-		case Protocol::CHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM:	OnChatLoginSignGM(pData, dwLen); break;
+		case Protocol::CHAT_NOTIFY_CHAT_MANAGER_INFO:				OnChatServerInfo(pData, dwLen);	break;
+		case Protocol::CHAT_NOTIFY_CHAT_MANAGER_LOGIN_SIGN:		OnChatLoginSign(pData, dwLen); break;
+		case Protocol::CHAT_NOTIFY_CHAT_MANAGER_LOGIN_SIGN_GM:	OnChatLoginSignGM(pData, dwLen); break;
 		default:	Assert(0);	break;
 	}
 }

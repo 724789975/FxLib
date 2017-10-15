@@ -7,6 +7,7 @@
 #include "ChatServerSession.h"
 #include "ChatSession.h"
 #include "ChatPlayerManager.h"
+#include "ChatGroup.h"
 
 class ChatServer : public TSingleton<ChatServer>
 {
@@ -22,6 +23,7 @@ public:
 	ChatBinarySessionManager& GetChatBinarySessionManager() { return m_oChatBinarySessionManager; }
 	ChatWebSocketSessionManager& GetChatWebSocketSessionManager() { return m_oChatWebSocketSessionManager; }
 	ChatPlayerManager& GetChatPlayerManager() { return m_oChatPlayerManager; }
+	ChatGroupManager& GetChatGroupManager() { return m_oChatGroupManager; }
 
 	void Close();
 
@@ -52,6 +54,8 @@ private:
 	ChatWebSocketSessionManager m_oChatWebSocketSessionManager;
 
 	ChatPlayerManager m_oChatPlayerManager;
+	
+	ChatGroupManager m_oChatGroupManager;
 
 	std::set<unsigned int> m_setHashIndex;
 	UINT32 m_dwHashIndex;

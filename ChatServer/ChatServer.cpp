@@ -23,6 +23,8 @@ ChatServer::~ChatServer()
 
 bool ChatServer::Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UINT32 dwChatWebSocketSessionPort, UINT32 dwChatServerSessionPort)
 {
+	m_oChatGroupManager.Init();
+
 	m_oChatBinarySessionManager.Init();
 	m_oChatPlayerManager.Init();
 	m_oChatServerSessionManager.Init();

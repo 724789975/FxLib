@@ -1,6 +1,7 @@
 #include "ChatServerSession.h"
 #include "ChatServer.h"
 #include "utility.h"
+#include "ChatGroup.h"
 
 const static unsigned int g_dwChatServerSessionBuffLen = 64 * 1024;
 static char g_pChatServerSessionBuf[g_dwChatServerSessionBuffLen];
@@ -21,7 +22,7 @@ void ChatServerSession::OnConnect(void)
 	stCHAT_TO_CHAT_HASH_INDEX oCHAT_TO_CHAT_HASH_INDEX;
 	oCHAT_TO_CHAT_HASH_INDEX.dwHashIndex = ChatServer::Instance()->GetHashIndex();
 	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
-	oStream.WriteInt(Protocol::CHAT_TO_CHAT_HASH_INDEX);
+	oStream.WriteInt(Protocol::CHAT_NOTIFY_CHAT_HASH_INDEX);
 	oCHAT_TO_CHAT_HASH_INDEX.Write(oStream);
 	Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
 }
@@ -46,8 +47,10 @@ void ChatServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 
 	switch (eProrocol)
 	{
-		case Protocol::CHAT_TO_CHAT_HASH_INDEX:	OnChatToChatHashIndex(pData, dwLen);	break;
-		case Protocol::CHAT_SENF_CHAT_PRIVATE_CHAT: OnChatToChatPrivateChat(pData, dwLen);	break;
+		case Protocol::CHAT_NOTIFY_CHAT_HASH_INDEX:		OnChatToChatHashIndex(pData, dwLen);	break;
+		case Protocol::CHAT_NOTIFY_CHAT_PRIVATE_CHAT:	OnChatToChatPrivateChat(pData, dwLen);	break;
+		case Protocol::CHAT_NOTIFY_CHAT_GROUP_CREATE:	OnChatToChatGroupCreate(pData, dwLen);	break;
+		case Protocol::CHAT_NOTIFY_CHAT_GROUP_CHAT:		OnChatToChatGroupChat(pData, dwLen);	break;
 		default:	Assert(0);	break;
 	}
 }
@@ -57,6 +60,17 @@ void ChatServerSession::Release(void)
 	OnDestroy();
 	//Init(NULL);
 	//ChatServerSessionManager::Instance()->Release(this);
+}
+
+void ChatServerSession::OnGroupCreate(unsigned int dwGroupId)
+{
+	stCHAT_NOTIFY_CHAT_GROUP_CREATE oCHAT_NOTIFY_CHAT_GROUP_CREATE;
+	oCHAT_NOTIFY_CHAT_GROUP_CREATE.dwGroupId = dwGroupId;
+
+	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
+	oStream.WriteInt(Protocol::CHAT_NOTIFY_CHAT_GROUP_CREATE);
+	oCHAT_NOTIFY_CHAT_GROUP_CREATE.Write(oStream);
+	Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
 }
 
 void ChatServerSession::OnChatToChatHashIndex(const char* pBuf, UINT32 dwLen)
@@ -81,15 +95,31 @@ void ChatServerSession::OnChatToChatPrivateChat(const char* pBuf, UINT32 dwLen)
 		if (pPlayer)
 		{
 			pPlayer->OnPrivateChat(oCHAT_SEND_CHAT_PRIVATE_CHAT.szSenderId, oCHAT_SEND_CHAT_PRIVATE_CHAT.eChatType, oCHAT_SEND_CHAT_PRIVATE_CHAT.szContent, oCHAT_SEND_CHAT_PRIVATE_CHAT.dwTimeStamp);
-			//CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
-			//oStream.WriteInt(Protocol::CHAT_SEND_PLAYER_PRIVATE_CHAT);
-			//oCHAT_SEND_CHAT_PRIVATE_CHAT.Write(oStream);
-			//pPlayer->GetSession()->Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
 		}
 		DBChatQuery * pQuery = new DBChatQuery(oCHAT_SEND_CHAT_PRIVATE_CHAT, pPlayer != NULL);
 		FxDBGetModule()->AddQuery(pQuery);
 		return;
 	}
+}
+
+void ChatServerSession::OnChatToChatGroupCreate(const char* pBuf, UINT32 dwLen)
+{
+	CNetStream oStream(pBuf, dwLen);
+	stCHAT_NOTIFY_CHAT_GROUP_CREATE oCHAT_NOTIFY_CHAT_GROUP_CREATE;
+	oCHAT_NOTIFY_CHAT_GROUP_CREATE.Read(oStream);
+
+	DBLoadGroupQuery* pQuery = new DBLoadGroupQuery(oCHAT_NOTIFY_CHAT_GROUP_CREATE.dwGroupId);
+	FxDBGetModule()->AddQuery(pQuery);
+}
+
+void ChatServerSession::OnChatToChatGroupChat(const char* pBuf, UINT32 dwLen)
+{
+	CNetStream oStream(pBuf, dwLen);
+	stCHAT_NOTIFY_CHAT_GROUP_CHAT oCHAT_NOTIFY_CHAT_GROUP_CHAT;
+	oCHAT_NOTIFY_CHAT_GROUP_CHAT.Read(oStream);
+
+	DBGroupChatQuery* pQuery = new DBGroupChatQuery(oCHAT_NOTIFY_CHAT_GROUP_CHAT);
+	FxDBGetModule()->AddQuery(pQuery);
 }
 
 FxSession* ChatServerSessionManager::CreateSession()

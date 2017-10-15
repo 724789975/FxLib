@@ -166,6 +166,7 @@
     <ClCompile Include="..\common\log_thread.cpp" />
     <ClCompile Include="..\common\lua_engine.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
+    <ClCompile Include="ChatGroup.cpp" />
     <ClCompile Include="ChatManagerSession.cpp" />
     <ClCompile Include="ChatPlayer.cpp" />
     <ClCompile Include="ChatPlayerManager.cpp" />
@@ -179,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="chatdefine.h" />
+    <ClInclude Include="ChatGroup.h" />
     <ClInclude Include="ChatManagerSession.h" />
     <ClInclude Include="ChatPlayer.h" />
     <ClInclude Include="ChatPlayerManager.h" />

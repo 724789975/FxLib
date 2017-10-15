@@ -24,7 +24,7 @@ void ChatManagerSession::OnConnect(void)
 	oCHAT_SEND_CHAT_MANAGER_INFO.m_dwWebSocketChatPort = ChatServer::Instance()->GetChatWebSocketSessionPort();
 	oCHAT_SEND_CHAT_MANAGER_INFO.m_dwChatServerPort = ChatServer::Instance()->GetChatServerSessionPort();
 	CNetStream oStream(ENetStreamType_Write, g_pChatServerManagerSessionBuf, g_dwChatServerManagerSessionBuffLen);
-	oStream.WriteInt(Protocol::CHAT_SEND_CHAT_MANAGER_INFO);
+	oStream.WriteInt(Protocol::CHAT_NOTIFY_CHAT_MANAGER_INFO);
 	oCHAT_SEND_CHAT_MANAGER_INFO.Write(oStream);
 	Send(g_pChatServerManagerSessionBuf, g_dwChatServerManagerSessionBuffLen - oStream.GetDataLength());
 }
@@ -124,7 +124,7 @@ void ChatManagerSession::OnLoginSign(const char* pBuf, UINT32 dwLen)
 	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN.szSign = szSign;
 
 	CNetStream oStreamSign(ENetStreamType_Write, g_pChatServerManagerSessionBuf, g_dwChatServerManagerSessionBuffLen);
-	oStreamSign.WriteInt(Protocol::CHAT_SEND_CHAT_MANAGER_LOGIN_SIGN);
+	oStreamSign.WriteInt(Protocol::CHAT_NOTIFY_CHAT_MANAGER_LOGIN_SIGN);
 	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN.Write(oStreamSign);
 	Send(g_pChatServerManagerSessionBuf, g_dwChatServerManagerSessionBuffLen - oStreamSign.GetDataLength());
 }
@@ -146,7 +146,7 @@ void ChatManagerSession::OnLoginSignByGM(const char* pBuf, UINT32 dwLen)
 	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM.szSign = szSign;
 
 	CNetStream oStreamSign(ENetStreamType_Write, g_pChatServerManagerSessionBuf, g_dwChatServerManagerSessionBuffLen);
-	oStreamSign.WriteInt(Protocol::CHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM);
+	oStreamSign.WriteInt(Protocol::CHAT_NOTIFY_CHAT_MANAGER_LOGIN_SIGN_GM);
 	oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM.Write(oStreamSign);
 	Send(g_pChatServerManagerSessionBuf, g_dwChatServerManagerSessionBuffLen - oStreamSign.GetDataLength());
 }

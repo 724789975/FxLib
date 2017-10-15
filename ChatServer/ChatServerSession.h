@@ -21,6 +21,8 @@ public:
 	virtual UINT32		GetRecvSize() { return 64 * 1024; };
 	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
 
+	void				OnGroupCreate(unsigned int dwGroupId);
+
 private:
 	BinaryDataHeader m_oBinaryDataHeader;
 	char m_dataRecvBuf[64 * 1024];
@@ -31,6 +33,8 @@ private:
 private:
 	void OnChatToChatHashIndex(const char* pBuf, UINT32 dwLen);
 	void OnChatToChatPrivateChat(const char* pBuf, UINT32 dwLen);
+	void OnChatToChatGroupCreate(const char* pBuf, UINT32 dwLen);
+	void OnChatToChatGroupChat(const char* pBuf, UINT32 dwLen);
 };
 
 class ChatServerSessionManager : public IFxSessionFactory

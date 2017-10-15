@@ -9,7 +9,7 @@
 
 namespace ChatConstant
 {
-	static const unsigned int g_dwChatServerNum = 3;
+	static const unsigned int g_dwChatServerNum = 2;
 	static const unsigned int g_dwHashGen = 256;
 }
 
@@ -26,15 +26,17 @@ namespace Protocol
 	{
 		//chat<--->chat 10001 11000
 		CHAT_TO_CHAT_BEGIN = 10001,
-		CHAT_TO_CHAT_HASH_INDEX = 10002,
-		CHAT_SENF_CHAT_PRIVATE_CHAT,
+		CHAT_NOTIFY_CHAT_HASH_INDEX = 10002,
+		CHAT_NOTIFY_CHAT_PRIVATE_CHAT,
+		CHAT_NOTIFY_CHAT_GROUP_CREATE,
+		CHAT_NOTIFY_CHAT_GROUP_CHAT,
 		CHAT_TO_CHAT_END = 11000,
 
 		//chat --->chatmanager 20001 25000
 		CHAT_TO_CHAT_MANAGER_BEGIN = 20001,
-		CHAT_SEND_CHAT_MANAGER_INFO,
-		CHAT_SEND_CHAT_MANAGER_LOGIN_SIGN,
-		CHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM,
+		CHAT_NOTIFY_CHAT_MANAGER_INFO,
+		CHAT_NOTIFY_CHAT_MANAGER_LOGIN_SIGN,
+		CHAT_NOTIFY_CHAT_MANAGER_LOGIN_SIGN_GM,
 		CHAT_TO_CHAT_MANAGER_END = 25000,
 
 		//chatmanager --->chat 25001 29999
@@ -50,12 +52,14 @@ namespace Protocol
 		PLAYER_REQUEST_CHAT_LOGIN,
 		PLAYER_REQUEST_PRIVATE_CHAT,
 		PLAYER_REQUEST_CREATE_CHAT_GROUP,
+		PLAYER_REQUEST_CHAT_GROUP_CHAT,
 		PLAYER_CHAT_END = 34999,
 
 		//chat--->player 35000 35999
 		CHAT_PLAYER_BEGIN = 35000,
 		CHAT_ACK_PLAYER_LOGIN,
-		CHAT_SEND_PLAYER_PRIVATE_CHAT,
+		CHAT_NOTIFY_PLAYER_PRIVATE_CHAT,
+		CHAT_ACK_PLAYER_CREATE_CHAT_GROUP,
 		CHAT_PLAYER_END = 39999,
 
 		//game--->chatmanager 40000 44999
@@ -86,6 +90,49 @@ struct stCHAT_TO_CHAT_HASH_INDEX
 	}
 };
 
+struct stCHAT_NOTIFY_CHAT_GROUP_CREATE
+{
+	unsigned int dwGroupId;
+	bool Write(CNetStream& refStream)
+	{
+		return refStream.WriteInt(dwGroupId);
+	}
+	bool Read(CNetStream& refStream)
+	{
+		return refStream.ReadInt(dwGroupId);
+	}
+};
+
+struct stCHAT_NOTIFY_CHAT_GROUP_CHAT
+{
+	unsigned int dwGroupId;
+	std::string szSenderId;
+	Protocol::EChatType eChatType;
+	std::string szContent;
+	unsigned int dwSendTime;
+
+	bool Write(CNetStream& refStream)
+	{
+		if (!refStream.WriteInt(dwGroupId)) return false;
+		if (!refStream.WriteString(szSenderId))	return false;
+		if (!refStream.WriteInt((unsigned int&)eChatType)) return false;
+		if (!refStream.WriteString(szContent)) return false;
+		if (!refStream.WriteInt(dwSendTime)) return false;
+		return true;
+	}
+
+	bool Read(CNetStream& refStream)
+	{
+		if (!refStream.ReadInt(dwGroupId)) return false;
+		if (!refStream.ReadString(szSenderId))	return false;
+		if (!refStream.ReadInt((unsigned int&)eChatType)) return false;
+		if (!refStream.ReadString(szContent)) return false;
+		if (!refStream.ReadInt(dwSendTime)) return false;
+		return true;
+	}
+};
+
+//-----------------------------------------------------------------------
 struct stCHAT_SEND_CHAT_MANAGER_INFO
 {
 	unsigned int m_dwChatPort;
@@ -185,14 +232,14 @@ struct stCHAT_MANAGER_NOTIFY_CHAT_BROADCAST
 	std::string szContent;
 	bool Write(CNetStream& refStream)
 	{
-		if (!refStream.WriteInt((UINT32&)eChatType)) return false;
+		if (!refStream.WriteInt((unsigned int&)eChatType)) return false;
 		if (!refStream.WriteString(szContent)) return false;
 		return true;
 	}
 
 	bool Read(CNetStream& refStream)
 	{
-		if (!refStream.ReadInt((UINT32&)eChatType)) return false;
+		if (!refStream.ReadInt((unsigned int&)eChatType)) return false;
 		if (!refStream.ReadString(szContent)) return false;
 		return true;
 	}
@@ -268,6 +315,51 @@ struct stPLAYER_REQUEST_CHAT_LOGIN
 	}
 };
 
+struct stPLAYER_REQUEST_PRIVATE_CHAT
+{
+	stPLAYER_REQUEST_PRIVATE_CHAT() { memset(szRecverId, 0, IDLENTH); eChatType = Protocol::ECT_NONE; }
+	char szRecverId[IDLENTH];
+	Protocol::EChatType eChatType;
+	std::string szContent;
+
+	bool Read(CNetStream& refStream)
+	{
+		if (!refStream.ReadString(szRecverId, IDLENTH)) return false;
+		if (!refStream.ReadInt((unsigned int&)eChatType)) return false;
+		if (!refStream.ReadString(szContent)) return false;
+		return true;
+	}
+};
+
+struct stPLAYER_REQUEST_CREATE_CHAT_GROUP
+{
+	bool Write(CNetStream& refStream)
+	{
+		return true;
+	}
+
+	bool Read(CNetStream& refStream)
+	{
+		return true;
+	}
+};
+
+struct stPLAYER_REQUEST_CHAT_GROUP_CHAT
+{
+	unsigned int dwGroupId;
+	Protocol::EChatType eChatType;
+	std::string szContent;
+
+	bool Read(CNetStream& refStream)
+	{
+		if (!refStream.ReadInt(dwGroupId)) return false;
+		if (!refStream.ReadInt((unsigned int&)eChatType)) return false;
+		if (!refStream.ReadString(szContent)) return false;
+		return true;
+	}
+};
+
+//---------------------------------------------------------------
 struct stCHAT_ACK_PLAYER_LOGIN
 {
 	unsigned int dwResult;
@@ -285,35 +377,22 @@ struct stCHAT_ACK_PLAYER_LOGIN
 	}
 };
 
-struct stPLAYER_REQUEST_PRIVATE_CHAT
-{
-	stPLAYER_REQUEST_PRIVATE_CHAT() { memset(szRecverId, 0, IDLENTH); eChatType = Protocol::ECT_NONE; }
-	char szRecverId[IDLENTH];
-	Protocol::EChatType eChatType;
-	std::string szContent;
-
-	bool Read(CNetStream& refStream)
-	{
-		if (!refStream.ReadString(szRecverId, IDLENTH)) return false;
-		if (!refStream.ReadInt((unsigned int&)eChatType)) return false;
-		if (!refStream.ReadString(szContent)) return false;
-		return true;
-	}
-};
-
 struct stCHAT_SEND_PLAYER_PRIVATE_CHAT : public stCHAT_SEND_CHAT_PRIVATE_CHAT
 {
 };
 
-struct stPLAYER_REQUEST_CREATE_CHAT_GROUP
+struct stCHAT_ACK_PLAYER_CREATE_CHAT_GROUP
 {
+	unsigned int dwGroupId;
 	bool Write(CNetStream& refStream)
 	{
+		if (!refStream.WriteInt(dwGroupId)) return false;
 		return true;
 	}
 
 	bool Read(CNetStream& refStream)
 	{
+		if (!refStream.ReadInt(dwGroupId)) return false;
 		return true;
 	}
 };
@@ -431,7 +510,7 @@ public:
 	}
 private:
 	std::string m_strQuery;
-	UINT32 m_bReader;
+	unsigned int m_bReader;
 };
 
 
