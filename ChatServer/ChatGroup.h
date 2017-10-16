@@ -65,8 +65,11 @@ public:
 	ChatGroup();
 	virtual ~ChatGroup();
 
+	void OnGroupChat(stCHAT_NOTIFY_CHAT_GROUP_CHAT& refChat);
+
 private:
-	std::map<std::string, ChatGroupMember> m_mapChatMembers;
+	std::map<unsigned int, std::map<std::string, ChatGroupMember> > m_mapChatGroupMembers;
+	//std::map<std::string, ChatGroupMember> m_mapChatMembers;
 };
 
 class ChatGroupManager

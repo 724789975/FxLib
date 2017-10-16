@@ -234,3 +234,11 @@ void ChatPlayer::OnRequestGroupChat(const char* pBuf, UINT32 dwLen)
 		}
 	}
 }
+
+void ChatPlayer::OnGroupChat(stCHAT_NOTIFY_PLAYER_GROUP_CHAT& refChat)
+{
+	CNetStream oStream(ENetStreamType_Write, g_pChatPlayerBuff, g_dwChatPlayerBuffLen);
+	oStream.WriteInt(Protocol::CHAT_NOTIFY_PLAYER_GROUP_CHAT);
+	refChat.Write(oStream);
+	m_pSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
+}

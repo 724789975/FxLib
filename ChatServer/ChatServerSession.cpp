@@ -47,10 +47,11 @@ void ChatServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 
 	switch (eProrocol)
 	{
-		case Protocol::CHAT_NOTIFY_CHAT_HASH_INDEX:		OnChatToChatHashIndex(pData, dwLen);	break;
-		case Protocol::CHAT_NOTIFY_CHAT_PRIVATE_CHAT:	OnChatToChatPrivateChat(pData, dwLen);	break;
-		case Protocol::CHAT_NOTIFY_CHAT_GROUP_CREATE:	OnChatToChatGroupCreate(pData, dwLen);	break;
-		case Protocol::CHAT_NOTIFY_CHAT_GROUP_CHAT:		OnChatToChatGroupChat(pData, dwLen);	break;
+		case Protocol::CHAT_NOTIFY_CHAT_HASH_INDEX:			OnChatToChatHashIndex(pData, dwLen);	break;
+		case Protocol::CHAT_NOTIFY_CHAT_PRIVATE_CHAT:		OnChatToChatPrivateChat(pData, dwLen);	break;
+		case Protocol::CHAT_NOTIFY_CHAT_GROUP_CREATE:		OnChatToChatGroupCreate(pData, dwLen);	break;
+		case Protocol::CHAT_NOTIFY_CHAT_GROUP_CHAT:			OnChatToChatGroupChat(pData, dwLen);	break;
+		case Protocol::CHAT_NOTIFY_CHAT_GROUP_MEMBER_CHAT:	OnChatToChatGroupMemberChat(pData, dwLen);	break;
 		default:	Assert(0);	break;
 	}
 }
@@ -70,6 +71,14 @@ void ChatServerSession::OnGroupCreate(unsigned int dwGroupId)
 	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
 	oStream.WriteInt(Protocol::CHAT_NOTIFY_CHAT_GROUP_CREATE);
 	oCHAT_NOTIFY_CHAT_GROUP_CREATE.Write(oStream);
+	Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
+}
+
+void ChatServerSession::OnGroupMemberChat(stCHAT_NOTIFY_CHAT_GROUP_MEMBER_CHAT& refChat)
+{
+	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
+	oStream.WriteInt(Protocol::CHAT_NOTIFY_CHAT_GROUP_MEMBER_CHAT);
+	refChat.Write(oStream);
 	Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
 }
 
@@ -120,6 +129,23 @@ void ChatServerSession::OnChatToChatGroupChat(const char* pBuf, UINT32 dwLen)
 
 	DBGroupChatQuery* pQuery = new DBGroupChatQuery(oCHAT_NOTIFY_CHAT_GROUP_CHAT);
 	FxDBGetModule()->AddQuery(pQuery);
+}
+
+void ChatServerSession::OnChatToChatGroupMemberChat(const char* pBuf, UINT32 dwLen)
+{
+	CNetStream oStream(pBuf, dwLen);
+	stCHAT_NOTIFY_CHAT_GROUP_MEMBER_CHAT oChat;
+	if (!oChat.Read(oStream))
+	{
+		LogExe(LogLv_Critical, "read error");
+		return;
+	}
+	for (std::vector<std::string>::iterator it = oChat.vecPlayerIds.begin();
+		it != oChat.vecPlayerIds.end(); ++it)
+	{
+		ChatPlayer* pChatPlayer = ChatServer::Instance()->GetChatPlayerManager().GetChatPlayer(*it);
+		pChatPlayer->OnGroupChat(oChat.oChat);
+	}
 }
 
 FxSession* ChatServerSessionManager::CreateSession()

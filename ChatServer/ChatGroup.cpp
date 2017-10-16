@@ -1,6 +1,7 @@
 #include "ChatGroup.h"
 #include "ChatServer.h"
 #include "utility.h"
+#include "ChatPlayer.h"
 
 
 //-------------------------------------------------------------
@@ -30,7 +31,8 @@ void DBLoadGroupQuery::OnResult(void)
 		std::string szPlayerId = m_pReader->GetFieldValue(0);
 		UINT32 dwPower = atoi(m_pReader->GetFieldValue(1));
 		UINT32 dwJoinTime = atoi(m_pReader->GetFieldValue(2));
-		ChatGroupMember& refMember = refManager.m_mapChatGroups[m_dwGroupId].m_mapChatMembers[szPlayerId];
+		//ChatGroupMember& refMember = refManager.m_mapChatGroups[m_dwGroupId].m_mapChatMembers[szPlayerId];
+		ChatGroupMember& refMember = refManager.m_mapChatGroups[m_dwGroupId].m_mapChatGroupMembers[HashToIndex(szPlayerId.c_str(), szPlayerId.size())][szPlayerId];
 		refMember.m_szPlayerId = szPlayerId;
 		refMember.m_dwPower = dwPower;
 		refMember.m_dwJoinTime = dwJoinTime;
@@ -67,7 +69,14 @@ void DBGroupChatQuery::OnQuery(IDBConnection *poDBConnection)
 
 void DBGroupChatQuery::OnResult(void)
 {
-	// todo
+	//m_refGroupChat.dwGroupId
+	ChatGroup* pChatGroup = ChatServer::Instance()->GetChatGroupManager().GetChatGroup(m_refGroupChat.dwGroupId);
+	if (!pChatGroup)
+	{
+		LogExe(LogLv_Critical, "can't find group : %d", m_refGroupChat.dwGroupId);
+		return;
+	}
+	pChatGroup->OnGroupChat(m_refGroupChat);
 }
 
 void DBGroupChatQuery::Release(void)
@@ -93,6 +102,51 @@ ChatGroup::ChatGroup()
 
 ChatGroup::~ChatGroup()
 {
+}
+
+void ChatGroup::OnGroupChat(stCHAT_NOTIFY_CHAT_GROUP_CHAT& refChat)
+{
+	stCHAT_NOTIFY_PLAYER_GROUP_CHAT oChat;
+	oChat.dwGroupId = refChat.dwGroupId;
+	oChat.szSenderId = refChat.szSenderId;
+	oChat.eChatType = refChat.eChatType;
+	oChat.szContent = refChat.szContent;
+	oChat.dwSendTime = refChat.dwSendTime;
+	for (std::map<unsigned int, std::map<std::string, ChatGroupMember> >::iterator it = m_mapChatGroupMembers.begin();
+		it != m_mapChatGroupMembers.end(); ++it)
+	{
+		if (ChatServer::Instance()->CheckHashIndex(it->first))
+		{
+			for (std::map<std::string, ChatGroupMember>::iterator itMember = it->second.begin();
+				itMember != it->second.end(); ++itMember)
+			{
+				ChatPlayer* pPlayer = ChatServer::Instance()->GetChatPlayerManager().GetChatPlayer(itMember->first);
+				if (pPlayer)
+				{
+					pPlayer->OnGroupChat(oChat);
+				}
+			}
+		}
+		else
+		{
+			ChatServerSessionManager& refServerSessionManager = ChatServer::Instance()->GetChatServerSessionManager();
+			ChatServerSession* pChatServerSession = refServerSessionManager.GetChatServerSession(HashToIndex(it->first));
+			if (!pChatServerSession)
+			{
+				LogExe(LogLv_Critical, "cant't find chat server session");
+				continue;
+			}
+			stCHAT_NOTIFY_CHAT_GROUP_MEMBER_CHAT oMemberChat;
+			oMemberChat.oChat = oChat;
+			for (std::map<std::string, ChatGroupMember>::iterator itMember = it->second.begin();
+				itMember != it->second.end(); ++itMember)
+			{
+				oMemberChat.vecPlayerIds.push_back(itMember->first);
+			}
+
+			pChatServerSession->OnGroupMemberChat(oMemberChat);
+		}
+	}
 }
 
 //-------------------------------------------------------------

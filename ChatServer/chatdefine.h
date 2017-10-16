@@ -30,6 +30,7 @@ namespace Protocol
 		CHAT_NOTIFY_CHAT_PRIVATE_CHAT,
 		CHAT_NOTIFY_CHAT_GROUP_CREATE,
 		CHAT_NOTIFY_CHAT_GROUP_CHAT,
+		CHAT_NOTIFY_CHAT_GROUP_MEMBER_CHAT,
 		CHAT_TO_CHAT_END = 11000,
 
 		//chat --->chatmanager 20001 25000
@@ -60,6 +61,7 @@ namespace Protocol
 		CHAT_ACK_PLAYER_LOGIN,
 		CHAT_NOTIFY_PLAYER_PRIVATE_CHAT,
 		CHAT_ACK_PLAYER_CREATE_CHAT_GROUP,
+		CHAT_NOTIFY_PLAYER_GROUP_CHAT,
 		CHAT_PLAYER_END = 39999,
 
 		//game--->chatmanager 40000 44999
@@ -128,6 +130,41 @@ struct stCHAT_NOTIFY_CHAT_GROUP_CHAT
 		if (!refStream.ReadInt((unsigned int&)eChatType)) return false;
 		if (!refStream.ReadString(szContent)) return false;
 		if (!refStream.ReadInt(dwSendTime)) return false;
+		return true;
+	}
+};
+
+struct stCHAT_NOTIFY_PLAYER_GROUP_CHAT : public stCHAT_NOTIFY_CHAT_GROUP_CHAT
+{
+};
+struct stCHAT_NOTIFY_CHAT_GROUP_MEMBER_CHAT
+{
+	std::vector<std::string> vecPlayerIds;
+	stCHAT_NOTIFY_PLAYER_GROUP_CHAT oChat;
+
+	bool Write(CNetStream& refStream)
+	{
+		if (!refStream.WriteInt((unsigned int)vecPlayerIds.size())) return false;
+		for (std::vector<std::string>::iterator it = vecPlayerIds.begin();
+			it != vecPlayerIds.end(); ++it)
+		{
+			if (!refStream.WriteString(*it)) return false;
+		}
+		if (!oChat.Write(refStream)) return false;
+		return true;
+	}
+
+	bool Read(CNetStream& refStream)
+	{
+		unsigned int dwLen = 0;
+		if (!refStream.ReadInt(dwLen)) return false;
+		for (unsigned int i = 0; i < dwLen; ++i)
+		{
+			std::string szPlayerId;
+			if (!refStream.ReadString(szPlayerId))	return false;
+			vecPlayerIds.push_back(szPlayerId);
+		}
+		if (!oChat.Read(refStream)) return false;
 		return true;
 	}
 };

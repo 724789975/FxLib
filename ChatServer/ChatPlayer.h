@@ -22,6 +22,7 @@ public:
 	void OnRequestCreateChatGroup(const char* pBuf, UINT32 dwLen);
 	void OnCreateChatGroup(UINT32 dwGroupId);
 	void OnRequestGroupChat(const char* pBuf, UINT32 dwLen);
+	void OnGroupChat(stCHAT_NOTIFY_PLAYER_GROUP_CHAT& refChat);
 private:
 	ChatSession* m_pSession;
 
