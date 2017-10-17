@@ -41,6 +41,7 @@ void ChatPlayer::OnMsg(const char* pBuf, UINT32 dwLen)
 		case Protocol::PLAYER_REQUEST_PRIVATE_CHAT:	OnPrivateChat(pData, dwLen);	break;
 		case Protocol::PLAYER_REQUEST_CREATE_CHAT_GROUP:	OnRequestCreateChatGroup(pData, dwLen);	break;
 		case Protocol::PLAYER_REQUEST_CHAT_GROUP_CHAT:	OnRequestGroupChat(pData, dwLen);	break;
+		case Protocol::PLAYER_REQUEST_INVITE_ENTER_GROUP_CHAT:	OnRequestInviteEnterGroupChat(pData, dwLen);	break;
 		default: {LogExe(LogLv_Critical, "error protocol : %d", (unsigned int)eProrocol); m_pSession->Close(); }	break;
 	}
 }
@@ -241,4 +242,34 @@ void ChatPlayer::OnGroupChat(stCHAT_NOTIFY_PLAYER_GROUP_CHAT& refChat)
 	oStream.WriteInt(Protocol::CHAT_NOTIFY_PLAYER_GROUP_CHAT);
 	refChat.Write(oStream);
 	m_pSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
+}
+
+void ChatPlayer::OnRequestInviteEnterGroupChat(const char* pBuf, UINT32 dwLen)
+{
+	CNetStream oNetStream(pBuf, dwLen);
+	stPLAYER_REQUEST_INVITE_ENTER_GROUP_CHAT oInviteEnterGroupChat;
+	oInviteEnterGroupChat.Read(oNetStream);
+
+	if (ChatServer::Instance()->CheckHashIndex(HashToIndex(oInviteEnterGroupChat.dwGroupId)))
+	{
+		ChatGroup* pGroup = ChatServer::Instance()->GetChatGroupManager().GetChatGroup(oInviteEnterGroupChat.dwGroupId);
+		if (!pGroup)
+		{
+			LogExe(LogLv_Error, "can't find group id : %d", oInviteEnterGroupChat.dwGroupId);
+			return;
+		}
+		pGroup->InviteMember(m_szPyayerId, oInviteEnterGroupChat.szPlayerId);
+	}
+	else
+	{
+		//ChatServerSessionManager& refServerSessionManager = ChatServer::Instance()->GetChatServerSessionManager();
+		//ChatServerSession* pChatServerSession = refServerSessionManager.GetChatServerSession(HashToIndex(oInviteEnterGroupChat.dwGroupId));
+		//if (pChatServerSession)
+		//{
+		//	CNetStream oStream(ENetStreamType_Write, g_pChatPlayerBuff, g_dwChatPlayerBuffLen);
+		//	oStream.WriteInt(Protocol::CHAT_NOTIFY_CHAT_GROUP_CHAT);
+		//	oCHAT_NOTIFY_CHAT_GROUP_CHAT.Write(oStream);
+		//	pChatServerSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
+		//}
+	}
 }

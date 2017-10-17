@@ -15,6 +15,12 @@ namespace ChatConstant
 
 namespace Protocol
 {
+	enum EErrorCode
+	{
+		EEC_NONE = 0,
+		EEC_PermissionDenied,
+		EEC_AlreadyInChatGroup,
+	};
 	enum EChatType
 	{
 		ECT_NONE,
@@ -54,6 +60,7 @@ namespace Protocol
 		PLAYER_REQUEST_PRIVATE_CHAT,
 		PLAYER_REQUEST_CREATE_CHAT_GROUP,
 		PLAYER_REQUEST_CHAT_GROUP_CHAT,
+		PLAYER_REQUEST_INVITE_ENTER_GROUP_CHAT,
 		PLAYER_CHAT_END = 34999,
 
 		//chat--->player 35000 35999
@@ -392,6 +399,18 @@ struct stPLAYER_REQUEST_CHAT_GROUP_CHAT
 		if (!refStream.ReadInt(dwGroupId)) return false;
 		if (!refStream.ReadInt((unsigned int&)eChatType)) return false;
 		if (!refStream.ReadString(szContent)) return false;
+		return true;
+	}
+};
+
+struct stPLAYER_REQUEST_INVITE_ENTER_GROUP_CHAT
+{
+	unsigned int dwGroupId;
+	std::string szPlayerId;
+	bool Read(CNetStream& refStream)
+	{
+		if (!refStream.ReadInt(dwGroupId)) return false;
+		if (!refStream.ReadString(szPlayerId)) return false;
 		return true;
 	}
 };

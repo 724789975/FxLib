@@ -2,6 +2,7 @@
 #include "ChatServer.h"
 #include "utility.h"
 #include "ChatPlayer.h"
+#include "chatdefine.h"
 
 
 //-------------------------------------------------------------
@@ -95,6 +96,11 @@ ChatGroupMember::~ChatGroupMember()
 
 }
 
+bool ChatGroupMember::CheckPower(ECHatPower ePower)
+{
+	return m_dwPower & ePower;
+}
+
 //-------------------------------------------------------------
 ChatGroup::ChatGroup()
 {
@@ -147,6 +153,70 @@ void ChatGroup::OnGroupChat(stCHAT_NOTIFY_CHAT_GROUP_CHAT& refChat)
 			pChatServerSession->OnGroupMemberChat(oMemberChat);
 		}
 	}
+}
+
+ChatGroupMember* ChatGroup::GetChatGroupMember(std::string szPlayerId)
+{
+	unsigned int dwHashIndex = HashToIndex(szPlayerId.c_str(), szPlayerId.size());
+	if (m_mapChatGroupMembers.find(dwHashIndex) == m_mapChatGroupMembers.end())
+	{
+		return NULL;
+	}
+	if (m_mapChatGroupMembers[dwHashIndex].find(szPlayerId) == m_mapChatGroupMembers[dwHashIndex].end())
+	{
+		return NULL;
+	}
+	return &m_mapChatGroupMembers[dwHashIndex][szPlayerId];
+}
+
+class DBInviteGroupMemberQuery : public IQuery
+{
+public:
+	DBInviteGroupMemberQuery()
+	{
+	}
+	~DBInviteGroupMemberQuery() {}
+	virtual INT32 GetDBId(void) { return 0; }
+
+	virtual void OnQuery(IDBConnection *poDBConnection)
+	{
+		if (poDBConnection->Query(m_strQuery.c_str()) != FXDB_SUCCESS)
+		{
+		}
+	}
+
+	virtual void OnResult(void)
+	{
+		//todo
+	}
+
+	virtual void Release(void)
+	{
+		delete this;
+	}
+	std::string m_strQuery;
+};
+
+void ChatGroup::InviteMember(std::string szManager, std::string szPlayer)
+{
+	Protocol::EErrorCode eErrorCode = Protocol::EEC_NONE;
+	if (GetChatGroupMember(szPlayer))
+	{
+		eErrorCode = Protocol::EEC_AlreadyInChatGroup;
+	}
+	ChatGroupMember* pManager = GetChatGroupMember(szManager);
+	if (pManager->CheckPower(ChatGroupMember::ECP_MANAGER))
+	{
+		eErrorCode = Protocol::EEC_PermissionDenied;
+	}
+	if (eErrorCode != Protocol::EEC_NONE)
+	{
+		//todo
+		return;
+	}
+
+	DBInviteGroupMemberQuery* pQuery = new DBInviteGroupMemberQuery;
+	FxDBGetModule()->AddQuery(pQuery);
 }
 
 //-------------------------------------------------------------

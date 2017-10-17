@@ -38,6 +38,8 @@ public:
 
 class ChatGroupMember
 {
+	friend class DBLoadGroupQuery;
+public:
 	enum ECHatPower
 	{
 		ECP_None = 0,
@@ -47,10 +49,11 @@ class ChatGroupMember
 		ECP_MANAGER = 1 << 29,
 		ECP_OWNER = 1 << 30,
 	};
-	friend class DBLoadGroupQuery;
-public:
+
 	ChatGroupMember();
 	virtual ~ChatGroupMember();
+
+	bool CheckPower(ECHatPower ePower);
 
 private:
 	std::string m_szPlayerId;
@@ -66,6 +69,9 @@ public:
 	virtual ~ChatGroup();
 
 	void OnGroupChat(stCHAT_NOTIFY_CHAT_GROUP_CHAT& refChat);
+
+	ChatGroupMember* GetChatGroupMember(std::string szPlayerId);
+	void InviteMember(std::string szManager, std::string szPlayer);
 
 private:
 	std::map<unsigned int, std::map<std::string, ChatGroupMember> > m_mapChatGroupMembers;

@@ -23,8 +23,6 @@ ChatServer::~ChatServer()
 
 bool ChatServer::Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UINT32 dwChatWebSocketSessionPort, UINT32 dwChatServerSessionPort)
 {
-	m_oChatGroupManager.Init();
-
 	m_oChatBinarySessionManager.Init();
 	m_oChatPlayerManager.Init();
 	m_oChatServerSessionManager.Init();
@@ -48,6 +46,11 @@ bool ChatServer::Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UIN
 			dwIp = *(u_long*)pHost->h_addr_list[i];
 		}
 	}
+	m_pChatServerSessionListener = pNet->Listen(&m_oChatServerSessionManager, SLT_CommonTcp, 0, m_dwChatServerSessionPort);
+	if (m_pChatServerSessionListener == NULL)
+	{
+		return false;
+	}
 	m_pChatSessionListener = pNet->Listen(&m_oChatBinarySessionManager, SLT_CommonTcp, dwIp, m_dwChatSessionPort);
 	if (m_pChatSessionListener  == NULL)
 	{
@@ -55,11 +58,6 @@ bool ChatServer::Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UIN
 	}
 	m_pChatWebSocketSessionListener = pNet->Listen(&m_oChatWebSocketSessionManager, SLT_WebSocket, dwIp, dwChatWebSocketSessionPort);
 	if (m_pChatWebSocketSessionListener == NULL)
-	{
-		return false;
-	}
-	m_pChatServerSessionListener = pNet->Listen(&m_oChatServerSessionManager, SLT_CommonTcp, 0, m_dwChatServerSessionPort);
-	if (m_pChatSessionListener == NULL)
 	{
 		return false;
 	}
@@ -91,6 +89,9 @@ void ChatServer::SetHashIndex(UINT32 dwIndex)
 			m_setHashIndex.insert(i);
 		}
 	}
+
+	//设置了hashindex后 才加载群聊
+	m_oChatGroupManager.Init();
 }
 
 bool ChatServer::CheckHashIndex(unsigned int dwIndex)
