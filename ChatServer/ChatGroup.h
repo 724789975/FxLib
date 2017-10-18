@@ -39,6 +39,7 @@ public:
 class ChatGroupMember
 {
 	friend class DBLoadGroupQuery;
+	friend class DBInviteGroupMemberQuery;
 public:
 	enum ECHatPower
 	{
@@ -64,6 +65,7 @@ private:
 class ChatGroup
 {
 	friend class DBLoadGroupQuery;
+	friend class DBInviteGroupMemberQuery;
 public:
 	ChatGroup();
 	virtual ~ChatGroup();
@@ -75,6 +77,7 @@ public:
 
 private:
 	std::map<unsigned int, std::map<std::string, ChatGroupMember> > m_mapChatGroupMembers;
+	unsigned int m_dwGroupId;
 	//std::map<std::string, ChatGroupMember> m_mapChatMembers;
 };
 

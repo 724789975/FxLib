@@ -1,4 +1,4 @@
-#include "ChatGroup.h"
+﻿#include "ChatGroup.h"
 #include "ChatServer.h"
 #include "utility.h"
 #include "ChatPlayer.h"
@@ -37,6 +37,10 @@ void DBLoadGroupQuery::OnResult(void)
 		refMember.m_szPlayerId = szPlayerId;
 		refMember.m_dwPower = dwPower;
 		refMember.m_dwJoinTime = dwJoinTime;
+	}
+	if (refManager.m_mapChatGroups.find(m_dwGroupId) != refManager.m_mapChatGroups.end())
+	{
+		refManager.m_mapChatGroups[m_dwGroupId].m_dwGroupId = m_dwGroupId;
 	}
 }
 
@@ -103,6 +107,7 @@ bool ChatGroupMember::CheckPower(ECHatPower ePower)
 
 //-------------------------------------------------------------
 ChatGroup::ChatGroup()
+	: m_dwGroupId(0)
 {
 }
 
@@ -172,8 +177,17 @@ ChatGroupMember* ChatGroup::GetChatGroupMember(std::string szPlayerId)
 class DBInviteGroupMemberQuery : public IQuery
 {
 public:
-	DBInviteGroupMemberQuery()
+	DBInviteGroupMemberQuery(unsigned int dwGroupId, std::string szPlayer, std::string szInviter)
 	{
+		m_dwGroupId = dwGroupId;
+		m_szPlayer = szPlayer;
+		m_szInviter = szInviter;
+		m_dwJoinTime = GetTimeHandler()->GetSecond();
+		static char szTemp[512] = { 0 };
+		memset(szTemp, 0, 512);
+		sprintf(szTemp, "INSERT INTO `group_member_%d` VALUES ('%s', 1, %d) ;",
+			dwGroupId, szPlayer.c_str(), m_dwJoinTime);
+		m_strQuery = szTemp;
 	}
 	~DBInviteGroupMemberQuery() {}
 	virtual INT32 GetDBId(void) { return 0; }
@@ -187,7 +201,22 @@ public:
 
 	virtual void OnResult(void)
 	{
-		//todo
+		ChatGroupManager& refManager = ChatServer::Instance()->GetChatGroupManager();
+		ChatGroup* pGroup = refManager.GetChatGroup(m_dwGroupId);
+		if (pGroup)
+		{
+			ChatGroupMember& refMember = pGroup->m_mapChatGroupMembers[HashToIndex(m_szPlayer.c_str(), m_szPlayer.size())][m_szPlayer];
+			refMember.m_szPlayerId = m_szPlayer;
+			refMember.m_dwPower = 1;
+			refMember.m_dwJoinTime = m_dwJoinTime;
+
+			stCHAT_NOTIFY_CHAT_GROUP_CHAT oChat;
+			oChat.dwGroupId = m_dwGroupId;
+			oChat.eChatType = Protocol::ECT_String;
+			oChat.szSenderId = "系统";
+			oChat.szContent = m_szInviter + " 邀请了 " + m_szPlayer + " 加入";
+			pGroup->OnGroupChat(oChat);
+		}
 	}
 
 	virtual void Release(void)
@@ -195,6 +224,10 @@ public:
 		delete this;
 	}
 	std::string m_strQuery;
+	unsigned int m_dwGroupId;
+	std::string m_szPlayer;
+	std::string m_szInviter;
+	unsigned int m_dwJoinTime;
 };
 
 void ChatGroup::InviteMember(std::string szManager, std::string szPlayer)
@@ -205,7 +238,7 @@ void ChatGroup::InviteMember(std::string szManager, std::string szPlayer)
 		eErrorCode = Protocol::EEC_AlreadyInChatGroup;
 	}
 	ChatGroupMember* pManager = GetChatGroupMember(szManager);
-	if (pManager->CheckPower(ChatGroupMember::ECP_MANAGER))
+	if (!pManager->CheckPower(ChatGroupMember::ECP_MANAGER))
 	{
 		eErrorCode = Protocol::EEC_PermissionDenied;
 	}
@@ -215,7 +248,7 @@ void ChatGroup::InviteMember(std::string szManager, std::string szPlayer)
 		return;
 	}
 
-	DBInviteGroupMemberQuery* pQuery = new DBInviteGroupMemberQuery;
+	DBInviteGroupMemberQuery* pQuery = new DBInviteGroupMemberQuery(m_dwGroupId, szPlayer, szManager);
 	FxDBGetModule()->AddQuery(pQuery);
 }
 

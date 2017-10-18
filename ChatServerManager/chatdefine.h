@@ -37,6 +37,7 @@ namespace Protocol
 		CHAT_NOTIFY_CHAT_GROUP_CREATE,
 		CHAT_NOTIFY_CHAT_GROUP_CHAT,
 		CHAT_NOTIFY_CHAT_GROUP_MEMBER_CHAT,
+		CHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT,
 		CHAT_TO_CHAT_END = 11000,
 
 		//chat --->chatmanager 20001 25000
@@ -172,6 +173,27 @@ struct stCHAT_NOTIFY_CHAT_GROUP_MEMBER_CHAT
 			vecPlayerIds.push_back(szPlayerId);
 		}
 		if (!oChat.Read(refStream)) return false;
+		return true;
+	}
+};
+
+struct stCHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT
+{
+	unsigned int dwGroupId;
+	std::string szPlayerId;
+	std::string szInviter;
+	bool Read(CNetStream& refStream)
+	{
+		if (!refStream.ReadInt(dwGroupId)) return false;
+		if (!refStream.ReadString(szPlayerId)) return false;
+		if (!refStream.ReadString(szInviter)) return false;
+		return true;
+	}
+	bool Write(CNetStream& refStream)
+	{
+		if (!refStream.WriteInt(dwGroupId)) return false;
+		if (!refStream.WriteString(szPlayerId)) return false;
+		if (!refStream.WriteString(szInviter)) return false;
 		return true;
 	}
 };

@@ -262,14 +262,15 @@ void ChatPlayer::OnRequestInviteEnterGroupChat(const char* pBuf, UINT32 dwLen)
 	}
 	else
 	{
-		//ChatServerSessionManager& refServerSessionManager = ChatServer::Instance()->GetChatServerSessionManager();
-		//ChatServerSession* pChatServerSession = refServerSessionManager.GetChatServerSession(HashToIndex(oInviteEnterGroupChat.dwGroupId));
-		//if (pChatServerSession)
-		//{
-		//	CNetStream oStream(ENetStreamType_Write, g_pChatPlayerBuff, g_dwChatPlayerBuffLen);
-		//	oStream.WriteInt(Protocol::CHAT_NOTIFY_CHAT_GROUP_CHAT);
-		//	oCHAT_NOTIFY_CHAT_GROUP_CHAT.Write(oStream);
-		//	pChatServerSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
-		//}
+		stCHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT oC2CInviteEnterGroupChat;
+		oC2CInviteEnterGroupChat.dwGroupId = oInviteEnterGroupChat.dwGroupId;
+		oC2CInviteEnterGroupChat.szPlayerId = oInviteEnterGroupChat.szPlayerId;
+		oC2CInviteEnterGroupChat.szInviter = m_szPyayerId;
+		ChatServerSessionManager& refServerSessionManager = ChatServer::Instance()->GetChatServerSessionManager();
+		ChatServerSession* pChatServerSession = refServerSessionManager.GetChatServerSession(HashToIndex(oInviteEnterGroupChat.dwGroupId));
+		if (pChatServerSession)
+		{
+			pChatServerSession->OnInviteGroupMember(oC2CInviteEnterGroupChat);
+		}
 	}
 }

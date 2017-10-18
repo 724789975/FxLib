@@ -52,6 +52,7 @@ void ChatServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 		case Protocol::CHAT_NOTIFY_CHAT_GROUP_CREATE:		OnChatToChatGroupCreate(pData, dwLen);	break;
 		case Protocol::CHAT_NOTIFY_CHAT_GROUP_CHAT:			OnChatToChatGroupChat(pData, dwLen);	break;
 		case Protocol::CHAT_NOTIFY_CHAT_GROUP_MEMBER_CHAT:	OnChatToChatGroupMemberChat(pData, dwLen);	break;
+		case Protocol::CHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT:	OnChatToChatInviteGroupMember(pData, dwLen);	break;
 		default:	Assert(0);	break;
 	}
 }
@@ -78,6 +79,14 @@ void ChatServerSession::OnGroupMemberChat(stCHAT_NOTIFY_CHAT_GROUP_MEMBER_CHAT& 
 {
 	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
 	oStream.WriteInt(Protocol::CHAT_NOTIFY_CHAT_GROUP_MEMBER_CHAT);
+	refChat.Write(oStream);
+	Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
+}
+
+void ChatServerSession::OnInviteGroupMember(stCHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT& refChat)
+{
+	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
+	oStream.WriteInt(Protocol::CHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT);
 	refChat.Write(oStream);
 	Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
 }
@@ -144,7 +153,27 @@ void ChatServerSession::OnChatToChatGroupMemberChat(const char* pBuf, UINT32 dwL
 		it != oChat.vecPlayerIds.end(); ++it)
 	{
 		ChatPlayer* pChatPlayer = ChatServer::Instance()->GetChatPlayerManager().GetChatPlayer(*it);
-		pChatPlayer->OnGroupChat(oChat.oChat);
+		if (pChatPlayer)
+		{
+			pChatPlayer->OnGroupChat(oChat.oChat);
+		}
+	}
+}
+
+void ChatServerSession::OnChatToChatInviteGroupMember(const char* pBuf, UINT32 dwLen)
+{
+	CNetStream oStream(pBuf, dwLen);
+	stCHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT oChat;
+	if (!oChat.Read(oStream))
+	{
+		LogExe(LogLv_Critical, "read error");
+		return;
+	}
+
+	ChatGroup* pGroup = ChatServer::Instance()->GetChatGroupManager().GetChatGroup(oChat.dwGroupId);
+	if (pGroup)
+	{
+		pGroup->InviteMember(oChat.szInviter, oChat.szPlayerId);
 	}
 }
 
