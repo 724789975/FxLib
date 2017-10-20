@@ -53,6 +53,8 @@ void ChatServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 		case Protocol::CHAT_NOTIFY_CHAT_GROUP_CHAT:			OnChatToChatGroupChat(pData, dwLen);	break;
 		case Protocol::CHAT_NOTIFY_CHAT_GROUP_MEMBER_CHAT:	OnChatToChatGroupMemberChat(pData, dwLen);	break;
 		case Protocol::CHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT:	OnChatToChatInviteGroupMember(pData, dwLen);	break;
+		case Protocol::CHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT:	OnChatToChatLeaveGroupChat(pData, dwLen);	break;
+		case Protocol::CHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT_RESULT:	OnChatToChatLeaveGroupChatResult(pData, dwLen);	break;
 		default:	Assert(0);	break;
 	}
 }
@@ -88,6 +90,22 @@ void ChatServerSession::OnInviteGroupMember(stCHAT_NOTIFY_CHAT_INVITE_ENTER_GROU
 	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
 	oStream.WriteInt(Protocol::CHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT);
 	refChat.Write(oStream);
+	Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
+}
+
+void ChatServerSession::OnLeaveGroupChat(stCHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT& refLeaveGroupChat)
+{
+	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
+	oStream.WriteInt(Protocol::CHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT);
+	refLeaveGroupChat.Write(oStream);
+	Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
+}
+
+void ChatServerSession::OnLeaveGroupChatResult(stCHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT_RESULT& refLeaveGroupChatResult)
+{
+	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
+	oStream.WriteInt(Protocol::CHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT_RESULT);
+	refLeaveGroupChatResult.Write(oStream);
 	Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
 }
 
@@ -173,7 +191,41 @@ void ChatServerSession::OnChatToChatInviteGroupMember(const char* pBuf, UINT32 d
 	ChatGroup* pGroup = ChatServer::Instance()->GetChatGroupManager().GetChatGroup(oChat.dwGroupId);
 	if (pGroup)
 	{
-		pGroup->InviteMember(oChat.szInviter, oChat.szPlayerId);
+		pGroup->OnInviteMember(oChat.szInviter, oChat.szPlayerId);
+	}
+}
+
+void ChatServerSession::OnChatToChatLeaveGroupChat(const char* pBuf, UINT32 dwLen)
+{
+	CNetStream oStream(pBuf, dwLen);
+	stCHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT oLeaveChat;
+	if (!oLeaveChat.Read(oStream))
+	{
+		LogExe(LogLv_Critical, "read error");
+		return;
+	}
+
+	ChatGroup* pGroup = ChatServer::Instance()->GetChatGroupManager().GetChatGroup(oLeaveChat.dwGroupId);
+	if (pGroup)
+	{
+		pGroup->OnLeaveGroupChat(oLeaveChat.szPlayerId);
+	}
+}
+
+void ChatServerSession::OnChatToChatLeaveGroupChatResult(const char* pBuf, UINT32 dwLen)
+{
+	CNetStream oStream(pBuf, dwLen);
+	stCHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT_RESULT oLeaveChatResult;
+	if (!oLeaveChatResult.Read(oStream))
+	{
+		LogExe(LogLv_Critical, "read error");
+		return;
+	}
+
+	ChatPlayer* pChatPlayer = ChatServer::Instance()->GetChatPlayerManager().GetChatPlayer(oLeaveChatResult.szPlayerId);
+	if (pChatPlayer)
+	{
+		pChatPlayer->OnLeaveGroupChatResult(oLeaveChatResult);
 	}
 }
 

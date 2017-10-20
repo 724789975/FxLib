@@ -42,6 +42,7 @@ void ChatPlayer::OnMsg(const char* pBuf, UINT32 dwLen)
 		case Protocol::PLAYER_REQUEST_CREATE_CHAT_GROUP:	OnRequestCreateChatGroup(pData, dwLen);	break;
 		case Protocol::PLAYER_REQUEST_CHAT_GROUP_CHAT:	OnRequestGroupChat(pData, dwLen);	break;
 		case Protocol::PLAYER_REQUEST_INVITE_ENTER_GROUP_CHAT:	OnRequestInviteEnterGroupChat(pData, dwLen);	break;
+		case Protocol::PLAYER_REQUEST_LEAVE_GROUP_CHAT:	OnRequestLeaveGroupChat(pData, dwLen);	break;
 		default: {LogExe(LogLv_Critical, "error protocol : %d", (unsigned int)eProrocol); m_pSession->Close(); }	break;
 	}
 }
@@ -258,7 +259,7 @@ void ChatPlayer::OnRequestInviteEnterGroupChat(const char* pBuf, UINT32 dwLen)
 			LogExe(LogLv_Error, "can't find group id : %d", oInviteEnterGroupChat.dwGroupId);
 			return;
 		}
-		pGroup->InviteMember(m_szPyayerId, oInviteEnterGroupChat.szPlayerId);
+		pGroup->OnInviteMember(m_szPyayerId, oInviteEnterGroupChat.szPlayerId);
 	}
 	else
 	{
@@ -273,4 +274,43 @@ void ChatPlayer::OnRequestInviteEnterGroupChat(const char* pBuf, UINT32 dwLen)
 			pChatServerSession->OnInviteGroupMember(oC2CInviteEnterGroupChat);
 		}
 	}
+}
+
+void ChatPlayer::OnRequestLeaveGroupChat(const char* pBuf, UINT32 dwLen)
+{
+	CNetStream oNetStream(pBuf, dwLen);
+	stPLAYER_REQUEST_LEAVE_GROUP_CHAT oLeaveGroupChat;
+	oLeaveGroupChat.Read(oNetStream);
+
+	if (ChatServer::Instance()->CheckHashIndex(HashToIndex(oLeaveGroupChat.dwGroupId)))
+	{
+		ChatGroup* pGroup = ChatServer::Instance()->GetChatGroupManager().GetChatGroup(oLeaveGroupChat.dwGroupId);
+		if (!pGroup)
+		{
+			LogExe(LogLv_Error, "can't find group id : %d", oLeaveGroupChat.dwGroupId);
+			return;
+		}
+		pGroup->OnLeaveGroupChat(m_szPyayerId);
+	}
+	else
+	{
+		stCHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT oC2CLeaveGroupChat;
+		oC2CLeaveGroupChat.dwGroupId = oLeaveGroupChat.dwGroupId;
+		oC2CLeaveGroupChat.szPlayerId = m_szPyayerId;
+
+		ChatServerSessionManager& refServerSessionManager = ChatServer::Instance()->GetChatServerSessionManager();
+		ChatServerSession* pChatServerSession = refServerSessionManager.GetChatServerSession(HashToIndex(oC2CLeaveGroupChat.dwGroupId));
+		if (pChatServerSession)
+		{
+			pChatServerSession->OnLeaveGroupChat(oC2CLeaveGroupChat);
+		}
+	}
+}
+
+void ChatPlayer::OnLeaveGroupChatResult(stCHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT_RESULT& refLeaveChatResult)
+{
+	CNetStream oStream(ENetStreamType_Write, g_pChatPlayerBuff, g_dwChatPlayerBuffLen);
+	oStream.WriteInt(Protocol::CHAT_NOTIFY_PLAYER_LEAVE_GROUP_CHAT);
+	refLeaveChatResult.Write(oStream);
+	m_pSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
 }

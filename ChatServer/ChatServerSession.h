@@ -24,6 +24,8 @@ public:
 	void				OnGroupCreate(unsigned int dwGroupId);
 	void				OnGroupMemberChat(stCHAT_NOTIFY_CHAT_GROUP_MEMBER_CHAT& refChat);
 	void				OnInviteGroupMember(stCHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT& refChat);
+	void				OnLeaveGroupChat(stCHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT& refLeaveGroupChat);
+	void				OnLeaveGroupChatResult(stCHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT_RESULT& refLeaveGroupChatResult);
 
 private:
 	BinaryDataHeader m_oBinaryDataHeader;
@@ -39,6 +41,8 @@ private:
 	void OnChatToChatGroupChat(const char* pBuf, UINT32 dwLen);
 	void OnChatToChatGroupMemberChat(const char* pBuf, UINT32 dwLen);
 	void OnChatToChatInviteGroupMember(const char* pBuf, UINT32 dwLen);
+	void OnChatToChatLeaveGroupChat(const char* pBuf, UINT32 dwLen);
+	void OnChatToChatLeaveGroupChatResult(const char* pBuf, UINT32 dwLen);
 };
 
 class ChatServerSessionManager : public IFxSessionFactory

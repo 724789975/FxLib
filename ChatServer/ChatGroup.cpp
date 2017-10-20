@@ -230,7 +230,7 @@ public:
 	unsigned int m_dwJoinTime;
 };
 
-void ChatGroup::InviteMember(std::string szManager, std::string szPlayer)
+void ChatGroup::OnInviteMember(std::string szManager, std::string szPlayer)
 {
 	Protocol::EErrorCode eErrorCode = Protocol::EEC_NONE;
 	if (GetChatGroupMember(szPlayer))
@@ -250,6 +250,11 @@ void ChatGroup::InviteMember(std::string szManager, std::string szPlayer)
 
 	DBInviteGroupMemberQuery* pQuery = new DBInviteGroupMemberQuery(m_dwGroupId, szPlayer, szManager);
 	FxDBGetModule()->AddQuery(pQuery);
+}
+
+void ChatGroup::OnLeaveGroupChat(std::string szPlayer)
+{
+	// todo
 }
 
 //-------------------------------------------------------------
