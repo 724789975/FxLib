@@ -307,10 +307,10 @@ void ChatPlayer::OnRequestLeaveGroupChat(const char* pBuf, UINT32 dwLen)
 	}
 }
 
-void ChatPlayer::OnLeaveGroupChatResult(stCHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT_RESULT& refLeaveChatResult)
+void ChatPlayer::OnLeaveGroupChatResult(stCHAT_ACK_PLAYER_LEAVE_GROUP_CHAT& refLeaveChatResult)
 {
 	CNetStream oStream(ENetStreamType_Write, g_pChatPlayerBuff, g_dwChatPlayerBuffLen);
-	oStream.WriteInt(Protocol::CHAT_NOTIFY_PLAYER_LEAVE_GROUP_CHAT);
+	oStream.WriteInt(Protocol::CHAT_ACK_PLAYER_LEAVE_GROUP_CHAT);
 	refLeaveChatResult.Write(oStream);
 	m_pSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
 }

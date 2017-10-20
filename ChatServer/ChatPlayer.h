@@ -25,7 +25,7 @@ public:
 	void OnGroupChat(stCHAT_NOTIFY_PLAYER_GROUP_CHAT& refChat);
 	void OnRequestInviteEnterGroupChat(const char* pBuf, UINT32 dwLen);
 	void OnRequestLeaveGroupChat(const char* pBuf, UINT32 dwLen);
-	void OnLeaveGroupChatResult(stCHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT_RESULT& refLeaveChatResult);
+	void OnLeaveGroupChatResult(stCHAT_ACK_PLAYER_LEAVE_GROUP_CHAT& refLeaveChatResult);
 private:
 	ChatSession* m_pSession;
 

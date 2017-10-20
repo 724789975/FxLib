@@ -18,8 +18,10 @@ namespace Protocol
 	enum EErrorCode
 	{
 		EEC_NONE = 0,
-		EEC_PermissionDenied,
-		EEC_AlreadyInChatGroup,
+		EEC_PermissionDenied,				//权限不足
+		EEC_AlreadyInChatGroup,				//已经在群聊中
+		EEC_NotInChatGroup,					//不在群聊中
+		EEC_DataError,						//不在群聊中
 	};
 	enum EChatType
 	{
@@ -73,7 +75,7 @@ namespace Protocol
 		CHAT_NOTIFY_PLAYER_PRIVATE_CHAT,
 		CHAT_ACK_PLAYER_CREATE_CHAT_GROUP,
 		CHAT_NOTIFY_PLAYER_GROUP_CHAT,
-		CHAT_NOTIFY_PLAYER_LEAVE_GROUP_CHAT,
+		CHAT_ACK_PLAYER_LEAVE_GROUP_CHAT,
 		CHAT_PLAYER_END = 39999,
 
 		//game--->chatmanager 40000 44999

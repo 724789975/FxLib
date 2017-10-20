@@ -420,3 +420,14 @@ void CChatManagerSession::Release(void)
 {
 	CSocketSession::Release();
 }
+
+void CChatManagerSession::OnClose()
+{
+	GetTimeHandler()->AddDelayTimer(2, this);
+}
+
+bool CChatManagerSession::OnTimer(unsigned int dwSecond)
+{
+	FxNetGetModule()->TcpConnect(this, inet_addr("127.0.0.1"), 13001, true);
+	return true;
+}

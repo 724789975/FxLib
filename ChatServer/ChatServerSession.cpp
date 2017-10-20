@@ -225,7 +225,10 @@ void ChatServerSession::OnChatToChatLeaveGroupChatResult(const char* pBuf, UINT3
 	ChatPlayer* pChatPlayer = ChatServer::Instance()->GetChatPlayerManager().GetChatPlayer(oLeaveChatResult.szPlayerId);
 	if (pChatPlayer)
 	{
-		pChatPlayer->OnLeaveGroupChatResult(oLeaveChatResult);
+		stCHAT_ACK_PLAYER_LEAVE_GROUP_CHAT oAckResult;
+		oAckResult.dwResult = oLeaveChatResult.dwResult;
+		oAckResult.dwGroupId = oLeaveChatResult.dwGroupId;
+		pChatPlayer->OnLeaveGroupChatResult(oAckResult);
 	}
 }
 

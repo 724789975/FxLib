@@ -73,8 +73,10 @@ public:
 	void OnGroupChat(stCHAT_NOTIFY_CHAT_GROUP_CHAT& refChat);
 
 	ChatGroupMember* GetChatGroupMember(std::string szPlayerId);
+	Protocol::EErrorCode RemoveChatMember(std::string szPlayer);
 	void OnInviteMember(std::string szManager, std::string szPlayer);
 	void OnLeaveGroupChat(std::string szPlayer);
+	void OnLeaveGroupChatResult(Protocol::EErrorCode eErrorCode, std::string szPlayer);
 
 private:
 	std::map<unsigned int, std::map<std::string, ChatGroupMember> > m_mapChatGroupMembers;

@@ -170,12 +170,15 @@ private:
 	WebSocketDataHeader m_oWebSocketDataHeader;
 };
 
-class CChatManagerSession : public TSingleton<CChatManagerSession>, public CBinarySocketSession
+class CChatManagerSession : public TSingleton<CChatManagerSession>, public CBinarySocketSession, public IFxTimer
 {
 public:
 	virtual void		OnConnect(void);
 	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
 	virtual void		Release(void);
+	virtual void		OnClose();
+
+	virtual bool		OnTimer(unsigned int dwSecond);
 protected:
 private:
 };

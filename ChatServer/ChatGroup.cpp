@@ -4,7 +4,6 @@
 #include "ChatPlayer.h"
 #include "chatdefine.h"
 
-
 //-------------------------------------------------------------
 DBLoadGroupQuery::DBLoadGroupQuery(unsigned int dwGroupId)
 {
@@ -174,6 +173,21 @@ ChatGroupMember* ChatGroup::GetChatGroupMember(std::string szPlayerId)
 	return &m_mapChatGroupMembers[dwHashIndex][szPlayerId];
 }
 
+Protocol::EErrorCode ChatGroup::RemoveChatMember(std::string szPlayer)
+{
+	unsigned int dwHash = HashToIndex(szPlayer.c_str(), szPlayer.size());
+	if (m_mapChatGroupMembers.find(dwHash) == m_mapChatGroupMembers.end())
+	{
+		return Protocol::EEC_NotInChatGroup;
+	}
+	else if (m_mapChatGroupMembers[dwHash].find(szPlayer) == m_mapChatGroupMembers[dwHash].end())
+	{
+		return Protocol::EEC_NotInChatGroup;
+	}
+	m_mapChatGroupMembers[dwHash].erase(szPlayer);
+	return Protocol::EEC_NONE;
+}
+
 class DBInviteGroupMemberQuery : public IQuery
 {
 public:
@@ -252,9 +266,138 @@ void ChatGroup::OnInviteMember(std::string szManager, std::string szPlayer)
 	FxDBGetModule()->AddQuery(pQuery);
 }
 
+class DBLeaveGroupQuery : public IQuery
+{
+public:
+	DBLeaveGroupQuery(unsigned int dwGroupId, std::string szPlayer)
+	{
+		m_eErrorCode = Protocol::EEC_NONE;
+		m_dwGroupId = dwGroupId;
+		m_szPlayer = szPlayer;
+		static char szTemp[512] = { 0 };
+		memset(szTemp, 0, 512);
+		sprintf(szTemp, "DELETE FROM `group_member_%d` WHERE `player_id` = '%s';",
+			dwGroupId, szPlayer.c_str());
+		m_strQuery = szTemp;
+	}
+	~DBLeaveGroupQuery() {}
+	virtual INT32 GetDBId(void) { return 0; }
+
+	virtual void OnQuery(IDBConnection *poDBConnection)
+	{
+		if (poDBConnection->Query(m_strQuery.c_str()) != FXDB_SUCCESS)
+		{
+			m_eErrorCode = Protocol::EEC_DataError;
+		}
+	}
+
+	virtual void OnResult(void)
+	{
+		ChatGroupManager& refManager = ChatServer::Instance()->GetChatGroupManager();
+		ChatGroup* pGroup = refManager.GetChatGroup(m_dwGroupId);
+		if (pGroup)
+		{
+			if (m_eErrorCode != Protocol::EEC_NONE)
+			{
+				pGroup->OnLeaveGroupChatResult(m_eErrorCode, m_szPlayer);
+			}
+			else
+			{
+				m_eErrorCode = pGroup->RemoveChatMember(m_szPlayer);
+				pGroup->OnLeaveGroupChatResult(m_eErrorCode, m_szPlayer);
+			}
+		}
+	}
+
+	virtual void Release(void)
+	{
+		delete this;
+	}
+	Protocol::EErrorCode m_eErrorCode;
+	std::string m_strQuery;
+	unsigned int m_dwGroupId;
+	std::string m_szPlayer;
+};
+
 void ChatGroup::OnLeaveGroupChat(std::string szPlayer)
 {
-	// todo
+	Protocol::EErrorCode eErrorCode = Protocol::EEC_NONE;
+	unsigned int dwHash  = HashToIndex(szPlayer.c_str(), szPlayer.size());
+	if (m_mapChatGroupMembers.find(dwHash) == m_mapChatGroupMembers.end())
+	{
+		eErrorCode = Protocol::EEC_NotInChatGroup;
+	}
+	else if (m_mapChatGroupMembers[dwHash].find(szPlayer) == m_mapChatGroupMembers[dwHash].end())
+	{
+		eErrorCode = Protocol::EEC_NotInChatGroup;
+	}
+
+	if (eErrorCode != Protocol::EEC_NONE)
+	{
+		if (ChatServer::Instance()->CheckHashIndex(dwHash))
+		{
+			ChatPlayer* pPlayer = ChatServer::Instance()->GetChatPlayerManager().GetChatPlayer(szPlayer);
+			if (pPlayer)
+			{
+				stCHAT_ACK_PLAYER_LEAVE_GROUP_CHAT oAckLeave;
+				oAckLeave.dwGroupId = m_dwGroupId;
+				oAckLeave.dwResult = eErrorCode;
+
+				pPlayer->OnLeaveGroupChatResult(oAckLeave);
+			}
+		}
+		else
+		{
+			ChatServerSessionManager& refServerSessionManager = ChatServer::Instance()->GetChatServerSessionManager();
+			ChatServerSession* pChatServerSession = refServerSessionManager.GetChatServerSession(dwHash);
+			if (!pChatServerSession)
+			{
+				LogExe(LogLv_Critical, "cant't find chat server session");
+				return;
+			}
+			stCHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT_RESULT oLeaveResult;
+			oLeaveResult.dwGroupId = m_dwGroupId;
+			oLeaveResult.dwResult = eErrorCode;
+			oLeaveResult.szPlayerId = szPlayer;
+			pChatServerSession->OnLeaveGroupChatResult(oLeaveResult);
+		}
+		return;
+	}
+
+	DBLeaveGroupQuery* pQuery = new DBLeaveGroupQuery(m_dwGroupId, szPlayer);
+	FxDBGetModule()->AddQuery(pQuery);
+}
+
+void ChatGroup::OnLeaveGroupChatResult(Protocol::EErrorCode eErrorCode, std::string szPlayer)
+{
+	unsigned int dwHash = HashToIndex(szPlayer.c_str(), szPlayer.size());
+	if (ChatServer::Instance()->CheckHashIndex(dwHash))
+	{
+		ChatPlayer* pPlayer = ChatServer::Instance()->GetChatPlayerManager().GetChatPlayer(szPlayer);
+		if (pPlayer)
+		{
+			stCHAT_ACK_PLAYER_LEAVE_GROUP_CHAT oAckLeave;
+			oAckLeave.dwGroupId = m_dwGroupId;
+			oAckLeave.dwResult = eErrorCode;
+
+			pPlayer->OnLeaveGroupChatResult(oAckLeave);
+		}
+	}
+	else
+	{
+		ChatServerSessionManager& refServerSessionManager = ChatServer::Instance()->GetChatServerSessionManager();
+		ChatServerSession* pChatServerSession = refServerSessionManager.GetChatServerSession(dwHash);
+		if (!pChatServerSession)
+		{
+			LogExe(LogLv_Critical, "cant't find chat server session");
+			return;
+		}
+		stCHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT_RESULT oLeaveResult;
+		oLeaveResult.dwGroupId = m_dwGroupId;
+		oLeaveResult.dwResult = eErrorCode;
+		oLeaveResult.szPlayerId = szPlayer;
+		pChatServerSession->OnLeaveGroupChatResult(oLeaveResult);
+	}
 }
 
 //-------------------------------------------------------------
