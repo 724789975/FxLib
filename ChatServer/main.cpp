@@ -15,6 +15,14 @@ DEFINE_uint32(chat_server_session_port, 20002, "Chat Server Session Port");
 DEFINE_string(chat_server_manager_ip, "127.0.0.1", "Chat Server Manager Ip");
 DEFINE_uint32(chat_server_manager_port, 13000, "Chat Server Manager Port");
 
+DEFINE_uint32(db_id, 0, "DB Id");
+DEFINE_uint32(db_port, 3306, "DB Id");
+DEFINE_string(character_set, "utf8", "Character Set");
+DEFINE_string(db_name, "chat", "DB Name");
+DEFINE_string(host_name, "127.0.0.1", "Host Name");
+DEFINE_string(login_name, "test", "Login Name");
+DEFINE_string(login_pwd, "test", "DB PassWord");
+
 bool g_bRun = true;
 
 void EndFun(int n)
@@ -85,13 +93,14 @@ int main(int argc, char **argv)
 
 	SDBConnInfo oInfo;
 	memset(&oInfo, 0, sizeof(oInfo));
-	oInfo.m_dwDBId = 0;
-	strcpy(oInfo.m_stAccount.m_szCharactSet, "utf8");
-	strcpy(oInfo.m_stAccount.m_szDBName, "chat");
-	strcpy(oInfo.m_stAccount.m_szHostName, "127.0.0.1");
-	strcpy(oInfo.m_stAccount.m_szLoginName, "test");
-	strcpy(oInfo.m_stAccount.m_szLoginPwd, "test");
+	oInfo.m_dwDBId = FLAGS_db_id;
+	strcpy(oInfo.m_stAccount.m_szCharactSet, FLAGS_character_set.c_str());
+	strcpy(oInfo.m_stAccount.m_szDBName, FLAGS_db_name.c_str());
+	strcpy(oInfo.m_stAccount.m_szHostName, FLAGS_host_name.c_str());
+	strcpy(oInfo.m_stAccount.m_szLoginName, FLAGS_login_name.c_str());
+	strcpy(oInfo.m_stAccount.m_szLoginPwd, FLAGS_login_pwd.c_str());
 	oInfo.m_stAccount.m_wConnPort = 3306;
+
 	if (!FxDBGetModule()->Open(oInfo))
 	{
 		LogExe(LogLv_Info, "%s", "db connected failed~~~~");

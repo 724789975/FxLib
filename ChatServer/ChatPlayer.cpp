@@ -276,6 +276,14 @@ void ChatPlayer::OnRequestInviteEnterGroupChat(const char* pBuf, UINT32 dwLen)
 	}
 }
 
+void ChatPlayer::OnInviteEnterGroupChatResult(stCHAT_ACK_PLAYER_INVITE_GROUP_CHAT & refInviteResult)
+{
+	CNetStream oStream(ENetStreamType_Write, g_pChatPlayerBuff, g_dwChatPlayerBuffLen);
+	oStream.WriteInt(Protocol::CHAT_ACK_PLAYER_INVITE_GROUP_CHAT);
+	refInviteResult.Write(oStream);
+	m_pSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
+}
+
 void ChatPlayer::OnRequestLeaveGroupChat(const char* pBuf, UINT32 dwLen)
 {
 	CNetStream oNetStream(pBuf, dwLen);

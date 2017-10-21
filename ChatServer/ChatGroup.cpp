@@ -230,6 +230,8 @@ public:
 			oChat.szSenderId = "系统";
 			oChat.szContent = m_szInviter + " 邀请了 " + m_szPlayer + " 加入";
 			pGroup->OnGroupChat(oChat);
+
+			pGroup->OnInviteMemberResult(Protocol::EEC_NONE, m_szInviter, m_szPlayer);
 		}
 	}
 
@@ -244,26 +246,60 @@ public:
 	unsigned int m_dwJoinTime;
 };
 
-void ChatGroup::OnInviteMember(std::string szManager, std::string szPlayer)
+void ChatGroup::OnInviteMember(std::string szInviter, std::string szPlayer)
 {
 	Protocol::EErrorCode eErrorCode = Protocol::EEC_NONE;
 	if (GetChatGroupMember(szPlayer))
 	{
 		eErrorCode = Protocol::EEC_AlreadyInChatGroup;
 	}
-	ChatGroupMember* pManager = GetChatGroupMember(szManager);
+	ChatGroupMember* pManager = GetChatGroupMember(szInviter);
 	if (!pManager->CheckPower(ChatGroupMember::ECP_MANAGER))
 	{
 		eErrorCode = Protocol::EEC_PermissionDenied;
 	}
 	if (eErrorCode != Protocol::EEC_NONE)
 	{
-		//todo
+		OnInviteMemberResult(eErrorCode, szInviter, szPlayer);
 		return;
 	}
 
-	DBInviteGroupMemberQuery* pQuery = new DBInviteGroupMemberQuery(m_dwGroupId, szPlayer, szManager);
+	DBInviteGroupMemberQuery* pQuery = new DBInviteGroupMemberQuery(m_dwGroupId, szPlayer, szInviter);
 	FxDBGetModule()->AddQuery(pQuery);
+}
+
+void ChatGroup::OnInviteMemberResult(Protocol::EErrorCode eErrorCode, std::string szInviter, std::string szPlayer)
+{
+	unsigned int dwHash = HashToIndex(szInviter.c_str(), szInviter.size());
+	if (ChatServer::Instance()->CheckHashIndex(dwHash))
+	{
+		ChatPlayer* pPlayer = ChatServer::Instance()->GetChatPlayerManager().GetChatPlayer(szInviter);
+		if (pPlayer)
+		{
+			stCHAT_ACK_PLAYER_INVITE_GROUP_CHAT oAckLeave;
+			oAckLeave.dwGroupId = m_dwGroupId;
+			oAckLeave.dwResult = eErrorCode;
+			oAckLeave.szPlayerId = szPlayer;
+
+			pPlayer->OnInviteEnterGroupChatResult(oAckLeave);
+		}
+	}
+	else
+	{
+		ChatServerSessionManager& refServerSessionManager = ChatServer::Instance()->GetChatServerSessionManager();
+		ChatServerSession* pChatServerSession = refServerSessionManager.GetChatServerSession(dwHash);
+		if (!pChatServerSession)
+		{
+			LogExe(LogLv_Critical, "cant't find chat server session");
+			return;
+		}
+		stCHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT_RESULT oInviteResult;
+		oInviteResult.dwGroupId = m_dwGroupId;
+		oInviteResult.dwResult = eErrorCode;
+		oInviteResult.szPlayerId = szPlayer;
+		oInviteResult.szInviter = szInviter;
+		pChatServerSession->OnInviteGroupMemberResult(oInviteResult);
+	}
 }
 
 class DBLeaveGroupQuery : public IQuery

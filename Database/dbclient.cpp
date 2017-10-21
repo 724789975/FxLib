@@ -55,13 +55,13 @@ bool FxMySqlClient::ConnectDB(SDBAccount& account)
 	m_poMySqlConn = new FxMySQLConnection;
 	if(NULL == m_poMySqlConn)
 	{
-		ThreadLog(LogLv_Error, m_pFile, m_szLogPath, "%s", "CMySqlClient::ConnectDB, new CMySQLConnection failed");
+		LogExe(LogLv_Error, "%s", "CMySqlClient::ConnectDB, new CMySQLConnection failed");
 		return false;
 	}
 
 	if(!m_poMySqlConn->Connect(account))                                                                              
 	{
-		ThreadLog(LogLv_Error, m_pFile, m_szLogPath, "Connect to Database %s error: %d, %s", account.m_szDBName, m_poMySqlConn->GetLastError(), m_poMySqlConn->GetLastErrorString());
+		LogExe(LogLv_Error, "Connect to Database %s error: %d, %s", account.m_szDBName, m_poMySqlConn->GetLastError(), m_poMySqlConn->GetLastErrorString());
 		return false;
 	}
 

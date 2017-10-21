@@ -74,7 +74,8 @@ public:
 
 	ChatGroupMember* GetChatGroupMember(std::string szPlayerId);
 	Protocol::EErrorCode RemoveChatMember(std::string szPlayer);
-	void OnInviteMember(std::string szManager, std::string szPlayer);
+	void OnInviteMember(std::string szInviter, std::string szPlayer);
+	void OnInviteMemberResult(Protocol::EErrorCode eErrorCode, std::string szInviter, std::string szPlayer);
 	void OnLeaveGroupChat(std::string szPlayer);
 	void OnLeaveGroupChatResult(Protocol::EErrorCode eErrorCode, std::string szPlayer);
 

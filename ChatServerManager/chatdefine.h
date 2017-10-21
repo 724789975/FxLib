@@ -40,6 +40,7 @@ namespace Protocol
 		CHAT_NOTIFY_CHAT_GROUP_CHAT,
 		CHAT_NOTIFY_CHAT_GROUP_MEMBER_CHAT,
 		CHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT,
+		CHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT_RESULT,
 		CHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT,
 		CHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT_RESULT,
 		CHAT_TO_CHAT_END = 11000,
@@ -75,6 +76,7 @@ namespace Protocol
 		CHAT_NOTIFY_PLAYER_PRIVATE_CHAT,
 		CHAT_ACK_PLAYER_CREATE_CHAT_GROUP,
 		CHAT_NOTIFY_PLAYER_GROUP_CHAT,
+		CHAT_ACK_PLAYER_INVITE_GROUP_CHAT,
 		CHAT_ACK_PLAYER_LEAVE_GROUP_CHAT,
 		CHAT_PLAYER_END = 39999,
 
@@ -200,6 +202,30 @@ struct stCHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT
 		if (!refStream.WriteInt(dwGroupId)) return false;
 		if (!refStream.WriteString(szPlayerId)) return false;
 		if (!refStream.WriteString(szInviter)) return false;
+		return true;
+	}
+};
+
+struct stCHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT_RESULT
+{
+	unsigned int dwGroupId;
+	std::string szInviter;
+	std::string szPlayerId;
+	unsigned int dwResult;
+	bool Read(CNetStream& refStream)
+	{
+		if (!refStream.ReadInt(dwGroupId)) return false;
+		if (!refStream.ReadString(szInviter)) return false;
+		if (!refStream.ReadString(szPlayerId)) return false;
+		if (!refStream.ReadInt(dwResult)) return false;
+		return true;
+	}
+	bool Write(CNetStream& refStream)
+	{
+		if (!refStream.WriteInt(dwGroupId)) return false;
+		if (!refStream.WriteString(szInviter)) return false;
+		if (!refStream.WriteString(szPlayerId)) return false;
+		if (!refStream.WriteInt(dwResult)) return false;
 		return true;
 	}
 };
@@ -526,6 +552,28 @@ struct stCHAT_ACK_PLAYER_CREATE_CHAT_GROUP
 	bool Read(CNetStream& refStream)
 	{
 		if (!refStream.ReadInt(dwGroupId)) return false;
+		return true;
+	}
+};
+
+struct stCHAT_ACK_PLAYER_INVITE_GROUP_CHAT
+{
+	unsigned int dwGroupId;
+	unsigned int dwResult;
+	std::string szPlayerId;
+	bool Write(CNetStream& refStream)
+	{
+		if (!refStream.WriteInt(dwGroupId)) return false;
+		if (!refStream.WriteInt(dwResult)) return false;
+		if (!refStream.WriteString(szPlayerId)) return false;
+		return true;
+	}
+
+	bool Read(CNetStream& refStream)
+	{
+		if (!refStream.ReadInt(dwGroupId)) return false;
+		if (!refStream.ReadInt(dwResult)) return false;
+		if (!refStream.ReadString(szPlayerId)) return false;
 		return true;
 	}
 };
