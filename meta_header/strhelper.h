@@ -1,9 +1,11 @@
 #ifndef __STRHELPER_H_2009_0824__
 #define __STRHELPER_H_2009_0824__
 
+#include <string>
 #ifdef WIN32
 #else
 #include <string.h>
+#include <iconv.h>
 #endif
 
 inline void _StrSafeCopy(char *pszDest, const char *pszSrc, size_t nLen) throw()
@@ -86,5 +88,43 @@ inline size_t StrNLen(const char *s, size_t maxlen)
 	return strnlen(s, maxlen);
 }
 #endif
+
+inline std::string GBKToUTF8(const std::string szGBK)
+{
+	if (szGBK.size() == 0)
+	{
+		return "";
+	}
+#ifdef WIN32
+	int dwLen = MultiByteToWideChar(CP_ACP, 0, szGBK.c_str(), -1, NULL, 0);
+	wchar_t * wszUtf8 = new wchar_t[dwLen];
+	memset(wszUtf8, 0, dwLen);
+	MultiByteToWideChar(CP_ACP, 0, szGBK.c_str(), -1, wszUtf8, dwLen);
+	dwLen = WideCharToMultiByte(CP_UTF8, 0, wszUtf8, -1, NULL, 0, NULL, NULL);
+	char *szUtf8 = new char[dwLen + 1];
+	memset(szUtf8, 0, dwLen + 1);
+	WideCharToMultiByte(CP_UTF8, 0, wszUtf8, -1, szUtf8, dwLen, NULL, NULL);
+	std::string strOutUTF8 = szUtf8;
+	delete[] szUtf8;
+	delete[] wszUtf8;
+	return strOutUTF8;
+#else
+	iconv_t cd = iconv_open("UTF-8", "GB13080");
+	unsigned int dwLen = szGBK.size();
+	char* outbuf = (char*)malloc(dwLen * 4);
+	memset(outbuf, 0, dwLen * 4);
+	const char* szIn = szGBK.c_str();
+	char* szOut = outbuf;
+	unsigned int dwOutLen = dwLen * 4;
+	iconv(cd, (char**)&szIn, &dwLen, &outbuf, &dwOutLen);
+	dwOutLen = strlen(outbuf);
+	std::string strOutUTF8 = szOut;
+	free(outbuf);
+	iconv_close(cd);
+	return strOutUTF8;
+#endif // WIN32
+
+}
+
 
 #endif  // __STRHELPER_H_2009_0824__
