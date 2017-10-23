@@ -3,6 +3,7 @@
 #include "utility.h"
 #include "ChatPlayer.h"
 #include "chatdefine.h"
+#include "strhelper.h"
 
 //-------------------------------------------------------------
 DBLoadGroupQuery::DBLoadGroupQuery(unsigned int dwGroupId)
@@ -227,8 +228,8 @@ public:
 			stCHAT_NOTIFY_CHAT_GROUP_CHAT oChat;
 			oChat.dwGroupId = m_dwGroupId;
 			oChat.eChatType = Protocol::ECT_String;
-			oChat.szSenderId = "系统";
-			oChat.szContent = m_szInviter + " 邀请了 " + m_szPlayer + " 加入";
+			oChat.szSenderId = GBKToUTF8("系统");
+			oChat.szContent = m_szInviter + GBKToUTF8(" 邀请了 ") + m_szPlayer + GBKToUTF8(" 加入");
 			pGroup->OnGroupChat(oChat);
 
 			pGroup->OnInviteMemberResult(Protocol::EEC_NONE, m_szInviter, m_szPlayer);
