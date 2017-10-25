@@ -1,6 +1,7 @@
 #include "ChatServerSession.h"
 #include "netstream.h"
 #include "ChatServerManager.h"
+#include "chatdefine.h"
 
 const static unsigned int g_dwChatServerSessionBuffLen = 64 * 1024;
 static char g_pChatServerSessionBuf[g_dwChatServerSessionBuffLen];
@@ -118,7 +119,7 @@ FxSession* ChatServerSessionManager::CreateSession()
 {
 	m_oLock.Lock();
 	FxSession* pSession = NULL;
-	for (int i = 0; i < ChatConstant::g_dwChatServerNum; ++i)
+	for (int i = 0; i < CHAT_SERVER_NUM; ++i)
 	{
 		if (m_oChatServerSessions[i].GetConnection() == NULL)
 		{
@@ -133,7 +134,7 @@ FxSession* ChatServerSessionManager::CreateSession()
 
 void ChatServerSessionManager::CloseSessions()
 {
-	for (int i = 0; i < ChatConstant::g_dwChatServerNum; ++i)
+	for (int i = 0; i < CHAT_SERVER_NUM; ++i)
 	{
 		m_oChatServerSessions[i].Close();
 	}
@@ -143,7 +144,7 @@ void ChatServerSessionManager::CloseSessions()
 		bClosed = true;
 		FxNetGetModule()->Run(0xffffffff);
 		FxSleep(10);
-		for (int i = 0; i < ChatConstant::g_dwChatServerNum; ++i)
+		for (int i = 0; i < CHAT_SERVER_NUM; ++i)
 		{
 			if (m_oChatServerSessions[i].GetConnection())
 			{
@@ -170,14 +171,14 @@ ChatServerSession* ChatServerSessionManager::GetChatServerSession(UINT32 dwHashI
 void ChatServerSessionManager::OnChatServerInfo(ChatServerSession* pChatServerSession)
 {
 	stCHAT_MANAGER_NOTIFY_CHAT_INFO oCHAT_MANAGER_NOTIFY_CHAT_INFO;
-	for (unsigned int i = 0; i < ChatConstant::g_dwChatServerNum; ++i)
+	for (unsigned int i = 0; i < CHAT_SERVER_NUM; ++i)
 	{
 		if (pChatServerSession == m_oChatServerSessions + i)
 		{
 			// 同一个连接
 			for (unsigned int j = 0; j < ChatConstant::g_dwHashGen; ++j)
 			{
-				if (j % ChatConstant::g_dwChatServerNum == i)
+				if (j % CHAT_SERVER_NUM == i)
 				{
 					m_mapSessionIpPort[j] = pChatServerSession;
 				}
@@ -211,7 +212,7 @@ void ChatServerSessionManager::BroadcastMsg(const Protocol::EChatType& eChatType
 	CNetStream oStream(ENetStreamType_Write, g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen);
 	oStream.WriteInt(Protocol::CHAT_MANAGER_NOTIFY_CHAT_BROADCAST);
 	oCHAT_MANAGER_NOTIFY_CHAT_BROADCAST.Write(oStream);
-	for (int i = 0; i < ChatConstant::g_dwChatServerNum; ++i)
+	for (int i = 0; i < CHAT_SERVER_NUM; ++i)
 	{
 		m_oChatServerSessions[i].Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
 	}

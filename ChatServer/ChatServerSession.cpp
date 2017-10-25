@@ -264,9 +264,10 @@ void ChatServerSession::OnChatToChatLeaveGroupChatResult(const char* pBuf, UINT3
 
 FxSession* ChatServerSessionManager::CreateSession()
 {
+#if CHAT_SERVER_NUM - 1
 	m_oLock.Lock();
 	ChatServerSession* pSession = NULL;
-	for (int i = 0; i < ChatConstant::g_dwChatServerNum - 1; ++i)
+	for (int i = 0; i < CHAT_SERVER_NUM - 1; ++i)
 	{
 		if (m_oChatServerSessions[i].GetConnection() == NULL)
 		{
@@ -277,6 +278,8 @@ FxSession* ChatServerSessionManager::CreateSession()
 	}
 	m_oLock.UnLock();
 	return pSession;
+#endif
+	return NULL;
 }
 
 ChatServerSession* ChatServerSessionManager::GetChatServerSession(unsigned int dwIndex)
@@ -297,7 +300,7 @@ void ChatServerSessionManager::SetHashIndex(UINT32 dwIndex, ChatServerSession* p
 {
 	for (unsigned int i = 0; i < ChatConstant::g_dwHashGen; ++i)
 	{ 
-		if (i % ChatConstant::g_dwChatServerNum == dwIndex)
+		if (i % CHAT_SERVER_NUM == dwIndex)
 		{
 			m_mapSessionIpPort[i] = pChatServerSession;
 		}
@@ -306,7 +309,8 @@ void ChatServerSessionManager::SetHashIndex(UINT32 dwIndex, ChatServerSession* p
 
 void ChatServerSessionManager::CloseSessions()
 {
-	for (int i = 0; i < ChatConstant::g_dwChatServerNum - 1; ++i)
+#if CHAT_SERVER_NUM - 1
+	for (int i = 0; i < CHAT_SERVER_NUM - 1; ++i)
 	{
 		m_oChatServerSessions[i].Close();
 	}
@@ -315,7 +319,7 @@ void ChatServerSessionManager::CloseSessions()
 	{
 		FxNetGetModule()->Run(0xffffffff);
 		FxSleep(10);
-		for (int i = 0; i < ChatConstant::g_dwChatServerNum - 1; ++i)
+		for (int i = 0; i < CHAT_SERVER_NUM - 1; ++i)
 		{
 			if (m_oChatServerSessions[i].GetConnection())
 			{
@@ -323,4 +327,5 @@ void ChatServerSessionManager::CloseSessions()
 			}
 		}
 	} while (!bClosed);
+#endif
 }

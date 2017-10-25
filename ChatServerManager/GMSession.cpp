@@ -4,6 +4,7 @@
 #include "chatdefine.h"
 #include "ChatServerManager.h"
 #include "utility.h"
+#include "chatdefine.h"
 
 const static unsigned int g_dwGMSessionBuffLen = 64 * 1024;
 static char g_pGMSessionBuf[g_dwGMSessionBuffLen];
@@ -103,7 +104,7 @@ void GMSession::Release(void)
 void GMSession::GetInfo(Json::Value& refjReq, Json::Value& refjAck)
 {
 	ChatServerSessionManager& refSessionManager = ChatServerManager::Instance()->GetChatServerSessionManager();
-	for (int i = 0; i < ChatConstant::g_dwChatServerNum; ++i)
+	for (int i = 0; i < CHAT_SERVER_NUM; ++i)
 	{
 		if (!refSessionManager.GetChatServerSessions()[i].GetConnection())
 		{

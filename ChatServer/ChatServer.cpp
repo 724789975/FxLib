@@ -84,7 +84,7 @@ void ChatServer::SetHashIndex(UINT32 dwIndex)
 	m_dwHashIndex = dwIndex;
 	for (unsigned int i = 0; i < ChatConstant::g_dwHashGen; ++i)
 	{
-		if (i % ChatConstant::g_dwChatServerNum == dwIndex)
+		if (i % CHAT_SERVER_NUM == dwIndex)
 		{
 			m_setHashIndex.insert(i);
 		}

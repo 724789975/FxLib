@@ -7,9 +7,10 @@
 
 #define IDLENTH 64
 
+#define CHAT_SERVER_NUM 1
+
 namespace ChatConstant
 {
-	static const unsigned int g_dwChatServerNum = 2;
 	static const unsigned int g_dwHashGen = 256;
 }
 
