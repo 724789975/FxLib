@@ -17,12 +17,57 @@
 
 class FxIoThread;
 
+// sliding window uses in reliable udp transfer.
+class SlidingWindow
+{
+public:
+	// count
+	inline unsigned char Count()
+	{
+		return end - begin;
+	}
+
+	// is valid id
+	inline bool IsValidIndex(unsigned char id)
+	{
+		unsigned char pos = id - begin;
+		unsigned char count = end - begin;
+		return pos < count;
+	}
+
+	// clear
+	inline void ClearBuffer()
+	{
+		// link buffers
+		free_buffer_id = 0;
+		for (int i = 0; i < window_size; i++)
+			buffer[i][0] = i + 1;
+	}
+
+public:
+	static const unsigned int buffer_size = 512;
+	static const unsigned int window_size = 32;
+
+	// temp buffer
+	unsigned char buffer[window_size][buffer_size];
+	unsigned char free_buffer_id;
+
+	unsigned char seq_buffer_id[window_size];
+	unsigned short seq_size[window_size];
+	double seq_time[window_size];
+	double seq_retry[window_size];
+	double seq_retry_time[window_size];
+	unsigned int seq_retry_count[window_size];
+
+	unsigned char begin;	// begin position of sliding window
+	unsigned char end;	// end position of sliding window
+};
+
 struct UDPPacketHeader
 {
 	char m_cStatus;
 	char m_cSyn;
 	char m_cAck;
-	char m_cParam;						// 占位
 };
 
 class FxUDPListenSock : public IFxListenSocket
@@ -75,6 +120,43 @@ private:
 	SPerUDPIoData m_oSPerIoDatas[128];
 	UDPPacketHeader m_oPacketHeaders[128];
 #endif // WIN32
+
+
+
+
+	// bytes send and recieved
+	unsigned int num_bytes_send;
+	unsigned int num_bytes_received;
+
+	// network delay time.
+	double delay_time;
+	double delay_average;
+	double retry_time;
+	double send_time;
+	double send_frequency;
+	double send_window_control;
+	double send_window_threshhold;
+	double send_data_time;
+	double send_data_frequency;
+
+	SlidingWindow recv_window;
+	SlidingWindow send_window;
+
+	// packets count send and retry
+	unsigned int num_packets_send;
+	unsigned int num_packets_retry;
+
+
+private:
+	double ack_recv_time;
+	int ack_timeout_retry;
+	unsigned int status;
+
+	int ack_same_count;
+	bool quick_retry;
+	bool send_ack;
+	unsigned char ack_last;
+	unsigned char syn_last;
 };
 
 class FxConnection;
@@ -178,6 +260,43 @@ private:
 #else
 	bool				m_bSending;
 #endif // WIN32
+
+
+
+
+	// bytes send and recieved
+	unsigned int num_bytes_send;
+	unsigned int num_bytes_received;
+
+	// network delay time.
+	double delay_time;
+	double delay_average;
+	double retry_time;
+	double send_time;
+	double send_frequency;
+	double send_window_control;
+	double send_window_threshhold;
+	double send_data_time;
+	double send_data_frequency;
+
+	SlidingWindow recv_window;
+	SlidingWindow send_window;
+
+	// packets count send and retry
+	unsigned int num_packets_send;
+	unsigned int num_packets_retry;
+
+
+private:
+	double ack_recv_time;
+	int ack_timeout_retry;
+	unsigned int status;
+
+	int ack_same_count;
+	bool quick_retry;
+	bool send_ack;
+	unsigned char ack_last;
+	unsigned char syn_last;
 
 };
 
