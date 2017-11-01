@@ -139,6 +139,11 @@ public:
 		return (int)m_qwSecond;
 	}
 
+	virtual double GetMilliSecond()
+	{
+		return m_qwSecond;
+	}
+
 	virtual const char* GetTimeStr()
 	{
 		return m_strTime;
