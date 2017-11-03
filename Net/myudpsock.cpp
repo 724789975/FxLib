@@ -1304,6 +1304,16 @@ SOCKET FxUDPConnectSock::Connect()
 			return INVALID_SOCKET;
 		}
 
+		for (unsigned char i = recv_window.begin; i != recv_window.end; i++)
+		{
+			unsigned char id = i % recv_window.window_size;
+			recv_window.seq_buffer_id[id] = recv_window.window_size;
+			recv_window.seq_size[id] = 0;
+			recv_window.seq_time[id] = 0;
+			recv_window.seq_retry[id] = 0;
+			recv_window.seq_retry_count[id] = 0;
+		}
+
 		SetRemoteAddr(stRemoteAddr);
 	}
 
@@ -1975,6 +1985,9 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 		return;
 	}
 
+	// packet received
+	bool packet_received = false;
+
 	{
 		// allocate buffer
 		byte buffer_id = recv_window.free_buffer_id;
@@ -2040,7 +2053,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 					if (send_window.seq_retry_count[id] == 1)
 					{
 						// rtt(packet delay)
-						rtt = GetTimeHandler()->GetMilliSecond(); - send_window.seq_time[id];
+						rtt = GetTimeHandler()->GetMilliSecond() - send_window.seq_time[id];
 						// err_time(difference between rtt and delay_time)
 						err_time = rtt - delay_time;
 						// revise delay_time with err_time 
@@ -2088,7 +2101,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 				{
 					recv_window.seq_buffer_id[id] = buffer_id;
 					recv_window.seq_size[id] = n;
-					//packet_received = true;
+					packet_received = true;
 
 					//// no more buffer, try parse first.
 					//if (recv_window.free_buffer_id >= recv_window.window_size)
@@ -2102,195 +2115,135 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 		// free buffer.
 		buffer[0] = recv_window.free_buffer_id;
 		recv_window.free_buffer_id = buffer_id;
-	}
 
 
 
 
 
+		if (send_window.begin == send_window.end)
+			ack_same_count = 0;
 
+		// record ack last
+		ack_last = send_window.begin - 1;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-	if (!m_poRecvBuf->CostBuff(nLen))
-	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "m_poRecvBuf->CostBuff error, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-		m_dwLastError = NET_RECVBUFF_ERROR;
-		PostClose();
-		return;
-	}
-
-	char *pUseBuf = NULL;
-	nLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
-	if (nLen <= 0)
-	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "m_poRecvBuf->GetUsedCursorPtr <= 0, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
-		m_dwLastError = NET_RECVBUFF_ERROR;
-		PostClose();
-		return;
-	}
-
-	while (0 < nLen)
-	{
-		if (0 != m_nNeedData)
+		// update recv window
+		if (packet_received)
 		{
-			if (nLen >= m_nNeedData)
-			{
-				nLen -= m_nNeedData;
-				nUsedLen += m_nNeedData;
-				nParserLen += m_nNeedData;
-				m_poRecvBuf->CostUsedBuff(nUsedLen);
-				nUsedLen = 0;
-				PushNetEvent(NETEVT_RECV, m_nPacketLen);
-				m_nPacketLen = 0;
-				m_nNeedData = 0;
-			}
-			else
-			{
-				m_nNeedData -= nLen;
-				nUsedLen += nLen;
-				nLen = 0;
-			}
-		}
-		else
-		{
-			char* pParseBuf = pUseBuf + nParserLen;
-			UINT32 dwHeaderLen = GetDataHeader()->GetHeaderLength();
-			GetDataHeader()->BuildRecvPkgHeader(pParseBuf, (int)dwHeaderLen > nLen ? nLen : dwHeaderLen, 0);
-			m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen);
-			if (-1 == m_nPacketLen)
-			{
-				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+			byte last_ack = recv_window.begin - 1;
+			byte new_ack = last_ack;
+			bool parse_message = false;
 
-				nUsedLen += nLen;
-				m_poRecvBuf->CostUsedBuff(nUsedLen);
-				nUsedLen = 0;
-				PushNetEvent(NETEVT_RECV_PACKAGE_ERROR, nLen);
-				nLen = 0;
-			}
-			else if (0 == m_nPacketLen)
+			// calculate new ack
+			for (byte i = recv_window.begin; i != recv_window.end; i++)
 			{
-				m_poRecvBuf->CostUsedBuff(nUsedLen);
-				nUsedLen = 0;
-				m_nNeedData = 0;
+				// recv buffer is invalid
+				if (recv_window.seq_buffer_id[i % recv_window.window_size] >= recv_window.window_size)
+					break;
 
-				if ((int)(GetDataHeader()->GetHeaderLength()) > nLen)
+				new_ack = i;
+			}
+
+			// ack changed
+			if (new_ack != last_ack)
+			{
+				while (recv_window.begin != (byte)(new_ack + 1))
 				{
-					// 判断是否在循环buff的头部还有数据//
-					int nHasData = m_poRecvBuf->GetUseLen();
-					if ((int)(GetDataHeader()->GetHeaderLength()) <= nHasData)
+					const byte head_size = sizeof(UDPPacketHeader);
+					byte id = recv_window.begin % recv_window.window_size;
+					byte buffer_id = recv_window.seq_buffer_id[id];
+					byte * buffer = recv_window.buffer[buffer_id] + head_size;
+					unsigned short size = recv_window.seq_size[id] - head_size;
+
+					// copy buffer
+					// add data to receive buffer
+					char* pBuffRecv = NULL;
+					int nLenRecv = m_poRecvBuf->GetInCursorPtr(pBuffRecv);
+					if (size <= nLenRecv)
 					{
-						GetDataHeader()->BuildRecvPkgHeader(pParseBuf, nLen, 0);
-						if (false == m_poRecvBuf->CostUsedBuff(nLen))
-						{
-							break;
-						}
-						int nNewLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
-						if ((int)(GetDataHeader()->GetHeaderLength()) - nLen > nNewLen)
-						{
-							ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-							nUsedLen += nLen;
-							m_poRecvBuf->CostUsedBuff(nUsedLen);
-							nUsedLen = 0;
-							PushNetEvent(NETEVT_RECV_PACKAGE_ERROR, nLen);
-							nLen = 0;
-						}
-						GetDataHeader()->BuildRecvPkgHeader(pUseBuf, GetDataHeader()->GetHeaderLength() - nLen, nLen);
-						pParseBuf = (char*)(GetDataHeader()->GetPkgHeader());
-						m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, GetDataHeader()->GetHeaderLength());
-						if (0 >= m_nPacketLen)
-						{
-							ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-							nUsedLen += nLen;
-							m_poRecvBuf->CostUsedBuff(nUsedLen);
-							nUsedLen = 0;
-							PushNetEvent(NETEVT_RECV_PACKAGE_ERROR, nLen);
-							nLen = 0;
-						}
-
-						m_nNeedData = m_nPacketLen - GetDataHeader()->GetHeaderLength();
-						nUsedLen = GetDataHeader()->GetHeaderLength() - nLen;
-						nParserLen = nUsedLen;
-						nLen = nNewLen - nUsedLen;
-						pParseBuf = pUseBuf + nUsedLen;
-						if (0 == m_nNeedData)
-						{
-							m_poRecvBuf->CostUsedBuff(nUsedLen);
-							nUsedLen = 0;
-							PushNetEvent(NETEVT_RECV, m_nPacketLen);
-							m_nPacketLen = 0;
-						}
+						m_poRecvBuf->CostBuff(size);
+						memcpy(pBuffRecv, buffer, size);
 					}
 					else
 					{
-						nLen = 0;
-						break;
+						m_poRecvBuf->CostBuff(nLenRecv);
+						memcpy(pBuffRecv, buffer, size);
+						size -= nLenRecv;
+
+						//不考虑包超长的情况 只处理包循环放了就可以了
+						m_poRecvBuf->GetInCursorPtr(pBuffRecv);
+						memcpy(pBuffRecv, buffer + nLenRecv, size);
+						m_poRecvBuf->CostBuff(nLenRecv);
+					}
+
+
+						// free buffer
+						recv_window.buffer[buffer_id][0] = recv_window.free_buffer_id;
+						recv_window.free_buffer_id = buffer_id;
+
+						// remove sequence
+						recv_window.seq_size[id] = 0;
+						recv_window.seq_buffer_id[id] = recv_window.window_size;
+						recv_window.begin++;
+						recv_window.end++;
+
+						// mark for parse message
+						parse_message = true;
+
+						// send ack when get packet
+						send_ack = true;
+				}
+			}
+
+			// record receive syn last
+			syn_last = recv_window.begin - 1;
+
+			// parse message
+			if (parse_message)
+			{
+				char *pUseBuf = NULL;
+				nLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
+				if (nLen <= 0)
+				{
+					ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "m_poRecvBuf->GetUsedCursorPtr <= 0, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+					InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+					m_dwLastError = NET_RECVBUFF_ERROR;
+					PostClose();
+					//m_oLock.UnLock();
+					return;
+				}
+
+				char* pParseBuf = pUseBuf + nParserLen;
+				UINT32 dwHeaderLen = GetDataHeader()->GetHeaderLength();
+				GetDataHeader()->BuildRecvPkgHeader(pParseBuf, (int)dwHeaderLen > nLen ? nLen : dwHeaderLen, 0);
+				m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen);
+				if (0 <= m_nPacketLen)
+				{
+					ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+					InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+					m_dwLastError = NET_RECVBUFF_ERROR;
+					PostClose();
+					//m_oLock.UnLock();
+					return;
+				}
+
+				m_poRecvBuf->CostUsedBuff(m_nPacketLen);
+				PushNetEvent(NETEVT_RECV, m_nPacketLen);
+
+
+				InterlockedCompareExchange(&m_nPostRecv, m_nPostRecv - 1, m_nPostRecv);
+				if (0 == m_nPostRecv)
+				{
+					if (false == PostRecv())
+					{
+						ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == PostRecv, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+						m_dwLastError = WSAGetLastError();
+						PostClose();
 					}
 				}
 			}
-			else
-			{
-				if (nLen >= m_nPacketLen)
-				{
-					nLen -= m_nPacketLen;
-					nUsedLen += m_nPacketLen;
-					nParserLen += nUsedLen;
-					m_poRecvBuf->CostUsedBuff(nUsedLen);
-					nUsedLen = 0;
-					PushNetEvent(NETEVT_RECV, m_nPacketLen);
-					m_nPacketLen = 0;
-					m_nNeedData = 0;
-				}
-				else
-				{
-					m_nNeedData = m_nPacketLen - nLen;
-					nUsedLen += nLen;
-					nLen = 0;
-				}
-			}
-		}
-	}
-
-	if (0 != nUsedLen)
-	{
-		m_poRecvBuf->CostUsedBuff(nUsedLen);
-	}
-
-	InterlockedCompareExchange(&m_nPostRecv, m_nPostRecv - 1, m_nPostRecv);
-	if (0 == m_nPostRecv)
-	{
-		if (false == PostRecv())
-		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == PostRecv, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-			m_dwLastError = WSAGetLastError();
-			PostClose();
 		}
 	}
 }
