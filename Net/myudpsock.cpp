@@ -871,7 +871,7 @@ void FxUDPConnectSock::OnRead()
 
 void FxUDPConnectSock::OnWrite()
 {
-	PostSend();
+	PostSendFree();
 }
 
 void FxUDPConnectSock::Reset()
@@ -1031,7 +1031,7 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 		}
 		FxSleep(10);
 	}
-	PostSend();
+	PostSendFree();
 	return true;
 }
 
@@ -1261,7 +1261,7 @@ SOCKET FxUDPConnectSock::Connect()
 	// send window buffer
 	byte * buffer = send_window.buffer[buffer_id];
 
-	UDPPacketHeader oUDPPacketHeader = { 0 };
+	UDPPacketHeader oUDPPacketHeader;
 	oUDPPacketHeader.m_cSyn = send_window.end;
 	oUDPPacketHeader.m_cAck = recv_window.begin - 1;
 	oUDPPacketHeader.m_cStatus = GetState();
@@ -1299,7 +1299,6 @@ SOCKET FxUDPConnectSock::Connect()
 #endif	//WIN32
 		int nRemoteAddrLen = sizeof(stRemoteAddr);
 
-	oUDPPacketHeader = { 0 };
 	if (recvfrom(GetSock(), (char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader), 0, (sockaddr*)&stRemoteAddr, &nRemoteAddrLen))
 	{
 		if (oUDPPacketHeader.m_cAck != 0)
@@ -2019,10 +2018,20 @@ bool FxUDPConnectSock::PostSend()
 
 bool FxUDPConnectSock::PostSendFree()
 {
-	assert(0);
-	return false;
 #ifdef WIN32
-	return PostSend();
+	if (!m_poSendBuf->GetUseLen())
+	{
+		return true;
+	}
+	static SPerUDPIoData oUDPIoData = {0};
+	oUDPIoData.nOp = IOCP_RECV;
+	ZeroMemory(&oUDPIoData.stOverlapped, sizeof(oUDPIoData.stOverlapped));
+	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(-1), (ULONG_PTR)this, &oUDPIoData.stOverlapped))
+	{
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "PostQueuedCompletionStatus error : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+		return false;
+	}
+	return true;
 #else
 	if (false == IsConnected())
 	{
@@ -2235,14 +2244,10 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 
 	if (UINT32(-1) == dwBytes)
 	{
-		InterlockedCompareExchange(&m_nPostRecv, m_nPostRecv - 1, m_nPostRecv);
-		if (0 == m_nPostRecv)
+		if (false == PostSend())
 		{
-			if (false == PostRecv())
-			{
-				PushNetEvent(NETEVT_ERROR, WSAGetLastError());
-				Close();
-			}
+			PushNetEvent(NETEVT_ERROR, WSAGetLastError());
+			Close();
 		}
 		return;
 	}

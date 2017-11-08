@@ -65,6 +65,7 @@ public:
 
 struct UDPPacketHeader
 {
+	UDPPacketHeader() { m_cStatus = 255; m_cSyn = 255; m_cAck = 255; }
 	char m_cStatus;
 	char m_cSyn;
 	char m_cAck;
