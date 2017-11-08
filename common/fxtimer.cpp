@@ -165,18 +165,42 @@ public:
 	}
 
 private:
+
+	void ProcDelayTimer()
+	{
+		for (std::map<float, std::set<IFxTimer*> >::iterator it =
+			m_mapDelayTimers.begin(); it != m_mapDelayTimers.end();)
+		{
+			if (it->first <= m_qwSecond)
+			{
+				for (std::set<IFxTimer*>::iterator itTimer = it->second.begin();
+					itTimer != it->second.end(); ++itTimer)
+				{
+					(*itTimer)->OnTimer((unsigned int)m_qwSecond);
+				}
+				m_mapDelayTimers.erase(it++);
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
 	void __Refresh()
 	{
 		static double s_qwSecond = 0;
 		static time_t s_dwTime = 0;
 		s_qwSecond = GetTimeOfDay();
 
+		
 		if((unsigned int)s_qwSecond == (unsigned int)m_qwSecond)
 		{
 			m_qwSecond = s_qwSecond;
+
+			ProcDelayTimer();
 			return;
 		}
-
 		m_qwSecond = s_qwSecond;
 
 		s_dwTime = (time_t)m_qwSecond;
@@ -191,6 +215,7 @@ private:
 		//		CLuaEngine::Instance()->CallStringFunction<unsigned int>(
 		//				"GetTimeStr", m_qwSecond));
 
+		ProcDelayTimer();
 
 		for (std::map<unsigned int, std::set<IFxTimer*> >::iterator it =
 				m_mapTimers.begin(); it != m_mapTimers.end(); ++it)
@@ -205,23 +230,6 @@ private:
 			}
 		}
 
-		for (std::map<float, std::set<IFxTimer*> >::iterator it =
-				m_mapDelayTimers.begin(); it != m_mapDelayTimers.end();)
-		{
-			if (it->first <= m_qwSecond)
-			{
-				for (std::set<IFxTimer*>::iterator itTimer = it->second.begin();
-						itTimer != it->second.end(); ++itTimer)
-				{
-					(*itTimer)->OnTimer((unsigned int)m_qwSecond);
-				}
-				m_mapDelayTimers.erase(it++);
-			}
-			else
-			{
-				break;
-			}
-		}
 	}
 
 private:
