@@ -128,6 +128,14 @@ FxConnection* FxSession::GetConnection(void)
 	return m_poConnection;
 }
 
+void FxSession::ForceSend()
+{
+	if (m_poConnection)
+	{
+		m_poConnection->ForceSend();
+	}
+}
+
 bool FxSession::OnDestroy()
 {
 	//  connection release

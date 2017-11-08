@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include "lua_engine.h"
 #include "fxtimer.h"
+#include "ifnet.h"
 
 #include <signal.h>
 
@@ -12,6 +13,30 @@
 char* g_strIp = "127.0.0.1";
 unsigned int g_dwPort = 20000;
 bool g_bRun = true;
+
+static FxSession* g_sSessions[CLIENTCOUNT] = { 0 };
+
+class TestTimer : public IFxTimer
+{
+	virtual bool OnTimer(float fSecond)
+	{
+		for (int i = 0; i < CLIENTCOUNT; ++i)
+		{
+			if (!g_sSessions[i]->GetConnection())
+			{
+				continue;
+			}
+			if (!g_sSessions[i]->IsConnected())
+			{
+				continue;
+			}
+			g_sSessions[i]->ForceSend();
+		}
+		GetTimeHandler()->AddDelayTimer(0.01f, this);
+		return true;
+	}
+};
+TestTimer g_sTimer;
 
 void EndFun(int n)
 {
@@ -53,7 +78,6 @@ int main(int argc, char **argv)
 	// must defined before goto
 	IFxNet* pNet = NULL;
 	UINT32 dwIP = 0;
-	FxSession* oSessions[CLIENTCOUNT] = { 0 };
 	char szMsg[1024] = "";
 	int j = 0;
 
@@ -86,9 +110,11 @@ int main(int argc, char **argv)
 
 	for (int i = 0; i < CLIENTCOUNT; ++i)
 	{
-		oSessions[i] = oSessionFactory.CreateSession();
-		pNet->UdpConnect(oSessions[i], dwIP, g_dwPort, true);
+		g_sSessions[i] = oSessionFactory.CreateSession();
+		pNet->UdpConnect(g_sSessions[i], dwIP, g_dwPort, true);
 	}
+
+	GetTimeHandler()->AddDelayTimer(0.01f, &g_sTimer);
 
 	while (g_bRun)
 	{
@@ -96,10 +122,10 @@ int main(int argc, char **argv)
 		pNet->Run(0xffffffff);
 		for (int i = 0; i < CLIENTCOUNT; ++i)
 		{
-			if (oSessions[i]->IsConnected())
+			if (g_sSessions[i]->IsConnected())
 			{
 				sprintf(szMsg, "%d", j);
-				if (!oSessions[i]->Send(szMsg, 1024))
+				if (!g_sSessions[i]->Send(szMsg, 1024))
 				{
 					//pSession->Close();
 				}
@@ -112,9 +138,9 @@ int main(int argc, char **argv)
 			}
 			else
 			{
-				if (!oSessions[i]->IsConnecting())
+				if (!g_sSessions[i]->IsConnecting())
 				{
-					oSessions[i]->Reconnect();
+					g_sSessions[i]->Reconnect();
 				}
 			}
 		}
@@ -123,7 +149,7 @@ int main(int argc, char **argv)
 	}
 	for (int i = 0; i < CLIENTCOUNT; ++i)
 	{
-		oSessions[i]->Close();
+		g_sSessions[i]->Close();
 	}
 	FxSleep(10);
 	pNet->Run(0xffffffff);

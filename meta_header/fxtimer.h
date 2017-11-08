@@ -12,7 +12,7 @@ public:
 	virtual ~IFxTimer()
 	{
 	}
-	virtual bool OnTimer(unsigned int dwSecond) = 0;
+	virtual bool OnTimer(float fSecond) = 0;
 
 private:
 //	unsigned int m_dwDelayTime;
@@ -28,7 +28,7 @@ public:
 	virtual bool Init() = 0;
 	virtual void Uninit() = 0;
 	virtual void Run() = 0;
-	virtual bool AddDelayTimer(unsigned int dwSecond, IFxTimer* pFxTimer) = 0;
+	virtual bool AddDelayTimer(float fSecond, IFxTimer* pFxTimer) = 0;
 	virtual bool DelDelayTimer(IFxTimer* pFxTimer) = 0;
 	virtual bool AddEveryFewMinuteTimer(unsigned int dwSecond, IFxTimer* pFxTimer) = 0;
 	virtual bool DelEveryFewMinuteTimer(IFxTimer* pFxTimer) = 0;

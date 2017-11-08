@@ -12,6 +12,29 @@ bool g_bRun = true;
 
 DEFINE_uint32(port, 20000, "linten port");
 
+class TestTimer : public IFxTimer
+{
+	virtual bool OnTimer(float fSecond)
+	{
+		for (std::set<FxSession*>::iterator it = CSessionFactory::Instance()->m_setSessions.begin();
+			it != CSessionFactory::Instance()->m_setSessions.end(); ++it)
+		{
+			if (!(*it)->GetConnection())
+			{
+				continue;
+			}
+			if (!(*it)->IsConnected())
+			{
+				continue;
+			}
+			(*it)->ForceSend();
+		}
+		GetTimeHandler()->AddDelayTimer(0.01f, this);
+		return true;
+	}
+};
+TestTimer g_sTimer;
+
 void EndFun(int n)
 {
 	if (n == SIGINT || n == SIGTERM)
@@ -109,6 +132,7 @@ int main(int argc, char **argv)
 		g_bRun = false;
 		goto STOP;
 	}
+	GetTimeHandler()->AddDelayTimer(0.01f, &g_sTimer);
 	while (g_bRun)
 	{
 		GetTimeHandler()->Run();
