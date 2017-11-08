@@ -178,7 +178,7 @@ public:
 	virtual void		Release(void);
 	virtual void		OnClose();
 
-	virtual bool		OnTimer(unsigned int dwSecond);
+	virtual bool OnTimer(float fSecond);
 protected:
 private:
 };

@@ -65,9 +65,9 @@ public:
 	{
 	}
 
-	virtual bool AddDelayTimer(unsigned int dwSecond, IFxTimer* pFxTimer)
+	virtual bool AddDelayTimer(float fSecond, IFxTimer* pFxTimer)
 	{
-		unsigned int dwInvokeTime = (unsigned int)m_qwSecond + dwSecond;
+		float dwInvokeTime = (float)m_qwSecond + fSecond;
 		if (m_mapDelayTimers[dwInvokeTime].find(pFxTimer)
 				!= m_mapDelayTimers[dwInvokeTime].end())
 		{
@@ -80,7 +80,7 @@ public:
 	virtual bool DelDelayTimer(IFxTimer* pFxTimer)
 	{
 		bool bDel = false;
-		for (std::map<unsigned int, std::set<IFxTimer*> >::iterator it =
+		for (std::map<float, std::set<IFxTimer*> >::iterator it =
 				m_mapDelayTimers.begin(); it != m_mapDelayTimers.end(); ++it)
 		{
 			for (std::set<IFxTimer*>::iterator itTimer = it->second.begin();
@@ -205,7 +205,7 @@ private:
 			}
 		}
 
-		for (std::map<unsigned int, std::set<IFxTimer*> >::iterator it =
+		for (std::map<float, std::set<IFxTimer*> >::iterator it =
 				m_mapDelayTimers.begin(); it != m_mapDelayTimers.end();)
 		{
 			if (it->first <= m_qwSecond)
@@ -235,7 +235,7 @@ private:
 	FxCriticalLock m_oLock;
 
 	std::map<unsigned int, std::set<IFxTimer*> > m_mapTimers;
-	std::map<unsigned int, std::set<IFxTimer*> > m_mapDelayTimers;
+	std::map<float, std::set<IFxTimer*> > m_mapDelayTimers;
 };
 
 IFxTimerHandler* GetTimeHandler()

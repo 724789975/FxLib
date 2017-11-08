@@ -72,12 +72,12 @@ int main(int argc, char **argv)
 		goto STOP;
 	}
 
-	if (!CWebSocketSessionFactory::CreateInstance())
+	if (!CSessionFactory::CreateInstance())
 	{
 		g_bRun = false;
 		goto STOP;
 	}
-	CWebSocketSessionFactory::Instance()->Init();
+	CSessionFactory::Instance()->Init();
 	CChatManagerSession::CreateInstance();
 	pNet = FxNetGetModule();
 	if (!pNet)
@@ -101,9 +101,9 @@ int main(int argc, char **argv)
 	//	LogFun(LT_Screen, LogLv_Info, "%s", "db connected~~~~");
 	//}
 
-	pListenSocket = pNet->Listen(CWebSocketSessionFactory::Instance(), SLT_WebSocket, 0, FLAGS_port);
+	pListenSocket = pNet->Listen(CSessionFactory::Instance(), SLT_Udp, 0, FLAGS_port);
 
-	pNet->TcpConnect(CChatManagerSession::Instance(), inet_addr("127.0.0.1"), 13001, true);
+	//pNet->TcpConnect(CChatManagerSession::Instance(), inet_addr("127.0.0.1"), 13001, true);
 	if(pListenSocket == NULL)
 	{
 		g_bRun = false;
@@ -118,13 +118,13 @@ int main(int argc, char **argv)
 	}
 	pListenSocket->StopListen();
 	pListenSocket->Close();
-	for (std::set<FxSession*>::iterator it = CWebSocketSessionFactory::Instance()->m_setSessions.begin();
-		it != CWebSocketSessionFactory::Instance()->m_setSessions.end(); ++it)
+	for (std::set<FxSession*>::iterator it = CSessionFactory::Instance()->m_setSessions.begin();
+		it != CSessionFactory::Instance()->m_setSessions.end(); ++it)
 	{
 		(*it)->Close();
 	}
 
-	while (CWebSocketSessionFactory::Instance()->m_setSessions.size())
+	while (CSessionFactory::Instance()->m_setSessions.size())
 	{
 		pNet->Run(0xffffffff);
 		FxSleep(10);

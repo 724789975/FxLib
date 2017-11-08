@@ -150,7 +150,7 @@ private:
 private:
 	double ack_recv_time;
 	int ack_timeout_retry;
-	unsigned int status;
+	//unsigned int status;
 
 	int ack_same_count;
 	bool quick_retry;
@@ -162,6 +162,7 @@ private:
 class FxConnection;
 class FxUDPConnectSock : public IFxConnectSocket
 {
+	friend class FxUDPListenSock;
 public:
 	FxUDPConnectSock();
 	virtual ~FxUDPConnectSock();
