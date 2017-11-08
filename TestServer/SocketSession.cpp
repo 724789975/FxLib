@@ -426,7 +426,7 @@ void CChatManagerSession::OnClose()
 	GetTimeHandler()->AddDelayTimer(2, this);
 }
 
-bool CChatManagerSession::OnTimer(float fSecond)
+bool CChatManagerSession::OnTimer(double fSecond)
 {
 	FxNetGetModule()->TcpConnect(this, inet_addr("127.0.0.1"), 13001, true);
 	return true;

@@ -18,7 +18,7 @@ static FxSession* g_sSessions[CLIENTCOUNT] = { 0 };
 
 class TestTimer : public IFxTimer
 {
-	virtual bool OnTimer(float fSecond)
+	virtual bool OnTimer(double fSecond)
 	{
 		for (int i = 0; i < CLIENTCOUNT; ++i)
 		{
@@ -32,7 +32,7 @@ class TestTimer : public IFxTimer
 			}
 			g_sSessions[i]->ForceSend();
 		}
-		GetTimeHandler()->AddDelayTimer(0.01f, this);
+		GetTimeHandler()->AddDelayTimer(0.01, this);
 		return true;
 	}
 };

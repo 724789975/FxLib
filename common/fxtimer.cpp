@@ -65,22 +65,22 @@ public:
 	{
 	}
 
-	virtual bool AddDelayTimer(float fSecond, IFxTimer* pFxTimer)
+	virtual bool AddDelayTimer(double dSecond, IFxTimer* pFxTimer)
 	{
-		float dwInvokeTime = (float)m_qwSecond + fSecond;
-		if (m_mapDelayTimers[dwInvokeTime].find(pFxTimer)
-				!= m_mapDelayTimers[dwInvokeTime].end())
+		double dInvokeTime = m_qwSecond + dSecond;
+		if (m_mapDelayTimers[dInvokeTime].find(pFxTimer)
+				!= m_mapDelayTimers[dInvokeTime].end())
 		{
 			return false;
 		}
-		m_mapDelayTimers[dwInvokeTime].insert(pFxTimer);
+		m_mapDelayTimers[dInvokeTime].insert(pFxTimer);
 		return true;
 	}
 
 	virtual bool DelDelayTimer(IFxTimer* pFxTimer)
 	{
 		bool bDel = false;
-		for (std::map<float, std::set<IFxTimer*> >::iterator it =
+		for (std::map<double, std::set<IFxTimer*> >::iterator it =
 				m_mapDelayTimers.begin(); it != m_mapDelayTimers.end(); ++it)
 		{
 			for (std::set<IFxTimer*>::iterator itTimer = it->second.begin();
@@ -168,7 +168,7 @@ private:
 
 	void ProcDelayTimer()
 	{
-		for (std::map<float, std::set<IFxTimer*> >::iterator it =
+		for (std::map<double, std::set<IFxTimer*> >::iterator it =
 			m_mapDelayTimers.begin(); it != m_mapDelayTimers.end();)
 		{
 			if (it->first <= m_qwSecond)
@@ -176,7 +176,7 @@ private:
 				for (std::set<IFxTimer*>::iterator itTimer = it->second.begin();
 					itTimer != it->second.end(); ++itTimer)
 				{
-					(*itTimer)->OnTimer((unsigned int)m_qwSecond);
+					(*itTimer)->OnTimer(m_qwSecond);
 				}
 				m_mapDelayTimers.erase(it++);
 			}
@@ -225,7 +225,7 @@ private:
 				for (std::set<IFxTimer*>::iterator itTimer = it->second.begin();
 						itTimer != it->second.end(); ++itTimer)
 				{
-					(*itTimer)->OnTimer((unsigned int)m_qwSecond);
+					(*itTimer)->OnTimer(m_qwSecond);
 				}
 			}
 		}
@@ -243,7 +243,7 @@ private:
 	FxCriticalLock m_oLock;
 
 	std::map<unsigned int, std::set<IFxTimer*> > m_mapTimers;
-	std::map<float, std::set<IFxTimer*> > m_mapDelayTimers;
+	std::map<double, std::set<IFxTimer*> > m_mapDelayTimers;
 };
 
 IFxTimerHandler* GetTimeHandler()

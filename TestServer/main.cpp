@@ -14,7 +14,7 @@ DEFINE_uint32(port, 20000, "linten port");
 
 class TestTimer : public IFxTimer
 {
-	virtual bool OnTimer(float fSecond)
+	virtual bool OnTimer(double fSecond)
 	{
 		for (std::set<FxSession*>::iterator it = CSessionFactory::Instance()->m_setSessions.begin();
 			it != CSessionFactory::Instance()->m_setSessions.end(); ++it)
