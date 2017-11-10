@@ -493,7 +493,49 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 			poSock->recv_window.seq_retry_count[id] = 0;
 		}
 
+		byte new_ack = poSock->send_window.begin - 1;
+		// calculate new ack
+		for (byte i = recv_window.begin; i != recv_window.end; i++)
+		{
+			// recv buffer is invalid
+			if (recv_window.seq_buffer_id[i % recv_window.window_size] >= recv_window.window_size)
+				break;
 
+			new_ack = i;
+		}
+
+		while (poSock->recv_window.begin != poSock->recv_window.end)
+		{
+			const byte head_size = sizeof(UDPPacketHeader);
+			byte id = poSock->recv_window.begin % poSock->recv_window.window_size;
+			byte buffer_id = poSock->recv_window.seq_buffer_id[id];
+			byte * buffer = poSock->recv_window.buffer[buffer_id] + head_size;
+
+			// copy buffer
+
+				// free buffer
+			poSock->recv_window.buffer[buffer_id][0] = recv_window.free_buffer_id;
+			poSock->recv_window.free_buffer_id = buffer_id;
+
+				// remove sequence
+			poSock->recv_window.seq_size[id] = 0;
+			poSock->recv_window.seq_buffer_id[id] = recv_window.window_size;
+			poSock->recv_window.begin++;
+			poSock->recv_window.end++;
+		}
+
+		UDPPacketHeader* pUDPPacketHeader = (UDPPacketHeader*)pstPerIoData->stWsaBuf.buf;
+
+		while (poSock->send_window.begin != (byte)(pUDPPacketHeader->m_cAck + 1))
+		{
+			byte id = poSock->send_window.begin % poSock->send_window.window_size;
+			byte buffer_id = poSock->send_window.seq_buffer_id[id];
+
+			// free buffer
+			poSock->send_window.buffer[buffer_id][0] = poSock->send_window.free_buffer_id;
+			poSock->send_window.free_buffer_id = buffer_id;
+			poSock->send_window.begin++;
+		}
 
 		// 这个时候不能说是已经establish 了 要发个消息确认下
 		byte id = poSock->send_window.end % poSock->send_window.window_size;
@@ -519,7 +561,6 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		poSock->send_window.seq_retry_count[id] = 0;
 		poSock->send_window.end++;
 
-		++poSock->send_window.begin;
 
 		// send的时候 可能要修改 因为 udp tcp 有区别
 		if (sendto(poSock->GetSock(), (char*)(&packet),
@@ -536,6 +577,11 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 			}
 		}
 		//poSock->Send((char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader));
+
+		// free buffer
+		poSock->send_window.buffer[buffer_id][0] = poSock->send_window.free_buffer_id;
+		poSock->send_window.free_buffer_id = buffer_id;
+		++poSock->send_window.begin;
 
 		sockaddr_in stLocalAddr;
 		INT32 nLocalAddrLen = sizeof(sockaddr_in);
@@ -798,6 +844,8 @@ bool FxUDPConnectSock::Init()
 #ifdef WIN32
 	memset(&m_stRecvIoData.stRemoteAddr, 0, sizeof(m_stRecvIoData.stRemoteAddr));
 	memset(&m_stSendIoData.stRemoteAddr, 0, sizeof(m_stSendIoData.stRemoteAddr));
+
+	m_byRecvBufferId = 0;
 #endif // WIN32
 	if (NULL == m_poSendBuf)
 	{
@@ -1327,7 +1375,16 @@ SOCKET FxUDPConnectSock::Connect()
 			recv_window.seq_retry_count[id] = 0;
 		}
 
-		++send_window.begin;
+		while (send_window.begin != (byte)(oUDPPacketHeader.m_cAck + 1))
+		{
+			byte id = send_window.begin % send_window.window_size;
+			byte buffer_id = send_window.seq_buffer_id[id];
+
+			// free buffer
+			send_window.buffer[buffer_id][0] = send_window.free_buffer_id;
+			send_window.free_buffer_id = buffer_id;
+			send_window.begin++;
+		}
 
 		SetRemoteAddr(stRemoteAddr);
 	}
@@ -1473,12 +1530,12 @@ bool FxUDPConnectSock::PostRecv()
 
 	ZeroMemory(&m_stRecvIoData.stOverlapped, sizeof(m_stRecvIoData.stOverlapped));
 
-	unsigned char buffer_id = recv_window.free_buffer_id;
-	unsigned char * buffer = recv_window.buffer[buffer_id];
+	m_byRecvBufferId = recv_window.free_buffer_id;
+	unsigned char * buffer = recv_window.buffer[m_byRecvBufferId];
 	recv_window.free_buffer_id = buffer[0];
 
 	// can't allocate buffer, disconnect.
-	if (buffer_id >= recv_window.window_size)
+	if (m_byRecvBufferId >= recv_window.window_size)
 	{
 		return false;
 	}
@@ -1507,6 +1564,7 @@ bool FxUDPConnectSock::PostRecv()
 
 bool FxUDPConnectSock::PostRecvFree()
 {
+	Assert(0);
 	if (false == IsConnected())
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
@@ -2019,7 +2077,7 @@ bool FxUDPConnectSock::PostSend()
 bool FxUDPConnectSock::PostSendFree()
 {
 #ifdef WIN32
-	if (!m_poSendBuf->GetUseLen())
+	if (!m_poSendBuf->GetUseLen() && !send_ack)
 	{
 		return true;
 	}
@@ -2282,17 +2340,22 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 	// packet received
 	bool packet_received = false;
 
-	// allocate buffer
-	byte buffer_id = recv_window.free_buffer_id;
-	byte * buffer = recv_window.buffer[buffer_id];
-	recv_window.free_buffer_id = buffer[0];
+	//// allocate buffer
+	//byte buffer_id = recv_window.free_buffer_id;
+	//byte * buffer = recv_window.buffer[buffer_id];
+	//recv_window.free_buffer_id = buffer[0];
 
-	// can't allocate buffer, disconnect.
-	if (buffer_id >= recv_window.window_size)
-	{
-		PostClose();
-		return;
-	}
+	// allocate buffer
+	//byte buffer_id = recv_window.free_buffer_id;
+	char * buffer = m_stRecvIoData.stWsaBuf.buf;
+	//recv_window.free_buffer_id = buffer[0];
+
+	//// can't allocate buffer, disconnect.
+	//if (buffer_id >= recv_window.window_size)
+	//{
+	//	PostClose();
+	//	return;
+	//}
 
 	// receive packet
 	int n = nLen;
@@ -2378,7 +2441,8 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 
 		if (recv_window.seq_buffer_id[id] >= recv_window.window_size)
 		{
-			recv_window.seq_buffer_id[id] = buffer_id;
+			//recv_window.seq_buffer_id[id] = buffer_id;
+			recv_window.seq_buffer_id[id] = m_byRecvBufferId;
 			recv_window.seq_size[id] = n;
 			packet_received = true;
 
@@ -2392,7 +2456,8 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 
 	// free buffer.
 	buffer[0] = recv_window.free_buffer_id;
-	recv_window.free_buffer_id = buffer_id;
+	//recv_window.free_buffer_id = buffer_id;
+	recv_window.free_buffer_id = m_byRecvBufferId;
 
 
 

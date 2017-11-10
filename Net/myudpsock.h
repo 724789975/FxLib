@@ -300,6 +300,11 @@ private:
 	unsigned char ack_last;
 	unsigned char syn_last;
 
+#ifdef WIN32
+	unsigned char m_byRecvBufferId;
+#endif // WIN32
+
+
 };
 
 
