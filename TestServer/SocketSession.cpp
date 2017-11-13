@@ -82,16 +82,16 @@ void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
 	//printf("time : %s ip : %s, port : %d, recv %s", GetTimeHandler()->GetTimeStr(), GetRemoteIPStr(), GetRemotePort(), pBuf);
 
-	CNetStream oStream(pBuf, dwLen);
-	std::string szPlayerId;
-	oStream.ReadString(szPlayerId);
+	//CNetStream oStream(pBuf, dwLen);
+	//std::string szPlayerId;
+	//oStream.ReadString(szPlayerId);
 
-	char szPlayerInfo[1024];
-	CNetStream oGameStream(ENetStreamType_Write, szPlayerInfo, 1024);
-	oGameStream.WriteInt(40002);
-	oGameStream.WriteString(szPlayerId);
-	mapSocket[szPlayerId] = this;
-	CChatManagerSession::Instance()->Send(szPlayerInfo, 1024 - oGameStream.GetDataLength());
+	//char szPlayerInfo[1024];
+	//CNetStream oGameStream(ENetStreamType_Write, szPlayerInfo, 1024);
+	//oGameStream.WriteInt(40002);
+	//oGameStream.WriteString(szPlayerId);
+	//mapSocket[szPlayerId] = this;
+	//CChatManagerSession::Instance()->Send(szPlayerInfo, 1024 - oGameStream.GetDataLength());
 
 	//if (!Send(pBuf, dwLen))
 	//{

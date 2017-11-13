@@ -1374,32 +1374,36 @@ SOCKET FxUDPConnectSock::Connect()
 #endif	//WIN32
 		int nRemoteAddrLen = sizeof(stRemoteAddr);
 
-	if (recvfrom(GetSock(), (char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader), 0, (sockaddr*)&stRemoteAddr, &nRemoteAddrLen))
+	for (unsigned char i = recv_window.begin; i != recv_window.end; i++)
 	{
-		if (oUDPPacketHeader.m_cAck != 1)
-		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "ack error want : 1, recv : %d", oUDPPacketHeader.m_cAck);
-			return INVALID_SOCKET;
-		}
-		if (oUDPPacketHeader.m_cSyn != 1)
-		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "syn error want : 1, recv : %d", oUDPPacketHeader.m_cSyn);
-			return INVALID_SOCKET;
-		}
-		if (oUDPPacketHeader.m_cStatus != SSTATE_ESTABLISH)
-		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "statu error want : SSTATE_ESTABLISH, recv : %d", oUDPPacketHeader.m_cStatus);
-			return INVALID_SOCKET;
-		}
+		unsigned char id = i % recv_window.window_size;
+		recv_window.seq_buffer_id[id] = recv_window.window_size;
+		recv_window.seq_size[id] = 0;
+		recv_window.seq_time[id] = 0;
+		recv_window.seq_retry[id] = 0;
+		recv_window.seq_retry_count[id] = 0;
+	}
 
-		for (unsigned char i = recv_window.begin; i != recv_window.end; i++)
+	byte recv_buffer_id = recv_window.free_buffer_id;
+	byte * recv_buffer = recv_window.buffer[recv_buffer_id];
+	recv_window.free_buffer_id = recv_buffer[0];
+
+	if (recvfrom(GetSock(), (char*)(recv_buffer), sizeof(UDPPacketHeader), 0, (sockaddr*)&stRemoteAddr, &nRemoteAddrLen))
+	{
+		if (((UDPPacketHeader*)(recv_buffer))->m_cAck != 1)
 		{
-			unsigned char id = i % recv_window.window_size;
-			recv_window.seq_buffer_id[id] = recv_window.window_size;
-			recv_window.seq_size[id] = 0;
-			recv_window.seq_time[id] = 0;
-			recv_window.seq_retry[id] = 0;
-			recv_window.seq_retry_count[id] = 0;
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "ack error want : 1, recv : %d", ((UDPPacketHeader*)(recv_buffer))->m_cAck);
+			return INVALID_SOCKET;
+		}
+		if (((UDPPacketHeader*)(recv_buffer))->m_cSyn != 1)
+		{
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "syn error want : 1, recv : %d", ((UDPPacketHeader*)(recv_buffer))->m_cSyn);
+			return INVALID_SOCKET;
+		}
+		if (((UDPPacketHeader*)(recv_buffer))->m_cStatus != SSTATE_ESTABLISH)
+		{
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "statu error want : SSTATE_ESTABLISH, recv : %d", ((UDPPacketHeader*)(recv_buffer))->m_cStatus);
+			return INVALID_SOCKET;
 		}
 
 		while (send_window.begin != (byte)(oUDPPacketHeader.m_cAck + 1))
@@ -1414,6 +1418,56 @@ SOCKET FxUDPConnectSock::Connect()
 		}
 
 		SetRemoteAddr(stRemoteAddr);
+	}
+
+	// packet is valid
+	if (recv_window.IsValidIndex(((UDPPacketHeader*)(recv_buffer))->m_cSyn))
+	{
+		byte id = ((UDPPacketHeader*)(recv_buffer))->m_cSyn % recv_window.window_size;
+
+		if (recv_window.seq_buffer_id[id] >= recv_window.window_size)
+		{
+			recv_window.seq_buffer_id[id] = recv_buffer_id;
+			recv_window.seq_size[id] = sizeof(UDPPacketHeader);
+		}
+	}
+
+	// free buffer.
+	recv_buffer[0] = recv_window.free_buffer_id;
+	recv_window.free_buffer_id = recv_buffer_id;
+
+	// record ack last
+	ack_last = send_window.begin - 1;
+
+	byte new_ack = send_window.begin - 1;
+	// calculate new ack
+	for (byte i = recv_window.begin; i != recv_window.end; i++)
+	{
+		// recv buffer is invalid
+		if (recv_window.seq_buffer_id[i % recv_window.window_size] >= recv_window.window_size)
+			break;
+
+		new_ack = i;
+	}
+
+	while (recv_window.begin != (byte)(new_ack + 1))
+	{
+		const byte head_size = sizeof(UDPPacketHeader);
+		byte id = recv_window.begin % recv_window.window_size;
+		byte buffer_id = recv_window.seq_buffer_id[id];
+		byte * buffer = recv_window.buffer[buffer_id] + head_size;
+
+		// copy buffer
+
+		// free buffer
+		recv_window.buffer[buffer_id][0] = recv_window.free_buffer_id;
+		recv_window.free_buffer_id = buffer_id;
+
+		// remove sequence
+		recv_window.seq_size[id] = 0;
+		recv_window.seq_buffer_id[id] = recv_window.window_size;
+		recv_window.begin++;
+		recv_window.end++;
 	}
 
 #ifdef WIN32
@@ -2243,20 +2297,20 @@ void FxUDPConnectSock::__ProcRecv(UINT32 dwLen)
 			return;
 		}
 
-		UDPPacketHeader* pUDPPacketHeader = (UDPPacketHeader*)(GetConnection()->GetRecvBuf() + GetDataHeader()->GetHeaderLength());
-		// 参数一定要是syn
-		if (!IsValidAck(pUDPPacketHeader->m_cSyn))
-		{
-#ifdef WIN32
-			PostClose();
-#else
-			Close();
-#endif // WIN32
-			return;
-		}
+		//UDPPacketHeader* pUDPPacketHeader = (UDPPacketHeader*)(GetConnection()->GetRecvBuf() + GetDataHeader()->GetHeaderLength());
+//		// 参数一定要是syn
+//		if (!IsValidAck(pUDPPacketHeader->m_cSyn))
+//		{
+//#ifdef WIN32
+//			PostClose();
+//#else
+//			Close();
+//#endif // WIN32
+//			return;
+//		}
 
-		memmove(GetConnection()->GetRecvBuf(), GetConnection()->GetRecvBuf() + GetDataHeader()->GetHeaderLength() + sizeof(UDPPacketHeader), dwLen - GetDataHeader()->GetHeaderLength() - sizeof(UDPPacketHeader));
-		GetConnection()->OnRecv(dwLen - GetDataHeader()->GetHeaderLength() - sizeof(UDPPacketHeader));
+		memmove(GetConnection()->GetRecvBuf(), GetConnection()->GetRecvBuf() + GetDataHeader()->GetHeaderLength(), dwLen - GetDataHeader()->GetHeaderLength());
+		GetConnection()->OnRecv(dwLen - GetDataHeader()->GetHeaderLength());
 	}
 }
 
