@@ -2646,22 +2646,22 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 						m_poRecvBuf->CostBuff(nLenRecv);
 					}
 
-					// free buffer
-					recv_window.buffer[buffer_id][0] = recv_window.free_buffer_id;
-					recv_window.free_buffer_id = buffer_id;
-
-					// remove sequence
-					recv_window.seq_size[id] = 0;
-					recv_window.seq_buffer_id[id] = recv_window.window_size;
-					recv_window.begin++;
-					recv_window.end++;
-
 					// mark for parse message
 					parse_message = true;
 
 					// send ack when get packet
 					send_ack = true;
 				}
+
+				// free buffer
+				recv_window.buffer[buffer_id][0] = recv_window.free_buffer_id;
+				recv_window.free_buffer_id = buffer_id;
+
+				// remove sequence
+				recv_window.seq_size[id] = 0;
+				recv_window.seq_buffer_id[id] = recv_window.window_size;
+				recv_window.begin++;
+				recv_window.end++;
 			}
 		}
 
