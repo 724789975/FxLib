@@ -8,7 +8,7 @@
 
 #include <signal.h>
 
-#define CLIENTCOUNT 16
+#define CLIENTCOUNT 1
 
 char* g_strIp = "127.0.0.1";
 unsigned int g_dwPort = 20000;

@@ -6,6 +6,7 @@
 #include "iothread.h"
 #include "net.h"
 #include "netstream.h"
+#include <math.h>
 
 #define RECV_BUFF_SIZE 32*64*1024
 #define SEND_BUFF_SIZE 64*1024
@@ -540,11 +541,11 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 
 			// copy buffer
 
-				// free buffer
+			// free buffer
 			poSock->recv_window.buffer[buffer_id][0] = poSock->recv_window.free_buffer_id;
 			poSock->recv_window.free_buffer_id = buffer_id;
 
-				// remove sequence
+			// remove sequence
 			poSock->recv_window.seq_size[id] = 0;
 			poSock->recv_window.seq_buffer_id[id] = poSock->recv_window.window_size;
 			poSock->recv_window.begin++;
@@ -607,7 +608,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		poSock->send_window.buffer[buffer_id][0] = poSock->send_window.free_buffer_id;
 		poSock->send_window.free_buffer_id = buffer_id;
 		++poSock->send_window.begin;
-		
+
 		poSock->send_ack = true;
 
 		sockaddr_in stLocalAddr;
@@ -673,7 +674,7 @@ void FxUDPListenSock::OnAccept()
 
 	if (recvfrom(GetSock(), (char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader), 0, (sockaddr*)&stRemoteAddr, &nRemoteAddrLen))
 	{
-		if (oUDPPacketHeader.m_cAck != 1)
+		if (oUDPPacketHeader.m_cAck != 0)
 		{
 			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "ack error want : 1, recv : %d", oUDPPacketHeader.m_cAck);
 			return;
@@ -765,7 +766,7 @@ void FxUDPListenSock::OnAccept()
 		poSock->recv_window.seq_retry_count[id] = 0;
 	}
 
-	UDPPacketHeader* pUDPPacketHeader = &oUDPPacketHeader
+	UDPPacketHeader* pUDPPacketHeader = &oUDPPacketHeader;
 
 	unsigned char recv_buffer_id = poSock->recv_window.free_buffer_id;
 	unsigned char * recv_buffer = poSock->recv_window.buffer[recv_buffer_id];
@@ -1851,95 +1852,143 @@ void FxUDPConnectSock::OnParserIoEvent(int dwEvents)
 
 bool FxUDPConnectSock::PostSend()
 {
+	double time = GetTimeHandler()->GetMilliSecond();
+
+	// check ack received time
+	if (time - ack_recv_time > 5)
 	{
-		double time = GetTimeHandler()->GetMilliSecond();
+		ack_recv_time = time;
 
-		// check ack received time
-		if (time - ack_recv_time > 5)
+		if (--ack_timeout_retry <= 0)
 		{
-			ack_recv_time = time;
+			Close();
+			return false;
+		}
+	}
 
-			if (--ack_timeout_retry <= 0)
-			{
-				PostClose();
-				return false;
-			}
+	if (time < send_time)
+		return true;
+
+	bool force_retry = false;
+
+	// enter quick retry when get 3 same ack
+	if (ack_same_count > 3)
+	{
+		if (quick_retry == false)
+		{
+			quick_retry = true;
+			force_retry = true;
+
+			send_window_threshhold = send_window_control / 2;
+			if (send_window_threshhold < 2) send_window_threshhold = 2;
+			send_window_control = send_window_threshhold + ack_same_count - 1;
+			if (send_window_control > send_window.window_size)
+				send_window_control = send_window.window_size;
+		}
+		else
+		{
+			// in quick retry
+			// send_window_control increase 1 when get same ack 
+			send_window_control += 1;
+			if (send_window_control > send_window.window_size)
+				send_window_control = send_window.window_size;
+		}
+	}
+	else
+	{
+		// quick retry finished when get new ack
+		if (quick_retry == true)
+		{
+			send_window_control = send_window_threshhold;
+			quick_retry = false;
+		}
+	}
+
+	// enter slow start when send data timeout 
+	for (unsigned char i = send_window.begin; i != send_window.end; i++)
+	{
+		unsigned char id = i % send_window.window_size;
+		unsigned short size = send_window.seq_size[id];
+
+		if (send_window.seq_retry_count[id] > 0
+			&& time >= send_window.seq_retry[id])
+		{
+			send_window_threshhold = send_window_control / 2;
+			if (send_window_threshhold < 2) send_window_threshhold = 2;
+			//send_window_control = 1;
+			send_window_control = send_window_threshhold;
+			//break;
+
+			quick_retry = false;
+			ack_same_count = 0;
+			break;
+		}
+	}
+
+	unsigned int offset = 0;
+	char * send_buffer = NULL;
+	unsigned int size = m_poSendBuf->GetOutCursorPtr(send_buffer);
+
+	// put buffer to send window
+	while ((send_window.free_buffer_id < send_window.window_size) &&	// there is a free buffer
+		(size > 0))
+	{
+		// if send window more than send_window_control, break
+		if (send_window.end - send_window.begin > send_window_control)
+			break;
+
+		unsigned char id = send_window.end % send_window.window_size;
+
+		// allocate buffer
+		unsigned char buffer_id = send_window.free_buffer_id;
+		send_window.free_buffer_id = send_window.buffer[buffer_id][0];
+
+		// send window buffer
+		unsigned char * buffer = send_window.buffer[buffer_id];
+
+		// packet header
+		UDPPacketHeader & packet = *(UDPPacketHeader*)buffer;
+		packet.m_cStatus = GetState();
+		packet.m_cSyn = send_window.end;
+		packet.m_cAck = recv_window.begin - 1;
+
+		// copy data
+		unsigned int copy_offset = sizeof(packet);
+		unsigned int copy_size = send_window.buffer_size - copy_offset;
+		if (copy_size > size)
+			copy_size = size;
+
+		if (copy_size > 0)
+		{
+			memcpy(buffer + copy_offset, send_buffer + offset, copy_size);
+
+			size -= copy_size;
+			offset += copy_size;
 		}
 
-		if (time < send_time)
-			return true;
+		// add to send window
+		send_window.seq_buffer_id[id] = buffer_id;
+		send_window.seq_size[id] = copy_size + copy_offset;
+		send_window.seq_time[id] = time;
+		send_window.seq_retry[id] = time;
+		send_window.seq_retry_time[id] = retry_time;
+		send_window.seq_retry_count[id] = 0;
+		send_window.end++;
+	}
 
-		bool force_retry = false;
+	// remove data from send buffer.
+	if (offset > 0)
+	{
+		m_poSendBuf->DiscardBuff(offset);
+	}
 
-		//if (status == ST_ESTABLISHED
-		//	|| status == ST_FIN_WAIT_1)
+	// if there is no data to send, make an empty one
+	if (send_window.begin == send_window.end)
+	{
+		if (time >= send_data_time)
 		{
-			// enter quick retry when get 3 same ack
-			if (ack_same_count > 3)
+			if (send_window.free_buffer_id < send_window.window_size)
 			{
-				if (quick_retry == false)
-				{
-					quick_retry = true;
-					force_retry = true;
-
-					send_window_threshhold = send_window_control / 2;
-					if (send_window_threshhold < 2) send_window_threshhold = 2;
-					send_window_control = send_window_threshhold + ack_same_count - 1;
-					if (send_window_control > send_window.window_size)
-						send_window_control = send_window.window_size;
-				}
-				else
-				{
-					// in quick retry
-					// send_window_control increase 1 when get same ack 
-					send_window_control += 1;
-					if (send_window_control > send_window.window_size)
-						send_window_control = send_window.window_size;
-				}
-			}
-			else
-			{
-				// quick retry finished when get new ack
-				if (quick_retry == true)
-				{
-					send_window_control = send_window_threshhold;
-					quick_retry = false;
-				}
-			}
-
-			// enter slow start when send data timeout 
-			for (unsigned char i = send_window.begin; i != send_window.end; i++)
-			{
-				unsigned char id = i % send_window.window_size;
-				unsigned short size = send_window.seq_size[id];
-
-				if (send_window.seq_retry_count[id] > 0
-					&& time >= send_window.seq_retry[id])
-				{
-					send_window_threshhold = send_window_control / 2;
-					if (send_window_threshhold < 2) send_window_threshhold = 2;
-					//send_window_control = 1;
-					send_window_control = send_window_threshhold;
-					//break;
-
-					quick_retry = false;
-					ack_same_count = 0;
-					break;
-				}
-			}
-
-			unsigned int offset = 0;
-			char * send_buffer = NULL;
-			unsigned int size = m_poSendBuf->GetOutCursorPtr(send_buffer);
-
-			// put buffer to send window
-			while ((send_window.free_buffer_id < send_window.window_size) &&	// there is a free buffer
-				(size > 0))
-			{
-				// if send window more than send_window_control, break
-				if (send_window.end - send_window.begin > send_window_control)
-					break;
-
 				unsigned char id = send_window.end % send_window.window_size;
 
 				// allocate buffer
@@ -1955,25 +2004,9 @@ bool FxUDPConnectSock::PostSend()
 				packet.m_cSyn = send_window.end;
 				packet.m_cAck = recv_window.begin - 1;
 
-				// copy data
-				unsigned int copy_offset = sizeof(packet);
-				unsigned int copy_size = send_window.buffer_size - copy_offset;
-				if (copy_size > size)
-					copy_size = size;
-
-				if (copy_size > 0)
-				{
-					memcpy(buffer + copy_offset, send_buffer + offset, copy_size);
-
-					size -= copy_size;
-					offset += copy_size;
-
-					m_poSendBuf->DiscardBuff(copy_size);
-				}
-
 				// add to send window
 				send_window.seq_buffer_id[id] = buffer_id;
-				send_window.seq_size[id] = copy_size + copy_offset;
+				send_window.seq_size[id] = sizeof(packet);
 				send_window.seq_time[id] = time;
 				send_window.seq_retry[id] = time;
 				send_window.seq_retry_time[id] = retry_time;
@@ -1981,148 +2014,38 @@ bool FxUDPConnectSock::PostSend()
 				send_window.end++;
 			}
 		}
+	}
+	else
+		send_data_time = time + send_data_frequency;
 
-		// if there is no data to send, make an empty one
-		if (send_window.begin == send_window.end)
+	// send packets
+	for (unsigned char i = send_window.begin; i != send_window.end; i++)
+	{
+		// if send packets more than send_window_control, break
+		if (i - send_window.begin >= send_window_control)
+			break;
+
+		unsigned char id = i % send_window.window_size;
+		unsigned short size = send_window.seq_size[id];
+
+		// send packet
+		if (time >= send_window.seq_retry[id] || force_retry)
 		{
-			if (time >= send_data_time)
-			{
-				if (send_window.free_buffer_id < send_window.window_size)
-				{
-					unsigned char id = send_window.end % send_window.window_size;
+			force_retry = false;
 
-					// allocate buffer
-					unsigned char buffer_id = send_window.free_buffer_id;
-					send_window.free_buffer_id = send_window.buffer[buffer_id][0];
+			char* buffer = (char*)send_window.buffer[send_window.seq_buffer_id[id]];
 
-					// send window buffer
-					unsigned char * buffer = send_window.buffer[buffer_id];
-
-					// packet header
-					UDPPacketHeader & packet = *(UDPPacketHeader*)buffer;
-					packet.m_cStatus = GetState();
-					packet.m_cSyn = send_window.end;
-					packet.m_cAck = recv_window.begin - 1;
-
-					// add to send window
-					send_window.seq_buffer_id[id] = buffer_id;
-					send_window.seq_size[id] = sizeof(packet);
-					send_window.seq_time[id] = time;
-					send_window.seq_retry[id] = time;
-					send_window.seq_retry_time[id] = retry_time;
-					send_window.seq_retry_count[id] = 0;
-					send_window.end++;
-				}
-			}
-		}
-		else
-			send_data_time = time + send_data_frequency;
-
-		// send packets
-		for (unsigned char i = send_window.begin; i != send_window.end; i++)
-		{
-			// if send packets more than send_window_control, break
-			if (i - send_window.begin >= send_window_control)
-				break;
-
-			unsigned char id = i % send_window.window_size;
-			unsigned short size = send_window.seq_size[id];
-
-			// send packet
-			if (time >= send_window.seq_retry[id] || force_retry)
-			{
-				force_retry = false;
-
-				char* buffer = (char*)send_window.buffer[send_window.seq_buffer_id[id]];
-
-				// packet header
-				UDPPacketHeader & packet = *(UDPPacketHeader*)buffer;
-				packet.m_cStatus = GetState();
-				packet.m_cSyn = i;
-				packet.m_cAck = recv_window.begin - 1;
-
-#ifdef WIN32
-				memset(&m_stSendIoData.stOverlapped, 0, sizeof(m_stSendIoData.stOverlapped));
-
-				m_stSendIoData.stWsaBuf.buf = buffer;
-				m_stSendIoData.stWsaBuf.len = size;
-				DWORD dwNumberOfBytesSent = 0;
-
-				int nRet = WSASend(GetSock(), &m_stSendIoData.stWsaBuf, 1, &dwNumberOfBytesSent, 0,
-					&m_stSendIoData.stOverlapped, NULL);
-				if (0 != nRet)
-				{
-					if (WSAGetLastError() != WSA_IO_PENDING)
-					{
-						InterlockedCompareExchange(&m_nPostSend, 0, 1);
-
-						UINT32 dwErr = WSAGetLastError();
-						LogExe(LogLv_Error, "WSASend errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
-
-						return false;
-					}
-				}
-#else
-				int nRet = send(GetSock(), (char*)(&packet), sizeof(packet), 0);
-				if (0 > nRet)
-				{
-					if (EAGAIN == errno)
-					{
-						if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLOUT | EPOLLIN, this))
-						{
-							ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-							m_bSending = false;
-							return false;
-						}
-						return true;
-					}
-
-					ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "send nRet < 0, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-					m_bSending = false;
-					return false;
-				}
-				else if (0 == nRet)
-				{
-					ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "send 0 == nRet, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-					m_bSending = false;
-					return false;
-				}
-#endif
-				// num send
-				num_packets_send++;
-
-				// num retry send
-				if (time != send_window.seq_time[id])
-					num_packets_retry++;
-
-				send_time = time + send_frequency;
-				send_data_time = time + send_data_frequency;
-				send_ack = false;
-
-				send_window.seq_retry_count[id]++;
-				//send_window.seq_retry_time[id] *= 2;
-				send_window.seq_retry_time[id] = 1.5 * retry_time;
-				if (send_window.seq_retry_time[id] > 0.2) send_window.seq_retry_time[id] = 0.2;
-				send_window.seq_retry[id] = time + send_window.seq_retry_time[id];
-			}
-		}
-
-		// send ack
-		if (send_ack)
-		{
-			UDPPacketHeader packet;
+			// packet header
+			UDPPacketHeader & packet = *(UDPPacketHeader*)buffer;
 			packet.m_cStatus = GetState();
-			packet.m_cSyn = send_window.begin - 1;
+			packet.m_cSyn = i;
 			packet.m_cAck = recv_window.begin - 1;
 
 #ifdef WIN32
 			memset(&m_stSendIoData.stOverlapped, 0, sizeof(m_stSendIoData.stOverlapped));
 
-			m_stSendIoData.stWsaBuf.buf = (char*)(&packet);
-			m_stSendIoData.stWsaBuf.len = sizeof(packet);
+			m_stSendIoData.stWsaBuf.buf = buffer;
+			m_stSendIoData.stWsaBuf.len = size;
 			DWORD dwNumberOfBytesSent = 0;
 
 			int nRet = WSASend(GetSock(), &m_stSendIoData.stWsaBuf, 1, &dwNumberOfBytesSent, 0,
@@ -2139,10 +2062,8 @@ bool FxUDPConnectSock::PostSend()
 					return false;
 				}
 			}
-
-			return true;
 #else
-			int nRet = send(GetSock(), (char*)(&packet), sizeof(packet), 0);
+			int nRet = send(GetSock(), buffer, size, 0);
 			if (0 > nRet)
 			{
 				if (EAGAIN == errno)
@@ -2169,149 +2090,113 @@ bool FxUDPConnectSock::PostSend()
 				m_bSending = false;
 				return false;
 			}
+
+			if (m_poSendBuf->GetUseLen() == 0)
+			{
+				if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
+				{
+					ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+					m_bSending = false;
+					return false;
+				}
+			}
 #endif
+			// num send
+			num_packets_send++;
+
+			// num retry send
+			if (time != send_window.seq_time[id])
+				num_packets_retry++;
+
 			send_time = time + send_frequency;
+			send_data_time = time + send_data_frequency;
 			send_ack = false;
+
+			send_window.seq_retry_count[id]++;
+			//send_window.seq_retry_time[id] *= 2;
+			send_window.seq_retry_time[id] = 1.5 * retry_time;
+			if (send_window.seq_retry_time[id] > 0.2) send_window.seq_retry_time[id] = 0.2;
+			send_window.seq_retry[id] = time + send_window.seq_retry_time[id];
 		}
 	}
 
-	return true;
+	// send ack
+	if (send_ack)
+	{
+		UDPPacketHeader packet;
+		packet.m_cStatus = GetState();
+		packet.m_cSyn = send_window.begin - 1;
+		packet.m_cAck = recv_window.begin - 1;
+
 #ifdef WIN32
-	if (false == IsConnected())
-	{
-		LogExe(LogLv_Error, "false == IsConnect(), socket : %d, socket id : %d", GetSock(), GetSockId());
+		memset(&m_stSendIoData.stOverlapped, 0, sizeof(m_stSendIoData.stOverlapped));
 
-		return false;
-	}
+		m_stSendIoData.stWsaBuf.buf = (char*)(&packet);
+		m_stSendIoData.stWsaBuf.len = sizeof(packet);
+		DWORD dwNumberOfBytesSent = 0;
 
-	LONG nPostSend = InterlockedCompareExchange(&m_nPostSend, 1, 0);
-	if (0 != nPostSend)
-	{
-		return true;
-	}
-
-	memset(&m_stSendIoData.stOverlapped, 0, sizeof(m_stSendIoData.stOverlapped));
-	int nLen = m_poSendBuf->GetOutCursorPtr(m_stSendIoData.stWsaBuf.buf);
-	if (0 >= nLen)
-	{
-		//ThreadLog(LogLv_Critical, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "m_poSendBuf->GetOutCursorPtr() = %d, socket : %d, socket id : %d", nLen, GetSock(), GetSockId());
-		// 不算失败，只是没有投递而已，下次可以继续//
-		InterlockedCompareExchange(&m_nPostSend, 0, 1);
-		return true;
-	}
-
-	nLen = 65536 < nLen ? 65536 : nLen;     // 最大64K
-
-	if (m_poSendBuf->GetFreeLen() < 32 * 1024)
-	{
-		InterlockedCompareExchange(&m_nPostSend, 0, 1);
-		return true;
-	}
-
-	m_stSendIoData.stWsaBuf.len = nLen;
-	DWORD dwNumberOfBytesSent = 0;
-
-	int nRet = WSASend(GetSock(), &m_stSendIoData.stWsaBuf, 1, &dwNumberOfBytesSent, 0,
-		&m_stSendIoData.stOverlapped, NULL);
-	if (0 != nRet)
-	{
-		if (WSAGetLastError() != WSA_IO_PENDING)
+		int nRet = WSASend(GetSock(), &m_stSendIoData.stWsaBuf, 1, &dwNumberOfBytesSent, 0,
+			&m_stSendIoData.stOverlapped, NULL);
+		if (0 != nRet)
 		{
-			InterlockedCompareExchange(&m_nPostSend, 0, 1);
+			if (WSAGetLastError() != WSA_IO_PENDING)
+			{
+				InterlockedCompareExchange(&m_nPostSend, 0, 1);
 
-			UINT32 dwErr = WSAGetLastError();
-			LogExe(LogLv_Error, "WSASend errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+				UINT32 dwErr = WSAGetLastError();
+				LogExe(LogLv_Error, "WSASend errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
-			return false;
+				return false;
+			}
 		}
-	}
 
-	return true;
+		return true;
 #else
-	if (false == IsConnected())
-	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		return false;
-	}
-
-	if (NULL == m_poIoThreadHandler)
-	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "NULL == m_poIoThreadHandler, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		Close();
-		return false;
-	}
-
-	if (m_bSending)
-	{
-		return true;
-	}
-
-	char* pSendBuf = NULL;
-	int nLen = m_poSendBuf->GetOutCursorPtr(pSendBuf);
-	if (0 >= nLen || NULL == pSendBuf)
-	{
-		//		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "m_poSendBuf->GetOutCursorPtr() = %d, socket : %d, socket id : %d", nLen, GetSock(), GetSockId());
-		// 不算失败，只是没有投递而已，下次可以继续//
-		// modify: 在这里需要设置事件为EPOLLIN，否则OUT事件一直被设置，导致CPU很高//
-		if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
+		int nRet = send(GetSock(), (char*)(&packet), sizeof(packet), 0);
+		if (0 > nRet)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
+			if (EAGAIN == errno)
+			{
+				if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLOUT | EPOLLIN, this))
+				{
+					ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-			PushNetEvent(NETEVT_ERROR, errno);
-			Close();
+					m_bSending = false;
+					return false;
+				}
+				return true;
+			}
+
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "send nRet < 0, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+			m_bSending = false;
 			return false;
 		}
-		return true;
-	}
-
-	m_bSending = true;
-	nLen = UDP_VAL_SO_SNDLOWAT < nLen ? UDP_VAL_SO_SNDLOWAT : nLen;     // 最大64K
-
-	int nRet = send(GetSock(), pSendBuf, nLen, 0);
-	if (0 > nRet)
-	{
-		if (EAGAIN == errno)
+		else if (0 == nRet)
 		{
-			if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLOUT | EPOLLIN, this))
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "send 0 == nRet, socket : %d, socket id : %d", GetSock(), GetSockId());
+
+			m_bSending = false;
+			return false;
+		}
+
+		if (m_poSendBuf->GetUseLen() == 0)
+		{
+			if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
 			{
 				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 				m_bSending = false;
 				return false;
 			}
-			return true;
 		}
-
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "send nRet < 0, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		m_bSending = false;
-		return false;
-	}
-	else if (0 == nRet)
-	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "send 0 == nRet, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		m_bSending = false;
-		return false;
-	}
-
-	// 把成功发送了的从发送缓冲区丢弃//
-	m_poSendBuf->DiscardBuff(nRet);
-
-	if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLOUT | EPOLLIN, this))
-	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		m_bSending = false;
-		PushNetEvent(NETEVT_ERROR, errno);
-		Close();
-		return false;
+#endif
+		send_time = time + send_frequency;
+		send_ack = false;
 	}
 
 	return true;
-#endif // WIN32
 }
 
 bool FxUDPConnectSock::PostSendFree()
@@ -2321,7 +2206,7 @@ bool FxUDPConnectSock::PostSendFree()
 		return true;
 	}
 #ifdef WIN32
-	static SPerUDPIoData oUDPIoData = {0};
+	static SPerUDPIoData oUDPIoData = { 0 };
 	oUDPIoData.nOp = IOCP_RECV;
 	ZeroMemory(&oUDPIoData.stOverlapped, sizeof(oUDPIoData.stOverlapped));
 	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(-1), (ULONG_PTR)this, &oUDPIoData.stOverlapped))
@@ -2451,16 +2336,16 @@ void FxUDPConnectSock::__ProcRecv(UINT32 dwLen)
 		}
 
 		//UDPPacketHeader* pUDPPacketHeader = (UDPPacketHeader*)(GetConnection()->GetRecvBuf() + GetDataHeader()->GetHeaderLength());
-//		// 参数一定要是syn
-//		if (!IsValidAck(pUDPPacketHeader->m_cSyn))
-//		{
-//#ifdef WIN32
-//			PostClose();
-//#else
-//			Close();
-//#endif // WIN32
-//			return;
-//		}
+		//		// 参数一定要是syn
+		//		if (!IsValidAck(pUDPPacketHeader->m_cSyn))
+		//		{
+		//#ifdef WIN32
+		//			PostClose();
+		//#else
+		//			Close();
+		//#endif // WIN32
+		//			return;
+		//		}
 
 		memmove(GetConnection()->GetRecvBuf(), GetConnection()->GetRecvBuf() + GetDataHeader()->GetHeaderLength(), dwLen - GetDataHeader()->GetHeaderLength());
 		GetConnection()->OnRecv(dwLen - GetDataHeader()->GetHeaderLength());
@@ -3180,25 +3065,38 @@ void FxUDPConnectSock::OnRecv()
 
 				// copy buffer
 				// add data to receive buffer
-				char* pBuffRecv = NULL;
-				int nLenRecv = m_poRecvBuf->GetInCursorPtr(pBuffRecv);
-				if (size <= nLenRecv)
+				if (size)
 				{
-					m_poRecvBuf->CostBuff(size);
-					memcpy(pBuffRecv, buffer, size);
-				}
-				else
-				{
-					m_poRecvBuf->CostBuff(nLenRecv);
-					memcpy(pBuffRecv, buffer, size);
-					size -= nLenRecv;
+					char* pBuffRecv = NULL;
+					int nLenRecv = m_poRecvBuf->GetInCursorPtr(pBuffRecv);
+					if (size <= nLenRecv)
+					{
+						m_poRecvBuf->CostBuff(size);
+						memcpy(pBuffRecv, buffer, size);
+					}
+					else
+					{
+						m_poRecvBuf->CostBuff(nLenRecv);
+						memcpy(pBuffRecv, buffer, size);
+						size -= nLenRecv;
 
-					//不考虑包超长的情况 只处理包循环放了就可以了
-					m_poRecvBuf->GetInCursorPtr(pBuffRecv);
-					memcpy(pBuffRecv, buffer + nLenRecv, size);
-					m_poRecvBuf->CostBuff(nLenRecv);
-				}
+						//不考虑包超长的情况 只处理包循环放了就可以了
+						int n = m_poRecvBuf->GetInCursorPtr(pBuffRecv);
+						if (n < size)
+						{
+							ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "recv errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
 
+							PushNetEvent(NETEVT_ERROR, errno);
+							Close();
+							return;
+						}
+						memcpy(pBuffRecv, buffer + nLenRecv, size);
+						m_poRecvBuf->CostBuff(nLenRecv);
+					}
+
+					// mark for parse message
+					parse_message = true;
+				}
 
 				// free buffer
 				recv_window.buffer[buffer_id][0] = recv_window.free_buffer_id;
@@ -3209,9 +3107,6 @@ void FxUDPConnectSock::OnRecv()
 				recv_window.seq_buffer_id[id] = recv_window.window_size;
 				recv_window.begin++;
 				recv_window.end++;
-
-				// mark for parse message
-				parse_message = true;
 
 				// send ack when get packet
 				send_ack = true;
@@ -3261,7 +3156,9 @@ void FxUDPConnectSock::OnRecv()
 					nUsedLen += nLen;
 					m_poRecvBuf->CostUsedBuff(nUsedLen);
 					nUsedLen = 0;
-					PushNetEvent(NETEVT_RECV_PACKAGE_ERROR, nLen);
+					PushNetEvent(NETEVT_ERROR, errno);
+					Close();
+					return;
 					nLen = 0;
 				}
 				else if (0 == m_nPacketLen)
@@ -3289,7 +3186,9 @@ void FxUDPConnectSock::OnRecv()
 								nUsedLen += nLen;
 								m_poRecvBuf->CostUsedBuff(nUsedLen);
 								nUsedLen = 0;
-								PushNetEvent(NETEVT_RECV_PACKAGE_ERROR, nLen);
+								PushNetEvent(NETEVT_ERROR, errno);
+								Close();
+								return;
 								nLen = 0;
 							}
 							GetDataHeader()->BuildRecvPkgHeader(pUseBuf, GetDataHeader()->GetHeaderLength() - nLen, nLen);
@@ -3302,7 +3201,9 @@ void FxUDPConnectSock::OnRecv()
 								nUsedLen += nLen;
 								m_poRecvBuf->CostUsedBuff(nUsedLen);
 								nUsedLen = 0;
-								PushNetEvent(NETEVT_RECV_PACKAGE_ERROR, nLen);
+								PushNetEvent(NETEVT_ERROR, errno);
+								Close();
+								return;
 								nLen = 0;
 							}
 

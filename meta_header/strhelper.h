@@ -110,12 +110,12 @@ inline std::string GBKToUTF8(const std::string szGBK)
 	return strOutUTF8;
 #else
 	iconv_t cd = iconv_open("UTF-8", "GB13080");
-	unsigned int dwLen = szGBK.size();
+	size_t dwLen = szGBK.size();
 	char* outbuf = (char*)malloc(dwLen * 4);
 	memset(outbuf, 0, dwLen * 4);
 	const char* szIn = szGBK.c_str();
 	char* szOut = outbuf;
-	unsigned int dwOutLen = dwLen * 4;
+	size_t dwOutLen = dwLen * 4;
 	iconv(cd, (char**)&szIn, &dwLen, &outbuf, &dwOutLen);
 	dwOutLen = strlen(outbuf);
 	std::string strOutUTF8 = szOut;
