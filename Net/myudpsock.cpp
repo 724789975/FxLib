@@ -2485,6 +2485,13 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 	// packet header
 	UDPPacketHeader & packet = *(UDPPacketHeader*)buffer;
 
+	if (packet.m_cStatus != SSTATE_ESTABLISH)
+	{
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "recv packet state err %d, socket : %d, socket id : %d", packet.m_cStatus, GetSock(), GetSockId());
+		Close();
+		return;
+	}
+
 	// receive ack, process send buffer.
 	if (send_window.IsValidIndex(packet.m_cAck))
 	{
@@ -2616,43 +2623,45 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 				unsigned char * buffer = recv_window.buffer[buffer_id] + head_size;
 				unsigned short size = recv_window.seq_size[id] - head_size;
 
-				// copy buffer
-				// add data to receive buffer
-				char* pBuffRecv = NULL;
-				int nLenRecv = m_poRecvBuf->GetInCursorPtr(pBuffRecv);
-				if (size <= nLenRecv)
+				if (size)
 				{
-					m_poRecvBuf->CostBuff(size);
-					memcpy(pBuffRecv, buffer, size);
+					// copy buffer
+					// add data to receive buffer
+					char* pBuffRecv = NULL;
+					int nLenRecv = m_poRecvBuf->GetInCursorPtr(pBuffRecv);
+					if (size <= nLenRecv)
+					{
+						m_poRecvBuf->CostBuff(size);
+						memcpy(pBuffRecv, buffer, size);
+					}
+					else
+					{
+						m_poRecvBuf->CostBuff(nLenRecv);
+						memcpy(pBuffRecv, buffer, size);
+						size -= nLenRecv;
+
+						//不考虑包超长的情况 只处理包循环放了就可以了
+						m_poRecvBuf->GetInCursorPtr(pBuffRecv);
+						memcpy(pBuffRecv, buffer + nLenRecv, size);
+						m_poRecvBuf->CostBuff(nLenRecv);
+					}
+
+					// free buffer
+					recv_window.buffer[buffer_id][0] = recv_window.free_buffer_id;
+					recv_window.free_buffer_id = buffer_id;
+
+					// remove sequence
+					recv_window.seq_size[id] = 0;
+					recv_window.seq_buffer_id[id] = recv_window.window_size;
+					recv_window.begin++;
+					recv_window.end++;
+
+					// mark for parse message
+					parse_message = true;
+
+					// send ack when get packet
+					send_ack = true;
 				}
-				else
-				{
-					m_poRecvBuf->CostBuff(nLenRecv);
-					memcpy(pBuffRecv, buffer, size);
-					size -= nLenRecv;
-
-					//不考虑包超长的情况 只处理包循环放了就可以了
-					m_poRecvBuf->GetInCursorPtr(pBuffRecv);
-					memcpy(pBuffRecv, buffer + nLenRecv, size);
-					m_poRecvBuf->CostBuff(nLenRecv);
-				}
-
-
-				// free buffer
-				recv_window.buffer[buffer_id][0] = recv_window.free_buffer_id;
-				recv_window.free_buffer_id = buffer_id;
-
-				// remove sequence
-				recv_window.seq_size[id] = 0;
-				recv_window.seq_buffer_id[id] = recv_window.window_size;
-				recv_window.begin++;
-				recv_window.end++;
-
-				// mark for parse message
-				parse_message = true;
-
-				// send ack when get packet
-				send_ack = true;
 			}
 		}
 
@@ -2937,6 +2946,13 @@ void FxUDPConnectSock::OnRecv()
 
 	// packet header
 	UDPPacketHeader & packet = *(UDPPacketHeader*)buffer;
+
+	if (packet.m_cStatus != SSTATE_ESTABLISH)
+	{
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "recv packet state err %d, socket : %d, socket id : %d", packet.m_cStatus, GetSock(), GetSockId());
+		Close();
+		return;
+	}
 
 	// receive ack, process send buffer.
 	if (send_window.IsValidIndex(packet.m_cAck))
