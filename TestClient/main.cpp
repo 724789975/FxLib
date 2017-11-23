@@ -125,15 +125,17 @@ int main(int argc, char **argv)
 			if (g_sSessions[i]->IsConnected())
 			{
 				sprintf(szMsg, "%d", j);
-				if (!g_sSessions[i]->Send(szMsg, 1024))
+				while(!g_sSessions[i]->Send(szMsg, 1024))
 				{
+					g_sSessions[i]->ForceSend();
+					FxSleep(1);
 					//pSession->Close();
 				}
-				else
-				{
-					LogExe(LogLv_Debug, "send : %s", szMsg);
-					//++i;
-				}
+				//else
+				//{
+				//	LogExe(LogLv_Debug, "send : %s", szMsg);
+				//	//++i;
+				//}
 				FxSleep(1);
 			}
 			else

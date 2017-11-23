@@ -2201,11 +2201,11 @@ bool FxUDPConnectSock::PostSend()
 
 bool FxUDPConnectSock::PostSendFree()
 {
+#ifdef WIN32
 	if (!m_poSendBuf->GetUseLen() && !send_ack)
 	{
 		return true;
 	}
-#ifdef WIN32
 	static SPerUDPIoData oUDPIoData = { 0 };
 	oUDPIoData.nOp = IOCP_RECV;
 	ZeroMemory(&oUDPIoData.stOverlapped, sizeof(oUDPIoData.stOverlapped));
