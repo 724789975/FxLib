@@ -92,11 +92,11 @@ int main(int argc, char **argv)
 		goto STOP;
 	}
 	GetTimeHandler()->Run();
-	if (!LogThread::Instance()->Init())
-	{
-		g_bRun = false;
-		goto STOP;
-	}
+	//if (!LogThread::Instance()->Init())
+	//{
+	//	g_bRun = false;
+	//	goto STOP;
+	//}
 
 	pNet = FxNetGetModule();
 	if (!pNet)
@@ -124,11 +124,16 @@ int main(int argc, char **argv)
 		{
 			if (g_sSessions[i]->IsConnected())
 			{
-				sprintf(szMsg, "%d", j);
+				sprintf(szMsg, "%s....%d......%d", GetExePath(), g_sSessions[i]->GetRemotePort(), j);
 				while(!g_sSessions[i]->Send(szMsg, 1024))
 				{
-					g_sSessions[i]->ForceSend();
-					FxSleep(1);
+					if (!g_sSessions[i]->IsConnected())
+					{
+						LogExe(LogLv_Error, "error!!!!!!!!!!!!!!!!!!!!!!!!");
+						g_bRun = false;
+						break;
+					}
+					FxSleep(10);
 					//pSession->Close();
 				}
 				//else
@@ -158,5 +163,5 @@ int main(int argc, char **argv)
 	FxSleep(10);
 	pNet->Release();
 STOP:
-	LogThread::Instance()->Stop();
+	//LogThread::Instance()->Stop();
 }

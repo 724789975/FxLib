@@ -9,7 +9,7 @@
 #include <math.h>
 
 #define RECV_BUFF_SIZE 32*64*1024
-#define SEND_BUFF_SIZE 64*1024
+#define SEND_BUFF_SIZE 32*64*1024
 
 #define MAX_LOST_PACKET 10
 
@@ -580,7 +580,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 
 		// add to send window
 		poSock->send_window.seq_buffer_id[id] = buffer_id;
-		poSock->send_window.seq_size[id] = sizeof(packet);
+		poSock->send_window.seq_size[id] = sizeof(UDPPacketHeader);
 		poSock->send_window.seq_time[id] = GetTimeHandler()->GetMilliSecond();
 		poSock->send_window.seq_retry[id] = GetTimeHandler()->GetMilliSecond();
 		poSock->send_window.seq_retry_time[id] = poSock->retry_time;
@@ -590,7 +590,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 
 		// send的时候 可能要修改 因为 udp tcp 有区别
 		if (sendto(poSock->GetSock(), (char*)(&packet),
-			sizeof(packet), 0, (sockaddr*)(&pstPerIoData->stRemoteAddr),
+			sizeof(UDPPacketHeader), 0, (sockaddr*)(&pstPerIoData->stRemoteAddr),
 			sizeof(pstPerIoData->stRemoteAddr)) == SOCKET_ERROR)
 		{
 			if (WSAGetLastError() != WSA_IO_PENDING)
@@ -852,7 +852,7 @@ void FxUDPListenSock::OnAccept()
 
 	// add to send window
 	poSock->send_window.seq_buffer_id[id] = buffer_id;
-	poSock->send_window.seq_size[id] = sizeof(packet);
+	poSock->send_window.seq_size[id] = sizeof(UDPPacketHeader);
 	poSock->send_window.seq_time[id] = GetTimeHandler()->GetMilliSecond();
 	poSock->send_window.seq_retry[id] = GetTimeHandler()->GetMilliSecond();
 	poSock->send_window.seq_retry_time[id] = poSock->retry_time;
@@ -862,7 +862,7 @@ void FxUDPListenSock::OnAccept()
 	// 这个时候不能说是已经establish 了 要发个消息确认下
 	// send的时候 可能要修改 因为 udp tcp 有区别
 	if (sendto(poSock->GetSock(), (char*)(&packet),
-		sizeof(packet), 0, (sockaddr*)(&stRemoteAddr),
+		sizeof(UDPPacketHeader), 0, (sockaddr*)(&stRemoteAddr),
 		sizeof(stRemoteAddr)) < 0)
 	{
 		if (errno != EINPROGRESS && errno != EINTR && errno != EAGAIN)
@@ -937,7 +937,6 @@ FxUDPConnectSock::FxUDPConnectSock()
 	m_nPostSend = 0;
 	m_dwLastError = 0;
 #else
-	m_bSending = false;
 #endif // WIN32
 
 	m_bSendLinger = false;     // 发送延迟，直到成功，或者30次后，这时默认设置//
@@ -1087,7 +1086,6 @@ void FxUDPConnectSock::Reset()
 	m_nPostSend = 0;
 	m_dwLastError = 0;
 #else
-	m_bSending = false;
 #endif // WIN32
 	m_bSendLinger = false;     //发送延迟，直到成功，或者30次后，这时默认设置//
 }
@@ -1861,6 +1859,7 @@ bool FxUDPConnectSock::PostSend()
 
 		if (--ack_timeout_retry <= 0)
 		{
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "ack_timeout_retry <= 0, socket : %d, socket id : %d", GetSock(), GetSockId());
 			Close();
 			return false;
 		}
@@ -1953,7 +1952,7 @@ bool FxUDPConnectSock::PostSend()
 		packet.m_cAck = recv_window.begin - 1;
 
 		// copy data
-		unsigned int copy_offset = sizeof(packet);
+		unsigned int copy_offset = sizeof(UDPPacketHeader);
 		unsigned int copy_size = send_window.buffer_size - copy_offset;
 		if (copy_size > size)
 			copy_size = size;
@@ -2006,7 +2005,7 @@ bool FxUDPConnectSock::PostSend()
 
 				// add to send window
 				send_window.seq_buffer_id[id] = buffer_id;
-				send_window.seq_size[id] = sizeof(packet);
+				send_window.seq_size[id] = sizeof(UDPPacketHeader);
 				send_window.seq_time[id] = time;
 				send_window.seq_retry[id] = time;
 				send_window.seq_retry_time[id] = retry_time;
@@ -2072,32 +2071,28 @@ bool FxUDPConnectSock::PostSend()
 					{
 						ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-						m_bSending = false;
 						return false;
 					}
 					return true;
 				}
 
-				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "send nRet < 0, socket : %d, socket id : %d", GetSock(), GetSockId());
+				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "send nRet < 0 err : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
 
-				m_bSending = false;
 				return false;
 			}
 			else if (0 == nRet)
 			{
 				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "send 0 == nRet, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-				m_bSending = false;
 				return false;
 			}
 
-			if (m_poSendBuf->GetUseLen() == 0)
+			if (m_poSendBuf->GetFreeLen() == m_poSendBuf->GetTotalLen())
 			{
 				if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
 				{
 					ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-					m_bSending = false;
 					return false;
 				}
 			}
@@ -2133,7 +2128,7 @@ bool FxUDPConnectSock::PostSend()
 		memset(&m_stSendIoData.stOverlapped, 0, sizeof(m_stSendIoData.stOverlapped));
 
 		m_stSendIoData.stWsaBuf.buf = (char*)(&packet);
-		m_stSendIoData.stWsaBuf.len = sizeof(packet);
+		m_stSendIoData.stWsaBuf.len = sizeof(UDPPacketHeader);
 		DWORD dwNumberOfBytesSent = 0;
 
 		int nRet = WSASend(GetSock(), &m_stSendIoData.stWsaBuf, 1, &dwNumberOfBytesSent, 0,
@@ -2150,10 +2145,8 @@ bool FxUDPConnectSock::PostSend()
 				return false;
 			}
 		}
-
-		return true;
 #else
-		int nRet = send(GetSock(), (char*)(&packet), sizeof(packet), 0);
+		int nRet = send(GetSock(), (char*)(&packet), sizeof(UDPPacketHeader), 0);
 		if (0 > nRet)
 		{
 			if (EAGAIN == errno)
@@ -2162,7 +2155,6 @@ bool FxUDPConnectSock::PostSend()
 				{
 					ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-					m_bSending = false;
 					return false;
 				}
 				return true;
@@ -2170,24 +2162,21 @@ bool FxUDPConnectSock::PostSend()
 
 			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "send nRet < 0, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-			m_bSending = false;
 			return false;
 		}
 		else if (0 == nRet)
 		{
 			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "send 0 == nRet, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-			m_bSending = false;
 			return false;
 		}
 
-		if (m_poSendBuf->GetUseLen() == 0)
+		if (m_poSendBuf->GetFreeLen() == m_poSendBuf->GetTotalLen())
 		{
 			if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
 			{
 				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-				m_bSending = false;
 				return false;
 			}
 		}
@@ -2201,11 +2190,11 @@ bool FxUDPConnectSock::PostSend()
 
 bool FxUDPConnectSock::PostSendFree()
 {
-#ifdef WIN32
-	if (!m_poSendBuf->GetUseLen() && !send_ack)
+	if ((m_poSendBuf->GetFreeLen() == m_poSendBuf->GetTotalLen()) && !send_ack)
 	{
 		return true;
 	}
+#ifdef WIN32
 	static SPerUDPIoData oUDPIoData = { 0 };
 	oUDPIoData.nOp = IOCP_RECV;
 	ZeroMemory(&oUDPIoData.stOverlapped, sizeof(oUDPIoData.stOverlapped));
@@ -2322,11 +2311,7 @@ void FxUDPConnectSock::__ProcRecv(UINT32 dwLen)
 		{
 			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "session recv_size error need : %d, but : %d", dwLen, GetConnection()->GetRecvSize());
 			PushNetEvent(NETEVT_ERROR, NET_RECV_ERROR);
-#ifdef WIN32
 			PostClose();
-#else
-			Close();
-#endif // WIN32
 			return;
 		}
 
@@ -2436,7 +2421,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 
 		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
 		m_dwLastError = nErr;
-		PostClose();
+		Close();
 		return;
 	}
 
@@ -2452,7 +2437,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 
 	if (nLen < sizeof(UDPPacketHeader))
 	{
-		PostClose();
+		Close();
 		return;
 	}
 
@@ -2637,13 +2622,21 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 					else
 					{
 						m_poRecvBuf->CostBuff(nLenRecv);
-						memcpy(pBuffRecv, buffer, size);
+						memcpy(pBuffRecv, buffer, nLenRecv);
 						size -= nLenRecv;
 
 						//不考虑包超长的情况 只处理包循环放了就可以了
-						m_poRecvBuf->GetInCursorPtr(pBuffRecv);
+						int n = m_poRecvBuf->GetInCursorPtr(pBuffRecv);
+						if (n < size)
+						{
+							ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "recv errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+
+							PushNetEvent(NETEVT_ERROR, errno);
+							Close();
+							return;
+						}
 						memcpy(pBuffRecv, buffer + nLenRecv, size);
-						m_poRecvBuf->CostBuff(nLenRecv);
+						m_poRecvBuf->CostBuff(size);
 					}
 
 					// mark for parse message
@@ -2707,7 +2700,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 
 					InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
 					m_dwLastError = NET_RECVBUFF_ERROR;
-					PostClose();
+					Close();
 					//m_oLock.UnLock();
 					return;
 				}
@@ -2735,7 +2728,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 
 								InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
 								m_dwLastError = NET_RECVBUFF_ERROR;
-								PostClose();
+								Close();
 								//m_oLock.UnLock();
 								return;
 							}
@@ -2748,7 +2741,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 
 								InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
 								m_dwLastError = NET_RECVBUFF_ERROR;
-								PostClose();
+								Close();
 								//m_oLock.UnLock();
 								return;
 							}
@@ -2810,7 +2803,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == PostRecv, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 			m_dwLastError = WSAGetLastError();
-			PostClose();
+			Close();
 		}
 	}
 }
@@ -2822,7 +2815,7 @@ void FxUDPConnectSock::OnSend(bool bRet, int dwBytes)
 	{
 		InterlockedCompareExchange(&m_nPostSend, 0, m_nPostSend);
 		m_dwLastError = WSAGetLastError();
-		PostClose();
+		Close();
 		return;
 	}
 
@@ -2848,7 +2841,7 @@ void FxUDPConnectSock::OnSend(bool bRet, int dwBytes)
 				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == PostSend, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 				m_dwLastError = WSAGetLastError();
-				PostClose();
+				Close();
 			}
 		}
 		return;
@@ -2858,7 +2851,7 @@ void FxUDPConnectSock::OnSend(bool bRet, int dwBytes)
 	{
 		InterlockedCompareExchange(&m_nPostSend, 0, m_nPostSend);
 		m_dwLastError = NET_SEND_ERROR;
-		PostClose();
+		Close();
 		return;
 	}
 
@@ -2873,7 +2866,7 @@ void FxUDPConnectSock::OnSend(bool bRet, int dwBytes)
 			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == PostSend, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 			m_dwLastError = WSAGetLastError();
-			PostClose();
+			Close();
 		}
 	}
 }
@@ -2909,6 +2902,7 @@ void FxUDPConnectSock::OnRecv()
 	// can't allocate buffer, disconnect.
 	if (buffer_id >= recv_window.window_size)
 	{
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "can't allocate buffer, socket : %d, socket id : %d", GetSock(), GetSockId());
 		Close();
 		return;
 	}
@@ -3093,7 +3087,7 @@ void FxUDPConnectSock::OnRecv()
 					else
 					{
 						m_poRecvBuf->CostBuff(nLenRecv);
-						memcpy(pBuffRecv, buffer, size);
+						memcpy(pBuffRecv, buffer, nLenRecv);
 						size -= nLenRecv;
 
 						//不考虑包超长的情况 只处理包循环放了就可以了
@@ -3107,7 +3101,7 @@ void FxUDPConnectSock::OnRecv()
 							return;
 						}
 						memcpy(pBuffRecv, buffer + nLenRecv, size);
-						m_poRecvBuf->CostBuff(nLenRecv);
+						m_poRecvBuf->CostBuff(size);
 					}
 
 					// mark for parse message
@@ -3282,7 +3276,6 @@ void FxUDPConnectSock::OnSend()
 		return;
 	}
 
-	m_bSending = false;
 	if (!PostSend())
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == PostSend(), socket : %d, socket id : %d", GetSock(), GetSockId());

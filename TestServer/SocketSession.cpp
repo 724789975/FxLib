@@ -26,7 +26,7 @@ void CSocketSession::OnClose(void)
 
 void CSocketSession::OnError(UINT32 dwErrorNo)
 {
-	LogFun(LT_Screen | LT_File, LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
+	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
 }
 
 class DBQuery : public IQuery
@@ -107,7 +107,7 @@ void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 
 void CSocketSession::Release(void)
 {
-	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
+	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
 	OnDestroy();
 
 	Init(NULL);
@@ -137,7 +137,7 @@ FxSession*	CSessionFactory::CreateSession()
 	{
 		m_setSessions.insert(pSession);
 	}
-	LogFun(LT_Screen | LT_File, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
+	LogExe(LogLv_Debug, "left free session : %d", (int)m_listSession.size());
 	m_pLock->UnLock();
 	return pSession;
 }
@@ -148,7 +148,7 @@ void CSessionFactory::Release(FxSession* pSession)
 //	m_poolSessions.ReleaseObj(pSession);
 	m_listSession.push_back(pSession);
 	m_setSessions.erase(pSession);
-	LogFun(LT_Screen | LT_File, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
+	LogExe(LogLv_Debug, "left free session : %d", (int)m_listSession.size());
 	m_pLock->UnLock();
 }
 
@@ -175,7 +175,7 @@ FxSession * CWebSocketSessionFactory::CreateSession()
 	{
 		m_setSessions.insert(pSession);
 	}
-	LogFun(LT_Screen | LT_File, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
+	LogExe(LogLv_Debug, "left free session : %d", (int)m_listSession.size());
 	m_pLock->UnLock();
 	return pSession;
 }
@@ -186,7 +186,7 @@ void CWebSocketSessionFactory::Release(FxSession * pSession)
 	//	m_poolSessions.ReleaseObj(pSession);
 	m_listSession.push_back(pSession);
 	m_setSessions.erase(pSession);
-	LogFun(LT_Screen | LT_File, LogLv_Debug, "left free session : %d", (int)m_listSession.size());
+	LogExe(LogLv_Debug, "left free session : %d", (int)m_listSession.size());
 	m_pLock->UnLock();
 }
 

@@ -14,7 +14,7 @@ CSocketSession::~CSocketSession()
 
 void CSocketSession::OnConnect(void)
 {
-	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
+	LogExe(LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
 	//char szMsg[1024] = {0};
 	//CNetStream oStream(ENetStreamType_Write, szMsg, 1024);
 	//oStream.WriteInt(40001);
@@ -25,13 +25,13 @@ void CSocketSession::OnConnect(void)
 
 void CSocketSession::OnClose(void)
 {
-	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
-	Reconnect();
+	LogExe(LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
+	//Reconnect();
 }
 
 void CSocketSession::OnError(UINT32 dwErrorNo)
 {
-	LogFun(LT_Screen | LT_File, LogLv_Debug, "ip : %s, port : %d, error no : %d\n", GetRemoteIPStr(), GetRemotePort(), dwErrorNo);
+	LogExe(LogLv_Debug, "ip : %s, port : %d, error no : %d\n", GetRemoteIPStr(), GetRemotePort(), dwErrorNo);
 }
 
 void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
@@ -57,7 +57,7 @@ void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 
 void CSocketSession::Release(void)
 {
-	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
+	LogExe(LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
 }
 
 FxSession*	CSessionFactory::CreateSession()

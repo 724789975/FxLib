@@ -260,7 +260,6 @@ private:
 
 	UINT32              m_dwLastError;      // 最后的出错信息//
 #else
-	bool				m_bSending;
 #endif // WIN32
 
 
