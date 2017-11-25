@@ -116,7 +116,7 @@ void CSocketSession::Release(void)
 CSessionFactory::CSessionFactory()
 {
 	m_pLock = FxCreateThreadLock();
-	for(int i = 0; i < 64; ++i)
+	for(int i = 0; i < 512; ++i)
 	{
 		CBinarySocketSession* pSession = new CBinarySocketSession;
 		m_listSession.push_back(pSession);

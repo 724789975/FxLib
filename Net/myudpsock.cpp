@@ -1014,6 +1014,9 @@ bool FxUDPConnectSock::Init()
 		return false;
 	}
 
+	send_frequency = 0.02;
+	send_data_frequency = 1;
+
 	delay_time = 0;
 	delay_average = 3 * send_frequency;
 	retry_time = delay_time + 2 * delay_average;

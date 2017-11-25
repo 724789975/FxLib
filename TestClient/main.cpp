@@ -55,10 +55,10 @@ int main(int argc, char **argv)
 	//--------------------order can't change begin-------------------------//
 	signal(SIGINT, EndFun);
 	signal(SIGTERM, EndFun);
-	if (!LogThread::CreateInstance())
-	{
-		return 0;
-	}
+	//if (!LogThread::CreateInstance())
+	//{
+	//	return 0;
+	//}
 
 	if (!CLuaEngine::CreateInstance())
 	{
@@ -162,6 +162,8 @@ int main(int argc, char **argv)
 	pNet->Run(0xffffffff);
 	FxSleep(10);
 	pNet->Release();
+	return 0;
 STOP:
+	printf("error!!!!!!!!\n");
 	//LogThread::Instance()->Stop();
 }
