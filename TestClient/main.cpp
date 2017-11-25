@@ -162,6 +162,8 @@ int main(int argc, char **argv)
 	pNet->Run(0xffffffff);
 	FxSleep(10);
 	pNet->Release();
+	return 0;
 STOP:
+	printf("error!!!!!!!!\n");
 	//LogThread::Instance()->Stop();
 }

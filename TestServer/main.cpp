@@ -155,6 +155,8 @@ int main(int argc, char **argv)
 	}
 	FxSleep(10);
 	pNet->Release();
+	return 0;
 STOP:
+	printf("error!!!!!!!!\n");
 	//LogThread::Instance()->Stop();
 }
