@@ -93,11 +93,11 @@ void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	//mapSocket[szPlayerId] = this;
 	//CChatManagerSession::Instance()->Send(szPlayerInfo, 1024 - oGameStream.GetDataLength());
 
-	//if (!Send(pBuf, dwLen))
-	//{
-	//	LogFun(LT_Screen | LT_File, LogLv_Debug, "ip : %s, port : %d, recv %s send error", GetRemoteIPStr(), GetRemotePort(), pBuf);
-	//	Close();
-	//}
+	if (!Send(pBuf, dwLen))
+	{
+		LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s send error", GetRemoteIPStr(), GetRemotePort(), pBuf);
+		Close();
+	}
 
 	//DBQuery * pQuery = new DBQuery;
 	//pQuery->m_strQuery = pBuf;

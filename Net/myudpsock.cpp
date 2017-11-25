@@ -1853,6 +1853,14 @@ void FxUDPConnectSock::OnParserIoEvent(int dwEvents)
 
 bool FxUDPConnectSock::PostSend()
 {
+#ifdef WIN32
+#else
+	if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
+	{
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
+		return false;
+	}
+#endif
 	double time = GetTimeHandler()->GetMilliSecond();
 
 	// check ack received time
@@ -1869,7 +1877,9 @@ bool FxUDPConnectSock::PostSend()
 	}
 
 	if (time < send_time)
+	{
 		return true;
+	}
 
 	bool force_retry = false;
 
@@ -2089,16 +2099,6 @@ bool FxUDPConnectSock::PostSend()
 
 				return false;
 			}
-
-			if (m_poSendBuf->GetFreeLen() == m_poSendBuf->GetTotalLen())
-			{
-				if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
-				{
-					ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-					return false;
-				}
-			}
 #endif
 			// num send
 			num_packets_send++;
@@ -2172,16 +2172,6 @@ bool FxUDPConnectSock::PostSend()
 			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "send 0 == nRet, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 			return false;
-		}
-
-		if (m_poSendBuf->GetFreeLen() == m_poSendBuf->GetTotalLen())
-		{
-			if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
-			{
-				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-				return false;
-			}
 		}
 #endif
 		send_time = time + send_frequency;
