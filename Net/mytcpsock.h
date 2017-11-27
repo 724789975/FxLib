@@ -34,7 +34,7 @@ public:
 	void								SetState(ESocketState eState)					{ m_nState = eState; }
 	ESocketState						GetState()										{ return m_nState; }
 
-	virtual void ProcEvent(SNetEvent oEvent);
+	virtual void						ProcEvent(SNetEvent oEvent);
 
 #ifdef WIN32
 	virtual void						OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred);		//
@@ -52,22 +52,22 @@ protected:
 	void								__ProcTerminate();
 
 protected:
-	ESocketState		m_nState;
+	ESocketState						m_nState;
 
-	FxCriticalLock			m_oLock;
+	FxCriticalLock						m_oLock;
 
-	FxIoThread* m_poIoThreadHandler;
+	FxIoThread*							m_poIoThreadHandler;
 
 #ifdef WIN32
 	bool								PostAccept(SPerIoData& oSPerIoData);
 	bool								InitAcceptEx();
-	virtual void OnAccept(SPerIoData* pstPerIoData);
+	virtual void						OnAccept(SPerIoData* pstPerIoData);
 
 	SPerIoData							m_oSPerIoDatas[128];
 	LPFN_ACCEPTEX						m_lpfnAcceptEx;
 	LPFN_GETACCEPTEXSOCKADDRS			m_lpfnGetAcceptExSockaddrs;
 #else
-	virtual  void OnAccept();
+	virtual  void						OnAccept();
 #endif // WIN32
 };
 
@@ -79,9 +79,9 @@ public:
 
 private:
 #ifdef WIN32
-	virtual void OnAccept(SPerIoData* pstPerIoData);
+	virtual void						OnAccept(SPerIoData* pstPerIoData);
 #else
-	virtual  void OnAccept();
+	virtual  void						OnAccept();
 #endif // WIN32
 };
 
@@ -156,7 +156,7 @@ protected:
 protected:
 	ESocketState						m_nState;
 
-	bool					m_bSendLinger;		// 发送延迟，直到成功，或者30次后 //
+	bool								m_bSendLinger;		// 发送延迟，直到成功，或者30次后 //
 
 	FxCriticalLock						m_oLock;
 
@@ -192,8 +192,8 @@ public:
 protected:
 	virtual void						OnConnect();
 private:
-	void __ProcRecv(UINT32 dwLen);
-	void __ProcRelease();
+	void								__ProcRecv(UINT32 dwLen);
+	void								__ProcRelease();
 };
 
 class FxWebSocketConnect : public FxTCPConnectSockBase
@@ -210,25 +210,21 @@ public:
 	FxWebSocketConnect();
 	virtual ~FxWebSocketConnect();
 
-	SOCKET Connect() { Assert(0); return INVALID_SOCKET; }
-	virtual void Reset();
+	SOCKET								Connect() { Assert(0); return INVALID_SOCKET; }
+	virtual void						Reset();
 private:
-	void __ProcRecv(UINT32 dwLen);
-	void __ProcRelease();
+	void								__ProcRecv(UINT32 dwLen);
+	void								__ProcRelease();
 
 protected:
 #ifdef WIN32
-	virtual void OnRecv(bool bRet, int dwBytes);
+	virtual void						OnRecv(bool bRet, int dwBytes);
 #else
-	virtual void OnRecv();
+	virtual void						OnRecv();
 #endif // WIN32
 
 private:
-	EWebSocketHandShakeState m_eWebSocketHandShakeState;
-	char m_szWebInfo[1024];
+	EWebSocketHandShakeState			m_eWebSocketHandShakeState;
+	char								m_szWebInfo[1024];
 };
-
-
-
-
 #endif // !__MySock_h__
