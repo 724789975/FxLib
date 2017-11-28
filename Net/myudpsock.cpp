@@ -2998,6 +2998,22 @@ void FxUDPConnectSock::OnRecv()
 			//	break;
 			//else
 			//	continue;
+			char szPack[512] = {0};
+			memset(szPack, 0, 512);
+			for(int i = 0; (i < 512 - sizeof(UDPPacketHeader)) && (i < nLen - sizeof(UDPPacketHeader)); ++i)
+			{
+				szPack[i] = pBuffer[i + sizeof(UDPPacketHeader)];
+				if(szPack[i] == 0)
+				{
+					szPack[i] = '.';
+				}
+			}
+
+			char sz1[640] = {0};
+			sprintf(sz1, "|%d-%d-%d-%s|", (unsigned int)refPacket.m_cStatus, (unsigned int)refPacket.m_cSyn,
+				(unsigned int)refPacket.m_cSyn, szPack);
+
+			ThreadLog(LogLv_Debug, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), sz1);
 		}
 	}
 

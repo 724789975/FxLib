@@ -28,3 +28,5 @@ if want release use "make"
 
 加入了gflags 需要到git上下载相应的源代码
 
+udp部分已经实现 经测试 启动400个客户端 每秒100条消息 服务器cpu单核70%
+
