@@ -1459,6 +1459,7 @@ SOCKET FxUDPConnectSock::Connect()
 	m_oSendWindow.m_pSeqRetryCount[btId] = 0;
 	m_oSendWindow.m_btEnd++;
 
+ContinuetSend:
 	if (sendto(GetSock(), (char*)(&oUDPPacketHeader),
 		sizeof(oUDPPacketHeader), 0, (sockaddr*)(&stAddr),
 		sizeof(stAddr)) < 0)
@@ -1497,37 +1498,48 @@ SOCKET FxUDPConnectSock::Connect()
 	unsigned char * pRecvBuffer = m_oRecvWindow.m_ppBuffer[btRecvBufferId];
 	m_oRecvWindow.m_btFreeBufferId = pRecvBuffer[0];
 
-	if (recvfrom(GetSock(), (char*)(pRecvBuffer), sizeof(UDPPacketHeader), 0, (sockaddr*)&stRemoteAddr, &nRemoteAddrLen))
+#ifdef WIN32
+#else
+	timeval t1;
+	t1.tv_sec = 1;
+	t1.tv_usec = 0;
+	setsockopt(GetSock(), SOL_SOCKET, SO_RCVTIMEO, (char*)&t1, sizeof(timeval));
+#endif
+	int ret =recvfrom(GetSock(), (char*)(pRecvBuffer), sizeof(UDPPacketHeader), 0, (sockaddr*)&stRemoteAddr, &nRemoteAddrLen);
+	if(ret < 0)
 	{
-		if (((UDPPacketHeader*)(pRecvBuffer))->m_cAck != 1)
-		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "ack error want : 1, recv : %d", ((UDPPacketHeader*)(pRecvBuffer))->m_cAck);
-			return INVALID_SOCKET;
-		}
-		if (((UDPPacketHeader*)(pRecvBuffer))->m_cSyn != 1)
-		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "syn error want : 1, recv : %d", ((UDPPacketHeader*)(pRecvBuffer))->m_cSyn);
-			return INVALID_SOCKET;
-		}
-		if (((UDPPacketHeader*)(pRecvBuffer))->m_cStatus != SSTATE_ESTABLISH)
-		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "statu error want : SSTATE_ESTABLISH, recv : %d", ((UDPPacketHeader*)(pRecvBuffer))->m_cStatus);
-			return INVALID_SOCKET;
-		}
-
-		while (m_oSendWindow.m_btBegin != (unsigned char)(oUDPPacketHeader.m_cAck + 1))
-		{
-			unsigned char btId = m_oSendWindow.m_btBegin % m_oSendWindow.s_dwWindowSize;
-			unsigned char btBufferId = m_oSendWindow.m_pSeqBufferId[btId];
-
-			// free buffer
-			m_oSendWindow.m_ppBuffer[btBufferId][0] = m_oSendWindow.m_btFreeBufferId;
-			m_oSendWindow.m_btFreeBufferId = btBufferId;
-			m_oSendWindow.m_btBegin++;
-		}
-
-		SetRemoteAddr(stRemoteAddr);
+		LogExe(LogLv_Error, "recv time out!!!");
+		goto ContinuetSend;
 	}
+
+	if (((UDPPacketHeader*)(pRecvBuffer))->m_cAck != 1)
+	{
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "ack error want : 1, recv : %d", ((UDPPacketHeader*)(pRecvBuffer))->m_cAck);
+		return INVALID_SOCKET;
+	}
+	if (((UDPPacketHeader*)(pRecvBuffer))->m_cSyn != 1)
+	{
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "syn error want : 1, recv : %d", ((UDPPacketHeader*)(pRecvBuffer))->m_cSyn);
+		return INVALID_SOCKET;
+	}
+	if (((UDPPacketHeader*)(pRecvBuffer))->m_cStatus != SSTATE_ESTABLISH)
+	{
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "statu error want : SSTATE_ESTABLISH, recv : %d", ((UDPPacketHeader*)(pRecvBuffer))->m_cStatus);
+		return INVALID_SOCKET;
+	}
+
+	while (m_oSendWindow.m_btBegin != (unsigned char)(oUDPPacketHeader.m_cAck + 1))
+	{
+		unsigned char btId = m_oSendWindow.m_btBegin % m_oSendWindow.s_dwWindowSize;
+		unsigned char btBufferId = m_oSendWindow.m_pSeqBufferId[btId];
+
+		// free buffer
+		m_oSendWindow.m_ppBuffer[btBufferId][0] = m_oSendWindow.m_btFreeBufferId;
+		m_oSendWindow.m_btFreeBufferId = btBufferId;
+		m_oSendWindow.m_btBegin++;
+	}
+
+	SetRemoteAddr(stRemoteAddr);
 
 	// packet is valid
 	if (m_oRecvWindow.IsValidIndex(((UDPPacketHeader*)(pRecvBuffer))->m_cSyn))
