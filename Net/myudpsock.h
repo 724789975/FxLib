@@ -246,6 +246,7 @@ private:
 	unsigned int				num_packets_send;
 	unsigned int				num_packets_retry;
 
+	double						m_dLastSendTime;
 private:
 	double						m_dAckRecvTime;
 	int							m_dAckTimeoutRetry;
