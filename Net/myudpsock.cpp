@@ -587,7 +587,6 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		poSock->m_oSendWindow.m_pSeqRetryCount[btId] = 0;
 		poSock->m_oSendWindow.m_btEnd++;
 
-
 		// send的时候 可能要修改 因为 udp tcp 有区别
 		if (sendto(poSock->GetSock(), (char*)(&refPacket),
 			sizeof(UDPPacketHeader), 0, (sockaddr*)(&pstPerIoData->stRemoteAddr),
@@ -604,10 +603,10 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		}
 		//poSock->Send((char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader));
 
-		// free buffer
-		poSock->m_oSendWindow.m_ppBuffer[btBufferId][0] = poSock->m_oSendWindow.m_btFreeBufferId;
-		poSock->m_oSendWindow.m_btFreeBufferId = btBufferId;
-		++poSock->m_oSendWindow.m_btBegin;
+		// // free buffer
+		// poSock->m_oSendWindow.m_ppBuffer[btBufferId][0] = poSock->m_oSendWindow.m_btFreeBufferId;
+		// poSock->m_oSendWindow.m_btFreeBufferId = btBufferId;
+		// ++poSock->m_oSendWindow.m_btBegin;
 
 		poSock->m_bSendAck = true;
 
