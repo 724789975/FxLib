@@ -876,10 +876,10 @@ void FxUDPListenSock::OnAccept()
 	}
 	//poSock->Send((char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader));
 
-	// free buffer
-	poSock->m_oSendWindow.m_ppBuffer[btBufferId][0] = poSock->m_oSendWindow.m_btFreeBufferId;
-	poSock->m_oSendWindow.m_btFreeBufferId = btBufferId;
-	++poSock->m_oSendWindow.m_btBegin;
+	// // free buffer
+	// poSock->m_oSendWindow.m_ppBuffer[btBufferId][0] = poSock->m_oSendWindow.m_btFreeBufferId;
+	// poSock->m_oSendWindow.m_btFreeBufferId = btBufferId;
+	// ++poSock->m_oSendWindow.m_btBegin;
 
 	poSock->m_bSendAck = true;
 
