@@ -1704,56 +1704,54 @@ bool FxTCPConnectSockBase::AddEvent()
 
 void FxTCPConnectSockBase::ProcEvent(SNetEvent oEvent)
 {
+	switch (oEvent.eType)
 	{
-		switch (oEvent.eType)
-		{
-			case NETEVT_ESTABLISH:
-			{
-				__ProcEstablish();
-			}
-			break;
+	case NETEVT_ESTABLISH:
+	{
+		__ProcEstablish();
+	}
+	break;
 
-			case NETEVT_ASSOCIATE:
-			{
-				__ProcAssociate();
-			}
-			break;
-		case NETEVT_CONN_ERR:
-		{
-			__ProcConnectError(oEvent.dwValue);
-		}
-			break;
+	case NETEVT_ASSOCIATE:
+	{
+		__ProcAssociate();
+	}
+	break;
+	case NETEVT_CONN_ERR:
+	{
+		__ProcConnectError(oEvent.dwValue);
+	}
+	break;
 
-		case NETEVT_ERROR:
-		{
-			__ProcError(oEvent.dwValue);
-		}
-			break;
+	case NETEVT_ERROR:
+	{
+		__ProcError(oEvent.dwValue);
+	}
+	break;
 
-			case NETEVT_TERMINATE:
-			{
-				__ProcTerminate();
-			}
-			break;
+	case NETEVT_TERMINATE:
+	{
+		__ProcTerminate();
+	}
+	break;
 
-		case NETEVT_RECV:
-		{
-			__ProcRecv(oEvent.dwValue);
-		}
-			break;
+	case NETEVT_RECV:
+	{
+		__ProcRecv(oEvent.dwValue);
+	}
+	break;
 
-		case NETEVT_RELEASE:
-		{
-			__ProcRelease();
-		}
-			break;
+	case NETEVT_RELEASE:
+	{
+		__ProcRelease();
+	}
+	break;
 
-			default:
-			{
-				Assert(0);
-			}
-			break;
-		}
+	default:
+	{
+		Assert(0);
+	}
+	break;
 	}
 }
 
