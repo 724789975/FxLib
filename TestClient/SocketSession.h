@@ -47,14 +47,15 @@ class BinaryDataHeader : public IFxDataHeader
 public:
 	BinaryDataHeader();
 	virtual ~BinaryDataHeader();
-	virtual unsigned int GetHeaderLength(){ return sizeof(m_dataBuffer); }		// 消息头长度
+	virtual unsigned int GetHeaderLength(){ return sizeof(m_dataRecvBuffer); }		// 消息头长度
 	virtual void* GetPkgHeader();
 	virtual void* BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen);
 	virtual bool BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset);
 	virtual int __CheckPkgHeader(const char* pBuf);
 private:
 	// 消息头 为网络字节序
-	char m_dataBuffer[8];
+	char m_dataRecvBuffer[8];
+	char m_dataSendBuffer[8];
 	static const UINT32 s_dwMagic = 'T' << 24 | 'E' << 16 | 'S' << 8 | 'T';
 	//static const UINT32 s_dwMagic = 12345678;
 };

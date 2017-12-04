@@ -78,17 +78,17 @@ BinaryDataHeader::~BinaryDataHeader()
 
 void* BinaryDataHeader::GetPkgHeader()
 {
-	return (void*)m_dataBuffer;
+	return (void*)m_dataRecvBuffer;
 }
 
 void* BinaryDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen)
 {
-	dwHeaderLen = sizeof(m_dataBuffer);
 	//*((UINT32*)m_dataBuffer) = htonl(dwDataLen);
-	CNetStream oNetStream(ENetStreamType_Write, m_dataBuffer, sizeof(m_dataBuffer));
+	dwHeaderLen = sizeof(m_dataSendBuffer);
+	CNetStream oNetStream(ENetStreamType_Write, m_dataSendBuffer, sizeof(m_dataSendBuffer));
 	oNetStream.WriteInt(dwDataLen);
 	oNetStream.WriteInt(s_dwMagic);
-	return (void*)m_dataBuffer;
+	return (void*)m_dataSendBuffer;
 }
 
 bool BinaryDataHeader::BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset)
@@ -98,14 +98,14 @@ bool BinaryDataHeader::BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOf
 		return false;
 	}
 
-	memcpy(m_dataBuffer + dwOffset, pBuff, dwLen);
+	memcpy(m_dataRecvBuffer + dwOffset, pBuff, dwLen);
 	return true;
 }
 
 int BinaryDataHeader::__CheckPkgHeader(const char* pBuf)
 {
-	CNetStream oHeaderStream(m_dataBuffer, sizeof(m_dataBuffer));
-	CNetStream oRecvStream(pBuf, sizeof(m_dataBuffer));
+	CNetStream oHeaderStream(m_dataRecvBuffer, sizeof(m_dataRecvBuffer));
+	CNetStream oRecvStream(pBuf, sizeof(m_dataRecvBuffer));
 
 	UINT32 dwHeaderLength = 0;
 	UINT32 dwBufferLength = 0;
