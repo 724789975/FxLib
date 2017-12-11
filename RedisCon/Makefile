@@ -26,10 +26,10 @@ ARFLAGS			= -rc
 #==========================================================
 #  Commands
 CODE_DIR = ./
-INCLUDE_DIR = ./ ../meta_header/ ../mysql/include/
+INCLUDE_DIR = ./ ../meta_header/ ../redis-3.2.1/deps/hiredis/
 LIB_FILE = -lpthread
 OUTPUT_DIR =../Debug
-OUTPUT = libDatabase.a
+OUTPUT = libRedisCon.a
 #==========================================================
 
 OBJS = $(foreach i, $(CODE_DIR), $(shell find $(i) -name "*.cpp"))
