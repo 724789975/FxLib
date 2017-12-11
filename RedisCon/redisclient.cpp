@@ -1,6 +1,6 @@
-﻿#include "dbclient.h"
-#include "dbreader.h"
-#include "dbmodule.h"
+﻿#include "redisclient.h"
+#include "redisreader.h"
+#include "redismodule.h"
 
 FxRedisClient::FxRedisClient()
 {
@@ -83,7 +83,7 @@ INT32 FxRedisClient::Query(const char* pszSQL)
 {
 	if (false == m_bDbOK)
 	{
-		return FXDB_DISCONNECT;
+		return -1;
 	}
 
 	return m_poMySqlConn->Query(pszSQL);

@@ -4,7 +4,7 @@
 #include <list>
 #include <time.h>
 #include <fxmeta.h>
-#include "dbconnection.h"
+#include "redisconnection.h"
 #include "lock.h"
 
 class FxRedisClient : public IRedisConnection, public IFxThread

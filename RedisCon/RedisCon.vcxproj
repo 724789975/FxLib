@@ -137,20 +137,18 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="dbclient.cpp" />
-    <ClCompile Include="dbconnection.cpp" />
-    <ClCompile Include="dbmodule.cpp" />
-    <ClCompile Include="dbreader.cpp" />
-    <ClCompile Include="dbstmt.cpp" />
+    <ClCompile Include="redisclient.cpp" />
+    <ClCompile Include="redisconnection.cpp" />
+    <ClCompile Include="redismodule.cpp" />
+    <ClCompile Include="redisreader.cpp" />
     <ClCompile Include="fxredis.cpp" />
     <ClCompile Include="RedisConn.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="dbclient.h" />
-    <ClInclude Include="dbconnection.h" />
-    <ClInclude Include="dbmodule.h" />
-    <ClInclude Include="dbreader.h" />
-    <ClInclude Include="dbstmt.h" />
+    <ClInclude Include="redisclient.h" />
+    <ClInclude Include="redisconnection.h" />
+    <ClInclude Include="redismodule.h" />
+    <ClInclude Include="redisreader.h" />
     <ClInclude Include="RedisConn.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

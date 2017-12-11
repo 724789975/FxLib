@@ -1,5 +1,5 @@
 ﻿#include "fxredis.h"
-#include "dbmodule.h"
+#include "redismodule.h"
 
 IRedisModule* FxRedisGetModule()
 {

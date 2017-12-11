@@ -1,4 +1,4 @@
-#include "dbmodule.h"
+#include "redismodule.h"
 
 //IMPLEMENT_SINGLETON(FxDBModule)
 
@@ -20,15 +20,15 @@ void FxRedisModule::Release(void)
 
 const char * FxRedisModule::GetModuleName(void)
 {
-	return FXDB_MODULENAME;
+	return "FXREDIS";
 }
 
-bool FxRedisModule::Open(const std::string& szHost, unsigned int dwPort, unsigned int dwDBId)
+bool FxRedisModule::Open(const char* szHost, unsigned int dwPort, unsigned int dwRedisId)
 {
-	FxRedisClient *poMySqlClient = FindDBClient(dwDBId);
+	FxRedisClient *poMySqlClient = FindDBClient(dwRedisId);
 	if(poMySqlClient != NULL)
 	{
-		LogExe(LogLv_Error, "db id = %d already exist", dwDBId);
+		LogExe(LogLv_Error, "db id = %d already exist", dwRedisId);
 		return false;
 	}
 
@@ -51,7 +51,7 @@ bool FxRedisModule::Open(const std::string& szHost, unsigned int dwPort, unsigne
 		return false;
 	}
 
-	m_mapDBClient[dwDBId] = poMySqlClient;
+	m_mapDBClient[dwRedisId] = poMySqlClient;
 
 	return true;
 }
@@ -149,7 +149,7 @@ void FxRedisModule::AddResult(IRedisQuery* poQuery)
 
 bool FxRedisModule::__CallBackResult()
 {
-    IQuery *poQuery = NULL;
+    IRedisQuery *poQuery = NULL;
 
     m_oLock.Lock();
     if (m_oResultList.empty())

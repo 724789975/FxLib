@@ -6,7 +6,7 @@
 #include <vector>
 #include <map>
 #include "lock.h"
-#include "dbreader.h"
+#include "redisreader.h"
 
 class FxRedisConnection
 {

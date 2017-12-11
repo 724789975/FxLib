@@ -5,7 +5,7 @@
 #include "fxredis.h"
 #include <fxmeta.h>
 #include "singleton.h"
-#include "dbclient.h"
+#include "redisclient.h"
 #include "dynamicpoolex.h"
 #include "lock.h"
 
@@ -20,7 +20,7 @@ public:
 	virtual void        Release(void);
 	virtual const char* GetModuleName(void);
 
-	virtual bool Open(const std::string& szHost, unsigned int dwPort, unsigned int dwDBId);
+	virtual bool		Open(const char* szHost, unsigned int dwPort, unsigned int dwRedisId);
 	virtual void        Close(UINT32 dwDBId);
 	virtual bool AddQuery(IRedisQuery*poQuery);
 	virtual bool        Run(UINT32 dwCount);

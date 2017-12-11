@@ -1,4 +1,4 @@
-﻿#include "dbconnection.h"
+﻿#include "redisconnection.h"
 #include "strhelper.h"
 
 FxRedisConnection::FxRedisConnection(void)
