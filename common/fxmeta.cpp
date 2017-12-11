@@ -25,6 +25,7 @@
 #include <errno.h>
 #include <netinet/in.h>
 #include <execinfo.h>
+#include <sys/stat.h>
 #endif // WIN32
 
 #ifndef INFINITE
@@ -297,6 +298,33 @@ void ListDir(const char* pDirName, ListDirAndLoadFile* pListDirAndLoadFile)
 		{
 			continue;
 		}
+#if 1
+		//有的系统不能用readdir 要用stat
+		struct stat buf;
+		std::string strPath(pDirName);
+		std::string strFileName(pDirp->d_name);
+		std::string strFullFilePath = strPath + "/" + strFileName;
+		stat(strFullFilePath.c_str(), &buf);
+		if (buf.st_mode & S_IFREG)
+		{
+			std::string strPath(pDirName);
+			std::string strFileName(pDirp->d_name);
+			std::string strFullFilePath = strPath + "/" + strFileName;
+			pListDirAndLoadFile->LoadFile(strFullFilePath.c_str());
+		}
+		else if (buf.st_mode & S_IFDIR)
+		{
+			//directory
+			std::string strPath(pDirName);
+			std::string strDirName(pDirp->d_name);
+			std::string strFullDirPath = strPath + "/" + strDirName;
+			ListDir(strFullDirPath.c_str(), pListDirAndLoadFile);
+		}
+		else
+		{
+			continue;
+		}
+#else
 		switch (pDirp->d_type)
 		{
 			case DT_REG:
@@ -322,6 +350,7 @@ void ListDir(const char* pDirName, ListDirAndLoadFile* pListDirAndLoadFile)
 			}
 			break;
 		}
+#endif
 	}
 #endif
 }
