@@ -869,7 +869,7 @@ void FxUDPListenSock::OnAccept()
 #else
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind failed, errno %d", errno);
 #endif // WIN32
-		return false;
+		return;
 	}
 
 	// 这个时候不能说是已经establish 了 要发个消息确认下
