@@ -53,14 +53,15 @@ void FxUDPListenSock::OnWrite()
 
 bool FxUDPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 {
+	memset(&m_stAddr, 0, sizeof(m_stAddr));
 	SetSock(socket(AF_INET, SOCK_DGRAM, 0));
 	if (INVALID_SOCKET == GetSock())
 	{
 #ifdef WIN32
 		int dwErr = WSAGetLastError();
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "create socket error, %u:%u, errno %d", dwIP, wPort, dwErr);
+		LogExe(LogLv_Error, "create socket error, %u:%u, errno %d", dwIP, wPort, dwErr);
 #else
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "create socket error, %u:%u, errno %d", dwIP, wPort, errno);
+		LogExe(LogLv_Error, "create socket error, %u:%u, errno %d", dwIP, wPort, errno);
 #endif // WIN32
 
 		return false;
@@ -69,36 +70,35 @@ bool FxUDPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 	INT32 nReuse = 1;
 	setsockopt(GetSock(), SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(nReuse));
 
-	sockaddr_in stAddr = { 0 };
-	stAddr.sin_family = AF_INET;
+	m_stAddr.sin_family = AF_INET;
 	if (0 == dwIP)
 	{
-		stAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+		m_stAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 	}
 	else
 	{
-		stAddr.sin_addr.s_addr = dwIP;
+		m_stAddr.sin_addr.s_addr = dwIP;
 	}
-	stAddr.sin_port = htons(wPort);
+	m_stAddr.sin_port = htons(wPort);
 
 #ifdef WIN32
 	unsigned long ul = 1;
 	if (SOCKET_ERROR == ioctlsocket(GetSock(), FIONBIO, (unsigned long*)&ul))
 	{
 		closesocket(GetSock());
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "Set socket FIONBIO error : %d, socket : %d, socket id %d",
+		LogExe(LogLv_Error, "Set socket FIONBIO error : %d, socket : %d, socket id %d",
 			WSAGetLastError(), GetSock(), GetSockId());
 		return false;
 	}
 #endif // WIN32
 
-	if (bind(GetSock(), (sockaddr*)&stAddr, sizeof(stAddr)) < 0)
+	if (bind(GetSock(), (sockaddr*)&m_stAddr, sizeof(m_stAddr)) < 0)
 	{
 #ifdef WIN32
 		int dwErr = WSAGetLastError();
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind at %u:%d failed, errno %d", dwIP, wPort, dwErr);
+		LogExe(LogLv_Error, "bind at %u:%d failed, errno %d", dwIP, wPort, dwErr);
 #else
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind at %u:%d failed, errno %d", dwIP, wPort, errno);
+		LogExe(LogLv_Error, "bind at %u:%d failed, errno %d", dwIP, wPort, errno);
 #endif // WIN32
 		return false;
 	}
@@ -116,7 +116,7 @@ bool FxUDPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 	{
 		return false;
 	}
-	ThreadLog(LogLv_Info, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "listen at %u:%d success", dwIP, wPort);
+	LogExe(LogLv_Info, "listen at %u:%d success", dwIP, wPort);
 
 #ifdef WIN32
 	for (int i = 0; i < sizeof(m_oSPerIoDatas) / sizeof(SPerUDPIoData); ++i)
@@ -859,6 +859,18 @@ void FxUDPListenSock::OnAccept()
 	poSock->m_oSendWindow.m_pSeqRetryTime[btId] = poSock->m_dRetryTime;
 	poSock->m_oSendWindow.m_pSeqRetryCount[btId] = 0;
 	poSock->m_oSendWindow.m_btEnd++;
+
+
+	if (bind(poSock->GetSock(), (sockaddr*)&m_stAddr, sizeof(m_stAddr)) < 0)
+	{
+#ifdef WIN32
+		int dwErr = WSAGetLastError();
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind at %u:%d failed, errno %d", dwIP, wPort, dwErr);
+#else
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind at %u:%d failed, errno %d", dwIP, wPort, errno);
+#endif // WIN32
+		return false;
+	}
 
 	// 这个时候不能说是已经establish 了 要发个消息确认下
 	// send的时候 可能要修改 因为 udp tcp 有区别

@@ -117,11 +117,12 @@ private:
 	FxCriticalLock				m_oLock;
 	FxIoThread*					m_poIoThreadHandler;
 	FxLoopBuff*					m_poRecvBuf;
+
+	sockaddr_in					m_stAddr;
 #ifdef WIN32
 	SPerUDPIoData				m_oSPerIoDatas[128];
 	UDPPacketHeader				m_oPacketHeaders[128];
 #endif // WIN32
-
 };
 
 class FxConnection;
