@@ -860,7 +860,8 @@ void FxUDPListenSock::OnAccept()
 	poSock->m_oSendWindow.m_pSeqRetryCount[btId] = 0;
 	poSock->m_oSendWindow.m_btEnd++;
 
-
+	INT32 nReuse = 1;
+	setsockopt(poSock->GetSock(), SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(nReuse));
 	if (bind(poSock->GetSock(), (sockaddr*)&m_stAddr, sizeof(m_stAddr)) < 0)
 	{
 #ifdef WIN32
