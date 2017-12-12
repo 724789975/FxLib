@@ -865,9 +865,9 @@ void FxUDPListenSock::OnAccept()
 	{
 #ifdef WIN32
 		int dwErr = WSAGetLastError();
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind at %u:%d failed, errno %d", dwIP, wPort, dwErr);
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind failed, errno %d", dwErr);
 #else
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind at %u:%d failed, errno %d", dwIP, wPort, errno);
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind failed, errno %d", errno);
 #endif // WIN32
 		return false;
 	}
