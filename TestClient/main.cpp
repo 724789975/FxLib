@@ -47,10 +47,12 @@ public:
 	}
 	virtual bool OnTimer(double fSecond)
 	{
+		int nLen = rand() % 256;
+		nLen += 768;
 		bool bSended = true;
 		for (int i = 0; i < CLIENTCOUNT; ++i)
 		{
-			sprintf(szMsg, "%s....%d......%d", GetExePath(), g_sSessions[i]->GetRemotePort(), m_i);
+			sprintf(szMsg, "%s....%d......%d.....%d", GetExePath(), g_sSessions[i]->GetRemotePort(), m_i, nLen);
 			if (!g_sSessions[i]->GetConnection())
 			{
 				continue;
