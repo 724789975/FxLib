@@ -675,7 +675,7 @@ void FxUDPListenSock::OnAccept()
 	{
 		if (oUDPPacketHeader.m_cAck != 0)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "ack error want : 1, recv : %d", oUDPPacketHeader.m_cAck);
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "ack error want : 0, recv : %d", oUDPPacketHeader.m_cAck);
 			return;
 		}
 		if (oUDPPacketHeader.m_cSyn != 1)
