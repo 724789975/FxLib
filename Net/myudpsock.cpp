@@ -1505,7 +1505,7 @@ ContinuetSend:
 		}
 	}
 
-	int ret = recvfrom(GetSock(), (char*)(pRecvBuffer), sizeof(UDPPacketHeader) + sizeof(int), 0, (sockaddr*)&stRemoteAddr, &nRemoteAddrLen);
+	int ret = recvfrom(GetSock(), (char*)(pRecvBuffer), sizeof(UDPPacketHeader) + sizeof(short), 0, (sockaddr*)&stRemoteAddr, &nRemoteAddrLen);
 	if (ret < 0)
 	{
 		LogExe(LogLv_Error, "recv time out!!!");
