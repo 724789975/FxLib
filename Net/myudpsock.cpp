@@ -563,52 +563,19 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 			poSock->m_oSendWindow.m_btBegin++;
 		}
 
-		// 这个时候不能说是已经establish 了 要发个消息确认下
-		unsigned char btId = poSock->m_oSendWindow.m_btEnd % poSock->m_oSendWindow.s_dwWindowSize;
+		poSock->SetRemoteAddr(pstPerIoData->stRemoteAddr);
 
-		// allocate buffer
-		unsigned char btBufferId = poSock->m_oSendWindow.m_btFreeBufferId;
-		poSock->m_oSendWindow.m_btFreeBufferId = poSock->m_oSendWindow.m_ppBuffer[btBufferId][0];
-
-		// send window buffer
-		unsigned char * pBuffer = poSock->m_oSendWindow.m_ppBuffer[btBufferId];
-
-		UDPPacketHeader & refPacket = *(UDPPacketHeader*)pBuffer;
-		refPacket.m_cStatus = poSock->GetState();
-		refPacket.m_cSyn = poSock->m_oSendWindow.m_btEnd;
-		refPacket.m_cAck = poSock->m_oRecvWindow.m_btBegin - 1;
-
-		// add to send window
-		poSock->m_oSendWindow.m_pSeqBufferId[btId] = btBufferId;
-		poSock->m_oSendWindow.m_pSeqSize[btId] = sizeof(UDPPacketHeader);
-		poSock->m_oSendWindow.m_pSeqTime[btId] = GetTimeHandler()->GetMilliSecond();
-		poSock->m_oSendWindow.m_pSeqRetry[btId] = GetTimeHandler()->GetMilliSecond();
-		poSock->m_oSendWindow.m_pSeqRetryTime[btId] = poSock->m_dRetryTime;
-		poSock->m_oSendWindow.m_pSeqRetryCount[btId] = 0;
-		poSock->m_oSendWindow.m_btEnd++;
-
-		// send的时候 可能要修改 因为 udp tcp 有区别
-		if (sendto(poSock->GetSock(), (char*)(&refPacket),
-			sizeof(UDPPacketHeader), 0, (sockaddr*)(&pstPerIoData->stRemoteAddr),
-			sizeof(pstPerIoData->stRemoteAddr)) == SOCKET_ERROR)
+		if (connect(poSock->GetSock(), (sockaddr*)(&pstPerIoData->stRemoteAddr), sizeof(pstPerIoData->stRemoteAddr)) == SOCKET_ERROR)
 		{
 			if (WSAGetLastError() != WSA_IO_PENDING)
 			{
-				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "sendto errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "connect errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
 				PostAccept(*pstPerIoData);
 				poSock->Close();
 				return;
 			}
 		}
-		//poSock->Send((char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader));
-
-		// // free buffer
-		// poSock->m_oSendWindow.m_ppBuffer[btBufferId][0] = poSock->m_oSendWindow.m_btFreeBufferId;
-		// poSock->m_oSendWindow.m_btFreeBufferId = btBufferId;
-		// ++poSock->m_oSendWindow.m_btBegin;
-
-		poSock->m_bSendAck = true;
 
 		sockaddr_in stLocalAddr;
 		INT32 nLocalAddrLen = sizeof(sockaddr_in);
@@ -628,7 +595,48 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		poConnection->SetLocalIP(stLocalAddr.sin_addr.s_addr);
 		poConnection->SetLocalPort(ntohs(stLocalAddr.sin_port));
 
-		poSock->SetRemoteAddr(pstPerIoData->stRemoteAddr);
+		// 这个时候不能说是已经establish 了 要发个消息确认下
+		unsigned char btId = poSock->m_oSendWindow.m_btEnd % poSock->m_oSendWindow.s_dwWindowSize;
+
+		// allocate buffer
+		unsigned char btBufferId = poSock->m_oSendWindow.m_btFreeBufferId;
+		poSock->m_oSendWindow.m_btFreeBufferId = poSock->m_oSendWindow.m_ppBuffer[btBufferId][0];
+
+		// send window buffer
+		unsigned char * pBuffer = poSock->m_oSendWindow.m_ppBuffer[btBufferId];
+
+		UDPPacketHeader & refPacket = *(UDPPacketHeader*)pBuffer;
+		refPacket.m_cStatus = poSock->GetState();
+		refPacket.m_cSyn = poSock->m_oSendWindow.m_btEnd;
+		refPacket.m_cAck = poSock->m_oRecvWindow.m_btBegin - 1;
+
+		*(unsigned short*)(pBuffer + sizeof(UDPPacketHeader)) = ntohs(stLocalAddr.sin_port);
+
+		// add to send window
+		poSock->m_oSendWindow.m_pSeqBufferId[btId] = btBufferId;
+		poSock->m_oSendWindow.m_pSeqSize[btId] = sizeof(UDPPacketHeader) + sizeof(unsigned short);
+		poSock->m_oSendWindow.m_pSeqTime[btId] = GetTimeHandler()->GetMilliSecond();
+		poSock->m_oSendWindow.m_pSeqRetry[btId] = GetTimeHandler()->GetMilliSecond();
+		poSock->m_oSendWindow.m_pSeqRetryTime[btId] = poSock->m_dRetryTime;
+		poSock->m_oSendWindow.m_pSeqRetryCount[btId] = 0;
+		poSock->m_oSendWindow.m_btEnd++;
+
+		// send的时候 可能要修改 因为 udp tcp 有区别
+		if (sendto(GetSock(), (char*)(&refPacket),
+			sizeof(UDPPacketHeader) + sizeof(unsigned short), 0, (sockaddr*)(&pstPerIoData->stRemoteAddr),
+			sizeof(pstPerIoData->stRemoteAddr)) == SOCKET_ERROR)
+		{
+			if (WSAGetLastError() != WSA_IO_PENDING)
+			{
+				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "sendto errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+
+				PostAccept(*pstPerIoData);
+				poSock->Close();
+				return;
+			}
+		}
+
+		poSock->m_bSendAck = true;
 
 		if (false == poSock->AddEvent())
 		{
@@ -637,18 +645,6 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 			poSock->Close();
 		}
 		poSock->PushNetEvent(NETEVT_ESTABLISH, 0);
-
-		if (connect(poSock->GetSock(), (sockaddr*)(&pstPerIoData->stRemoteAddr), sizeof(pstPerIoData->stRemoteAddr)) == SOCKET_ERROR)
-		{
-			if (WSAGetLastError() != WSA_IO_PENDING)
-			{
-				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "connect errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
-
-				PostAccept(*pstPerIoData);
-				poSock->Close();
-				return;
-			}
-		}
 
 		if (false == poSock->PostRecv())
 		{
@@ -836,6 +832,32 @@ void FxUDPListenSock::OnAccept()
 		poSock->m_oSendWindow.m_btBegin++;
 	}
 
+	poSock->SetRemoteAddr(stRemoteAddr);
+
+	if (connect(poSock->GetSock(), (sockaddr*)(&stRemoteAddr), sizeof(stRemoteAddr)) < 0)
+	{
+		if (errno != EINPROGRESS && errno != EINTR && errno != EAGAIN)
+		{
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "connect errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+
+			poSock->Close();
+			return;
+		}
+	}
+
+	sockaddr_in stLocalAddr = { 0 };
+	unsigned int nLocalAddrLen = sizeof(stLocalAddr);
+	if (getsockname(poSock->GetSock(), (sockaddr*)&stLocalAddr, &nLocalAddrLen) < 0)
+	{
+		close(hAcceptSock);
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "socket getsockname error : %d, socket : %d, socket id %d", errno, GetSock(), GetSockId());
+		poSock->Close();
+		return;
+	}
+
+	poConnection->SetLocalIP(stLocalAddr.sin_addr.s_addr);
+	poConnection->SetLocalPort(ntohs(stLocalAddr.sin_port));
+
 	// 这个时候不能说是已经establish 了 要发个消息确认下
 	unsigned char btId = poSock->m_oSendWindow.m_btEnd % poSock->m_oSendWindow.s_dwWindowSize;
 
@@ -851,18 +873,20 @@ void FxUDPListenSock::OnAccept()
 	refPacket.m_cSyn = poSock->m_oSendWindow.m_btEnd;
 	refPacket.m_cAck = poSock->m_oRecvWindow.m_btBegin - 1;
 
+	*(unsigned short*)(pBuffer + sizeof(UDPPacketHeader)) = ntohs(stLocalAddr.sin_port);
+
 	// add to send window
 	poSock->m_oSendWindow.m_pSeqBufferId[btId] = btBufferId;
-	poSock->m_oSendWindow.m_pSeqSize[btId] = sizeof(UDPPacketHeader);
+	poSock->m_oSendWindow.m_pSeqSize[btId] = sizeof(UDPPacketHeader) + sizeof(unsigned short);
 	poSock->m_oSendWindow.m_pSeqTime[btId] = GetTimeHandler()->GetMilliSecond();
 	poSock->m_oSendWindow.m_pSeqRetry[btId] = GetTimeHandler()->GetMilliSecond();
 	poSock->m_oSendWindow.m_pSeqRetryTime[btId] = poSock->m_dRetryTime;
 	poSock->m_oSendWindow.m_pSeqRetryCount[btId] = 0;
 	poSock->m_oSendWindow.m_btEnd++;
 
-	INT32 nReuse = 1;
-	setsockopt(poSock->GetSock(), SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(nReuse));
-	if (bind(poSock->GetSock(), (sockaddr*)&m_stAddr, sizeof(m_stAddr)) < 0)
+	//INT32 nReuse = 1;
+	//setsockopt(poSock->GetSock(), SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(nReuse));
+	if (bind(poSock->GetSock(), (sockaddr*)&stLocalAddr, sizeof(stLocalAddr)) < 0)
 	{
 #ifdef WIN32
 		int dwErr = WSAGetLastError();
@@ -875,8 +899,8 @@ void FxUDPListenSock::OnAccept()
 
 	// 这个时候不能说是已经establish 了 要发个消息确认下
 	// send的时候 可能要修改 因为 udp tcp 有区别
-	if (sendto(poSock->GetSock(), (char*)(&refPacket),
-		sizeof(UDPPacketHeader), 0, (sockaddr*)(&stRemoteAddr),
+	if (sendto(GetSock(), (char*)(&refPacket),
+		sizeof(UDPPacketHeader) + sizeof(unsigned short), 0, (sockaddr*)(&stRemoteAddr),
 		sizeof(stRemoteAddr)) < 0)
 	{
 		if (errno != EINPROGRESS && errno != EINTR && errno != EAGAIN)
@@ -887,29 +911,8 @@ void FxUDPListenSock::OnAccept()
 			return;
 		}
 	}
-	//poSock->Send((char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader));
-
-	// // free buffer
-	// poSock->m_oSendWindow.m_ppBuffer[btBufferId][0] = poSock->m_oSendWindow.m_btFreeBufferId;
-	// poSock->m_oSendWindow.m_btFreeBufferId = btBufferId;
-	// ++poSock->m_oSendWindow.m_btBegin;
 
 	poSock->m_bSendAck = true;
-
-	sockaddr_in stLocalAddr = { 0 };
-	unsigned int nLocalAddrLen = sizeof(stLocalAddr);
-	if (getsockname(poSock->GetSock(), (sockaddr*)&stLocalAddr, &nLocalAddrLen) < 0)
-	{
-		close(hAcceptSock);
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "socket getsockname error : %d, socket : %d, socket id %d", errno, GetSock(), GetSockId());
-		poSock->Close();
-		return;
-	}
-
-	poConnection->SetLocalIP(stLocalAddr.sin_addr.s_addr);
-	poConnection->SetLocalPort(ntohs(stLocalAddr.sin_port));
-
-	poSock->SetRemoteAddr(stRemoteAddr);
 
 	if (false == poSock->AddEvent())
 	{
@@ -918,17 +921,6 @@ void FxUDPListenSock::OnAccept()
 		poSock->Close();
 	}
 	poSock->PushNetEvent(NETEVT_ESTABLISH, 0);
-
-	if (connect(poSock->GetSock(), (sockaddr*)(&stRemoteAddr), sizeof(stRemoteAddr)) < 0)
-	{
-		if (errno != EINPROGRESS && errno != EINTR && errno != EAGAIN)
-		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "connect errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
-
-			poSock->Close();
-			return;
-		}
-	}
 	return;
 }
 
@@ -1513,7 +1505,7 @@ ContinuetSend:
 		}
 	}
 
-	int ret = recvfrom(GetSock(), (char*)(pRecvBuffer), sizeof(UDPPacketHeader), 0, (sockaddr*)&stRemoteAddr, &nRemoteAddrLen);
+	int ret = recvfrom(GetSock(), (char*)(pRecvBuffer), sizeof(UDPPacketHeader) + sizeof(int), 0, (sockaddr*)&stRemoteAddr, &nRemoteAddrLen);
 	if (ret < 0)
 	{
 		LogExe(LogLv_Error, "recv time out!!!");
@@ -1536,6 +1528,9 @@ ContinuetSend:
 		LogExe(LogLv_Critical, "statu error want : SSTATE_ESTABLISH, recv : %d", ((UDPPacketHeader*)(pRecvBuffer))->m_cStatus);
 		return INVALID_SOCKET;
 	}
+
+	unsigned short wPort = *(unsigned short*)(pRecvBuffer + sizeof(UDPPacketHeader));
+	stRemoteAddr.sin_port = htons(wPort);
 
 	while (m_oSendWindow.m_btBegin != (unsigned char)(oUDPPacketHeader.m_cAck + 1))
 	{
