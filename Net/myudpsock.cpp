@@ -886,16 +886,16 @@ void FxUDPListenSock::OnAccept()
 
 	//INT32 nReuse = 1;
 	//setsockopt(poSock->GetSock(), SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(nReuse));
-	if (bind(poSock->GetSock(), (sockaddr*)&stLocalAddr, sizeof(stLocalAddr)) < 0)
-	{
-#ifdef WIN32
-		int dwErr = WSAGetLastError();
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind failed, errno %d", dwErr);
-#else
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind failed, errno %d", errno);
-#endif // WIN32
-		return;
-	}
+// 	if (bind(poSock->GetSock(), (sockaddr*)&stLocalAddr, sizeof(stLocalAddr)) < 0)
+// 	{
+// #ifdef WIN32
+// 		int dwErr = WSAGetLastError();
+// 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind failed, errno %d", dwErr);
+// #else
+// 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind failed, errno %d", errno);
+// #endif // WIN32
+// 		return;
+// 	}
 
 	// 这个时候不能说是已经establish 了 要发个消息确认下
 	// send的时候 可能要修改 因为 udp tcp 有区别
