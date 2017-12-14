@@ -293,6 +293,8 @@ public:
 	virtual void					OnParserIoEvent(int dwEvents) = 0;		//
 #endif // WIN32
 
+	virtual void					Update() {}
+
 protected:
 	FxConnection*					m_poConnection;
 private:
