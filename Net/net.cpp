@@ -87,6 +87,7 @@ bool FxNetModule::__InitComponent()
     {
 		FxIoThread* poEpollHandler = m_pEpollHandlers + i;
       	poEpollHandler->Init(m_nMaxConnectionCount);
+		FxSleep(10);
     }
 
 	m_pEventQueue = new TEventQueue<SSockNetEvent>;
@@ -100,6 +101,7 @@ void FxNetModule::__UninitComponent()
     for (int i = 0; i < m_nNetThreadCount; i++)
     {
         (m_pEpollHandlers + i)->SetStoped();
+		FxSleep(100);
     }
 	// 先设置为stop 然后 sleep 1s 这样 次线程就有时间终结了
 	FxSleep(1000);
