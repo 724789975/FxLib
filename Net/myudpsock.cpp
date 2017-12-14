@@ -3296,7 +3296,7 @@ void FxUDPConnectSock::OnSend()
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "error : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
 
 		Close();
-		return false;
+		return;
 	}
 
 	//if (!PostSend())
