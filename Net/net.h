@@ -38,6 +38,8 @@ public:
 	bool						PushNetEvent(IFxSocket* poSock, SNetEvent oEvent);
 	FxIoThread*					FetchIoThread(UINT32 dwSockId);
 
+	int							GetThreadCount() { return m_nNetThreadCount; }
+
 private:
 	bool						__CreateComponent();
 	bool						__InitComponent();

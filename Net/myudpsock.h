@@ -169,6 +169,8 @@ public:
 	virtual void				OnParserIoEvent(int dwEvents);		//  1/4 //
 #endif // WIN32
 
+	virtual void				Update();
+
 private:
 
 	bool						PostSend();

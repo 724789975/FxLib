@@ -3,6 +3,7 @@
 
 #include "mytcpsock.h"
 #include <vector>
+#include <set>
 #ifdef WIN32
 #else
 #include <sys/epoll.h>
@@ -28,6 +29,9 @@ public:
 	UINT32					GetThreadId();
 	FILE*&					GetFile() { return m_pFile; }
 	const char*				GetLogFile() { return m_szLogPath; }
+
+	void					AddConnectSocket(IFxConnectSocket* pSock);
+	void					DelConnectSocket(IFxConnectSocket* pSock);
 
 #ifdef WIN32
 	bool					AddEvent(int hSock, IFxSocket* poSock);
@@ -67,6 +71,9 @@ protected:
 
 	FILE*					m_pFile;
 	char					m_szLogPath[64];
+
+	std::set<IFxConnectSocket*>	m_setConnectSockets;
+	double					m_dLoatUpdateTime;
 };
 
 #endif // __IOThread_H__
