@@ -3290,7 +3290,7 @@ void FxUDPConnectSock::OnSend()
 
 	m_poIoThreadHandler->AddConnectSocket(this);
 
-	if (!m_poIoThreadHandler->AddEvent(GetSock(), EPOLLIN, this))
+	if (!m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
 	{
 		PushNetEvent(NETEVT_ERROR, errno);
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "error : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
