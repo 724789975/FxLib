@@ -1614,6 +1614,7 @@ ContinuetSend:
 	}
 #endif // WIN32
 
+	SetState(SSTATE_ESTABLISH);
 	if (!AddEvent())
 	{
 #ifdef WIN32
@@ -1628,7 +1629,6 @@ ContinuetSend:
 
 	GetConnection()->SetID(GetSockId());
 
-	SetState(SSTATE_ESTABLISH);
 	PushNetEvent(NETEVT_ESTABLISH, 0);
 
 #ifdef WIN32
@@ -1675,12 +1675,6 @@ ContinuetSend:
 		return INVALID_SOCKET;
 	}
 
-	if (!m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
-	{
-		LogExe(LogLv_Error, "m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		return INVALID_SOCKET;
-	}
 #endif // WIN32
 
 	return GetSock();
