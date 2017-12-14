@@ -60,8 +60,6 @@ public:
 
 	IFxDataHeader*				GetDataHeader();
 
-	void						ForceSend();
-
 private:
 	bool						m_bReconnect;
 	UINT32						m_dwID;

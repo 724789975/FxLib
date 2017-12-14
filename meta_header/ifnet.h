@@ -164,7 +164,6 @@ public:
 	virtual bool					OnDestroy();
 
 	virtual FxConnection*			GetConnection(void);
-	void							ForceSend();//udp中才用的到
 private:
 	FxConnection*					m_poConnection;
 

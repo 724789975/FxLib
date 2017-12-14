@@ -16,27 +16,27 @@ bool g_bRun = true;
 
 static FxSession* g_sSessions[CLIENTCOUNT] = { 0 };
 
-class TestTimer : public IFxTimer
-{
-	virtual bool OnTimer(double fSecond)
-	{
-		for (int i = 0; i < CLIENTCOUNT; ++i)
-		{
-			if (!g_sSessions[i]->GetConnection())
-			{
-				continue;
-			}
-			if (!g_sSessions[i]->IsConnected())
-			{
-				continue;
-			}
-			g_sSessions[i]->ForceSend();
-		}
-		GetTimeHandler()->AddDelayTimer(0.01, this);
-		return true;
-	}
-};
-TestTimer g_sTimer;
+//class TestTimer : public IFxTimer
+//{
+//	virtual bool OnTimer(double fSecond)
+//	{
+//		for (int i = 0; i < CLIENTCOUNT; ++i)
+//		{
+//			if (!g_sSessions[i]->GetConnection())
+//			{
+//				continue;
+//			}
+//			if (!g_sSessions[i]->IsConnected())
+//			{
+//				continue;
+//			}
+//			g_sSessions[i]->ForceSend();
+//		}
+//		GetTimeHandler()->AddDelayTimer(0.01, this);
+//		return true;
+//	}
+//};
+//TestTimer g_sTimer;
 
 class TestTimer1 : public IFxTimer
 {
@@ -160,7 +160,7 @@ int main(int argc, char **argv)
 		pNet->UdpConnect(g_sSessions[i], dwIP, g_dwPort, true);
 	}
 
-	GetTimeHandler()->AddDelayTimer(0.011f, &g_sTimer);
+	//GetTimeHandler()->AddDelayTimer(0.011f, &g_sTimer);
 	GetTimeHandler()->AddDelayTimer(0.08f, &g_sTimer1);
 
 	while (g_bRun)

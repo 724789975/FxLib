@@ -1068,7 +1068,6 @@ void FxUDPConnectSock::OnRead()
 
 void FxUDPConnectSock::OnWrite()
 {
-	PostSendFree();
 }
 
 void FxUDPConnectSock::Reset()

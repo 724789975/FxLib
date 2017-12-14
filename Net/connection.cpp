@@ -310,12 +310,3 @@ IFxDataHeader* FxConnection::GetDataHeader()
 	return NULL;
 }
 
-void FxConnection::ForceSend()
-{
-	Assert(m_eSockType == SLT_Udp);
-	if (m_poSock)
-	{
-		m_poSock->OnWrite();
-	}
-}
-
