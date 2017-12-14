@@ -834,19 +834,36 @@ void FxUDPListenSock::OnAccept()
 
 	poSock->SetRemoteAddr(stRemoteAddr);
 
-	if (connect(poSock->GetSock(), (sockaddr*)(&stRemoteAddr), sizeof(stRemoteAddr)) < 0)
-	{
-		if (errno != EINPROGRESS && errno != EINTR && errno != EAGAIN)
-		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "connect errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+	//if (connect(poSock->GetSock(), (sockaddr*)(&stRemoteAddr), sizeof(stRemoteAddr)) < 0)
+	//{
+	//	if (errno != EINPROGRESS && errno != EINTR && errno != EAGAIN)
+	//	{
+	//		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "connect errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
 
-			poSock->Close();
-			return;
-		}
-	}
+	//		poSock->Close();
+	//		return;
+	//	}
+	//}
+
+	//INT32 nReuse = 1;
+	//setsockopt(poSock->GetSock(), SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(nReuse))
 
 	sockaddr_in stLocalAddr = { 0 };
 	unsigned int nLocalAddrLen = sizeof(stLocalAddr);
+	stLocalAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+	stLocalAddr.sin_port = 0;
+
+	if (bind(poSock->GetSock(), (sockaddr*)&stLocalAddr, sizeof(stLocalAddr)) < 0)
+	{
+#ifdef WIN32
+		int dwErr = WSAGetLastError();
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind failed, errno %d", dwErr);
+#else
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind failed, errno %d", errno);
+#endif // WIN32
+		return;
+	};
+
 	if (getsockname(poSock->GetSock(), (sockaddr*)&stLocalAddr, &nLocalAddrLen) < 0)
 	{
 		close(hAcceptSock);
@@ -883,19 +900,6 @@ void FxUDPListenSock::OnAccept()
 	poSock->m_oSendWindow.m_pSeqRetryTime[btId] = poSock->m_dRetryTime;
 	poSock->m_oSendWindow.m_pSeqRetryCount[btId] = 0;
 	poSock->m_oSendWindow.m_btEnd++;
-
-	//INT32 nReuse = 1;
-	//setsockopt(poSock->GetSock(), SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(nReuse));
-// 	if (bind(poSock->GetSock(), (sockaddr*)&stLocalAddr, sizeof(stLocalAddr)) < 0)
-// 	{
-// #ifdef WIN32
-// 		int dwErr = WSAGetLastError();
-// 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind failed, errno %d", dwErr);
-// #else
-// 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind failed, errno %d", errno);
-// #endif // WIN32
-// 		return;
-// 	}
 
 	// 这个时候不能说是已经establish 了 要发个消息确认下
 	// send的时候 可能要修改 因为 udp tcp 有区别
