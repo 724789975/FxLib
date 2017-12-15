@@ -948,7 +948,6 @@ FxUDPConnectSock::FxUDPConnectSock()
 	m_stRecvIoData.nOp = IOCP_RECV;
 	m_stSendIoData.nOp = IOCP_SEND;
 	m_nPostRecv = 0;
-	m_nPostSend = 0;
 	m_dwLastError = 0;
 #else
 #endif // WIN32
@@ -1068,6 +1067,9 @@ void FxUDPConnectSock::OnRead()
 
 void FxUDPConnectSock::OnWrite()
 {
+#ifdef WIN32
+	PostSendFree();
+#endif // WIN32
 }
 
 void FxUDPConnectSock::Reset()
@@ -1099,7 +1101,6 @@ void FxUDPConnectSock::Reset()
 #ifdef WIN32
 	m_dwLastError = 0;
 	m_nPostRecv = 0;
-	m_nPostSend = 0;
 	m_dwLastError = 0;
 #else
 #endif // WIN32
@@ -1489,10 +1490,10 @@ SOCKET FxUDPConnectSock::Connect()
 	unsigned char * pRecvBuffer = m_oRecvWindow.m_ppBuffer[btRecvBufferId];
 	m_oRecvWindow.m_btFreeBufferId = pRecvBuffer[0];
 
-	timeval t1;
-	t1.tv_sec = 1;
-	t1.tv_usec = 0;
-	setsockopt(GetSock(), SOL_SOCKET, SO_RCVTIMEO, (char*)&t1, sizeof(timeval));
+	//timeval t1;
+	//t1.tv_sec = 1;
+	//t1.tv_usec = 0;
+	//setsockopt(GetSock(), SOL_SOCKET, SO_RCVTIMEO, (char*)&t1, sizeof(timeval));
 
 ContinuetSend:
 	if (sendto(GetSock(), (char*)(&oUDPPacketHeader),
@@ -1761,32 +1762,6 @@ bool FxUDPConnectSock::PostRecv()
 			InterlockedCompareExchange(&m_nPostRecv, 0, 1);
 			return false;
 		}
-	}
-
-	return true;
-}
-
-bool FxUDPConnectSock::PostRecvFree()
-{
-	Assert(0);
-	if (false == IsConnected())
-	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
-		return false;
-	}
-	LONG nPostRecv = InterlockedCompareExchange(&m_nPostRecv, 1, 0);
-	if (0 != nPostRecv)
-	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "m_nPostRecv == 1, socket : %d, socket id : %d", GetSock(), GetSockId());
-		return false;
-	}
-	ZeroMemory(&m_stRecvIoData.stOverlapped, sizeof(m_stRecvIoData.stOverlapped));
-	//post 失败的时候 再进入这个函数 可能会丢失一次
-	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(-1), (ULONG_PTR)this, &m_stRecvIoData.stOverlapped))
-	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "PostQueuedCompletionStatus error : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
-		InterlockedCompareExchange(&m_nPostRecv, 0, 1);
-		return false;
 	}
 
 	return true;
@@ -2100,8 +2075,6 @@ bool FxUDPConnectSock::PostSend()
 			{
 				if (WSAGetLastError() != WSA_IO_PENDING)
 				{
-					InterlockedCompareExchange(&m_nPostSend, 0, 1);
-
 					UINT32 dwErr = WSAGetLastError();
 					LogExe(LogLv_Error, "WSASend errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
@@ -2174,8 +2147,6 @@ bool FxUDPConnectSock::PostSend()
 		{
 			if (WSAGetLastError() != WSA_IO_PENDING)
 			{
-				InterlockedCompareExchange(&m_nPostSend, 0, 1);
-
 				UINT32 dwErr = WSAGetLastError();
 				LogExe(LogLv_Error, "WSASend errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
@@ -2227,7 +2198,7 @@ bool FxUDPConnectSock::PostSendFree()
 	m_dLastSendTime = GetTimeHandler()->GetMilliSecond();
 #ifdef WIN32
 	static SPerUDPIoData oUDPIoData = { 0 };
-	oUDPIoData.nOp = IOCP_RECV;
+	oUDPIoData.nOp = IOCP_SEND;
 	ZeroMemory(&oUDPIoData.stOverlapped, sizeof(oUDPIoData.stOverlapped));
 	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(-1), (ULONG_PTR)this, &oUDPIoData.stOverlapped))
 	{
@@ -2330,17 +2301,6 @@ void FxUDPConnectSock::__ProcRecv(UINT32 dwLen)
 {
 	if (GetConnection())
 	{
-		if (UINT32(-1) == dwLen)
-		{
-#ifdef WIN32
-			PostRecvFree();
-#else
-			PushNetEvent(NETEVT_ERROR, NET_RECV_ERROR);
-			PostClose();
-#endif
-			return;
-		}
-
 		if (GetSockId() != GetConnection()->GetID())
 		{
 			return;
@@ -2407,16 +2367,6 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 	{
 		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
 		Close();
-		return;
-	}
-
-	if (UINT32(-1) == dwBytes)
-	{
-		if (false == PostSend())
-		{
-			PushNetEvent(NETEVT_ERROR, WSAGetLastError());
-			Close();
-		}
 		return;
 	}
 
@@ -2817,10 +2767,8 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 
 void FxUDPConnectSock::OnSend(bool bRet, int dwBytes)
 {
-	return;
 	if (false == bRet)
 	{
-		InterlockedCompareExchange(&m_nPostSend, 0, m_nPostSend);
 		m_dwLastError = WSAGetLastError();
 		Close();
 		return;
@@ -2828,53 +2776,20 @@ void FxUDPConnectSock::OnSend(bool bRet, int dwBytes)
 
 	if (false == IsConnected())
 	{
-		InterlockedCompareExchange(&m_nPostSend, 0, m_nPostSend);
 		return;
 	}
 
 	if (SSTATE_ESTABLISH != GetState())
 	{
-		InterlockedCompareExchange(&m_nPostSend, 0, m_nPostSend);
 		return;
 	}
 
-	if (UINT32(-1) == dwBytes)
+	if (false == PostSend())
 	{
-		InterlockedCompareExchange(&m_nPostSend, m_nPostSend - 1, m_nPostSend);
-		if (0 == m_nPostSend)
-		{
-			if (false == PostSend())
-			{
-				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == PostSend, socket : %d, socket id : %d", GetSock(), GetSockId());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == PostSend, socket : %d, socket id : %d", GetSock(), GetSockId());
 
-				m_dwLastError = WSAGetLastError();
-				Close();
-			}
-		}
-		return;
-	}
-
-	if (0 == dwBytes)
-	{
-		InterlockedCompareExchange(&m_nPostSend, 0, m_nPostSend);
-		m_dwLastError = NET_SEND_ERROR;
+		m_dwLastError = WSAGetLastError();
 		Close();
-		return;
-	}
-
-	// 把成功发送了的从发送缓冲区丢弃//
-	m_poSendBuf->DiscardBuff(dwBytes);
-
-	InterlockedCompareExchange(&m_nPostSend, m_nPostSend - 1, m_nPostSend);
-	if (0 == m_nPostSend)
-	{
-		if (false == PostSend())
-		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == PostSend, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-			m_dwLastError = WSAGetLastError();
-			Close();
-		}
 	}
 }
 

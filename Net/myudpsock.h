@@ -162,7 +162,6 @@ public:
 	virtual bool				PostClose();
 #ifdef WIN32
 	bool						PostRecv();
-	bool						PostRecvFree();
 
 	virtual void				OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred);		// 处理完成端口事件//
 #else
@@ -221,7 +220,6 @@ private:
 	SPerUDPIoData				m_stRecvIoData;
 	SPerUDPIoData				m_stSendIoData;
 	LONG						m_nPostRecv;        // 未决的WSARecv操作数//
-	LONG						m_nPostSend;        // 未决的WSASend操作数/
 
 	UINT32						m_dwLastError;      // 最后的出错信息//
 #else

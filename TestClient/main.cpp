@@ -16,27 +16,29 @@ bool g_bRun = true;
 
 static FxSession* g_sSessions[CLIENTCOUNT] = { 0 };
 
-//class TestTimer : public IFxTimer
-//{
-//	virtual bool OnTimer(double fSecond)
-//	{
-//		for (int i = 0; i < CLIENTCOUNT; ++i)
-//		{
-//			if (!g_sSessions[i]->GetConnection())
-//			{
-//				continue;
-//			}
-//			if (!g_sSessions[i]->IsConnected())
-//			{
-//				continue;
-//			}
-//			g_sSessions[i]->ForceSend();
-//		}
-//		GetTimeHandler()->AddDelayTimer(0.01, this);
-//		return true;
-//	}
-//};
-//TestTimer g_sTimer;
+#ifdef WIN32
+class TestTimer : public IFxTimer
+{
+	virtual bool OnTimer(double fSecond)
+	{
+		for (int i = 0; i < CLIENTCOUNT; ++i)
+		{
+			if (!g_sSessions[i]->GetConnection())
+			{
+				continue;
+			}
+			if (!g_sSessions[i]->IsConnected())
+			{
+				continue;
+			}
+			g_sSessions[i]->ForceSend();
+		}
+		GetTimeHandler()->AddDelayTimer(0.01, this);
+		return true;
+	}
+};
+TestTimer g_sTimer;
+#endif // WIN32
 
 class TestTimer1 : public IFxTimer
 {
@@ -160,45 +162,15 @@ int main(int argc, char **argv)
 		pNet->UdpConnect(g_sSessions[i], dwIP, g_dwPort, true);
 	}
 
-	//GetTimeHandler()->AddDelayTimer(0.011f, &g_sTimer);
+#ifdef WIN32
+	GetTimeHandler()->AddDelayTimer(0.011f, &g_sTimer);
+#endif // WIN32
 	GetTimeHandler()->AddDelayTimer(0.08f, &g_sTimer1);
 
 	while (g_bRun)
 	{
 		GetTimeHandler()->Run();
 		pNet->Run(0xffffffff);
-		//for (int i = 0; i < CLIENTCOUNT; ++i)
-		//{
-		//	if (g_sSessions[i]->IsConnected())
-		//	{
-		//		sprintf(szMsg, "%s....%d......%d", GetExePath(), g_sSessions[i]->GetRemotePort(), j);
-		//		while(!g_sSessions[i]->Send(szMsg, 1024))
-		//		{
-		//			if (!g_sSessions[i]->IsConnected())
-		//			{
-		//				LogExe(LogLv_Error, "error!!!!!!!!!!!!!!!!!!!!!!!!");
-		//				g_bRun = false;
-		//				break;
-		//			}
-		//			GetTimeHandler()->Run();
-		//			FxSleep(10);
-		//			//pSession->Close();
-		//		}
-		//		//else
-		//		//{
-		//		//	LogExe(LogLv_Debug, "send : %s", szMsg);
-		//		//	//++i;
-		//		//}
-		//		FxSleep(1);
-		//	}
-		//	else
-		//	{
-		//		if (!g_sSessions[i]->IsConnecting())
-		//		{
-		//			g_sSessions[i]->Reconnect();
-		//		}
-		//	}
-		//}
 		FxSleep(10);
 		++j;
 	}

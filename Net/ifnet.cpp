@@ -128,6 +128,16 @@ FxConnection* FxSession::GetConnection(void)
 	return m_poConnection;
 }
 
+#ifdef WIN32
+void FxSession::ForceSend()
+{
+	if (m_poConnection)
+	{
+		m_poConnection->ForceSend();
+	}
+}
+#endif // WIN32
+
 bool FxSession::OnDestroy()
 {
 	//  connection release
