@@ -2,6 +2,7 @@
 #define __DBREADER_H_2009_0824__
 
 #include "fxredis.h"
+#include "hiredis.h"
 
 class FxRedisReader : public IRedisDataReader
 {
