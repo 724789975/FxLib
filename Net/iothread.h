@@ -72,7 +72,9 @@ protected:
 	FILE*					m_pFile;
 	char					m_szLogPath[64];
 
+	//存放udp的连接指针 目前只在udp中用到 每0.01秒发送一次
 	std::set<IFxConnectSocket*>	m_setConnectSockets;
+	//最后一次更新的时间
 	double					m_dLoatUpdateTime;
 };
 

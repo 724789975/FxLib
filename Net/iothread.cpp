@@ -23,7 +23,7 @@ FxIoThread::FxIoThread()
 	m_bStop = false;
 	sprintf(m_szLogPath, "./%s_%p_log.txt", GetExeName(), this);
 
-	m_dLoatUpdateTime = GetTimeHandler()->GetMilliSecond();
+	m_dLoatUpdateTime = 0;
 }
 
 FxIoThread::~FxIoThread()
