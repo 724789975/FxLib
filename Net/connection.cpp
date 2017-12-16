@@ -1,4 +1,4 @@
-#include "connection.h"
+﻿#include "connection.h"
 #include "mytcpsock.h"
 #include "myudpsock.h"
 #include "sockmgr.h"

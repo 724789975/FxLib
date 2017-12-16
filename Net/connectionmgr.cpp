@@ -1,4 +1,4 @@
-#include "connectionmgr.h"
+﻿#include "connectionmgr.h"
 
 //IMPLEMENT_SINGLETON(FxConnectionMgr)
 

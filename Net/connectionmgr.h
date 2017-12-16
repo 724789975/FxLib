@@ -1,4 +1,4 @@
-#ifndef __CONNECTIONMGR_H_NICK_2009_1203__
+﻿#ifndef __CONNECTIONMGR_H_NICK_2009_1203__
 #define __CONNECTIONMGR_H_NICK_2009_1203__
 
 #include <list>

@@ -1,4 +1,4 @@
-#ifndef __CPSOCKMGR_H__
+﻿#ifndef __CPSOCKMGR_H__
 #define __CPSOCKMGR_H__
 
 #include <list>

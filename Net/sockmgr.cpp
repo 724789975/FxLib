@@ -1,4 +1,4 @@
-#include "sockmgr.h"
+﻿#include "sockmgr.h"
 #include <time.h>
 
 //IMPLEMENT_SINGLETON(FxMySockMgr)

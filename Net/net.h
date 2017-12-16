@@ -1,4 +1,4 @@
-#ifndef __NET_H_2009_0825__
+﻿#ifndef __NET_H_2009_0825__
 #define __NET_H_2009_0825__
 
 #include "ifnet.h"

@@ -1,4 +1,4 @@
-#include "loopbuff.h"
+﻿#include "loopbuff.h"
 #include <malloc.h>
 #include <memory.h>
 

@@ -1,4 +1,4 @@
-#ifndef __CONNECTION_H__
+﻿#ifndef __CONNECTION_H__
 #define __CONNECTION_H__
 
 #include "ifnet.h"

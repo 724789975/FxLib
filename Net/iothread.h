@@ -1,4 +1,4 @@
-#ifndef __IOThread_H__
+﻿#ifndef __IOThread_H__
 #define __IOThread_H__
 
 #include "mytcpsock.h"

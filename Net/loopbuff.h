@@ -1,4 +1,4 @@
-#ifndef __LOOPBUFF_H_NIJIE_2009_0825__
+﻿#ifndef __LOOPBUFF_H_NIJIE_2009_0825__
 #define __LOOPBUFF_H_NIJIE_2009_0825__
 
 #include "fxmeta.h"
