@@ -12,31 +12,6 @@ bool g_bRun = true;
 
 DEFINE_uint32(port, 20000, "linten port");
 
-#ifdef WIN32
-class TestTimer : public IFxTimer
-{
-	virtual bool OnTimer(double fSecond)
-	{
-		for (std::set<FxSession*>::iterator it = CSessionFactory::Instance()->m_setSessions.begin();
-		it != CSessionFactory::Instance()->m_setSessions.end(); ++it)
-		{
-			if (!(*it)->GetConnection())
-			{
-				continue;
-			}
-			if (!(*it)->IsConnected())
-			{
-				continue;
-			}
-			(*it)->ForceSend();
-		}
-		GetTimeHandler()->AddDelayTimer(0.01f, this);
-		return true;
-	}
-};
-TestTimer g_sTimer;
-#endif // WIN32
-
 void EndFun(int n)
 {
 	if (n == SIGINT || n == SIGTERM)
@@ -56,10 +31,6 @@ int main(int argc, char **argv)
 	gflags::ParseCommandLineFlags(&argc, &argv, false);
 	signal(SIGINT, EndFun);
 	signal(SIGTERM, EndFun);
-	//if (!LogThread::CreateInstance())
-	//{
-	//	return 0;
-	//}
 
 	if (!CLuaEngine::CreateInstance())
 	{
@@ -80,22 +51,13 @@ int main(int argc, char **argv)
 	IFxNet* pNet = NULL;
 	IFxListenSocket* pListenSocket = NULL;
 
-	//if (!CLuaEngine::Instance()->CommandLineFunction(argv, argc))
-	//{
-	//	g_bRun = false;
-	//	goto STOP;
-	//}
+
 	if (!GetTimeHandler()->Init())
 	{
 		g_bRun = false;
 		goto STOP;
 	}
 	GetTimeHandler()->Run();
-	//if (!LogThread::Instance()->Init())
-	//{
-	//	g_bRun = false;
-	//	goto STOP;
-	//}
 
 	if (!CSessionFactory::CreateInstance())
 	{
@@ -134,9 +96,6 @@ int main(int argc, char **argv)
 		g_bRun = false;
 		goto STOP;
 	}
-#ifdef WIN32
-	GetTimeHandler()->AddDelayTimer(0.01f, &g_sTimer);
-#endif // WIN32
 
 	while (g_bRun)
 	{

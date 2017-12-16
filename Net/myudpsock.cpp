@@ -601,12 +601,6 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 				return;
 			}
 		}
-		//poSock->Send((char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader));
-
-		// // free buffer
-		// poSock->m_oSendWindow.m_ppBuffer[btBufferId][0] = poSock->m_oSendWindow.m_btFreeBufferId;
-		// poSock->m_oSendWindow.m_btFreeBufferId = btBufferId;
-		// ++poSock->m_oSendWindow.m_btBegin;
 
 		poSock->m_bSendAck = true;
 
@@ -660,6 +654,8 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		}
 
 		PostAccept(*pstPerIoData);
+
+		poSock->PostSendFree();
 	}
 }
 
@@ -1067,9 +1063,6 @@ void FxUDPConnectSock::OnRead()
 
 void FxUDPConnectSock::OnWrite()
 {
-#ifdef WIN32
-	PostSendFree();
-#endif // WIN32
 }
 
 void FxUDPConnectSock::Reset()
@@ -1227,7 +1220,6 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 		}
 		FxSleep(10);
 	}
-	PostSendFree();
 	return true;
 }
 
@@ -1490,10 +1482,10 @@ SOCKET FxUDPConnectSock::Connect()
 	unsigned char * pRecvBuffer = m_oRecvWindow.m_ppBuffer[btRecvBufferId];
 	m_oRecvWindow.m_btFreeBufferId = pRecvBuffer[0];
 
-	//timeval t1;
-	//t1.tv_sec = 1;
-	//t1.tv_usec = 0;
-	//setsockopt(GetSock(), SOL_SOCKET, SO_RCVTIMEO, (char*)&t1, sizeof(timeval));
+	timeval t1;
+	t1.tv_sec = 1;
+	t1.tv_usec = 0;
+	setsockopt(GetSock(), SOL_SOCKET, SO_RCVTIMEO, (char*)&t1, sizeof(timeval));
 
 ContinuetSend:
 	if (sendto(GetSock(), (char*)(&oUDPPacketHeader),
@@ -1648,6 +1640,8 @@ ContinuetSend:
 
 		return INVALID_SOCKET;
 	}
+
+	PostSendFree();
 #else
 	if (connect(GetSock(), (sockaddr*)(&m_stRemoteAddr), sizeof(m_stRemoteAddr)) < 0)
 	{
@@ -1862,14 +1856,6 @@ void FxUDPConnectSock::Update()
 
 bool FxUDPConnectSock::PostSend()
 {
-//#ifdef WIN32
-//#else
-//	if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
-//	{
-//		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
-//		return false;
-//	}
-//#endif
 	double dTime = GetTimeHandler()->GetMilliSecond();
 
 	// check ack received time
@@ -2087,12 +2073,6 @@ bool FxUDPConnectSock::PostSend()
 			{
 				if (EAGAIN == errno)
 				{
-					//if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLOUT | EPOLLIN, this))
-					//{
-					//	ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-					//	return false;
-					//}
 					return true;
 				}
 
@@ -2159,12 +2139,6 @@ bool FxUDPConnectSock::PostSend()
 		{
 			if (EAGAIN == errno)
 			{
-				//if (false == m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLOUT | EPOLLIN, this))
-				//{
-				//	ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-				//	return false;
-				//}
 				return true;
 			}
 
@@ -2184,46 +2158,6 @@ bool FxUDPConnectSock::PostSend()
 	}
 
 	return true;
-}
-
-bool FxUDPConnectSock::PostSendFree()
-{
-	if ((m_poSendBuf->GetFreeLen() == m_poSendBuf->GetTotalLen()) && !m_bSendAck)
-	{
-		if (GetTimeHandler()->GetMilliSecond() - m_dLastSendTime < 0.03)
-		{
-			return true;
-		}
-	}
-	m_dLastSendTime = GetTimeHandler()->GetMilliSecond();
-#ifdef WIN32
-	static SPerUDPIoData oUDPIoData = { 0 };
-	oUDPIoData.nOp = IOCP_SEND;
-	ZeroMemory(&oUDPIoData.stOverlapped, sizeof(oUDPIoData.stOverlapped));
-	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(-1), (ULONG_PTR)this, &oUDPIoData.stOverlapped))
-	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "PostQueuedCompletionStatus error : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
-		return false;
-	}
-	return true;
-#else
-	if (false == IsConnected())
-	{
-		LogExe(LogLv_Error, "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		return false;
-	}
-
-	if (NULL == m_poIoThreadHandler)
-	{
-		LogExe(LogLv_Error, "NULL == m_poIoThreadHandler, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		PostClose();
-		return false;
-	}
-
-	//return m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLOUT | EPOLLIN, this);
-#endif // WIN32
 }
 
 bool FxUDPConnectSock::SendImmediately()
@@ -2361,6 +2295,19 @@ void FxUDPConnectSock::__ProcRelease()
 }
 
 #ifdef WIN32
+bool FxUDPConnectSock::PostSendFree()
+{
+	static SPerUDPIoData oUDPIoData = { 0 };
+	oUDPIoData.nOp = IOCP_SEND;
+	ZeroMemory(&oUDPIoData.stOverlapped, sizeof(oUDPIoData.stOverlapped));
+	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(-1), (ULONG_PTR)this, &oUDPIoData.stOverlapped))
+	{
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "PostQueuedCompletionStatus error : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+		return false;
+	}
+	return true;
+}
+
 void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 {
 	if (0 == dwBytes)
@@ -2767,30 +2714,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 
 void FxUDPConnectSock::OnSend(bool bRet, int dwBytes)
 {
-	if (false == bRet)
-	{
-		m_dwLastError = WSAGetLastError();
-		Close();
-		return;
-	}
-
-	if (false == IsConnected())
-	{
-		return;
-	}
-
-	if (SSTATE_ESTABLISH != GetState())
-	{
-		return;
-	}
-
-	if (false == PostSend())
-	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == PostSend, socket : %d, socket id : %d", GetSock(), GetSockId());
-
-		m_dwLastError = WSAGetLastError();
-		Close();
-	}
+	m_poIoThreadHandler->AddConnectSocket(this);
 }
 
 #else
@@ -3212,15 +3136,6 @@ void FxUDPConnectSock::OnSend()
 		Close();
 		return;
 	}
-
-	//if (!PostSend())
-	//{
-	//	ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == PostSend(), socket : %d, socket id : %d", GetSock(), GetSockId());
-
-	//	PushNetEvent(NETEVT_ERROR, errno);
-	//	Close();
-	//	return;
-	//}
 }
 
 

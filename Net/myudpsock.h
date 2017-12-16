@@ -173,7 +173,6 @@ public:
 private:
 
 	bool						PostSend();
-	bool						PostSendFree();
 	bool						SendImmediately();						// //
 
 	void						__ProcEstablish();
@@ -186,6 +185,7 @@ private:
 	void						__ProcRelease();
 private:
 #ifdef WIN32
+	bool						PostSendFree();
 	void						OnRecv(bool bRet, int dwBytes);
 	void						OnSend(bool bRet, int dwBytes);
 #else

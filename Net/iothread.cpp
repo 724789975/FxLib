@@ -286,15 +286,12 @@ bool FxIoThread::__DealData()
 			&dwByteTransferred,
 			(PULONG_PTR)&poSock,
 			(LPOVERLAPPED*)&pstPerIoData,
-			INFINITE);
+			0);
 
-		// 
-		if (NULL == poSock)
+		if (poSock)
 		{
-			return false;
+			poSock->OnParserIoEvent((FALSE != bRet), pstPerIoData, dwByteTransferred);
 		}
-
-		poSock->OnParserIoEvent((FALSE != bRet), pstPerIoData, dwByteTransferred);
 	}
 #else
 	while (true)

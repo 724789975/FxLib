@@ -310,15 +310,3 @@ IFxDataHeader* FxConnection::GetDataHeader()
 	return NULL;
 }
 
-#ifdef WIN32
-void FxConnection::ForceSend()
-{
-	Assert(m_eSockType == SLT_Udp);
-	if (m_poSock)
-	{
-		m_poSock->OnWrite();
-	}
-}
-#endif // WIN32
-
-
