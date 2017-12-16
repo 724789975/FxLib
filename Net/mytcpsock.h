@@ -1,4 +1,4 @@
-﻿#ifndef __MyTcpSock_h__
+#ifndef __MyTcpSock_h__
 #define __MyTcpSock_h__
 
 #ifdef WIN32

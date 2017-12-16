@@ -1,4 +1,4 @@
-﻿#ifndef __THRDQUEUE_H_NICK_2009_1203__
+#ifndef __THRDQUEUE_H_NICK_2009_1203__
 #define __THRDQUEUE_H_NICK_2009_1203__
 
 #include "fxmeta.h"

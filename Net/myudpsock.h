@@ -1,4 +1,4 @@
-﻿#ifndef __MyUdpSock_h__
+#ifndef __MyUdpSock_h__
 #define __MyUdpSock_h__
 
 #ifdef WIN32

@@ -1,4 +1,4 @@
-﻿#include "iothread.h"
+#include "iothread.h"
 #include "mytcpsock.h"
 #include <errno.h>
 #include <fcntl.h>
