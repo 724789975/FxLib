@@ -20,16 +20,15 @@ C_LFLAGS		= -g -rdynamic -Wall -DNDEBUG -DLINUX
 CXX_FLAGS 		= -g -rdynamic -Wall -Woverloaded-virtual -DNDEBUG -DLINUX
 endif
 
-ARFLAGS			= -rc
 #==========================================================
 
 #==========================================================
 #  Commands
 CODE_DIR = ./ ../common
-INCLUDE_DIR =./ ../meta_header/ ../lua ../tolua ../mysql/include ../gflags
-LIB_FILE = -L../Debug -Lcrypto -lpthread -lLuaLib -lNet -lDatabase -lgflags -L../mysql/lib/linux -lmysqlclient
+INCLUDE_DIR =./ ../gflags ../meta_header/ ../lua ../tolua ../redis-3.2.1/deps/hiredis/
+LIB_FILE = -L../Debug -Lcrypto -lpthread -lLuaLib -lNet -lRedisCon -lgflags -lhiredis
 OUTPUT_DIR =../Debug
-OUTPUT = ChatServer
+OUTPUT = RedisTest
 #==========================================================
 
 OBJS = $(foreach i, $(CODE_DIR), $(shell find $(i) -name "*.cpp"))
