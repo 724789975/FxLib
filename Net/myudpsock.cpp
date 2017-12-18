@@ -803,7 +803,7 @@ void FxUDPListenSock::OnAccept()
 
 	while (poSock->m_oRecvWindow.m_btBegin != (unsigned char)(btNewAck + 1))
 	{
-		const unsigned char btHeadSize = sizeof(UDPPacketHeader);
+		//const unsigned char btHeadSize = sizeof(UDPPacketHeader);
 		unsigned char btId = poSock->m_oRecvWindow.m_btBegin % poSock->m_oRecvWindow.s_dwWindowSize;
 		unsigned char btBufferId = poSock->m_oRecvWindow.m_pSeqBufferId[btId];
 		//unsigned char * pBuffer = poSock->m_oRecvWindow.m_ppBuffer[btBufferId] + btHeadSize;
@@ -1574,7 +1574,7 @@ ContinuetSend:
 
 	while (m_oRecvWindow.m_btBegin != (unsigned char)(btNewAck + 1))
 	{
-		const unsigned char btHeadSize = sizeof(UDPPacketHeader);
+		//const unsigned char btHeadSize = sizeof(UDPPacketHeader);
 		unsigned char btId = m_oRecvWindow.m_btBegin % m_oRecvWindow.s_dwWindowSize;
 		unsigned char btBufferId = m_oRecvWindow.m_pSeqBufferId[btId];
 		//unsigned char * pBuffer = m_oRecvWindow.m_ppBuffer[btBufferId] + btHeadSize;
@@ -1915,7 +1915,7 @@ bool FxUDPConnectSock::PostSend()
 	for (unsigned char i = m_oSendWindow.m_btBegin; i != m_oSendWindow.m_btEnd; i++)
 	{
 		unsigned char btId = i % m_oSendWindow.s_dwWindowSize;
-		unsigned short btSize = m_oSendWindow.m_pSeqSize[btId];
+		//unsigned short btSize = m_oSendWindow.m_pSeqSize[btId];
 
 		if (m_oSendWindow.m_pSeqRetryCount[btId] > 0
 			&& dTime >= m_oSendWindow.m_pSeqRetry[btId])

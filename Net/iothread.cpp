@@ -234,7 +234,6 @@ bool FxIoThread::DelEvent(int hSock)
 void FxIoThread::ThrdFunc()
 {
 	ThreadLog(LogLv_Info, GetFile(), GetLogFile(), "thread id %d start", m_poThrdHandler->GetThreadId());
-	int i = 0;
 	while (!m_bStop)
 	{
 		if (!__DealData())

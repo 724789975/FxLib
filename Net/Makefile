@@ -12,8 +12,8 @@ RANLIB	= ranlib
 #  Flags
 ifeq ($(BUILD),DEBUG)
 D = d
-C_LFLAGS		= -g -O0 -rdynamic -Wall -D_DEBUG -DLINUX
-CXX_FLAGS 		= -g -O0 -rdynamic -Wall -Woverloaded-virtual -D_DEBUG -DLINUX 
+C_LFLAGS		= -g -O0 -rdynamic -Wall -D_DEBUG -DLINUX -pg
+CXX_FLAGS 		= -g -O0 -rdynamic -Wall -Woverloaded-virtual -D_DEBUG -DLINUX -pg
 else
 D = 
 C_LFLAGS		= -g -rdynamic -Wall -DNDEBUG -DLINUX
