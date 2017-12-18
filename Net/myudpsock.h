@@ -40,7 +40,7 @@ public:
 	{
 		// link buffers
 		m_btFreeBufferId = 0;
-		for (int i = 0; i < s_dwWindowSize; i++)
+		for (unsigned int i = 0; i < s_dwWindowSize; i++)
 			m_ppBuffer[i][0] = i + 1;
 	}
 
