@@ -806,7 +806,7 @@ void FxUDPListenSock::OnAccept()
 		const unsigned char btHeadSize = sizeof(UDPPacketHeader);
 		unsigned char btId = poSock->m_oRecvWindow.m_btBegin % poSock->m_oRecvWindow.s_dwWindowSize;
 		unsigned char btBufferId = poSock->m_oRecvWindow.m_pSeqBufferId[btId];
-		unsigned char * pBuffer = poSock->m_oRecvWindow.m_ppBuffer[btBufferId] + btHeadSize;
+		//unsigned char * pBuffer = poSock->m_oRecvWindow.m_ppBuffer[btBufferId] + btHeadSize;
 
 		// copy buffer
 
@@ -1445,7 +1445,7 @@ SOCKET FxUDPConnectSock::Connect()
 	m_oSendWindow.m_btFreeBufferId = m_oSendWindow.m_ppBuffer[btBufferId][0];
 
 	// send window buffer
-	unsigned char * pBuffer = m_oSendWindow.m_ppBuffer[btBufferId];
+	//unsigned char * pBuffer = m_oSendWindow.m_ppBuffer[btBufferId];
 
 	UDPPacketHeader oUDPPacketHeader;
 	oUDPPacketHeader.m_cSyn = m_oSendWindow.m_btEnd;
@@ -1577,7 +1577,7 @@ ContinuetSend:
 		const unsigned char btHeadSize = sizeof(UDPPacketHeader);
 		unsigned char btId = m_oRecvWindow.m_btBegin % m_oRecvWindow.s_dwWindowSize;
 		unsigned char btBufferId = m_oRecvWindow.m_pSeqBufferId[btId];
-		unsigned char * pBuffer = m_oRecvWindow.m_ppBuffer[btBufferId] + btHeadSize;
+		//unsigned char * pBuffer = m_oRecvWindow.m_ppBuffer[btBufferId] + btHeadSize;
 
 		// copy buffer
 
@@ -2731,9 +2731,6 @@ void FxUDPConnectSock::OnRecv()
 	{
 		m_poRecvBuf->Clear();
 	}
-
-	// current time
-	double dTime = GetTimeHandler()->GetMilliSecond();
 
 	int nUsedLen = 0;
 	int nParserLen = 0;
