@@ -40,7 +40,7 @@ public:
 	{
 		// link buffers
 		m_btFreeBufferId = 0;
-		for (int i = 0; i < s_dwWindowSize; i++)
+		for (unsigned int i = 0; i < s_dwWindowSize; i++)
 			m_ppBuffer[i][0] = i + 1;
 	}
 
@@ -162,17 +162,17 @@ public:
 	virtual bool				PostClose();
 #ifdef WIN32
 	bool						PostRecv();
-	bool						PostRecvFree();
 
 	virtual void				OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred);		// 处理完成端口事件//
 #else
 	virtual void				OnParserIoEvent(int dwEvents);		//  1/4 //
 #endif // WIN32
 
+	virtual void				Update();
+
 private:
 
 	bool						PostSend();
-	bool						PostSendFree();
 	bool						SendImmediately();						// //
 
 	void						__ProcEstablish();
@@ -185,6 +185,7 @@ private:
 	void						__ProcRelease();
 private:
 #ifdef WIN32
+	bool						PostSendFree();
 	void						OnRecv(bool bRet, int dwBytes);
 	void						OnSend(bool bRet, int dwBytes);
 #else
@@ -219,7 +220,6 @@ private:
 	SPerUDPIoData				m_stRecvIoData;
 	SPerUDPIoData				m_stSendIoData;
 	LONG						m_nPostRecv;        // 未决的WSARecv操作数//
-	LONG						m_nPostSend;        // 未决的WSASend操作数/
 
 	UINT32						m_dwLastError;      // 最后的出错信息//
 #else

@@ -35,18 +35,17 @@
 #include <vector>
 
 #include "fxmeta.h"
-#include "hiredis.h"
 
 class	IRedisDataReader
 {
 public:
 	virtual						~IRedisDataReader() {}
 
-	virtual bool				GetValue(std::string& refszValue);
+	virtual bool				GetValue(std::string& refszValue) = 0;
 
-	virtual bool				GetValue(std::vector<std::string>& refszvecValue);
+	virtual bool				GetValue(std::vector<std::string>& refszvecValue) = 0;
 
-	virtual bool				GetValue(long long& refqwValue);
+	virtual bool				GetValue(long long& refqwValue) = 0;
 
 	virtual void				Release(void) = 0;
 };
@@ -57,9 +56,9 @@ class IRedisConnection
 public:
 	virtual						~IRedisConnection() {}
 
-	virtual int					Query(const char* pszSQL) = 0;
+	virtual int					Query(const char* pszCMD) = 0;
 
-	virtual int					Query(const char* pszSQL, IRedisDataReader** ppReader) = 0;
+	virtual int					Query(const char* pszCMD, IRedisDataReader** ppReader) = 0;
 };
 
 class IRedisQuery

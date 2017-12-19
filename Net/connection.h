@@ -1,4 +1,4 @@
-#ifndef __CONNECTION_H__
+﻿#ifndef __CONNECTION_H__
 #define __CONNECTION_H__
 
 #include "ifnet.h"
@@ -59,8 +59,6 @@ public:
 	void						OnSocketDestroy();
 
 	IFxDataHeader*				GetDataHeader();
-
-	void						ForceSend();
 
 private:
 	bool						m_bReconnect;

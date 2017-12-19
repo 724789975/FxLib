@@ -1,8 +1,9 @@
-#ifndef __IOThread_H__
+﻿#ifndef __IOThread_H__
 #define __IOThread_H__
 
 #include "mytcpsock.h"
 #include <vector>
+#include <set>
 #ifdef WIN32
 #else
 #include <sys/epoll.h>
@@ -28,6 +29,9 @@ public:
 	UINT32					GetThreadId();
 	FILE*&					GetFile() { return m_pFile; }
 	const char*				GetLogFile() { return m_szLogPath; }
+
+	void					AddConnectSocket(IFxConnectSocket* pSock);
+	void					DelConnectSocket(IFxConnectSocket* pSock);
 
 #ifdef WIN32
 	bool					AddEvent(int hSock, IFxSocket* poSock);
@@ -67,6 +71,11 @@ protected:
 
 	FILE*					m_pFile;
 	char					m_szLogPath[64];
+
+	//存放udp的连接指针 目前只在udp中用到 每0.01秒发送一次
+	std::set<IFxConnectSocket*>	m_setConnectSockets;
+	//最后一次更新的时间
+	double					m_dLoatUpdateTime;
 };
 
 #endif // __IOThread_H__

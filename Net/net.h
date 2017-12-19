@@ -1,4 +1,4 @@
-#ifndef __NET_H_2009_0825__
+﻿#ifndef __NET_H_2009_0825__
 #define __NET_H_2009_0825__
 
 #include "ifnet.h"
@@ -37,6 +37,8 @@ public:
 
 	bool						PushNetEvent(IFxSocket* poSock, SNetEvent oEvent);
 	FxIoThread*					FetchIoThread(UINT32 dwSockId);
+
+	int							GetThreadCount() { return m_nNetThreadCount; }
 
 private:
 	bool						__CreateComponent();

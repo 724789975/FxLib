@@ -1,4 +1,4 @@
-#include "ifnet.h"
+﻿#include "ifnet.h"
 #include "connection.h"
 #include "net.h"
 #include "connectionmgr.h"
@@ -126,14 +126,6 @@ UINT32 FxSession::GetRemotePort()
 FxConnection* FxSession::GetConnection(void)
 {
 	return m_poConnection;
-}
-
-void FxSession::ForceSend()
-{
-	if (m_poConnection)
-	{
-		m_poConnection->ForceSend();
-	}
 }
 
 bool FxSession::OnDestroy()

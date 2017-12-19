@@ -22,6 +22,8 @@ FxIoThread::FxIoThread()
 	m_dwMaxSock = 0;
 	m_bStop = false;
 	sprintf(m_szLogPath, "./%s_%p_log.txt", GetExeName(), this);
+
+	m_dLoatUpdateTime = 0;
 }
 
 FxIoThread::~FxIoThread()
@@ -105,6 +107,16 @@ UINT32 FxIoThread::GetThreadId()
 		return m_poThrdHandler->GetThreadId();
 	}
 	return 0;
+}
+
+void FxIoThread::AddConnectSocket(IFxConnectSocket* pSock)
+{
+	m_setConnectSockets.insert(pSock);
+}
+
+void FxIoThread::DelConnectSocket(IFxConnectSocket* pSock)
+{
+	m_setConnectSockets.erase(pSock);
 }
 
 void FxIoThread::__DealSock()
@@ -222,7 +234,6 @@ bool FxIoThread::DelEvent(int hSock)
 void FxIoThread::ThrdFunc()
 {
 	ThreadLog(LogLv_Info, GetFile(), GetLogFile(), "thread id %d start", m_poThrdHandler->GetThreadId());
-	int i = 0;
 	while (!m_bStop)
 	{
 		if (!__DealData())
@@ -231,6 +242,24 @@ void FxIoThread::ThrdFunc()
 		}
 
 		__DealSock();
+
+		if (GetTimeHandler()->GetMilliSecond() - m_dLoatUpdateTime >= 0.01)
+		{
+			m_dLoatUpdateTime = GetTimeHandler()->GetMilliSecond();
+			for (std::set<IFxConnectSocket*>::iterator it = m_setConnectSockets.begin();
+				it != m_setConnectSockets.end();)
+			{
+				if ((*it)->IsConnected())
+				{
+					(*it)->Update();
+					++it;
+				}
+				else
+				{
+					m_setConnectSockets.erase(it++);
+				}
+			}
+		}
 
 		FxSleep(1);
 	}
@@ -256,15 +285,12 @@ bool FxIoThread::__DealData()
 			&dwByteTransferred,
 			(PULONG_PTR)&poSock,
 			(LPOVERLAPPED*)&pstPerIoData,
-			INFINITE);
+			0);
 
-		// 
-		if (NULL == poSock)
+		if (poSock)
 		{
-			return false;
+			poSock->OnParserIoEvent((FALSE != bRet), pstPerIoData, dwByteTransferred);
 		}
-
-		poSock->OnParserIoEvent((FALSE != bRet), pstPerIoData, dwByteTransferred);
 	}
 #else
 	while (true)

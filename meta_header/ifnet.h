@@ -164,7 +164,9 @@ public:
 	virtual bool					OnDestroy();
 
 	virtual FxConnection*			GetConnection(void);
+#ifdef WIN32
 	void							ForceSend();//udp中才用的到
+#endif // WIN32
 private:
 	FxConnection*					m_poConnection;
 
@@ -292,6 +294,8 @@ public:
 #else
 	virtual void					OnParserIoEvent(int dwEvents) = 0;		//
 #endif // WIN32
+
+	virtual void					Update() {}
 
 protected:
 	FxConnection*					m_poConnection;

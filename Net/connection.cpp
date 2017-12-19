@@ -1,4 +1,4 @@
-#include "connection.h"
+﻿#include "connection.h"
 #include "mytcpsock.h"
 #include "myudpsock.h"
 #include "sockmgr.h"
@@ -308,14 +308,5 @@ IFxDataHeader* FxConnection::GetDataHeader()
 		return m_poSession->GetDataHeader();
 	}
 	return NULL;
-}
-
-void FxConnection::ForceSend()
-{
-	Assert(m_eSockType == SLT_Udp);
-	if (m_poSock)
-	{
-		m_poSock->OnWrite();
-	}
 }
 

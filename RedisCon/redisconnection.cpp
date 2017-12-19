@@ -2,6 +2,8 @@
 #include "strhelper.h"
 
 FxRedisConnection::FxRedisConnection(void)
+	: m_pRedisContext(NULL)
+	, m_dwPort(0)
 {
 	//m_myConnection = NULL;
 }
