@@ -5,21 +5,6 @@
 
 #include <signal.h>
 
-DEFINE_string(chat_server_ip, "127.0.0.1", "Chat Server Ip");
-DEFINE_uint32(chat_session_port, 20000, "Chat Session Port");
-DEFINE_uint32(chat_web_socket_session, 20001, "Web Socket Session Port");
-DEFINE_uint32(chat_server_session_port, 20002, "Chat Server Session Port");
-DEFINE_string(chat_server_manager_ip, "127.0.0.1", "Chat Server Manager Ip");
-DEFINE_uint32(chat_server_manager_port, 13000, "Chat Server Manager Port");
-
-DEFINE_uint32(db_id, 0, "DB Id");
-DEFINE_uint32(db_port, 3306, "DB Id");
-DEFINE_string(character_set, "utf8", "Character Set");
-DEFINE_string(db_name, "chat", "DB Name");
-DEFINE_string(host_name, "127.0.0.1", "Host Name");
-DEFINE_string(login_name, "test", "Login Name");
-DEFINE_string(login_pwd, "test", "DB PassWord");
-
 bool g_bRun = true;
 
 void EndFun(int n)

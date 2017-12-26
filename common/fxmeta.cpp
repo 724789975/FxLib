@@ -28,14 +28,6 @@
 #include <sys/stat.h>
 #endif // WIN32
 
-#ifndef INFINITE
-#define INFINITE			 0xffffffff
-#endif
-
-#ifndef PATH_MAX
-#define PATH_MAX 256
-#endif
-
 class FxCriticalLock: public IFxLock
 {
 	// Can't be copied
