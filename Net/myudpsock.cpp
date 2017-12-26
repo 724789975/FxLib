@@ -1866,7 +1866,6 @@ bool FxUDPConnectSock::PostSend()
 		if (--m_dAckTimeoutRetry <= 0)
 		{
 			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "ack_timeout_retry <= 0, socket : %d, socket id : %d", GetSock(), GetSockId());
-			Close();
 			return false;
 		}
 	}

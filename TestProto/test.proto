@@ -1,0 +1,5 @@
+message test
+{
+     required int32 id = 1; // ID
+     required string str = 2; // str
+}
