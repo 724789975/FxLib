@@ -164,7 +164,6 @@
     <ClCompile Include="..\common\fxmeta.cpp" />
     <ClCompile Include="..\common\fxtimer.cpp" />
     <ClCompile Include="..\common\log_thread.cpp" />
-    <ClCompile Include="..\common\lua_engine.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
     <ClCompile Include="ChatGroup.cpp" />
     <ClCompile Include="ChatManagerSession.cpp" />
@@ -173,7 +172,6 @@
     <ClCompile Include="ChatServerSession.cpp" />
     <ClCompile Include="ChatSession.cpp" />
     <ClCompile Include="ChatServer.cpp" />
-    <ClCompile Include="LuaMeta.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SocketSession.cpp" />
     <ClCompile Include="utility.cpp" />
@@ -187,7 +185,6 @@
     <ClInclude Include="ChatServerSession.h" />
     <ClInclude Include="ChatSession.h" />
     <ClInclude Include="ChatServer.h" />
-    <ClInclude Include="LuaMeta.h" />
     <ClInclude Include="SocketSession.h" />
     <ClInclude Include="utility.h" />
   </ItemGroup>

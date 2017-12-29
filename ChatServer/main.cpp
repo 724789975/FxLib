@@ -1,5 +1,4 @@
 #include "SocketSession.h"
-#include "lua_engine.h"
 #include "fxtimer.h"
 #include "fxdb.h"
 #include "fxmeta.h"
@@ -49,21 +48,6 @@ int main(int argc, char **argv)
 		return 0;
 	}
 
-	if (!CLuaEngine::CreateInstance())
-	{
-		return 0;
-	}
-	std::vector<ToluaFunctionOpen*> vecFunctions;
-	int tolua_LuaMeta_open(lua_State*);
-	vecFunctions.push_back(tolua_LuaMeta_open);
-	if (!CLuaEngine::Instance()->Init(vecFunctions))
-	{
-		return 0;
-	}
-	if (!CLuaEngine::Instance()->Reload(WORK_PATH))
-	{
-		return 0;
-	}
 	// must define before goto
 	IFxNet* pNet = NULL;
 

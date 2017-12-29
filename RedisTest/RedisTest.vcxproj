@@ -91,7 +91,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../meta_header;../mysql/include;../tolua;../lua;../gflags_win;../Database;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../meta_header;../mysql/include;../gflags_win;../Database;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <SDLCheck>
       </SDLCheck>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -165,7 +165,6 @@
     <ClCompile Include="..\common\fxmeta.cpp" />
     <ClCompile Include="..\common\fxtimer.cpp" />
     <ClCompile Include="..\common\log_thread.cpp" />
-    <ClCompile Include="..\common\lua_engine.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>

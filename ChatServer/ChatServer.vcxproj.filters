@@ -19,13 +19,9 @@
     <ClCompile Include="..\common\log_thread.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\lua_engine.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
     <ClCompile Include="..\common\thread.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="LuaMeta.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SocketSession.cpp" />
     <ClCompile Include="ChatServer.cpp" />
@@ -38,7 +34,6 @@
     <ClCompile Include="ChatGroup.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LuaMeta.h" />
     <ClInclude Include="SocketSession.h" />
     <ClInclude Include="ChatServer.h" />
     <ClInclude Include="ChatServerSession.h" />

@@ -3,7 +3,6 @@
 
 #include "fxtimer.h"
 #include "fxmeta.h"
-#include "lua_engine.h"
 #include "lock.h"
 #ifdef WIN32
 #include <time.h>
