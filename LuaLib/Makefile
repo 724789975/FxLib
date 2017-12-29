@@ -26,31 +26,39 @@ ARFLAGS			= -rc
 #==========================================================
 #  Commands
 CODE_DIR = ./
-INCLUDE_DIR = ./ ../lua/ ../tolua/
+INCLUDE_DIR = ./ ../lua/ ../tolua/ ../meta_header
 LIB_FILE =
 OUTPUT_DIR =../Debug
 OUTPUT = libLuaLib.a
 #==========================================================
 
-OBJS = $(foreach i, $(CODE_DIR), $(shell find $(i) -name "*.c"))
+OBJS = $(foreach i, $(CODE_DIR), $(shell find $(i) -name "*.cpp"))
+COBJS = $(foreach i, $(CODE_DIR), $(shell find $(i) -name "*.c"))
 INCLUDE_FLAG = $(foreach i, $(INCLUDE_DIR), -I$(i))
 
 all:$(OUTPUT)
 
-$(OUTPUT):$(OBJS:.c=.o)
+$(OUTPUT):$(OBJS:.cpp=.o) $(COBJS:.c=.o)
 	@echo Build...$@
-	$(AR) $(ARFLAGS) $(OUTPUT_DIR)/$(OUTPUT) $(OBJS:.c=.o)
+	$(AR) $(ARFLAGS) $(OUTPUT_DIR)/$(OUTPUT) $(OBJS:.cpp=.o) $(COBJS:.c=.o)
 	@$(RANLIB) $(OUTPUT_DIR)/$(OUTPUT)
 
+%.o: %.cpp
+	@echo Compile...$@
+	$(CPP) $(CXX_FLAGS) $(INCLUDE_FLAG) -c $< -o $@ -MMD -MP -MF$(@:%.o=%.d)
+
 %.o: %.c
-#	@echo Compile...$@
+	@echo Compile...$@
 	$(CC) $(C_FLAGS) $(INCLUDE_FLAG) -c $< -o $@ -MMD -MP -MF$(@:%.o=%.d)
 
--include $(OBJS:.c=.d)
+-include $(OBJS:.cpp=.d)
+-include $(COBJS:.c=.d)
 
 clean:
 	rm -f $(OUTPUT_DIR)/$(OUTPUT)
-	rm -f $(OBJS:.c=.o)
-	rm -f $(OBJS:.c=.d)
+	rm -f $(OBJS:.cpp=.o)
+	rm -f $(OBJS:.cpp=.d)
+	rm -f $(COBJS:.c=.o)
+	rm -f $(COBJS:.c=.d)
 	
 	@echo Clean ...done!

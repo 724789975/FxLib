@@ -8,6 +8,7 @@
 
 #include <signal.h>
 
+#define WORK_PATH "scripts"
 #define CLIENTCOUNT 1
 
 char* g_strIp = "127.0.0.1";

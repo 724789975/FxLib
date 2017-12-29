@@ -10,6 +10,8 @@
 
 //#include<getopt.h>
 
+#define WORK_PATH "scripts"
+
 class TestTimer: public IFxTimer
 {
 	virtual bool OnTimer(double fSecond)

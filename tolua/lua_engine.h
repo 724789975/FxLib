@@ -25,22 +25,6 @@ extern "C"
 
 typedef int ToluaFunctionOpen(lua_State*);
 
-#define WORK_PATH "scripts"
-#ifdef	FXN_DLLCLASS
-#ifndef DLLCLASS_DECL
-#define	DLLCLASS_DECL			__declspec(dllimport)
-#endif
-#else
-#ifndef DLLCLASS_DECL
-#define	DLLCLASS_DECL			__declspec(dllexport)
-#endif
-#endif
-
-#ifdef FXN_STATICLIB
-#undef	DLLCLASS_DECL
-#define DLLCLASS_DECL
-#endif
-
 class CLuaEngine : public TSingleton<CLuaEngine>, public ListDirAndLoadFile
 {
 //DECLARE_SINGLETON(CLuaEngine)
