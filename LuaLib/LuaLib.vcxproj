@@ -163,6 +163,7 @@
     <ClCompile Include="ltable.c" />
     <ClCompile Include="ltablib.c" />
     <ClCompile Include="ltm.c" />
+    <ClCompile Include="lua_engine.cpp" />
     <ClCompile Include="lundump.c" />
     <ClCompile Include="lvm.c" />
     <ClCompile Include="lzio.c" />
