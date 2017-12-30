@@ -9,28 +9,11 @@
 const static unsigned int g_dwGMSessionBuffLen = 64 * 1024;
 static char g_pGMSessionBuf[g_dwGMSessionBuffLen];
 
-bool GMGetInfo(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck)
-{
-	pSession->GetInfo(refjReq, refjAck);
-	return true;
-}
-
-bool GMBroadcast(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck)
-{
-	pSession->Broadcast(refjReq, refjAck);
-	return true;
-}
-
-bool GMLoginTest(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck)
-{
-	return pSession->LoginTest(refjReq, refjAck);
-}
-
 GMSession::GMSession()
 {
-	m_mapOperate["get_info"] = GMGetInfo;
-	m_mapOperate["broadcast"] = GMBroadcast;
-	m_mapOperate["login"] = GMLoginTest;
+	m_mapOperate["get_info"] = &GMSession::GetInfo;
+	m_mapOperate["broadcast"] = &GMSession::Broadcast;
+	m_mapOperate["login"] = &GMSession::LoginTest;
 }
 
 GMSession::~GMSession()
@@ -75,7 +58,7 @@ void GMSession::OnRecv(const char* pBuf, UINT32 dwLen)
 			}
 			else
 			{
-				if(!m_mapOperate[szOpCode](this, jReq, jAck))
+				if(!(this->*(m_mapOperate[szOpCode]))(jReq, jAck))
 				{
 					return;
 				}
@@ -101,7 +84,7 @@ void GMSession::Release(void)
 	OnDestroy();
 }
 
-void GMSession::GetInfo(Json::Value& refjReq, Json::Value& refjAck)
+bool GMSession::GetInfo(Json::Value& refjReq, Json::Value& refjAck)
 {
 	ChatServerSessionManager& refSessionManager = ChatServerManager::Instance()->GetChatServerSessionManager();
 	for (int i = 0; i < CHAT_SERVER_NUM; ++i)
@@ -118,27 +101,30 @@ void GMSession::GetInfo(Json::Value& refjReq, Json::Value& refjAck)
 
 		refjAck["info"].append(jInfo);
 	}
+	return true;
 }
 
-void GMSession::Broadcast(Json::Value& refjReq, Json::Value& refjAck)
+bool GMSession::Broadcast(Json::Value& refjReq, Json::Value& refjAck)
 {
 	if (!refjReq["chat_type"].isInt())
 	{
 		refjAck["ret"] = "error chat type";
-		return;
+		return true;
 	}
 	Protocol::EChatType eChatType = (Protocol::EChatType)refjReq["chat_type"].asInt();
 
 	if (!refjReq["content"].isString())
 	{
 		refjAck["ret"] = "error content";
-		return;
+		return true;
 	}
 	std::string szContent = refjReq["content"].asString();
 
 	ChatServerManager::Instance()->GetChatServerSessionManager().BroadcastMsg(eChatType, szContent);
 
 	refjAck["ret"] = "ok";
+
+	return true;
 }
 
 bool GMSession::LoginTest(Json::Value& refjReq, Json::Value& refjAck)

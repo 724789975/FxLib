@@ -8,11 +8,10 @@
 #include "chatdefine.h"
 #include "../json/json.h"
 
-class GMSession;
-typedef bool (*Operate)(GMSession* pSession, Json::Value& refjReq, Json::Value& refjAck);
 class GMSession : public FxSession
 {
 public:
+	typedef bool (GMSession::*Operate)(Json::Value& refjReq, Json::Value& refjAck);
 	GMSession();
 	virtual ~GMSession();
 
@@ -25,8 +24,8 @@ public:
 	virtual UINT32		GetRecvSize() { return 64 * 1024; };
 	virtual IFxDataHeader* GetDataHeader() { return &m_oTextDataHeader; }
 
-	void				GetInfo(Json::Value& refjReq, Json::Value& refjAck);
-	void				Broadcast(Json::Value& refjReq, Json::Value& refjAck);
+	bool				GetInfo(Json::Value& refjReq, Json::Value& refjAck);
+	bool				Broadcast(Json::Value& refjReq, Json::Value& refjAck);
 	bool				LoginTest(Json::Value& refjReq, Json::Value& refjAck);
 	void				OnLoginSign(std::string szChatIp, unsigned int dwChatPort, unsigned int dwWebSocketChatPort, std::string szPlayerId, std::string szSign);
 
