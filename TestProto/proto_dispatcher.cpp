@@ -1,7 +1,7 @@
 #include "proto_dispatcher.h"
 #include "google/protobuf/message.h"
 
-namespace ProtoBufDispatch
+namespace CallBackDispatcher
 {
 	template <typename OwnerType>
 	bool ProtoDispatcherBase<OwnerType>::Dispatch(const std::string& refName, const unsigned char* pData, unsigned int dwSize, OwnerType* pOwner /*= NULL*/)

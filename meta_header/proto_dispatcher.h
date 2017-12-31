@@ -2,6 +2,7 @@
 #define __PROTO_DISPATCHER_H__
 #include <functional>
 #include <map>
+#include "nulltype.h"
 
 namespace google
 {
@@ -12,10 +13,8 @@ namespace google
 	}
 }
 
-namespace ProtoBufDispatch {
-
-	class NullType;
-
+namespace CallBackDispatcher
+{
 	template <typename OwnerType>
 	class ProtobufCallback
 	{

@@ -7,6 +7,7 @@
 #include "SocketSession.h"
 #include "chatdefine.h"
 #include "../json/json.h"
+#include "callback_dispatch.h"
 
 class GMSession : public FxSession
 {
@@ -34,6 +35,9 @@ private:
 	char m_dataRecvBuf[1024 * 1024];
 
 	std::map<std::string, Operate> m_mapOperate;
+
+	typedef CallBackDispatcher::ClassCallBackDispatcher<bool, std::string, GMSession, Json::Value, Json::Value> CallBackDispatch;
+	CallBackDispatch m_oCallBackDispatch;
 };
 
 class GMSessionManager : public IFxSessionFactory

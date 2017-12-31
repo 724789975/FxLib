@@ -10,10 +10,11 @@ const static unsigned int g_dwGMSessionBuffLen = 64 * 1024;
 static char g_pGMSessionBuf[g_dwGMSessionBuffLen];
 
 GMSession::GMSession()
+	:m_oCallBackDispatch(*this)
 {
-	m_mapOperate["get_info"] = &GMSession::GetInfo;
-	m_mapOperate["broadcast"] = &GMSession::Broadcast;
-	m_mapOperate["login"] = &GMSession::LoginTest;
+	m_oCallBackDispatch.RegistFunction("get_info", &GMSession::GetInfo);
+	m_oCallBackDispatch.RegistFunction("broadcast", &GMSession::Broadcast);
+	m_oCallBackDispatch.RegistFunction("login", &GMSession::LoginTest);
 }
 
 GMSession::~GMSession()
@@ -52,13 +53,14 @@ void GMSession::OnRecv(const char* pBuf, UINT32 dwLen)
 		if (jReq["opcode"].isString())
 		{
 			std::string szOpCode = jReq["opcode"].asString();
-			if (m_mapOperate.find(szOpCode) == m_mapOperate.end())
+			CallBackDispatch::CallBackFunction cbf = m_oCallBackDispatch.GetFunction(szOpCode);
+			if (!cbf)
 			{
 				jAck["ret"] = "opcode not found";
 			}
 			else
 			{
-				if(!(this->*(m_mapOperate[szOpCode]))(jReq, jAck))
+				if(!m_oCallBackDispatch.Dispatch(cbf, jReq, jAck))
 				{
 					return;
 				}
