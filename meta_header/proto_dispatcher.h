@@ -3,6 +3,7 @@
 #include <functional>
 #include <map>
 #include "nulltype.h"
+#include "callback_dispatch.h"
 
 namespace google
 {
@@ -109,16 +110,46 @@ namespace CallBackDispatcher
 				new ProtoMessageCallback<MsgType>(refFunc);
 		}
 	};
+
+
+	bool GetMessage(google::protobuf::Message** ppMsg, const google::protobuf::Descriptor** ppDescriptor, const std::string& refszName, const unsigned char* pData, unsigned int dwSize);
+
+	template <class Owner, typename P1>
+	class ProtoCallBackDispatch : public ClassCallBackDispatcher<bool, const google::protobuf::Descriptor*, Owner, P1&, google::protobuf::Message&>
+	{
+		typedef ClassCallBackDispatcher<bool, const google::protobuf::Descriptor*, Owner, P1&, google::protobuf::Message&> BaseType;
+	public:
+		ProtoCallBackDispatch(Owner& refOwner)
+			:ClassCallBackDispatcher(refOwner)
+		{}
+
+		//使用静态函数的目的是为了头文件跟cpp文件的分离
+		inline bool Dispatch(const std::string& refszName, const unsigned char* pData, unsigned int dwSize, Owner* pOwner, P1& refP1)
+		{
+			google::protobuf::Message* pMsg = NULL;
+			const google::protobuf::Descriptor* pDescriptor = NULL;
+			if (!GetMessage(&pMsg, &pDescriptor, refszName, pData, dwSize))
+			{
+				return false;
+			}
+			BaseType::CallBackFunction pFun = GetFunction(pDescriptor);
+			if (pFun == NULL)
+			{
+				delete pMsg;
+				pMsg = NULL;
+				return false;
+			}
+
+			BaseType::Dispatch(pFun, refP1, *pMsg);
+			delete pMsg;
+			pMsg = NULL;
+			return true;
+		}
+	protected:
+	private:
+	};
+
+	
 }
-
-#define	declare_msg_func(msg_type)	\
-	void on_##msg_type(const msg::msg_type &rev)
-
-#define reg_msg_func(dispatcher, handler_classname, msg_type)	\
-	(dispatcher).func_reg< msg::msg_type >(std::bind(&handler_classname::on_##msg_type, this, _1))
-
-
-//#define DISPATCHER_FUNC_HAS_OWNER(dispatcher, msg_type, owner_type, p_instance, func)
-	//(dispatcher).func_reg< msg::msg_type >(Fir::CmdCallback< msg::msg_type, owner_type >::Function((p_instance), &func));
 
 #endif

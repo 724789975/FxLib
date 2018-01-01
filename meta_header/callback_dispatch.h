@@ -13,7 +13,7 @@ namespace CallBackDispatcher
 	class ClassCallBackDispatcher<R, K, Owner, P1, P2>
 	{
 	public:
-		typedef R(Owner::*CallBackFunction)(P1& p1, P2& p2);
+		typedef R(Owner::*CallBackFunction)(P1 p1, P2 p2);
 		ClassCallBackDispatcher(Owner& refOwner) :m_refOwner(refOwner) {}
 		inline bool RegistFunction(K k, CallBackFunction pCallBackFunction)
 		{
@@ -32,7 +32,7 @@ namespace CallBackDispatcher
 			}
 			return m_mapCallBackFuns[k];
 		}
-		inline R Dispatch(CallBackFunction pFun, P1& p1, P2& p2)
+		inline virtual R Dispatch(CallBackFunction pFun, P1 p1, P2 p2)
 		{
 			return (m_refOwner.*pFun)(p1, p2);
 		}
@@ -46,7 +46,7 @@ namespace CallBackDispatcher
 	class ClassCallBackDispatcher<R, K, Owner, P1>
 	{
 	public:
-		typedef R(Owner::*CallBackFunction)(P1& p1);
+		typedef R(Owner::*CallBackFunction)(P1 p1);
 		ClassCallBackDispatcher(Owner& refOwner) :m_refOwner(refOwner) {}
 		inline bool RegistFunction(K k, CallBackFunction pCallBackFunction)
 		{
@@ -65,7 +65,7 @@ namespace CallBackDispatcher
 			}
 			return m_mapCallBackFuns[k];
 		}
-		inline R Dispatch(CallBackFunction pFun, P1& p1)
+		inline virtual R Dispatch(CallBackFunction pFun, P1& p1)
 		{
 			return (m_refOwner.*pFun)(p1);
 		}
@@ -98,7 +98,7 @@ namespace CallBackDispatcher
 			}
 			return m_mapCallBackFuns[k];
 		}
-		inline R Dispatch(CallBackFunction pFun)
+		inline virtual R Dispatch(CallBackFunction pFun)
 		{
 			return (m_refOwner.*pFun)();
 		}

@@ -16,7 +16,7 @@ public:
 	void Test(BBB* a, const test& t1){}
 	void Fun(BBB& a, test& t1){}
 	void Fun1(BBB& a){}
-
+	bool Fun2(BBB& a, google::protobuf::Message& t1) { return false; }
 protected:
 private:
 	int a;
@@ -26,14 +26,12 @@ private:
 int main(int argc, char **argv)
 {
 	AAA ta;
-	CallBackDispatcher::ProtoDispatcher<BBB> aaa(std::string("asdf"));
-	aaa.FuncReg<test>(std::bind(&(AAA::Test), &ta, std::placeholders::_1, std::placeholders::_2));
+	CallBackDispatcher::ProtoCallBackDispatch<AAA, BBB> ta3(ta);
+	//ta3.GetFunction(NULL);
+	ta3.RegistFunction(test::descriptor(), &(AAA::Fun2));
 
-	CallBackDispatcher::ClassCallBackDispatcher<void, std::string, AAA, BBB, test> ta1(ta);
-	ta1.RegistFunction("test", &(AAA::Fun));
-
-	CallBackDispatcher::ClassCallBackDispatcher<void, std::string, AAA, BBB> ta2(ta);
-	ta2.RegistFunction("test", &(AAA::Fun1));
+	BBB b;
+	ta3.Dispatch("test", NULL, 0, NULL, b);
 
 	test ttt;
 	ttt.set_id(123);

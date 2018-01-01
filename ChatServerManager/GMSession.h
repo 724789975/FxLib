@@ -36,7 +36,7 @@ private:
 
 	std::map<std::string, Operate> m_mapOperate;
 
-	typedef CallBackDispatcher::ClassCallBackDispatcher<bool, std::string, GMSession, Json::Value, Json::Value> CallBackDispatch;
+	typedef CallBackDispatcher::ClassCallBackDispatcher<bool, std::string, GMSession, Json::Value&, Json::Value&> CallBackDispatch;
 	CallBackDispatch m_oCallBackDispatch;
 };
 
