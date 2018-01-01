@@ -28,12 +28,6 @@ int main(int argc, char **argv)
 	AAA ta;
 	CallBackDispatcher::ProtoCallBackDispatch<AAA, BBB> ta3(ta);
 	//ta3.GetFunction(NULL);
-	typedef bool (AAA::*F)(BBB& a, google::protobuf::Message& t1);
-
-	//F f;
-	//f = AAA::Fun2;
-
-	bool (AAA::*pf)(BBB& a, google::protobuf::Message& t1) = &AAA::Fun2;
 	ta3.RegistFunction(test::descriptor(), &AAA::Fun2);
 
 	BBB b;
