@@ -43,10 +43,10 @@ int main(int argc, char **argv)
 	gflags::ParseCommandLineFlags(&argc, &argv, false);
 	signal(SIGINT, EndFun);
 	signal(SIGTERM, EndFun);
-	if (!LogThread::CreateInstance())
-	{
-		return 0;
-	}
+	//if (!LogThread::CreateInstance())
+	//{
+	//	return 0;
+	//}
 
 	// must define before goto
 	IFxNet* pNet = NULL;
@@ -56,11 +56,11 @@ int main(int argc, char **argv)
 		return 0;
 	}
 	GetTimeHandler()->Run();
-	if (!LogThread::Instance()->Init())
-	{
-		g_bRun = false;
-		goto STOP;
-	}
+	//if (!LogThread::Instance()->Init())
+	//{
+	//	g_bRun = false;
+	//	goto STOP;
+	//}
 
 	if (!ChatServer::CreateInstance())
 	{
@@ -115,5 +115,6 @@ int main(int argc, char **argv)
 	FxSleep(10);
 	pNet->Release();
 STOP:
-	LogThread::Instance()->Stop();
+	printf("error!!!!!!!!\n");
+	//LogThread::Instance()->Stop();
 }

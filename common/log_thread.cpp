@@ -28,7 +28,7 @@ LogThread::LogThread()
 
 void LogThread::ThrdFunc()
 {
-	LogFun(LT_Screen | LT_File, LogLv_Info, "thread : %d start!!!!!!!!!!!!!!!!!!!", m_poThrdHandler->GetThreadId());
+	LogExe(LogLv_Info, "thread : %d start!!!!!!!!!!!!!!!!!!!", m_poThrdHandler->GetThreadId());
 	while (!m_bStop)
 	{
 		if (m_bPrint)
