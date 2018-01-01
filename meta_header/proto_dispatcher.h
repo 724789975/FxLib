@@ -2,6 +2,7 @@
 #define __PROTO_DISPATCHER_H__
 #include <functional>
 #include <map>
+#include <string>
 #include "nulltype.h"
 #include "callback_dispatch.h"
 
@@ -120,10 +121,9 @@ namespace CallBackDispatcher
 		typedef ClassCallBackDispatcher<bool, const google::protobuf::Descriptor*, Owner, P1&, google::protobuf::Message&> BaseType;
 	public:
 		ProtoCallBackDispatch(Owner& refOwner)
-			:ClassCallBackDispatcher(refOwner)
+			:BaseType(refOwner)
 		{}
 
-		//使用静态函数的目的是为了头文件跟cpp文件的分离
 		inline bool Dispatch(const std::string& refszName, const unsigned char* pData, unsigned int dwSize, Owner* pOwner, P1& refP1)
 		{
 			google::protobuf::Message* pMsg = NULL;
@@ -132,7 +132,7 @@ namespace CallBackDispatcher
 			{
 				return false;
 			}
-			BaseType::CallBackFunction pFun = GetFunction(pDescriptor);
+			typename BaseType::CallBackFunction pFun = BaseType::GetFunction(pDescriptor);
 			if (pFun == NULL)
 			{
 				delete pMsg;
