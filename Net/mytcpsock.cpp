@@ -95,7 +95,7 @@ bool FxTCPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 	}
 	else
 	{
-		stAddr.sin_addr.s_addr = dwIP;
+		stAddr.sin_addr.s_addr = htonl(dwIP);
 	}
 	stAddr.sin_port = htons(wPort);
 
