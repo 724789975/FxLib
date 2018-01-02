@@ -51,12 +51,13 @@ bool ChatServer::Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UIN
 	{
 		return false;
 	}
-	m_pChatSessionListener = pNet->Listen(&m_oChatBinarySessionManager, SLT_CommonTcp, dwIp, m_dwChatSessionPort);
+	//腾讯云没有公网IP 所以只能bind 0
+	m_pChatSessionListener = pNet->Listen(&m_oChatBinarySessionManager, SLT_CommonTcp, 0, m_dwChatSessionPort);
 	if (m_pChatSessionListener  == NULL)
 	{
 		return false;
 	}
-	m_pChatWebSocketSessionListener = pNet->Listen(&m_oChatWebSocketSessionManager, SLT_WebSocket, dwIp, dwChatWebSocketSessionPort);
+	m_pChatWebSocketSessionListener = pNet->Listen(&m_oChatWebSocketSessionManager, SLT_WebSocket, 0, dwChatWebSocketSessionPort);
 	if (m_pChatWebSocketSessionListener == NULL)
 	{
 		return false;
