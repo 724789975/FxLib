@@ -32,14 +32,6 @@ public:
 		for (int i = 0; i < CLIENTCOUNT; ++i)
 		{
 			sprintf(szMsg, "%s....%d......%d.....%d", GetExePath(), g_sSessions[i]->GetRemotePort(), m_i, nLen);
-			if (!g_sSessions[i]->GetConnection())
-			{
-				continue;
-			}
-			if (!g_sSessions[i]->IsConnected())
-			{
-				continue;
-			}
 			if(!g_sSessions[i]->Send(szMsg, 512))
 			{
 				if (!g_sSessions[i]->IsConnected())
