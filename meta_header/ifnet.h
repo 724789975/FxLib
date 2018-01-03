@@ -20,7 +20,7 @@ class IFxDataHeader;
 
 #define LINUX_NETTHREAD_COUNT		3	// linux默认网络线程数,Windows默认采用cpu个数的2倍 现在win下也是2个
 #define MAX_CONNECTION_COUNT		32
-#define MAX_NETEVENT_PERSOCK		1024
+#define MAX_NETEVENT_PERSOCK		32
 // Max socket count
 #define MAX_SOCKET_COUNT			1024*32		// 要比MAX_CONNECTION_COUNT 大
 
