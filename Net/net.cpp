@@ -6,16 +6,16 @@
 
 //IMPLEMENT_SINGLETON(FxNetModule);
 FxNetModule::FxNetModule()
+	: m_pEventQueue(NULL)
+	, m_nNetThreadCount(0)
+	, m_nMaxConnectionCount(MAX_CONNECTION_COUNT)
+	, m_nTotalEventCount(MAX_NETEVENT_PERSOCK * MAX_SOCKET_COUNT)
+	, m_bInit(false)
 {
-    m_nNetThreadCount = 0;
-    m_nMaxConnectionCount = MAX_CONNECTION_COUNT;
-    m_nTotalEventCount = MAX_NETEVENT_PERSOCK * MAX_SOCKET_COUNT;
-    m_bInit = false;
 }
 
 FxNetModule::~FxNetModule()
 {
-
 }
 
 bool FxNetModule::Init()
@@ -72,6 +72,17 @@ bool FxNetModule::__InitComponent()
         return false;
     }
 
+	m_pEventQueue = new TEventQueue<SSockNetEvent>;
+	if (m_pEventQueue == NULL)
+	{
+		return false;
+	}
+
+	if (!m_pEventQueue->Init(m_nTotalEventCount))
+	{
+		return false;
+	}
+
     if (0 >= m_nNetThreadCount)
     {
         m_nNetThreadCount = LINUX_NETTHREAD_COUNT;
@@ -89,9 +100,6 @@ bool FxNetModule::__InitComponent()
       	poEpollHandler->Init(m_nMaxConnectionCount);
 		FxSleep(10);
     }
-
-	m_pEventQueue = new TEventQueue<SSockNetEvent>;
-	m_pEventQueue->Init(m_nTotalEventCount);
 
     return true;
 }
