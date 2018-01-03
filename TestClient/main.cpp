@@ -32,6 +32,16 @@ public:
 		for (int i = 0; i < CLIENTCOUNT; ++i)
 		{
 			sprintf(szMsg, "%s....%d......%d.....%d", GetExePath(), g_sSessions[i]->GetRemotePort(), m_i, nLen);
+			static unsigned int s_dwCheckCount = 0;
+			if (!g_sSessions[i]->IsConnected())
+			{
+				//检查10次 再连不上就断开好了
+				if (++s_dwCheckCount < 10)
+				{
+					continue;
+				}
+			}
+			s_dwCheckCount = 0;
 			if(!g_sSessions[i]->Send(szMsg, 512))
 			{
 				if (!g_sSessions[i]->IsConnected())
