@@ -9,8 +9,8 @@
 unsigned int g_dwPort = 20000;
 bool g_bRun = true;
 
-DEFINE_uint32(tcp_port, 20000, "tcp linten port");
-DEFINE_uint32(udp_port, 20001, "udp linten port");
+DEFINE_uint32(tcp_port, 20001, "tcp linten port");
+DEFINE_uint32(udp_port, 20000, "udp linten port");
 
 void EndFun(int n)
 {
