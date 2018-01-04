@@ -57,7 +57,7 @@ public:
 		{
 			++m_i;
 		}
-		GetTimeHandler()->AddDelayTimer(0.01, this);
+		GetTimeHandler()->AddDelayTimer(0.005, this);
 		return true;
 	}
 	char szMsg[1024];
@@ -137,7 +137,7 @@ int main(int argc, char **argv)
 	{
 		GetTimeHandler()->Run();
 		pNet->Run(0xffffffff);
-		FxSleep(10);
+		FxSleep(1);
 		++j;
 	}
 	for (int i = 0; i < CLIENTCOUNT; ++i)
