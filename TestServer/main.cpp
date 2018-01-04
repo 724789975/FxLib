@@ -9,7 +9,8 @@
 unsigned int g_dwPort = 20000;
 bool g_bRun = true;
 
-DEFINE_uint32(port, 20000, "linten port");
+DEFINE_uint32(tcp_port, 20000, "tcp linten port");
+DEFINE_uint32(udp_port, 20001, "udp linten port");
 
 void EndFun(int n)
 {
@@ -33,8 +34,8 @@ int main(int argc, char **argv)
 
 	// must define before goto
 	IFxNet* pNet = NULL;
-	IFxListenSocket* pListenSocket = NULL;
-
+	IFxListenSocket* pTcpListenSocket = NULL;
+	IFxListenSocket* pUdpListenSocket = NULL;
 
 	if (!GetTimeHandler()->Init())
 	{
@@ -72,10 +73,15 @@ int main(int argc, char **argv)
 	//	LogFun(LT_Screen, LogLv_Info, "%s", "db connected~~~~");
 	//}
 
-	pListenSocket = pNet->Listen(CSessionFactory::Instance(), SLT_Udp, 0, FLAGS_port);
+	pTcpListenSocket = pNet->Listen(CSessionFactory::Instance(), SLT_CommonTcp, 0, FLAGS_tcp_port);
+	if(pTcpListenSocket == NULL)
+	{
+		g_bRun = false;
+		goto STOP;
+	}
 
-	//pNet->TcpConnect(CChatManagerSession::Instance(), inet_addr("127.0.0.1"), 13001, true);
-	if(pListenSocket == NULL)
+	pUdpListenSocket = pNet->Listen(CSessionFactory::Instance(), SLT_Udp, 0, FLAGS_udp_port);
+	if(pUdpListenSocket == NULL)
 	{
 		g_bRun = false;
 		goto STOP;
@@ -88,8 +94,10 @@ int main(int argc, char **argv)
 		//LogFun(LT_Screen, LogLv_Info, "%s", PrintTrace());
 		FxSleep(1);
 	}
-	pListenSocket->StopListen();
-	pListenSocket->Close();
+	pTcpListenSocket->StopListen();
+	pUdpListenSocket->StopListen();
+	pTcpListenSocket->Close();
+	pUdpListenSocket->Close();
 	for (std::set<FxSession*>::iterator it = CSessionFactory::Instance()->m_setSessions.begin();
 		it != CSessionFactory::Instance()->m_setSessions.end(); ++it)
 	{

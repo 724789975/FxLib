@@ -128,7 +128,14 @@ int main(int argc, char **argv)
 	for (int i = 0; i < CLIENTCOUNT; ++i)
 	{
 		g_sSessions[i] = oSessionFactory.CreateSession();
-		pNet->UdpConnect(g_sSessions[i], dwIP, g_dwPort, true);
+		if (g_dwPort == 20001)
+		{
+			pNet->TcpConnect(g_sSessions[i], dwIP, g_dwPort, true);
+		}
+		else
+		{
+			pNet->UdpConnect(g_sSessions[i], dwIP, g_dwPort, true);
+		}
 	}
 
 	GetTimeHandler()->AddDelayTimer(0.08f, &g_sTimer1);
