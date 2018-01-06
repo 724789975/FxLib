@@ -79,17 +79,17 @@ bool FxRedisClient::AddQuery(IRedisQuery *poDBCommand)
 	return true;
 }
 
-INT32 FxRedisClient::Query(const char* pszSQL)
+INT32 FxRedisClient::Query(const char* pszCMD)
 {
 	if (false == m_bDbOK)
 	{
 		return -1;
 	}
 
-	return m_poMySqlConn->Query(pszSQL);
+	return m_poMySqlConn->Query(pszCMD);
 }
 
-INT32 FxRedisClient::Query(const char* pszSQL, IRedisDataReader **ppReader)
+INT32 FxRedisClient::Query(const char* pszCMD, IRedisDataReader **ppReader)
 {
     if (NULL != *ppReader)
     {
@@ -109,7 +109,7 @@ INT32 FxRedisClient::Query(const char* pszSQL, IRedisDataReader **ppReader)
     }
     *ppReader = poReader;
 
-	INT32 nRetCode = m_poMySqlConn->Query( pszSQL, *poReader);
+	INT32 nRetCode = m_poMySqlConn->Query( pszCMD, *poReader);
 
 	if(-1 == nRetCode)
 	{
