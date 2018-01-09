@@ -10,38 +10,31 @@
   <Class Name="FxNet.FxUdpClientSocket">
     <Position X="2.5" Y="9.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAAAAEAAAAAAAAAAAAIABAAAAAIAAAAAAAAIAAAA=</HashCode>
       <FileName>FxUdpClientSocket.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="FxNet.FxTcpClientSocket">
-    <Position X="4.25" Y="9.5" Width="1.5" />
+    <Position X="4.5" Y="9.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAEAAAAAAAAAAAAAAIABAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAQAAAEAEAAAAAAAAAAAAIABAAAAAIAAAAAAAAIAAAA=</HashCode>
       <FileName>FxTcpClientSocket.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="FxNet.FxNetModule">
     <Position X="0.5" Y="9.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAABAAAAAAAAAAARACAAAAACEBAAAAI=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAABAAAAAAAAAAAAACAAAAACEBAAAAI=</HashCode>
       <FileName>FxNetModule.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="FxNet.FxClientSocket">
-    <Position X="3.25" Y="1.75" Width="1.5" />
+    <Position X="3" Y="1.75" Width="1.5" />
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
-    <NestedTypes>
-      <Class Name="FxNet.FxClientSocket.StateObject">
-        <TypeIdentifier>
-          <NewMemberFileName>FxClientSocket.cs</NewMemberFileName>
-        </TypeIdentifier>
-      </Class>
-    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAQACAAAHAAABABAAEAAAIAJAAAFAAAQAAACAAKgAAA=</HashCode>
+      <HashCode>AAQACAAQHAAABABAAEAAgIAJCAAFAIAQAAAGAAKgAAA=</HashCode>
       <FileName>FxClientSocket.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -50,6 +43,13 @@
     <TypeIdentifier>
       <HashCode>AAAABAAAAAAAAAAAACAAAAAAAAAAAAAAQAAAAAAAAAQ=</HashCode>
       <FileName>TSingleton.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FxNet.DataBuffer">
+    <Position X="8.25" Y="10.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAEAYAABAQAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataBuffer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Struct Name="FxNet.SNetEvent" Collapsed="true">

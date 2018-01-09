@@ -49,16 +49,17 @@ namespace FxNet
 
 				OnConnect();
 			}
-			catch (SocketException ex)
+			catch (SocketException e)
 			{
 				SNetEvent pEvent = new SNetEvent();
 				pEvent.eType = ENetEvtType.NETEVT_ERROR;
+				pEvent.dwValue = (UInt32)e.SocketErrorCode;
 				FxNetModule.Instance().PushNetEvent(this, pEvent);
 				Disconnect();
 			}
 		}
 
-		internal override void OnSend(int bytesSent)
+		internal override void OnSend(UInt32 bytesSent)
 		{
 			throw new NotImplementedException();
 		}
@@ -73,7 +74,13 @@ namespace FxNet
 			throw new NotImplementedException();
 		}
 
-		internal override void OnRecv(byte[] buffer, int bytesRead)
+		internal override void OnRecv(byte[] buffer, UInt32 bytesRead)
+		{
+			m_pRecvBuffer.PushData(buffer, bytesRead);
+			//todo 判断包长 达到一定长度 将其加入处理队列
+		}
+
+		protected override bool CreateSocket(AddressFamily pAddressFamily)
 		{
 			throw new NotImplementedException();
 		}

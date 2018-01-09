@@ -9,22 +9,23 @@ namespace FxNet
 {
 	public abstract class FxClientSocket
 	{
-		public class StateObject
-		{
-			public Socket workSocket = null;
-			public const int BUFFER_SIZE = 64 * 1024;
-			public byte[] buffer = new byte[BUFFER_SIZE];
-		}
 		protected Socket m_hSocket;
 		protected bool m_bReconnect;
 		protected string m_szIp;
 		protected int m_nPort;
+		public const int BUFFER_SIZE = 64 * 1024;
+		public byte[] m_pDataBuffer;
+		protected DataBuffer m_pRecvBuffer;
+		protected DataBuffer m_pSendBuffer;
 
 		public bool Init(string szIp, int nPort, bool bReconnect)
 		{
 			m_szIp = szIp;
 			m_nPort = nPort;
 			m_bReconnect = bReconnect;
+			m_pDataBuffer = new byte[BUFFER_SIZE];
+			m_pRecvBuffer = new DataBuffer();
+			m_pSendBuffer = new DataBuffer();
 			return true;
 		}
 
@@ -42,11 +43,7 @@ namespace FxNet
 
 		public abstract void Connect();
 
-		protected virtual bool CreateSocket(AddressFamily pAddressFamily)
-		{
-			throw new NotImplementedException();
-		}
-
+		protected abstract bool CreateSocket(AddressFamily pAddressFamily);
 	
 		public void OnConnect()
 		{
@@ -68,7 +65,7 @@ namespace FxNet
 				FxClientSocket pClientSocket = (FxClientSocket)ar.AsyncState;
 				// Complete sending the data to the remote device.     
 				int bytesSent = pClientSocket.m_hSocket.EndSend(ar);
-				OnSend(bytesSent);
+				OnSend((UInt32)bytesSent);
 			}
 			catch (SocketException e)
 			{
@@ -89,17 +86,15 @@ namespace FxNet
 			}
 		}
 
-		internal abstract void OnSend(int bytesSent);
+		internal abstract void OnSend(UInt32 bytesSent);
 
 		private void Receive()
 		{
 			try
 			{
 				// Create the state object.     
-				StateObject state = new StateObject();
-				state.workSocket = m_hSocket;
 				// Begin receiving the data from the remote device.     
-				m_hSocket.BeginReceive(state.buffer, 0, StateObject.BUFFER_SIZE, 0, new AsyncCallback(ReceiveCallback), state);
+				m_hSocket.BeginReceive(m_pDataBuffer, 0, (int)m_pRecvBuffer.GetFreeLength(), 0, new AsyncCallback(ReceiveCallback), this);
 			}
 			catch(SocketException e)
 			{
@@ -125,10 +120,9 @@ namespace FxNet
 			{
 				// Retrieve the state object and the client socket     
 				// from the asynchronous state object.     
-				StateObject state = (StateObject)ar.AsyncState;
-				Socket client = state.workSocket;
+				//FxClientSocket pSocket = (FxClientSocket)ar.AsyncState;
 				// Read data from the remote device.     
-				int bytesRead = client.EndReceive(ar);
+				int bytesRead = m_hSocket.EndReceive(ar);
 				if (bytesRead < 0)
 				{
 					SNetEvent pEvent = new SNetEvent();
@@ -143,9 +137,9 @@ namespace FxNet
 					return;
 				}
 				// There might be more data, so store the data received so far.     
-				OnRecv(state.buffer, bytesRead);
+				OnRecv(m_pDataBuffer, (UInt32)bytesRead);
 				// Get the rest of the data.     
-				client.BeginReceive(state.buffer, 0, StateObject.BUFFER_SIZE, 0, new AsyncCallback(ReceiveCallback), state);
+				m_hSocket.BeginReceive(m_pDataBuffer, 0, (int)m_pRecvBuffer.GetFreeLength(), 0, new AsyncCallback(ReceiveCallback), this);
 			}
 			catch (SocketException e)
 			{
@@ -161,7 +155,7 @@ namespace FxNet
 			}
 		}
 
-		internal abstract void OnRecv(byte[] buffer, int bytesRead);
+		internal abstract void OnRecv(byte[] buffer, UInt32 bytesRead);
 
 		public void Disconnect()
 		{

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net;
+using System.Net.Sockets;
 
 namespace FxNet
 {
@@ -23,12 +25,16 @@ namespace FxNet
 			throw new NotImplementedException();
 		}
 
-		internal override void OnRecv(byte[] buffer, int bytesRead)
+		internal override void OnRecv(byte[] buffer, UInt32 bytesRead)
+		{
+			throw new NotImplementedException();
+		}
+		internal override void OnSend(UInt32 bytesSent)
 		{
 			throw new NotImplementedException();
 		}
 
-		internal override void OnSend(int bytesSent)
+		protected override bool CreateSocket(AddressFamily pAddressFamily)
 		{
 			throw new NotImplementedException();
 		}
