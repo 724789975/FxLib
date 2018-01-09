@@ -13,8 +13,7 @@ namespace test
 		{ }
         static void Main(string[] args)
         {
-			Program p = new Program();
-			Thread t = new Thread(p.fun);
+			FxNet.FxTcpClientSocket tcp = new FxNet.FxTcpClientSocket();
         }
     }
 }

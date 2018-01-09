@@ -32,7 +32,6 @@ namespace FxNet
 
 	public class FxNetModule : TSingleton<FxNetModule>
 	{
-
 		public bool Init()
 		{
 			m_pEventQueue = new List<SSockNetEvent>();
@@ -50,14 +49,6 @@ namespace FxNet
 			return false;
 		}
 		public void Release() { }
-
-		public FxTcpClientSocket TcpConnect(string szIP, UInt16 wPort, bool bReconnect = false)
-		{
-			FxTcpClientSocket poSock = new FxTcpClientSocket();
-			return poSock;
-		}
-
-		public FxUdpClientSocket UdpConnect(string szIP, UInt16 wPort, bool bReconnect = false) { return null; }
 
 		public bool Uninit() { return false; }
 

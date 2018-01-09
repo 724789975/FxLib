@@ -1,42 +1,52 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="FxNet.IoThread">
-    <Position X="4.5" Y="4.5" Width="1.5" />
+    <Position X="6" Y="6.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAEAAAAAACAAAAIBAAAAIAAAgAAAAAAAoACCAAAAACA=</HashCode>
       <FileName>IoThread.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="FxNet.FxUdpClientSocket" Collapsed="true">
-    <Position X="1" Y="3" Width="1.5" />
+  <Class Name="FxNet.FxUdpClientSocket">
+    <Position X="2.5" Y="9.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>FxUdpClientSocket.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="FxNet.FxTcpClientSocket" Collapsed="true">
-    <Position X="3" Y="3" Width="1.5" />
+  <Class Name="FxNet.FxTcpClientSocket">
+    <Position X="4.25" Y="9.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAEAAAAAAAAAAAAAAIABAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>FxTcpClientSocket.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="FxNet.FxNetModule" Collapsed="true">
-    <Position X="1" Y="6.25" Width="1.5" />
+  <Class Name="FxNet.FxNetModule">
+    <Position X="0.5" Y="9.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAABAAAAAAAAAAARACAAAAACEBAAAAI=</HashCode>
       <FileName>FxNetModule.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="FxNet.FxClientSocket" Collapsed="true">
-    <Position X="2" Y="1.75" Width="1.5" />
+  <Class Name="FxNet.FxClientSocket">
+    <Position X="3.25" Y="1.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Class Name="FxNet.FxClientSocket.StateObject">
+        <TypeIdentifier>
+          <NewMemberFileName>FxClientSocket.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAQAAAAAAAAABABAAAAAAAAIAAABAAAAAAACAAKAAAA=</HashCode>
+      <HashCode>AAQACAAAHAAABABAAEAAAIAJAAAFAAAQAAACAAKgAAA=</HashCode>
       <FileName>FxClientSocket.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="FxNet.TSingleton&lt;T&gt;" Collapsed="true">
-    <Position X="1" Y="5" Width="1.5" />
+  <Class Name="FxNet.TSingleton&lt;T&gt;">
+    <Position X="0.5" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAABAAAAAAAAAAAACAAAAAAAAAAAAAAQAAAAAAAAAQ=</HashCode>
       <FileName>TSingleton.cs</FileName>

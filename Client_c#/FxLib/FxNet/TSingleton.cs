@@ -10,7 +10,7 @@ namespace FxNet
 	{
 		~TSingleton() { }
 		//static volatile T* Instance() { return (T*)(m_pInstance); }
-		static T Instance() { return m_pInstance; }
+		public static T Instance() { return m_pInstance; }
 		static bool CreateInstance()
 		{
 			if (m_pInstance == null)

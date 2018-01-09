@@ -7,63 +7,55 @@ using System.Net.Sockets;
 
 namespace FxNet
 {
-    public abstract class FxClientSocket
+	public abstract class FxClientSocket
 	{
 		public class StateObject
 		{
 			public Socket workSocket = null;
-			public const int BUFFER_SIZE = 1024;
+			public const int BUFFER_SIZE = 64 * 1024;
 			public byte[] buffer = new byte[BUFFER_SIZE];
-			public StringBuilder sb = new StringBuilder();
 		}
-		private Socket m_hSocket;
-		private bool m_bReconnect;
-		private string m_szIp;
-		private int m_nPort;
+		protected Socket m_hSocket;
+		protected bool m_bReconnect;
+		protected string m_szIp;
+		protected int m_nPort;
 
-		public bool Init()
-		{
-            throw new System.NotImplementedException();
-        }
-
-		/// <summary>
-		/// 这个是在线程中执行的 要注意
-		/// </summary>
-		public void Update()
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public bool IsConnected()
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public void ProcEvent(SNetEvent pEvent)
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public void Connect(string szIp, int nPort, bool bReconnect)
+		public bool Init(string szIp, int nPort, bool bReconnect)
 		{
 			m_szIp = szIp;
 			m_nPort = nPort;
 			m_bReconnect = bReconnect;
-			m_hSocket.BeginConnect(m_szIp, m_nPort, new AsyncCallback(ConnectCallback), this);
+			return true;
 		}
 
-		private void ConnectCallback(IAsyncResult ar)
+		/// <summary>
+		/// 这个是在线程中执行的 要注意
+		/// </summary>
+		public abstract void Update();
+
+		public bool IsConnected()
 		{
-			try
-			{
-				FxClientSocket pClientSocket = (FxClientSocket)ar.AsyncState;
-				pClientSocket.m_hSocket.EndConnect(ar);
-			}
-			catch (SocketException ex)
-			{ }
+			return m_hSocket.Connected;
 		}
 
-		private void Send(byte[] byteData)
+		public abstract void ProcEvent(SNetEvent pEvent);
+
+		public abstract void Connect();
+
+		protected virtual bool CreateSocket(AddressFamily pAddressFamily)
+		{
+			throw new NotImplementedException();
+		}
+
+	
+		public void OnConnect()
+		{
+			SNetEvent pEvent = new SNetEvent();
+			pEvent.eType = ENetEvtType.NETEVT_ESTABLISH;
+			FxNetModule.Instance().PushNetEvent(this, pEvent);
+		}
+
+		protected void Send(byte[] byteData)
 		{
 			// Begin sending the data to the remote device.     
 			m_hSocket.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallback), this);
@@ -76,11 +68,28 @@ namespace FxNet
 				FxClientSocket pClientSocket = (FxClientSocket)ar.AsyncState;
 				// Complete sending the data to the remote device.     
 				int bytesSent = pClientSocket.m_hSocket.EndSend(ar);
+				OnSend(bytesSent);
+			}
+			catch (SocketException e)
+			{
+				SNetEvent pEvent = new SNetEvent();
+				pEvent.eType = ENetEvtType.NETEVT_ERROR;
+				pEvent.dwValue = (UInt32)e.SocketErrorCode;
+				FxNetModule.Instance().PushNetEvent(this, pEvent);
+				Disconnect();
+				return;
 			}
 			catch (Exception e)
 			{
+				SNetEvent pEvent = new SNetEvent();
+				pEvent.eType = ENetEvtType.NETEVT_ERROR;
+				FxNetModule.Instance().PushNetEvent(this, pEvent);
+				Disconnect();
+				return;
 			}
 		}
+
+		internal abstract void OnSend(int bytesSent);
 
 		private void Receive()
 		{
@@ -92,11 +101,25 @@ namespace FxNet
 				// Begin receiving the data from the remote device.     
 				m_hSocket.BeginReceive(state.buffer, 0, StateObject.BUFFER_SIZE, 0, new AsyncCallback(ReceiveCallback), state);
 			}
+			catch(SocketException e)
+			{
+				SNetEvent pEvent = new SNetEvent();
+				pEvent.eType = ENetEvtType.NETEVT_ERROR;
+				pEvent.dwValue = (UInt32)e.SocketErrorCode;
+				FxNetModule.Instance().PushNetEvent(this, pEvent);
+				Disconnect();
+				return;
+			}
 			catch (Exception e)
 			{
+				SNetEvent pEvent = new SNetEvent();
+				pEvent.eType = ENetEvtType.NETEVT_ERROR;
+				FxNetModule.Instance().PushNetEvent(this, pEvent);
+				Disconnect();
+				return;
 			}
 		}
-		private static void ReceiveCallback(IAsyncResult ar)
+		private void ReceiveCallback(IAsyncResult ar)
 		{
 			try
 			{
@@ -106,27 +129,92 @@ namespace FxNet
 				Socket client = state.workSocket;
 				// Read data from the remote device.     
 				int bytesRead = client.EndReceive(ar);
-				if (bytesRead > 0)
+				if (bytesRead < 0)
 				{
-					// There might be more data, so store the data received so far.     
-					state.sb.Append(Encoding.ASCII.GetString(state.buffer, 0, bytesRead));
-					// Get the rest of the data.     
-					client.BeginReceive(state.buffer, 0, StateObject.BUFFER_SIZE, 0, new AsyncCallback(ReceiveCallback), state);
+					SNetEvent pEvent = new SNetEvent();
+					pEvent.eType = ENetEvtType.NETEVT_ERROR;
+					FxNetModule.Instance().PushNetEvent(this, pEvent);
+					Disconnect();
+					return;
 				}
-				else
+				if (bytesRead == 0)
 				{
-					// All the data has arrived; put it in response.     
-					if (state.sb.Length > 1)
+					Disconnect();
+					return;
+				}
+				// There might be more data, so store the data received so far.     
+				OnRecv(state.buffer, bytesRead);
+				// Get the rest of the data.     
+				client.BeginReceive(state.buffer, 0, StateObject.BUFFER_SIZE, 0, new AsyncCallback(ReceiveCallback), state);
+			}
+			catch (SocketException e)
+			{
+				SNetEvent pEvent = new SNetEvent();
+				pEvent.eType = ENetEvtType.NETEVT_ERROR;
+				pEvent.dwValue = (UInt32)e.SocketErrorCode;
+				FxNetModule.Instance().PushNetEvent(this, pEvent);
+				Disconnect();
+				return;
+			}
+			catch (Exception e)
+			{
+			}
+		}
+
+		internal abstract void OnRecv(byte[] buffer, int bytesRead);
+
+		public void Disconnect()
+		{
+			if (m_hSocket != null && m_hSocket.Connected)
+			{
+				m_hSocket.Disconnect(false);
+				m_hSocket = null;
+
+				SNetEvent pEvent = new SNetEvent();
+				pEvent.eType = ENetEvtType.NETEVT_TERMINATE;
+				FxNetModule.Instance().PushNetEvent(this, pEvent);
+			}
+		}
+
+		protected void getIPType(String serverIp, int serverPorts, out String newServerIp, out AddressFamily mIPType)
+		{
+			mIPType = AddressFamily.InterNetwork;
+			newServerIp = serverIp;
+			try
+			{
+				string mIPv6 = GetIPv6(serverIp, serverPorts.ToString());
+				if (!string.IsNullOrEmpty(mIPv6))
+				{
+					string[] m_StrTemp = System.Text.RegularExpressions.Regex.Split(mIPv6, "&&");
+					if (m_StrTemp != null && m_StrTemp.Length >= 2)
 					{
-						string response = state.sb.ToString();
+						string IPType = m_StrTemp[1];
+						if (IPType == "ipv6")
+						{
+							newServerIp = m_StrTemp[0];
+							mIPType = AddressFamily.InterNetworkV6;
+						}
 					}
-					client.Close();
 				}
 			}
 			catch (Exception e)
 			{
-				Console.WriteLine(e.ToString());
+				SNetEvent pEvent = new SNetEvent();
+				pEvent.eType = ENetEvtType.NETEVT_ERROR;
+				FxNetModule.Instance().PushNetEvent(this, pEvent);
+				Disconnect();
+				return;
 			}
+		}
+
+		public string GetIPv6(string mHost, string mPort)
+		{
+#if UNITY_IPHONE && !UNITY_EDITOR
+		string mIPv6 = getIPv6(mHost, mPort);
+		return mIPv6;
+#else
+			return mHost + "&&ipv4";
+#endif
 		}
 	}
 }
