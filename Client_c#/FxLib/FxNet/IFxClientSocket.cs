@@ -44,18 +44,18 @@ namespace FxNet
 		public abstract void Connect();
 
 		protected abstract bool CreateSocket(AddressFamily pAddressFamily);
-	
-		public void OnConnect()
-		{
-			SNetEvent pEvent = new SNetEvent();
-			pEvent.eType = ENetEvtType.NETEVT_ESTABLISH;
-			FxNetModule.Instance().PushNetEvent(this, pEvent);
-		}
 
-		protected void Send(byte[] byteData)
+		public abstract void OnConnect();
+		//{
+		//	SNetEvent pEvent = new SNetEvent();
+		//	pEvent.eType = ENetEvtType.NETEVT_ESTABLISH;
+		//	FxNetModule.Instance().PushNetEvent(this, pEvent);
+		//}
+
+		protected void Send(byte[] byteData, UInt32 dwLen)
 		{
 			// Begin sending the data to the remote device.     
-			m_hSocket.BeginSend(byteData, 0, byteData.Length, 0, new AsyncCallback(SendCallback), this);
+			m_hSocket.BeginSend(byteData, 0, (int)dwLen, 0, new AsyncCallback(SendCallback), this);
 		}
 		private void SendCallback(IAsyncResult ar)
 		{
@@ -80,6 +80,7 @@ namespace FxNet
 			{
 				SNetEvent pEvent = new SNetEvent();
 				pEvent.eType = ENetEvtType.NETEVT_ERROR;
+				pEvent.dwValue = (UInt32)e.HResult;
 				FxNetModule.Instance().PushNetEvent(this, pEvent);
 				Disconnect();
 				return;
@@ -88,7 +89,7 @@ namespace FxNet
 
 		internal abstract void OnSend(UInt32 bytesSent);
 
-		private void Receive()
+		protected void Receive()
 		{
 			try
 			{
@@ -109,6 +110,7 @@ namespace FxNet
 			{
 				SNetEvent pEvent = new SNetEvent();
 				pEvent.eType = ENetEvtType.NETEVT_ERROR;
+				pEvent.dwValue = (UInt32)e.HResult;
 				FxNetModule.Instance().PushNetEvent(this, pEvent);
 				Disconnect();
 				return;
@@ -152,6 +154,12 @@ namespace FxNet
 			}
 			catch (Exception e)
 			{
+				SNetEvent pEvent = new SNetEvent();
+				pEvent.eType = ENetEvtType.NETEVT_ERROR;
+				pEvent.dwValue = (UInt32)e.HResult;
+				FxNetModule.Instance().PushNetEvent(this, pEvent);
+				Disconnect();
+				return;
 			}
 		}
 
@@ -195,6 +203,7 @@ namespace FxNet
 			{
 				SNetEvent pEvent = new SNetEvent();
 				pEvent.eType = ENetEvtType.NETEVT_ERROR;
+				pEvent.dwValue = (UInt32)e.HResult;
 				FxNetModule.Instance().PushNetEvent(this, pEvent);
 				Disconnect();
 				return;

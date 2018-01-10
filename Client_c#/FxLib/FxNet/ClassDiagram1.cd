@@ -10,14 +10,21 @@
   <Class Name="FxNet.FxUdpClientSocket">
     <Position X="2.5" Y="9.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAEAAAAAAAAAAAAIABAAAAAIAAAAAAAAIAAAA=</HashCode>
+      <HashCode>AAQAAAAAEAAAAAAAAEAAAIABAAAAAIAAAAAAAAIAAAA=</HashCode>
       <FileName>FxUdpClientSocket.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="FxNet.FxTcpClientSocket">
     <Position X="4.5" Y="9.75" Width="1.5" />
+    <NestedTypes>
+      <Enum Name="FxNet.FxTcpClientSocket.SendState" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>FxTcpClientSocket.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAQAAAEAEAAAAAAAAAAAAIABAAAAAIAAAAAAAAIAAAA=</HashCode>
+      <HashCode>AARAAAEAEAAAAAAAAAAAAIABAAAAAIAAAAAAAAIAAAA=</HashCode>
       <FileName>FxTcpClientSocket.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -46,9 +53,26 @@
     </TypeIdentifier>
   </Class>
   <Class Name="FxNet.DataBuffer">
-    <Position X="8.25" Y="10.75" Width="1.5" />
+    <Position X="8" Y="10.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAEAAAAEAYAABAQAAAAAAAAAAAAAQAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAEAAAAEAYAABAQAAAAAAAAAAAAIQAAAAAAAAAAAAA=</HashCode>
+      <FileName>DataBuffer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FxNet.NetStream">
+    <Position X="1.25" Y="13" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <NestedTypes>
+      <Enum Name="FxNet.NetStream.ENetStreamType">
+        <TypeIdentifier>
+          <NewMemberFileName>DataBuffer.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAQAAAABADAAQgAQgAAAAIBgAEAgARACgAABAAA=</HashCode>
       <FileName>DataBuffer.cs</FileName>
     </TypeIdentifier>
   </Class>

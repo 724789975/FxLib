@@ -38,5 +38,10 @@ namespace FxNet
 		{
 			throw new NotImplementedException();
 		}
+
+		public override void OnConnect()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

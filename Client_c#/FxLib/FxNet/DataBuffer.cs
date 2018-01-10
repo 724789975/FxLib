@@ -20,6 +20,7 @@ namespace FxNet
 		public byte[] GetData() { return m_pData; }
 
 		public UInt32 GetFreeLength() { return MAX_DATA_LENGTH - m_dwUsedLength; }
+		public UInt32 GetUsedLength() { return m_dwUsedLength; }
 
 		public bool PushData(byte[] byteData, UInt32 dwDataLen)
 		{
@@ -56,6 +57,20 @@ namespace FxNet
 			}
 		}
 
+		public bool PopData(UInt32 dwLen)
+		{
+			if (m_dwUsedLength < dwLen)
+			{
+				return false;
+			}
+			lock (m_obj)
+			{
+				m_dwUsedLength -= dwLen;
+				Array.Copy(m_pData, dwLen, m_pData, 0, m_dwUsedLength);
+				return true;
+			}
+		}
+
 		public const UInt32 MAX_DATA_LENGTH = 64 * 1024;
 		byte[] m_pData;
 
@@ -64,7 +79,7 @@ namespace FxNet
 	}
 
 
-	public class CNetStream
+	public class NetStream
 	{
 		public enum ENetStreamType
 		{
@@ -72,7 +87,7 @@ namespace FxNet
 			ENetStreamType_Read,
 			ENetStreamType_Write,
 		}
-		CNetStream(ENetStreamType eType, byte[] pData, UInt32 dwLen)
+		NetStream(ENetStreamType eType, byte[] pData, UInt32 dwLen)
 		{
 			m_eType = eType;
 			m_pData = pData;
@@ -97,7 +112,7 @@ namespace FxNet
 			}
 
 		}
-		CNetStream(byte[] pData, UInt32 dwLen)
+		NetStream(byte[] pData, UInt32 dwLen)
 		{
 			m_eType = ENetStreamType.ENetStreamType_Read;
 			m_pData = pData;
@@ -105,166 +120,82 @@ namespace FxNet
 			MemoryStream ms = new MemoryStream(pData, 0, (int)dwLen);
 			m_pReader = new BinaryReader(ms);
 		}
-		~CNetStream() { }
-
-		UInt32 GetDataLength() { return m_dwLen; }
+		~NetStream() { }
 
 		bool ReadData(ref byte[] pData, UInt32 dwLen)
 		{
-			//assert(m_eType == ENetStreamType_Read);
-			//if (dwLen > m_dwLen)
-			//{
-			//	return NULL;
-			//}
-			//byte[] pTemp = m_pData;
-			//m_pData += dwLen;
-			//m_dwLen -= dwLen;
-			//return pTemp;
+			pData = m_pReader.ReadBytes((int)dwLen);
+			m_dwLen -= dwLen;
 			return true;
 		}
 
 		bool ReadByte(ref byte cData)
 		{
-			//byte[] pData = ReadData(sizeof(cData));
-			//if (!pData)
-			//{
-			//	return false;
-			//}
-			//memcpy(&cData, pData, sizeof(cData));
+			cData = m_pReader.ReadByte();
+			m_dwLen -= 1;
 			return true;
 		}
 
 		bool ReadShort(ref Int16 wData)
 		{
-			//byte[] pData = ReadData(sizeof(wData));
-			//if (!pData)
-			//{
-			//	return false;
-			//}
-			//memcpy(&wData, pData, sizeof(wData));
-			//wData = ntohs(wData);
+			wData = m_pReader.ReadInt16();
+			m_dwLen -= 2;
 			return true;
 		}
 
 		bool ReadShort(ref UInt16 wData)
 		{
-			//byte[] pData = ReadData(sizeof(wData));
-			//if (!pData)
-			//{
-			//	return false;
-			//}
-			//memcpy(&wData, pData, sizeof(wData));
-			//wData = ntohs(wData);
+			wData = m_pReader.ReadUInt16();
+			m_dwLen -= 2;
 			return true;
 		}
 
 		bool ReadInt(ref Int32 dwData)
 		{
-			//byte[] pData = ReadData(sizeof(dwData));
-			//if (!pData)
-			//{
-			//	return false;
-			//}
-			//memcpy(&dwData, pData, sizeof(dwData));
-			//dwData = ntohl(dwData);
+			dwData = m_pReader.ReadInt32();
+			m_dwLen -= 4;
 			return true;
 		}
 
 		bool ReadInt(ref UInt32 dwData)
 		{
-			//byte[] pData = ReadData(sizeof(dwData));
-			//if (!pData)
-			//{
-			//	return false;
-			//}
-			//memcpy(&dwData, pData, sizeof(dwData));
-			//dwData = ntohl(dwData);
+			dwData = m_pReader.ReadUInt32();
+			m_dwLen -= 4;
 			return true;
 		}
 
 		bool ReadInt64(ref Int64 llData)
 		{
-			//byte[] pData = ReadData(sizeof(llData));
-			//if (!pData)
-			//{
-			//	return false;
-			//}
-			//memcpy(&llData, pData, sizeof(llData));
-			//union ByteOrder
-			//         {
-			//	unsigned short wByte;
-			//	unsigned char ucByte[2];
-			//};
-			//static const short wByte = 0x0102;
-			//static const ByteOrder&oByteOrder = (ByteOrder &)wByte;
-			//if (oByteOrder.ucByte[0] != 0x01)
-			//{
-			//	// 小端
-			//	llData = (long long)htonl((int)(llData >> 32)) | ((long long)htonl((int)llData) << 32);
-			//}
+			llData = m_pReader.ReadInt64();
+			m_dwLen -= 8;
 			return true;
 		}
 
 		bool ReadInt64(ref UInt64 ullData)
 		{
-			//byte[] pData = ReadData(sizeof(ullData));
-			//if (!pData)
-			//{
-			//	return false;
-			//}
-			//memcpy(&ullData, pData, sizeof(ullData));
-			//union ByteOrder
-			//         {
-			//	unsigned short wByte;
-			//	unsigned char ucByte[2];
-			//};
-			//static const short wByte = 0x0102;
-			//static const ByteOrder&oByteOrder = (ByteOrder &)wByte;
-			//if (oByteOrder.ucByte[0] != 0x01)
-			//{
-			//	// 小端
-			//	ullData = (unsigned long long)htonl((int)(ullData >> 32)) | ((unsigned long long)htonl((int)ullData) << 32);
-			//}
+			ullData = m_pReader.ReadUInt64();
+			m_dwLen -= 8;
 			return true;
 		}
 
-		bool ReadFloat(float fData)
+		bool ReadFloat(ref float fData)
 		{
-			//int dwFloat = 0;
-			//if (!ReadInt(dwFloat))
-			//{
-			//	return false;
-			//}
-			//fData = dwFloat / 256.0f;
+			int dwFloat = m_pReader.ReadInt32();
+			fData = dwFloat / 256.0f;
 			return true;
-		}
-
-		byte[] GetData(UInt32 dwLen)
-		{
-			//assert(m_eType == ENetStreamType_Read);
-			//if (dwLen <= m_dwLen)
-			//{
-			//	return m_pData;
-			//}
-			return null;
 		}
 
 		bool WriteData(byte[] pData, UInt32 dwLen)
 		{
-			//assert(m_eType == ENetStreamType_Write);
-			//if (dwLen > m_dwLen)
-			//{
-			//	return false;
-			//}
-			//memcpy(m_pData, pData, dwLen);
-			//m_pData += dwLen;
-			//m_dwLen -= dwLen;
+			m_pWrite.Write(pData, 0, (int)dwLen);
+			m_dwLen -= dwLen;
 			return true;
 		}
 
 		bool WriteByte(byte cData)
 		{
-			//return WriteData(cData, sizeof(byte));
+			m_pWrite.Write(cData);
+			m_dwLen -= 1;
 			return true;
 		}
 
@@ -272,6 +203,7 @@ namespace FxNet
 		{
 			wData = IPAddress.HostToNetworkOrder(wData);
 			m_pWrite.Write(wData);
+			m_dwLen -= 2;
 			return true;
 		}
 
@@ -284,6 +216,7 @@ namespace FxNet
 		{
 			dwData = IPAddress.HostToNetworkOrder(dwData);
 			m_pWrite.Write(dwData);
+			m_dwLen -= 4;
 			return true;
 		}
 
@@ -296,6 +229,7 @@ namespace FxNet
 		{
 			llData = IPAddress.HostToNetworkOrder(llData);
 			m_pWrite.Write(llData);
+			m_dwLen -= 8;
 			return true;
 		}
 
@@ -308,6 +242,12 @@ namespace FxNet
 		{
 			Int32 nData = (Int32)(fData * 256);
 			return WriteInt(nData);
+		}
+
+		bool WriteString(string szData)
+		{
+			byte[] pData = Encoding.UTF8.GetBytes(szData);
+			return WriteData(pData, (UInt32)pData.Length);
 		}
 
 		ENetStreamType m_eType;

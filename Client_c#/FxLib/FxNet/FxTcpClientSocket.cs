@@ -10,6 +10,13 @@ namespace FxNet
 {
 	public class FxTcpClientSocket : IFxClientSocket
     {
+		enum SendState
+		{
+			SendState_None,
+			//SnedState_NeedSend,			//主线程修改为这个状态 表示需要发送
+			SnedState_Idle,				//发送静止
+			SnedState_Sending,			//正在发送中
+		}
 		public override void Connect()
 		{
 			Disconnect();
@@ -36,6 +43,7 @@ namespace FxNet
 			{
 				SNetEvent pEvent = new SNetEvent();
 				pEvent.eType = ENetEvtType.NETEVT_ERROR;
+				pEvent.dwValue = (UInt32)e.HResult;
 				FxNetModule.Instance().PushNetEvent(this, pEvent);
 				Disconnect();
 			}
@@ -61,12 +69,28 @@ namespace FxNet
 
 		internal override void OnSend(UInt32 bytesSent)
 		{
-			throw new NotImplementedException();
+			m_pSendBuffer.PopData(bytesSent);
+			if (m_pSendBuffer.GetUsedLength() == 0)
+			{
+				m_eSendState = SendState.SnedState_Idle;
+			}
+			else
+			{
+				m_eSendState = SendState.SnedState_Sending;
+				Send(m_pSendBuffer.GetData(), m_pSendBuffer.GetUsedLength());
+			}
 		}
 
 		public override void Update()
 		{
-			throw new NotImplementedException();
+			if (m_eSendState == SendState.SnedState_Idle)
+			{
+				if (m_pSendBuffer.GetUsedLength() > 0)
+				{
+					m_eSendState = SendState.SnedState_Sending;
+					Send(m_pSendBuffer.GetData(), m_pSendBuffer.GetUsedLength());
+				}
+			}
 		}
 
 		public override void ProcEvent(SNetEvent pEvent)
@@ -84,5 +108,16 @@ namespace FxNet
 		{
 			throw new NotImplementedException();
 		}
+
+		public override void OnConnect()
+		{
+			SNetEvent pEvent = new SNetEvent();
+			pEvent.eType = ENetEvtType.NETEVT_ESTABLISH;
+			FxNetModule.Instance().PushNetEvent(this, pEvent);
+
+			Receive();
+		}
+
+		SendState m_eSendState = SendState.SnedState_Idle;
 	}
 }
