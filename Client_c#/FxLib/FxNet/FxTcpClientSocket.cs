@@ -115,7 +115,7 @@ namespace FxNet
 			pEvent.eType = ENetEvtType.NETEVT_ESTABLISH;
 			FxNetModule.Instance().PushNetEvent(this, pEvent);
 
-			Receive();
+			//Receive();		//这是在主线程 所以不能receive
 		}
 
 		SendState m_eSendState = SendState.SnedState_Idle;
