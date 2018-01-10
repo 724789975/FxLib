@@ -7,7 +7,7 @@ using System.Net.Sockets;
 
 namespace FxNet
 {
-	public abstract class FxClientSocket
+	public abstract class IFxClientSocket
 	{
 		protected Socket m_hSocket;
 		protected bool m_bReconnect;
@@ -62,7 +62,7 @@ namespace FxNet
 			try
 			{
 				// Retrieve the socket from the state object.     
-				FxClientSocket pClientSocket = (FxClientSocket)ar.AsyncState;
+				IFxClientSocket pClientSocket = (IFxClientSocket)ar.AsyncState;
 				// Complete sending the data to the remote device.     
 				int bytesSent = pClientSocket.m_hSocket.EndSend(ar);
 				OnSend((UInt32)bytesSent);

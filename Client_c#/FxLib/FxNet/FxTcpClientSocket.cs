@@ -8,7 +8,7 @@ using System.Net.Sockets;
 
 namespace FxNet
 {
-	public class FxTcpClientSocket : FxClientSocket
+	public class FxTcpClientSocket : IFxClientSocket
     {
 		public override void Connect()
 		{
