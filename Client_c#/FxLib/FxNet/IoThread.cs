@@ -12,7 +12,7 @@ namespace FxNet
 		{
 			while (!m_bStop)
 			{
-				foreach (FxClientSocket poSock in m_setConnectSockets)
+				foreach (IFxClientSocket poSock in m_setConnectSockets)
 				{
 					if (poSock.IsConnected())
 					{
@@ -32,7 +32,7 @@ namespace FxNet
 		public bool Init()
 		{
 			m_pLock = new object();
-			m_setConnectSockets = new HashSet<FxClientSocket>();
+			m_setConnectSockets = new HashSet<IFxClientSocket>();
 			m_poThrdHandler = new Thread(new ThreadStart(this.ThrdFunc));
 			m_bStop = false;
 			return true;
@@ -43,7 +43,7 @@ namespace FxNet
 		/// 主线程执行
 		/// </summary>
 		/// <param name="pSock"></param>
-		void AddConnectSocket(FxClientSocket pSock)
+		void AddConnectSocket(IFxClientSocket pSock)
 		{
 			lock(m_pLock)
 			{
@@ -54,7 +54,7 @@ namespace FxNet
 		/// 主线程执行
 		/// </summary>
 		/// <param name="pSock"></param>
-		void DelConnectSocket(FxClientSocket pSock)
+		void DelConnectSocket(IFxClientSocket pSock)
 		{
 			lock(m_pLock)
 			{
@@ -68,6 +68,6 @@ namespace FxNet
 		bool m_bStop;
 
 		//存放连接指针
-		HashSet<FxClientSocket> m_setConnectSockets;
+		HashSet<IFxClientSocket> m_setConnectSockets;
 	}
 }

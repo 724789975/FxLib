@@ -42,7 +42,8 @@
   <ItemGroup>
     <Compile Include="Class1.cs" />
     <Compile Include="DataBuffer.cs" />
-    <Compile Include="FxClientSocket.cs" />
+    <Compile Include="DataHeader.cs" />
+    <Compile Include="IFxClientSocket.cs" />
     <Compile Include="FxNetModule.cs" />
     <Compile Include="FxTcpClientSocket.cs" />
     <Compile Include="FxUdpClientSocket.cs" />

@@ -26,7 +26,7 @@ namespace FxNet
 
 	struct SSockNetEvent
 	{
-		public FxClientSocket pSock;
+		public IFxClientSocket pSock;
 		public SNetEvent pEvent;
 	}
 
@@ -52,7 +52,7 @@ namespace FxNet
 
 		public bool Uninit() { return false; }
 
-		public void PushNetEvent(FxClientSocket poSock, SNetEvent pEvent)
+		public void PushNetEvent(IFxClientSocket poSock, SNetEvent pEvent)
 		{
 			SSockNetEvent pSocketEvent = new SSockNetEvent();
 			pSocketEvent.pSock = poSock;

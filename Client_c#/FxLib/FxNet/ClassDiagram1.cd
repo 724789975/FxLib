@@ -28,14 +28,14 @@
       <FileName>FxNetModule.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="FxNet.FxClientSocket">
+  <Class Name="FxNet.IFxClientSocket">
     <Position X="3" Y="1.75" Width="1.5" />
     <Compartments>
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
     <TypeIdentifier>
       <HashCode>AAQACAAQHAAABABAAEAAgIAJCAAFAIAQAAAGAAKgAAA=</HashCode>
-      <FileName>FxClientSocket.cs</FileName>
+      <FileName>IFxClientSocket.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="FxNet.TSingleton&lt;T&gt;">
