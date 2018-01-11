@@ -17,17 +17,9 @@ namespace FxNet
 		public byte[] m_pDataBuffer;
 		protected DataBuffer m_pRecvBuffer;
 		protected DataBuffer m_pSendBuffer;
+		protected IFxDataHeader m_pDataHeader;
 
-		public bool Init(string szIp, int nPort, bool bReconnect)
-		{
-			m_szIp = szIp;
-			m_nPort = nPort;
-			m_bReconnect = bReconnect;
-			m_pDataBuffer = new byte[BUFFER_SIZE];
-			m_pRecvBuffer = new DataBuffer();
-			m_pSendBuffer = new DataBuffer();
-			return true;
-		}
+		public abstract bool Init(string szIp, int nPort, bool bReconnect);
 
 		/// <summary>
 		/// 这个是在线程中执行的 要注意
@@ -89,7 +81,7 @@ namespace FxNet
 
 		internal abstract void OnSend(UInt32 bytesSent);
 
-		protected void Receive()
+		public void Receive()
 		{
 			try
 			{
@@ -176,6 +168,7 @@ namespace FxNet
 				pEvent.eType = ENetEvtType.NETEVT_TERMINATE;
 				FxNetModule.Instance().PushNetEvent(this, pEvent);
 			}
+			IoThread.Instance().DelConnectSocket(this);
 		}
 
 		protected void getIPType(String serverIp, int serverPorts, out String newServerIp, out AddressFamily mIPType)

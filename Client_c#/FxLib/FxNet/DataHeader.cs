@@ -8,51 +8,56 @@ namespace FxNet
 {
 	public abstract class IFxDataHeader
 	{
-		public abstract int GetHeaderLength();      // 消息头长度
+		public abstract Int32 GetHeaderLength();      // 消息头长度
 
-		public abstract int ParsePacket(char[] pBuf, UInt32 dwLen);
+		public Int32 ParsePacket(byte[] pBuf, UInt32 dwLen)
+		{
+			if (dwLen < GetHeaderLength())
+			{
+				return 0;
+			}
 
-		public abstract void GetPkgHeader();           //有歧义了 现在只代表接收到的包头
+			Int32 iPkgLen = __CheckPkgHeader(pBuf);
+
+			return iPkgLen;
+		}
+
 		public abstract void BuildSendPkgHeader(ref UInt32 dwHeaderLen, UInt32 dwDataLen);
-		public abstract bool BuildRecvPkgHeader(char[] pBuff, UInt32 dwLen, UInt32 dwOffset);
-		public abstract int __CheckPkgHeader(char[] pBuf);
+		public abstract Int32 __CheckPkgHeader(byte[] pBuf);
 	}
 
 	public class BinaryDataHeader : IFxDataHeader
 	{
-		public override bool BuildRecvPkgHeader(char[] pBuff, uint dwLen, uint dwOffset)
+		public override void BuildSendPkgHeader(ref UInt32 dwHeaderLen, UInt32 dwDataLen)
 		{
-			throw new NotImplementedException();
+			NetStream oNetStream = new NetStream(m_dataSendBuffer, 8);
+			oNetStream.WriteInt(dwDataLen);
+			oNetStream.WriteInt(s_dwMagic);
+			dwHeaderLen = s_dwHeaderLen;
 		}
 
-		public override void BuildSendPkgHeader(ref uint dwHeaderLen, uint dwDataLen)
+		public override Int32 GetHeaderLength()
 		{
-			throw new NotImplementedException();
+			return (Int32)s_dwHeaderLen;
 		}
 
-		public override int GetHeaderLength()
+		public override Int32 __CheckPkgHeader(byte[] pBuf)
 		{
-			throw new NotImplementedException();
+			NetStream oNetStream = new NetStream(NetStream.ENetStreamType.ENetStreamType_Read, pBuf, s_dwHeaderLen);
+			UInt32 dwLength = 0;
+			oNetStream.ReadInt(ref dwLength);
+			UInt32 dwMagic = 0;
+			oNetStream.ReadInt(ref dwMagic);
+			if (dwMagic != s_dwMagic)
+			{
+				return -1;
+			}
+			return (Int32)(s_dwHeaderLen + dwLength);
 		}
 
-		public override void GetPkgHeader()
-		{
-			throw new NotImplementedException();
-		}
-
-		public override int ParsePacket(char[] pBuf, uint dwLen)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override int __CheckPkgHeader(char[] pBuf)
-		{
-			throw new NotImplementedException();
-		}
-
+		public const UInt32 s_dwHeaderLen = 8;
 		// 消息头 为网络字节序
-		char[] m_dataRecvBuffer = new char[8];
-		char[] m_dataSendBuffer = new char[8];
+		byte[] m_dataSendBuffer = new byte[s_dwHeaderLen];
 		public const UInt32 s_dwMagic = 'T' << 24 | 'E' << 16 | 'S' << 8 | 'T';
 	}
 }

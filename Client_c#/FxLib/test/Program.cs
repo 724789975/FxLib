@@ -13,7 +13,20 @@ namespace test
 		{ }
         static void Main(string[] args)
         {
+			FxNet.FxNetModule.CreateInstance();
+			FxNet.IoThread.CreateInstance();
+			FxNet.IoThread.Instance().Init();
+			FxNet.IoThread.Instance().Start();
+
 			FxNet.FxTcpClientSocket tcp = new FxNet.FxTcpClientSocket();
+			tcp.Init("127.0.0.1", 20001, true);
+			tcp.Connect();
+
+			while (true)
+			{
+				FxNet.FxNetModule.Instance().Run();
+				Thread.Sleep(1);
+			}
         }
     }
 }

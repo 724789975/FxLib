@@ -95,18 +95,55 @@ namespace FxNet
 
 		public override void ProcEvent(SNetEvent pEvent)
 		{
-			throw new NotImplementedException();
+			switch (pEvent.eType)
+			{
+				case ENetEvtType.NETEVT_ESTABLISH:
+					{
+						IoThread.Instance().AddConnectSocket(this);
+					}
+					break;
+				case ENetEvtType.NETEVT_RECV:
+					{
+						byte[] pData = new byte[pEvent.dwValue];
+						m_pRecvBuffer.PopData(pData, pEvent.dwValue);
+					}
+					break;
+				case ENetEvtType.NETEVT_ERROR:
+					break;
+				case ENetEvtType.NETEVT_TERMINATE:
+					break;
+				case ENetEvtType.NETEVT_RELEASE:
+					break;
+				default:
+					break;
+			}
 		}
 
 		internal override void OnRecv(byte[] buffer, UInt32 bytesRead)
 		{
 			m_pRecvBuffer.PushData(buffer, bytesRead);
-			//todo 判断包长 达到一定长度 将其加入处理队列
-		}
+			//判断包长 达到一定长度 将其加入处理队列
+			Int32 iLength = m_pDataHeader.ParsePacket(buffer, bytesRead);
+			if (iLength < 0)
+			{
+				SNetEvent pEvent = new SNetEvent();
+				pEvent.eType = ENetEvtType.NETEVT_ERROR;
+				FxNetModule.Instance().PushNetEvent(this, pEvent);
+				Disconnect();
+			}
+			else if (iLength > 0)
+			{
+				SNetEvent pEvent = new SNetEvent();
+				pEvent.eType = ENetEvtType.NETEVT_RECV;
+				pEvent.dwValue = (UInt32)iLength;
+				FxNetModule.Instance().PushNetEvent(this, pEvent);
+			}
+        }
 
 		protected override bool CreateSocket(AddressFamily pAddressFamily)
 		{
-			throw new NotImplementedException();
+			m_hSocket = new Socket(pAddressFamily, SocketType.Stream, ProtocolType.Tcp);
+			return true;
 		}
 
 		public override void OnConnect()
@@ -116,6 +153,18 @@ namespace FxNet
 			FxNetModule.Instance().PushNetEvent(this, pEvent);
 
 			//Receive();		//这是在主线程 所以不能receive
+		}
+
+		public override bool Init(string szIp, int nPort, bool bReconnect)
+		{
+			m_szIp = szIp;
+			m_nPort = nPort;
+			m_bReconnect = bReconnect;
+			m_pDataBuffer = new byte[BUFFER_SIZE];
+			m_pRecvBuffer = new DataBuffer();
+			m_pSendBuffer = new DataBuffer();
+			m_pDataHeader = new BinaryDataHeader();
+			return true;
 		}
 
 		SendState m_eSendState = SendState.SnedState_Idle;

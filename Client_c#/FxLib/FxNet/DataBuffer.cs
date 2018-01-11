@@ -87,7 +87,7 @@ namespace FxNet
 			ENetStreamType_Read,
 			ENetStreamType_Write,
 		}
-		NetStream(ENetStreamType eType, byte[] pData, UInt32 dwLen)
+		public NetStream(ENetStreamType eType, byte[] pData, UInt32 dwLen)
 		{
 			m_eType = eType;
 			m_pData = pData;
@@ -112,7 +112,7 @@ namespace FxNet
 			}
 
 		}
-		NetStream(byte[] pData, UInt32 dwLen)
+		public NetStream(byte[] pData, UInt32 dwLen)
 		{
 			m_eType = ENetStreamType.ENetStreamType_Read;
 			m_pData = pData;
@@ -122,84 +122,90 @@ namespace FxNet
 		}
 		~NetStream() { }
 
-		bool ReadData(ref byte[] pData, UInt32 dwLen)
+		public bool ReadData(ref byte[] pData, UInt32 dwLen)
 		{
 			pData = m_pReader.ReadBytes((int)dwLen);
 			m_dwLen -= dwLen;
 			return true;
 		}
 
-		bool ReadByte(ref byte cData)
+		public bool ReadByte(ref byte cData)
 		{
 			cData = m_pReader.ReadByte();
 			m_dwLen -= 1;
 			return true;
 		}
 
-		bool ReadShort(ref Int16 wData)
+		public bool ReadShort(ref Int16 wData)
 		{
 			wData = m_pReader.ReadInt16();
+			wData = IPAddress.NetworkToHostOrder(wData);
 			m_dwLen -= 2;
 			return true;
 		}
 
-		bool ReadShort(ref UInt16 wData)
+		public bool ReadShort(ref UInt16 wData)
 		{
 			wData = m_pReader.ReadUInt16();
+			wData = (UInt16)IPAddress.NetworkToHostOrder(wData);
 			m_dwLen -= 2;
 			return true;
 		}
 
-		bool ReadInt(ref Int32 dwData)
+		public bool ReadInt(ref Int32 dwData)
 		{
 			dwData = m_pReader.ReadInt32();
+			dwData = IPAddress.NetworkToHostOrder(dwData);
 			m_dwLen -= 4;
 			return true;
 		}
 
-		bool ReadInt(ref UInt32 dwData)
+		public bool ReadInt(ref UInt32 dwData)
 		{
 			dwData = m_pReader.ReadUInt32();
+			dwData = (UInt32)IPAddress.NetworkToHostOrder(dwData);
 			m_dwLen -= 4;
 			return true;
 		}
 
-		bool ReadInt64(ref Int64 llData)
+		public bool ReadInt64(ref Int64 llData)
 		{
 			llData = m_pReader.ReadInt64();
+			llData = IPAddress.NetworkToHostOrder(llData);
 			m_dwLen -= 8;
 			return true;
 		}
 
-		bool ReadInt64(ref UInt64 ullData)
+		public bool ReadInt64(ref UInt64 ullData)
 		{
 			ullData = m_pReader.ReadUInt64();
+			ullData = (UInt64)IPAddress.NetworkToHostOrder((Int64)ullData);
 			m_dwLen -= 8;
 			return true;
 		}
 
-		bool ReadFloat(ref float fData)
+		public bool ReadFloat(ref float fData)
 		{
 			int dwFloat = m_pReader.ReadInt32();
 			fData = dwFloat / 256.0f;
 			return true;
 		}
 
-		bool WriteData(byte[] pData, UInt32 dwLen)
+		public bool WriteData(byte[] pData, UInt32 dwLen)
 		{
 			m_pWrite.Write(pData, 0, (int)dwLen);
 			m_dwLen -= dwLen;
 			return true;
 		}
 
-		bool WriteByte(byte cData)
+		public bool WriteByte(byte cData)
 		{
 			m_pWrite.Write(cData);
 			m_dwLen -= 1;
 			return true;
 		}
 
-		bool WriteShort(Int16 wData)
+		public bool WriteShort(Int16 wData)
 		{
 			wData = IPAddress.HostToNetworkOrder(wData);
 			m_pWrite.Write(wData);
@@ -207,12 +213,12 @@ namespace FxNet
 			return true;
 		}
 
-		bool WriteShort(UInt16 wData)
+		public bool WriteShort(UInt16 wData)
 		{
 			return WriteShort((Int16)wData);
 		}
 
-		bool WriteInt(Int32 dwData)
+		public bool WriteInt(Int32 dwData)
 		{
 			dwData = IPAddress.HostToNetworkOrder(dwData);
 			m_pWrite.Write(dwData);
@@ -220,12 +226,12 @@ namespace FxNet
 			return true;
 		}
 
-		bool WriteInt(UInt32 dwData)
+		public bool WriteInt(UInt32 dwData)
 		{
 			return WriteInt((Int32)dwData);
 		}
 
-		bool WriteInt64(Int64 llData)
+		public bool WriteInt64(Int64 llData)
 		{
 			llData = IPAddress.HostToNetworkOrder(llData);
 			m_pWrite.Write(llData);
@@ -233,18 +239,18 @@ namespace FxNet
 			return true;
 		}
 
-		bool WriteInt64(UInt64 ullData)
+		public bool WriteInt64(UInt64 ullData)
 		{
 			return WriteInt64((Int64)ullData);
 		}
 
-		bool WriteFloat(float fData)
+		public bool WriteFloat(float fData)
 		{
 			Int32 nData = (Int32)(fData * 256);
 			return WriteInt(nData);
 		}
 
-		bool WriteString(string szData)
+		public bool WriteString(string szData)
 		{
 			byte[] pData = Encoding.UTF8.GetBytes(szData);
 			return WriteData(pData, (UInt32)pData.Length);

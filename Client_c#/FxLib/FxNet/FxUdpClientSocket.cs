@@ -43,5 +43,10 @@ namespace FxNet
 		{
 			throw new NotImplementedException();
 		}
+
+		public override bool Init(string szIp, int nPort, bool bReconnect)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

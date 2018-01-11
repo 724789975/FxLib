@@ -11,7 +11,7 @@ namespace FxNet
 		~TSingleton() { }
 		//static volatile T* Instance() { return (T*)(m_pInstance); }
 		public static T Instance() { return m_pInstance; }
-		static bool CreateInstance()
+		public static bool CreateInstance()
 		{
 			if (m_pInstance == null)
 			{
@@ -21,7 +21,7 @@ namespace FxNet
 			return false;
 		}
 
-		static bool DestroyInstance()
+		public static bool DestroyInstance()
 		{
 			if (m_pInstance != null)
 			{
