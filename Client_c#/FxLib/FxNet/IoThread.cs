@@ -33,7 +33,7 @@ namespace FxNet
 					foreach (IFxClientSocket poSock in m_setAddSockets)
 					{
 						poSock.Receive();
-						m_setAddSockets.Add(poSock);
+						m_setConnectSockets.Add(poSock);
 					}
 					m_setAddSockets.Clear();
 				}
@@ -42,7 +42,7 @@ namespace FxNet
 		}
 		public bool Start()
 		{
-			m_poThrdHandler.Start(this);
+			m_poThrdHandler.Start();
 			return true;
 		}
 		public void Stop() { m_bStop = true; }

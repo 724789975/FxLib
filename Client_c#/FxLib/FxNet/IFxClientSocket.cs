@@ -167,8 +167,8 @@ namespace FxNet
 				SNetEvent pEvent = new SNetEvent();
 				pEvent.eType = ENetEvtType.NETEVT_TERMINATE;
 				FxNetModule.Instance().PushNetEvent(this, pEvent);
+				IoThread.Instance().DelConnectSocket(this);
 			}
-			IoThread.Instance().DelConnectSocket(this);
 		}
 
 		protected void getIPType(String serverIp, int serverPorts, out String newServerIp, out AddressFamily mIPType)

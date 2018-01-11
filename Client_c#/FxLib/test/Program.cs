@@ -14,6 +14,7 @@ namespace test
         static void Main(string[] args)
         {
 			FxNet.FxNetModule.CreateInstance();
+			FxNet.FxNetModule.Instance().Init();
 			FxNet.IoThread.CreateInstance();
 			FxNet.IoThread.Instance().Init();
 			FxNet.IoThread.Instance().Start();
