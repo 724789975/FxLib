@@ -8,7 +8,7 @@ namespace FxNet
 {
 	public abstract class IFxDataHeader
 	{
-		public abstract Int32 GetHeaderLength();      // 消息头长度
+		public abstract UInt32 GetHeaderLength();      // 消息头长度
 
 		public Int32 ParsePacket(byte[] pBuf, UInt32 dwLen)
 		{
@@ -22,23 +22,24 @@ namespace FxNet
 			return iPkgLen;
 		}
 
-		public abstract void BuildSendPkgHeader(ref UInt32 dwHeaderLen, UInt32 dwDataLen);
+		public abstract byte[] BuildSendPkgHeader(ref UInt32 dwHeaderLen, UInt32 dwDataLen);
 		public abstract Int32 __CheckPkgHeader(byte[] pBuf);
 	}
 
 	public class BinaryDataHeader : IFxDataHeader
 	{
-		public override void BuildSendPkgHeader(ref UInt32 dwHeaderLen, UInt32 dwDataLen)
+		public override byte[] BuildSendPkgHeader(ref UInt32 dwHeaderLen, UInt32 dwDataLen)
 		{
-			NetStream oNetStream = new NetStream(m_dataSendBuffer, 8);
+			NetStream oNetStream = new NetStream(NetStream.ENetStreamType.ENetStreamType_Write, m_dataSendBuffer, 8);
 			oNetStream.WriteInt(dwDataLen);
 			oNetStream.WriteInt(s_dwMagic);
 			dwHeaderLen = s_dwHeaderLen;
+			return m_dataSendBuffer;
 		}
 
-		public override Int32 GetHeaderLength()
+		public override UInt32 GetHeaderLength()
 		{
-			return (Int32)s_dwHeaderLen;
+			return s_dwHeaderLen;
 		}
 
 		public override Int32 __CheckPkgHeader(byte[] pBuf)

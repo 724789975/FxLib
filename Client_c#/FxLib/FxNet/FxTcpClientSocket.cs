@@ -77,7 +77,7 @@ namespace FxNet
 			else
 			{
 				m_eSendState = SendState.SnedState_Sending;
-				Send(m_pSendBuffer.GetData(), m_pSendBuffer.GetUsedLength());
+				AsynSend(m_pSendBuffer.GetData(), m_pSendBuffer.GetUsedLength());
 			}
 		}
 
@@ -88,7 +88,7 @@ namespace FxNet
 				if (m_pSendBuffer.GetUsedLength() > 0)
 				{
 					m_eSendState = SendState.SnedState_Sending;
-					Send(m_pSendBuffer.GetData(), m_pSendBuffer.GetUsedLength());
+					AsynSend(m_pSendBuffer.GetData(), m_pSendBuffer.GetUsedLength());
 				}
 			}
 		}
@@ -165,6 +165,17 @@ namespace FxNet
 			m_pSendBuffer = new DataBuffer();
 			m_pDataHeader = new BinaryDataHeader();
 			return true;
+		}
+
+		public override void Send(byte[] byteData, UInt32 dwLen)
+		{
+			byte[] pData = new byte[dwLen + m_pDataHeader.GetHeaderLength()];
+			FxNet.NetStream oNetStream = new NetStream(NetStream.ENetStreamType.ENetStreamType_Write, pData, (UInt32)pData.Length);
+			UInt32 dwHeaderLen = 0;
+			byte[] pDataHeader = m_pDataHeader.BuildSendPkgHeader(ref dwHeaderLen, (UInt32)pData.Length);
+			oNetStream.WriteData(pDataHeader, m_pDataHeader.GetHeaderLength());
+			oNetStream.WriteData(byteData, dwLen);
+			m_pSendBuffer.PushData(pData, (UInt32)pData.Length);
 		}
 
 		SendState m_eSendState = SendState.SnedState_Idle;

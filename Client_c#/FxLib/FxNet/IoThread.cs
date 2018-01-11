@@ -32,7 +32,7 @@ namespace FxNet
 				{
 					foreach (IFxClientSocket poSock in m_setAddSockets)
 					{
-						poSock.Receive();
+						poSock.AsynReceive();
 						m_setConnectSockets.Add(poSock);
 					}
 					m_setAddSockets.Clear();

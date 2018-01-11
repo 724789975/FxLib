@@ -38,13 +38,10 @@ namespace FxNet
 		protected abstract bool CreateSocket(AddressFamily pAddressFamily);
 
 		public abstract void OnConnect();
-		//{
-		//	SNetEvent pEvent = new SNetEvent();
-		//	pEvent.eType = ENetEvtType.NETEVT_ESTABLISH;
-		//	FxNetModule.Instance().PushNetEvent(this, pEvent);
-		//}
 
-		protected void Send(byte[] byteData, UInt32 dwLen)
+		public abstract void Send(byte[] byteData, UInt32 dwLen);
+
+		protected void AsynSend(byte[] byteData, UInt32 dwLen)
 		{
 			// Begin sending the data to the remote device.     
 			m_hSocket.BeginSend(byteData, 0, (int)dwLen, 0, new AsyncCallback(SendCallback), this);
@@ -81,7 +78,7 @@ namespace FxNet
 
 		internal abstract void OnSend(UInt32 bytesSent);
 
-		public void Receive()
+		public void AsynReceive()
 		{
 			try
 			{
@@ -203,7 +200,7 @@ namespace FxNet
 			}
 		}
 
-		public string GetIPv6(string mHost, string mPort)
+		string GetIPv6(string mHost, string mPort)
 		{
 #if UNITY_IPHONE && !UNITY_EDITOR
 		string mIPv6 = getIPv6(mHost, mPort);

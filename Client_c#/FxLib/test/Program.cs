@@ -26,7 +26,13 @@ namespace test
 			while (true)
 			{
 				FxNet.FxNetModule.Instance().Run();
-				Thread.Sleep(1);
+				var st = new System.Diagnostics.StackTrace();
+				string szData = st.GetFrame(0).ToString();
+				szData += "           ";
+				szData += DateTime.Now.ToLocalTime().ToString();
+				byte[] pData = Encoding.UTF8.GetBytes(szData);
+				tcp.Send(pData, (UInt32)pData.Length);
+				Thread.Sleep(100);
 			}
         }
     }

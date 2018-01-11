@@ -48,5 +48,10 @@ namespace FxNet
 		{
 			throw new NotImplementedException();
 		}
+
+		public override void Send(byte[] byteData, UInt32 dwLen)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

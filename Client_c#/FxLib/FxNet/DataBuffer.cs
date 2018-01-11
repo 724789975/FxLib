@@ -147,7 +147,7 @@ namespace FxNet
 		public bool ReadShort(ref UInt16 wData)
 		{
 			wData = m_pReader.ReadUInt16();
-			wData = (UInt16)IPAddress.NetworkToHostOrder(wData);
+			wData = (UInt16)IPAddress.NetworkToHostOrder((Int16)wData);
 			m_dwLen -= 2;
 			return true;
 		}
@@ -163,7 +163,7 @@ namespace FxNet
 		public bool ReadInt(ref UInt32 dwData)
 		{
 			dwData = m_pReader.ReadUInt32();
-			dwData = (UInt32)IPAddress.NetworkToHostOrder(dwData);
+			dwData = (UInt32)IPAddress.NetworkToHostOrder((int)dwData);
 			m_dwLen -= 4;
 			return true;
 		}
