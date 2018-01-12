@@ -23,15 +23,16 @@ namespace test
 			tcp.Init("127.0.0.1", 20001, true);
 			tcp.Connect();
 
+			var st = new System.Diagnostics.StackTrace();
+			string szData = st.GetFrame(0).ToString();
+			szData += "           ";
+			szData += DateTime.Now.ToLocalTime().ToString();
+			byte[] pData = Encoding.UTF8.GetBytes(szData);
+			tcp.Send(pData, (UInt32)pData.Length);
 			while (true)
 			{
 				FxNet.FxNetModule.Instance().Run();
-				var st = new System.Diagnostics.StackTrace();
-				string szData = st.GetFrame(0).ToString();
-				szData += "           ";
-				szData += DateTime.Now.ToLocalTime().ToString();
-				byte[] pData = Encoding.UTF8.GetBytes(szData);
-				tcp.Send(pData, (UInt32)pData.Length);
+
 				Thread.Sleep(100);
 			}
         }

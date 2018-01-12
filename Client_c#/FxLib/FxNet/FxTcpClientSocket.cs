@@ -105,7 +105,8 @@ namespace FxNet
 				case ENetEvtType.NETEVT_RECV:
 					{
 						byte[] pData = new byte[pEvent.dwValue];
-						m_pRecvBuffer.PopData(pData, pEvent.dwValue);
+						m_pSessionBuffer.PopData(pData, pEvent.dwValue);
+						Send(pData, pEvent.dwValue);
 					}
 					break;
 				case ENetEvtType.NETEVT_ERROR:
@@ -123,22 +124,35 @@ namespace FxNet
 		{
 			m_pRecvBuffer.PushData(buffer, bytesRead);
 			//判断包长 达到一定长度 将其加入处理队列
-			Int32 iLength = m_pDataHeader.ParsePacket(buffer, bytesRead);
-			if (iLength < 0)
+			while (true)
 			{
-				SNetEvent pEvent = new SNetEvent();
-				pEvent.eType = ENetEvtType.NETEVT_ERROR;
-				FxNetModule.Instance().PushNetEvent(this, pEvent);
-				Disconnect();
+				Int32 iLength = m_pDataHeader.ParsePacket(m_pRecvBuffer.GetData(), m_pRecvBuffer.GetUsedLength());
+				if (iLength == 0)
+				{
+					break;
+				}
+				if (iLength < 0)
+				{
+					SNetEvent pEvent = new SNetEvent();
+					pEvent.eType = ENetEvtType.NETEVT_ERROR;
+					FxNetModule.Instance().PushNetEvent(this, pEvent);
+					Disconnect();
+				}
+				else if (iLength > 0)
+				{
+					if (m_pRecvBuffer.GetUsedLength() < iLength)
+					{
+						break;
+					}
+					m_pSessionBuffer.PushData(m_pRecvBuffer.GetData(), (UInt32)iLength);
+					m_pRecvBuffer.PopData((UInt32)iLength);
+					SNetEvent pEvent = new SNetEvent();
+					pEvent.eType = ENetEvtType.NETEVT_RECV;
+					pEvent.dwValue = (UInt32)iLength;
+					FxNetModule.Instance().PushNetEvent(this, pEvent);
+				}
 			}
-			else if (iLength > 0)
-			{
-				SNetEvent pEvent = new SNetEvent();
-				pEvent.eType = ENetEvtType.NETEVT_RECV;
-				pEvent.dwValue = (UInt32)iLength;
-				FxNetModule.Instance().PushNetEvent(this, pEvent);
-			}
-        }
+		}
 
 		protected override bool CreateSocket(AddressFamily pAddressFamily)
 		{
@@ -164,6 +178,7 @@ namespace FxNet
 			m_pRecvBuffer = new DataBuffer();
 			m_pSendBuffer = new DataBuffer();
 			m_pDataHeader = new BinaryDataHeader();
+			m_pSessionBuffer = new DataBuffer();
 			return true;
 		}
 
@@ -172,12 +187,14 @@ namespace FxNet
 			byte[] pData = new byte[dwLen + m_pDataHeader.GetHeaderLength()];
 			FxNet.NetStream oNetStream = new NetStream(NetStream.ENetStreamType.ENetStreamType_Write, pData, (UInt32)pData.Length);
 			UInt32 dwHeaderLen = 0;
-			byte[] pDataHeader = m_pDataHeader.BuildSendPkgHeader(ref dwHeaderLen, (UInt32)pData.Length);
+			byte[] pDataHeader = m_pDataHeader.BuildSendPkgHeader(ref dwHeaderLen, dwLen);
 			oNetStream.WriteData(pDataHeader, m_pDataHeader.GetHeaderLength());
 			oNetStream.WriteData(byteData, dwLen);
 			m_pSendBuffer.PushData(pData, (UInt32)pData.Length);
 		}
 
 		SendState m_eSendState = SendState.SnedState_Idle;
+
+		DataBuffer m_pSessionBuffer;
 	}
 }

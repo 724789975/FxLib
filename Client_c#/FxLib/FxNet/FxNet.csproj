@@ -48,6 +48,7 @@
     <Compile Include="FxTcpClientSocket.cs" />
     <Compile Include="FxUdpClientSocket.cs" />
     <Compile Include="IoThread.cs" />
+    <Compile Include="ISession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TSingleton.cs" />
   </ItemGroup>

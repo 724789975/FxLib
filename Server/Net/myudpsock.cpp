@@ -2253,6 +2253,7 @@ void FxUDPConnectSock::__ProcRecv(UINT32 dwLen)
 		}
 
 		memmove(GetConnection()->GetRecvBuf(), GetConnection()->GetRecvBuf() + GetDataHeader()->GetHeaderLength(), dwLen - GetDataHeader()->GetHeaderLength());
+		GetConnection()->GetRecvBuf()[dwLen - GetDataHeader()->GetHeaderLength()] = 0;
 		GetConnection()->OnRecv(dwLen - GetDataHeader()->GetHeaderLength());
 	}
 }

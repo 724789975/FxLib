@@ -2728,6 +2728,7 @@ void FxTCPConnectSock::__ProcRecv(UINT32 dwLen)
 			return;
 		}
 		memmove(GetConnection()->GetRecvBuf(), GetConnection()->GetRecvBuf() + GetDataHeader()->GetHeaderLength(), dwLen - GetDataHeader()->GetHeaderLength());
+		GetConnection()->GetRecvBuf()[dwLen - GetDataHeader()->GetHeaderLength()] = 0;
 		m_poConnection->OnRecv(dwLen - GetDataHeader()->GetHeaderLength());
 	}
 }
