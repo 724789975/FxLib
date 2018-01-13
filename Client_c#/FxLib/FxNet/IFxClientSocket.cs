@@ -10,16 +10,13 @@ namespace FxNet
 	public abstract class IFxClientSocket
 	{
 		protected Socket m_hSocket;
-		protected bool m_bReconnect;
-		protected string m_szIp;
-		protected int m_nPort;
 		public const int BUFFER_SIZE = 64 * 1024;
 		public byte[] m_pDataBuffer;
 		protected DataBuffer m_pRecvBuffer;
 		protected DataBuffer m_pSendBuffer;
-		protected IFxDataHeader m_pDataHeader;
+		protected ISession m_pSession;
 
-		public abstract bool Init(string szIp, int nPort, bool bReconnect);
+		public abstract bool Init(ISession pSession);
 
 		/// <summary>
 		/// 这个是在线程中执行的 要注意
@@ -33,13 +30,15 @@ namespace FxNet
 
 		public abstract void ProcEvent(SNetEvent pEvent);
 
-		public abstract void Connect();
+		public abstract void Connect(string szIp, int nPort);
 
 		protected abstract bool CreateSocket(AddressFamily pAddressFamily);
 
 		public abstract void OnConnect();
 
 		public abstract void Send(byte[] byteData, UInt32 dwLen);
+
+		protected IFxDataHeader GetDataHeader() { return m_pSession.GetDataHeader(); }
 
 		protected void AsynSend(byte[] byteData, UInt32 dwLen)
 		{

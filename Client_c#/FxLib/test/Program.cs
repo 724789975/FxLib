@@ -20,8 +20,8 @@ namespace test
 			FxNet.IoThread.Instance().Start();
 
 			FxNet.FxTcpClientSocket tcp = new FxNet.FxTcpClientSocket();
-			tcp.Init("127.0.0.1", 20001, true);
-			tcp.Connect();
+			tcp.Init(null);
+			tcp.Connect("127.0.0.1", 20001);
 
 			var st = new System.Diagnostics.StackTrace();
 			string szData = st.GetFrame(0).ToString();

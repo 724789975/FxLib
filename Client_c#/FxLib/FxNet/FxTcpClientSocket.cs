@@ -17,13 +17,13 @@ namespace FxNet
 			SnedState_Idle,				//发送静止
 			SnedState_Sending,			//正在发送中
 		}
-		public override void Connect()
+		public override void Connect(string szIp, int nPort)
 		{
 			Disconnect();
 			String newServerIp = "";
 			AddressFamily pAddressFamily = AddressFamily.InterNetwork;
-			getIPType(m_szIp, m_nPort, out newServerIp, out pAddressFamily);
-			IPEndPoint ipe = new IPEndPoint(IPAddress.Parse(newServerIp), m_nPort);
+			getIPType(szIp, nPort, out newServerIp, out pAddressFamily);
+			IPEndPoint ipe = new IPEndPoint(IPAddress.Parse(newServerIp), nPort);
 
 			CreateSocket(pAddressFamily);
 			try
@@ -104,9 +104,8 @@ namespace FxNet
 					break;
 				case ENetEvtType.NETEVT_RECV:
 					{
-						byte[] pData = new byte[pEvent.dwValue];
-						m_pSessionBuffer.PopData(pData, pEvent.dwValue);
-						Send(pData, pEvent.dwValue);
+						m_pSession.OnRecv(m_pSessionBuffer.GetData(), pEvent.dwValue);
+						m_pSessionBuffer.PopData(pEvent.dwValue);
 					}
 					break;
 				case ENetEvtType.NETEVT_ERROR:
@@ -126,7 +125,7 @@ namespace FxNet
 			//判断包长 达到一定长度 将其加入处理队列
 			while (true)
 			{
-				Int32 iLength = m_pDataHeader.ParsePacket(m_pRecvBuffer.GetData(), m_pRecvBuffer.GetUsedLength());
+				Int32 iLength = GetDataHeader().ParsePacket(m_pRecvBuffer.GetData(), m_pRecvBuffer.GetUsedLength());
 				if (iLength == 0)
 				{
 					break;
@@ -169,26 +168,23 @@ namespace FxNet
 			//Receive();		//这是在主线程 所以不能receive
 		}
 
-		public override bool Init(string szIp, int nPort, bool bReconnect)
+		public override bool Init(ISession pSession)
 		{
-			m_szIp = szIp;
-			m_nPort = nPort;
-			m_bReconnect = bReconnect;
+			m_pSession = pSession;
 			m_pDataBuffer = new byte[BUFFER_SIZE];
 			m_pRecvBuffer = new DataBuffer();
 			m_pSendBuffer = new DataBuffer();
-			m_pDataHeader = new BinaryDataHeader();
 			m_pSessionBuffer = new DataBuffer();
 			return true;
 		}
 
 		public override void Send(byte[] byteData, UInt32 dwLen)
 		{
-			byte[] pData = new byte[dwLen + m_pDataHeader.GetHeaderLength()];
+			byte[] pData = new byte[dwLen + GetDataHeader().GetHeaderLength()];
 			FxNet.NetStream oNetStream = new NetStream(NetStream.ENetStreamType.ENetStreamType_Write, pData, (UInt32)pData.Length);
 			UInt32 dwHeaderLen = 0;
-			byte[] pDataHeader = m_pDataHeader.BuildSendPkgHeader(ref dwHeaderLen, dwLen);
-			oNetStream.WriteData(pDataHeader, m_pDataHeader.GetHeaderLength());
+			byte[] pDataHeader = GetDataHeader().BuildSendPkgHeader(ref dwHeaderLen, dwLen);
+			oNetStream.WriteData(pDataHeader, GetDataHeader().GetHeaderLength());
 			oNetStream.WriteData(byteData, dwLen);
 			m_pSendBuffer.PushData(pData, (UInt32)pData.Length);
 		}

@@ -10,7 +10,7 @@ namespace FxNet
 {
 	public class FxUdpClientSocket : IFxClientSocket
 	{
-		public override void Connect()
+		public override void Connect(string szIp, int nPort)
 		{
 			throw new NotImplementedException();
 		}
@@ -44,7 +44,7 @@ namespace FxNet
 			throw new NotImplementedException();
 		}
 
-		public override bool Init(string szIp, int nPort, bool bReconnect)
+		public override bool Init(ISession pSession)
 		{
 			throw new NotImplementedException();
 		}
@@ -53,5 +53,7 @@ namespace FxNet
 		{
 			throw new NotImplementedException();
 		}
+
+
 	}
 }
