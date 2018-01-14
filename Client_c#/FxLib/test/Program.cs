@@ -19,16 +19,10 @@ namespace test
 			FxNet.IoThread.Instance().Init();
 			FxNet.IoThread.Instance().Start();
 
-			FxNet.FxTcpClientSocket tcp = new FxNet.FxTcpClientSocket();
-			tcp.Init(null);
-			tcp.Connect("127.0.0.1", 20001);
+			BinarySession pSession = new BinarySession();
+			pSession.Init("127.0.0.1", 20001);
 
-			var st = new System.Diagnostics.StackTrace();
-			string szData = st.GetFrame(0).ToString();
-			szData += "           ";
-			szData += DateTime.Now.ToLocalTime().ToString();
-			byte[] pData = Encoding.UTF8.GetBytes(szData);
-			tcp.Send(pData, (UInt32)pData.Length);
+			pSession.Reconnect();
 			while (true)
 			{
 				FxNet.FxNetModule.Instance().Run();

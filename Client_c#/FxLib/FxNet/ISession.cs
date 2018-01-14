@@ -25,18 +25,17 @@ namespace FxNet
 		public abstract IFxClientSocket Reconnect();
 
 		public abstract bool IsConnected();
-		public abstract bool IsConnecting();
 
-		public abstract void Init();
+		public abstract void Init(string szIp, UInt16 wPort);
 
 		public IFxDataHeader GetDataHeader() { return m_pDataHeader; }
 
 		public abstract bool OnDestroy();
 
-		IFxDataHeader m_pDataHeader;
-		IFxClientSocket m_pSocket;
+		protected IFxDataHeader m_pDataHeader;
+		protected IFxClientSocket m_pSocket;
 
-		string m_szIp;
-		UInt16 m_wPort;
+		protected string m_szIp;
+		protected UInt16 m_wPort;
 	}
 }

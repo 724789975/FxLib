@@ -191,6 +191,16 @@ namespace FxNet
 			return true;
 		}
 
+		public bool ReadString(ref string szData)
+		{
+			UInt32 dwLen = 0;
+			ReadInt(ref dwLen);
+			byte[] pData = new byte[dwLen];
+			ReadData(ref pData, dwLen);
+			szData = Encoding.UTF8.GetString(pData);
+			return true;
+		}
+
 		public bool WriteData(byte[] pData, UInt32 dwLen)
 		{
 			m_pWrite.Write(pData, 0, (int)dwLen);
@@ -253,6 +263,7 @@ namespace FxNet
 		public bool WriteString(string szData)
 		{
 			byte[] pData = Encoding.UTF8.GetBytes(szData);
+			WriteInt(pData.Length);
 			return WriteData(pData, (UInt32)pData.Length);
 		}
 

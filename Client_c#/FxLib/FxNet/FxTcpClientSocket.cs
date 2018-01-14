@@ -99,6 +99,7 @@ namespace FxNet
 			{
 				case ENetEvtType.NETEVT_ESTABLISH:
 					{
+						m_pSession.OnConnect();
 						IoThread.Instance().AddConnectSocket(this);
 					}
 					break;
@@ -109,8 +110,17 @@ namespace FxNet
 					}
 					break;
 				case ENetEvtType.NETEVT_ERROR:
+					{
+						m_pSession.OnError(pEvent.dwValue);
+					}
 					break;
 				case ENetEvtType.NETEVT_TERMINATE:
+					{
+						m_pSession.OnClose();
+						SNetEvent oEvent = new SNetEvent();
+						oEvent.eType = ENetEvtType.NETEVT_RELEASE;
+						FxNetModule.Instance().PushNetEvent(this, oEvent);
+					}
 					break;
 				case ENetEvtType.NETEVT_RELEASE:
 					break;
@@ -164,8 +174,6 @@ namespace FxNet
 			SNetEvent pEvent = new SNetEvent();
 			pEvent.eType = ENetEvtType.NETEVT_ESTABLISH;
 			FxNetModule.Instance().PushNetEvent(this, pEvent);
-
-			//Receive();		//这是在主线程 所以不能receive
 		}
 
 		public override bool Init(ISession pSession)
