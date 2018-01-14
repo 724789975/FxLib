@@ -61,6 +61,7 @@ namespace test
 		{
 		}
 
+		UInt32 dw1 = 0;
 		public override void OnRecv(byte[] pBuf, uint dwLen)
 		{
 			NetStream pNetStream = new NetStream(pBuf, dwLen);
@@ -73,8 +74,14 @@ namespace test
 			pNetStream.ReadData(ref pData, dwDataLen);
 
 			string szData = Encoding.UTF8.GetString(pData);
-
-			Send(pData, dwDataLen);
+			var st = new System.Diagnostics.StackTrace();
+			var frame = st.GetFrame(0);
+			szData = String.Format("{0}, {1}, {2}, {3}, {4}, {5}",
+				frame.GetFileName(), frame.GetFileLineNumber().ToString(),
+				frame.GetMethod().ToString(), dw1++,
+				ToString(), DateTime.Now.ToLocalTime().ToString());
+			pData = Encoding.UTF8.GetBytes(szData);
+			Send(pData, (UInt32)pData.Length);
         }
 
 		public override IFxClientSocket Reconnect()

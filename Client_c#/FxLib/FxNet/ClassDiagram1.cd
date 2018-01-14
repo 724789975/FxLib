@@ -3,19 +3,19 @@
   <Class Name="FxNet.IoThread">
     <Position X="6" Y="6.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAEAAAAAACAAAAIBAAAAIAAAgAAAAAAAoACCAAAAACA=</HashCode>
+      <HashCode>AAkAAAAAACAAAAIBAAAAIAAQgAAAAAAAoACCAAAAACA=</HashCode>
       <FileName>IoThread.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="FxNet.FxUdpClientSocket">
-    <Position X="2.5" Y="9.75" Width="1.5" />
+    <Position X="2.25" Y="9.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAQAAAAAEAAAAAAAAEAAAIABAAAAAIAAAAAAAAIAAAA=</HashCode>
+      <HashCode>AAQAAAAAEAAAAAAAAEAAAIABAAAEAIAAAAACAAIAAAA=</HashCode>
       <FileName>FxUdpClientSocket.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="FxNet.FxTcpClientSocket">
-    <Position X="4.5" Y="9.75" Width="1.5" />
+    <Position X="4" Y="9.75" Width="1.5" />
     <NestedTypes>
       <Enum Name="FxNet.FxTcpClientSocket.SendState" Collapsed="true">
         <TypeIdentifier>
@@ -24,7 +24,7 @@
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AARAAAEAEAAAAAAAAAAAAIABAAAAAIAAAAAAAAIAAAA=</HashCode>
+      <HashCode>AARAAAEAEAAAAAAAAEAAAIABAAAEAIAAAAACAAIQAAA=</HashCode>
       <FileName>FxTcpClientSocket.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -41,7 +41,7 @@
       <Compartment Name="Nested Types" Collapsed="false" />
     </Compartments>
     <TypeIdentifier>
-      <HashCode>AAQACAAQHAAABABAAEAAgIAJCAAFAIAQAAAGAAKgAAA=</HashCode>
+      <HashCode>AAQACAAQHAAAACBAAECAgIAhCAAFAIAAAAAGAAIgAAA=</HashCode>
       <FileName>IFxClientSocket.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -53,7 +53,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="FxNet.DataBuffer">
-    <Position X="8" Y="10.5" Width="1.5" />
+    <Position X="6" Y="11" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAEAAAAEAYAABAQAAAAAAAAAAAAIQAAAAAAAAAAAAA=</HashCode>
       <FileName>DataBuffer.cs</FileName>
@@ -72,26 +72,47 @@
       </Enum>
     </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAAAAQAAAABADAAQgAQgAAAAIBgAEAgARACgAABAAA=</HashCode>
+      <HashCode>AAAAAAQAAAABADAAQgAQgAAAAIBgAUAgARACgAABAAA=</HashCode>
       <FileName>DataBuffer.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Struct Name="FxNet.SNetEvent" Collapsed="true">
+  <Class Name="FxNet.ISession">
+    <Position X="4" Y="14.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAABAAAAAACAACJAAEAAAAAIAAAFAIAAAAICABCAAAA=</HashCode>
+      <FileName>ISession.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FxNet.IFxDataHeader">
+    <Position X="5.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAQAAAAIAAAQAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>DataHeader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FxNet.BinaryDataHeader">
+    <Position X="5.75" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAEAAAAAAQAAAAIAAAAAAAAAAAAAAEAAIABA=</HashCode>
+      <FileName>DataHeader.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="FxNet.SNetEvent">
     <Position X="0.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAQAAgAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>FxNetModule.cs</FileName>
     </TypeIdentifier>
   </Struct>
-  <Struct Name="FxNet.SSockNetEvent" Collapsed="true">
-    <Position X="3" Y="0.5" Width="1.5" />
+  <Struct Name="FxNet.SSockNetEvent">
+    <Position X="0.75" Y="2" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AABAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>FxNetModule.cs</FileName>
     </TypeIdentifier>
   </Struct>
-  <Enum Name="FxNet.ENetEvtType" Collapsed="true">
-    <Position X="5" Y="0.5" Width="1.5" />
+  <Enum Name="FxNet.ENetEvtType">
+    <Position X="0.75" Y="3.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAABAAAAAAAAAARAAAAAAQAAMAAAgAACAAAAAgAAAAA=</HashCode>
       <FileName>FxNetModule.cs</FileName>
