@@ -19,10 +19,13 @@ namespace test
 			FxNet.IoThread.Instance().Init();
 			FxNet.IoThread.Instance().Start();
 
-			BinarySession pSession = new BinarySession();
-			pSession.Init("127.0.0.1", 20001);
+			for (int i = 0; i < 100; ++i)
+			{
+				BinarySession pSession = new BinarySession();
+				pSession.Init("127.0.0.1", 20001);
+				pSession.Reconnect();
+			}
 
-			pSession.Reconnect();
 			while (true)
 			{
 				FxNet.FxNetModule.Instance().Run();
