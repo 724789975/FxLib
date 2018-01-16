@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace FxNet
 {
@@ -35,17 +33,23 @@ namespace FxNet
 		public bool Init()
 		{
 			m_pEventQueue = new List<SSockNetEvent>();
+			m_pLock = new object();
 			return true;
 		}
 		public bool Run(UInt32 dwCount = 0xffffffff)
 		{
-			dwCount = (UInt32)m_pEventQueue.Count;
-			while (dwCount > 0)
+			List<SSockNetEvent> lProcEvent = null;
+			lock (m_pLock)
 			{
-				m_pEventQueue[0].pSock.ProcEvent(m_pEventQueue[0].pEvent);
-				m_pEventQueue.RemoveAt(0);
-				--dwCount;
+				lProcEvent = m_pEventQueue;
+				m_pEventQueue = new List<SSockNetEvent>();
 			}
+
+			foreach (SSockNetEvent poEvent in lProcEvent)
+			{
+				poEvent.pSock.ProcEvent(poEvent.pEvent);
+			}
+			lProcEvent.Clear();
 			return false;
 		}
 		public void Release() { }
@@ -54,15 +58,19 @@ namespace FxNet
 
 		public void PushNetEvent(IFxClientSocket poSock, SNetEvent pEvent)
 		{
-			SSockNetEvent pSocketEvent = new SSockNetEvent();
-			pSocketEvent.pSock = poSock;
-			pSocketEvent.pEvent = pEvent;
-			m_pEventQueue.Add(pSocketEvent);
+			lock(m_pLock)
+			{
+				SSockNetEvent pSocketEvent = new SSockNetEvent();
+				pSocketEvent.pSock = poSock;
+				pSocketEvent.pEvent = pEvent;
+				m_pEventQueue.Add(pSocketEvent);
+			}
 		}
 
 		/// <summary>
 		/// 事件队列 这个会放到多线程中 不过push_back与pop_front都只各有一个线程 所以不用加锁
 		/// </summary>
 		private List<SSockNetEvent> m_pEventQueue;
+		object m_pLock;
 	}
 }

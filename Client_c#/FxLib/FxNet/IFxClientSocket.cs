@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Net;
 using System.Net.Sockets;
 
 namespace FxNet
@@ -68,7 +64,7 @@ namespace FxNet
 			{
 				SNetEvent pEvent = new SNetEvent();
 				pEvent.eType = ENetEvtType.NETEVT_ERROR;
-				pEvent.dwValue = (UInt32)e.HResult;
+				//pEvent.dwValue = (UInt32)e.HResult;
 				FxNetModule.Instance().PushNetEvent(this, pEvent);
 				Disconnect();
 				return;
@@ -98,7 +94,7 @@ namespace FxNet
 			{
 				SNetEvent pEvent = new SNetEvent();
 				pEvent.eType = ENetEvtType.NETEVT_ERROR;
-				pEvent.dwValue = (UInt32)e.HResult;
+				//pEvent.dwValue = (UInt32)e.HResult;
 				FxNetModule.Instance().PushNetEvent(this, pEvent);
 				Disconnect();
 				return;
@@ -144,7 +140,7 @@ namespace FxNet
 			{
 				SNetEvent pEvent = new SNetEvent();
 				pEvent.eType = ENetEvtType.NETEVT_ERROR;
-				pEvent.dwValue = (UInt32)e.HResult;
+				//pEvent.dwValue = (UInt32)e.HResult;
 				FxNetModule.Instance().PushNetEvent(this, pEvent);
 				Disconnect();
 				return;
@@ -192,7 +188,7 @@ namespace FxNet
 			{
 				SNetEvent pEvent = new SNetEvent();
 				pEvent.eType = ENetEvtType.NETEVT_ERROR;
-				pEvent.dwValue = (UInt32)e.HResult;
+				//pEvent.dwValue = (UInt32)e.HResult;
 				FxNetModule.Instance().PushNetEvent(this, pEvent);
 				Disconnect();
 				return;
