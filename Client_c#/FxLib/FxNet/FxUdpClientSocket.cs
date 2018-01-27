@@ -5,12 +5,10 @@ namespace FxNet
 {
 	public class FxUdpClientSocket : IFxClientSocket
 	{
-		public override void Connect(string szIp, int nPort)
-		{
-			throw new NotImplementedException();
-		}
 
-		public override void ProcEvent(SNetEvent pEvent)
+
+
+		public override bool Init(ISession pSession)
 		{
 			throw new NotImplementedException();
 		}
@@ -20,11 +18,17 @@ namespace FxNet
 			throw new NotImplementedException();
 		}
 
-		internal override void OnRecv(byte[] buffer, UInt32 bytesRead)
+		public override bool IsConnected()
 		{
 			throw new NotImplementedException();
 		}
-		internal override void OnSend(UInt32 bytesSent)
+
+		public override void ProcEvent(SNetEvent pEvent)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void Connect(string szIp, int nPort)
 		{
 			throw new NotImplementedException();
 		}
@@ -39,16 +43,29 @@ namespace FxNet
 			throw new NotImplementedException();
 		}
 
-		public override bool Init(ISession pSession)
-		{
-			throw new NotImplementedException();
-		}
-
 		public override void Send(byte[] byteData, UInt32 dwLen)
 		{
 			throw new NotImplementedException();
 		}
 
+		public override void OnSend(UInt32 bytesSent)
+		{
+			throw new NotImplementedException();
+		}
 
+		public override void AsynReceive()
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void OnRecv(byte[] buffer, UInt32 bytesRead)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void Disconnect()
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

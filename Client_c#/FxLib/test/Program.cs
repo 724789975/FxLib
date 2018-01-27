@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using WebSocketSharp;
 
 namespace test
 {
@@ -32,6 +33,11 @@ namespace test
 
 				Thread.Sleep(100);
 			}
+
+			//WebSocket oSock = new WebSocket("asdf");
+			//oSock.ConnectAsync();
+			//oSock.ConnectAsync();
+
         }
     }
 }
