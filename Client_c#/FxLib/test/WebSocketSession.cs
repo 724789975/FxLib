@@ -4,7 +4,7 @@ using FxNet;
 
 namespace test
 {
-	public class BinarySession : FxNet.ISession
+	class WebSocketSession : FxNet.ISession
 	{
 		public override void Close()
 		{
@@ -17,7 +17,6 @@ namespace test
 
 		public override void Init(string szIp, UInt16 wPort)
 		{
-			m_pDataHeader = new BinaryDataHeader();
 			//m_pSocket = new FxTcpClientSocket();
 			m_pSocket = new FxWebSocket();
 			m_szIp = szIp;
@@ -63,13 +62,9 @@ namespace test
 		public override void OnRecv(byte[] pBuf, uint dwLen)
 		{
 			NetStream pNetStream = new NetStream(pBuf, dwLen);
-			UInt32 dwDataLen = 0;
-			pNetStream.ReadInt(ref dwDataLen);
-			UInt32 dwMagicNum = 0;
-			pNetStream.ReadInt(ref dwMagicNum);
 
-			byte[] pData = new byte[dwDataLen];
-			pNetStream.ReadData(ref pData, dwDataLen);
+			byte[] pData = new byte[dwLen];
+			pNetStream.ReadData(ref pData, dwLen);
 
 			string szData = Encoding.UTF8.GetString(pData);
 			var st = new System.Diagnostics.StackTrace();
@@ -80,7 +75,7 @@ namespace test
 				ToString(), DateTime.Now.ToLocalTime().ToString());
 			pData = Encoding.UTF8.GetBytes(szData);
 			Send(pData, (UInt32)pData.Length);
-        }
+		}
 
 		public override IFxClientSocket Reconnect()
 		{

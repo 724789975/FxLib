@@ -20,10 +20,10 @@ namespace test
 			FxNet.IoThread.Instance().Init();
 			FxNet.IoThread.Instance().Start();
 
-			for (int i = 0; i < 100; ++i)
+			//for (int i = 0; i < 100; ++i)
 			{
-				BinarySession pSession = new BinarySession();
-				pSession.Init("127.0.0.1", 20001);
+				WebSocketSession pSession = new WebSocketSession();
+				pSession.Init("ws://127.0.0.1:20001/chat", 20001);
 				pSession.Reconnect();
 			}
 
