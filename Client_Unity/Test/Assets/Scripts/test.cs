@@ -15,12 +15,16 @@ public class test : MonoBehaviour
 		FxNet.IoThread.Instance().Init();
 		FxNet.IoThread.Instance().Start();
 
-		for (int i = 0; i < 100; ++i)
-		{
-			BinarySession pSession = new BinarySession(this);
-			pSession.Init("127.0.0.1", 20001);
-			pSession.Reconnect();
-		}
+		//for (int i = 0; i < 100; ++i)
+		//{
+		//	BinarySession pSession = new BinarySession(this);
+		//	pSession.Init("127.0.0.1", 20001);
+		//	pSession.Reconnect();
+		//}
+
+		WebSocketSession pSession = new WebSocketSession(this);
+		pSession.Init("ws://127.0.0.1:20001/chat", 20001);
+		pSession.Reconnect();
 	}
 	
 	// Update is called once per frame
