@@ -2,9 +2,9 @@
 using System.Text;
 using FxNet;
 
-public class BinarySession : ISession
+class WebSocketSession : ISession
 {
-	public BinarySession(SessionObject oGameObject)
+	public WebSocketSession(SessionObject oGameObject)
 	{
 		m_oGameObject = oGameObject;
 	}
@@ -20,8 +20,8 @@ public class BinarySession : ISession
 
 	public override void Init(string szIp, UInt16 wPort)
 	{
-		m_pDataHeader = new BinaryDataHeader();
-		m_pSocket = new FxTcpClientSocket();
+		//m_pSocket = new FxTcpClientSocket();
+		m_pSocket = new FxWebSocket();
 		m_szIp = szIp;
 		m_wPort = wPort;
 	}
@@ -59,15 +59,11 @@ public class BinarySession : ISession
 	public override void OnRecv(byte[] pBuf, uint dwLen)
 	{
 		NetStream pNetStream = new NetStream(pBuf, dwLen);
-		UInt32 dwDataLen = 0;
-		pNetStream.ReadInt(ref dwDataLen);
-		UInt32 dwMagicNum = 0;
-		pNetStream.ReadInt(ref dwMagicNum);
 
-		byte[] pData = new byte[dwDataLen];
-		pNetStream.ReadData(ref pData, dwDataLen);
+		byte[] pData = new byte[dwLen];
+		pNetStream.ReadData(ref pData, dwLen);
 
-		m_oGameObject.OnRecv(pData, dwDataLen);
+		m_oGameObject.OnRecv(pData, dwLen);
 	}
 
 	public override IFxClientSocket Reconnect()

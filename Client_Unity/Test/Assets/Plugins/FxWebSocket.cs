@@ -72,11 +72,18 @@ namespace FxNet
 			Disconnect();
 		}
 
-		public override void Connect(string szUri, int nPort)
+		public override void Connect(string szIp, int nPort)
 		{
 			Disconnect();
 
-			m_hSocket = new WebSocket(szUri);
+			Uri pUrl = new Uri("ws://" + szIp + ":" + nPort + "/");
+			string szProtocol = pUrl.Scheme;
+			if (!szProtocol.Equals("ws") && !szProtocol.Equals("wss"))
+			{
+				throw new ArgumentException("Unsupported protocol: " + szProtocol);
+			}
+
+			m_hSocket = new WebSocket(pUrl.ToString());
 			m_hSocket.OnMessage += (pSender, pEventArgs) => { OnRecv(pEventArgs.RawData, (UInt32)pEventArgs.RawData.Length); };
 			m_hSocket.OnOpen += (pSender, pEventArgs) => { m_bIsConnected = true; OnConnect(); };
 			m_hSocket.OnError += OnError;
