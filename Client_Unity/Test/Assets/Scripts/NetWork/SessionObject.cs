@@ -42,6 +42,8 @@ public class SessionObject : MonoBehaviour
 
 	public void OnClose()
 	{
+		m_textText.text = "session closed";
+		Debug.LogError("session closed");
 	}
 
 	public bool OnDestroy()
@@ -51,6 +53,7 @@ public class SessionObject : MonoBehaviour
 
 	public void OnError(uint dwErrorNo)
 	{
+		m_textText.text = "session error " + dwErrorNo.ToString();
 		Debug.LogError("session error : " + dwErrorNo.ToString());
 	}
 
@@ -61,6 +64,7 @@ public class SessionObject : MonoBehaviour
 
 	public void OnConnect()
 	{
+		m_textText.text = "server connected!!!!!";
 		var st = new System.Diagnostics.StackTrace();
 		var frame = st.GetFrame(0);
 		string szData = String.Format("{0}, {1}, {2}, {3}, {4}",
@@ -75,6 +79,7 @@ public class SessionObject : MonoBehaviour
 	public void OnRecv(byte[] pBuf, uint dwLen)
 	{
 		string szData1 = Encoding.UTF8.GetString(pBuf);
+		m_textText.text = szData1;
 		Debug.Log(szData1);
 
 		string szData = Encoding.UTF8.GetString(pBuf);
@@ -92,4 +97,5 @@ public class SessionObject : MonoBehaviour
 	public SessionType m_eSessionType;
 	public string m_szIP;
 	public UInt16 m_wPort;
+	public UnityEngine.UI.Text m_textText;
 }
