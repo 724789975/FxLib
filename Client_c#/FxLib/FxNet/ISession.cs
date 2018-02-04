@@ -29,7 +29,6 @@ namespace FxNet
 		public abstract bool OnDestroy();
 
 		protected IFxDataHeader m_pDataHeader;
-		protected IFxClientSocket m_pSocket;
 
 		protected string m_szIp;
 		protected UInt16 m_wPort;

@@ -102,5 +102,6 @@ namespace test
 			}
 			return false;
 		}
+		protected IFxClientSocket m_pSocket;
 	}
 }
