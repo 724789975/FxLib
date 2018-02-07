@@ -122,6 +122,10 @@ namespace FxNet
 
 		public override void Update()
 		{
+			if (!IsConnected())
+			{
+				return;
+			}
 			int nLen = 0;
 			byte[] retVal = null;
 			try

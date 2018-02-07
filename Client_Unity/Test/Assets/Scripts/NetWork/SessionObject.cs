@@ -31,14 +31,17 @@ public class SessionObject : MonoBehaviour
 		}
 
 		m_pSession.Init(m_szIP, m_wPort);
-		m_pSession.Reconnect();
+		m_pClientSocket = m_pSession.Reconnect();
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
 #if UNITY_WEBGL && !UNITY_EDITOR
-		m_pClientSocket.Update();
+		if(m_pClientSocket != null)
+		{
+			m_pClientSocket.Update();
+		}
 #else
 #endif
 	}
