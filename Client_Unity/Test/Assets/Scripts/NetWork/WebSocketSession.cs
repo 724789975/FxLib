@@ -15,12 +15,15 @@ class WebSocketSession : ISession
 		{
 			return;
 		}
+#if UNITY_WEBGL && !UNITY_EDITOR
+		m_pSocket.Disconnect();
+#else
 		IoThread.Instance().DelConnectSocket(m_pSocket);
+#endif
 	}
 
 	public override void Init(string szIp, UInt16 wPort)
 	{
-		//m_pSocket = new FxTcpClientSocket();
 		m_pSocket = new FxWebSocket();
 		m_szIp = szIp;
 		m_wPort = wPort;
@@ -69,8 +72,8 @@ class WebSocketSession : ISession
 	public override IFxClientSocket Reconnect()
 	{
 		m_pSocket.Init(this);
-		m_pSocket.Connect(m_szIp, m_wPort);
-		return m_pSocket;
+		m_pSocket.Connect(m_oGameObject, m_szIp, m_wPort);
+        return m_pSocket;
 	}
 
 	public override void Release()
@@ -88,4 +91,5 @@ class WebSocketSession : ISession
 	}
 
 	SessionObject m_oGameObject;
+	FxWebSocket m_pSocket;
 }

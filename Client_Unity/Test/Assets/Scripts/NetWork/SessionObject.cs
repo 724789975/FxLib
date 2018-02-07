@@ -37,7 +37,10 @@ public class SessionObject : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-		
+#if UNITY_WEBGL && !UNITY_EDITOR
+		m_pClientSocket.Update();
+#else
+#endif
 	}
 
 	public void OnClose()
@@ -98,4 +101,5 @@ public class SessionObject : MonoBehaviour
 	public string m_szIP;
 	public UInt16 m_wPort;
 	public UnityEngine.UI.Text m_textText;
+	FxNet.IFxClientSocket m_pClientSocket;
 }

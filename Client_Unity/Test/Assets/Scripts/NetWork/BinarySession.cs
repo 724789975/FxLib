@@ -92,4 +92,5 @@ public class BinarySession : ISession
 	}
 
 	SessionObject m_oGameObject;
+	protected IFxClientSocket m_pSocket;
 }

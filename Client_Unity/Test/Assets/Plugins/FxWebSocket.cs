@@ -1,7 +1,249 @@
 ﻿using System;
+using System.Text;
 using System.Net.Sockets;
-using WebSocketSharp;
+using System.Collections;
+using System.Runtime.InteropServices;
+using UnityEngine;
 
+#if UNITY_WEBGL && !UNITY_EDITOR
+public class WebSocket
+{
+	private Uri mUrl;
+    byte[] buffer = null;
+	public WebSocket(Uri url)
+	{
+		mUrl = url;
+        buffer = new byte[128 * 1024];
+		string protocol = mUrl.Scheme;
+		if (!protocol.Equals("ws") && !protocol.Equals("wss"))
+			throw new ArgumentException("Unsupported protocol: " + protocol);
+	}
+
+	public void SendString(string str)
+	{
+		Send(Encoding.UTF8.GetBytes (str), 0);
+	}
+
+	public string RecvString()
+	{
+        int len = 0;
+		byte[] retval = Recv(0, ref len);
+		if (retval == null)
+			return null;
+		return Encoding.UTF8.GetString (retval);
+	}
+
+	[DllImport("__Internal")]
+	private static extern int SocketCreate (string url);
+
+	[DllImport("__Internal")]
+	private static extern int SocketState (int socketInstance);
+
+	[DllImport("__Internal")]
+	private static extern void SocketSend (int socketInstance, byte[] ptr, int length);
+
+	[DllImport("__Internal")]
+	private static extern void SocketRecv (int socketInstance, byte[] ptr, int length);
+
+	[DllImport("__Internal")]
+	private static extern int SocketRecvLength (int socketInstance);
+
+	[DllImport("__Internal")]
+	private static extern void SocketClose (int socketInstance);
+
+	[DllImport("__Internal")]
+	private static extern int SocketError (int socketInstance, byte[] ptr, int length);
+
+	int m_NativeRef = 0;
+
+	public void Send(byte[] buffer, int size)
+	{
+		SocketSend (m_NativeRef, buffer, size);
+	}
+
+	public byte[] Recv(int recv_size, ref int len)
+	{
+		int length = SocketRecvLength (m_NativeRef);
+		if (length == 0)
+			return null;
+        if (recv_size < length)
+        {
+            length = recv_size;
+        }
+		//byte[] buffer = new byte[length];
+		SocketRecv (m_NativeRef, buffer, length);
+        len = length;
+		return buffer;
+	}
+
+	public IEnumerator Connect()
+	{
+		m_NativeRef = SocketCreate(mUrl.ToString());
+
+		while (SocketState(m_NativeRef) == 0)
+			yield return 0;
+
+		m_pfOnConnect();
+	}
+ 
+	public void Close()
+	{
+		SocketClose(m_NativeRef);
+	}
+
+	public string error
+	{
+		get {
+			const int bufsize = 1024;
+			byte[] buffer = new byte[bufsize];
+			int result = SocketError (m_NativeRef, buffer, bufsize);
+
+			if (result == 0)
+				return null;
+
+			return Encoding.UTF8.GetString (buffer);				
+		}
+	}
+    public bool IsConnected
+    {
+        get { return (SocketState(m_NativeRef) != 0); }
+    }
+
+	public Action m_pfOnConnect;
+}
+namespace FxNet
+{
+	public class FxWebSocket : IFxClientSocket
+	{
+		public override bool Init(ISession pSession)
+		{
+			return true;
+		}
+
+		public override void Update()
+		{
+			int nLen = 0;
+			byte[] retVal = null;
+			try
+			{
+				retVal = m_hSocket.Recv(64 * 1024, ref nLen);
+			}
+			catch(SocketException e)
+			{
+				switch ((SocketError)e.ErrorCode)
+				{
+					case SocketError.TryAgain:
+					case SocketError.TimedOut:
+					case SocketError.NoBufferSpaceAvailable:
+					case SocketError.Interrupted:
+					case SocketError.IOPending:
+					case SocketError.WouldBlock:
+					return;
+				}
+				m_pSession.OnError((UInt32)e.ErrorCode);
+				Disconnect();
+			}
+			catch(Exception)
+			{
+				Disconnect();
+			}
+			if (retVal == null)
+			{
+				return;
+			}
+
+			OnRecv(retVal, (UInt32)nLen);
+		}
+
+		public override bool IsConnected()
+		{
+			return m_hSocket.IsConnected;
+		}
+
+		public override void ProcEvent(SNetEvent pEvent)
+		{
+			throw new NotImplementedException();
+		}
+
+		public WebSocket GetWebSocket() { return m_hSocket; }
+
+		public void Connect(MonoBehaviour pSession, string szIp, int nPort)
+		{
+			Disconnect();
+
+			Uri pUrl = new Uri("ws://" + szIp + ":" + nPort + "/");
+			string szProtocol = pUrl.Scheme;
+			if (!szProtocol.Equals("ws") && !szProtocol.Equals("wss"))
+			{
+				throw new ArgumentException("Unsupported protocol: " + szProtocol);
+			}
+
+			m_hSocket = new WebSocket(pUrl);
+			m_hSocket.m_pfOnConnect += OnConnect;
+
+			pSession.StartCoroutine(m_hSocket.Connect());
+        }
+
+		public override void Connect(string szIp, int nPort)
+		{
+			throw new NotImplementedException();
+		}
+
+		protected override bool CreateSocket(AddressFamily pAddressFamily)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void OnConnect()
+		{
+			m_pSession.OnConnect();
+		}
+
+		public override void Send(byte[] byteData, UInt32 dwLen)
+		{
+			// 阻塞着发 省的包头有问题
+			m_hSocket.Send(byteData, (Int32)dwLen);
+		}
+
+		public override void OnSend(UInt32 bytesSent)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void AsynReceive()
+		{
+			throw new NotImplementedException();
+		}
+
+		public override void OnRecv(byte[] bytesBuffer, UInt32 bytesRead)
+		{
+			m_pSession.OnRecv(bytesBuffer, bytesRead);
+		}
+
+		public override void Disconnect()
+		{
+			try
+			{
+				if (m_hSocket != null && IsConnected())
+				{
+					m_hSocket.Close();
+					m_hSocket = null;
+
+					m_pSession.OnClose();
+				}
+			}
+			catch (Exception)
+			{
+			}
+		}
+
+		string m_szError;
+
+		DataBuffer m_pSessionBuffer;
+		protected WebSocket m_hSocket;
+	}
+}
+#else
 namespace FxNet
 {
 	public class FxWebSocket : IFxClientSocket
@@ -63,13 +305,18 @@ namespace FxNet
 			}
 		}
 
-		void OnError(object pSender, ErrorEventArgs pEventArgs)
+		void OnError(object pSender, WebSocketSharp.ErrorEventArgs pEventArgs)
 		{
 			m_szError = pEventArgs.Message;
 			SNetEvent pEvent = new SNetEvent();
 			pEvent.eType = ENetEvtType.NETEVT_ERROR;
 			FxNetModule.Instance().PushNetEvent(this, pEvent);
 			Disconnect();
+		}
+
+		public void Connect(MonoBehaviour pSession, string szIp, int nPort)
+		{
+			Connect(szIp, nPort);
 		}
 
 		public override void Connect(string szIp, int nPort)
@@ -83,7 +330,7 @@ namespace FxNet
 				throw new ArgumentException("Unsupported protocol: " + szProtocol);
 			}
 
-			m_hSocket = new WebSocket(pUrl.ToString());
+			m_hSocket = new WebSocketSharp.WebSocket(pUrl.ToString());
 			m_hSocket.OnMessage += (pSender, pEventArgs) => { OnRecv(pEventArgs.RawData, (UInt32)pEventArgs.RawData.Length); };
 			m_hSocket.OnOpen += (pSender, pEventArgs) => { m_bIsConnected = true; OnConnect(); };
 			m_hSocket.OnError += OnError;
@@ -109,14 +356,6 @@ namespace FxNet
 		{
 			// 阻塞着发 省的包头有问题
 			m_hSocket.Send(byteData);
-
-			//byte[] pData = new byte[dwLen + GetDataHeader().GetHeaderLength()];
-			//FxNet.NetStream oNetStream = new NetStream(NetStream.ENetStreamType.ENetStreamType_Write, pData, (UInt32)pData.Length);
-			//UInt32 dwHeaderLen = 0;
-			//byte[] pDataHeader = GetDataHeader().BuildSendPkgHeader(ref dwHeaderLen, dwLen);
-			//oNetStream.WriteData(pDataHeader, GetDataHeader().GetHeaderLength());
-			//oNetStream.WriteData(byteData, dwLen);
-			//m_pSendBuffer.PushData(pData, (UInt32)pData.Length);
 		}
 
 		public override void OnSend(UInt32 bytesSent)
@@ -158,6 +397,7 @@ namespace FxNet
 		string m_szError;
 
 		DataBuffer m_pSessionBuffer;
-		protected WebSocket m_hSocket;
+		protected WebSocketSharp.WebSocket m_hSocket;
 	}
 }
+#endif
