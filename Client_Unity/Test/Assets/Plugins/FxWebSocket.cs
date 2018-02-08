@@ -8,6 +8,7 @@ using UnityEngine;
 #if UNITY_WEBGL && !UNITY_EDITOR
 public class WebSocket
 {
+	public delegate void Fun();
 	private Uri mUrl;
     byte[] buffer = null;
 	public WebSocket(Uri url)
@@ -109,7 +110,7 @@ public class WebSocket
         get { return (SocketState(m_NativeRef) != 0); }
     }
 
-	public Action m_pfOnConnect;
+	public Fun m_pfOnConnect;
 }
 namespace FxNet
 {
@@ -117,6 +118,12 @@ namespace FxNet
 	{
 		public override bool Init(ISession pSession)
 		{
+			m_pSession = pSession;
+			//m_pDataBuffer = new byte[BUFFER_SIZE];
+			//m_pRecvBuffer = new DataBuffer();
+			//m_pSendBuffer = new DataBuffer();
+			//m_pSessionBuffer = new DataBuffer();
+			m_szError = null;
 			return true;
 		}
 
@@ -183,7 +190,7 @@ namespace FxNet
 			}
 
 			m_hSocket = new WebSocket(pUrl);
-			m_hSocket.m_pfOnConnect += OnConnect;
+			m_hSocket.m_pfOnConnect = OnConnect;
 
 			pSession.StartCoroutine(m_hSocket.Connect());
         }
