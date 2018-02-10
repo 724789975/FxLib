@@ -44,6 +44,13 @@ int main(int argc, char **argv)
 	}
 	GetTimeHandler()->Run();
 
+	if (!CSessionFactory::CreateInstance())
+	{
+		g_bRun = false;
+		goto STOP;
+	}
+	CSessionFactory::Instance()->Init();
+
 	if (!CWebSocketSessionFactory::CreateInstance())
 	{
 		g_bRun = false;
@@ -73,19 +80,21 @@ int main(int argc, char **argv)
 	//	LogFun(LT_Screen, LogLv_Info, "%s", "db connected~~~~");
 	//}
 
-	pTcpListenSocket = pNet->Listen(CWebSocketSessionFactory::Instance(), SLT_WebSocket, 0, FLAGS_tcp_port);
+	UINT16 wPort = FLAGS_tcp_port;
+	pTcpListenSocket = pNet->Listen(CWebSocketSessionFactory::Instance(), SLT_WebSocket, 0, wPort);
 	if(pTcpListenSocket == NULL)
 	{
 		g_bRun = false;
 		goto STOP;
 	}
 
-	//pUdpListenSocket = pNet->Listen(CSessionFactory::Instance(), SLT_Udp, 0, FLAGS_udp_port);
-	//if(pUdpListenSocket == NULL)
-	//{
-	//	g_bRun = false;
-	//	goto STOP;
-	//}
+	wPort = FLAGS_udp_port;
+	pUdpListenSocket = pNet->Listen(CSessionFactory::Instance(), SLT_Udp, 0, wPort);
+	if(pUdpListenSocket == NULL)
+	{
+		g_bRun = false;
+		goto STOP;
+	}
 
 	while (g_bRun)
 	{
@@ -98,13 +107,13 @@ int main(int argc, char **argv)
 	pUdpListenSocket->StopListen();
 	pTcpListenSocket->Close();
 	pUdpListenSocket->Close();
-	for (std::set<FxSession*>::iterator it = CWebSocketSessionFactory::Instance()->m_setSessions.begin();
-		it != CWebSocketSessionFactory::Instance()->m_setSessions.end(); ++it)
+	for (std::set<FxSession*>::iterator it = CSessionFactory::Instance()->m_setSessions.begin();
+		it != CSessionFactory::Instance()->m_setSessions.end(); ++it)
 	{
 		(*it)->Close();
 	}
 
-	while (CWebSocketSessionFactory::Instance()->m_setSessions.size())
+	while (CSessionFactory::Instance()->m_setSessions.size())
 	{
 		pNet->Run(0xffffffff);
 		FxSleep(10);

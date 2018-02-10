@@ -27,7 +27,7 @@ public:
 	virtual void				Release();
 	virtual bool				SetNetOpt(ENetOpt eOpt, int nValue);
 
-	virtual IFxListenSocket*	Listen(IFxSessionFactory* pSessionFactory, ESocketType eSocketListenType, UINT32 dwIP, UINT16 dwPort);
+	virtual IFxListenSocket*	Listen(IFxSessionFactory* pSessionFactory, ESocketType eSocketListenType, UINT32 dwIP, UINT16& dwPort);
 
 	virtual SOCKET				TcpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect = false);
 

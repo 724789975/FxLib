@@ -132,7 +132,7 @@ void FxNetModule::Uninit()
     __DestroyComponent();
 }
 
-IFxListenSocket* FxNetModule::Listen(IFxSessionFactory* pSessionFactory, ESocketType eSocketListenType, UINT32 dwIP, UINT16 dwPort)
+IFxListenSocket* FxNetModule::Listen(IFxSessionFactory* pSessionFactory, ESocketType eSocketListenType, UINT32 dwIP, UINT16& dwPort)
 {
 	IFxListenSocket* pListenSocket = NULL;
 	switch (eSocketListenType)

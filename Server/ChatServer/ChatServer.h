@@ -15,7 +15,7 @@ public:
 	ChatServer();
 	virtual ~ChatServer();
 
-	bool Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UINT32 dwChatWebSocketSessionPort, UINT32 dwChatServerSessionPort);
+	bool Init(std::string szChatSessionIp, UINT16& wChatSessionPort, UINT16& wChatWebSocketSessionPort, UINT16& wChatServerSessionPort);
 
 	//GameSession& GetGameSession() { return m_oChatSession; }
 	ChatManagerSession& GetChatManagerSession() { return m_oChatManagerSession; }
@@ -27,9 +27,9 @@ public:
 
 	void Close();
 
-	UINT32 GetChatSessionPort() { return m_dwChatSessionPort; }
-	UINT32 GetChatWebSocketSessionPort() { return m_dwChatWebSocketSessionPort; }
-	UINT32 GetChatServerSessionPort() { return m_dwChatServerSessionPort; }
+	UINT32 GetChatSessionPort() { return m_wChatSessionPort; }
+	UINT32 GetChatWebSocketSessionPort() { return m_wChatWebSocketSessionPort; }
+	UINT32 GetChatServerSessionPort() { return m_wChatServerSessionPort; }
 	std::string GetChatSessionIp() { return m_szChatSessionIp; }
 
 	void SetHashIndex(UINT32 dwIndex);
@@ -41,9 +41,9 @@ private:
 	ChatManagerSession m_oChatManagerSession;
 
 	std::string m_szChatSessionIp;
-	UINT32 m_dwChatSessionPort;
-	UINT32 m_dwChatWebSocketSessionPort;
-	UINT32 m_dwChatServerSessionPort;
+	UINT16 m_wChatSessionPort;
+	UINT16 m_wChatWebSocketSessionPort;
+	UINT16 m_wChatServerSessionPort;
 
 	IFxListenSocket* m_pChatSessionListener;
 	IFxListenSocket* m_pChatWebSocketSessionListener;

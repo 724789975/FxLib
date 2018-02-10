@@ -68,7 +68,8 @@ int main(int argc, char **argv)
 	}
 	//----------------------order can't change end-----------------------//
 
-	ChatServerManager::Instance()->Init(FLAGS_chat_server_port, FLAGS_game_server_port, FLAGS_gm_port);
+	UINT16 w1 = FLAGS_chat_server_port, w2 = FLAGS_game_server_port, w3 = FLAGS_gm_port;
+	ChatServerManager::Instance()->Init(w1, w2, w3);
 	while (g_bRun)
 	{
 		GetTimeHandler()->Run();

@@ -80,7 +80,7 @@ public:
 	virtual bool				Init();
 	virtual void				OnRead();
 	virtual void				OnWrite();
-	virtual bool				Listen(UINT32 dwIP, UINT16 wPort);
+	virtual SOCKET				Listen(UINT32 dwIP, UINT16& wPort);
 	virtual bool				StopListen();
 	virtual bool				Close();
 	void						Reset();

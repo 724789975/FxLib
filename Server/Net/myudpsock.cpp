@@ -51,7 +51,7 @@ void FxUDPListenSock::OnWrite()
 
 }
 
-bool FxUDPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
+SOCKET FxUDPListenSock::Listen(UINT32 dwIP, UINT16& wPort)
 {
 	memset(&m_stAddr, 0, sizeof(m_stAddr));
 	SetSock(socket(AF_INET, SOCK_DGRAM, 0));

@@ -68,7 +68,7 @@ void FxTCPListenSock::OnWrite()
 {
 }
 
-bool FxTCPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
+SOCKET FxTCPListenSock::Listen(UINT32 dwIP, UINT16& wPort)
 {
 	SetSock(socket(AF_INET, SOCK_STREAM, 0));
 	if (INVALID_SOCKET == GetSock())
@@ -119,6 +119,22 @@ bool FxTCPListenSock::Listen(UINT32 dwIP, UINT16 wPort)
 #endif // WIN32
 		return false;
 	}
+
+	int nLocalAddrLen = sizeof(stAddr);
+	if (getsockname(GetSock(), (sockaddr*)&stAddr, &nLocalAddrLen) < 0)
+	{
+#ifdef WIN32
+		closesocket(GetSock());
+		int dwErr = WSAGetLastError();
+#else
+		close(GetSock());
+		int dwErr = errno;
+#endif // WIN32
+
+		LogExe(LogLv_Critical, "socket getsockname error : %d, socket : %d, socket id %d", dwErr, GetSock(), GetSockId());
+		return INVALID_SOCKET;
+	}
+	wPort = ntohs(stAddr.sin_port);
 
 	m_poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(GetSock());
 	if (NULL == m_poIoThreadHandler)

@@ -186,11 +186,11 @@ class IFxSocket
 public:
 	virtual							~IFxSocket(){}
 
-	virtual bool Init() = 0;
-	virtual void OnRead() = 0;
-	virtual void OnWrite() = 0;
-	virtual bool Close() = 0;
-	virtual void ProcEvent(SNetEvent oEvent) = 0;
+	virtual bool					Init() = 0;
+	virtual void					OnRead() = 0;
+	virtual void					OnWrite() = 0;
+	virtual bool					Close() = 0;
+	virtual void					ProcEvent(SNetEvent oEvent) = 0;
 	
 	void							SetSock(SOCKET hSock){ m_hSock = hSock; }
 	SOCKET&							GetSock(){ return m_hSock; }
@@ -247,12 +247,12 @@ public:
 
 	bool							Init(IFxSessionFactory* pSessionFactory){ m_poSessionFactory = pSessionFactory; return Init(); }
 
-	virtual void OnRead() = 0;
-	virtual void OnWrite() = 0;
-	virtual bool Listen(UINT32 dwIP, UINT16 wPort) = 0;
-	virtual bool StopListen() = 0;
-	virtual bool Close() = 0;
-	virtual void ProcEvent(SNetEvent oEvent) = 0;
+	virtual void					OnRead() = 0;
+	virtual void					OnWrite() = 0;
+	virtual SOCKET					Listen(UINT32 dwIP, UINT16& wPort) = 0;
+	virtual bool					StopListen() = 0;
+	virtual bool					Close() = 0;
+	virtual void					ProcEvent(SNetEvent oEvent) = 0;
 
 #ifdef WIN32
 	virtual void					OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred) = 0;		//
@@ -273,12 +273,12 @@ class IFxConnectSocket : public IFxSocket
 public:
 	virtual ~IFxConnectSocket(){}
 
-	virtual bool Init() = 0;
-	//bool Init(IFxListenSocket* pListenSocket){ m_pListenSocket = pListenSocket;return Init(); }
-	virtual void OnRead() = 0;
-	virtual void OnWrite() = 0;
-	virtual bool Close() = 0;
-	virtual void ProcEvent(SNetEvent oEvent) = 0;
+	virtual bool					Init() = 0;
+	//bool							Init(IFxListenSocket* pListenSocket){ m_pListenSocket = pListenSocket;return Init(); }
+	virtual void					OnRead() = 0;
+	virtual void					OnWrite() = 0;
+	virtual bool					Close() = 0;
+	virtual void					ProcEvent(SNetEvent oEvent) = 0;
 	virtual bool					Send(const char* pData, int dwLen) = 0;
 
 	virtual void					SetConnection(FxConnection* poFxConnection) { m_poConnection = poFxConnection; }
@@ -312,7 +312,7 @@ public:
 	virtual void					Release() = 0;
 
 	virtual SOCKET					TcpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect = false) = 0;
-	virtual IFxListenSocket*		Listen(IFxSessionFactory* pSessionFactory, ESocketType eSocketListenType, UINT32 dwIP, UINT16 dwPort) = 0;
+	virtual IFxListenSocket*		Listen(IFxSessionFactory* pSessionFactory, ESocketType eSocketListenType, UINT32 dwIP, UINT16& dwPort) = 0;
 
 	virtual SOCKET					UdpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect = false) = 0;
 

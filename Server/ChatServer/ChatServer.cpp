@@ -9,8 +9,8 @@
 
 
 ChatServer::ChatServer()
-	: m_dwChatSessionPort(0)
-	, m_dwChatServerSessionPort(0)
+	: m_wChatSessionPort(0)
+	, m_wChatServerSessionPort(0)
 	, m_pChatSessionListener(NULL)
 	, m_pChatServerSessionListener(NULL)
 	, m_dwHashIndex(0xFFFFFFFF)
@@ -21,7 +21,7 @@ ChatServer::~ChatServer()
 {
 }
 
-bool ChatServer::Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UINT32 dwChatWebSocketSessionPort, UINT32 dwChatServerSessionPort)
+bool ChatServer::Init(std::string szChatSessionIp, UINT16& wChatSessionPort, UINT16& wChatWebSocketSessionPort, UINT16& wChatServerSessionPort)
 {
 	m_oChatBinarySessionManager.Init();
 	m_oChatPlayerManager.Init();
@@ -29,9 +29,9 @@ bool ChatServer::Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UIN
 	m_oChatWebSocketSessionManager.Init();
 
 	m_szChatSessionIp = szChatSessionIp;
-	m_dwChatServerSessionPort = dwChatServerSessionPort;
-	m_dwChatSessionPort = dwChatSessionPort;
-	m_dwChatWebSocketSessionPort = dwChatWebSocketSessionPort;
+	m_wChatServerSessionPort = wChatServerSessionPort;
+	m_wChatSessionPort = wChatSessionPort;
+	m_wChatWebSocketSessionPort = wChatWebSocketSessionPort;
 	IFxNet* pNet = FxNetGetModule();
 	if (pNet == NULL)
 	{
@@ -46,18 +46,18 @@ bool ChatServer::Init(std::string szChatSessionIp, UINT32 dwChatSessionPort, UIN
 			dwIp = *(u_long*)pHost->h_addr_list[i];
 		}
 	}
-	m_pChatServerSessionListener = pNet->Listen(&m_oChatServerSessionManager, SLT_CommonTcp, 0, m_dwChatServerSessionPort);
+	m_pChatServerSessionListener = pNet->Listen(&m_oChatServerSessionManager, SLT_CommonTcp, 0, m_wChatServerSessionPort);
 	if (m_pChatServerSessionListener == NULL)
 	{
 		return false;
 	}
 	//腾讯云没有公网IP 所以只能bind 0
-	m_pChatSessionListener = pNet->Listen(&m_oChatBinarySessionManager, SLT_CommonTcp, 0, m_dwChatSessionPort);
+	m_pChatSessionListener = pNet->Listen(&m_oChatBinarySessionManager, SLT_CommonTcp, 0, m_wChatSessionPort);
 	if (m_pChatSessionListener  == NULL)
 	{
 		return false;
 	}
-	m_pChatWebSocketSessionListener = pNet->Listen(&m_oChatWebSocketSessionManager, SLT_WebSocket, 0, dwChatWebSocketSessionPort);
+	m_pChatWebSocketSessionListener = pNet->Listen(&m_oChatWebSocketSessionManager, SLT_WebSocket, 0, wChatWebSocketSessionPort);
 	if (m_pChatWebSocketSessionListener == NULL)
 	{
 		return false;
