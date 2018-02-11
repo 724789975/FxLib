@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "singleton.h"
-#include "ChatSession.h"
+#include "ServerSession.h"
 
 class GameServer : public TSingleton<GameServer>
 {
@@ -13,11 +13,13 @@ public:
 	virtual ~GameServer();
 
 	//ChatSession& GetChatSession() { return m_oChatSession; }
+	CServerSession& GetServerSession() { return m_oServerSession; }
 
 private:
 	//ChatSession m_oChatSession;
+	CWebSocketServerSession m_oServerSession;
 
-	std::vector<ChatSession> m_vecChatSession;
+	//std::vector<ChatSession> m_vecChatSession;
 };
 
 

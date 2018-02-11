@@ -1,6 +1,9 @@
 #include "SlaveServerSession.h"
+#include "netstream.h"
+#include "gamedefine.h"
 
-
+const static unsigned int g_dwSlaveServerSessionBuffLen = 64 * 1024;
+static char g_pSlaveServerSessionBuf[g_dwSlaveServerSessionBuffLen];
 
 CSlaveServerSession::CSlaveServerSession()
 {

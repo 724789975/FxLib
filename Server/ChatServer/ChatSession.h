@@ -55,8 +55,6 @@ public:
 
 private:
 	TDynamicPoolEx<ChatBinarySession> m_poolSessions;
-
-	FxCriticalLock m_oLock;
 };
 
 class ChatWebSocketSession : public ChatSession
@@ -83,8 +81,6 @@ public:
 
 private:
 	TDynamicPoolEx<ChatWebSocketSession> m_poolSessions;
-
-	FxCriticalLock m_oLock;
 };
 
 #endif // !__CHatSession_H__

@@ -34,6 +34,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebGame", "WebGame\WebGame.
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebGameManager", "WebGameManager\WebGameManager.vcxproj", "{1ACA1AD4-A4A7-4F50-890E-180262BF109D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{125E8610-3875-4CAC-A54E-1CBD717898DA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -154,5 +156,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5F97E034-3D07-4FCE-9A0D-410661E3C32A} = {125E8610-3875-4CAC-A54E-1CBD717898DA}
+		{EA521660-35B5-4C46-8AA0-545C78441734} = {125E8610-3875-4CAC-A54E-1CBD717898DA}
+		{80844BDA-1F06-4850-83A8-DCAB973131BA} = {125E8610-3875-4CAC-A54E-1CBD717898DA}
+		{E46B34D1-23FF-434D-AD85-DF5E0ED821F4} = {125E8610-3875-4CAC-A54E-1CBD717898DA}
 	EndGlobalSection
 EndGlobal
