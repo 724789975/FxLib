@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Net", "Net\Net.vcxproj", "{5F97E034-3D07-4FCE-9A0D-410661E3C32A}"
 EndProject
@@ -29,6 +29,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "RerdisTest", "RedisTest\RedisTest.vcxproj", "{A5520A3C-2313-45F9-8D3B-AE05DB595AC0}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestProto", "TestProto\TestProto.vcxproj", "{3F11C56C-F062-4C3A-987B-BE6929F4A7BF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebGame", "WebGame\WebGame.vcxproj", "{F0817D48-7560-4349-BE6A-3264457DD980}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebGameManager", "WebGameManager\WebGameManager.vcxproj", "{1ACA1AD4-A4A7-4F50-890E-180262BF109D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -131,6 +135,22 @@ Global
 		{3F11C56C-F062-4C3A-987B-BE6929F4A7BF}.Release|Win32.Build.0 = Release|Win32
 		{3F11C56C-F062-4C3A-987B-BE6929F4A7BF}.Release|x64.ActiveCfg = Release|x64
 		{3F11C56C-F062-4C3A-987B-BE6929F4A7BF}.Release|x64.Build.0 = Release|x64
+		{F0817D48-7560-4349-BE6A-3264457DD980}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F0817D48-7560-4349-BE6A-3264457DD980}.Debug|Win32.Build.0 = Debug|Win32
+		{F0817D48-7560-4349-BE6A-3264457DD980}.Debug|x64.ActiveCfg = Debug|x64
+		{F0817D48-7560-4349-BE6A-3264457DD980}.Debug|x64.Build.0 = Debug|x64
+		{F0817D48-7560-4349-BE6A-3264457DD980}.Release|Win32.ActiveCfg = Release|Win32
+		{F0817D48-7560-4349-BE6A-3264457DD980}.Release|Win32.Build.0 = Release|Win32
+		{F0817D48-7560-4349-BE6A-3264457DD980}.Release|x64.ActiveCfg = Release|x64
+		{F0817D48-7560-4349-BE6A-3264457DD980}.Release|x64.Build.0 = Release|x64
+		{1ACA1AD4-A4A7-4F50-890E-180262BF109D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1ACA1AD4-A4A7-4F50-890E-180262BF109D}.Debug|Win32.Build.0 = Debug|Win32
+		{1ACA1AD4-A4A7-4F50-890E-180262BF109D}.Debug|x64.ActiveCfg = Debug|x64
+		{1ACA1AD4-A4A7-4F50-890E-180262BF109D}.Debug|x64.Build.0 = Debug|x64
+		{1ACA1AD4-A4A7-4F50-890E-180262BF109D}.Release|Win32.ActiveCfg = Release|Win32
+		{1ACA1AD4-A4A7-4F50-890E-180262BF109D}.Release|Win32.Build.0 = Release|Win32
+		{1ACA1AD4-A4A7-4F50-890E-180262BF109D}.Release|x64.ActiveCfg = Release|x64
+		{1ACA1AD4-A4A7-4F50-890E-180262BF109D}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
