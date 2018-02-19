@@ -32,4 +32,73 @@ void CSlaveServerSession::OnRecv(const char * pBuf, UINT32 dwLen)
 
 void CSlaveServerSession::Release(void)
 {
+	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
+	OnDestroy();
+
+	Init(NULL);
 }
+
+//////////////////////////////////////////////////////////////////////////
+CWebSocketSlaveServerSession::CWebSocketSlaveServerSession()
+{
+
+}
+
+CWebSocketSlaveServerSession::~CWebSocketSlaveServerSession()
+{
+
+}
+
+void CWebSocketSlaveServerSession::Release(void)
+{
+	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
+	OnDestroy();
+
+	Init(NULL);
+}
+
+//////////////////////////////////////////////////////////////////////////
+WebSocketSlaveServerSessionManager::WebSocketSlaveServerSessionManager()
+{
+}
+
+WebSocketSlaveServerSessionManager::~WebSocketSlaveServerSessionManager()
+{
+}
+
+FxSession * WebSocketSlaveServerSessionManager::CreateSession()
+{
+	FxSession* pSession = NULL;
+	m_oLock.Lock();
+	for (int i = 0; i < MAXSLAVESERVERNUM; ++i)
+	{
+		if (m_oWebSocketSlaveServerSessions[i].GetConnection() == NULL)
+		{
+			m_oWebSocketSlaveServerSessions[i].Init((FxConnection*)0xFFFFFFFF);
+			pSession = &m_oWebSocketSlaveServerSessions[i];
+			break;
+		}
+	}
+	m_oLock.UnLock();
+	return pSession;
+}
+
+void WebSocketSlaveServerSessionManager::Release(FxSession * pSession)
+{
+}
+
+void WebSocketSlaveServerSessionManager::Release(CWebSocketSlaveServerSession* pSession)
+{
+	m_oLock.Lock();
+	for (int i = 0; i < MAXSLAVESERVERNUM; ++i)
+	{
+		if (&m_oWebSocketSlaveServerSessions[i] == pSession)
+		{
+			m_oWebSocketSlaveServerSessions[i].Init(NULL);
+			break;
+		}
+	}
+	m_oLock.UnLock();
+}
+
+

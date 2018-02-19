@@ -6,6 +6,8 @@
 #include "fxdb.h"
 
 #define IDLENTH 64
+#define MAXCLIENTNUM 16
+#define MAXSLAVESERVERNUM 15
 
 namespace Protocol
 {

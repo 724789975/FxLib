@@ -9,7 +9,6 @@ CPlayerSession::CPlayerSession()
 {
 }
 
-
 CPlayerSession::~CPlayerSession()
 {
 }
@@ -59,4 +58,66 @@ void CPlayerSession::OnRequestGameManagerInfo(const char* pBuf, UINT32 dwLen)
 		//oPLAYER_REQUEST_GAME_MANAGER_INFO.Read(oStream);
 
 
+}
+
+//////////////////////////////////////////////////////////////////////////
+CWebSocketPlayerSession::CWebSocketPlayerSession()
+{
+}
+
+CWebSocketPlayerSession::~CWebSocketPlayerSession()
+{
+}
+
+void CWebSocketPlayerSession::Release(void)
+{
+	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
+	OnDestroy();
+
+	Init(NULL);
+}
+
+//////////////////////////////////////////////////////////////////////////
+WebSocketPlayerSessionManager::WebSocketPlayerSessionManager()
+{
+}
+
+WebSocketPlayerSessionManager::~WebSocketPlayerSessionManager()
+{
+}
+
+FxSession * WebSocketPlayerSessionManager::CreateSession()
+{
+	FxSession* pSession = NULL;
+	m_oLock.Lock();
+	for (int i = 0; i < MAXSLAVESERVERNUM; ++i)
+	{
+		if (m_oWebSocketPlayerSessions[i].GetConnection() == NULL)
+		{
+			m_oWebSocketPlayerSessions[i].Init((FxConnection*)0xFFFFFFFF);
+			pSession = &m_oWebSocketPlayerSessions[i];
+			break;
+		}
+	}
+	m_oLock.UnLock();
+	return pSession;
+}
+
+void WebSocketPlayerSessionManager::Release(FxSession * pSession)
+{
+	Assert(0);
+}
+
+void WebSocketPlayerSessionManager::Release(CWebSocketPlayerSession* pSession)
+{
+	m_oLock.Lock();
+	for (int i = 0; i < MAXSLAVESERVERNUM; ++i)
+	{
+		if (&m_oWebSocketPlayerSessions[i] == pSession)
+		{
+			m_oWebSocketPlayerSessions[i].Init(NULL);
+			break;
+		}
+	}
+	m_oLock.UnLock();
 }

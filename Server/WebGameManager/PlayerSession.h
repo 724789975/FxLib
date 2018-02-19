@@ -7,6 +7,7 @@
 #include <set>
 #include <list>
 #include <deque>
+#include "SocketSession.h"
 
 class CPlayerSession : public FxSession
 {
@@ -26,5 +27,35 @@ public:
 private:
 	char m_dataRecvBuf[1024 * 1024];
 };
+
+class CWebSocketPlayerSession : public CPlayerSession
+{
+public:
+	CWebSocketPlayerSession(){}
+	~CWebSocketPlayerSession(){}
+
+	virtual IFxDataHeader* GetDataHeader() { return &m_oWebSocketDataHeader; }
+	virtual void Release(void);
+private:
+	WebSocketDataHeader m_oWebSocketDataHeader;
+
+};
+
+class WebSocketPlayerSessionManager : public IFxSessionFactory
+{
+public:
+	WebSocketPlayerSessionManager() {}
+	virtual ~WebSocketPlayerSessionManager() {}
+
+	virtual FxSession* CreateSession();
+
+	bool Init();
+	virtual void Release(FxSession* pSession);
+	void Release(CWebSocketPlayerSession* pSession);
+
+private:
+	TDynamicPoolEx<CWebSocketPlayerSession> m_poolSessions;
+};
+
 
 #endif	//__PlayerSession_H__

@@ -4,7 +4,8 @@
 #include <vector>
 
 #include "singleton.h"
-#include "ChatSession.h"
+#include "ServerSession.h"
+#include "PlayerSession.h"
 
 class GameServer : public TSingleton<GameServer>
 {
@@ -12,12 +13,22 @@ public:
 	GameServer();
 	virtual ~GameServer();
 
-	//ChatSession& GetChatSession() { return m_oChatSession; }
+	bool Init();
+	bool Stop();
+
+	void AddRequestPlayer(CPlayerSession* pPlayer);
+	CPlayerSession* EndRequestPlayer();
+
+
+	WebSocketPlayerSessionManager& GetWebSocketPlayerSessionManager() { return m_oWebSocketPlayerSessionManager; }
+	BinaryServerSessionManager& GetBinaryServerSessionManager() { return m_oBinaryServerSessionManager; }
 
 private:
-	//ChatSession m_oChatSession;
+	WebSocketPlayerSessionManager m_oWebSocketPlayerSessionManager;
+	BinaryServerSessionManager m_oBinaryServerSessionManager;
 
-	std::vector<ChatSession> m_vecChatSession;
+	std::list<CPlayerSession*> m_listRequestPlayer;
+	std::set<CPlayerSession*> m_setRequestPlayer;
 };
 
 

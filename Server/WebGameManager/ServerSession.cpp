@@ -58,3 +58,43 @@ void CServerSession::OnGameNotifyGameManagerInfo(const char* pBuf, UINT32 dwLen)
 	stGAME_NOTIFY_GAME_MANAGER_INFO oGAME_NOTIFY_GAME_MANAGER_INFO;
 	oGAME_NOTIFY_GAME_MANAGER_INFO.Read(oStream);
 }
+
+//////////////////////////////////////////////////////////////////////////
+CBinaryServerSession::CBinaryServerSession()
+{
+}
+
+CBinaryServerSession::~CBinaryServerSession()
+{
+}
+
+void CBinaryServerSession::Release(void)
+{
+	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
+	OnDestroy();
+
+	Init(NULL);
+}
+
+//////////////////////////////////////////////////////////////////////////
+FxSession * BinaryServerSessionManager::CreateSession()
+{
+	CBinaryServerSession* pSession = m_poolSessions.FetchObj();
+	return pSession;
+}
+
+bool BinaryServerSessionManager::Init()
+{
+	return m_poolSessions.Init(64, 64);
+}
+
+void BinaryServerSessionManager::Release(FxSession * pSession)
+{
+	Assert(0);
+}
+
+void BinaryServerSessionManager::Release(CBinaryServerSession * pSession)
+{
+	m_poolSessions.ReleaseObj(pSession);
+}
+

@@ -1,5 +1,5 @@
-#ifndef __ServerSession_H__
-#define __ServerSession_H__
+#ifndef __CGameManagerSession_H__
+#define __CGameManagerSession_H__
 #include "dynamicpoolex.h"
 
 #include "ifnet.h"
@@ -9,11 +9,11 @@
 #include <deque>
 #include "SocketSession.h"
 
-class CServerSession : public FxSession
+class CGameManagerSession : public FxSession
 {
 public:
-	CServerSession();
-	virtual ~CServerSession();
+	CGameManagerSession();
+	virtual ~CGameManagerSession();
 
 	virtual void		OnConnect(void);
 	virtual void		OnClose(void);
@@ -28,11 +28,11 @@ private:
 	char m_dataRecvBuf[1024 * 1024];
 };
 
-class CBinaryServerSession : public CServerSession
+class CBinaryGameManagerSession : public CGameManagerSession
 {
 public:
-	CBinaryServerSession();
-	~CBinaryServerSession();
+	CBinaryGameManagerSession();
+	~CBinaryGameManagerSession();
 
 	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
 	virtual void Release(void);
@@ -41,21 +41,4 @@ private:
 
 };
 
-class BinaryServerSessionManager : public IFxSessionFactory
-{
-public:
-	BinaryServerSessionManager() {}
-	virtual ~BinaryServerSessionManager() {}
-
-	virtual FxSession* CreateSession();
-
-	bool Init();
-	virtual void Release(FxSession* pSession);
-	void Release(CBinaryServerSession* pSession);
-
-private:
-	TDynamicPoolEx<CBinaryServerSession> m_poolSessions;
-};
-
-
-#endif	//__ServerSession_H__
+#endif	//!__CGameManagerSession_H__

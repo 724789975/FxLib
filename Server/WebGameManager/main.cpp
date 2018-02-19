@@ -2,6 +2,9 @@
 #include "fxtimer.h"
 #include "fxdb.h"
 #include "fxmeta.h"
+#include "PlayerSession.h"
+#include "ServerSession.h"
+#include "GameServer.h"
 
 #include <signal.h>
 #include "gflags/gflags.h"
@@ -9,7 +12,8 @@
 unsigned int g_dwPort = 20000;
 bool g_bRun = true;
 
-DEFINE_uint32(port, 20000, "linten port");
+DEFINE_uint32(server_port, 30001, "server port");
+DEFINE_uint32(player_port, 30002, "player port");
 
 void EndFun(int n)
 {
@@ -33,7 +37,8 @@ int main(int argc, char **argv)
 
 	// must define before goto
 	IFxNet* pNet = NULL;
-	IFxListenSocket* pListenSocket = NULL;
+	IFxListenSocket* pServerListenSocket = NULL;
+	IFxListenSocket* pPlayerListenSocket = NULL;
 
 	if (!GetTimeHandler()->Init())
 	{
@@ -42,13 +47,12 @@ int main(int argc, char **argv)
 	}
 	GetTimeHandler()->Run();
 
-	if (!CWebSocketSessionFactory::CreateInstance())
+	if (!GameServer::CreateInstance())
 	{
 		g_bRun = false;
 		goto STOP;
 	}
-	CWebSocketSessionFactory::Instance()->Init();
-	CChatManagerSession::CreateInstance();
+
 	pNet = FxNetGetModule();
 	if (!pNet)
 	{
@@ -57,11 +61,17 @@ int main(int argc, char **argv)
 	}
 	//----------------------order can't change end-----------------------//
 
-	UINT16 wPort = FLAGS_port;
-	pListenSocket = pNet->Listen(CWebSocketSessionFactory::Instance(), SLT_WebSocket, 0, wPort);
+	UINT16 wPort = FLAGS_server_port;
+	pServerListenSocket = pNet->Listen(&GameServer::Instance()->GetBinaryServerSessionManager(), SLT_CommonTcp, 0, wPort);
+	if (pServerListenSocket == NULL)
+	{
+		g_bRun = false;
+		goto STOP;
+	}
 
-	pNet->TcpConnect(CChatManagerSession::Instance(), inet_addr("127.0.0.1"), 13001, true);
-	if(pListenSocket == NULL)
+	wPort = FLAGS_player_port;
+	pPlayerListenSocket = pNet->Listen(&GameServer::Instance()->GetWebSocketPlayerSessionManager(), SLT_WebSocket, 0, wPort);
+	if(pPlayerListenSocket == NULL)
 	{
 		g_bRun = false;
 		goto STOP;
@@ -72,19 +82,13 @@ int main(int argc, char **argv)
 		pNet->Run(0xffffffff);
 		FxSleep(1);
 	}
-	pListenSocket->StopListen();
-	pListenSocket->Close();
-	for (std::set<FxSession*>::iterator it = CWebSocketSessionFactory::Instance()->m_setSessions.begin();
-		it != CWebSocketSessionFactory::Instance()->m_setSessions.end(); ++it)
-	{
-		(*it)->Close();
-	}
+	pServerListenSocket->StopListen();
+	pServerListenSocket->Close();
+	pPlayerListenSocket->StopListen();
+	pPlayerListenSocket->Close();
 
-	while (CWebSocketSessionFactory::Instance()->m_setSessions.size())
-	{
-		pNet->Run(0xffffffff);
-		FxSleep(10);
-	}
+	GameServer::Instance()->Stop();
+
 	FxSleep(10);
 	pNet->Release();
 STOP:

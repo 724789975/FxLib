@@ -60,25 +60,6 @@ void CServerSession::OnGameNotifyGameManagerInfo(const char* pBuf, UINT32 dwLen)
 }
 
 //////////////////////////////////////////////////////////////////////////
-CBinaryServerSession::CBinaryServerSession()
-{
-
-}
-
-CBinaryServerSession::~CBinaryServerSession()
-{
-
-}
-
-void CBinaryServerSession::Release(void)
-{
-	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
-	OnDestroy();
-
-	Init(NULL);
-}
-
-//////////////////////////////////////////////////////////////////////////
 
 CWebSocketServerSession::CWebSocketServerSession()
 {
@@ -94,4 +75,29 @@ void CWebSocketServerSession::Release(void)
 	OnDestroy();
 
 	Init(NULL);
+}
+
+//////////////////////////////////////////////////////////////////////////
+WebSocketServerSessionManager::WebSocketServerSessionManager()
+{
+	m_pCreated = NULL;
+}
+
+WebSocketServerSessionManager::~WebSocketServerSessionManager()
+{
+}
+
+FxSession * WebSocketServerSessionManager::CreateSession()
+{
+	if (m_pCreated)
+	{
+		return NULL;
+	}
+	m_pCreated = &m_oWebSocketSlaveServerSession;
+	return m_pCreated;
+}
+
+void WebSocketServerSessionManager::Release(FxSession * pSession)
+{
+	m_pCreated = NULL;
 }

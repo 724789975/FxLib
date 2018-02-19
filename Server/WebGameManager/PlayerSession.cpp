@@ -1,6 +1,7 @@
 #include "PlayerSession.h"
 #include "netstream.h"
 #include "gamedefine.h"
+#include "GameServer.h"
 
 const static unsigned int g_dwPlayerSessionBuffLen = 64 * 1024;
 static char g_pPlayerSessionBuf[g_dwPlayerSessionBuffLen];
@@ -58,5 +59,37 @@ void CPlayerSession::OnRequestGameManagerInfo(const char* pBuf, UINT32 dwLen)
 	stPLAYER_REQUEST_GAME_MANAGER_INFO oPLAYER_REQUEST_GAME_MANAGER_INFO;
 	oPLAYER_REQUEST_GAME_MANAGER_INFO.Read(oStream);
 
-
+	GameServer::Instance()->AddRequestPlayer(this);
 }
+
+//////////////////////////////////////////////////////////////////////////
+void CWebSocketPlayerSession::Release(void)
+{
+	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
+	OnDestroy();
+
+	Init(NULL);
+}
+
+//////////////////////////////////////////////////////////////////////////
+FxSession * WebSocketPlayerSessionManager::CreateSession()
+{
+	FxSession* pSession = m_poolSessions.FetchObj();
+	return pSession;
+}
+
+bool WebSocketPlayerSessionManager::Init()
+{
+	return m_poolSessions.Init(64, 64);
+}
+
+void WebSocketPlayerSessionManager::Release(FxSession * pSession)
+{
+	Assert(0);
+}
+
+void WebSocketPlayerSessionManager::Release(CWebSocketPlayerSession* pSession)
+{
+	m_poolSessions.ReleaseObj(pSession);
+}
+

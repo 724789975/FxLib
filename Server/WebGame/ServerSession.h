@@ -28,29 +28,31 @@ private:
 	char m_dataRecvBuf[1024 * 1024];
 };
 
-class CBinaryServerSession : public CServerSession
-{
-public:
-	CBinaryServerSession();
-	~CBinaryServerSession();
-
-	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
-	virtual void Release(void);
-private:
-	BinaryDataHeader m_oBinaryDataHeader;
-};
-
 class CWebSocketServerSession : public CServerSession
 {
 public:
 	CWebSocketServerSession();
 	~CWebSocketServerSession();
 
-	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
+	virtual IFxDataHeader* GetDataHeader() { return &m_oWebSocketDataHeader; }
 	virtual void Release(void);
 private:
-	BinaryDataHeader m_oBinaryDataHeader;
+	WebSocketDataHeader m_oWebSocketDataHeader;
 };
 
+class WebSocketServerSessionManager : public IFxSessionFactory
+{
+public:
+	WebSocketServerSessionManager();
+	~WebSocketServerSessionManager();
+
+	virtual FxSession* CreateSession();
+
+	virtual void Release(FxSession* pSession);
+
+private:
+	CWebSocketServerSession* m_pCreated;
+	CWebSocketServerSession m_oWebSocketSlaveServerSession;
+};
 
 #endif	//__ServerSession_H__

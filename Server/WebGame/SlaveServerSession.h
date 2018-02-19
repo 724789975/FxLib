@@ -7,6 +7,9 @@
 #include <set>
 #include <list>
 #include <deque>
+#include "SocketSession.h"
+#include "gamedefine.h"
+#include "lock.h"
 
 class CSlaveServerSession : public FxSession
 {
@@ -26,5 +29,35 @@ public:
 private:
 	char m_dataRecvBuf[1024 * 1024];
 };
+
+class CWebSocketSlaveServerSession : public CSlaveServerSession
+{
+public:
+	CWebSocketSlaveServerSession();
+	~CWebSocketSlaveServerSession();
+
+	virtual IFxDataHeader* GetDataHeader() { return &m_oWebSocketDataHeader; }
+	virtual void Release(void);
+private:
+	WebSocketDataHeader m_oWebSocketDataHeader;
+};
+
+class WebSocketSlaveServerSessionManager : public IFxSessionFactory
+{
+public:
+	WebSocketSlaveServerSessionManager();
+	~WebSocketSlaveServerSessionManager();
+
+	virtual FxSession* CreateSession();
+
+	virtual void Release(FxSession* pSession);
+	virtual void Release(CWebSocketSlaveServerSession* pSession);
+
+private:
+	CWebSocketSlaveServerSession m_oWebSocketSlaveServerSessions[MAXSLAVESERVERNUM];
+	FxCriticalLock m_oLock;
+};
+
+
 
 #endif // !__CSlaveServerSession_H__

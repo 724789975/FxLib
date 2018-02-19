@@ -5,6 +5,9 @@
 
 #include "singleton.h"
 #include "ServerSession.h"
+#include "GameManagerSession.h"
+#include "SlaveServerSession.h"
+#include "PlayerSession.h"
 
 class GameServer : public TSingleton<GameServer>
 {
@@ -12,14 +15,23 @@ public:
 	GameServer();
 	virtual ~GameServer();
 
-	//ChatSession& GetChatSession() { return m_oChatSession; }
-	CServerSession& GetServerSession() { return m_oServerSession; }
+	bool Init(unsigned int dwGameManagerIp, unsigned short wGameManagerPort);
+	bool Stop();
+
+	//CBinaryGameManagerSession& GetBinaryGameManagerSession() { return m_oBinaryGameManagerSession; }
 
 private:
-	//ChatSession m_oChatSession;
-	CWebSocketServerSession m_oServerSession;
+	CBinaryGameManagerSession m_oBinaryGameManagerSession;
+	WebSocketPlayerSessionManager m_oWebSocketPlayerSessionManager;
+	WebSocketServerSessionManager m_oWebSocketServerSessionManager;
+	WebSocketSlaveServerSessionManager m_oWebSocketSlaveServerSessionManager;
 
-	//std::vector<ChatSession> m_vecChatSession;
+	IFxListenSocket* m_pPlayerListenSocket;
+	unsigned short m_wPlayerListenPort;
+	IFxListenSocket* m_pServerListenSocket;
+	unsigned short m_wServerListenPort;
+	IFxListenSocket* m_pSlaveServerListenSocket;
+	unsigned short m_wSlaveServerListenPort;
 };
 
 
