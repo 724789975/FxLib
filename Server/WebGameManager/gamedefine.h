@@ -34,14 +34,20 @@ namespace Protocol
 //----------------------------------------------------------------------
 struct stGAME_NOTIFY_GAME_MANAGER_INFO
 {
-	unsigned short wPort;
+	unsigned short wPlayerPort;
+	unsigned short wServerPort;
+	unsigned short wSlaveServerPort;
 	bool Write(CNetStream& refStream)
 	{
-		return refStream.WriteShort(wPort);
+		return refStream.WriteShort(wPlayerPort);
+		return refStream.WriteShort(wServerPort);
+		return refStream.WriteShort(wSlaveServerPort);
 	}
 	bool Read(CNetStream& refStream)
 	{
-		return refStream.WriteShort(wPort);
+		return refStream.ReadShort(wPlayerPort);
+		return refStream.ReadShort(wServerPort);
+		return refStream.ReadShort(wSlaveServerPort);
 	}
 };
 //----------------------------------------------------------------------

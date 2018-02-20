@@ -13,22 +13,32 @@ public:
 	GameServer();
 	virtual ~GameServer();
 
-	bool Init();
+	bool Init(std::string szServerListenIp, unsigned short wServerListenPort, std::string szPlayerListenIp, unsigned short wPlayerListenPort);
 	bool Stop();
 
 	void AddRequestPlayer(CPlayerSession* pPlayer);
 	CPlayerSession* EndRequestPlayer();
 
-
 	WebSocketPlayerSessionManager& GetWebSocketPlayerSessionManager() { return m_oWebSocketPlayerSessionManager; }
 	BinaryServerSessionManager& GetBinaryServerSessionManager() { return m_oBinaryServerSessionManager; }
+
+	std::string GetServerListenIp() { return m_szServerListenIp; }
+	unsigned short GetServerListenPort() { return m_wServerListenPort; }
 
 private:
 	WebSocketPlayerSessionManager m_oWebSocketPlayerSessionManager;
 	BinaryServerSessionManager m_oBinaryServerSessionManager;
 
+	IFxListenSocket* m_pServerListenSocket;
+	IFxListenSocket* m_pPlayerListenSocket;
+
 	std::list<CPlayerSession*> m_listRequestPlayer;
 	std::set<CPlayerSession*> m_setRequestPlayer;
+
+	std::string m_szServerListenIp;
+	unsigned short m_wServerListenPort;
+	std::string m_szPlayerListenIp;
+	unsigned short m_wPlayerListenPort;
 };
 
 

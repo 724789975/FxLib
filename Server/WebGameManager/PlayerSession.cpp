@@ -3,6 +3,51 @@
 #include "gamedefine.h"
 #include "GameServer.h"
 
+#ifdef WIN32
+#include <Windows.h>
+#include <ShellAPI.h>
+#else
+#include<unistd.h>
+#endif // WIN32
+
+bool StartProccess()
+{
+#ifdef WIN32
+	SHELLEXECUTEINFO shell = { sizeof(shell) };
+	shell.fMask = SEE_MASK_NOCLOSEPROCESS;
+	shell.lpVerb = "open";
+	shell.lpFile = "WebGame.exe";
+	char szBuffer[512] = { 0 };
+	GetExePath();
+	sprintf(szBuffer, "--game_manager_ip %s --game_manager_port %d",
+		GameServer::Instance()->GetServerListenIp().c_str(), GameServer::Instance()->GetServerListenPort());
+	shell.lpParameters = szBuffer;
+	shell.lpDirectory = GetExePath();
+	shell.nShow = SW_SHOWNORMAL;
+	BOOL ret = ShellExecuteEx(&shell);
+	return ret == TRUE;
+#else
+	char szExePath[512] = { 0 };
+	sprintf(szExePath, "%s/WebGame", GetExePath());
+	char szServerPort[8];
+	sprintf(szServerPort, "%d", GameServer::Instance()->GetServerListenPort());
+	const char *arg[] = { szExePath, "--game_manager_ip", GameServer::Instance()->GetServerListenIp().c_str(),
+		"--game_manager_port", szServerPort };
+	int pid = vfork();
+
+	if (pid == 0)
+	{
+		execv(arg[0], arg);
+		_exit(0);
+	}
+	else
+	{
+		return true;
+	}
+	return false;
+#endif // WIN32
+}
+
 const static unsigned int g_dwPlayerSessionBuffLen = 64 * 1024;
 static char g_pPlayerSessionBuf[g_dwPlayerSessionBuffLen];
 
@@ -59,7 +104,10 @@ void CPlayerSession::OnRequestGameManagerInfo(const char* pBuf, UINT32 dwLen)
 	stPLAYER_REQUEST_GAME_MANAGER_INFO oPLAYER_REQUEST_GAME_MANAGER_INFO;
 	oPLAYER_REQUEST_GAME_MANAGER_INFO.Read(oStream);
 
-	GameServer::Instance()->AddRequestPlayer(this);
+	if (StartProccess())
+	{
+		GameServer::Instance()->AddRequestPlayer(this);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -10,7 +10,7 @@
 bool g_bRun = true;
 
 DEFINE_string(game_manager_ip, "127.0.0.1", "game manager ip");
-DEFINE_uint32(game_manager_port, 20000, "game manager port");
+DEFINE_uint32(game_manager_port, 30001, "game manager port");
 
 void EndFun(int n)
 {
@@ -27,7 +27,7 @@ void EndFun(int n)
 int main(int argc, char **argv)
 {
 	//----------------------order can't change begin-----------------------//
-	gflags::SetUsageMessage("TestServer");
+	gflags::SetUsageMessage("WebGame");
 	gflags::ParseCommandLineFlags(&argc, &argv, false);
 	signal(SIGINT, EndFun);
 	signal(SIGTERM, EndFun);

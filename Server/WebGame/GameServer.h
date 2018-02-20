@@ -20,6 +20,10 @@ public:
 
 	//CBinaryGameManagerSession& GetBinaryGameManagerSession() { return m_oBinaryGameManagerSession; }
 
+	unsigned short GetPlayerListenPort() { return m_wPlayerListenPort; }
+	unsigned short GetServerListenPort() { return m_wServerListenPort; }
+	unsigned short GetSlaveServerListenPort() { return m_wSlaveServerListenPort; }
+
 private:
 	CBinaryGameManagerSession m_oBinaryGameManagerSession;
 	WebSocketPlayerSessionManager m_oWebSocketPlayerSessionManager;

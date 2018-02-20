@@ -30,15 +30,13 @@ void EndFun(int n)
 int main(int argc, char **argv)
 {
 	//----------------------order can't change begin-----------------------//
-	gflags::SetUsageMessage("TestServer");
+	gflags::SetUsageMessage("WebGameManager");
 	gflags::ParseCommandLineFlags(&argc, &argv, false);
 	signal(SIGINT, EndFun);
 	signal(SIGTERM, EndFun);
 
 	// must define before goto
 	IFxNet* pNet = NULL;
-	IFxListenSocket* pServerListenSocket = NULL;
-	IFxListenSocket* pPlayerListenSocket = NULL;
 
 	if (!GetTimeHandler()->Init())
 	{
@@ -61,17 +59,7 @@ int main(int argc, char **argv)
 	}
 	//----------------------order can't change end-----------------------//
 
-	UINT16 wPort = FLAGS_server_port;
-	pServerListenSocket = pNet->Listen(&GameServer::Instance()->GetBinaryServerSessionManager(), SLT_CommonTcp, 0, wPort);
-	if (pServerListenSocket == NULL)
-	{
-		g_bRun = false;
-		goto STOP;
-	}
-
-	wPort = FLAGS_player_port;
-	pPlayerListenSocket = pNet->Listen(&GameServer::Instance()->GetWebSocketPlayerSessionManager(), SLT_WebSocket, 0, wPort);
-	if(pPlayerListenSocket == NULL)
+	if (!GameServer::Instance()->Init("0.0.0.0", FLAGS_server_port, "0.0.0.0", FLAGS_player_port))
 	{
 		g_bRun = false;
 		goto STOP;
@@ -82,15 +70,10 @@ int main(int argc, char **argv)
 		pNet->Run(0xffffffff);
 		FxSleep(1);
 	}
-	pServerListenSocket->StopListen();
-	pServerListenSocket->Close();
-	pPlayerListenSocket->StopListen();
-	pPlayerListenSocket->Close();
 
 	GameServer::Instance()->Stop();
 
 	FxSleep(10);
 	pNet->Release();
 STOP:
-	printf("error!!!!!!!!\n");
-}
+	printf("error!!!!!!!!\n");false;}
