@@ -2919,6 +2919,13 @@ void FxWebSocketConnect::__ProcRecv(UINT32 dwLen)
 		oHeaderStream.ReadByte(bt1);
 		oHeaderStream.ReadByte(bt2);
 		dwHeaderLen += 2;
+		unsigned char btOpCode = (bt1) & 0x0f;
+		if (btOpCode == 0x08)
+		{
+			//这个是关闭的码
+			PostClose();
+			return;
+		}
 		unsigned char btMask = (bt2 >> 7) & 0xff;
 		unsigned char btPayloadLen = bt2 & 0x7f;
 		if (btPayloadLen == 126)
