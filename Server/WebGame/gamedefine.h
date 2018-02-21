@@ -39,17 +39,22 @@ struct stGAME_NOTIFY_GAME_MANAGER_INFO
 	unsigned short wPlayerPort;
 	unsigned short wServerPort;
 	unsigned short wSlaveServerPort;
+	unsigned long long qwPlayerPoint;
 	bool Write(CNetStream& refStream)
 	{
-		return refStream.WriteShort(wPlayerPort);
-		return refStream.WriteShort(wServerPort);
-		return refStream.WriteShort(wSlaveServerPort);
+		refStream.WriteShort(wPlayerPort);
+		refStream.WriteShort(wServerPort);
+		refStream.WriteShort(wSlaveServerPort);
+		refStream.WriteInt64(qwPlayerPoint);
+		return true;
 	}
 	bool Read(CNetStream& refStream)
 	{
-		return refStream.ReadShort(wPlayerPort);
-		return refStream.ReadShort(wServerPort);
-		return refStream.ReadShort(wSlaveServerPort);
+		refStream.ReadShort(wPlayerPort);
+		refStream.ReadShort(wServerPort);
+		refStream.ReadShort(wSlaveServerPort);
+		refStream.ReadInt64(qwPlayerPoint);
+		return true;
 	}
 };
 //----------------------------------------------------------------------
@@ -80,13 +85,22 @@ struct stPLAYER_REQUEST_GAME_MANAGER_INFO
 //----------------------------------------------------------------------
 struct stGAME_MANAGER_ACK_PLAYER_INFO_RESULT
 {
+	unsigned short wPlayerPort;
+	unsigned short wServerPort;
+	unsigned short wSlaveServerPort;
 	bool Write(CNetStream& refStream)
 	{
-		return false;
+		refStream.WriteShort(wPlayerPort);
+		refStream.WriteShort(wServerPort);
+		refStream.WriteShort(wSlaveServerPort);
+		return true;
 	}
 	bool Read(CNetStream& refStream)
 	{
-		return false;
+		refStream.ReadShort(wPlayerPort);
+		refStream.ReadShort(wServerPort);
+		refStream.ReadShort(wSlaveServerPort);
+		return true;
 	}
 };
 //----------------------------------------------------------------------

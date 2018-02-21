@@ -16,8 +16,8 @@ public:
 	bool Init(std::string szServerListenIp, unsigned short wServerListenPort, std::string szPlayerListenIp, unsigned short wPlayerListenPort);
 	bool Stop();
 
-	void AddRequestPlayer(CPlayerSession* pPlayer);
-	CPlayerSession* EndRequestPlayer();
+	bool AddRequestPlayer(CPlayerSession* pPlayer);
+	bool DelRequestPlayer(CPlayerSession* pPlayer);
 
 	WebSocketPlayerSessionManager& GetWebSocketPlayerSessionManager() { return m_oWebSocketPlayerSessionManager; }
 	BinaryServerSessionManager& GetBinaryServerSessionManager() { return m_oBinaryServerSessionManager; }
@@ -32,7 +32,6 @@ private:
 	IFxListenSocket* m_pServerListenSocket;
 	IFxListenSocket* m_pPlayerListenSocket;
 
-	std::list<CPlayerSession*> m_listRequestPlayer;
 	std::set<CPlayerSession*> m_setRequestPlayer;
 
 	std::string m_szServerListenIp;

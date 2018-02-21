@@ -130,7 +130,6 @@ private:
 	// // 消息头 为网络字节序
 	char m_dataRecvBuffer[16];
 	char m_dataSendBuffer[16];
-	static const UINT32 s_dwMagic = 'T' << 24 | 'E' << 16 | 'S' << 8 | 'T';
 
 	unsigned int m_dwHeaderLength;
 	//static const UINT32 s_dwMagic = 12345678;

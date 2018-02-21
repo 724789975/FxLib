@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 	}
 	//----------------------order can't change end-----------------------//
 
-	if (!GameServer::Instance()->Init("0.0.0.0", FLAGS_server_port, "0.0.0.0", FLAGS_player_port))
+	if (!GameServer::Instance()->Init("127.0.0.1", FLAGS_server_port, "0.0.0.0", FLAGS_player_port))
 	{
 		g_bRun = false;
 		goto STOP;

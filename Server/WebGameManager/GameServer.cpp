@@ -10,7 +10,6 @@ GameServer::GameServer()
 {
 }
 
-
 GameServer::~GameServer()
 {
 }
@@ -52,23 +51,23 @@ bool GameServer::Stop()
 	return false;
 }
 
-void GameServer::AddRequestPlayer(CPlayerSession * pPlayer)
+bool GameServer::AddRequestPlayer(CPlayerSession* pPlayer)
 {
 	if (m_setRequestPlayer.find(pPlayer) == m_setRequestPlayer.end())
 	{
 		m_setRequestPlayer.insert(pPlayer);
+		return true;
 	}
+	return false;
 }
 
-CPlayerSession * GameServer::EndRequestPlayer()
+bool GameServer::DelRequestPlayer(CPlayerSession* pPlayer)
 {
-	CPlayerSession* pPlayer = NULL;
-	if (m_listRequestPlayer.size())
+	if (m_setRequestPlayer.find(pPlayer) == m_setRequestPlayer.end())
 	{
-		pPlayer = *(m_listRequestPlayer.begin());
-		m_listRequestPlayer.pop_front();
-		m_setRequestPlayer.erase(pPlayer);
+		return false;
 	}
-	return pPlayer;
+	m_setRequestPlayer.erase(pPlayer);
+	return true;
 }
 

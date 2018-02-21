@@ -9,6 +9,7 @@
 #include <deque>
 #include "SocketSession.h"
 
+struct stGAME_NOTIFY_GAME_MANAGER_INFO;
 class CPlayerSession : public FxSession
 {
 public:
@@ -24,6 +25,8 @@ public:
 	virtual UINT32		GetRecvSize() { return 64 * 1024; };
 
 	void				OnRequestGameManagerInfo(const char* pBuf, UINT32 dwLen);
+
+	void				OnGameInfo(stGAME_NOTIFY_GAME_MANAGER_INFO& refInfo);
 private:
 	char m_dataRecvBuf[1024 * 1024];
 };

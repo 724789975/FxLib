@@ -10,7 +10,7 @@
 #include<unistd.h>
 #endif // WIN32
 
-bool StartProccess()
+bool StartProccess(unsigned long long qwPlayerPoint)
 {
 #ifdef WIN32
 	SHELLEXECUTEINFO shell = { sizeof(shell) };
@@ -19,8 +19,8 @@ bool StartProccess()
 	shell.lpFile = "WebGame.exe";
 	char szBuffer[512] = { 0 };
 	GetExePath();
-	sprintf(szBuffer, "--game_manager_ip %s --game_manager_port %d",
-		GameServer::Instance()->GetServerListenIp().c_str(), GameServer::Instance()->GetServerListenPort());
+	sprintf(szBuffer, "--game_manager_ip %s --game_manager_port %d --player_point %llu",
+		GameServer::Instance()->GetServerListenIp().c_str(), GameServer::Instance()->GetServerListenPort(), qwPlayerPoint);
 	shell.lpParameters = szBuffer;
 	shell.lpDirectory = GetExePath();
 	shell.nShow = SW_SHOWNORMAL;
@@ -29,10 +29,12 @@ bool StartProccess()
 #else
 	char szExePath[512] = { 0 };
 	sprintf(szExePath, "%s/WebGame", GetExePath());
-	char szServerPort[8];
+	char szServerPort[8] = { 0 };
 	sprintf(szServerPort, "%d", GameServer::Instance()->GetServerListenPort());
+	char szPlayerPoint[16] = { 0 };
+	sprintf(szPlayerPoint, "%llu", qwPlayerPoint);
 	const char *arg[] = { szExePath, "--game_manager_ip", GameServer::Instance()->GetServerListenIp().c_str(),
-		"--game_manager_port", szServerPort };
+		"--game_manager_port", szServerPort, "--player_point", szPlayerPoint };
 	int pid = vfork();
 
 	if (pid == 0)
@@ -104,10 +106,23 @@ void CPlayerSession::OnRequestGameManagerInfo(const char* pBuf, UINT32 dwLen)
 	stPLAYER_REQUEST_GAME_MANAGER_INFO oPLAYER_REQUEST_GAME_MANAGER_INFO;
 	oPLAYER_REQUEST_GAME_MANAGER_INFO.Read(oStream);
 
-	if (StartProccess())
+	if (StartProccess((unsigned long long)this))
 	{
 		GameServer::Instance()->AddRequestPlayer(this);
 	}
+}
+
+void CPlayerSession::OnGameInfo(stGAME_NOTIFY_GAME_MANAGER_INFO & refInfo)
+{
+	CNetStream oStream(ENetStreamType_Write, g_pPlayerSessionBuf, g_dwPlayerSessionBuffLen);
+	oStream.WriteInt(Protocol::GAME_MANAGER_ACK_PLAYER_INFO_RESULT);
+	stGAME_MANAGER_ACK_PLAYER_INFO_RESULT oGAME_MANAGER_ACK_PLAYER_INFO_RESULT;
+	oGAME_MANAGER_ACK_PLAYER_INFO_RESULT.wPlayerPort = refInfo.wPlayerPort;
+	oGAME_MANAGER_ACK_PLAYER_INFO_RESULT.wServerPort = refInfo.wServerPort;
+	oGAME_MANAGER_ACK_PLAYER_INFO_RESULT.wSlaveServerPort = refInfo.wSlaveServerPort;
+
+	oGAME_MANAGER_ACK_PLAYER_INFO_RESULT.Write(oStream);
+	Send(g_pPlayerSessionBuf, g_dwPlayerSessionBuffLen - oStream.GetDataLength());
 }
 
 //////////////////////////////////////////////////////////////////////////

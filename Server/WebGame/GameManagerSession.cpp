@@ -19,6 +19,7 @@ void CGameManagerSession::OnConnect(void)
 	oGAME_NOTIFY_GAME_MANAGER_INFO.wPlayerPort = GameServer::Instance()->GetPlayerListenPort();
 	oGAME_NOTIFY_GAME_MANAGER_INFO.wServerPort = GameServer::Instance()->GetServerListenPort();
 	oGAME_NOTIFY_GAME_MANAGER_INFO.wSlaveServerPort = GameServer::Instance()->GetSlaveServerListenPort();
+	oGAME_NOTIFY_GAME_MANAGER_INFO.qwPlayerPoint = GameServer::Instance()->GetPlayerPoint();
 	CNetStream oStream(ENetStreamType_Write, g_pGameManagerSessionBuf, g_dwGameManagerSessionBuffLen);
 	oStream.WriteInt(Protocol::GAME_NOTIFY_GAME_MANAGER_INFO);
 
@@ -36,6 +37,17 @@ void CGameManagerSession::OnError(UINT32 dwErrorNo)
 
 void CGameManagerSession::OnRecv(const char * pBuf, UINT32 dwLen)
 {
+	CNetStream oStream(pBuf, dwLen);
+	Protocol::EGameProtocol eProrocol;
+	oStream.ReadInt((int&)eProrocol);
+	const char* pData = pBuf + sizeof(UINT32);
+	dwLen -= sizeof(UINT32);
+	
+	switch (eProrocol)
+	{
+		case Protocol::GAME_MANAGER_ACK_GAME_INFO_RESULT:		OnGameManagerAckGameInfoResult(pData, dwLen); break;
+		default:	Assert(0);	break;
+	}
 }
 
 void CGameManagerSession::Release(void)
@@ -46,8 +58,15 @@ void CGameManagerSession::Release(void)
 	Init(NULL);
 }
 
-void CGameManagerSession::OnGameNotifyGameManagerInfo(const char * pBuf, UINT32 dwLen)
+void CGameManagerSession::OnGameManagerAckGameInfoResult(const char * pBuf, UINT32 dwLen)
 {
+	CNetStream oStream(pBuf, dwLen);
+	stGAME_MANAGER_ACK_GAME_INFO_RESULT oGAME_MANAGER_ACK_GAME_INFO_RESULT;
+	oGAME_MANAGER_ACK_GAME_INFO_RESULT.Read(oStream);
+	if (oGAME_MANAGER_ACK_GAME_INFO_RESULT.dwResult != 0)
+	{
+		exit(-1);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -15,7 +15,7 @@ public:
 	GameServer();
 	virtual ~GameServer();
 
-	bool Init(unsigned int dwGameManagerIp, unsigned short wGameManagerPort);
+	bool Init(unsigned int dwGameManagerIp, unsigned short wGameManagerPort, unsigned long long qwPlayerPoint);
 	bool Stop();
 
 	//CBinaryGameManagerSession& GetBinaryGameManagerSession() { return m_oBinaryGameManagerSession; }
@@ -23,6 +23,7 @@ public:
 	unsigned short GetPlayerListenPort() { return m_wPlayerListenPort; }
 	unsigned short GetServerListenPort() { return m_wServerListenPort; }
 	unsigned short GetSlaveServerListenPort() { return m_wSlaveServerListenPort; }
+	unsigned long long GetPlayerPoint() { return m_qwPlayerPoint; }
 
 private:
 	CBinaryGameManagerSession m_oBinaryGameManagerSession;
@@ -36,6 +37,8 @@ private:
 	unsigned short m_wServerListenPort;
 	IFxListenSocket* m_pSlaveServerListenSocket;
 	unsigned short m_wSlaveServerListenPort;
+
+	unsigned long long m_qwPlayerPoint;
 };
 
 

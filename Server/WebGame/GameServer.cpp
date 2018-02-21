@@ -9,16 +9,17 @@ GameServer::GameServer()
 	, m_wPlayerListenPort(0)
 	, m_wServerListenPort(0)
 	, m_wSlaveServerListenPort(0)
+	, m_qwPlayerPoint(0)
 {
 }
-
 
 GameServer::~GameServer()
 {
 }
 
-bool GameServer::Init(unsigned int dwGameManagerIp, unsigned short wGameManagerPort)
+bool GameServer::Init(unsigned int dwGameManagerIp, unsigned short wGameManagerPort, unsigned long long qwPlayerPoint)
 {
+	m_qwPlayerPoint = qwPlayerPoint;
 	IFxNet* pNet = FxNetGetModule();
 	if (!pNet)
 	{

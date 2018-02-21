@@ -65,14 +65,15 @@
 # 4.测试结果
 
 ## 4.1 网络流量记录
-
-* localhost.example:dnp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;=> 210.73.214.213&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;220Mb   221Mb   223Mb
-* &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;211Mb   212Mb   212Mb
+| 服务器地址 | 客户端地址 | 当前流量 | 一分钟前流量 | 最高流量 |
+| --- | --- | --- | --- | --- |
+| localhost.example:dnp| 目标地址 | 220Mb | 221Mb | 223Mb |
+| 目标地址| localhost.example:dnp | 211Mb | 212Mb | 212Mb |
 
 ## 4.2 CPU状态记录
-
-* VIRT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RES&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SHR&nbsp;&nbsp;&nbsp;&nbsp;%CPU&nbsp;&nbsp;&nbsp;&nbsp;%MEM
-* 3387800&nbsp;&nbsp;&nbsp;472908&nbsp;&nbsp;1660&nbsp;&nbsp;&nbsp;&nbsp;92.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.9
+| VIRT | RES | SHR | %CPU | %MEM |
+| --- | --- | --- | --- | --- |
+| 3387800 | 472908 | 1660 | 92.0 | 2.9 |
 
 ## 4.3 消息采样
 

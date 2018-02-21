@@ -11,6 +11,7 @@ bool g_bRun = true;
 
 DEFINE_string(game_manager_ip, "127.0.0.1", "game manager ip");
 DEFINE_uint32(game_manager_port, 30001, "game manager port");
+DEFINE_uint64(player_point, 0, "player point");
 
 void EndFun(int n)
 {
@@ -55,7 +56,7 @@ int main(int argc, char **argv)
 
 	//----------------------order can't change end-----------------------//
 
-	if (!GameServer::Instance()->Init(inet_addr(FLAGS_game_manager_ip.c_str()), FLAGS_game_manager_port))
+	if (!GameServer::Instance()->Init(inet_addr(FLAGS_game_manager_ip.c_str()), FLAGS_game_manager_port, FLAGS_player_point))
 	{
 		g_bRun = false;
 		goto STOP;
