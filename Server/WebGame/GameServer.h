@@ -24,6 +24,7 @@ public:
 	unsigned short GetServerListenPort() { return m_wServerListenPort; }
 	unsigned short GetSlaveServerListenPort() { return m_wSlaveServerListenPort; }
 	unsigned long long GetPlayerPoint() { return m_qwPlayerPoint; }
+	WebSocketServerSessionManager& GetWebSocketServerSessionManager() { return m_oWebSocketServerSessionManager; }
 
 private:
 	CBinaryGameManagerSession m_oBinaryGameManagerSession;

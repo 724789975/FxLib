@@ -1,6 +1,7 @@
 #include "ServerSession.h"
 #include "netstream.h"
 #include "gamedefine.h"
+#include "GameServer.h"
 
 const static unsigned int g_dwSlaveServerSessionBuffLen = 64 * 1024;
 static char g_pServerSessionBuf[g_dwSlaveServerSessionBuffLen];
@@ -31,17 +32,23 @@ void CServerSession::OnError(UINT32 dwErrorNo)
 
 void CServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
-	CNetStream oStream(pBuf, dwLen);
-	Protocol::EGameProtocol eProrocol;
-	oStream.ReadInt((int&)eProrocol);
-	const char* pData = pBuf + sizeof(UINT32);
-	dwLen -= sizeof(UINT32);
-
-	switch (eProrocol)
+	LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
+	if (!Send(pBuf, dwLen))
 	{
-	case Protocol::GAME_NOTIFY_GAME_MANAGER_INFO:			OnGameNotifyGameManagerInfo(pData, dwLen);	break;
-	default:	Assert(0);	break;
+		LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s send error", GetRemoteIPStr(), GetRemotePort(), pBuf);
+		Close();
 	}
+	//CNetStream oStream(pBuf, dwLen);
+	//Protocol::EGameProtocol eProrocol;
+	//oStream.ReadInt((int&)eProrocol);
+	//const char* pData = pBuf + sizeof(UINT32);
+	//dwLen -= sizeof(UINT32);
+
+	//switch (eProrocol)
+	//{
+	//case Protocol::GAME_NOTIFY_GAME_MANAGER_INFO:			OnGameNotifyGameManagerInfo(pData, dwLen);	break;
+	//default:	Assert(0);	break;
+	//}
 }
 
 void CServerSession::Release(void)
@@ -52,12 +59,12 @@ void CServerSession::Release(void)
 	Init(NULL);
 }
 
-void CServerSession::OnGameNotifyGameManagerInfo(const char* pBuf, UINT32 dwLen)
-{
-	CNetStream oStream(pBuf, dwLen);
-	stGAME_NOTIFY_GAME_MANAGER_INFO oGAME_NOTIFY_GAME_MANAGER_INFO;
-	oGAME_NOTIFY_GAME_MANAGER_INFO.Read(oStream);
-}
+//void CServerSession::OnGameNotifyGameManagerInfo(const char* pBuf, UINT32 dwLen)
+//{
+//	CNetStream oStream(pBuf, dwLen);
+//	stGAME_NOTIFY_GAME_MANAGER_INFO oGAME_NOTIFY_GAME_MANAGER_INFO;
+//	oGAME_NOTIFY_GAME_MANAGER_INFO.Read(oStream);
+//}
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -75,6 +82,8 @@ void CWebSocketServerSession::Release(void)
 	OnDestroy();
 
 	Init(NULL);
+
+	GameServer::Instance()->GetWebSocketServerSessionManager().Release(this);
 }
 
 //////////////////////////////////////////////////////////////////////////

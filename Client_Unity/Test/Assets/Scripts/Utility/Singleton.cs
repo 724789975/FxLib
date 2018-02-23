@@ -30,7 +30,7 @@ public class SingletonObject<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T m_pInstance;
 
-	public T Instance()
+	public static T Instance()
 	{
 		return m_pInstance;
 	}
@@ -40,7 +40,7 @@ public class SingletonObject<T> : MonoBehaviour where T : MonoBehaviour
         return m_pInstance != null;
     }
 
-	public bool CreateInstance(T pInstance)
+	public static bool CreateInstance(T pInstance)
 	{
 		if (m_pInstance != null)
 		{

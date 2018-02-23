@@ -23,7 +23,7 @@ namespace test
 			//for (int i = 0; i < 100; ++i)
 			{
 				WebSocketSession pSession = new WebSocketSession();
-				pSession.Init("ws://127.0.0.1:20001/chat", 20001);
+				pSession.Init("ws://127.0.0.1:57779/chat", 57779);
 				pSession.Reconnect();
 			}
 
