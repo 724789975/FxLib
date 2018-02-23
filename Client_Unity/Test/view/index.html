@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en-us">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Unity WebGL Player | Test</title>
+		<link rel="shortcut icon" href="TemplateData/favicon.ico">
+		<link rel="stylesheet" href="TemplateData/style.css">
+		<script src="TemplateData/UnityProgress.js"></script>  
+		<script src="Build/UnityLoader.js"></script>
+		<script>
+			function GetQueryVariable(variable)
+			{
+				var query = window.location.search.substring(1);
+				var vars = query.split("&");
+				for (var i=0;i<vars.length;i++) {
+					var pair = vars[i].split("=");
+					if(pair[0] == variable){return pair[1];}
+				}
+				return(false);
+			}
+			var gameInstance = UnityLoader.instantiate("gameContainer", "Build/view.json", {onProgress: UnityProgress});
+			gameInstance.SendMessage("GameManager", "Init", GetQueryVariable("player_port"), GetQueryVariable("server_port"), GetQueryVariable("slave_server_port"));
+		</script>
+	</head>
+	<body>
+		<div class="webgl-content">
+			<div id="gameContainer" style="width: 960px; height: 600px"></div>
+			<div class="footer">
+				<div class="webgl-logo"></div>
+				<div class="fullscreen" onclick="gameInstance.SetFullscreen(1)"></div>
+				<div class="title">Test</div>
+			</div>
+		</div>
+	</body>
+</html>
