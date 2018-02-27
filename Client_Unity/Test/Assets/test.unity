@@ -1234,7 +1234,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 41146178}
-        m_MethodName: Init
+        m_MethodName: InitTest
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

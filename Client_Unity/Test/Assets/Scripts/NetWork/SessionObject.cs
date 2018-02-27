@@ -27,8 +27,9 @@ public class SessionObject : MonoBehaviour
 #endif
 	}
 
-	public bool Init(SessionType eType, string szIp, UInt16 wPort)
+	public bool InitSession(SessionType eType, string szIp, UInt16 wPort)
 	{
+		LogHelper.LogStr("type : " + eType.ToString() + ", ip : " + szIp + ", port : " + wPort);
 		m_szIP = szIp;
 		m_wPort = wPort;
 		m_eSessionType = eType;
@@ -118,6 +119,8 @@ public class SessionObject : MonoBehaviour
 		byte[] pData = Encoding.UTF8.GetBytes(szData);
 		Send(pData, (UInt32)pData.Length);
 	}
+
+	FxNet.IFxClientSocket GetClientSocket() { return m_pClientSocket; }
 
 	public FxNet.ISession m_pSession;
 	public SessionType m_eSessionType = SessionType.SessionType_TCP;
