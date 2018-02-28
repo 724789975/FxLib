@@ -29,7 +29,7 @@ public class SessionObject : MonoBehaviour
 
 	public bool InitSession(SessionType eType, string szIp, UInt16 wPort)
 	{
-		LogHelper.LogStr("type : " + eType.ToString() + ", ip : " + szIp + ", port : " + wPort);
+		H5Helper.LogStr("type : " + eType.ToString() + ", ip : " + szIp + ", port : " + wPort);
 		m_szIP = szIp;
 		m_wPort = wPort;
 		m_eSessionType = eType;
