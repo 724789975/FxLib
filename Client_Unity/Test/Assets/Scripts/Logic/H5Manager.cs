@@ -14,9 +14,9 @@ public class H5Manager : SingletonObject<H5Manager>
 	// Use this for initialization
 	void Start ()
 	{
-		H5Helper.LogStr("start : geturl");
+		H5Helper.H5LogStr("start : geturl");
 #if UNITY_WEBGL && !UNITY_EDITOR
-		Init(H5Helper.GetH5Url());
+		Init(H5Helper.H5GetUrl());
 #endif
 	}
 
@@ -25,7 +25,7 @@ public class H5Manager : SingletonObject<H5Manager>
 
 	public void Init(string szUrl)
 	{
-		H5Helper.LogStr(szUrl);
+		H5Helper.H5LogStr(szUrl);
 		Uri uri = new Uri(szUrl);
 		
 		string szBaseUrl;
@@ -35,7 +35,7 @@ public class H5Manager : SingletonObject<H5Manager>
 		string szServerPort = nvcParam.Get("server_port");
 		string szSlaveServerPort = nvcParam.Get("slave_server_port");
 		string szPlayerPort = nvcParam.Get("player_port");
-		H5Helper.LogStr("server_port : " + szServerPort + ", slave_server_port : "
+		H5Helper.H5LogStr("server_port : " + szServerPort + ", slave_server_port : "
 			+ szSlaveServerPort + ", player_port : " + szPlayerPort);
 		if (szServerPort != null)
 		{

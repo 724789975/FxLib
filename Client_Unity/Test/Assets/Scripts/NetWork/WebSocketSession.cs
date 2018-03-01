@@ -41,13 +41,13 @@ class WebSocketSession : ISession
 
 	public override void OnClose()
 	{
-		H5Helper.LogStr("OnClose");
+		H5Helper.H5LogStr("OnClose");
 		m_oGameObject.OnClose();
 	}
 
 	public override void OnConnect()
 	{
-		H5Helper.LogStr("OnConnect");
+		H5Helper.H5LogStr("OnConnect");
 		m_oGameObject.OnConnect();
 	}
 
@@ -73,7 +73,7 @@ class WebSocketSession : ISession
 
 	public override IFxClientSocket Reconnect()
 	{
-		H5Helper.LogStr("Reconnect");
+		H5Helper.H5LogStr("Reconnect");
 		m_pSocket.Init(this);
 		m_pSocket.Connect(m_oGameObject, m_szIp, m_wPort);
         return m_pSocket;
