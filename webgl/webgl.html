@@ -1,0 +1,65 @@
+﻿<html>
+<head>
+<meta charset="UTF-8">
+<title>Web Socket Test</title>
+<script src="./dist/binarypack.js"></script>
+<script src="./lib/date.js"></script>
+
+<script type="text/javascript">
+
+var littleEndian = (function() {
+	return false;
+	var buffer = new ArrayBuffer(2);
+	new DataView(buffer).setInt16(0, 256, true);
+	return new Int16Array(buffer)[0] === 256;
+})();
+
+var ws;
+
+function GameConnect()
+{
+//	var domain = wondow.location.host;
+	var domain = document.domain;
+	ws = new WebSocket("ws://" + domain + ":30002/chat");
+	ws.onopen = function(event){
+		var packedVal;
+		var packer = BinaryPack.GetPack();
+		packer.pack_uint32(30002);
+		var packedVal = packer.getBuffer();
+		ws.send(packedVal);
+	};
+	ws.onmessage = function(event){
+		var fr = new FileReader();
+		fr.onload = function(evt) {
+			var unpacker = BinaryPack.GetUnpack(evt.target.result);
+			var protocol = unpacker.unpack_uint32();
+			var player_port = unpacker.unpack_uint16();
+			var server_port = unpacker.unpack_uint16();
+			var slave_server_port = unpacker.unpack_uint16();
+			alert("" + player_port + "," + server_port + "," + slave_server_port);
+			window.location.href = "http://" + domain + "/view/index.html?player_port=" + player_port + "&server_port=" + server_port + "&slave_server_port=" + slave_server_port;
+			ws.close();
+
+		};
+		fr.readAsArrayBuffer(event.data);
+	};
+	ws.onclose = function(event){ alert("已与服务器断开连接\r\n当前状态: " + this.readyState);};
+	ws.onerror = WSOnError;
+}
+
+function GetState()
+{
+	alert(ws.readyState);
+};
+
+function WSOnError(event)
+{
+	 alert("websocket异常111111111\r\n" + this.extensions);
+}
+
+</script>
+</head>
+<body>
+	<button type="button" onclick='GameConnect();'>连接到服务器</button><br/><br/>
+</body>
+</html>
