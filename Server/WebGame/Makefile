@@ -29,7 +29,7 @@ CODE_DIR = ./ ../common
 INCLUDE_DIR =./ ../gflags ../meta_header/ ../lua ../tolua ../mysql/include
 LIB_FILE = -L../Debug -Lcrypto -lpthread -lLuaLib -lNet -lDatabase -lgflags
 OUTPUT_DIR =../Debug
-OUTPUT = GameServer
+OUTPUT = WebGame
 #==========================================================
 
 OBJS = $(foreach i, $(CODE_DIR), $(shell find $(i) -name "*.cpp"))
