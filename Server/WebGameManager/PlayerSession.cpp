@@ -36,7 +36,7 @@ bool StartProccess(unsigned long long qwPlayerPoint)
 	char szPlayerPoint[16] = { 0 };
 	sprintf(szPlayerPoint, "%llu", qwPlayerPoint);
 	char *arg[] = { szExePath, "--game_manager_ip", szServerIp,
-		"--game_manager_port", szServerPort, "--player_point", szPlayerPoint };
+		"--game_manager_port", szServerPort, "--player_point", szPlayerPoint, 0 };
 	int pid = vfork();
 	if (pid < 0)
 	{
@@ -47,7 +47,7 @@ bool StartProccess(unsigned long long qwPlayerPoint)
 	if (pid == 0)
 	{
 		execv(arg[0], arg);
-		//_exit(0);
+		_exit(0);
 	}
 	else
 	{
