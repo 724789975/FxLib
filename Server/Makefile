@@ -1,5 +1,5 @@
 
-DIRS = Database LuaLib Net LuaTest TestClient TestServer ChatServer ChatServerManager
+DIRS = Database LuaLib Net WebGameManager WebGame
 
 release:
 	@for dir in ${DIRS}; do\
