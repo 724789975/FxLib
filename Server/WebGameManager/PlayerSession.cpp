@@ -35,7 +35,7 @@ bool StartProccess(unsigned long long qwPlayerPoint)
 	sprintf(szServerPort, "%d", GameServer::Instance()->GetServerListenPort());
 	char szPlayerPoint[16] = { 0 };
 	sprintf(szPlayerPoint, "%llu", qwPlayerPoint);
-	const char *arg[] = { szExePath, "--game_manager_ip", szServerIp,
+	char *arg[] = { szExePath, "--game_manager_ip", szServerIp,
 		"--game_manager_port", szServerPort, "--player_point", szPlayerPoint };
 	int pid = vfork();
 
