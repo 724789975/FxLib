@@ -79,6 +79,7 @@ static const char* LogLevelString[LogLv_Count] =
 		"LogLv_Debug3	",
 };
 
+int GetPid();
 FILE* GetLogFile();
 
 void PrintTrace(char* strTrace);

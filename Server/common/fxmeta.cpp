@@ -133,6 +133,15 @@ void FxSleep(UINT32 dwMilliseconds)
 
 }
 
+int GetPid()
+{
+#ifdef WIN32
+	return _getpid();
+#else
+	return (int)getpid();
+#endif // WIN32
+}
+
 FILE* GetLogFile()
 {
 	static FILE* pFile = NULL;
@@ -148,7 +157,7 @@ FILE* GetLogFile()
 		}
 		return pFile;
 	}
-	sprintf(strLogPath, "./%s_exe_log.txt", GetExeName());
+	sprintf(strLogPath, "./%s_%d_exe_log.txt", GetExeName(), GetPid());
 
 	if (strcmp(strLogPath, sstrPath) != 0)
 	{

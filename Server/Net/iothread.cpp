@@ -21,7 +21,7 @@ FxIoThread::FxIoThread()
 #endif // WIN32
 	m_dwMaxSock = 0;
 	m_bStop = false;
-	sprintf(m_szLogPath, "./%s_%p_log.txt", GetExeName(), this);
+	sprintf(m_szLogPath, "./%s_%d_%p_log.txt", GetExeName(), GetPid(), this);
 
 	m_dLoatUpdateTime = 0;
 }
