@@ -9,14 +9,18 @@
 #include "SlaveServerSession.h"
 #include "PlayerSession.h"
 
-class GameServer : public TSingleton<GameServer>
+class GameServer : public TSingleton<GameServer>, public IFxTimer
 {
 public:
 	GameServer();
 	virtual ~GameServer();
 
+	virtual bool OnTimer(double fSecond);
+
 	bool Init(unsigned int dwGameManagerIp, unsigned short wGameManagerPort, unsigned long long qwPlayerPoint);
 	bool Stop();
+
+	bool GameEnd();
 
 	//CBinaryGameManagerSession& GetBinaryGameManagerSession() { return m_oBinaryGameManagerSession; }
 

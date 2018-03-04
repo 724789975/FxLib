@@ -17,6 +17,13 @@ GameServer::~GameServer()
 {
 }
 
+bool GameServer::OnTimer(double fSecond)
+{
+	LogExe(LogLv_Debug, "%s", "time end~~~~~");
+	GameEnd();
+	exit(0);
+}
+
 bool GameServer::Init(unsigned int dwGameManagerIp, unsigned short wGameManagerPort, unsigned long long qwPlayerPoint)
 {
 	m_qwPlayerPoint = qwPlayerPoint;
@@ -51,5 +58,11 @@ bool GameServer::Init(unsigned int dwGameManagerIp, unsigned short wGameManagerP
 bool GameServer::Stop()
 {
 	// todo
+	return false;
+}
+
+bool GameServer::GameEnd()
+{
+	LogExe(LogLv_Debug, "%s", "game end~~~~~");
 	return false;
 }
