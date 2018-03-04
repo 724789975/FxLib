@@ -33,6 +33,7 @@ int main(int argc, char **argv)
 	signal(SIGINT, EndFun);
 	signal(SIGTERM, EndFun);
 
+	IFxNet* pNet = FxNetGetModule();
 	// must define before goto
 	if (!GetTimeHandler()->Init())
 	{
@@ -41,7 +42,6 @@ int main(int argc, char **argv)
 	}
 	GetTimeHandler()->Run();
 
-	IFxNet* pNet = FxNetGetModule();
 	if (!pNet)
 	{
 		g_bRun = false;
