@@ -29,11 +29,13 @@ bool StartProccess(unsigned long long qwPlayerPoint)
 #else
 	char szExePath[512] = { 0 };
 	sprintf(szExePath, "%s/WebGame", GetExePath());
+	char szServerIp[32] = { 0 };
+	sprintf(szServerIp, "%s", GameServer::Instance()->GetServerListenIp().c_str());
 	char szServerPort[8] = { 0 };
 	sprintf(szServerPort, "%d", GameServer::Instance()->GetServerListenPort());
 	char szPlayerPoint[16] = { 0 };
 	sprintf(szPlayerPoint, "%llu", qwPlayerPoint);
-	const char *arg[] = { szExePath, "--game_manager_ip", GameServer::Instance()->GetServerListenIp().c_str(),
+	const char *arg[] = { szExePath, "--game_manager_ip", szServerIp,
 		"--game_manager_port", szServerPort, "--player_point", szPlayerPoint };
 	int pid = vfork();
 

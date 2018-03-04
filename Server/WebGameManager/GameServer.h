@@ -2,6 +2,7 @@
 #define __GameServer_H__
 
 #include <vector>
+#include <string>
 
 #include "singleton.h"
 #include "ServerSession.h"
