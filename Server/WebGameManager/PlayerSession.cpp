@@ -38,11 +38,16 @@ bool StartProccess(unsigned long long qwPlayerPoint)
 	char *arg[] = { szExePath, "--game_manager_ip", szServerIp,
 		"--game_manager_port", szServerPort, "--player_point", szPlayerPoint };
 	int pid = vfork();
+	if (pid < 0)
+	{
+		LogExe(LogLv_Error, "%s %s %s %s %s %s %s",
+			arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], arg[6]);
+	}
 
 	if (pid == 0)
 	{
 		execv(arg[0], arg);
-		_exit(0);
+		//_exit(0);
 	}
 	else
 	{
