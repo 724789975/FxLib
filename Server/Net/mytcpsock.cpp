@@ -120,7 +120,12 @@ SOCKET FxTCPListenSock::Listen(UINT32 dwIP, UINT16& wPort)
 		return false;
 	}
 
-	int nLocalAddrLen = sizeof(stAddr);
+#ifdef WIN32
+	int
+#else
+	socklen_t
+#endif // WIN32
+	 nLocalAddrLen = sizeof(stAddr);
 	if (getsockname(GetSock(), (sockaddr*)&stAddr, &nLocalAddrLen) < 0)
 	{
 #ifdef WIN32
