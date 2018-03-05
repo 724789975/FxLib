@@ -104,7 +104,6 @@ public class SessionObject : MonoBehaviour
 		Send(pData, (UInt32)pData.Length);
 	}
 
-	int dw1 = 0;
 	public void OnRecv(byte[] pBuf, uint dwLen)
 	{
 		foreach (var item in m_pfOnRecv)
@@ -112,12 +111,6 @@ public class SessionObject : MonoBehaviour
 			item(pBuf, dwLen);
 		}
 		//m_pfOnRecv(pBuf, dwLen);
-
-		string szData = String.Format("{0}, {1}, {2}, {3}, {4}, {5}",
-			"sessionobject.cs", 106, "SessionObject::OnRecv", dw1++,
-			ToString(), DateTime.Now.ToLocalTime().ToString());
-		byte[] pData = Encoding.UTF8.GetBytes(szData);
-		Send(pData, (UInt32)pData.Length);
 	}
 
 	FxNet.IFxClientSocket GetClientSocket() { return m_pClientSocket; }
