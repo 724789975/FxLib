@@ -97,11 +97,6 @@ public class SessionObject : MonoBehaviour
 		}
 		//m_pfOnConnect();
 
-		string szData = String.Format("{0}, {1}, {2}, {3}, {4}",
-			"sessionobject.cs", 83, "SessionObject::OnConnect",
-			ToString(), DateTime.Now.ToLocalTime().ToString());
-		byte[] pData = Encoding.UTF8.GetBytes(szData);
-		Send(pData, (UInt32)pData.Length);
 	}
 
 	public void OnRecv(byte[] pBuf, uint dwLen)
