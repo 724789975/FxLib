@@ -25,10 +25,18 @@ public class H5Helper : MonoBehaviour
 
 	public static string H5GetUrl()
 	{
+#if UNITY_WEBGL && !UNITY_EDITOR
 		return GetUrl();
+#else
+		return "not in webgl!!!!!!";
+#endif
 	}
 	public static void H5AlertString(string szLog)
 	{
+#if UNITY_WEBGL && !UNITY_EDITOR
 		AlertString(szLog);
+#else
+		Debug.LogError(szLog);
+#endif
 	}
 }

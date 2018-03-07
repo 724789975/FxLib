@@ -235,7 +235,7 @@ namespace FxNet
 		{
 			try
 			{
-				if (m_hSocket != null && IsConnected())
+				if (m_hSocket != null)
 				{
 					m_hSocket.Close();
 					m_hSocket = null;
@@ -246,6 +246,11 @@ namespace FxNet
 			catch (Exception)
 			{
 			}
+		}
+
+		public string GetError()
+		{
+			return m_szError;
 		}
 
 		string m_szError;
@@ -401,6 +406,11 @@ namespace FxNet
 				FxNetModule.Instance().PushNetEvent(this, pEvent);
 				IoThread.Instance().DelConnectSocket(this);
 			}
+		}
+
+		public string GetError()
+		{
+			return m_szError;
 		}
 
 		bool m_bIsConnected;

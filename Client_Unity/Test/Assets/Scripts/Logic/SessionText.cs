@@ -52,10 +52,12 @@ public class SessionText : MonoBehaviour
 	public void OnClose()
 	{
 		m_textText.text = "on close!!!!";
+		H5Helper.H5AlertString("session close");
 	}
 	public void OnError(uint dwErrorNo)
 	{
 		m_textText.text = "on error " + dwErrorNo.ToString() + "!!!!!!!";
+		H5Helper.H5AlertString("session error " + dwErrorNo.ToString());
 	}
 
 	public void SetPort()

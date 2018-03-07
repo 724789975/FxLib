@@ -58,6 +58,7 @@ class WebSocketSession : ISession
 
 	public override void OnError(uint dwErrorNo)
 	{
+		H5Helper.H5AlertString(m_pSocket.GetError());
 		m_oGameObject.OnError(dwErrorNo);
 	}
 
