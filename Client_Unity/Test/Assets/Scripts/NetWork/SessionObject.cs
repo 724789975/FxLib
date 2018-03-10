@@ -71,6 +71,7 @@ public class SessionObject : MonoBehaviour
 
 	public bool OnDestroy()
 	{
+		H5Helper.H5AlertString("session obj has destroy!!!!");
 		return false;
 	}
 

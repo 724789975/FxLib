@@ -123,7 +123,6 @@ namespace FxNet
 			//m_pRecvBuffer = new DataBuffer();
 			//m_pSendBuffer = new DataBuffer();
 			//m_pSessionBuffer = new DataBuffer();
-			m_szError = null;
 			return true;
 		}
 
@@ -168,7 +167,20 @@ namespace FxNet
 
 		public override bool IsConnected()
 		{
-			return m_hSocket.IsConnected;
+			bool bConnected = m_hSocket.IsConnected && GetError().Length == 0;
+			if (m_bConnected && !bConnected)
+			{
+				m_bConnected = false;
+				if (m_hSocket != null)
+				{
+					Disconnect();
+				}
+				else
+				{
+					m_pSession.OnClose();
+				}
+			}
+			return bConnected;
 		}
 
 		public override void ProcEvent(SNetEvent pEvent)
@@ -207,13 +219,22 @@ namespace FxNet
 
 		public override void OnConnect()
 		{
+			m_bConnected = true;
 			m_pSession.OnConnect();
 		}
 
 		public override void Send(byte[] byteData, UInt32 dwLen)
 		{
-			// 阻塞着发 省的包头有问题
-			m_hSocket.Send(byteData, (Int32)dwLen);
+			try
+			{
+				// 阻塞着发 省的包头有问题
+				m_hSocket.Send(byteData, (Int32)dwLen);
+			}
+			catch (SocketException e)
+			{
+				m_pSession.OnError((UInt32)e.ErrorCode);
+				Disconnect();
+			}
 		}
 
 		public override void OnSend(UInt32 bytesSent)
@@ -237,7 +258,8 @@ namespace FxNet
 			{
 				if (m_hSocket != null)
 				{
-					m_hSocket.Close();
+					m_bConnected = false;
+                    m_hSocket.Close();
 					m_hSocket = null;
 
 					m_pSession.OnClose();
@@ -250,13 +272,13 @@ namespace FxNet
 
 		public string GetError()
 		{
-			return m_szError;
+			return m_hSocket.error;
 		}
 
-		string m_szError;
 
 		DataBuffer m_pSessionBuffer;
 		protected WebSocket m_hSocket;
+		bool m_bConnected = false;
 	}
 }
 #else

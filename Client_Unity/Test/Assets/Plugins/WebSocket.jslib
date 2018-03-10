@@ -90,7 +90,8 @@ SocketError: function (socketInstance, ptr, bufsize)
  	if (socket.error == null)
  		return 0;
     var str = socket.error.slice(0, Math.max(0, bufsize - 1));
-    writeStringToMemory(str, ptr, false);
+	stringToUTF8(str, ptr, Math.max(0, bufsize - 1));
+//    writeStringToMemory(str, ptr, false);
 	return 1;
 },
 
