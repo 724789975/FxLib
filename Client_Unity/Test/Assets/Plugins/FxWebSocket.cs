@@ -167,7 +167,11 @@ namespace FxNet
 
 		public override bool IsConnected()
 		{
-			bool bConnected = m_hSocket.IsConnected && GetError().Length == 0;
+			if (m_hSocket == null)
+			{
+				return false;
+			}
+			bool bConnected = m_hSocket.IsConnected && (GetError() == null);
 			if (m_bConnected && !bConnected)
 			{
 				m_bConnected = false;
@@ -276,8 +280,8 @@ namespace FxNet
 		}
 
 
-		DataBuffer m_pSessionBuffer;
-		protected WebSocket m_hSocket;
+		DataBuffer m_pSessionBuffer = null;
+		protected WebSocket m_hSocket = null;
 		bool m_bConnected = false;
 	}
 }
