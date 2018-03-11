@@ -120,14 +120,27 @@ void CPlayerSession::OnRequestGameManagerInfo(const char* pBuf, UINT32 dwLen)
 	}
 }
 
-void CPlayerSession::OnGameInfo(stGAME_NOTIFY_GAME_MANAGER_INFO & refInfo)
+//void CPlayerSession::OnGameInfo(stGAME_NOTIFY_GAME_MANAGER_INFO & refInfo)
+//{
+//	CNetStream oStream(ENetStreamType_Write, g_pPlayerSessionBuf, g_dwPlayerSessionBuffLen);
+//	oStream.WriteInt(Protocol::GAME_MANAGER_ACK_PLAYER_INFO_RESULT);
+//	stGAME_MANAGER_ACK_PLAYER_INFO_RESULT oGAME_MANAGER_ACK_PLAYER_INFO_RESULT;
+//	oGAME_MANAGER_ACK_PLAYER_INFO_RESULT.wPlayerPort = refInfo.wPlayerPort;
+//	oGAME_MANAGER_ACK_PLAYER_INFO_RESULT.wServerPort = refInfo.wServerPort;
+//	oGAME_MANAGER_ACK_PLAYER_INFO_RESULT.wSlaveServerPort = refInfo.wSlaveServerPort;
+//
+//	oGAME_MANAGER_ACK_PLAYER_INFO_RESULT.Write(oStream);
+//	Send(g_pPlayerSessionBuf, g_dwPlayerSessionBuffLen - oStream.GetDataLength());
+//}
+
+void CPlayerSession::OnGameInfo(game_proto::GameNotifyGameManagerInfo& refInfo)
 {
 	CNetStream oStream(ENetStreamType_Write, g_pPlayerSessionBuf, g_dwPlayerSessionBuffLen);
 	oStream.WriteInt(Protocol::GAME_MANAGER_ACK_PLAYER_INFO_RESULT);
 	stGAME_MANAGER_ACK_PLAYER_INFO_RESULT oGAME_MANAGER_ACK_PLAYER_INFO_RESULT;
-	oGAME_MANAGER_ACK_PLAYER_INFO_RESULT.wPlayerPort = refInfo.wPlayerPort;
-	oGAME_MANAGER_ACK_PLAYER_INFO_RESULT.wServerPort = refInfo.wServerPort;
-	oGAME_MANAGER_ACK_PLAYER_INFO_RESULT.wSlaveServerPort = refInfo.wSlaveServerPort;
+	oGAME_MANAGER_ACK_PLAYER_INFO_RESULT.wPlayerPort = refInfo.dw_player_port();
+	oGAME_MANAGER_ACK_PLAYER_INFO_RESULT.wServerPort = refInfo.dw_server_port();
+	oGAME_MANAGER_ACK_PLAYER_INFO_RESULT.wSlaveServerPort = refInfo.dw_slave_server_port();
 
 	oGAME_MANAGER_ACK_PLAYER_INFO_RESULT.Write(oStream);
 	Send(g_pPlayerSessionBuf, g_dwPlayerSessionBuffLen - oStream.GetDataLength());

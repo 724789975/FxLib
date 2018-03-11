@@ -9,6 +9,8 @@
 #include <deque>
 #include "SocketSession.h"
 
+#include "proto_dispatcher.h"
+
 class CGameManagerSession : public FxSession
 {
 public:
@@ -23,9 +25,11 @@ public:
 	virtual char*		GetRecvBuf() { return m_dataRecvBuf; }
 	virtual UINT32		GetRecvSize() { return 64 * 1024; };
 
-	void				OnGameManagerAckGameInfoResult(const char* pBuf, UINT32 dwLen);
+	bool				OnGameManagerAckGameInfoResult(CGameManagerSession& refSession, google::protobuf::Message& refMsg);
 private:
 	char m_dataRecvBuf[1024 * 1024];
+
+	CallBackDispatcher::ProtoCallBackDispatch<CGameManagerSession, CGameManagerSession> m_oProtoDispatch;
 };
 
 class CBinaryGameManagerSession : public CGameManagerSession

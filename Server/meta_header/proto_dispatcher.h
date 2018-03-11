@@ -113,7 +113,7 @@ namespace CallBackDispatcher
 	};
 
 
-	bool GetMessage(google::protobuf::Message** ppMsg, const google::protobuf::Descriptor** ppDescriptor, const std::string& refszName, const unsigned char* pData, unsigned int dwSize);
+	bool GetProtoMessage(google::protobuf::Message** ppMsg, const google::protobuf::Descriptor** ppDescriptor, const std::string& refszName, const unsigned char* pData, unsigned int dwSize);
 
 	template <class Owner, typename P1>
 	class ProtoCallBackDispatch : public ClassCallBackDispatcher<bool, const google::protobuf::Descriptor*, Owner, P1&, google::protobuf::Message&>
@@ -128,7 +128,7 @@ namespace CallBackDispatcher
 		{
 			google::protobuf::Message* pMsg = NULL;
 			const google::protobuf::Descriptor* pDescriptor = NULL;
-			if (!GetMessage(&pMsg, &pDescriptor, refszName, pData, dwSize))
+			if (!GetProtoMessage(&pMsg, &pDescriptor, refszName, pData, dwSize))
 			{
 				return false;
 			}

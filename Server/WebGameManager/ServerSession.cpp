@@ -3,12 +3,15 @@
 #include "gamedefine.h"
 #include "PlayerSession.h"
 #include "GameServer.h"
+#include "msg_proto/web_game.pb.h"
 
 const static unsigned int g_dwServerSessionBuffLen = 64 * 1024;
 static char g_pServerSessionBuf[g_dwServerSessionBuffLen];
 
 CServerSession::CServerSession()
+	:m_oProtoDispatch(*this)
 {
+	m_oProtoDispatch.RegistFunction(game_proto::GameNotifyGameManagerInfo::descriptor(), &CServerSession::OnGameNotifyGameManagerInfo);
 }
 
 
@@ -34,15 +37,14 @@ void CServerSession::OnError(UINT32 dwErrorNo)
 void CServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
-	Protocol::EGameProtocol eProrocol;
-	oStream.ReadInt((int&)eProrocol);
-	const char* pData = pBuf + sizeof(UINT32);
-	dwLen -= sizeof(UINT32);
-
-	switch (eProrocol)
+	std::string szProtocolName;
+	oStream.ReadString(szProtocolName);
+	unsigned int dwProtoLen = oStream.GetDataLength();
+	char* pData = oStream.ReadData(dwProtoLen);
+	if (!m_oProtoDispatch.Dispatch(szProtocolName.c_str(),
+		(const unsigned char*)pData, dwProtoLen, this, *this))
 	{
-	case Protocol::GAME_NOTIFY_GAME_MANAGER_INFO:			OnGameNotifyGameManagerInfo(pData, dwLen);	break;
-	default:	Assert(0);	break;
+		LogExe(LogLv_Debug, "%s proccess error", szProtocolName.c_str());
 	}
 }
 
@@ -54,26 +56,30 @@ void CServerSession::Release(void)
 	Init(NULL);
 }
 
-void CServerSession::OnGameNotifyGameManagerInfo(const char* pBuf, UINT32 dwLen)
+bool CServerSession::OnGameNotifyGameManagerInfo(CServerSession& refSession, google::protobuf::Message& refMsg)
 {
-	CNetStream oStream(pBuf, dwLen);
-	stGAME_NOTIFY_GAME_MANAGER_INFO oGAME_NOTIFY_GAME_MANAGER_INFO;
-	oGAME_NOTIFY_GAME_MANAGER_INFO.Read(oStream);
-
-	stGAME_MANAGER_ACK_GAME_INFO_RESULT oGAME_MANAGER_ACK_GAME_INFO_RESULT;
-	oGAME_MANAGER_ACK_GAME_INFO_RESULT.dwResult = 1;
-	CPlayerSession* pPlayer = (CPlayerSession*)oGAME_NOTIFY_GAME_MANAGER_INFO.qwPlayerPoint;
-	if (GameServer::Instance()->DelRequestPlayer(pPlayer))
+	game_proto::GameNotifyGameManagerInfo* pMsg = dynamic_cast<game_proto::GameNotifyGameManagerInfo*>(&refMsg);
+	if (pMsg == NULL)
 	{
-		oGAME_MANAGER_ACK_GAME_INFO_RESULT.dwResult = 0;
-		pPlayer->OnGameInfo(oGAME_NOTIFY_GAME_MANAGER_INFO);
+		return false;
 	}
 
+	game_proto::GameManagerAckGameInfoResult oResult;
+	oResult.set_dw_result(1);
+	CPlayerSession* pPlayer = (CPlayerSession*)pMsg->qw_player_point();
+	if (GameServer::Instance()->DelRequestPlayer(pPlayer))
+	{
+		oResult.set_dw_result(0);
+		pPlayer->OnGameInfo(*pMsg);
+	}
 	CNetStream oWriteStream(ENetStreamType_Write, g_pServerSessionBuf, g_dwServerSessionBuffLen);
-	oWriteStream.WriteInt(Protocol::GAME_MANAGER_ACK_GAME_INFO_RESULT);
+	oWriteStream.WriteString(oResult.GetTypeName());
+	std::string szResult;
+	oResult.SerializeToString(&szResult);
+	oWriteStream.WriteData(szResult.c_str(), szResult.size());
 
-	oGAME_MANAGER_ACK_GAME_INFO_RESULT.Write(oWriteStream);
 	Send(g_pServerSessionBuf, g_dwServerSessionBuffLen - oWriteStream.GetDataLength());
+	return true;
 }
 
 //////////////////////////////////////////////////////////////////////////

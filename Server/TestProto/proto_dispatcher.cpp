@@ -33,7 +33,7 @@ namespace CallBackDispatcher
 	//	return true;
 	//}
 
-	bool GetMessage(google::protobuf::Message** ppMsg, const google::protobuf::Descriptor** ppDescriptor, const std::string& refszName, const unsigned char* pData, unsigned int dwSize)
+	bool GetProtoMessage(google::protobuf::Message** ppMsg, const google::protobuf::Descriptor** ppDescriptor, const std::string& refszName, const unsigned char* pData, unsigned int dwSize)
 	{
 		*ppDescriptor = google::protobuf::DescriptorPool::generated_pool()->FindMessageTypeByName(refszName);
 

@@ -1,12 +1,15 @@
 #include "PlayerSession.h"
 #include "netstream.h"
+#include "msg_proto/web_game.pb.h"
 //#include "gamedefine.h"
 
 const static unsigned int g_dwPlayerSessionBuffLen = 64 * 1024;
 static char g_pPlayerSessionBuf[g_dwPlayerSessionBuffLen];
 
 CPlayerSession::CPlayerSession()
+	: m_oProtoDispatch(*this)
 {
+	m_oProtoDispatch.RegistFunction(game_proto::PlayerRequestGameManagerInfo::descriptor(), &CPlayerSession::OnRequestGameManagerInfo);
 }
 
 CPlayerSession::~CPlayerSession()
@@ -30,17 +33,16 @@ void CPlayerSession::OnError(UINT32 dwErrorNo)
 
 void CPlayerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
-	//CNetStream oStream(pBuf, dwLen);
-	//Protocol::EGameProtocol eProrocol;
-	//oStream.ReadInt((int&)eProrocol);
-	//const char* pData = pBuf + sizeof(UINT32);
-	//dwLen -= sizeof(UINT32);
-
-	//switch (eProrocol)
-	//{
-	//case Protocol::PLAYER_REQUEST_GAME_MANAGER_INFO:			OnRequestGameManagerInfo(pData, dwLen);	break;
-	//default:	Assert(0);	break;
-	//}
+	CNetStream oStream(pBuf, dwLen);
+	std::string szProtocolName;
+	oStream.ReadString(szProtocolName);
+	unsigned int dwProtoLen = oStream.GetDataLength();
+	char* pData = oStream.ReadData(dwProtoLen);
+	if (!m_oProtoDispatch.Dispatch(szProtocolName.c_str(),
+		(const unsigned char*)pData, dwProtoLen, this, *this))
+	{
+		LogExe(LogLv_Debug, "%s proccess error", szProtocolName.c_str());
+	}
 }
 
 void CPlayerSession::Release(void)
@@ -51,13 +53,9 @@ void CPlayerSession::Release(void)
 	Init(NULL);
 }
 
-void CPlayerSession::OnRequestGameManagerInfo(const char* pBuf, UINT32 dwLen)
+bool CPlayerSession::OnRequestGameManagerInfo(CPlayerSession& refSession, google::protobuf::Message& refMsg)
 {
-		//CNetStream oStream(pBuf, dwLen);
-		//stPLAYER_REQUEST_GAME_MANAGER_INFO oPLAYER_REQUEST_GAME_MANAGER_INFO;
-		//oPLAYER_REQUEST_GAME_MANAGER_INFO.Read(oStream);
-
-
+	return false;
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -9,6 +9,8 @@
 #include <deque>
 #include "SocketSession.h"
 
+#include "msg_proto/web_game.pb.h"
+
 struct stGAME_NOTIFY_GAME_MANAGER_INFO;
 class CPlayerSession : public FxSession
 {
@@ -26,7 +28,8 @@ public:
 
 	void				OnRequestGameManagerInfo(const char* pBuf, UINT32 dwLen);
 
-	void				OnGameInfo(stGAME_NOTIFY_GAME_MANAGER_INFO& refInfo);
+	//void				OnGameInfo(stGAME_NOTIFY_GAME_MANAGER_INFO& refInfo);
+	void				OnGameInfo(game_proto::GameNotifyGameManagerInfo& refInfo);
 private:
 	char m_dataRecvBuf[1024 * 1024];
 };
