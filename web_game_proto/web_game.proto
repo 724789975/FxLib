@@ -1,0 +1,32 @@
+﻿syntax = "proto3";
+package game_proto;
+
+//game->gamemanager
+message GameNotifyGameManagerInfo
+{
+	uint32 dw_player_port = 1;
+	uint32 dw_server_port = 2;
+	uint32 dw_slave_server_port = 3;
+	uint64 qw_player_point = 4;
+}
+
+//gamemanager->game
+message GameManagerAckGameInfoResult
+{
+	uint32 dw_result = 1;
+}
+
+//player->gamemanager
+message PlayerRequestGameManagerInfo
+{
+	uint32 dw_result = 1;
+}
+
+//gamemanager->player
+message GameManagerAckPlayerInfoResult
+{
+	uint32 dw_player_port = 1;
+	uint32 dw_server_port = 2;
+	uint32 dw_slave_server_port = 3;
+}
+
