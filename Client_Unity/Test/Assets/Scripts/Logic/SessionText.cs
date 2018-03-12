@@ -32,11 +32,21 @@ public class SessionText : MonoBehaviour
 	{
 		m_textText.text = "onconnect";
 
-		string szData = String.Format("{0}, {1}, {2}, {3}, {4}",
+		GameProto.PlayerRequestGameTest oTest = new GameProto.PlayerRequestGameTest();
+
+		oTest.SzTest = String.Format("{0}, {1}, {2}, {3}, {4}",
 			"sessionobject.cs", 83, "SessionObject::OnConnect",
 			ToString(), DateTime.Now.ToLocalTime().ToString());
-		byte[] pData = Encoding.UTF8.GetBytes(szData);
-		m_pSession.Send(pData, (UInt32)pData.Length);
+
+		byte[] pData = new byte[1024];
+		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
+		pStream.WriteString(GameProto.PlayerRequestGameTest.Descriptor.FullName);
+		byte[] pProto = new byte[oTest.CalculateSize()];
+		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
+		oTest.WriteTo(oStream);
+		pStream.WriteData(pProto, (uint)pProto.Length);
+
+		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
 	}
 	
 	public void OnClose()
