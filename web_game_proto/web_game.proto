@@ -30,3 +30,9 @@ message GameManagerAckPlayerInfoResult
 	uint32 dw_slave_server_port = 3;
 }
 
+//player->game
+message PlayerRequestGameTest
+{
+	string sz_test = 1;
+}
+

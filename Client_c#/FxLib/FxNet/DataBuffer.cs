@@ -264,6 +264,11 @@ namespace FxNet
 			return WriteData(pData, (UInt32)pData.Length);
 		}
 
+		public UInt32 GetLeftLen()
+		{
+			return m_dwLen;
+		}
+
 		ENetStreamType m_eType;
 		byte[] m_pData;
 		UInt32 m_dwLen;

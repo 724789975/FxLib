@@ -64,12 +64,7 @@ class WebSocketSession : ISession
 
 	public override void OnRecv(byte[] pBuf, uint dwLen)
 	{
-		NetStream pNetStream = new NetStream(pBuf, dwLen);
-
-		byte[] pData = new byte[dwLen];
-		pNetStream.ReadData(ref pData, dwLen);
-
-		m_oGameObject.OnRecv(pData, dwLen);
+		m_oGameObject.OnRecv(pBuf, dwLen);
 	}
 
 	public override IFxClientSocket Reconnect()

@@ -2,6 +2,7 @@
 using System.Text;
 using System.Collections.Generic;
 using UnityEngine;
+using FxNet;
 
 public class SessionObject : MonoBehaviour
 {
@@ -102,11 +103,34 @@ public class SessionObject : MonoBehaviour
 
 	public void OnRecv(byte[] pBuf, uint dwLen)
 	{
-		foreach (var item in m_pfOnRecv)
+		NetStream pStream = new NetStream(pBuf, dwLen);
+		string szProtoName = "";
+		pStream.ReadString(ref szProtoName);
+		byte[] pProto = new byte[pStream.GetLeftLen()];
+		pStream.ReadData(ref pProto, pStream.GetLeftLen());
+
+		if (!m_mapCallBack.ContainsKey(szProtoName))
 		{
-			item(pBuf, dwLen);
+			H5Helper.H5LogStr("can't find proto name " + szProtoName);
+			return;
 		}
+		m_mapCallBack[szProtoName](pProto);
+
+		//foreach (var item in m_pfOnRecv)
+		//{
+		//	item(pBuf, dwLen);
+		//}
 		//m_pfOnRecv(pBuf, dwLen);
+	}
+
+	public void RegistMessage(string szProtoName, MessageCallBack pfCallBack)
+	{
+		if (m_mapCallBack.ContainsKey(szProtoName))
+		{
+			H5Helper.H5AlertString("already registed proto " + szProtoName);
+			return;
+		}
+		m_mapCallBack[szProtoName] = pfCallBack;
 	}
 
 	FxNet.IFxClientSocket GetClientSocket() { return m_pClientSocket; }
@@ -120,12 +144,12 @@ public class SessionObject : MonoBehaviour
 	public delegate void PFun();
 	public delegate void PFun1(uint p1);
 	public delegate void PFun2(byte[] p1, uint p2);
-	//public Action m_pfOnConnect;
-	//public Action<byte[], uint> m_pfOnRecv;
-	//public Action m_pfOnClose;
-	//public Action<uint> m_pfOnError;
+	public delegate void MessageCallBack(byte[] p1);
+
 	public HashSet<PFun> m_pfOnConnect = new HashSet<PFun>();
-	public HashSet<PFun2> m_pfOnRecv = new HashSet<PFun2>();
+	//public HashSet<PFun2> m_pfOnRecv = new HashSet<PFun2>();
 	public HashSet<PFun> m_pfOnClose = new HashSet<PFun>();
 	public HashSet<PFun1> m_pfOnError = new HashSet<PFun1>();
+
+	public Dictionary<string, MessageCallBack> m_mapCallBack = new Dictionary<string, MessageCallBack>();
 }

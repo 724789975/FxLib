@@ -32,14 +32,16 @@ namespace GameProto {
             "dWVzdEdhbWVNYW5hZ2VySW5mbxIRCglkd19yZXN1bHQYASABKA0ibgoeR2Ft",
             "ZU1hbmFnZXJBY2tQbGF5ZXJJbmZvUmVzdWx0EhYKDmR3X3BsYXllcl9wb3J0",
             "GAEgASgNEhYKDmR3X3NlcnZlcl9wb3J0GAIgASgNEhwKFGR3X3NsYXZlX3Nl",
-            "cnZlcl9wb3J0GAMgASgNYgZwcm90bzM="));
+            "cnZlcl9wb3J0GAMgASgNIigKFVBsYXllclJlcXVlc3RHYW1lVGVzdBIPCgdz",
+            "el90ZXN0GAEgASgJYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyGameManagerInfo), global::GameProto.GameNotifyGameManagerInfo.Parser, new[]{ "DwPlayerPort", "DwServerPort", "DwSlaveServerPort", "QwPlayerPoint" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameManagerAckGameInfoResult), global::GameProto.GameManagerAckGameInfoResult.Parser, new[]{ "DwResult" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestGameManagerInfo), global::GameProto.PlayerRequestGameManagerInfo.Parser, new[]{ "DwResult" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameManagerAckPlayerInfoResult), global::GameProto.GameManagerAckPlayerInfoResult.Parser, new[]{ "DwPlayerPort", "DwServerPort", "DwSlaveServerPort" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameManagerAckPlayerInfoResult), global::GameProto.GameManagerAckPlayerInfoResult.Parser, new[]{ "DwPlayerPort", "DwServerPort", "DwSlaveServerPort" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestGameTest), global::GameProto.PlayerRequestGameTest.Parser, new[]{ "SzTest" }, null, null, null)
           }));
     }
     #endregion
@@ -706,6 +708,138 @@ namespace GameProto {
           }
           case 24: {
             DwSlaveServerPort = input.ReadUInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  ///player->game
+  /// </summary>
+  public sealed partial class PlayerRequestGameTest : pb::IMessage<PlayerRequestGameTest> {
+    private static readonly pb::MessageParser<PlayerRequestGameTest> _parser = new pb::MessageParser<PlayerRequestGameTest>(() => new PlayerRequestGameTest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<PlayerRequestGameTest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[4]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayerRequestGameTest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayerRequestGameTest(PlayerRequestGameTest other) : this() {
+      szTest_ = other.szTest_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayerRequestGameTest Clone() {
+      return new PlayerRequestGameTest(this);
+    }
+
+    /// <summary>Field number for the "sz_test" field.</summary>
+    public const int SzTestFieldNumber = 1;
+    private string szTest_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string SzTest {
+      get { return szTest_; }
+      set {
+        szTest_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as PlayerRequestGameTest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(PlayerRequestGameTest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (SzTest != other.SzTest) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (SzTest.Length != 0) hash ^= SzTest.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (SzTest.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(SzTest);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (SzTest.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SzTest);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(PlayerRequestGameTest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.SzTest.Length != 0) {
+        SzTest = other.SzTest;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            SzTest = input.ReadString();
             break;
           }
         }
