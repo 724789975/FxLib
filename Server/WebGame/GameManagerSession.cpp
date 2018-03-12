@@ -73,6 +73,7 @@ bool CGameManagerSession::OnGameManagerAckGameInfoResult(CGameManagerSession& re
 	{
 		exit(-1);
 	}
+	return true;
 }
 
 //////////////////////////////////////////////////////////////////////////

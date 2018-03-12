@@ -9,6 +9,8 @@
 #include <deque>
 #include "SocketSession.h"
 
+#include "proto_dispatcher.h"
+
 class CServerSession : public FxSession
 {
 public:
@@ -24,8 +26,11 @@ public:
 	virtual UINT32		GetRecvSize() { return 64 * 1024; };
 
 	//void				OnGameNotifyGameManagerInfo(const char* pBuf, UINT32 dwLen);
+	bool				OnPlayerRequestGameTest(CServerSession& refSession, google::protobuf::Message& refMsg);
 private:
 	char m_dataRecvBuf[1024 * 1024];
+
+	CallBackDispatcher::ProtoCallBackDispatch<CServerSession, CServerSession> m_oProtoDispatch;
 };
 
 class CWebSocketServerSession : public CServerSession

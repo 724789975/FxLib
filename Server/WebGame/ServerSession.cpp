@@ -2,12 +2,15 @@
 #include "netstream.h"
 #include "gamedefine.h"
 #include "GameServer.h"
+#include "msg_proto/web_game.pb.h"
 
-const static unsigned int g_dwSlaveServerSessionBuffLen = 64 * 1024;
-static char g_pServerSessionBuf[g_dwSlaveServerSessionBuffLen];
+const static unsigned int g_dwServerSessionBuffLen = 64 * 1024;
+static char g_pServerSessionBuf[g_dwServerSessionBuffLen];
 
 CServerSession::CServerSession()
+	: m_oProtoDispatch(*this)
 {
+	m_oProtoDispatch.RegistFunction(game_proto::PlayerRequestGameTest::descriptor(), &CServerSession::OnPlayerRequestGameTest);
 }
 
 
@@ -32,23 +35,16 @@ void CServerSession::OnError(UINT32 dwErrorNo)
 
 void CServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
-	LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
-	if (!Send(pBuf, dwLen))
+	CNetStream oStream(pBuf, dwLen);
+	std::string szProtocolName;
+	oStream.ReadString(szProtocolName);
+	unsigned int dwProtoLen = oStream.GetDataLength();
+	char* pData = oStream.ReadData(dwProtoLen);
+	if (!m_oProtoDispatch.Dispatch(szProtocolName.c_str(),
+		(const unsigned char*)pData, dwProtoLen, this, *this))
 	{
-		LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s send error", GetRemoteIPStr(), GetRemotePort(), pBuf);
-		Close();
+		LogExe(LogLv_Debug, "%s proccess error", szProtocolName.c_str());
 	}
-	//CNetStream oStream(pBuf, dwLen);
-	//Protocol::EGameProtocol eProrocol;
-	//oStream.ReadInt((int&)eProrocol);
-	//const char* pData = pBuf + sizeof(UINT32);
-	//dwLen -= sizeof(UINT32);
-
-	//switch (eProrocol)
-	//{
-	//case Protocol::GAME_NOTIFY_GAME_MANAGER_INFO:			OnGameNotifyGameManagerInfo(pData, dwLen);	break;
-	//default:	Assert(0);	break;
-	//}
 }
 
 void CServerSession::Release(void)
@@ -57,6 +53,27 @@ void CServerSession::Release(void)
 	OnDestroy();
 
 	Init(NULL);
+}
+
+bool CServerSession::OnPlayerRequestGameTest(CServerSession& refSession, google::protobuf::Message& refMsg)
+{
+	game_proto::PlayerRequestGameTest* pMsg = dynamic_cast<game_proto::PlayerRequestGameTest*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	LogExe(LogLv_Debug, "recv : %s", pMsg->sz_test().c_str());
+
+	CNetStream oWriteStream(ENetStreamType_Write, g_pServerSessionBuf, g_dwServerSessionBuffLen);
+	oWriteStream.WriteString(pMsg->GetTypeName());
+	std::string szResult;
+	pMsg->SerializeToString(&szResult);
+	oWriteStream.WriteData(szResult.c_str(), szResult.size());
+
+	Send(g_pServerSessionBuf, g_dwServerSessionBuffLen - oWriteStream.GetDataLength());
+
+	return true;
 }
 
 //void CServerSession::OnGameNotifyGameManagerInfo(const char* pBuf, UINT32 dwLen)
