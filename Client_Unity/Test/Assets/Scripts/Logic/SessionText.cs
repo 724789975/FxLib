@@ -42,7 +42,7 @@ public class SessionText : MonoBehaviour
 
 		byte[] pData = new byte[1024];
 		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
-		pStream.WriteString(GameProto.PlayerRequestGameTest.Descriptor.FullName);
+		pStream.WriteString("GameProto.PlayerRequestGameTest");
 		byte[] pProto = new byte[oTest.CalculateSize()];
 		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
 		oTest.WriteTo(oStream);
@@ -85,7 +85,7 @@ public class SessionText : MonoBehaviour
 
 		byte[] pData = new byte[1024];
 		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
-		pStream.WriteString(GameProto.PlayerRequestGameTest.Descriptor.FullName);
+		pStream.WriteString("GameProto.PlayerRequestGameTest");
 		byte[] pProto = new byte[oTest.CalculateSize()];
 		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
 		oTest.WriteTo(oStream);
