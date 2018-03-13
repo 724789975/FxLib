@@ -1,5 +1,6 @@
 ﻿syntax = "proto3";
-package game_proto;
+//只能用这种命名方式 不能用小写 下划线
+package GameProto;
 
 //game->gamemanager
 message GameNotifyGameManagerInfo

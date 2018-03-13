@@ -29,7 +29,7 @@ public:
 	void				OnRequestGameManagerInfo(const char* pBuf, UINT32 dwLen);
 
 	//void				OnGameInfo(stGAME_NOTIFY_GAME_MANAGER_INFO& refInfo);
-	void				OnGameInfo(game_proto::GameNotifyGameManagerInfo& refInfo);
+	void				OnGameInfo(GameProto::GameNotifyGameManagerInfo& refInfo);
 private:
 	char m_dataRecvBuf[1024 * 1024];
 };

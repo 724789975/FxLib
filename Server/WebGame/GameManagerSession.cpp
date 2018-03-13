@@ -9,7 +9,7 @@ static char g_pGameManagerSessionBuf[g_dwGameManagerSessionBuffLen];
 CGameManagerSession::CGameManagerSession()
 	: m_oProtoDispatch(*this)
 {
-	m_oProtoDispatch.RegistFunction(game_proto::GameManagerAckGameInfoResult::descriptor(), &CGameManagerSession::OnGameManagerAckGameInfoResult);
+	m_oProtoDispatch.RegistFunction(GameProto::GameManagerAckGameInfoResult::descriptor(), &CGameManagerSession::OnGameManagerAckGameInfoResult);
 }
 
 CGameManagerSession::~CGameManagerSession()
@@ -18,7 +18,7 @@ CGameManagerSession::~CGameManagerSession()
 
 void CGameManagerSession::OnConnect(void)
 {
-	game_proto::GameNotifyGameManagerInfo oInfo;
+	GameProto::GameNotifyGameManagerInfo oInfo;
 	oInfo.set_dw_player_port(GameServer::Instance()->GetPlayerListenPort());
 	oInfo.set_dw_server_port(GameServer::Instance()->GetServerListenPort());
 	oInfo.set_dw_slave_server_port(GameServer::Instance()->GetSlaveServerListenPort());
@@ -63,7 +63,7 @@ void CGameManagerSession::Release(void)
 
 bool CGameManagerSession::OnGameManagerAckGameInfoResult(CGameManagerSession& refSession, google::protobuf::Message& refMsg)
 {
-	game_proto::GameManagerAckGameInfoResult* pMsg = dynamic_cast<game_proto::GameManagerAckGameInfoResult*>(&refMsg);
+	GameProto::GameManagerAckGameInfoResult* pMsg = dynamic_cast<GameProto::GameManagerAckGameInfoResult*>(&refMsg);
 	if (pMsg == NULL)
 	{
 		return false;

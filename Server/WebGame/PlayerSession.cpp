@@ -9,7 +9,7 @@ static char g_pPlayerSessionBuf[g_dwPlayerSessionBuffLen];
 CPlayerSession::CPlayerSession()
 	: m_oProtoDispatch(*this)
 {
-	m_oProtoDispatch.RegistFunction(game_proto::PlayerRequestGameManagerInfo::descriptor(), &CPlayerSession::OnRequestGameManagerInfo);
+	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestGameManagerInfo::descriptor(), &CPlayerSession::OnRequestGameManagerInfo);
 }
 
 CPlayerSession::~CPlayerSession()

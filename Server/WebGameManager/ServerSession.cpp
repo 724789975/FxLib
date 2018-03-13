@@ -11,7 +11,7 @@ static char g_pServerSessionBuf[g_dwServerSessionBuffLen];
 CServerSession::CServerSession()
 	:m_oProtoDispatch(*this)
 {
-	m_oProtoDispatch.RegistFunction(game_proto::GameNotifyGameManagerInfo::descriptor(), &CServerSession::OnGameNotifyGameManagerInfo);
+	m_oProtoDispatch.RegistFunction(GameProto::GameNotifyGameManagerInfo::descriptor(), &CServerSession::OnGameNotifyGameManagerInfo);
 }
 
 
@@ -58,13 +58,13 @@ void CServerSession::Release(void)
 
 bool CServerSession::OnGameNotifyGameManagerInfo(CServerSession& refSession, google::protobuf::Message& refMsg)
 {
-	game_proto::GameNotifyGameManagerInfo* pMsg = dynamic_cast<game_proto::GameNotifyGameManagerInfo*>(&refMsg);
+	GameProto::GameNotifyGameManagerInfo* pMsg = dynamic_cast<GameProto::GameNotifyGameManagerInfo*>(&refMsg);
 	if (pMsg == NULL)
 	{
 		return false;
 	}
 
-	game_proto::GameManagerAckGameInfoResult oResult;
+	GameProto::GameManagerAckGameInfoResult oResult;
 	oResult.set_dw_result(1);
 	CPlayerSession* pPlayer = (CPlayerSession*)pMsg->qw_player_point();
 	if (GameServer::Instance()->DelRequestPlayer(pPlayer))

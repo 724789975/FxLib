@@ -24,16 +24,16 @@ namespace GameProto {
     static WebGameReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cg53ZWJfZ2FtZS5wcm90bxIKZ2FtZV9wcm90byKCAQoZR2FtZU5vdGlmeUdh",
-            "bWVNYW5hZ2VySW5mbxIWCg5kd19wbGF5ZXJfcG9ydBgBIAEoDRIWCg5kd19z",
-            "ZXJ2ZXJfcG9ydBgCIAEoDRIcChRkd19zbGF2ZV9zZXJ2ZXJfcG9ydBgDIAEo",
-            "DRIXCg9xd19wbGF5ZXJfcG9pbnQYBCABKAQiMQocR2FtZU1hbmFnZXJBY2tH",
-            "YW1lSW5mb1Jlc3VsdBIRCglkd19yZXN1bHQYASABKA0iMQocUGxheWVyUmVx",
-            "dWVzdEdhbWVNYW5hZ2VySW5mbxIRCglkd19yZXN1bHQYASABKA0ibgoeR2Ft",
-            "ZU1hbmFnZXJBY2tQbGF5ZXJJbmZvUmVzdWx0EhYKDmR3X3BsYXllcl9wb3J0",
-            "GAEgASgNEhYKDmR3X3NlcnZlcl9wb3J0GAIgASgNEhwKFGR3X3NsYXZlX3Nl",
-            "cnZlcl9wb3J0GAMgASgNIigKFVBsYXllclJlcXVlc3RHYW1lVGVzdBIPCgdz",
-            "el90ZXN0GAEgASgJYgZwcm90bzM="));
+            "Cg53ZWJfZ2FtZS5wcm90bxIJR2FtZVByb3RvIoIBChlHYW1lTm90aWZ5R2Ft",
+            "ZU1hbmFnZXJJbmZvEhYKDmR3X3BsYXllcl9wb3J0GAEgASgNEhYKDmR3X3Nl",
+            "cnZlcl9wb3J0GAIgASgNEhwKFGR3X3NsYXZlX3NlcnZlcl9wb3J0GAMgASgN",
+            "EhcKD3F3X3BsYXllcl9wb2ludBgEIAEoBCIxChxHYW1lTWFuYWdlckFja0dh",
+            "bWVJbmZvUmVzdWx0EhEKCWR3X3Jlc3VsdBgBIAEoDSIxChxQbGF5ZXJSZXF1",
+            "ZXN0R2FtZU1hbmFnZXJJbmZvEhEKCWR3X3Jlc3VsdBgBIAEoDSJuCh5HYW1l",
+            "TWFuYWdlckFja1BsYXllckluZm9SZXN1bHQSFgoOZHdfcGxheWVyX3BvcnQY",
+            "ASABKA0SFgoOZHdfc2VydmVyX3BvcnQYAiABKA0SHAoUZHdfc2xhdmVfc2Vy",
+            "dmVyX3BvcnQYAyABKA0iKAoVUGxheWVyUmVxdWVzdEdhbWVUZXN0Eg8KB3N6",
+            "X3Rlc3QYASABKAliBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {

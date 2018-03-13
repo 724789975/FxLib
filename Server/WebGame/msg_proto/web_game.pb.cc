@@ -19,7 +19,7 @@
 #include "third_party/protobuf/version.h"
 #endif
 // @@protoc_insertion_point(includes)
-namespace game_proto {
+namespace GameProto {
 class GameNotifyGameManagerInfoDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<GameNotifyGameManagerInfo>
@@ -45,7 +45,7 @@ class PlayerRequestGameTestDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<PlayerRequestGameTest>
       _instance;
 } _PlayerRequestGameTest_default_instance_;
-}  // namespace game_proto
+}  // namespace GameProto
 namespace protobuf_web_5fgame_2eproto {
 void InitDefaultsGameNotifyGameManagerInfoImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -56,11 +56,11 @@ void InitDefaultsGameNotifyGameManagerInfoImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::game_proto::_GameNotifyGameManagerInfo_default_instance_;
-    new (ptr) ::game_proto::GameNotifyGameManagerInfo();
+    void* ptr = &::GameProto::_GameNotifyGameManagerInfo_default_instance_;
+    new (ptr) ::GameProto::GameNotifyGameManagerInfo();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::game_proto::GameNotifyGameManagerInfo::InitAsDefaultInstance();
+  ::GameProto::GameNotifyGameManagerInfo::InitAsDefaultInstance();
 }
 
 void InitDefaultsGameNotifyGameManagerInfo() {
@@ -77,11 +77,11 @@ void InitDefaultsGameManagerAckGameInfoResultImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::game_proto::_GameManagerAckGameInfoResult_default_instance_;
-    new (ptr) ::game_proto::GameManagerAckGameInfoResult();
+    void* ptr = &::GameProto::_GameManagerAckGameInfoResult_default_instance_;
+    new (ptr) ::GameProto::GameManagerAckGameInfoResult();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::game_proto::GameManagerAckGameInfoResult::InitAsDefaultInstance();
+  ::GameProto::GameManagerAckGameInfoResult::InitAsDefaultInstance();
 }
 
 void InitDefaultsGameManagerAckGameInfoResult() {
@@ -98,11 +98,11 @@ void InitDefaultsPlayerRequestGameManagerInfoImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::game_proto::_PlayerRequestGameManagerInfo_default_instance_;
-    new (ptr) ::game_proto::PlayerRequestGameManagerInfo();
+    void* ptr = &::GameProto::_PlayerRequestGameManagerInfo_default_instance_;
+    new (ptr) ::GameProto::PlayerRequestGameManagerInfo();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::game_proto::PlayerRequestGameManagerInfo::InitAsDefaultInstance();
+  ::GameProto::PlayerRequestGameManagerInfo::InitAsDefaultInstance();
 }
 
 void InitDefaultsPlayerRequestGameManagerInfo() {
@@ -119,11 +119,11 @@ void InitDefaultsGameManagerAckPlayerInfoResultImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::game_proto::_GameManagerAckPlayerInfoResult_default_instance_;
-    new (ptr) ::game_proto::GameManagerAckPlayerInfoResult();
+    void* ptr = &::GameProto::_GameManagerAckPlayerInfoResult_default_instance_;
+    new (ptr) ::GameProto::GameManagerAckPlayerInfoResult();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::game_proto::GameManagerAckPlayerInfoResult::InitAsDefaultInstance();
+  ::GameProto::GameManagerAckPlayerInfoResult::InitAsDefaultInstance();
 }
 
 void InitDefaultsGameManagerAckPlayerInfoResult() {
@@ -140,11 +140,11 @@ void InitDefaultsPlayerRequestGameTestImpl() {
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
   {
-    void* ptr = &::game_proto::_PlayerRequestGameTest_default_instance_;
-    new (ptr) ::game_proto::PlayerRequestGameTest();
+    void* ptr = &::GameProto::_PlayerRequestGameTest_default_instance_;
+    new (ptr) ::GameProto::PlayerRequestGameTest();
     ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
   }
-  ::game_proto::PlayerRequestGameTest::InitAsDefaultInstance();
+  ::GameProto::PlayerRequestGameTest::InitAsDefaultInstance();
 }
 
 void InitDefaultsPlayerRequestGameTest() {
@@ -156,55 +156,55 @@ void InitDefaultsPlayerRequestGameTest() {
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   ~0u,  // no _has_bits_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::game_proto::GameNotifyGameManagerInfo, _internal_metadata_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyGameManagerInfo, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::game_proto::GameNotifyGameManagerInfo, dw_player_port_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::game_proto::GameNotifyGameManagerInfo, dw_server_port_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::game_proto::GameNotifyGameManagerInfo, dw_slave_server_port_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::game_proto::GameNotifyGameManagerInfo, qw_player_point_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyGameManagerInfo, dw_player_port_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyGameManagerInfo, dw_server_port_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyGameManagerInfo, dw_slave_server_port_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyGameManagerInfo, qw_player_point_),
   ~0u,  // no _has_bits_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::game_proto::GameManagerAckGameInfoResult, _internal_metadata_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameManagerAckGameInfoResult, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::game_proto::GameManagerAckGameInfoResult, dw_result_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameManagerAckGameInfoResult, dw_result_),
   ~0u,  // no _has_bits_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::game_proto::PlayerRequestGameManagerInfo, _internal_metadata_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::PlayerRequestGameManagerInfo, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::game_proto::PlayerRequestGameManagerInfo, dw_result_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::PlayerRequestGameManagerInfo, dw_result_),
   ~0u,  // no _has_bits_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::game_proto::GameManagerAckPlayerInfoResult, _internal_metadata_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameManagerAckPlayerInfoResult, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::game_proto::GameManagerAckPlayerInfoResult, dw_player_port_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::game_proto::GameManagerAckPlayerInfoResult, dw_server_port_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::game_proto::GameManagerAckPlayerInfoResult, dw_slave_server_port_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameManagerAckPlayerInfoResult, dw_player_port_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameManagerAckPlayerInfoResult, dw_server_port_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameManagerAckPlayerInfoResult, dw_slave_server_port_),
   ~0u,  // no _has_bits_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::game_proto::PlayerRequestGameTest, _internal_metadata_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::PlayerRequestGameTest, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::game_proto::PlayerRequestGameTest, sz_test_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::PlayerRequestGameTest, sz_test_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-  { 0, -1, sizeof(::game_proto::GameNotifyGameManagerInfo)},
-  { 9, -1, sizeof(::game_proto::GameManagerAckGameInfoResult)},
-  { 15, -1, sizeof(::game_proto::PlayerRequestGameManagerInfo)},
-  { 21, -1, sizeof(::game_proto::GameManagerAckPlayerInfoResult)},
-  { 29, -1, sizeof(::game_proto::PlayerRequestGameTest)},
+  { 0, -1, sizeof(::GameProto::GameNotifyGameManagerInfo)},
+  { 9, -1, sizeof(::GameProto::GameManagerAckGameInfoResult)},
+  { 15, -1, sizeof(::GameProto::PlayerRequestGameManagerInfo)},
+  { 21, -1, sizeof(::GameProto::GameManagerAckPlayerInfoResult)},
+  { 29, -1, sizeof(::GameProto::PlayerRequestGameTest)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
-  reinterpret_cast<const ::google::protobuf::Message*>(&::game_proto::_GameNotifyGameManagerInfo_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&::game_proto::_GameManagerAckGameInfoResult_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&::game_proto::_PlayerRequestGameManagerInfo_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&::game_proto::_GameManagerAckPlayerInfoResult_default_instance_),
-  reinterpret_cast<const ::google::protobuf::Message*>(&::game_proto::_PlayerRequestGameTest_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_GameNotifyGameManagerInfo_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_GameManagerAckGameInfoResult_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_PlayerRequestGameManagerInfo_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_GameManagerAckPlayerInfoResult_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_PlayerRequestGameTest_default_instance_),
 };
 
 void protobuf_AssignDescriptors() {
@@ -229,20 +229,20 @@ void protobuf_RegisterTypes(const ::std::string&) {
 void AddDescriptorsImpl() {
   InitDefaults();
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
-      "\n\016web_game.proto\022\ngame_proto\"\202\001\n\031GameNot"
-      "ifyGameManagerInfo\022\026\n\016dw_player_port\030\001 \001"
-      "(\r\022\026\n\016dw_server_port\030\002 \001(\r\022\034\n\024dw_slave_s"
-      "erver_port\030\003 \001(\r\022\027\n\017qw_player_point\030\004 \001("
-      "\004\"1\n\034GameManagerAckGameInfoResult\022\021\n\tdw_"
-      "result\030\001 \001(\r\"1\n\034PlayerRequestGameManager"
-      "Info\022\021\n\tdw_result\030\001 \001(\r\"n\n\036GameManagerAc"
-      "kPlayerInfoResult\022\026\n\016dw_player_port\030\001 \001("
+      "\n\016web_game.proto\022\tGameProto\"\202\001\n\031GameNoti"
+      "fyGameManagerInfo\022\026\n\016dw_player_port\030\001 \001("
       "\r\022\026\n\016dw_server_port\030\002 \001(\r\022\034\n\024dw_slave_se"
-      "rver_port\030\003 \001(\r\"(\n\025PlayerRequestGameTest"
-      "\022\017\n\007sz_test\030\001 \001(\tb\006proto3"
+      "rver_port\030\003 \001(\r\022\027\n\017qw_player_point\030\004 \001(\004"
+      "\"1\n\034GameManagerAckGameInfoResult\022\021\n\tdw_r"
+      "esult\030\001 \001(\r\"1\n\034PlayerRequestGameManagerI"
+      "nfo\022\021\n\tdw_result\030\001 \001(\r\"n\n\036GameManagerAck"
+      "PlayerInfoResult\022\026\n\016dw_player_port\030\001 \001(\r"
+      "\022\026\n\016dw_server_port\030\002 \001(\r\022\034\n\024dw_slave_ser"
+      "ver_port\030\003 \001(\r\"(\n\025PlayerRequestGameTest\022"
+      "\017\n\007sz_test\030\001 \001(\tb\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 425);
+      descriptor, 424);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "web_game.proto", &protobuf_RegisterTypes);
 }
@@ -258,7 +258,7 @@ struct StaticDescriptorInitializer {
   }
 } static_descriptor_initializer;
 }  // namespace protobuf_web_5fgame_2eproto
-namespace game_proto {
+namespace GameProto {
 
 // ===================================================================
 
@@ -277,7 +277,7 @@ GameNotifyGameManagerInfo::GameNotifyGameManagerInfo()
     ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyGameManagerInfo();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:game_proto.GameNotifyGameManagerInfo)
+  // @@protoc_insertion_point(constructor:GameProto.GameNotifyGameManagerInfo)
 }
 GameNotifyGameManagerInfo::GameNotifyGameManagerInfo(const GameNotifyGameManagerInfo& from)
   : ::google::protobuf::Message(),
@@ -287,7 +287,7 @@ GameNotifyGameManagerInfo::GameNotifyGameManagerInfo(const GameNotifyGameManager
   ::memcpy(&dw_player_port_, &from.dw_player_port_,
     static_cast<size_t>(reinterpret_cast<char*>(&dw_slave_server_port_) -
     reinterpret_cast<char*>(&dw_player_port_)) + sizeof(dw_slave_server_port_));
-  // @@protoc_insertion_point(copy_constructor:game_proto.GameNotifyGameManagerInfo)
+  // @@protoc_insertion_point(copy_constructor:GameProto.GameNotifyGameManagerInfo)
 }
 
 void GameNotifyGameManagerInfo::SharedCtor() {
@@ -298,7 +298,7 @@ void GameNotifyGameManagerInfo::SharedCtor() {
 }
 
 GameNotifyGameManagerInfo::~GameNotifyGameManagerInfo() {
-  // @@protoc_insertion_point(destructor:game_proto.GameNotifyGameManagerInfo)
+  // @@protoc_insertion_point(destructor:GameProto.GameNotifyGameManagerInfo)
   SharedDtor();
 }
 
@@ -329,7 +329,7 @@ GameNotifyGameManagerInfo* GameNotifyGameManagerInfo::New(::google::protobuf::Ar
 }
 
 void GameNotifyGameManagerInfo::Clear() {
-// @@protoc_insertion_point(message_clear_start:game_proto.GameNotifyGameManagerInfo)
+// @@protoc_insertion_point(message_clear_start:GameProto.GameNotifyGameManagerInfo)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -344,7 +344,7 @@ bool GameNotifyGameManagerInfo::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:game_proto.GameNotifyGameManagerInfo)
+  // @@protoc_insertion_point(parse_start:GameProto.GameNotifyGameManagerInfo)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -418,17 +418,17 @@ bool GameNotifyGameManagerInfo::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:game_proto.GameNotifyGameManagerInfo)
+  // @@protoc_insertion_point(parse_success:GameProto.GameNotifyGameManagerInfo)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:game_proto.GameNotifyGameManagerInfo)
+  // @@protoc_insertion_point(parse_failure:GameProto.GameNotifyGameManagerInfo)
   return false;
 #undef DO_
 }
 
 void GameNotifyGameManagerInfo::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:game_proto.GameNotifyGameManagerInfo)
+  // @@protoc_insertion_point(serialize_start:GameProto.GameNotifyGameManagerInfo)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -456,13 +456,13 @@ void GameNotifyGameManagerInfo::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
   }
-  // @@protoc_insertion_point(serialize_end:game_proto.GameNotifyGameManagerInfo)
+  // @@protoc_insertion_point(serialize_end:GameProto.GameNotifyGameManagerInfo)
 }
 
 ::google::protobuf::uint8* GameNotifyGameManagerInfo::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic; // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:game_proto.GameNotifyGameManagerInfo)
+  // @@protoc_insertion_point(serialize_to_array_start:GameProto.GameNotifyGameManagerInfo)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -490,12 +490,12 @@ void GameNotifyGameManagerInfo::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:game_proto.GameNotifyGameManagerInfo)
+  // @@protoc_insertion_point(serialize_to_array_end:GameProto.GameNotifyGameManagerInfo)
   return target;
 }
 
 size_t GameNotifyGameManagerInfo::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:game_proto.GameNotifyGameManagerInfo)
+// @@protoc_insertion_point(message_byte_size_start:GameProto.GameNotifyGameManagerInfo)
   size_t total_size = 0;
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -539,22 +539,22 @@ size_t GameNotifyGameManagerInfo::ByteSizeLong() const {
 }
 
 void GameNotifyGameManagerInfo::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:game_proto.GameNotifyGameManagerInfo)
+// @@protoc_insertion_point(generalized_merge_from_start:GameProto.GameNotifyGameManagerInfo)
   GOOGLE_DCHECK_NE(&from, this);
   const GameNotifyGameManagerInfo* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const GameNotifyGameManagerInfo>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:game_proto.GameNotifyGameManagerInfo)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:GameProto.GameNotifyGameManagerInfo)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:game_proto.GameNotifyGameManagerInfo)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:GameProto.GameNotifyGameManagerInfo)
     MergeFrom(*source);
   }
 }
 
 void GameNotifyGameManagerInfo::MergeFrom(const GameNotifyGameManagerInfo& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:game_proto.GameNotifyGameManagerInfo)
+// @@protoc_insertion_point(class_specific_merge_from_start:GameProto.GameNotifyGameManagerInfo)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -575,14 +575,14 @@ void GameNotifyGameManagerInfo::MergeFrom(const GameNotifyGameManagerInfo& from)
 }
 
 void GameNotifyGameManagerInfo::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:game_proto.GameNotifyGameManagerInfo)
+// @@protoc_insertion_point(generalized_copy_from_start:GameProto.GameNotifyGameManagerInfo)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void GameNotifyGameManagerInfo::CopyFrom(const GameNotifyGameManagerInfo& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:game_proto.GameNotifyGameManagerInfo)
+// @@protoc_insertion_point(class_specific_copy_from_start:GameProto.GameNotifyGameManagerInfo)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -626,7 +626,7 @@ GameManagerAckGameInfoResult::GameManagerAckGameInfoResult()
     ::protobuf_web_5fgame_2eproto::InitDefaultsGameManagerAckGameInfoResult();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:game_proto.GameManagerAckGameInfoResult)
+  // @@protoc_insertion_point(constructor:GameProto.GameManagerAckGameInfoResult)
 }
 GameManagerAckGameInfoResult::GameManagerAckGameInfoResult(const GameManagerAckGameInfoResult& from)
   : ::google::protobuf::Message(),
@@ -634,7 +634,7 @@ GameManagerAckGameInfoResult::GameManagerAckGameInfoResult(const GameManagerAckG
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   dw_result_ = from.dw_result_;
-  // @@protoc_insertion_point(copy_constructor:game_proto.GameManagerAckGameInfoResult)
+  // @@protoc_insertion_point(copy_constructor:GameProto.GameManagerAckGameInfoResult)
 }
 
 void GameManagerAckGameInfoResult::SharedCtor() {
@@ -643,7 +643,7 @@ void GameManagerAckGameInfoResult::SharedCtor() {
 }
 
 GameManagerAckGameInfoResult::~GameManagerAckGameInfoResult() {
-  // @@protoc_insertion_point(destructor:game_proto.GameManagerAckGameInfoResult)
+  // @@protoc_insertion_point(destructor:GameProto.GameManagerAckGameInfoResult)
   SharedDtor();
 }
 
@@ -674,7 +674,7 @@ GameManagerAckGameInfoResult* GameManagerAckGameInfoResult::New(::google::protob
 }
 
 void GameManagerAckGameInfoResult::Clear() {
-// @@protoc_insertion_point(message_clear_start:game_proto.GameManagerAckGameInfoResult)
+// @@protoc_insertion_point(message_clear_start:GameProto.GameManagerAckGameInfoResult)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -687,7 +687,7 @@ bool GameManagerAckGameInfoResult::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:game_proto.GameManagerAckGameInfoResult)
+  // @@protoc_insertion_point(parse_start:GameProto.GameManagerAckGameInfoResult)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -719,17 +719,17 @@ bool GameManagerAckGameInfoResult::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:game_proto.GameManagerAckGameInfoResult)
+  // @@protoc_insertion_point(parse_success:GameProto.GameManagerAckGameInfoResult)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:game_proto.GameManagerAckGameInfoResult)
+  // @@protoc_insertion_point(parse_failure:GameProto.GameManagerAckGameInfoResult)
   return false;
 #undef DO_
 }
 
 void GameManagerAckGameInfoResult::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:game_proto.GameManagerAckGameInfoResult)
+  // @@protoc_insertion_point(serialize_start:GameProto.GameManagerAckGameInfoResult)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -742,13 +742,13 @@ void GameManagerAckGameInfoResult::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
   }
-  // @@protoc_insertion_point(serialize_end:game_proto.GameManagerAckGameInfoResult)
+  // @@protoc_insertion_point(serialize_end:GameProto.GameManagerAckGameInfoResult)
 }
 
 ::google::protobuf::uint8* GameManagerAckGameInfoResult::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic; // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:game_proto.GameManagerAckGameInfoResult)
+  // @@protoc_insertion_point(serialize_to_array_start:GameProto.GameManagerAckGameInfoResult)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -761,12 +761,12 @@ void GameManagerAckGameInfoResult::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:game_proto.GameManagerAckGameInfoResult)
+  // @@protoc_insertion_point(serialize_to_array_end:GameProto.GameManagerAckGameInfoResult)
   return target;
 }
 
 size_t GameManagerAckGameInfoResult::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:game_proto.GameManagerAckGameInfoResult)
+// @@protoc_insertion_point(message_byte_size_start:GameProto.GameManagerAckGameInfoResult)
   size_t total_size = 0;
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -789,22 +789,22 @@ size_t GameManagerAckGameInfoResult::ByteSizeLong() const {
 }
 
 void GameManagerAckGameInfoResult::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:game_proto.GameManagerAckGameInfoResult)
+// @@protoc_insertion_point(generalized_merge_from_start:GameProto.GameManagerAckGameInfoResult)
   GOOGLE_DCHECK_NE(&from, this);
   const GameManagerAckGameInfoResult* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const GameManagerAckGameInfoResult>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:game_proto.GameManagerAckGameInfoResult)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:GameProto.GameManagerAckGameInfoResult)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:game_proto.GameManagerAckGameInfoResult)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:GameProto.GameManagerAckGameInfoResult)
     MergeFrom(*source);
   }
 }
 
 void GameManagerAckGameInfoResult::MergeFrom(const GameManagerAckGameInfoResult& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:game_proto.GameManagerAckGameInfoResult)
+// @@protoc_insertion_point(class_specific_merge_from_start:GameProto.GameManagerAckGameInfoResult)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -816,14 +816,14 @@ void GameManagerAckGameInfoResult::MergeFrom(const GameManagerAckGameInfoResult&
 }
 
 void GameManagerAckGameInfoResult::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:game_proto.GameManagerAckGameInfoResult)
+// @@protoc_insertion_point(generalized_copy_from_start:GameProto.GameManagerAckGameInfoResult)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void GameManagerAckGameInfoResult::CopyFrom(const GameManagerAckGameInfoResult& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:game_proto.GameManagerAckGameInfoResult)
+// @@protoc_insertion_point(class_specific_copy_from_start:GameProto.GameManagerAckGameInfoResult)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -864,7 +864,7 @@ PlayerRequestGameManagerInfo::PlayerRequestGameManagerInfo()
     ::protobuf_web_5fgame_2eproto::InitDefaultsPlayerRequestGameManagerInfo();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:game_proto.PlayerRequestGameManagerInfo)
+  // @@protoc_insertion_point(constructor:GameProto.PlayerRequestGameManagerInfo)
 }
 PlayerRequestGameManagerInfo::PlayerRequestGameManagerInfo(const PlayerRequestGameManagerInfo& from)
   : ::google::protobuf::Message(),
@@ -872,7 +872,7 @@ PlayerRequestGameManagerInfo::PlayerRequestGameManagerInfo(const PlayerRequestGa
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   dw_result_ = from.dw_result_;
-  // @@protoc_insertion_point(copy_constructor:game_proto.PlayerRequestGameManagerInfo)
+  // @@protoc_insertion_point(copy_constructor:GameProto.PlayerRequestGameManagerInfo)
 }
 
 void PlayerRequestGameManagerInfo::SharedCtor() {
@@ -881,7 +881,7 @@ void PlayerRequestGameManagerInfo::SharedCtor() {
 }
 
 PlayerRequestGameManagerInfo::~PlayerRequestGameManagerInfo() {
-  // @@protoc_insertion_point(destructor:game_proto.PlayerRequestGameManagerInfo)
+  // @@protoc_insertion_point(destructor:GameProto.PlayerRequestGameManagerInfo)
   SharedDtor();
 }
 
@@ -912,7 +912,7 @@ PlayerRequestGameManagerInfo* PlayerRequestGameManagerInfo::New(::google::protob
 }
 
 void PlayerRequestGameManagerInfo::Clear() {
-// @@protoc_insertion_point(message_clear_start:game_proto.PlayerRequestGameManagerInfo)
+// @@protoc_insertion_point(message_clear_start:GameProto.PlayerRequestGameManagerInfo)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -925,7 +925,7 @@ bool PlayerRequestGameManagerInfo::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:game_proto.PlayerRequestGameManagerInfo)
+  // @@protoc_insertion_point(parse_start:GameProto.PlayerRequestGameManagerInfo)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -957,17 +957,17 @@ bool PlayerRequestGameManagerInfo::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:game_proto.PlayerRequestGameManagerInfo)
+  // @@protoc_insertion_point(parse_success:GameProto.PlayerRequestGameManagerInfo)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:game_proto.PlayerRequestGameManagerInfo)
+  // @@protoc_insertion_point(parse_failure:GameProto.PlayerRequestGameManagerInfo)
   return false;
 #undef DO_
 }
 
 void PlayerRequestGameManagerInfo::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:game_proto.PlayerRequestGameManagerInfo)
+  // @@protoc_insertion_point(serialize_start:GameProto.PlayerRequestGameManagerInfo)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -980,13 +980,13 @@ void PlayerRequestGameManagerInfo::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
   }
-  // @@protoc_insertion_point(serialize_end:game_proto.PlayerRequestGameManagerInfo)
+  // @@protoc_insertion_point(serialize_end:GameProto.PlayerRequestGameManagerInfo)
 }
 
 ::google::protobuf::uint8* PlayerRequestGameManagerInfo::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic; // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:game_proto.PlayerRequestGameManagerInfo)
+  // @@protoc_insertion_point(serialize_to_array_start:GameProto.PlayerRequestGameManagerInfo)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -999,12 +999,12 @@ void PlayerRequestGameManagerInfo::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:game_proto.PlayerRequestGameManagerInfo)
+  // @@protoc_insertion_point(serialize_to_array_end:GameProto.PlayerRequestGameManagerInfo)
   return target;
 }
 
 size_t PlayerRequestGameManagerInfo::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:game_proto.PlayerRequestGameManagerInfo)
+// @@protoc_insertion_point(message_byte_size_start:GameProto.PlayerRequestGameManagerInfo)
   size_t total_size = 0;
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -1027,22 +1027,22 @@ size_t PlayerRequestGameManagerInfo::ByteSizeLong() const {
 }
 
 void PlayerRequestGameManagerInfo::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:game_proto.PlayerRequestGameManagerInfo)
+// @@protoc_insertion_point(generalized_merge_from_start:GameProto.PlayerRequestGameManagerInfo)
   GOOGLE_DCHECK_NE(&from, this);
   const PlayerRequestGameManagerInfo* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const PlayerRequestGameManagerInfo>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:game_proto.PlayerRequestGameManagerInfo)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:GameProto.PlayerRequestGameManagerInfo)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:game_proto.PlayerRequestGameManagerInfo)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:GameProto.PlayerRequestGameManagerInfo)
     MergeFrom(*source);
   }
 }
 
 void PlayerRequestGameManagerInfo::MergeFrom(const PlayerRequestGameManagerInfo& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:game_proto.PlayerRequestGameManagerInfo)
+// @@protoc_insertion_point(class_specific_merge_from_start:GameProto.PlayerRequestGameManagerInfo)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -1054,14 +1054,14 @@ void PlayerRequestGameManagerInfo::MergeFrom(const PlayerRequestGameManagerInfo&
 }
 
 void PlayerRequestGameManagerInfo::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:game_proto.PlayerRequestGameManagerInfo)
+// @@protoc_insertion_point(generalized_copy_from_start:GameProto.PlayerRequestGameManagerInfo)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void PlayerRequestGameManagerInfo::CopyFrom(const PlayerRequestGameManagerInfo& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:game_proto.PlayerRequestGameManagerInfo)
+// @@protoc_insertion_point(class_specific_copy_from_start:GameProto.PlayerRequestGameManagerInfo)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -1104,7 +1104,7 @@ GameManagerAckPlayerInfoResult::GameManagerAckPlayerInfoResult()
     ::protobuf_web_5fgame_2eproto::InitDefaultsGameManagerAckPlayerInfoResult();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:game_proto.GameManagerAckPlayerInfoResult)
+  // @@protoc_insertion_point(constructor:GameProto.GameManagerAckPlayerInfoResult)
 }
 GameManagerAckPlayerInfoResult::GameManagerAckPlayerInfoResult(const GameManagerAckPlayerInfoResult& from)
   : ::google::protobuf::Message(),
@@ -1114,7 +1114,7 @@ GameManagerAckPlayerInfoResult::GameManagerAckPlayerInfoResult(const GameManager
   ::memcpy(&dw_player_port_, &from.dw_player_port_,
     static_cast<size_t>(reinterpret_cast<char*>(&dw_slave_server_port_) -
     reinterpret_cast<char*>(&dw_player_port_)) + sizeof(dw_slave_server_port_));
-  // @@protoc_insertion_point(copy_constructor:game_proto.GameManagerAckPlayerInfoResult)
+  // @@protoc_insertion_point(copy_constructor:GameProto.GameManagerAckPlayerInfoResult)
 }
 
 void GameManagerAckPlayerInfoResult::SharedCtor() {
@@ -1125,7 +1125,7 @@ void GameManagerAckPlayerInfoResult::SharedCtor() {
 }
 
 GameManagerAckPlayerInfoResult::~GameManagerAckPlayerInfoResult() {
-  // @@protoc_insertion_point(destructor:game_proto.GameManagerAckPlayerInfoResult)
+  // @@protoc_insertion_point(destructor:GameProto.GameManagerAckPlayerInfoResult)
   SharedDtor();
 }
 
@@ -1156,7 +1156,7 @@ GameManagerAckPlayerInfoResult* GameManagerAckPlayerInfoResult::New(::google::pr
 }
 
 void GameManagerAckPlayerInfoResult::Clear() {
-// @@protoc_insertion_point(message_clear_start:game_proto.GameManagerAckPlayerInfoResult)
+// @@protoc_insertion_point(message_clear_start:GameProto.GameManagerAckPlayerInfoResult)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1171,7 +1171,7 @@ bool GameManagerAckPlayerInfoResult::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:game_proto.GameManagerAckPlayerInfoResult)
+  // @@protoc_insertion_point(parse_start:GameProto.GameManagerAckPlayerInfoResult)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -1231,17 +1231,17 @@ bool GameManagerAckPlayerInfoResult::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:game_proto.GameManagerAckPlayerInfoResult)
+  // @@protoc_insertion_point(parse_success:GameProto.GameManagerAckPlayerInfoResult)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:game_proto.GameManagerAckPlayerInfoResult)
+  // @@protoc_insertion_point(parse_failure:GameProto.GameManagerAckPlayerInfoResult)
   return false;
 #undef DO_
 }
 
 void GameManagerAckPlayerInfoResult::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:game_proto.GameManagerAckPlayerInfoResult)
+  // @@protoc_insertion_point(serialize_start:GameProto.GameManagerAckPlayerInfoResult)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -1264,13 +1264,13 @@ void GameManagerAckPlayerInfoResult::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
   }
-  // @@protoc_insertion_point(serialize_end:game_proto.GameManagerAckPlayerInfoResult)
+  // @@protoc_insertion_point(serialize_end:GameProto.GameManagerAckPlayerInfoResult)
 }
 
 ::google::protobuf::uint8* GameManagerAckPlayerInfoResult::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic; // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:game_proto.GameManagerAckPlayerInfoResult)
+  // @@protoc_insertion_point(serialize_to_array_start:GameProto.GameManagerAckPlayerInfoResult)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -1293,12 +1293,12 @@ void GameManagerAckPlayerInfoResult::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:game_proto.GameManagerAckPlayerInfoResult)
+  // @@protoc_insertion_point(serialize_to_array_end:GameProto.GameManagerAckPlayerInfoResult)
   return target;
 }
 
 size_t GameManagerAckPlayerInfoResult::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:game_proto.GameManagerAckPlayerInfoResult)
+// @@protoc_insertion_point(message_byte_size_start:GameProto.GameManagerAckPlayerInfoResult)
   size_t total_size = 0;
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -1335,22 +1335,22 @@ size_t GameManagerAckPlayerInfoResult::ByteSizeLong() const {
 }
 
 void GameManagerAckPlayerInfoResult::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:game_proto.GameManagerAckPlayerInfoResult)
+// @@protoc_insertion_point(generalized_merge_from_start:GameProto.GameManagerAckPlayerInfoResult)
   GOOGLE_DCHECK_NE(&from, this);
   const GameManagerAckPlayerInfoResult* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const GameManagerAckPlayerInfoResult>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:game_proto.GameManagerAckPlayerInfoResult)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:GameProto.GameManagerAckPlayerInfoResult)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:game_proto.GameManagerAckPlayerInfoResult)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:GameProto.GameManagerAckPlayerInfoResult)
     MergeFrom(*source);
   }
 }
 
 void GameManagerAckPlayerInfoResult::MergeFrom(const GameManagerAckPlayerInfoResult& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:game_proto.GameManagerAckPlayerInfoResult)
+// @@protoc_insertion_point(class_specific_merge_from_start:GameProto.GameManagerAckPlayerInfoResult)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -1368,14 +1368,14 @@ void GameManagerAckPlayerInfoResult::MergeFrom(const GameManagerAckPlayerInfoRes
 }
 
 void GameManagerAckPlayerInfoResult::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:game_proto.GameManagerAckPlayerInfoResult)
+// @@protoc_insertion_point(generalized_copy_from_start:GameProto.GameManagerAckPlayerInfoResult)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void GameManagerAckPlayerInfoResult::CopyFrom(const GameManagerAckPlayerInfoResult& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:game_proto.GameManagerAckPlayerInfoResult)
+// @@protoc_insertion_point(class_specific_copy_from_start:GameProto.GameManagerAckPlayerInfoResult)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -1418,7 +1418,7 @@ PlayerRequestGameTest::PlayerRequestGameTest()
     ::protobuf_web_5fgame_2eproto::InitDefaultsPlayerRequestGameTest();
   }
   SharedCtor();
-  // @@protoc_insertion_point(constructor:game_proto.PlayerRequestGameTest)
+  // @@protoc_insertion_point(constructor:GameProto.PlayerRequestGameTest)
 }
 PlayerRequestGameTest::PlayerRequestGameTest(const PlayerRequestGameTest& from)
   : ::google::protobuf::Message(),
@@ -1429,7 +1429,7 @@ PlayerRequestGameTest::PlayerRequestGameTest(const PlayerRequestGameTest& from)
   if (from.sz_test().size() > 0) {
     sz_test_.AssignWithDefault(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), from.sz_test_);
   }
-  // @@protoc_insertion_point(copy_constructor:game_proto.PlayerRequestGameTest)
+  // @@protoc_insertion_point(copy_constructor:GameProto.PlayerRequestGameTest)
 }
 
 void PlayerRequestGameTest::SharedCtor() {
@@ -1438,7 +1438,7 @@ void PlayerRequestGameTest::SharedCtor() {
 }
 
 PlayerRequestGameTest::~PlayerRequestGameTest() {
-  // @@protoc_insertion_point(destructor:game_proto.PlayerRequestGameTest)
+  // @@protoc_insertion_point(destructor:GameProto.PlayerRequestGameTest)
   SharedDtor();
 }
 
@@ -1470,7 +1470,7 @@ PlayerRequestGameTest* PlayerRequestGameTest::New(::google::protobuf::Arena* are
 }
 
 void PlayerRequestGameTest::Clear() {
-// @@protoc_insertion_point(message_clear_start:game_proto.PlayerRequestGameTest)
+// @@protoc_insertion_point(message_clear_start:GameProto.PlayerRequestGameTest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
@@ -1483,7 +1483,7 @@ bool PlayerRequestGameTest::MergePartialFromCodedStream(
     ::google::protobuf::io::CodedInputStream* input) {
 #define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
   ::google::protobuf::uint32 tag;
-  // @@protoc_insertion_point(parse_start:game_proto.PlayerRequestGameTest)
+  // @@protoc_insertion_point(parse_start:GameProto.PlayerRequestGameTest)
   for (;;) {
     ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
     tag = p.first;
@@ -1498,7 +1498,7 @@ bool PlayerRequestGameTest::MergePartialFromCodedStream(
           DO_(::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
             this->sz_test().data(), static_cast<int>(this->sz_test().length()),
             ::google::protobuf::internal::WireFormatLite::PARSE,
-            "game_proto.PlayerRequestGameTest.sz_test"));
+            "GameProto.PlayerRequestGameTest.sz_test"));
         } else {
           goto handle_unusual;
         }
@@ -1517,17 +1517,17 @@ bool PlayerRequestGameTest::MergePartialFromCodedStream(
     }
   }
 success:
-  // @@protoc_insertion_point(parse_success:game_proto.PlayerRequestGameTest)
+  // @@protoc_insertion_point(parse_success:GameProto.PlayerRequestGameTest)
   return true;
 failure:
-  // @@protoc_insertion_point(parse_failure:game_proto.PlayerRequestGameTest)
+  // @@protoc_insertion_point(parse_failure:GameProto.PlayerRequestGameTest)
   return false;
 #undef DO_
 }
 
 void PlayerRequestGameTest::SerializeWithCachedSizes(
     ::google::protobuf::io::CodedOutputStream* output) const {
-  // @@protoc_insertion_point(serialize_start:game_proto.PlayerRequestGameTest)
+  // @@protoc_insertion_point(serialize_start:GameProto.PlayerRequestGameTest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -1536,7 +1536,7 @@ void PlayerRequestGameTest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->sz_test().data(), static_cast<int>(this->sz_test().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "game_proto.PlayerRequestGameTest.sz_test");
+      "GameProto.PlayerRequestGameTest.sz_test");
     ::google::protobuf::internal::WireFormatLite::WriteStringMaybeAliased(
       1, this->sz_test(), output);
   }
@@ -1545,13 +1545,13 @@ void PlayerRequestGameTest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
   }
-  // @@protoc_insertion_point(serialize_end:game_proto.PlayerRequestGameTest)
+  // @@protoc_insertion_point(serialize_end:GameProto.PlayerRequestGameTest)
 }
 
 ::google::protobuf::uint8* PlayerRequestGameTest::InternalSerializeWithCachedSizesToArray(
     bool deterministic, ::google::protobuf::uint8* target) const {
   (void)deterministic; // Unused
-  // @@protoc_insertion_point(serialize_to_array_start:game_proto.PlayerRequestGameTest)
+  // @@protoc_insertion_point(serialize_to_array_start:GameProto.PlayerRequestGameTest)
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
@@ -1560,7 +1560,7 @@ void PlayerRequestGameTest::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::VerifyUtf8String(
       this->sz_test().data(), static_cast<int>(this->sz_test().length()),
       ::google::protobuf::internal::WireFormatLite::SERIALIZE,
-      "game_proto.PlayerRequestGameTest.sz_test");
+      "GameProto.PlayerRequestGameTest.sz_test");
     target =
       ::google::protobuf::internal::WireFormatLite::WriteStringToArray(
         1, this->sz_test(), target);
@@ -1570,12 +1570,12 @@ void PlayerRequestGameTest::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
   }
-  // @@protoc_insertion_point(serialize_to_array_end:game_proto.PlayerRequestGameTest)
+  // @@protoc_insertion_point(serialize_to_array_end:GameProto.PlayerRequestGameTest)
   return target;
 }
 
 size_t PlayerRequestGameTest::ByteSizeLong() const {
-// @@protoc_insertion_point(message_byte_size_start:game_proto.PlayerRequestGameTest)
+// @@protoc_insertion_point(message_byte_size_start:GameProto.PlayerRequestGameTest)
   size_t total_size = 0;
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -1598,22 +1598,22 @@ size_t PlayerRequestGameTest::ByteSizeLong() const {
 }
 
 void PlayerRequestGameTest::MergeFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_merge_from_start:game_proto.PlayerRequestGameTest)
+// @@protoc_insertion_point(generalized_merge_from_start:GameProto.PlayerRequestGameTest)
   GOOGLE_DCHECK_NE(&from, this);
   const PlayerRequestGameTest* source =
       ::google::protobuf::internal::DynamicCastToGenerated<const PlayerRequestGameTest>(
           &from);
   if (source == NULL) {
-  // @@protoc_insertion_point(generalized_merge_from_cast_fail:game_proto.PlayerRequestGameTest)
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:GameProto.PlayerRequestGameTest)
     ::google::protobuf::internal::ReflectionOps::Merge(from, this);
   } else {
-  // @@protoc_insertion_point(generalized_merge_from_cast_success:game_proto.PlayerRequestGameTest)
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:GameProto.PlayerRequestGameTest)
     MergeFrom(*source);
   }
 }
 
 void PlayerRequestGameTest::MergeFrom(const PlayerRequestGameTest& from) {
-// @@protoc_insertion_point(class_specific_merge_from_start:game_proto.PlayerRequestGameTest)
+// @@protoc_insertion_point(class_specific_merge_from_start:GameProto.PlayerRequestGameTest)
   GOOGLE_DCHECK_NE(&from, this);
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::google::protobuf::uint32 cached_has_bits = 0;
@@ -1626,14 +1626,14 @@ void PlayerRequestGameTest::MergeFrom(const PlayerRequestGameTest& from) {
 }
 
 void PlayerRequestGameTest::CopyFrom(const ::google::protobuf::Message& from) {
-// @@protoc_insertion_point(generalized_copy_from_start:game_proto.PlayerRequestGameTest)
+// @@protoc_insertion_point(generalized_copy_from_start:GameProto.PlayerRequestGameTest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
 }
 
 void PlayerRequestGameTest::CopyFrom(const PlayerRequestGameTest& from) {
-// @@protoc_insertion_point(class_specific_copy_from_start:game_proto.PlayerRequestGameTest)
+// @@protoc_insertion_point(class_specific_copy_from_start:GameProto.PlayerRequestGameTest)
   if (&from == this) return;
   Clear();
   MergeFrom(from);
@@ -1661,6 +1661,6 @@ void PlayerRequestGameTest::InternalSwap(PlayerRequestGameTest* other) {
 
 
 // @@protoc_insertion_point(namespace_scope)
-}  // namespace game_proto
+}  // namespace GameProto
 
 // @@protoc_insertion_point(global_scope)

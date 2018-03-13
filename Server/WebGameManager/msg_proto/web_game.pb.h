@@ -60,7 +60,7 @@ inline void InitDefaults() {
   InitDefaultsPlayerRequestGameTest();
 }
 }  // namespace protobuf_web_5fgame_2eproto
-namespace game_proto {
+namespace GameProto {
 class GameManagerAckGameInfoResult;
 class GameManagerAckGameInfoResultDefaultTypeInternal;
 extern GameManagerAckGameInfoResultDefaultTypeInternal _GameManagerAckGameInfoResult_default_instance_;
@@ -76,12 +76,12 @@ extern PlayerRequestGameManagerInfoDefaultTypeInternal _PlayerRequestGameManager
 class PlayerRequestGameTest;
 class PlayerRequestGameTestDefaultTypeInternal;
 extern PlayerRequestGameTestDefaultTypeInternal _PlayerRequestGameTest_default_instance_;
-}  // namespace game_proto
-namespace game_proto {
+}  // namespace GameProto
+namespace GameProto {
 
 // ===================================================================
 
-class GameNotifyGameManagerInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:game_proto.GameNotifyGameManagerInfo) */ {
+class GameNotifyGameManagerInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameNotifyGameManagerInfo) */ {
  public:
   GameNotifyGameManagerInfo();
   virtual ~GameNotifyGameManagerInfo();
@@ -187,7 +187,7 @@ class GameNotifyGameManagerInfo : public ::google::protobuf::Message /* @@protoc
   ::google::protobuf::uint32 dw_slave_server_port() const;
   void set_dw_slave_server_port(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:game_proto.GameNotifyGameManagerInfo)
+  // @@protoc_insertion_point(class_scope:GameProto.GameNotifyGameManagerInfo)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -201,7 +201,7 @@ class GameNotifyGameManagerInfo : public ::google::protobuf::Message /* @@protoc
 };
 // -------------------------------------------------------------------
 
-class GameManagerAckGameInfoResult : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:game_proto.GameManagerAckGameInfoResult) */ {
+class GameManagerAckGameInfoResult : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameManagerAckGameInfoResult) */ {
  public:
   GameManagerAckGameInfoResult();
   virtual ~GameManagerAckGameInfoResult();
@@ -289,7 +289,7 @@ class GameManagerAckGameInfoResult : public ::google::protobuf::Message /* @@pro
   ::google::protobuf::uint32 dw_result() const;
   void set_dw_result(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:game_proto.GameManagerAckGameInfoResult)
+  // @@protoc_insertion_point(class_scope:GameProto.GameManagerAckGameInfoResult)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -300,7 +300,7 @@ class GameManagerAckGameInfoResult : public ::google::protobuf::Message /* @@pro
 };
 // -------------------------------------------------------------------
 
-class PlayerRequestGameManagerInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:game_proto.PlayerRequestGameManagerInfo) */ {
+class PlayerRequestGameManagerInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.PlayerRequestGameManagerInfo) */ {
  public:
   PlayerRequestGameManagerInfo();
   virtual ~PlayerRequestGameManagerInfo();
@@ -388,7 +388,7 @@ class PlayerRequestGameManagerInfo : public ::google::protobuf::Message /* @@pro
   ::google::protobuf::uint32 dw_result() const;
   void set_dw_result(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:game_proto.PlayerRequestGameManagerInfo)
+  // @@protoc_insertion_point(class_scope:GameProto.PlayerRequestGameManagerInfo)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -399,7 +399,7 @@ class PlayerRequestGameManagerInfo : public ::google::protobuf::Message /* @@pro
 };
 // -------------------------------------------------------------------
 
-class GameManagerAckPlayerInfoResult : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:game_proto.GameManagerAckPlayerInfoResult) */ {
+class GameManagerAckPlayerInfoResult : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameManagerAckPlayerInfoResult) */ {
  public:
   GameManagerAckPlayerInfoResult();
   virtual ~GameManagerAckPlayerInfoResult();
@@ -499,7 +499,7 @@ class GameManagerAckPlayerInfoResult : public ::google::protobuf::Message /* @@p
   ::google::protobuf::uint32 dw_slave_server_port() const;
   void set_dw_slave_server_port(::google::protobuf::uint32 value);
 
-  // @@protoc_insertion_point(class_scope:game_proto.GameManagerAckPlayerInfoResult)
+  // @@protoc_insertion_point(class_scope:GameProto.GameManagerAckPlayerInfoResult)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -512,7 +512,7 @@ class GameManagerAckPlayerInfoResult : public ::google::protobuf::Message /* @@p
 };
 // -------------------------------------------------------------------
 
-class PlayerRequestGameTest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:game_proto.PlayerRequestGameTest) */ {
+class PlayerRequestGameTest : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.PlayerRequestGameTest) */ {
  public:
   PlayerRequestGameTest();
   virtual ~PlayerRequestGameTest();
@@ -608,7 +608,7 @@ class PlayerRequestGameTest : public ::google::protobuf::Message /* @@protoc_ins
   ::std::string* release_sz_test();
   void set_allocated_sz_test(::std::string* sz_test);
 
-  // @@protoc_insertion_point(class_scope:game_proto.PlayerRequestGameTest)
+  // @@protoc_insertion_point(class_scope:GameProto.PlayerRequestGameTest)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -633,13 +633,13 @@ inline void GameNotifyGameManagerInfo::clear_dw_player_port() {
   dw_player_port_ = 0u;
 }
 inline ::google::protobuf::uint32 GameNotifyGameManagerInfo::dw_player_port() const {
-  // @@protoc_insertion_point(field_get:game_proto.GameNotifyGameManagerInfo.dw_player_port)
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyGameManagerInfo.dw_player_port)
   return dw_player_port_;
 }
 inline void GameNotifyGameManagerInfo::set_dw_player_port(::google::protobuf::uint32 value) {
   
   dw_player_port_ = value;
-  // @@protoc_insertion_point(field_set:game_proto.GameNotifyGameManagerInfo.dw_player_port)
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyGameManagerInfo.dw_player_port)
 }
 
 // uint32 dw_server_port = 2;
@@ -647,13 +647,13 @@ inline void GameNotifyGameManagerInfo::clear_dw_server_port() {
   dw_server_port_ = 0u;
 }
 inline ::google::protobuf::uint32 GameNotifyGameManagerInfo::dw_server_port() const {
-  // @@protoc_insertion_point(field_get:game_proto.GameNotifyGameManagerInfo.dw_server_port)
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyGameManagerInfo.dw_server_port)
   return dw_server_port_;
 }
 inline void GameNotifyGameManagerInfo::set_dw_server_port(::google::protobuf::uint32 value) {
   
   dw_server_port_ = value;
-  // @@protoc_insertion_point(field_set:game_proto.GameNotifyGameManagerInfo.dw_server_port)
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyGameManagerInfo.dw_server_port)
 }
 
 // uint32 dw_slave_server_port = 3;
@@ -661,13 +661,13 @@ inline void GameNotifyGameManagerInfo::clear_dw_slave_server_port() {
   dw_slave_server_port_ = 0u;
 }
 inline ::google::protobuf::uint32 GameNotifyGameManagerInfo::dw_slave_server_port() const {
-  // @@protoc_insertion_point(field_get:game_proto.GameNotifyGameManagerInfo.dw_slave_server_port)
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyGameManagerInfo.dw_slave_server_port)
   return dw_slave_server_port_;
 }
 inline void GameNotifyGameManagerInfo::set_dw_slave_server_port(::google::protobuf::uint32 value) {
   
   dw_slave_server_port_ = value;
-  // @@protoc_insertion_point(field_set:game_proto.GameNotifyGameManagerInfo.dw_slave_server_port)
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyGameManagerInfo.dw_slave_server_port)
 }
 
 // uint64 qw_player_point = 4;
@@ -675,13 +675,13 @@ inline void GameNotifyGameManagerInfo::clear_qw_player_point() {
   qw_player_point_ = GOOGLE_ULONGLONG(0);
 }
 inline ::google::protobuf::uint64 GameNotifyGameManagerInfo::qw_player_point() const {
-  // @@protoc_insertion_point(field_get:game_proto.GameNotifyGameManagerInfo.qw_player_point)
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyGameManagerInfo.qw_player_point)
   return qw_player_point_;
 }
 inline void GameNotifyGameManagerInfo::set_qw_player_point(::google::protobuf::uint64 value) {
   
   qw_player_point_ = value;
-  // @@protoc_insertion_point(field_set:game_proto.GameNotifyGameManagerInfo.qw_player_point)
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyGameManagerInfo.qw_player_point)
 }
 
 // -------------------------------------------------------------------
@@ -693,13 +693,13 @@ inline void GameManagerAckGameInfoResult::clear_dw_result() {
   dw_result_ = 0u;
 }
 inline ::google::protobuf::uint32 GameManagerAckGameInfoResult::dw_result() const {
-  // @@protoc_insertion_point(field_get:game_proto.GameManagerAckGameInfoResult.dw_result)
+  // @@protoc_insertion_point(field_get:GameProto.GameManagerAckGameInfoResult.dw_result)
   return dw_result_;
 }
 inline void GameManagerAckGameInfoResult::set_dw_result(::google::protobuf::uint32 value) {
   
   dw_result_ = value;
-  // @@protoc_insertion_point(field_set:game_proto.GameManagerAckGameInfoResult.dw_result)
+  // @@protoc_insertion_point(field_set:GameProto.GameManagerAckGameInfoResult.dw_result)
 }
 
 // -------------------------------------------------------------------
@@ -711,13 +711,13 @@ inline void PlayerRequestGameManagerInfo::clear_dw_result() {
   dw_result_ = 0u;
 }
 inline ::google::protobuf::uint32 PlayerRequestGameManagerInfo::dw_result() const {
-  // @@protoc_insertion_point(field_get:game_proto.PlayerRequestGameManagerInfo.dw_result)
+  // @@protoc_insertion_point(field_get:GameProto.PlayerRequestGameManagerInfo.dw_result)
   return dw_result_;
 }
 inline void PlayerRequestGameManagerInfo::set_dw_result(::google::protobuf::uint32 value) {
   
   dw_result_ = value;
-  // @@protoc_insertion_point(field_set:game_proto.PlayerRequestGameManagerInfo.dw_result)
+  // @@protoc_insertion_point(field_set:GameProto.PlayerRequestGameManagerInfo.dw_result)
 }
 
 // -------------------------------------------------------------------
@@ -729,13 +729,13 @@ inline void GameManagerAckPlayerInfoResult::clear_dw_player_port() {
   dw_player_port_ = 0u;
 }
 inline ::google::protobuf::uint32 GameManagerAckPlayerInfoResult::dw_player_port() const {
-  // @@protoc_insertion_point(field_get:game_proto.GameManagerAckPlayerInfoResult.dw_player_port)
+  // @@protoc_insertion_point(field_get:GameProto.GameManagerAckPlayerInfoResult.dw_player_port)
   return dw_player_port_;
 }
 inline void GameManagerAckPlayerInfoResult::set_dw_player_port(::google::protobuf::uint32 value) {
   
   dw_player_port_ = value;
-  // @@protoc_insertion_point(field_set:game_proto.GameManagerAckPlayerInfoResult.dw_player_port)
+  // @@protoc_insertion_point(field_set:GameProto.GameManagerAckPlayerInfoResult.dw_player_port)
 }
 
 // uint32 dw_server_port = 2;
@@ -743,13 +743,13 @@ inline void GameManagerAckPlayerInfoResult::clear_dw_server_port() {
   dw_server_port_ = 0u;
 }
 inline ::google::protobuf::uint32 GameManagerAckPlayerInfoResult::dw_server_port() const {
-  // @@protoc_insertion_point(field_get:game_proto.GameManagerAckPlayerInfoResult.dw_server_port)
+  // @@protoc_insertion_point(field_get:GameProto.GameManagerAckPlayerInfoResult.dw_server_port)
   return dw_server_port_;
 }
 inline void GameManagerAckPlayerInfoResult::set_dw_server_port(::google::protobuf::uint32 value) {
   
   dw_server_port_ = value;
-  // @@protoc_insertion_point(field_set:game_proto.GameManagerAckPlayerInfoResult.dw_server_port)
+  // @@protoc_insertion_point(field_set:GameProto.GameManagerAckPlayerInfoResult.dw_server_port)
 }
 
 // uint32 dw_slave_server_port = 3;
@@ -757,13 +757,13 @@ inline void GameManagerAckPlayerInfoResult::clear_dw_slave_server_port() {
   dw_slave_server_port_ = 0u;
 }
 inline ::google::protobuf::uint32 GameManagerAckPlayerInfoResult::dw_slave_server_port() const {
-  // @@protoc_insertion_point(field_get:game_proto.GameManagerAckPlayerInfoResult.dw_slave_server_port)
+  // @@protoc_insertion_point(field_get:GameProto.GameManagerAckPlayerInfoResult.dw_slave_server_port)
   return dw_slave_server_port_;
 }
 inline void GameManagerAckPlayerInfoResult::set_dw_slave_server_port(::google::protobuf::uint32 value) {
   
   dw_slave_server_port_ = value;
-  // @@protoc_insertion_point(field_set:game_proto.GameManagerAckPlayerInfoResult.dw_slave_server_port)
+  // @@protoc_insertion_point(field_set:GameProto.GameManagerAckPlayerInfoResult.dw_slave_server_port)
 }
 
 // -------------------------------------------------------------------
@@ -775,41 +775,41 @@ inline void PlayerRequestGameTest::clear_sz_test() {
   sz_test_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline const ::std::string& PlayerRequestGameTest::sz_test() const {
-  // @@protoc_insertion_point(field_get:game_proto.PlayerRequestGameTest.sz_test)
+  // @@protoc_insertion_point(field_get:GameProto.PlayerRequestGameTest.sz_test)
   return sz_test_.GetNoArena();
 }
 inline void PlayerRequestGameTest::set_sz_test(const ::std::string& value) {
   
   sz_test_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
-  // @@protoc_insertion_point(field_set:game_proto.PlayerRequestGameTest.sz_test)
+  // @@protoc_insertion_point(field_set:GameProto.PlayerRequestGameTest.sz_test)
 }
 #if LANG_CXX11
 inline void PlayerRequestGameTest::set_sz_test(::std::string&& value) {
   
   sz_test_.SetNoArena(
     &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
-  // @@protoc_insertion_point(field_set_rvalue:game_proto.PlayerRequestGameTest.sz_test)
+  // @@protoc_insertion_point(field_set_rvalue:GameProto.PlayerRequestGameTest.sz_test)
 }
 #endif
 inline void PlayerRequestGameTest::set_sz_test(const char* value) {
   GOOGLE_DCHECK(value != NULL);
   
   sz_test_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
-  // @@protoc_insertion_point(field_set_char:game_proto.PlayerRequestGameTest.sz_test)
+  // @@protoc_insertion_point(field_set_char:GameProto.PlayerRequestGameTest.sz_test)
 }
 inline void PlayerRequestGameTest::set_sz_test(const char* value, size_t size) {
   
   sz_test_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
       ::std::string(reinterpret_cast<const char*>(value), size));
-  // @@protoc_insertion_point(field_set_pointer:game_proto.PlayerRequestGameTest.sz_test)
+  // @@protoc_insertion_point(field_set_pointer:GameProto.PlayerRequestGameTest.sz_test)
 }
 inline ::std::string* PlayerRequestGameTest::mutable_sz_test() {
   
-  // @@protoc_insertion_point(field_mutable:game_proto.PlayerRequestGameTest.sz_test)
+  // @@protoc_insertion_point(field_mutable:GameProto.PlayerRequestGameTest.sz_test)
   return sz_test_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
 inline ::std::string* PlayerRequestGameTest::release_sz_test() {
-  // @@protoc_insertion_point(field_release:game_proto.PlayerRequestGameTest.sz_test)
+  // @@protoc_insertion_point(field_release:GameProto.PlayerRequestGameTest.sz_test)
   
   return sz_test_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
 }
@@ -820,7 +820,7 @@ inline void PlayerRequestGameTest::set_allocated_sz_test(::std::string* sz_test)
     
   }
   sz_test_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), sz_test);
-  // @@protoc_insertion_point(field_set_allocated:game_proto.PlayerRequestGameTest.sz_test)
+  // @@protoc_insertion_point(field_set_allocated:GameProto.PlayerRequestGameTest.sz_test)
 }
 
 #ifdef __GNUC__
@@ -837,7 +837,7 @@ inline void PlayerRequestGameTest::set_allocated_sz_test(::std::string* sz_test)
 
 // @@protoc_insertion_point(namespace_scope)
 
-}  // namespace game_proto
+}  // namespace GameProto
 
 // @@protoc_insertion_point(global_scope)
 

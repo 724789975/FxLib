@@ -10,7 +10,7 @@ static char g_pServerSessionBuf[g_dwServerSessionBuffLen];
 CServerSession::CServerSession()
 	: m_oProtoDispatch(*this)
 {
-	m_oProtoDispatch.RegistFunction(game_proto::PlayerRequestGameTest::descriptor(), &CServerSession::OnPlayerRequestGameTest);
+	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestGameTest::descriptor(), &CServerSession::OnPlayerRequestGameTest);
 }
 
 
@@ -57,7 +57,7 @@ void CServerSession::Release(void)
 
 bool CServerSession::OnPlayerRequestGameTest(CServerSession& refSession, google::protobuf::Message& refMsg)
 {
-	game_proto::PlayerRequestGameTest* pMsg = dynamic_cast<game_proto::PlayerRequestGameTest*>(&refMsg);
+	GameProto::PlayerRequestGameTest* pMsg = dynamic_cast<GameProto::PlayerRequestGameTest*>(&refMsg);
 	if (pMsg == NULL)
 	{
 		return false;

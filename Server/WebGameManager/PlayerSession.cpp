@@ -133,7 +133,7 @@ void CPlayerSession::OnRequestGameManagerInfo(const char* pBuf, UINT32 dwLen)
 //	Send(g_pPlayerSessionBuf, g_dwPlayerSessionBuffLen - oStream.GetDataLength());
 //}
 
-void CPlayerSession::OnGameInfo(game_proto::GameNotifyGameManagerInfo& refInfo)
+void CPlayerSession::OnGameInfo(GameProto::GameNotifyGameManagerInfo& refInfo)
 {
 	CNetStream oStream(ENetStreamType_Write, g_pPlayerSessionBuf, g_dwPlayerSessionBuffLen);
 	oStream.WriteInt(Protocol::GAME_MANAGER_ACK_PLAYER_INFO_RESULT);
