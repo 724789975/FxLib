@@ -20,7 +20,8 @@ public class SessionText : MonoBehaviour
 		m_pSession.m_pfOnClose.Add(OnClose);
 
 		//m_pSession.RegistMessage(GameProto.PlayerRequestGameTest.Descriptor.FullName, OnTest);
-		m_pSession.RegistMessage(typeof(GameProto.PlayerRequestGameTest).FullName, OnTest);
+		//m_pSession.RegistMessage(typeof(GameProto.PlayerRequestGameTest).FullName, OnTest);
+		m_pSession.RegistMessage("GameProto.PlayerRequestGameTest", OnTest);
 	}
 	
 	// Update is called once per frame
