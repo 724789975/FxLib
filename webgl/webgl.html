@@ -37,7 +37,7 @@ function GameConnect()
 			var server_port = unpacker.unpack_uint16();
 			var slave_server_port = unpacker.unpack_uint16();
 			alert("" + player_port + "," + server_port + "," + slave_server_port);
-			window.location.href = "http://" + domain + "/view/index.html?player_port=" + player_port + "&server_port=" + server_port + "&slave_server_port=" + slave_server_port;
+			window.location.href = "http://" + domain + "/view/index.html?player_port=" + player_port + "&server_port=" + server_port + "&slave_server_port=" + slave_server_port + "&game_play_type=player";
 			ws.close();
 
 		};
