@@ -44,13 +44,13 @@ public class H5Manager : SingletonObject<H5Manager>
 			ushort.TryParse(szServerPort, out m_wServerPort);
 			ushort.TryParse(szPlayerPort, out m_wPlayerPort);
 			m_pServerSession.InitSession(SessionObject.SessionType.SessionType_WebSocket, uri.Host, m_wServerPort);
-			GameManager.Instance().proGamePlayType = GameManager.GamePlayType.GamePlayType_Player;
+			GameInstance.Instance().proGamePlayType = GameInstance.GamePlayType.GamePlayType_Player;
 		}
 		else if (szGamePlayType == "slave")
 		{
 			ushort.TryParse(szSlaveServerPort, out m_wSlaveServerPort);
 			m_pServerSession.InitSession(SessionObject.SessionType.SessionType_WebSocket, uri.Host, m_wServerPort);
-			GameManager.Instance().proGamePlayType = GameManager.GamePlayType.GamePlayType_Slave;
+			GameInstance.Instance().proGamePlayType = GameInstance.GamePlayType.GamePlayType_Slave;
 		}
 		else
 		{

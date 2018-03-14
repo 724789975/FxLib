@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameManager : SingletonObject<GameManager>
+public class GameInstance: SingletonObject<GameInstance>
 {
 	public enum GamePlayType
 	{
 		GamePlayType_NONE = 0,
 		GamePlayType_Server = 1,
 		GamePlayType_Slave = 1 << 1,
-        GamePlayType_Player = 1 << 2,
+		GamePlayType_Player = 1 << 2,
 
 		SLAVE_PLAYER = GamePlayType_Slave | GamePlayType_Player,
 
