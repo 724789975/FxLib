@@ -10,17 +10,10 @@ public class SessionText : MonoBehaviour
 	void Start ()
 	{
 		m_pSession = H5Manager.Instance().GetServerSession();
-		//pSession.m_pfOnConnect += OnConnect;
-		//pSession.m_pfOnRecv += OnRecv;
-		//pSession.m_pfOnError += OnError;
-		//pSession.m_pfOnClose += OnClose;
 		m_pSession.m_pfOnConnect.Add(OnConnect);
-		//m_pSession.m_pfOnRecv.Add(OnRecv);
 		m_pSession.m_pfOnError.Add(OnError);
 		m_pSession.m_pfOnClose.Add(OnClose);
 
-		//m_pSession.RegistMessage(GameProto.PlayerRequestGameTest.Descriptor.FullName, OnTest);
-		//m_pSession.RegistMessage(typeof(GameProto.PlayerRequestGameTest).FullName, OnTest);
 		m_pSession.RegistMessage("GameProto.PlayerRequestGameTest", OnTest);
 	}
 	
@@ -92,6 +85,16 @@ public class SessionText : MonoBehaviour
 		pStream.WriteData(pProto, (uint)pProto.Length);
 
 		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+	}
+
+	public void OnDestroy()
+	{
+		if (m_pSession != null)
+		{
+			m_pSession.m_pfOnConnect.Remove(OnConnect);
+			m_pSession.m_pfOnError.Remove(OnError);
+			m_pSession.m_pfOnClose.Remove(OnClose);
+		}
 	}
 
 	public UnityEngine.UI.Text m_textText;

@@ -20,11 +20,15 @@ public class SessionObject : MonoBehaviour
 	void Update ()
 	{
 #if UNITY_WEBGL && !UNITY_EDITOR
+		if (Time.time - m_fLastUpdate < 0.05f)
+		{
+			return;
+		}
+		m_fLastUpdate = Time.time;
 		if(m_pClientSocket != null)
 		{
 			m_pClientSocket.Update();
 		}
-#else
 #endif
 	}
 
@@ -152,4 +156,8 @@ public class SessionObject : MonoBehaviour
 	public HashSet<PFun1> m_pfOnError = new HashSet<PFun1>();
 
 	public Dictionary<string, MessageCallBack> m_mapCallBack = new Dictionary<string, MessageCallBack>();
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+	float m_fLastUpdate = 0.0f;
+#endif
 }

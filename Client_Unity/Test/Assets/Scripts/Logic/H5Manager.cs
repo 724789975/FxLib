@@ -14,7 +14,6 @@ public class H5Manager : SingletonObject<H5Manager>
 	// Use this for initialization
 	void Start ()
 	{
-		H5Helper.H5LogStr("start : geturl");
 #if UNITY_WEBGL && !UNITY_EDITOR
 		Init(H5Helper.H5GetUrl());
 #endif
@@ -35,40 +34,33 @@ public class H5Manager : SingletonObject<H5Manager>
 		string szServerPort = nvcParam.Get("server_port");
 		string szSlaveServerPort = nvcParam.Get("slave_server_port");
 		string szPlayerPort = nvcParam.Get("player_port");
+		string szGamePlayType = nvcParam.Get("game_play_type");
 		H5Helper.H5LogStr("server_port : " + szServerPort + ", slave_server_port : "
 			+ szSlaveServerPort + ", player_port : " + szPlayerPort);
-		if (szServerPort != null)
+
+		if (szGamePlayType == "player")
 		{
+			//先连这个 后面再改
 			ushort.TryParse(szServerPort, out m_wServerPort);
-			ushort.TryParse(szSlaveServerPort, out m_wSlaveServerPort);
 			ushort.TryParse(szPlayerPort, out m_wPlayerPort);
 			m_pServerSession.InitSession(SessionObject.SessionType.SessionType_WebSocket, uri.Host, m_wServerPort);
+			GameManager.Instance().proGamePlayType = GameManager.GamePlayType.GamePlayType_Player;
 		}
-		else if (szSlaveServerPort != null)
+		else if (szGamePlayType == "slave")
 		{
 			ushort.TryParse(szSlaveServerPort, out m_wSlaveServerPort);
-			ushort.TryParse(szPlayerPort, out m_wPlayerPort);
-			m_pServerSession.InitSession(SessionObject.SessionType.SessionType_WebSocket, uri.Host, m_wSlaveServerPort);
-		}
-		else if (szPlayerPort != null)
-		{
-			ushort.TryParse(szPlayerPort, out m_wPlayerPort);
-			m_pServerSession.InitSession(SessionObject.SessionType.SessionType_WebSocket, uri.Host, m_wPlayerPort);
+			m_pServerSession.InitSession(SessionObject.SessionType.SessionType_WebSocket, uri.Host, m_wServerPort);
+			GameManager.Instance().proGamePlayType = GameManager.GamePlayType.GamePlayType_Slave;
 		}
 		else
 		{
-			return;
+			H5Helper.H5AlertString("err game type!!!");
 		}
-
-		//m_pServerSession = this.gameObject.AddComponent<SessionObject>();
-		//m_pServerSession.m_eSessionType = SessionObject.SessionType.SessionType_WebSocket;
-		//m_pServerSession.m_szIP = "127.0.0.1";
-		//m_pServerSession.m_wPort = m_wServerPort;
 	}
 
 	public void InitTest()
 	{
-		Init("http://127.0.0.1/view/index.html?server_port=" + m_wServerPort + "&slave_server_port=1&player_port=2");
+		Init("http://127.0.0.1/view/index.html?server_port=" + m_wServerPort + "&slave_server_port=1&player_port=2&game_play_type=player");
 		//m_pServerSession.Init(SessionObject.SessionType.SessionType_WebSocket, "127.0.0.1", m_wServerPort);
 	}
 
