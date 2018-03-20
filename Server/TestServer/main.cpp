@@ -89,7 +89,7 @@ int main(int argc, char **argv)
 	}
 
 	wPort = FLAGS_udp_port;
-	pUdpListenSocket = pNet->Listen(CSessionFactory::Instance(), SLT_Udp, 0, wPort);
+	pUdpListenSocket = pNet->Listen(CSessionFactory::Instance(), SLT_Http, 0, wPort);
 	if(pUdpListenSocket == NULL)
 	{
 		g_bRun = false;

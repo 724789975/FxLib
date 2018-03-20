@@ -28,6 +28,8 @@ public:
 
 	virtual UINT32		GetRecvSize(){ return 64 * 1024; };
 
+	virtual IFxDataHeader* GetDataHeader() { Assert(0); return NULL; }
+
 	//void				SetFxSessionFactory(IFxSessionFactory* pFxSessionFactory) { m_pFxSessionFactory = pFxSessionFactory; }
 
 private:
@@ -168,6 +170,21 @@ public:
 	virtual void Release(void);
 private:
 	WebSocketDataHeader m_oWebSocketDataHeader;
+};
+
+class CHttpSession : public CSocketSession
+{
+public:
+	CHttpSession()
+	{
+	}
+
+	~CHttpSession()
+	{
+	}
+
+	virtual IFxDataHeader* GetDataHeader() { Assert(0); }
+	virtual void Release(void);
 };
 
 class CChatManagerSession : public TSingleton<CChatManagerSession>, public CBinarySocketSession, public IFxTimer

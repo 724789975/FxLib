@@ -81,6 +81,7 @@ enum ESocketType
 	SLT_CommonTcp,
 	SLT_WebSocket,
 	SLT_Udp,
+	SLT_Http,
 };
 
 #ifdef WIN32

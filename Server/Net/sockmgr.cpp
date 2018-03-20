@@ -27,6 +27,10 @@ bool FxMySockMgr::Init(INT32 nMax)
     {
         return false;
     }
+	if (!m_oHttpPool.Init(nMax, nMax / 2, false, MAX_SOCKET_COUNT))
+	{
+		return false;
+	}
 
     m_dwNextId      = 0;
 	return true;
@@ -62,6 +66,26 @@ FxTCPConnectSock* FxMySockMgr::CreateCommonTcp()
 FxWebSocketConnect* FxMySockMgr::CreateWebSocket()
 {
 	FxWebSocketConnect* poSock = m_oWebSockPool.FetchObj();
+
+	if (NULL == poSock)
+	{
+		return NULL;
+	}
+	if (!poSock->Init())
+	{
+		Release(poSock);
+		return NULL;
+	}
+	poSock->SetState(SSTATE_INVALID);
+	poSock->SetSock(INVALID_SOCKET);
+	poSock->SetSockId(m_dwNextId++);
+
+	return poSock;
+}
+
+FxHttpConnect* FxMySockMgr::CreateHttpConnect()
+{
+	FxHttpConnect* poSock = m_oHttpPool.FetchObj();
 
 	if (NULL == poSock)
 	{
@@ -133,6 +157,33 @@ FxWebSocketListen* FxMySockMgr::CreateWebSocketListen(UINT32 dwPort, IFxSessionF
 	return &s_mapListenSocks[dwPort];
 }
 
+FxHttpListen* FxMySockMgr::CreateHttpListen(UINT32 dwPort, IFxSessionFactory* pSessionFactory)
+{
+	FxHttpListen* pSock = new FxHttpListen();
+	pSock->IFxListenSocket::Init(pSessionFactory);
+	pSock->SetState(SSTATE_INVALID);
+	pSock->SetSock(INVALID_SOCKET);
+	pSock->SetSockId(m_dwNextId++);
+	return pSock;
+
+	static std::map<UINT32, FxHttpListen> s_mapListenSocks;
+	if (m_mapListenSocks.find(dwPort) != m_mapListenSocks.end())
+	{
+		return NULL;
+	}
+	if (!s_mapListenSocks[dwPort].IFxListenSocket::Init(pSessionFactory))
+	{
+		s_mapListenSocks.erase(dwPort);
+		return NULL;
+	}
+	m_mapListenSocks[dwPort] = &s_mapListenSocks[dwPort];
+
+	s_mapListenSocks[dwPort].SetState(SSTATE_INVALID);
+	s_mapListenSocks[dwPort].SetSock(INVALID_SOCKET);
+	s_mapListenSocks[dwPort].SetSockId(m_dwNextId++);
+	return &s_mapListenSocks[dwPort];
+}
+
 void FxMySockMgr::Release(FxTCPConnectSock* poSock)
 {
 	if(NULL == poSock)
@@ -151,6 +202,16 @@ void FxMySockMgr::Release(FxWebSocketConnect* poSock)
 	}
 	poSock->Reset();
 	m_oWebSockPool.ReleaseObj(poSock);
+}
+
+void FxMySockMgr::Release(FxHttpConnect * poSock)
+{
+	if (NULL == poSock)
+	{
+		return;
+	}
+	poSock->Reset();
+	m_oHttpPool.ReleaseObj(poSock);
 }
 
 FxUDPConnectSock * FxMySockMgr::CreateUdpSock()

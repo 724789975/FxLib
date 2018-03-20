@@ -85,6 +85,20 @@ private:
 #endif // WIN32
 };
 
+class FxHttpListen : public FxTCPListenSock
+{
+public:
+	FxHttpListen();
+	~FxHttpListen();
+
+private:
+#ifdef WIN32
+	virtual void						OnAccept(SPerIoData* pstPerIoData);
+#else
+	virtual  void						OnAccept();
+#endif // WIN32
+};
+
 class FxConnection;
 class FxTCPConnectSockBase : public IFxConnectSocket
 {
@@ -129,7 +143,7 @@ public:
 
 protected:
 
-	bool								PostSend();
+	virtual bool						PostSend();
 #ifdef WIN32
 	bool								PostSendThread();	//其实就是PostSend 不过在线程中执行
 #endif // WIN32
@@ -147,10 +161,10 @@ protected:
 	virtual void						OnConnect();
 #ifdef WIN32
 	virtual void						OnRecv(bool bRet, int dwBytes);
-	void								OnSend(bool bRet, int dwBytes);
+	virtual void						OnSend(bool bRet, int dwBytes);
 #else
 	virtual void						OnRecv();
-	void								OnSend();
+	virtual void						OnSend();
 #endif // WIN32
 
 protected:
@@ -226,5 +240,29 @@ protected:
 private:
 	EWebSocketHandShakeState			m_eWebSocketHandShakeState;
 	char								m_szWebInfo[1024];
+};
+
+class FxHttpConnect : public FxTCPConnectSockBase
+{
+public:
+	FxHttpConnect();
+	virtual ~FxHttpConnect();
+
+	SOCKET								Connect() { Assert(0); return INVALID_SOCKET; }
+
+	virtual bool						Send(const char* pData, int dwLen);
+private:
+	void								__ProcRecv(UINT32 dwLen);
+	void								__ProcRelease();
+
+protected:
+	virtual bool						PostSend();
+#ifdef WIN32
+	virtual void						OnRecv(bool bRet, int dwBytes);
+	virtual void						OnSend(bool bRet, int dwBytes);
+#else
+	virtual void						OnRecv();
+	virtualvoid							OnSend();
+#endif // WIN32
 };
 #endif // !__MySock_h__

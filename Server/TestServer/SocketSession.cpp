@@ -93,7 +93,16 @@ void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	//mapSocket[szPlayerId] = this;
 	//CChatManagerSession::Instance()->Send(szPlayerInfo, 1024 - oGameStream.GetDataLength());
 
-	if (!Send(pBuf, dwLen))
+	std::string szBuf = "<!DOCTYPE HTML>\r\n"
+		"<html>\r\n"
+		"<head>\r\n"
+		"<meta charset = \"UTF-8\">\r\n"
+		"<title>Web Socket Test</title>\r\n"
+		"<body>\r\n"
+		"</body>\r\n"
+		"</html>\r\n";
+
+	if (!Send(szBuf.c_str(), szBuf.size()))
 	{
 		LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s send error", GetRemoteIPStr(), GetRemotePort(), pBuf);
 		Close();
@@ -118,7 +127,8 @@ CSessionFactory::CSessionFactory()
 	m_pLock = FxCreateThreadLock();
 	for(int i = 0; i < 512; ++i)
 	{
-		CBinarySocketSession* pSession = new CBinarySocketSession;
+		//CBinarySocketSession* pSession = new CBinarySocketSession;
+		CSocketSession* pSession = new CSocketSession;
 		m_listSession.push_back(pSession);
 	}
 //	m_poolSessions.Init(100, 10, false, 100);

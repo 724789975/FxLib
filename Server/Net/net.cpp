@@ -151,7 +151,12 @@ IFxListenSocket* FxNetModule::Listen(IFxSessionFactory* pSessionFactory, ESocket
 		{
 			pListenSocket = FxMySockMgr::Instance()->CreateUdpSockListen(dwPort, pSessionFactory);
 		}
-			break;
+		break;
+		case SLT_Http:
+		{
+			pListenSocket = FxMySockMgr::Instance()->CreateHttpListen(dwPort, pSessionFactory);
+		}
+		break;
 		default:
 		{
 			Assert(0);
