@@ -93,11 +93,12 @@ void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	//mapSocket[szPlayerId] = this;
 	//CChatManagerSession::Instance()->Send(szPlayerInfo, 1024 - oGameStream.GetDataLength());
 
-	std::string szBuf = "<!DOCTYPE HTML>\r\n"
+	std::string szBuf = "<!DOCTYPE html PUBLIC \" -//W3C//DTD XHTML 1.0 Stict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\r\n"
+		"<html xmlns = \"http://www.w3.org/1999/xhtml\" lang = \"zh-CN\">\r\n"
 		"<html>\r\n"
 		"<head>\r\n"
-		"<meta charset = \"UTF-8\">\r\n"
-		"<title>Web Socket Test</title>\r\n"
+		"<meta http-equiv=\"Content - Type\" content=\"text / html; charset = \"UTF-8\">\r\n"
+		"<title>Test</title>\r\n"
 		"<body>\r\n"
 		"</body>\r\n"
 		"</html>\r\n";

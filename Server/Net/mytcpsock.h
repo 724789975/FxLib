@@ -59,7 +59,7 @@ protected:
 	FxIoThread*							m_poIoThreadHandler;
 
 #ifdef WIN32
-	bool								PostAccept(SPerIoData& oSPerIoData);
+	virtual bool						PostAccept(SPerIoData& oSPerIoData);
 	bool								InitAcceptEx();
 	virtual void						OnAccept(SPerIoData* pstPerIoData);
 
@@ -90,6 +90,12 @@ class FxHttpListen : public FxTCPListenSock
 public:
 	FxHttpListen();
 	~FxHttpListen();
+
+protected:
+#ifdef WIN32
+	virtual bool						PostAccept(SPerIoData& oSPerIoData);
+#endif // WIN32
+
 
 private:
 #ifdef WIN32
@@ -133,7 +139,7 @@ public:
 
 	virtual bool						PostClose();
 #ifdef WIN32
-	bool								PostRecv();
+	virtual bool						PostRecv();
 	bool								PostRecvFree();
 
 	virtual void						OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred);		// 处理完成端口事件//
@@ -251,6 +257,9 @@ public:
 	SOCKET								Connect() { Assert(0); return INVALID_SOCKET; }
 
 	virtual bool						Send(const char* pData, int dwLen);
+#ifdef WIN32
+	bool								PostRecv();
+#endif // WIN32
 private:
 	void								__ProcRecv(UINT32 dwLen);
 	void								__ProcRelease();

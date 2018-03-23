@@ -78,4 +78,9 @@ protected:
 	double					m_dLoatUpdateTime;
 };
 
+class FxHttpThread : public TSingleton<FxIoThread>
+{
+};
+
+
 #endif // __IOThread_H__

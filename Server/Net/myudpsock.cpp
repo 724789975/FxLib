@@ -749,6 +749,10 @@ void FxUDPListenSock::OnAccept()
 	setsockopt(poSock->GetSock(), SOL_SOCKET, SO_SNDLOWAT, &UDP_VAL_SO_SNDLOWAT, sizeof(UDP_VAL_SO_SNDLOWAT));
 	setsockopt(poSock->GetSock(), SOL_SOCKET, SO_SNDBUF, &UDP_MAX_SYS_SEND_BUF, sizeof(UDP_MAX_SYS_SEND_BUF));
 
+	INT32 nFlags = fcntl(poSock->GetSock(), F_GETFL, 0);
+	nFlags |= O_NONBLOCK;
+	fcntl(poSock->GetSock(), F_SETFL, nFlags);
+
 	poSock->SetState(SSTATE_ESTABLISH);
 
 	for (unsigned char i = poSock->m_oRecvWindow.m_btBegin; i != poSock->m_oRecvWindow.m_btEnd; i++)

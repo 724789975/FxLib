@@ -161,11 +161,6 @@ bool FxIoThread::AddEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 		ThreadLog(LogLv_Error, GetFile(), GetLogFile(), "%s", "m_hEpoll < 0");
 		return false;
 	}
-
-	INT32 nFlags = fcntl(hSock, F_GETFL, 0);
-	nFlags |= O_NONBLOCK;
-	fcntl(hSock, F_SETFL, nFlags);
-
 	epoll_event e;
 	e.events = dwEvents;
 	e.data.ptr = poSock;

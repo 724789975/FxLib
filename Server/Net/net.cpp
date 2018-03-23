@@ -101,6 +101,9 @@ bool FxNetModule::__InitComponent()
 		FxSleep(10);
     }
 
+	FxHttpThread::CreateInstance();
+	FxHttpThread::Instance()->Init(m_nMaxConnectionCount);
+
     return true;
 }
 
@@ -117,6 +120,9 @@ void FxNetModule::__UninitComponent()
     {
         (m_pEpollHandlers + i)->Uninit();
     }
+
+	FxHttpThread::Instance()->SetStoped();
+	FxHttpThread::Instance()->Uninit();
 }
 
 void FxNetModule::__DestroyComponent()
