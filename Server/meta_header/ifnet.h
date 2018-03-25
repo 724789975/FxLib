@@ -325,6 +325,107 @@ IFxNet* FxNetGetModule();
 
 typedef IFxNet* (*PFN_FxNetGetModule)();
 
+#define HTTP_MAX_HEADERS 64
+struct HttpHeader
+{
+	const char *name;  /* HTTP header name */
+	const char *value; /* HTTP header value */
+};
+
+struct HttpRequestInfo {
+	const char *request_method; /* "GET", "POST", etc */
+	const char *request_uri;    /* URL-decoded URI (absolute or relative,
+								* as in the request) */
+	const char *local_uri;      /* URL-decoded URI (relative). Can be NULL
+								* if the request_uri does not address a
+								* resource at the server host. */
+	const char *http_version; /* E.g. "1.0", "1.1" */
+	const char *query_string; /* URL part after '?', not including '?', or
+							  NULL */
+	const char *remote_user;  /* Authenticated user, or NULL if no auth
+							  used */
+	char remote_addr[48];     /* Client's IP address as a string. */
+
+
+	long long content_length; /* Length (in bytes) of the request body,
+							  can be -1 if no length was given. */
+	int remote_port;          /* Client's port */
+	int is_ssl;               /* 1 if SSL-ed, 0 if not */
+	void *user_data;          /* User data pointer passed to mg_start() */
+	void *conn_data;          /* Connection-specific user data */
+
+	int num_headers; /* Number of HTTP headers */
+	struct HttpHeader http_headers[64]; /* Allocate maximum headers */
+	
+	const char* body;
+};
+
+struct HttpMethodInfo {
+	const char *name;
+	int request_has_body;
+	int response_has_body;
+	int is_safe;
+	int is_idempotent;
+	int is_cacheable;
+};
+
+
+/* https://developer.mozilla.org/en-US/docs/Web/HTTP/Methods */
+static struct HttpMethodInfo g_sHttpMethods[] = {
+	/* HTTP (RFC 2616) */
+	{ "GET", 0, 1, 1, 1, 1 },
+	{ "POST", 1, 1, 0, 0, 0 },
+	{ "PUT", 1, 0, 0, 1, 0 },
+	{ "DELETE", 0, 0, 0, 1, 0 },
+	{ "HEAD", 0, 0, 1, 1, 1 },
+	{ "OPTIONS", 0, 0, 1, 1, 0 },
+	{ "CONNECT", 1, 1, 0, 0, 0 },
+	/* TRACE method (RFC 2616) is not supported for security reasons */
+
+	/* PATCH method (RFC 5789) */
+	{ "PATCH", 1, 0, 0, 0, 0 },
+	/* PATCH method only allowed for CGI/Lua/LSP and callbacks. */
+
+	/* WEBDAV (RFC 2518) */
+	{ "PROPFIND", 0, 1, 1, 1, 0 },
+	/* http://www.webdav.org/specs/rfc4918.html, 9.1:
+	* Some PROPFIND results MAY be cached, with care,
+	* as there is no cache validation mechanism for
+	* most properties. This method is both safe and
+	* idempotent (see Section 9.1 of [RFC2616]). */
+	{ "MKCOL", 0, 0, 0, 1, 0 },
+	/* http://www.webdav.org/specs/rfc4918.html, 9.1:
+	* When MKCOL is invoked without a request body,
+	* the newly created collection SHOULD have no
+	* members. A MKCOL request message may contain
+	* a message body. The precise behavior of a MKCOL
+	* request when the body is present is undefined,
+	* ... ==> We do not support MKCOL with body data.
+	* This method is idempotent, but not safe (see
+	* Section 9.1 of [RFC2616]). Responses to this
+	* method MUST NOT be cached. */
+
+	/* Unsupported WEBDAV Methods: */
+	/* PROPPATCH, COPY, MOVE, LOCK, UNLOCK (RFC 2518) */
+	/* + 11 methods from RFC 3253 */
+	/* ORDERPATCH (RFC 3648) */
+	/* ACL (RFC 3744) */
+	/* SEARCH (RFC 5323) */
+	/* + MicroSoft extensions
+	* https://msdn.microsoft.com/en-us/library/aa142917.aspx */
+
+	/* REPORT method (RFC 3253) */
+	{ "REPORT", 1, 1, 1, 1, 1 },
+	/* REPORT method only allowed for CGI/Lua/LSP and callbacks. */
+	/* It was defined for WEBDAV in RFC 3253, Sec. 3.6
+	* (https://tools.ietf.org/html/rfc3253#section-3.6), but seems
+	* to be useful for REST in case a "GET request with body" is
+	* required. */
+
+	{ NULL, 0, 0, 0, 0, 0 }
+	/* end of list */
+};
+
 
 #endif	// __IFNET_H__
 
