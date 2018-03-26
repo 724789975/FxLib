@@ -14,6 +14,7 @@
 #ifdef WIN32
 #else
 #include <unistd.h>
+#include <fcntl.h>
 int UDP_MAX_SYS_SEND_BUF = (128 * 1024);
 int UDP_VAL_SO_SNDLOWAT = (64 * 1024);
 #endif // WIN32

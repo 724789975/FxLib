@@ -6,6 +6,8 @@
 
 #else
 #include <arpa/inet.h>
+#include <ctype.h>
+#include <stdlib.h>
 #define SOCKET UINT32
 //#define DLLCLASS_DECL
 #define INVALID_SOCKET UINT32(-1)
@@ -13,6 +15,7 @@
 
 #include <assert.h>
 #include "fxmeta.h"
+#include <string.h>
 
 class FxConnection;
 

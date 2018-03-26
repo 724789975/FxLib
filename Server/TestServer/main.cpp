@@ -36,6 +36,7 @@ int main(int argc, char **argv)
 	IFxNet* pNet = NULL;
 	IFxListenSocket* pTcpListenSocket = NULL;
 	IFxListenSocket* pUdpListenSocket = NULL;
+	UINT16 wPort = 0;
 
 	if (!GetTimeHandler()->Init())
 	{
@@ -80,7 +81,7 @@ int main(int argc, char **argv)
 	//	LogFun(LT_Screen, LogLv_Info, "%s", "db connected~~~~");
 	//}
 
-	UINT16 wPort = FLAGS_tcp_port;
+	wPort = FLAGS_tcp_port;
 	pTcpListenSocket = pNet->Listen(CWebSocketSessionFactory::Instance(), SLT_WebSocket, 0, wPort);
 	if(pTcpListenSocket == NULL)
 	{

@@ -22,6 +22,7 @@ struct tcp_keepalive
 };
 #define SIO_KEEPALIVE_VALS _WSAIOW(IOC_VENDOR,4)
 #else
+#include <fcntl.h>
 #include <unistd.h>
 #include <errno.h>
 #include <netinet/in.h>
@@ -3901,6 +3902,32 @@ FxHttpConnect::~FxHttpConnect()
 {
 }
 
+bool FxHttpConnect::AddEvent()
+{
+#ifdef WIN32
+	if (!m_poIoThreadHandler->AddEvent(GetSock(), this))
+	{
+		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "error : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+
+		Close();
+		return false;
+	}
+#else
+	if (!m_poIoThreadHandler->AddEvent(GetSock(), EPOLLIN, this))
+	{
+		PushNetEvent(NETEVT_ERROR, errno);
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "error : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+
+		Close();
+		return false;
+	}
+#endif // WIN32
+
+	PushNetEvent(NETEVT_ASSOCIATE, 0);
+	return true;
+}
+
 bool FxHttpConnect::Send(const char* pData, int dwLen)
 {
 	if (false == IsConnected())
@@ -4131,7 +4158,7 @@ void FxHttpConnect::OnRecv()
 		return;
 	}
 
-	nLen = recv(GetSock(), GetConnection()->GetRecvBuf(), GetConnection()->GetRecvSize(), 0);
+	int nLen = recv(GetSock(), GetConnection()->GetRecvBuf(), GetConnection()->GetRecvSize(), 0);
 
 	if (0 > nLen)
 	{

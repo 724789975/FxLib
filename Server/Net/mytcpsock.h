@@ -131,7 +131,7 @@ public:
 	virtual IFxDataHeader*				GetDataHeader();
 
 	void								SetIoThread(FxIoThread* pIoThread)				{ m_poIoThreadHandler = pIoThread;}
-	bool								AddEvent();
+	virtual bool						AddEvent();
 
 	virtual void						ProcEvent(SNetEvent oEvent);
 
@@ -257,6 +257,7 @@ public:
 	SOCKET								Connect() { Assert(0); return INVALID_SOCKET; }
 
 	virtual bool						Send(const char* pData, int dwLen);
+	virtual bool						AddEvent();
 #ifdef WIN32
 	bool								PostRecv();
 #endif // WIN32
@@ -271,7 +272,7 @@ protected:
 	virtual void						OnSend(bool bRet, int dwBytes);
 #else
 	virtual void						OnRecv();
-	virtualvoid							OnSend();
+	virtual void						OnSend();
 #endif // WIN32
 };
 #endif // !__MySock_h__
