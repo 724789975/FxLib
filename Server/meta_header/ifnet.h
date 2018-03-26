@@ -336,23 +336,23 @@ struct HttpRequestInfo {
 	const char *request_method; /* "GET", "POST", etc */
 	const char *request_uri;    /* URL-decoded URI (absolute or relative,
 								* as in the request) */
-	const char *local_uri;      /* URL-decoded URI (relative). Can be NULL
-								* if the request_uri does not address a
-								* resource at the server host. */
+	//const char *local_uri;      /* URL-decoded URI (relative). Can be NULL
+	//							* if the request_uri does not address a
+	//							* resource at the server host. */
 	const char *http_version; /* E.g. "1.0", "1.1" */
 	const char *query_string; /* URL part after '?', not including '?', or
 							  NULL */
-	const char *remote_user;  /* Authenticated user, or NULL if no auth
-							  used */
-	char remote_addr[48];     /* Client's IP address as a string. */
+	//const char *remote_user;  /* Authenticated user, or NULL if no auth
+	//						  used */
+	//char remote_addr[48];     /* Client's IP address as a string. */
 
 
 	long long content_length; /* Length (in bytes) of the request body,
 							  can be -1 if no length was given. */
-	int remote_port;          /* Client's port */
+	//int remote_port;          /* Client's port */
 	int is_ssl;               /* 1 if SSL-ed, 0 if not */
-	void *user_data;          /* User data pointer passed to mg_start() */
-	void *conn_data;          /* Connection-specific user data */
+	//void *user_data;          /* User data pointer passed to mg_start() */
+	//void *conn_data;          /* Connection-specific user data */
 
 	int num_headers; /* Number of HTTP headers */
 	struct HttpHeader http_headers[64]; /* Allocate maximum headers */
@@ -600,7 +600,7 @@ namespace HttpHelp
 
 		/* Reset attributes. DO NOT TOUCH is_ssl, remote_ip, remote_addr,
 		* remote_port */
-		ri->remote_user = ri->request_method = ri->request_uri = ri->http_version =
+		ri->request_method = ri->request_uri = ri->http_version =
 			NULL;
 		ri->num_headers = 0;
 
@@ -667,6 +667,7 @@ namespace HttpHelp
 		}
 		ri->http_version += 5;
 
+		ri->query_string = strchr(ri->request_uri, '?');
 
 		/* Parse all HTTP headers */
 		ri->num_headers = parse_http_headers(&buf, ri->http_headers);

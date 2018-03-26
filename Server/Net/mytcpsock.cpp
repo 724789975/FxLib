@@ -4112,9 +4112,6 @@ void FxHttpConnect::OnRecv(bool bRet, int dwBytes)
 
 	GetConnection()->GetRecvBuf()[dwBytes] = 0;
 
-	HttpRequestInfo oInfo;
-	HttpHelp::parse_http_request(GetConnection()->GetRecvBuf(), GetConnection()->GetRecvSize(), &oInfo);
-
 	//不再接收消息
 	shutdown(GetSock(), SD_RECEIVE);
 
