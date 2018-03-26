@@ -88,7 +88,7 @@ FxSession * WebSocketPlayerSessionManager::CreateSession()
 {
 	FxSession* pSession = NULL;
 	m_oLock.Lock();
-	for (int i = 0; i < MAXSLAVESERVERNUM; ++i)
+	for (int i = 0; i < MAXCLIENTNUM; ++i)
 	{
 		if (m_oWebSocketPlayerSessions[i].GetConnection() == NULL)
 		{
@@ -109,7 +109,7 @@ void WebSocketPlayerSessionManager::Release(FxSession * pSession)
 void WebSocketPlayerSessionManager::Release(CWebSocketPlayerSession* pSession)
 {
 	m_oLock.Lock();
-	for (int i = 0; i < MAXSLAVESERVERNUM; ++i)
+	for (int i = 0; i < MAXCLIENTNUM; ++i)
 	{
 		if (&m_oWebSocketPlayerSessions[i] == pSession)
 		{

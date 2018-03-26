@@ -7,7 +7,7 @@
 
 #define IDLENTH 64
 #define MAXCLIENTNUM 16
-#define MAXSLAVESERVERNUM 15
+#define MAXSLAVESERVERNUM 20
 
 namespace Protocol
 {

@@ -60,6 +60,7 @@ void CWebSocketSlaveServerSession::Release(void)
 //////////////////////////////////////////////////////////////////////////
 WebSocketSlaveServerSessionManager::WebSocketSlaveServerSessionManager()
 {
+	m_poolSessions.Init(4, 4);
 }
 
 WebSocketSlaveServerSessionManager::~WebSocketSlaveServerSessionManager()
@@ -69,36 +70,18 @@ WebSocketSlaveServerSessionManager::~WebSocketSlaveServerSessionManager()
 FxSession * WebSocketSlaveServerSessionManager::CreateSession()
 {
 	FxSession* pSession = NULL;
-	m_oLock.Lock();
-	for (int i = 0; i < MAXSLAVESERVERNUM; ++i)
-	{
-		if (m_oWebSocketSlaveServerSessions[i].GetConnection() == NULL)
-		{
-			m_oWebSocketSlaveServerSessions[i].Init((FxConnection*)0xFFFFFFFF);
-			pSession = &m_oWebSocketSlaveServerSessions[i];
-			break;
-		}
-	}
-	m_oLock.UnLock();
+	pSession = m_poolSessions.FetchObj();
 	return pSession;
 }
 
 void WebSocketSlaveServerSessionManager::Release(FxSession * pSession)
 {
+	Assert(0);
 }
 
 void WebSocketSlaveServerSessionManager::Release(CWebSocketSlaveServerSession* pSession)
 {
-	m_oLock.Lock();
-	for (int i = 0; i < MAXSLAVESERVERNUM; ++i)
-	{
-		if (&m_oWebSocketSlaveServerSessions[i] == pSession)
-		{
-			m_oWebSocketSlaveServerSessions[i].Init(NULL);
-			break;
-		}
-	}
-	m_oLock.UnLock();
+	m_poolSessions.ReleaseObj(pSession);
 }
 
 

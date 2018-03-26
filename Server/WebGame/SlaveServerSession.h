@@ -54,6 +54,7 @@ public:
 	virtual void Release(CWebSocketSlaveServerSession* pSession);
 
 private:
+	TDynamicPoolEx<CWebSocketSlaveServerSession> m_poolSessions;
 	CWebSocketSlaveServerSession m_oWebSocketSlaveServerSessions[MAXSLAVESERVERNUM];
 	FxCriticalLock m_oLock;
 };
