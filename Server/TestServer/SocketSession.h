@@ -171,22 +171,6 @@ public:
 private:
 	WebSocketDataHeader m_oWebSocketDataHeader;
 };
-
-class CHttpSession : public CSocketSession
-{
-public:
-	CHttpSession()
-	{
-	}
-
-	~CHttpSession()
-	{
-	}
-
-	virtual IFxDataHeader* GetDataHeader() { Assert(0); }
-	virtual void Release(void);
-};
-
 class CChatManagerSession : public TSingleton<CChatManagerSession>, public CBinarySocketSession, public IFxTimer
 {
 public:

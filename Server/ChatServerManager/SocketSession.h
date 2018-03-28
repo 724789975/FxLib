@@ -4,9 +4,7 @@
 
 #include "ifnet.h"
 
-#include <set>
-#include <list>
-#include <deque>
+#include <map>
 
 class TextDataHeader : public IFxDataHeader
 {
@@ -78,48 +76,6 @@ private:
 
 	unsigned int m_dwHeaderLength;
 	//static const UINT32 s_dwMagic = 12345678;
-};
-
-class CHttpSession : public FxSession
-{
-public:
-	CHttpSession();
-	virtual ~CHttpSession();
-
-	virtual void		OnConnect(void);
-
-	virtual void		OnClose(void);
-
-	virtual void		OnError(UINT32 dwErrorNo);
-
-	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
-
-	virtual void		Release(void);
-
-	virtual char*		GetRecvBuf() { return m_dataRecvBuf; }
-
-	virtual UINT32		GetRecvSize() { return 64 * 1024; };
-
-	virtual IFxDataHeader* GetDataHeader() { Assert(0); return NULL; }
-
-private:
-	char m_dataRecvBuf[1024 * 1024];
-};
-
-
-class CHttpSessionFactory : public TSingleton<CHttpSessionFactory>, public IFxSessionFactory
-{
-public:
-	CHttpSessionFactory();
-	virtual ~CHttpSessionFactory() {}
-
-	virtual FxSession*	CreateSession();
-
-	virtual void Release(FxSession* pSession) { Assert(0); }
-	virtual void Release(CHttpSession* pSession);
-
-private:
-	TDynamicPoolEx<CHttpSession> m_poolSessions;
 };
 
 #endif // !__SocketSession_H__

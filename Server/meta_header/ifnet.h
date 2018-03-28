@@ -655,6 +655,12 @@ namespace HttpHelp
 		if (skip_to_end_of_word_and_terminate(&buf, 0) <= 0) {
 			return -1;
 		}
+		ri->query_string = strchr(ri->request_uri, '?');
+		if (ri->query_string[0] == '?')
+		{
+			const_cast<char*>(ri->query_string)[0] = 0;
+			ri->query_string += 1;
+		}
 
 		/* Next would be the HTTP version */
 		ri->http_version = buf;
@@ -669,8 +675,6 @@ namespace HttpHelp
 			return -1;
 		}
 		ri->http_version += 5;
-
-		ri->query_string = strchr(ri->request_uri, '?');
 
 		/* Parse all HTTP headers */
 		ri->num_headers = parse_http_headers(&buf, ri->http_headers);

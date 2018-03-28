@@ -2,6 +2,7 @@
 #include "fxtimer.h"
 #include "fxdb.h"
 #include "fxmeta.h"
+#include "HttpSession.h"
 
 #include <signal.h>
 #include "gflags/gflags.h"
@@ -52,6 +53,12 @@ int main(int argc, char **argv)
 	}
 	CSessionFactory::Instance()->Init();
 
+	if (!CHttpSessionFactory::CreateInstance())
+	{
+		g_bRun = false;
+		goto STOP;
+	}
+
 	if (!CWebSocketSessionFactory::CreateInstance())
 	{
 		g_bRun = false;
@@ -90,7 +97,7 @@ int main(int argc, char **argv)
 	}
 
 	wPort = FLAGS_udp_port;
-	pUdpListenSocket = pNet->Listen(CSessionFactory::Instance(), SLT_Http, 0, wPort);
+	pUdpListenSocket = pNet->Listen(CHttpSessionFactory::Instance(), SLT_Http, 0, wPort);
 	if(pUdpListenSocket == NULL)
 	{
 		g_bRun = false;
@@ -108,13 +115,13 @@ int main(int argc, char **argv)
 	pUdpListenSocket->StopListen();
 	pTcpListenSocket->Close();
 	pUdpListenSocket->Close();
-	for (std::set<FxSession*>::iterator it = CSessionFactory::Instance()->m_setSessions.begin();
-		it != CSessionFactory::Instance()->m_setSessions.end(); ++it)
+	for (std::set<FxSession*>::iterator it = CWebSocketSessionFactory::Instance()->m_setSessions.begin();
+		it != CWebSocketSessionFactory::Instance()->m_setSessions.end(); ++it)
 	{
 		(*it)->Close();
 	}
 
-	while (CSessionFactory::Instance()->m_setSessions.size())
+	while (CWebSocketSessionFactory::Instance()->m_setSessions.size())
 	{
 		pNet->Run(0xffffffff);
 		FxSleep(10);

@@ -80,9 +80,6 @@ std::map<std::string, CSocketSession*> mapSocket;
 void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
-
-	HttpRequestInfo oInfo = {0};
-	HttpHelp::parse_http_request(const_cast<char*>(pBuf), dwLen, &oInfo);
 	//printf("time : %s ip : %s, port : %d, recv %s", GetTimeHandler()->GetTimeStr(), GetRemoteIPStr(), GetRemotePort(), pBuf);
 
 	//CNetStream oStream(pBuf, dwLen);

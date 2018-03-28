@@ -165,10 +165,12 @@
     <ClCompile Include="..\common\fxtimer.cpp" />
     <ClCompile Include="..\common\log_thread.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
+    <ClCompile Include="HttpSession.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SocketSession.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HttpSession.h" />
     <ClInclude Include="SocketSession.h" />
   </ItemGroup>
   <ItemGroup>
