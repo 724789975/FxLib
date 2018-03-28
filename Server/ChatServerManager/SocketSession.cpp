@@ -215,3 +215,72 @@ int WebSocketDataHeader::ParsePacket(const char * pBuf, UINT32 dwLen)
 
 	return nPkgLen;
 }
+
+CHttpSession::CHttpSession()
+{
+}
+
+
+CHttpSession::~CHttpSession()
+{
+}
+
+void CHttpSession::OnConnect(void)
+{
+}
+
+void CHttpSession::OnClose(void)
+{
+}
+
+void CHttpSession::OnError(UINT32 dwErrorNo)
+{
+	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
+}
+
+void CHttpSession::OnRecv(const char* pBuf, UINT32 dwLen)
+{
+	LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
+
+	HttpRequestInfo oInfo = { 0 };
+	HttpHelp::parse_http_request(const_cast<char*>(pBuf), dwLen, &oInfo);
+
+	std::string szBuf = "<!DOCTYPE html PUBLIC \" -//W3C//DTD XHTML 1.0 Stict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\r\n"
+		"<html xmlns = \"http://www.w3.org/1999/xhtml\" lang = \"zh-CN\">\r\n"
+		"<html>\r\n"
+		"<head>\r\n"
+		"<meta http-equiv=\"Content - Type\" content=\"text / html; charset = \"UTF-8\">\r\n"
+		"<title>Test</title>\r\n"
+		"<body>\r\n"
+		"</body>\r\n"
+		"</html>\r\n";
+
+	if (!Send(szBuf.c_str(), szBuf.size()))
+	{
+		LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s send error", GetRemoteIPStr(), GetRemotePort(), pBuf);
+		Close();
+	}
+}
+
+void CHttpSession::Release(void)
+{
+	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
+	OnDestroy();
+
+	Init(NULL);
+}
+
+CHttpSessionFactory::CHttpSessionFactory()
+{
+	m_poolSessions.Init(64, 64);
+}
+
+FxSession*	CHttpSessionFactory::CreateSession()
+{
+	return m_poolSessions.FetchObj();
+}
+
+void CHttpSessionFactory::Release(CHttpSession* pSession)
+{
+	m_poolSessions.ReleaseObj(pSession);
+}
