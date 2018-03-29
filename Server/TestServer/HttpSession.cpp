@@ -38,6 +38,7 @@ void CHttpSession::OnRecv(const char* pBuf, UINT32 dwLen)
 		return;
 	}
 	it->second(oInfo, *this);
+	Close();
 }
 
 void CHttpSession::Release(void)
