@@ -4,35 +4,35 @@
 
 FxMySqlClient::FxMySqlClient()
 {
-    __Reset();
+	__Reset();
 	sprintf(m_szLogPath, "./%s_%p_log.txt", GetExeName(), this);
 }
 
 FxMySqlClient::~FxMySqlClient()
 {
-	if(m_poMySqlConn != NULL)
-    {
+	if (m_poMySqlConn != NULL)
+	{
 		delete m_poMySqlConn;
-        m_poMySqlConn = NULL;
-    }
+		m_poMySqlConn = NULL;
+	}
 }
 
 void FxMySqlClient::__Reset()
 {
-    m_bTerminate		= false;
-    m_poMySqlConn		= NULL;
-    m_nLastReconnectTime= 0;
-    m_bDbOK				= false;
-    m_poThrdHandler		= NULL;
+	m_bTerminate = false;
+	m_poMySqlConn = NULL;
+	m_nLastReconnectTime = 0;
+	m_bDbOK = false;
+	m_poThrdHandler = NULL;
 }
 
 bool FxMySqlClient::Start()
 {
 	FxCreateThreadHandler(this, true, m_poThrdHandler);
-	if(NULL == m_poThrdHandler)
+	if (NULL == m_poThrdHandler)
 	{
 		ThreadLog(LogLv_Error, m_pFile, m_szLogPath, "%s", "FxCreateThreadHandler failed");
-        return false;
+		return false;
 	}
 
 	return true;
@@ -40,9 +40,9 @@ bool FxMySqlClient::Start()
 
 void FxMySqlClient::Stop()
 {
-    m_bTerminate = true;
-//     m_poThrdHandler->Stop();
-	if(m_poThrdHandler != NULL)
+	m_bTerminate = true;
+	//     m_poThrdHandler->Stop();
+	if (m_poThrdHandler != NULL)
 	{
 		m_poThrdHandler->WaitFor(FX_INFINITE);
 		m_poThrdHandler->Release();
@@ -53,13 +53,13 @@ void FxMySqlClient::Stop()
 bool FxMySqlClient::ConnectDB(SDBAccount& account)
 {
 	m_poMySqlConn = new FxMySQLConnection;
-	if(NULL == m_poMySqlConn)
+	if (NULL == m_poMySqlConn)
 	{
 		LogExe(LogLv_Error, "%s", "CMySqlClient::ConnectDB, new CMySQLConnection failed");
 		return false;
 	}
 
-	if(!m_poMySqlConn->Connect(account))                                                                              
+	if (!m_poMySqlConn->Connect(account))
 	{
 		LogExe(LogLv_Error, "Connect to Database %s error: %d, %s", account.m_szDBName, m_poMySqlConn->GetLastError(), m_poMySqlConn->GetLastErrorString());
 		return false;
@@ -81,7 +81,7 @@ bool FxMySqlClient::AddQuery(IQuery *poDBCommand)
 
 UINT32 FxMySqlClient::EscapeString(const char* pszSrc, INT32 nSrcLen, char* pszDest, INT32 nDestLen)
 {
-	if(NULL == m_poMySqlConn)
+	if (NULL == m_poMySqlConn)
 	{
 		return 0;
 	}
@@ -101,27 +101,27 @@ INT32 FxMySqlClient::Query(const char* pszSQL)
 
 INT32 FxMySqlClient::Query(const char* pszSQL, IDataReader **ppReader)
 {
-    if (NULL != *ppReader)
-    {
-        return FXDB_ERR_READER;
-    }
+	if (NULL != *ppReader)
+	{
+		return FXDB_ERR_READER;
+	}
 
-    if (false == m_bDbOK)
-    {
-        *ppReader = NULL;
-        return FXDB_DISCONNECT;
-    }
+	if (false == m_bDbOK)
+	{
+		*ppReader = NULL;
+		return FXDB_DISCONNECT;
+	}
 
-    FxMySQLReader* poReader = FxDBModule::Instance()->FetchReader();
-    if (NULL == poReader)
-    {
-        return FXDB_ERR_READER;
-    }
-    *ppReader = poReader;
+	FxMySQLReader* poReader = FxDBModule::Instance()->FetchReader();
+	if (NULL == poReader)
+	{
+		return FXDB_ERR_READER;
+	}
+	*ppReader = poReader;
 
-	INT32 nRetCode = m_poMySqlConn->Query( pszSQL, (INT32)strlen(pszSQL), *poReader);
+	INT32 nRetCode = m_poMySqlConn->Query(pszSQL, (INT32)strlen(pszSQL), *poReader);
 
-	if(FXDB_ERR_CONN == nRetCode)
+	if (FXDB_ERR_CONN == nRetCode)
 	{
 		m_bDbOK = false;
 	}
@@ -141,22 +141,22 @@ const char * FxMySqlClient::GetLastErrorString(void)
 
 void FxMySqlClient::ThrdFunc()
 {
-	while(!m_bTerminate)
+	while (!m_bTerminate)
 	{
-		if(m_bDbOK)
+		if (m_bDbOK)
 		{
-            if (!__DoQuery())
-            {
-                FxSleep(1);
-            }
+			if (!__DoQuery())
+			{
+				FxSleep(1);
+			}
 		}
 		else
 		{
 			//每30秒重联一次
-            time_t nNow = time(NULL);
-			if(nNow - m_nLastReconnectTime > 10)
+			time_t nNow = time(NULL);
+			if (nNow - m_nLastReconnectTime > 10)
 			{
-				if(m_poMySqlConn->ReConnect())
+				if (m_poMySqlConn->ReConnect())
 				{
 					m_bDbOK = true;
 				}
@@ -180,30 +180,30 @@ void FxMySqlClient::ThrdFunc()
 
 void FxMySqlClient::__ClearQuery()
 {
-    while(__DoQuery()) {}
+	while (__DoQuery()) {}
 }
 
-bool FxMySqlClient::__DoQuery( void )
+bool FxMySqlClient::__DoQuery(void)
 {
-    IQuery *poQuery = NULL;
-    m_oLock.Lock();
-    if(m_oQuerys.empty())
-    {
-        m_oLock.UnLock();
-        return false;
-    }
+	IQuery *poQuery = NULL;
+	m_oLock.Lock();
+	if (m_oQuerys.empty())
+	{
+		m_oLock.UnLock();
+		return false;
+	}
 
-    poQuery = m_oQuerys.front();
-    m_oQuerys.pop_front();
+	poQuery = m_oQuerys.front();
+	m_oQuerys.pop_front();
 
-    m_oLock.UnLock();
+	m_oLock.UnLock();
 
-    if(poQuery == NULL)
-        return false;
+	if (poQuery == NULL)
+		return false;
 
-    poQuery->OnQuery(this);
-    FxDBModule::Instance()->AddResult(poQuery);
-    return true;
+	poQuery->OnQuery(this);
+	FxDBModule::Instance()->AddResult(poQuery);
+	return true;
 }
 
 IStmt* FxMySqlClient::CreateStmt()
