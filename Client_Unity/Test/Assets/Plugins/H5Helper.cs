@@ -39,4 +39,35 @@ public class H5Helper : MonoBehaviour
 		Debug.LogError(szLog);
 #endif
 	}
+
+    public delegate void CallBackFun(string szData);
+
+    public static IEnumerator SendGet(string _url, CallBackFun cbf)
+    {
+        WWW getData = new WWW(_url);
+        yield return getData;
+        if (getData.error != null)
+        {
+            H5LogStr(getData.error);
+        }
+        else
+        {
+            cbf(getData.text);
+        }
+    }
+
+    public static IEnumerator SendPost(string _url, WWWForm _wForm, CallBackFun cbf)
+    {
+        WWW postData = new WWW(_url, _wForm);
+        yield return postData;
+        if (postData.error != null)
+        {
+            H5LogStr(postData.error);
+        }
+        else
+        {
+            cbf(postData.text);
+        }
+    }
+
 }

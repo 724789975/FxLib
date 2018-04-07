@@ -2,6 +2,23 @@
 //只能用这种命名方式 不能用小写 下划线
 package GameProto;
 
+//player->login
+message PlayerRequestLogin
+{
+	uint64 qw_player_id = 1;
+	string sz_nick_name = 2;
+	string sz_avatar = 3;
+	uint32 dw_sex = 4;
+	uint32 dw_balance = 5;
+	string sz_token = 6;
+}
+
+//login->player
+message LoginAckPlayerLoginResult
+{
+	uint32 dw_result = 1;
+}
+
 //game->gamemanager
 message GameNotifyGameManagerInfo
 {

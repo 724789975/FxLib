@@ -31,38 +31,48 @@ public class H5Manager : SingletonObject<H5Manager>
 		NameValueCollection nvcParam;
 		ParseUrl(szUrl, out szBaseUrl, out nvcParam);
 
-		string szServerPort = nvcParam.Get("server_port");
-		string szSlaveServerPort = nvcParam.Get("slave_server_port");
-		string szPlayerPort = nvcParam.Get("player_port");
-		string szGamePlayType = nvcParam.Get("game_play_type");
-		H5Helper.H5LogStr("server_port : " + szServerPort + ", slave_server_port : "
-			+ szSlaveServerPort + ", player_port : " + szPlayerPort);
+		//string szServerPort = nvcParam.Get("server_port");
+		//string szSlaveServerPort = nvcParam.Get("slave_server_port");
+		//string szPlayerPort = nvcParam.Get("player_port");
+		//string szGamePlayType = nvcParam.Get("game_play_type");
+		//H5Helper.H5LogStr("server_port : " + szServerPort + ", slave_server_port : "
+		//	+ szSlaveServerPort + ", player_port : " + szPlayerPort);
 
-		if (szGamePlayType == "player")
-		{
-			//先连这个 后面再改
-			ushort.TryParse(szServerPort, out m_wServerPort);
-			ushort.TryParse(szPlayerPort, out m_wPlayerPort);
-			m_pServerSession.InitSession(SessionObject.SessionType.SessionType_WebSocket, uri.Host, m_wServerPort);
-			GameInstance.Instance().proGamePlayType = GameInstance.GamePlayType.GamePlayType_Player;
-		}
-		else if (szGamePlayType == "slave")
-		{
-			ushort.TryParse(szSlaveServerPort, out m_wSlaveServerPort);
-			m_pServerSession.InitSession(SessionObject.SessionType.SessionType_WebSocket, uri.Host, m_wServerPort);
-			GameInstance.Instance().proGamePlayType = GameInstance.GamePlayType.GamePlayType_Slave;
-		}
-		else
-		{
-			H5Helper.H5AlertString("err game type!!!");
-		}
+		//if (szGamePlayType == "player")
+		//{
+		//	//先连这个 后面再改
+		//	ushort.TryParse(szServerPort, out m_wServerPort);
+		//	ushort.TryParse(szPlayerPort, out m_wPlayerPort);
+		//	m_pServerSession.InitSession(SessionObject.SessionType.SessionType_WebSocket, uri.Host, m_wServerPort);
+		//	GameInstance.Instance().proGamePlayType = GameInstance.GamePlayType.GamePlayType_Player;
+		//}
+		//else if (szGamePlayType == "slave")
+		//{
+		//	ushort.TryParse(szSlaveServerPort, out m_wSlaveServerPort);
+		//	m_pServerSession.InitSession(SessionObject.SessionType.SessionType_WebSocket, uri.Host, m_wServerPort);
+		//	GameInstance.Instance().proGamePlayType = GameInstance.GamePlayType.GamePlayType_Slave;
+		//}
+		//else
+		//{
+		//	H5Helper.H5AlertString("err game type!!!");
+		//}
 	}
 
 	public void InitTest()
 	{
-		Init("http://127.0.0.1/view/index.html?server_port=" + m_wServerPort + "&slave_server_port=1&player_port=2&game_play_type=player");
-		//m_pServerSession.Init(SessionObject.SessionType.SessionType_WebSocket, "127.0.0.1", m_wServerPort);
-	}
+        //Init("http://127.0.0.1/view/index.html?server_port=" + m_wServerPort + "&slave_server_port=1&player_port=2&game_play_type=player");
+        string szUrl = "http://127.0.0.1/portal/index.php/api/login/sendOauthUserInfo";
+        WWWForm form = new WWWForm();
+        form.AddField("platform", "unity_test");
+        form.AddField("name", "test");
+        form.AddField("head_img", "no pic");
+        form.AddField("sex", "1");
+        form.AddField("access_token", "asdfghjk");
+        form.AddField("expires_date", ((int)Time.time + 3600).ToString());
+        form.AddField("openid", "unity");
+
+        StartCoroutine(H5Helper.SendPost(szUrl, form, OnRoleData));
+    }
 
 	static public void ParseUrl(string strOrgUrl, out string strBaseUrl, out NameValueCollection nvcParams)
 	{
@@ -109,6 +119,11 @@ public class H5Manager : SingletonObject<H5Manager>
 	{
 		return m_pServerSession;
 	}
+
+    public void OnRoleData(string szData)
+    {
+        Debug.Log(szData);
+    }
 
 	public ushort m_wPlayerPort = 0;
 	public ushort m_wServerPort = 0;

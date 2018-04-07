@@ -171,6 +171,8 @@ public:
 #ifdef WIN32
 	void							ForceSend();//udp中才用的到
 #endif // WIN32
+protected:
+	virtual void					Init(){}
 private:
 	FxConnection*					m_poConnection;
 

@@ -47,7 +47,7 @@ public:
 			//设置301、302跳转跟随location
 			curl_easy_setopt(m_pCurl, CURLOPT_FOLLOWLOCATION, 1);
 
-			//抓取内容后，回调函数  
+			//抓取内容后，回调函数
 			curl_easy_setopt(m_pCurl, CURLOPT_WRITEFUNCTION, call_wirte_func);
 			curl_easy_setopt(m_pCurl, CURLOPT_WRITEDATA, &m_szBuffer);
 

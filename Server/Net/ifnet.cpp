@@ -51,6 +51,7 @@ void FxSession::Close(void)
 void FxSession::Init(FxConnection* poConnection)
 {
 	m_poConnection = poConnection;
+	Init();
 }
 
 bool FxSession::SetSessionOpt(ESessionOpt eOpt, bool bSetting)
