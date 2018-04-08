@@ -11,6 +11,7 @@ namespace FxNet
 			{
 				foreach (IFxClientSocket poSock in m_setDelSockets)
 				{
+                    poSock.Disconnect();
 					m_setConnectSockets.Remove(poSock);
 				}
 				m_setDelSockets.Clear();

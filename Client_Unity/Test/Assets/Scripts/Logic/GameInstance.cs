@@ -39,4 +39,14 @@ public class GameInstance: SingletonObject<GameInstance>
 		set { m_eGamePlayType = value; }
 	}
 
+    public ushort proLoginPort {get { return m_wLoginPort; } }
+    public string proLoginIp { get { return m_szLoginIp; } }
+    public string proUrlHost { get { return m_szUrlHost; } }
+    public string proGetRoleUri { get { return m_szGetRoleUri; } }
+
+    public ushort m_wLoginPort;
+    public string m_szLoginIp;
+    public string m_szUrlHost;
+
+    public string m_szGetRoleUri;
 }

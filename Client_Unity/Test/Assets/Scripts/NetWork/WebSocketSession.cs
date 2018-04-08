@@ -53,7 +53,7 @@ class WebSocketSession : ISession
 
 	public override bool OnDestroy()
 	{
-		return m_oGameObject.OnDestroy();
+		return m_oGameObject.OnSessionDestroy();
 	}
 
 	public override void OnError(uint dwErrorNo)

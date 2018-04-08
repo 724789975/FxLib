@@ -155,6 +155,7 @@ namespace FxNet
 					}
 					break;
 				case ENetEvtType.NETEVT_RELEASE:
+                    m_pSession.OnDestroy();
 					break;
 				default:
 					break;

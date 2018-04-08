@@ -44,7 +44,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebGameLogin", "WebGameLogi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chat", "Chat", "{3C103923-B14F-4CA0-AED7-A0C52BCDA272}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebGame", "WebGame", "{3AD657D7-06B5-4500-972C-09435B2DCDAA}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebGameGroup", "WebGameGroup", "{3AD657D7-06B5-4500-972C-09435B2DCDAA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

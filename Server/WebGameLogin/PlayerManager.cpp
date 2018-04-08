@@ -23,7 +23,16 @@ Player* PlayerManager::GetPlayer(UINT64 qwPlayerId)
 Player* PlayerManager::OnPlayerLogin(CPlayerSession* pSession, GameProto::PlayerRequestLogin& refLogin)
 {
 	Player* pPlayer = NULL;
-	pPlayer = &m_mapPlayers[refLogin.qw_player_id()];
+	std::map<UINT64, Player>::iterator it = m_mapPlayers.find(refLogin.qw_player_id());
+	if (it != m_mapPlayers.end())
+	{
+		it->second.GetSession()->Close();
+		pPlayer = &(it->second);
+	}
+	else
+	{
+		pPlayer = &m_mapPlayers[refLogin.qw_player_id()];
+	}
 	pPlayer->Init(pSession, refLogin);
 
 	return pPlayer;

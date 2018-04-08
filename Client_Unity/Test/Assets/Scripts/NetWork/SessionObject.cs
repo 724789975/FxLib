@@ -14,6 +14,7 @@ public class SessionObject : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+        DontDestroyOnLoad(this);
 	}
 	
 	// Update is called once per frame
@@ -70,13 +71,15 @@ public class SessionObject : MonoBehaviour
 		{
 			item();
 		}
+        m_pSession = null;
 		//m_pfOnClose();
 		//Debug.LogError("session closed");
 	}
 
-	public bool OnDestroy()
+	public bool OnSessionDestroy()
 	{
 		H5Helper.H5AlertString("session obj has destroy!!!!");
+        Destroy(this);
 		return false;
 	}
 
@@ -137,9 +140,15 @@ public class SessionObject : MonoBehaviour
 		m_mapCallBack[szProtoName] = pfCallBack;
 	}
 
-	FxNet.IFxClientSocket GetClientSocket() { return m_pClientSocket; }
+    public void UnRegistMessage(string szProtoName)
+    {
+        m_mapCallBack.Remove(szProtoName);
+    }
 
-	public FxNet.ISession m_pSession;
+
+    FxNet.IFxClientSocket GetClientSocket() { return m_pClientSocket; }
+
+	public FxNet.ISession m_pSession = null;
 	public SessionType m_eSessionType = SessionType.SessionType_TCP;
 	public string m_szIP;
 	public UInt16 m_wPort = 0;

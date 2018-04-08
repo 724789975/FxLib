@@ -341,6 +341,7 @@ namespace FxNet
 					}
 					break;
 				case ENetEvtType.NETEVT_RELEASE:
+                    m_pSession.OnDestroy();
 					break;
 				default:
 					break;
@@ -396,8 +397,10 @@ namespace FxNet
 
 		public override void Send(byte[] byteData, UInt32 dwLen)
 		{
-			// 阻塞着发 省的包头有问题
-			m_hSocket.Send(byteData);
+            // 阻塞着发 省的包头有问题
+            byte[] byteSend = new byte[dwLen];
+            Array.Copy(byteData, byteSend, dwLen);
+			m_hSocket.Send(byteSend);
 		}
 
 		public override void OnSend(UInt32 bytesSent)
@@ -422,10 +425,11 @@ namespace FxNet
 		{
 			if (m_hSocket != null && m_bIsConnected)
 			{
-				m_hSocket.Close();
-				m_hSocket = null;
+                WebSocketSharp.WebSocket pSock = m_hSocket;
 
 				m_bIsConnected = false;
+				m_hSocket = null;
+                pSock.Close();
 
 				SNetEvent pEvent = new SNetEvent();
 				pEvent.eType = ENetEvtType.NETEVT_TERMINATE;

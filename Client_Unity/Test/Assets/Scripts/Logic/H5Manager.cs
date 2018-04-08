@@ -60,20 +60,17 @@ public class H5Manager : SingletonObject<H5Manager>
 
 	public void InitTest()
 	{
-		m_wPlayerPort = 31002;
-		m_pLoginSession.InitSession(SessionObject.SessionType.SessionType_WebSocket, "127.0.0.1", m_wLoginPort);
-		////Init("http://127.0.0.1/view/index.html?server_port=" + m_wServerPort + "&slave_server_port=1&player_port=2&game_play_type=player");
-		//string szUrl = "http://127.0.0.1/portal/index.php/api/login/sendOauthUserInfo";
-		//WWWForm form = new WWWForm();
-		//form.AddField("platform", "unity_test");
-		//form.AddField("name", "test");
-		//form.AddField("head_img", "no pic");
-		//form.AddField("sex", "1");
-		//form.AddField("access_token", "asdfghjk");
-		//form.AddField("expires_date", ((int)Time.time + 3600).ToString());
-		//form.AddField("openid", "unity");
+        if (m_pLoginSession != null)
+        {
+            m_pLoginSession.m_pSession.Close();
+        }
 
-		//StartCoroutine(H5Helper.SendPost(szUrl, form, OnRoleData));
+        m_pLoginSession = gameObject.AddComponent<SessionObject>();
+        foreach (var item in m_setLoginSessionResetCallBack)
+        {
+            item(m_pLoginSession);
+        }
+		m_pLoginSession.InitSession(SessionObject.SessionType.SessionType_WebSocket, GameInstance.Instance().proLoginIp, GameInstance.Instance().proLoginPort);
 	}
 
 	static public void ParseUrl(string strOrgUrl, out string strBaseUrl, out NameValueCollection nvcParams)
@@ -122,14 +119,8 @@ public class H5Manager : SingletonObject<H5Manager>
 		return m_pLoginSession;
 	}
 
-    public void OnRoleData(string szData)
-    {
-        Debug.Log(szData);
-    }
+    public delegate void OnLoginSessionReset(SessionObject obj);
 
-	public ushort m_wPlayerPort = 0;
-	public ushort m_wLoginPort = 0;
-	public ushort m_wSlaveServerPort = 0;
-
-	public SessionObject m_pLoginSession;
+    public HashSet<OnLoginSessionReset> m_setLoginSessionResetCallBack = new HashSet<OnLoginSessionReset>();
+    public SessionObject m_pLoginSession = null;
 }
