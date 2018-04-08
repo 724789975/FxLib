@@ -9,7 +9,7 @@ public class SessionText : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		m_pSession = H5Manager.Instance().GetServerSession();
+		m_pSession = H5Manager.Instance().GetLoginSession();
 		m_pSession.m_pfOnConnect.Add(OnConnect);
 		m_pSession.m_pfOnError.Add(OnError);
 		m_pSession.m_pfOnClose.Add(OnClose);
@@ -25,23 +25,23 @@ public class SessionText : MonoBehaviour
 
 	public void OnConnect()
 	{
-		m_textText.text = "onconnect";
+		//m_textText.text = "onconnect";
 
-		GameProto.PlayerRequestGameTest oTest = new GameProto.PlayerRequestGameTest();
+		//GameProto.PlayerRequestGameTest oTest = new GameProto.PlayerRequestGameTest();
 
-		oTest.SzTest = String.Format("{0}, {1}, {2}, {3}, {4}",
-			"sessionobject.cs", 83, "SessionObject::OnConnect",
-			ToString(), DateTime.Now.ToLocalTime().ToString());
+		//oTest.SzTest = String.Format("{0}, {1}, {2}, {3}, {4}",
+		//	"sessionobject.cs", 83, "SessionObject::OnConnect",
+		//	ToString(), DateTime.Now.ToLocalTime().ToString());
 
-		byte[] pData = new byte[1024];
-		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
-		pStream.WriteString("GameProto.PlayerRequestGameTest");
-		byte[] pProto = new byte[oTest.CalculateSize()];
-		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
-		oTest.WriteTo(oStream);
-		pStream.WriteData(pProto, (uint)pProto.Length);
+		//byte[] pData = new byte[1024];
+		//FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
+		//pStream.WriteString("GameProto.PlayerRequestGameTest");
+		//byte[] pProto = new byte[oTest.CalculateSize()];
+		//Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
+		//oTest.WriteTo(oStream);
+		//pStream.WriteData(pProto, (uint)pProto.Length);
 
-		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+		//m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
 	}
 	
 	public void OnClose()
