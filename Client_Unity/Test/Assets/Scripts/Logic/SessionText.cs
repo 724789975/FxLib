@@ -7,19 +7,19 @@ using UnityEngine;
 [Serializable]
 class RoleData
 {
-    public UInt64 id;
-    public string nick_name;
-    public string avatar;
-    public uint sex;
-    public uint balance;
+    public UInt64 id = 0;
+    public string nick_name = "";
+    public string avatar = "";
+    public uint sex = 0;
+    public uint balance = 0;
 }
 [Serializable]
 class RoleDataRet
 {
-    public int code;
-    public string token;
+    public int code = 0;
+    public string token = "";
     public RoleData data = new RoleData();
-    public string descrp;
+    public string descrp = "";
 }
 
 public class SessionText : MonoBehaviour
