@@ -22,43 +22,7 @@ public class H5Manager : SingletonObject<H5Manager>
 	// Update is called once per frame
 	void Update () { }
 
-	public void Init(string szUrl)
-	{
-		H5Helper.H5LogStr(szUrl);
-		Uri uri = new Uri(szUrl);
-		
-		string szBaseUrl;
-		NameValueCollection nvcParam;
-		ParseUrl(szUrl, out szBaseUrl, out nvcParam);
-
-		//string szServerPort = nvcParam.Get("server_port");
-		//string szSlaveServerPort = nvcParam.Get("slave_server_port");
-		//string szPlayerPort = nvcParam.Get("player_port");
-		//string szGamePlayType = nvcParam.Get("game_play_type");
-		//H5Helper.H5LogStr("server_port : " + szServerPort + ", slave_server_port : "
-		//	+ szSlaveServerPort + ", player_port : " + szPlayerPort);
-
-		//if (szGamePlayType == "player")
-		//{
-		//	//先连这个 后面再改
-		//	ushort.TryParse(szServerPort, out m_wServerPort);
-		//	ushort.TryParse(szPlayerPort, out m_wPlayerPort);
-		//	m_pServerSession.InitSession(SessionObject.SessionType.SessionType_WebSocket, uri.Host, m_wServerPort);
-		//	GameInstance.Instance().proGamePlayType = GameInstance.GamePlayType.GamePlayType_Player;
-		//}
-		//else if (szGamePlayType == "slave")
-		//{
-		//	ushort.TryParse(szSlaveServerPort, out m_wSlaveServerPort);
-		//	m_pServerSession.InitSession(SessionObject.SessionType.SessionType_WebSocket, uri.Host, m_wServerPort);
-		//	GameInstance.Instance().proGamePlayType = GameInstance.GamePlayType.GamePlayType_Slave;
-		//}
-		//else
-		//{
-		//	H5Helper.H5AlertString("err game type!!!");
-		//}
-	}
-
-	public void InitTest()
+	public void ConnectLogin()
 	{
         if (m_pLoginSession != null)
         {
