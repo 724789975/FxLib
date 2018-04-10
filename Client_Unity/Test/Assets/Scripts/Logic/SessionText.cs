@@ -52,13 +52,13 @@ public class SessionText : MonoBehaviour
 	{
         string szUrl = GameInstance.Instance().proUrlHost + GameInstance.Instance().proGetRoleUri;
         WWWForm form = new WWWForm();
-        form.AddField("platform", "unity_test");
-        form.AddField("name", "test");
-        form.AddField("head_img", "no pic");
-        form.AddField("sex", "1");
-        form.AddField("access_token", "asdfghjk");
-        form.AddField("expires_date", ((int)Time.time + 3600).ToString());
-        form.AddField("openid", "unity");
+        form.AddField("platform", GameInstance.Instance().proPlatform);
+        form.AddField("name", GameInstance.Instance().proName);
+        form.AddField("head_img", GameInstance.Instance().proHeadImage);
+        form.AddField("sex", GameInstance.Instance().proSex.ToString());
+        form.AddField("access_token", GameInstance.Instance().proAccessToken);
+        form.AddField("expires_date", GameInstance.Instance().proExpiresDate.ToString());
+        form.AddField("openid", GameInstance.Instance().proOpenId);
 
         StartCoroutine(H5Helper.SendPost(szUrl, form, OnRoleData));
     }

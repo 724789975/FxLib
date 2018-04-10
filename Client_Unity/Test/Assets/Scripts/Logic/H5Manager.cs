@@ -22,6 +22,32 @@ public class H5Manager : SingletonObject<H5Manager>
 	// Update is called once per frame
 	void Update () { }
 
+	public void Init(string szUrl)
+	{
+		H5Helper.H5LogStr(szUrl);
+		Uri uri = new Uri(szUrl);
+		
+		string szBaseUrl;
+		NameValueCollection nvcParam;
+		ParseUrl(szUrl, out szBaseUrl, out nvcParam);
+
+		GameInstance.Instance().SetPlatform(nvcParam.Get("platform"));
+		GameInstance.Instance().SetName(nvcParam.Get("name"));
+		GameInstance.Instance().SetHeadImage(nvcParam.Get("head_img"));
+		GameInstance.Instance().SetAccessToken(nvcParam.Get("access_token"));
+		GameInstance.Instance().SetOpenId(nvcParam.Get("openid"));
+
+		string szSex = nvcParam.Get("sex");
+		string szExpiresDate = nvcParam.Get("expires_date");
+		uint dwSex = 0;
+		uint dwExpiresDate = 0;
+        uint.TryParse(szSex, out dwSex);
+		uint.TryParse(szExpiresDate, out dwExpiresDate);
+
+		GameInstance.Instance().SetSex(dwSex);
+		GameInstance.Instance().SetExpiresDate(dwExpiresDate);
+	}
+
 	public void ConnectLogin()
 	{
         if (m_pLoginSession != null)
