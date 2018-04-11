@@ -37,22 +37,41 @@ namespace GameProto {
             "Im4KHkdhbWVNYW5hZ2VyQWNrUGxheWVySW5mb1Jlc3VsdBIWCg5kd19wbGF5",
             "ZXJfcG9ydBgBIAEoDRIWCg5kd19zZXJ2ZXJfcG9ydBgCIAEoDRIcChRkd19z",
             "bGF2ZV9zZXJ2ZXJfcG9ydBgDIAEoDSIoChVQbGF5ZXJSZXF1ZXN0R2FtZVRl",
-            "c3QSDwoHc3pfdGVzdBgBIAEoCWIGcHJvdG8z"));
+            "c3QSDwoHc3pfdGVzdBgBIAEoCSKKAQoKU2VydmVySW5mbxIUCgxkd19zZXJ2",
+            "ZXJfaWQYASABKA0SFAoMc3pfbGlzdGVuX2lwGAIgASgJEhQKDGR3X3RlYW1f",
+            "cG9ydBgDIAEoDRIjChtkd19nYW1lX3NlcnZlcl9tYW5hZ2VyX3BvcnQYBCAB",
+            "KA0SFQoNZHdfbG9naW5fcG9ydBgFIAEoDSpICgpTZXJ2ZXJUeXBlEgsKB1NU",
+            "X05PTkUQABIMCghTVF9Mb2dpbhABEgsKB1NUX1RlYW0QAhISCg5TVF9HYW1l",
+            "TWFuYWdlchADYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProto.ServerType), }, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLogin), global::GameProto.PlayerRequestLogin.Parser, new[]{ "QwPlayerId", "SzNickName", "SzAvatar", "DwSex", "DwBalance", "SzToken" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerLoginResult), global::GameProto.LoginAckPlayerLoginResult.Parser, new[]{ "DwResult" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyGameManagerInfo), global::GameProto.GameNotifyGameManagerInfo.Parser, new[]{ "DwPlayerPort", "DwServerPort", "DwSlaveServerPort", "QwPlayerPoint" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameManagerAckGameInfoResult), global::GameProto.GameManagerAckGameInfoResult.Parser, new[]{ "DwResult" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestGameManagerInfo), global::GameProto.PlayerRequestGameManagerInfo.Parser, new[]{ "DwResult" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameManagerAckPlayerInfoResult), global::GameProto.GameManagerAckPlayerInfoResult.Parser, new[]{ "DwPlayerPort", "DwServerPort", "DwSlaveServerPort" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestGameTest), global::GameProto.PlayerRequestGameTest.Parser, new[]{ "SzTest" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestGameTest), global::GameProto.PlayerRequestGameTest.Parser, new[]{ "SzTest" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.ServerInfo), global::GameProto.ServerInfo.Parser, new[]{ "DwServerId", "SzListenIp", "DwTeamPort", "DwGameServerManagerPort", "DwLoginPort" }, null, null, null)
           }));
     }
     #endregion
 
   }
+  #region Enums
+  /// <summary>
+  ///服务器类型
+  /// </summary>
+  public enum ServerType {
+    [pbr::OriginalName("ST_NONE")] StNone = 0,
+    [pbr::OriginalName("ST_Login")] StLogin = 1,
+    [pbr::OriginalName("ST_Team")] StTeam = 2,
+    [pbr::OriginalName("ST_GameManager")] StGameManager = 3,
+  }
+
+  #endregion
+
   #region Messages
   /// <summary>
   ///player->login
@@ -1250,6 +1269,250 @@ namespace GameProto {
             break;
           case 10: {
             SzTest = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  ///serverinfo(server->server_center, server_center->server)
+  /// </summary>
+  public sealed partial class ServerInfo : pb::IMessage<ServerInfo> {
+    private static readonly pb::MessageParser<ServerInfo> _parser = new pb::MessageParser<ServerInfo>(() => new ServerInfo());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<ServerInfo> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[7]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ServerInfo() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ServerInfo(ServerInfo other) : this() {
+      dwServerId_ = other.dwServerId_;
+      szListenIp_ = other.szListenIp_;
+      dwTeamPort_ = other.dwTeamPort_;
+      dwGameServerManagerPort_ = other.dwGameServerManagerPort_;
+      dwLoginPort_ = other.dwLoginPort_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ServerInfo Clone() {
+      return new ServerInfo(this);
+    }
+
+    /// <summary>Field number for the "dw_server_id" field.</summary>
+    public const int DwServerIdFieldNumber = 1;
+    private uint dwServerId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint DwServerId {
+      get { return dwServerId_; }
+      set {
+        dwServerId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "sz_listen_ip" field.</summary>
+    public const int SzListenIpFieldNumber = 2;
+    private string szListenIp_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public string SzListenIp {
+      get { return szListenIp_; }
+      set {
+        szListenIp_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "dw_team_port" field.</summary>
+    public const int DwTeamPortFieldNumber = 3;
+    private uint dwTeamPort_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint DwTeamPort {
+      get { return dwTeamPort_; }
+      set {
+        dwTeamPort_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "dw_game_server_manager_port" field.</summary>
+    public const int DwGameServerManagerPortFieldNumber = 4;
+    private uint dwGameServerManagerPort_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint DwGameServerManagerPort {
+      get { return dwGameServerManagerPort_; }
+      set {
+        dwGameServerManagerPort_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "dw_login_port" field.</summary>
+    public const int DwLoginPortFieldNumber = 5;
+    private uint dwLoginPort_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint DwLoginPort {
+      get { return dwLoginPort_; }
+      set {
+        dwLoginPort_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as ServerInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(ServerInfo other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (DwServerId != other.DwServerId) return false;
+      if (SzListenIp != other.SzListenIp) return false;
+      if (DwTeamPort != other.DwTeamPort) return false;
+      if (DwGameServerManagerPort != other.DwGameServerManagerPort) return false;
+      if (DwLoginPort != other.DwLoginPort) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (DwServerId != 0) hash ^= DwServerId.GetHashCode();
+      if (SzListenIp.Length != 0) hash ^= SzListenIp.GetHashCode();
+      if (DwTeamPort != 0) hash ^= DwTeamPort.GetHashCode();
+      if (DwGameServerManagerPort != 0) hash ^= DwGameServerManagerPort.GetHashCode();
+      if (DwLoginPort != 0) hash ^= DwLoginPort.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (DwServerId != 0) {
+        output.WriteRawTag(8);
+        output.WriteUInt32(DwServerId);
+      }
+      if (SzListenIp.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(SzListenIp);
+      }
+      if (DwTeamPort != 0) {
+        output.WriteRawTag(24);
+        output.WriteUInt32(DwTeamPort);
+      }
+      if (DwGameServerManagerPort != 0) {
+        output.WriteRawTag(32);
+        output.WriteUInt32(DwGameServerManagerPort);
+      }
+      if (DwLoginPort != 0) {
+        output.WriteRawTag(40);
+        output.WriteUInt32(DwLoginPort);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (DwServerId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwServerId);
+      }
+      if (SzListenIp.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SzListenIp);
+      }
+      if (DwTeamPort != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwTeamPort);
+      }
+      if (DwGameServerManagerPort != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwGameServerManagerPort);
+      }
+      if (DwLoginPort != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwLoginPort);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(ServerInfo other) {
+      if (other == null) {
+        return;
+      }
+      if (other.DwServerId != 0) {
+        DwServerId = other.DwServerId;
+      }
+      if (other.SzListenIp.Length != 0) {
+        SzListenIp = other.SzListenIp;
+      }
+      if (other.DwTeamPort != 0) {
+        DwTeamPort = other.DwTeamPort;
+      }
+      if (other.DwGameServerManagerPort != 0) {
+        DwGameServerManagerPort = other.DwGameServerManagerPort;
+      }
+      if (other.DwLoginPort != 0) {
+        DwLoginPort = other.DwLoginPort;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            DwServerId = input.ReadUInt32();
+            break;
+          }
+          case 18: {
+            SzListenIp = input.ReadString();
+            break;
+          }
+          case 24: {
+            DwTeamPort = input.ReadUInt32();
+            break;
+          }
+          case 32: {
+            DwGameServerManagerPort = input.ReadUInt32();
+            break;
+          }
+          case 40: {
+            DwLoginPort = input.ReadUInt32();
             break;
           }
         }

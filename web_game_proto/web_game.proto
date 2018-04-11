@@ -2,6 +2,15 @@
 //只能用这种命名方式 不能用小写 下划线
 package GameProto;
 
+//服务器类型
+enum ServerType
+{
+	ST_NONE = 0;
+	ST_Login = 1;
+	ST_Team = 2;
+	ST_GameManager = 3;
+}
+
 //player->login
 message PlayerRequestLogin
 {
@@ -54,3 +63,12 @@ message PlayerRequestGameTest
 	string sz_test = 1;
 }
 
+//serverinfo(server->server_center, server_center->server)
+message ServerInfo
+{
+	uint32 dw_server_id = 1;
+	string sz_listen_ip = 2;
+	uint32 dw_team_port = 3;
+	uint32 dw_game_server_manager_port = 4;
+	uint32 dw_login_port = 5;
+}
