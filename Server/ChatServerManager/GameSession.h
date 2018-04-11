@@ -54,7 +54,6 @@ public:
 private:
 	TDynamicPoolEx<GameSession> m_poolSessions;
 	std::map<std::string, GameSession*> m_mapGameSessions;
-	FxCriticalLock m_oLock;
 };
 
 

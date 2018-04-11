@@ -125,9 +125,7 @@ void GameSession::OnPlayerLogin(const char * pBuf, UINT32 dwLen)
 
 FxSession* GameSessionManager::CreateSession()
 {
-	m_oLock.Lock();
 	GameSession* pSession = m_poolSessions.FetchObj();
-	m_oLock.UnLock();
 	return pSession;
 }
 
