@@ -113,7 +113,7 @@ WebSocketServerSessionManager::~WebSocketServerSessionManager()
 {
 }
 
-FxSession * WebSocketServerSessionManager::CreateSession()
+CWebSocketServerSession * WebSocketServerSessionManager::CreateSession()
 {
 	if (m_pCreated)
 	{

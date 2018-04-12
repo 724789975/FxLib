@@ -100,7 +100,7 @@ void CBinaryServerSession::Release(void)
 }
 
 //////////////////////////////////////////////////////////////////////////
-FxSession * BinaryServerSessionManager::CreateSession()
+CBinaryServerSession * BinaryServerSessionManager::CreateSession()
 {
 	CBinaryServerSession* pSession = m_poolSessions.FetchObj();
 	return pSession;

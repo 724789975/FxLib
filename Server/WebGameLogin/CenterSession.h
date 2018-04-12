@@ -50,7 +50,7 @@ public:
 	BinaryCenterSessionManager() {}
 	virtual ~BinaryCenterSessionManager() {}
 
-	virtual FxSession* CreateSession();
+	virtual CBinaryCenterSession* CreateSession();
 
 	bool Init();
 	virtual void Release(FxSession* pSession);

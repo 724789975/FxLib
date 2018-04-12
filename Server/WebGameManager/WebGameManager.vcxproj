@@ -165,7 +165,6 @@
     <ClCompile Include="..\common\fxtimer.cpp" />
     <ClCompile Include="..\common\log_thread.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
-    <ClCompile Include="ChatSession.cpp" />
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="msg_proto\web_game.pb.cc" />
@@ -175,7 +174,6 @@
     <ClCompile Include="SocketSession.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ChatSession.h" />
     <ClInclude Include="gamedefine.h" />
     <ClInclude Include="GameServer.h" />
     <ClInclude Include="msg_proto\web_game.pb.h" />

@@ -100,7 +100,7 @@ void CWebSocketPlayerSession::Release(void)
 }
 
 //////////////////////////////////////////////////////////////////////////
-FxSession * WebSocketPlayerSessionManager::CreateSession()
+CWebSocketPlayerSession * WebSocketPlayerSessionManager::CreateSession()
 {
 	CWebSocketPlayerSession* pSession = m_poolSessions.FetchObj();
 	return pSession;

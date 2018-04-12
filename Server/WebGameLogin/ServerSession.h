@@ -50,7 +50,7 @@ public:
 	BinaryServerSessionManager() {}
 	virtual ~BinaryServerSessionManager() {}
 
-	virtual FxSession* CreateSession();
+	virtual CBinaryServerSession* CreateSession();
 
 	bool Init();
 	virtual void Release(FxSession* pSession);

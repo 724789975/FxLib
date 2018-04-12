@@ -48,7 +48,7 @@ public:
 	WebSocketSlaveServerSessionManager();
 	~WebSocketSlaveServerSessionManager();
 
-	virtual FxSession* CreateSession();
+	virtual CWebSocketSlaveServerSession* CreateSession();
 
 	virtual void Release(FxSession* pSession);
 	virtual void Release(CWebSocketSlaveServerSession* pSession);

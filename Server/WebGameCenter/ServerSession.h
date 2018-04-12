@@ -62,7 +62,7 @@ public:
 	BinaryServerSessionManager() {}
 	virtual ~BinaryServerSessionManager() {}
 
-	virtual FxSession* CreateSession();
+	virtual CBinaryServerSession* CreateSession();
 
 	std::set<CBinaryServerSession*>& GetSessions() { return m_setSessions; }
 

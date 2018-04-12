@@ -90,7 +90,7 @@ void CBinaryCenterSession::Release(void)
 }
 
 //////////////////////////////////////////////////////////////////////////
-FxSession * BinaryCenterSessionManager::CreateSession()
+CBinaryCenterSession * BinaryCenterSessionManager::CreateSession()
 {
 	CBinaryCenterSession* pSession = m_poolSessions.FetchObj();
 	return pSession;

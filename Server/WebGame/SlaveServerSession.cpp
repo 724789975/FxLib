@@ -67,9 +67,9 @@ WebSocketSlaveServerSessionManager::~WebSocketSlaveServerSessionManager()
 {
 }
 
-FxSession * WebSocketSlaveServerSessionManager::CreateSession()
+CWebSocketSlaveServerSession * WebSocketSlaveServerSessionManager::CreateSession()
 {
-	FxSession* pSession = NULL;
+	CWebSocketSlaveServerSession* pSession = NULL;
 	pSession = m_poolSessions.FetchObj();
 	return pSession;
 }

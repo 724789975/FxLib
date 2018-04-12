@@ -35,6 +35,7 @@ public:
 	virtual ~CSessionFactory(){}
 
 	virtual FxSession*	CreateSession();
+	virtual void		Release(FxSession* pSession){}
 
 private:
 

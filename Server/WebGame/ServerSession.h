@@ -51,7 +51,7 @@ public:
 	WebSocketServerSessionManager();
 	~WebSocketServerSessionManager();
 
-	virtual FxSession* CreateSession();
+	virtual CWebSocketServerSession* CreateSession();
 
 	virtual void Release(FxSession* pSession);
 

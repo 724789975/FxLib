@@ -23,13 +23,22 @@ bool GameServer::Init(unsigned int dwServerId, std::string szPlayerListenIp, uns
 	m_szPlayerListenIp = szPlayerListenIp;
 	m_wPlayerListenPort = wPlayerListenPort;
 
+	if (!m_oLoginSessionManager.Init())
+	{
+		return false;
+	}
+	if (!m_oWebSocketPlayerSessionManager.Init())
+	{
+		return false;
+	}
+
 	IFxNet* pNet = FxNetGetModule();
 	if (!pNet)
 	{
 		return false;
 	}
 
-	m_pPlayerListenSocket = pNet->Listen(&GameServer::Instance()->GetWebSocketPlayerSessionManager(), SLT_WebSocket, inet_addr(m_szPlayerListenIp.c_str()), m_wPlayerListenPort);
+	m_pPlayerListenSocket = pNet->Listen(&GameServer::Instance()->GetPlayerSessionManager(), SLT_WebSocket, inet_addr(m_szPlayerListenIp.c_str()), m_wPlayerListenPort);
 	if (m_pPlayerListenSocket == NULL)
 	{
 		return false;

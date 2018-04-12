@@ -9,6 +9,7 @@
 #include "PlayerSession.h"
 #include "PlayerManager.h"
 #include "CenterSession.h"
+#include "LoginSession.h"
 
 class GameServer : public TSingleton<GameServer>
 {
@@ -19,9 +20,11 @@ public:
 	bool Init(unsigned int dwServerId, std::string szPlayerListenIp, unsigned short wPlayerListenPort, std::string szGameCenterIp, unsigned short wGameCenterPort, unsigned short wLoginPort, unsigned short wTeamPort, unsigned short wGameManagerPort);
 	bool Stop();
 
-	WebSocketPlayerSessionManager& GetWebSocketPlayerSessionManager() { return m_oWebSocketPlayerSessionManager; }
+	WebSocketPlayerSessionManager& GetPlayerSessionManager() { return m_oWebSocketPlayerSessionManager; }
 
 	PlayerManager& GetPlayerManager() { return m_oPlayerManager; }
+
+	BinaryLoginSessionManager& GetLoginSessionManager() { return m_oLoginSessionManager; }
 
 	unsigned int GetServerid() { return m_dwServerId; }
 	unsigned short GetLoginPort() { return m_wLoginPort; }
@@ -35,6 +38,8 @@ private:
 	CBinaryCenterSession m_oCenterSession;
 
 	PlayerManager m_oPlayerManager;
+
+	BinaryLoginSessionManager m_oLoginSessionManager;
 
 	unsigned int m_dwServerId;
 
