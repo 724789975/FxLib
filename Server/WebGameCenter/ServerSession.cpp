@@ -9,7 +9,7 @@ static char g_pServerSessionBuf[g_dwServerSessionBuffLen];
 CServerSession::CServerSession()
 	:m_oProtoDispatch(*this)
 {
-	m_oProtoDispatch.RegistFunction(GameProto::GameNotifyGameManagerInfo::descriptor(), &CServerSession::OnGameNotifyGameManagerInfo);
+	m_oProtoDispatch.RegistFunction(GameProto::ServerInfo::descriptor(), &CServerSession::OnServerInfo);
 }
 
 
@@ -64,17 +64,6 @@ void CServerSession::Init()
 	m_dwLoginPort = 0;
 }
 
-bool CServerSession::OnGameNotifyGameManagerInfo(CServerSession& refSession, google::protobuf::Message& refMsg)
-{
-	GameProto::GameNotifyGameManagerInfo* pMsg = dynamic_cast<GameProto::GameNotifyGameManagerInfo*>(&refMsg);
-	if (pMsg == NULL)
-	{
-		return false;
-	}
-
-	return true;
-}
-
 bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::Message& refMsg)
 {
 	GameProto::ServerInfo* pMsg = dynamic_cast<GameProto::ServerInfo*>(&refMsg);
@@ -92,7 +81,9 @@ bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::
 	std::set<CBinaryServerSession*>& refSessions = GameServer::Instance()->GetBinaryServerSessionManager().GetSessions();
 	for (std::set<CBinaryServerSession*>::iterator it = refSessions.begin(); it != refSessions.end(); ++it)
 	{
+		if (m_dwServerId / 10000 == GameProto::ST_Login)
 		{
+			// 如果是login连上了 那么 应该向其他的所有服务器发消息 让其他服务器连接这个login 包含其他的login
 			CNetStream oWriteStream(ENetStreamType_Write, g_pServerSessionBuf, g_dwServerSessionBuffLen);
 			oWriteStream.WriteString(pMsg->GetTypeName());
 			std::string szResult;
@@ -100,21 +91,24 @@ bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::
 			oWriteStream.WriteData(szResult.c_str(), szResult.size());
 
 			(*it)->Send(g_pServerSessionBuf, g_dwServerSessionBuffLen - oWriteStream.GetDataLength());
-		}
-		{
-			GameProto::ServerInfo oInfo;
-			oInfo.set_dw_server_id((*it)->m_dwServerId);
-			oInfo.set_sz_listen_ip((*it)->GetRemoteIPStr());
-			oInfo.set_dw_login_port((*it)->m_dwLoginPort);
-			oInfo.set_dw_team_port((*it)->m_dwTeamPort);
-			oInfo.set_dw_game_server_manager_port((*it)->m_dwGameServerManagerPort);
 
-			CNetStream oWriteStream(ENetStreamType_Write, g_pServerSessionBuf, g_dwServerSessionBuffLen);
-			oWriteStream.WriteString(pMsg->GetTypeName());
-			std::string szResult;
-			pMsg->SerializeToString(&szResult);
-			oWriteStream.WriteData(szResult.c_str(), szResult.size());
-			Send(g_pServerSessionBuf, g_dwServerSessionBuffLen - oWriteStream.GetDataLength());
+			if ((*it)->m_dwServerId / 10000 != GameProto::ST_Login)
+			{
+				//如果不是login 那么 要给他发送所有login服务器的消息 让他去连login
+				GameProto::ServerInfo oInfo;
+				oInfo.set_dw_server_id((*it)->m_dwServerId);
+				oInfo.set_sz_listen_ip((*it)->GetRemoteIPStr());
+				oInfo.set_dw_login_port((*it)->m_dwLoginPort);
+				oInfo.set_dw_team_port((*it)->m_dwTeamPort);
+				oInfo.set_dw_game_server_manager_port((*it)->m_dwGameServerManagerPort);
+
+				CNetStream oWriteStream(ENetStreamType_Write, g_pServerSessionBuf, g_dwServerSessionBuffLen);
+				oWriteStream.WriteString(oInfo.GetTypeName());
+				std::string szResult;
+				oInfo.SerializeToString(&szResult);
+				oWriteStream.WriteData(szResult.c_str(), szResult.size());
+				Send(g_pServerSessionBuf, g_dwServerSessionBuffLen - oWriteStream.GetDataLength());
+			}
 		}
 	}
 }

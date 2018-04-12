@@ -28,7 +28,6 @@ public:
 
 	virtual void		Init();
 
-	bool				OnGameNotifyGameManagerInfo(CServerSession& refSession, google::protobuf::Message& refMsg);
 	bool				OnServerInfo(CServerSession& refSession, google::protobuf::Message& refMsg);
 private:
 	char				m_dataRecvBuf[1024 * 1024];

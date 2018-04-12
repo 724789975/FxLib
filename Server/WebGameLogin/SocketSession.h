@@ -8,78 +8,6 @@
 #include <list>
 #include <deque>
 
-class CSocketSession : public FxSession
-{
-public:
-	CSocketSession();
-	virtual ~CSocketSession();
-
-	virtual void		OnConnect(void);
-
-	virtual void		OnClose(void);
-
-	virtual void		OnError(UINT32 dwErrorNo);
-
-	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
-
-	virtual void		Release(void);
-
-	virtual char*		GetRecvBuf(){ return m_dataRecvBuf; }
-
-	virtual UINT32		GetRecvSize(){ return 64 * 1024; };
-
-	//void				SetFxSessionFactory(IFxSessionFactory* pFxSessionFactory) { m_pFxSessionFactory = pFxSessionFactory; }
-
-private:
-	char m_dataRecvBuf[1024* 1024];
-	//IFxSessionFactory* m_pFxSessionFactory;
-};
-
-
-class CSessionFactory : public TSingleton<CSessionFactory>, public IFxSessionFactory
-{
-public:
-	CSessionFactory();
-	virtual ~CSessionFactory(){}
-
-	virtual FxSession*	CreateSession();
-
-	void Init(){}
-	virtual void Release(FxSession* pSession);
-
-	std::set<FxSession*> m_setSessions;
-
-private:
-//	TDynamicPoolEx<CSocketSession> m_poolSessions;
-
-	std::deque<FxSession* > m_listSession;
-
-	IFxLock*			m_pLock;
-};
-
-class CWebSocketSessionFactory : public TSingleton<CWebSocketSessionFactory>, public IFxSessionFactory
-{
-public:
-	CWebSocketSessionFactory();
-	~CWebSocketSessionFactory(){}
-
-	virtual FxSession*	CreateSession();
-
-	void Init() {}
-	virtual void Release(FxSession* pSession);
-
-	std::set<FxSession*> m_setSessions;
-
-private:
-	//	TDynamicPoolEx<CSocketSession> m_poolSessions;
-
-	std::deque<FxSession*> m_listSession;
-
-	IFxLock*			m_pLock;
-};
-
-//static CSessionFactory oSessionFactory;
-
 class BinaryDataHeader : public IFxDataHeader
 {
 public:
@@ -134,55 +62,6 @@ private:
 	unsigned int m_dwHeaderLength;
 	//static const UINT32 s_dwMagic = 12345678;
 };
-
-class CBinarySocketSession : public CSocketSession
-{
-public:
-	CBinarySocketSession()
-	{
-	}
-
-	~CBinarySocketSession()
-	{
-	}
-
-	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
-	virtual void Release(void);
-private:
-	BinaryDataHeader m_oBinaryDataHeader;
-};
-
-class CWebSocketSession : public CSocketSession
-{
-public:
-	CWebSocketSession()
-	{
-	}
-
-	~CWebSocketSession()
-	{
-	}
-
-	virtual IFxDataHeader* GetDataHeader() { return &m_oWebSocketDataHeader; }
-	virtual void Release(void);
-private:
-	WebSocketDataHeader m_oWebSocketDataHeader;
-};
-
-class CChatManagerSession : public TSingleton<CChatManagerSession>, public CBinarySocketSession, public IFxTimer
-{
-public:
-	virtual void		OnConnect(void);
-	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
-	virtual void		Release(void);
-	virtual void		OnClose();
-
-	virtual bool OnTimer(double fSecond);
-protected:
-private:
-};
-
-//static CChatManagerSession g_oChatManagerSession;
 
 
 #endif // !__SocketSession_H__
