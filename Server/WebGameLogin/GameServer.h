@@ -10,6 +10,7 @@
 #include "PlayerManager.h"
 #include "CenterSession.h"
 #include "LoginSession.h"
+#include "GameManagerSession.h"
 
 class GameServer : public TSingleton<GameServer>
 {
@@ -25,6 +26,7 @@ public:
 	PlayerManager& GetPlayerManager() { return m_oPlayerManager; }
 
 	BinaryLoginSessionManager& GetLoginSessionManager() { return m_oLoginSessionManager; }
+	BinaryGameManagerSessionManager& GetGameManagerSessionManager() { return m_oGameManagerSessionManager; }
 
 	unsigned int GetServerid() { return m_dwServerId; }
 	unsigned short GetLoginPort() { return m_wLoginPort; }
@@ -41,6 +43,9 @@ private:
 
 	BinaryLoginSessionManager m_oLoginSessionManager;
 	IFxListenSocket* m_pLoginListenSocket;
+
+	BinaryGameManagerSessionManager m_oGameManagerSessionManager;
+	IFxListenSocket* m_pGameManagerListenSocket;
 
 	unsigned int m_dwServerId;
 

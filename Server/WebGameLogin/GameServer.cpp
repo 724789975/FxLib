@@ -30,6 +30,10 @@ bool GameServer::Init(unsigned int dwServerId, std::string szPlayerListenIp, uns
 	{
 		return false;
 	}
+	if (!m_oGameManagerSessionManager.Init())
+	{
+		return false;
+	}
 
 	IFxNet* pNet = FxNetGetModule();
 	if (!pNet)
@@ -62,6 +66,12 @@ bool GameServer::Init(unsigned int dwServerId, std::string szPlayerListenIp, uns
 
 	m_pLoginListenSocket = pNet->Listen(&m_oLoginSessionManager, SLT_CommonTcp, 0, m_wLoginPort);
 	if (m_pPlayerListenSocket == NULL)
+	{
+		return false;
+	}
+
+	m_pGameManagerListenSocket = pNet->Listen(&m_oGameManagerSessionManager, SLT_CommonTcp, 0, m_wGameManagerPort);
+	if (m_pGameManagerListenSocket == NULL)
 	{
 		return false;
 	}

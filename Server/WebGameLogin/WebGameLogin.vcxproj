@@ -166,6 +166,7 @@
     <ClCompile Include="..\common\log_thread.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
     <ClCompile Include="CenterSession.cpp" />
+    <ClCompile Include="GameManagerSession.cpp" />
     <ClCompile Include="LoginSession.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerManager.cpp" />
@@ -179,6 +180,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CenterSession.h" />
+    <ClInclude Include="GameManagerSession.h" />
     <ClInclude Include="LoginSession.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerManager.h" />

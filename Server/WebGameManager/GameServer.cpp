@@ -16,13 +16,23 @@ GameServer::~GameServer()
 
 bool GameServer::Init(std::string szServerListenIp, unsigned short wServerListenPort, std::string szPlayerListenIp, unsigned short wPlayerListenPort)
 {
-	m_oBinaryServerSessionManager.Init();
-	m_oWebSocketPlayerSessionManager.Init();
-
 	m_szServerListenIp = szServerListenIp;
 	m_wServerListenPort = wServerListenPort;
 	m_szPlayerListenIp = szPlayerListenIp;
 	m_wPlayerListenPort = wPlayerListenPort;
+
+	if (!m_oBinaryServerSessionManager.Init())
+	{
+		return false;
+	}
+	if (!m_oWebSocketPlayerSessionManager.Init())
+	{
+		return false;
+	}
+	if (!m_oBinaryLoginSessionManager.Init())
+	{
+		return false;
+	}
 
 	IFxNet* pNet = FxNetGetModule();
 	if (!pNet)

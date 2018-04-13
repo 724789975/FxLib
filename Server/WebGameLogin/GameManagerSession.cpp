@@ -1,25 +1,25 @@
-#include "LoginSession.h"
+#include "GameManagerSession.h"
 #include "netstream.h"
 #include "gamedefine.h"
 #include "PlayerSession.h"
 #include "GameServer.h"
 #include "msg_proto/web_game.pb.h"
 
-const static unsigned int g_dwLoginSessionBuffLen = 64 * 1024;
-static char g_pLoginSessionBuf[g_dwLoginSessionBuffLen];
+const static unsigned int g_dwGameManagerSessionBuffLen = 64 * 1024;
+static char g_pGameManagerSessionBuf[g_dwGameManagerSessionBuffLen];
 
-CLoginSession::CLoginSession()
+CGameManagerSession::CGameManagerSession()
 	:m_oProtoDispatch(*this)
 {
-	m_oProtoDispatch.RegistFunction(GameProto::ServerInfo::descriptor(), &CLoginSession::OnServerInfo);
+	m_oProtoDispatch.RegistFunction(GameProto::ServerInfo::descriptor(), &CGameManagerSession::OnServerInfo);
 }
 
 
-CLoginSession::~CLoginSession()
+CGameManagerSession::~CGameManagerSession()
 {
 }
 
-void CLoginSession::OnConnect(void)
+void CGameManagerSession::OnConnect(void)
 {
 	//向对方发送本服务器信息
 	GameProto::ServerInfo oInfo;
@@ -29,25 +29,25 @@ void CLoginSession::OnConnect(void)
 	//oInfo.set_dw_team_port((*it)->m_dwTeamPort);
 	oInfo.set_dw_game_server_manager_port(GameServer::Instance()->GetGameManagerPort());
 
-	CNetStream oWriteStream(ENetStreamType_Write, g_pLoginSessionBuf, g_dwLoginSessionBuffLen);
+	CNetStream oWriteStream(ENetStreamType_Write, g_pGameManagerSessionBuf, g_dwGameManagerSessionBuffLen);
 	oWriteStream.WriteString(oInfo.GetTypeName());
 	std::string szResult;
 	oInfo.SerializeToString(&szResult);
 	oWriteStream.WriteData(szResult.c_str(), szResult.size());
-	Send(g_pLoginSessionBuf, g_dwLoginSessionBuffLen - oWriteStream.GetDataLength());
+	Send(g_pGameManagerSessionBuf, g_dwGameManagerSessionBuffLen - oWriteStream.GetDataLength());
 }
 
-void CLoginSession::OnClose(void)
+void CGameManagerSession::OnClose(void)
 {
 
 }
 
-void CLoginSession::OnError(UINT32 dwErrorNo)
+void CGameManagerSession::OnError(UINT32 dwErrorNo)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
 }
 
-void CLoginSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void CGameManagerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	std::string szProtocolName;
@@ -61,7 +61,7 @@ void CLoginSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	}
 }
 
-void CLoginSession::Release(void)
+void CGameManagerSession::Release(void)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
 	OnDestroy();
@@ -69,26 +69,27 @@ void CLoginSession::Release(void)
 	FxSession::Init(NULL);
 }
 
-void CLoginSession::Init()
+void CGameManagerSession::Init()
 {
 	m_dwServerId = 0;
 }
 
-bool CLoginSession::OnServerInfo(CLoginSession& refSession, google::protobuf::Message& refMsg)
+bool CGameManagerSession::OnServerInfo(CGameManagerSession& refSession, google::protobuf::Message& refMsg)
 {
 	return OnServerInfo(refSession, refMsg);
 }
 
 //////////////////////////////////////////////////////////////////////////
-CBinaryLoginSession::CBinaryLoginSession()
+CBinaryGameManagerSession::CBinaryGameManagerSession()
+{
+	
+}
+
+CBinaryGameManagerSession::~CBinaryGameManagerSession()
 {
 }
 
-CBinaryLoginSession::~CBinaryLoginSession()
-{
-}
-
-bool CBinaryLoginSession::OnServerInfo(CLoginSession& refSession, google::protobuf::Message& refMsg)
+bool CBinaryGameManagerSession::OnServerInfo(CGameManagerSession& refSession, google::protobuf::Message& refMsg)
 {
 	GameProto::ServerInfo* pMsg = dynamic_cast<GameProto::ServerInfo*>(&refMsg);
 	if (pMsg == NULL)
@@ -97,12 +98,12 @@ bool CBinaryLoginSession::OnServerInfo(CLoginSession& refSession, google::protob
 	}
 
 	m_dwServerId = pMsg->dw_server_id();
-	GameServer::Instance()->GetLoginSessionManager().GetLoginSessions()[m_dwServerId] = this;
+	GameServer::Instance()->GetGameManagerSessionManager().GetGameManagerSessions()[m_dwServerId] = this;
 	LogExe(LogLv_Debug, "server id : %d connected", m_dwServerId);
 	return true;
 }
 
-void CBinaryLoginSession::Release(void)
+void CBinaryGameManagerSession::Release(void)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
 	OnDestroy();
@@ -111,25 +112,25 @@ void CBinaryLoginSession::Release(void)
 }
 
 //////////////////////////////////////////////////////////////////////////
-CBinaryLoginSession * BinaryLoginSessionManager::CreateSession()
+CBinaryGameManagerSession * BinaryGameManagerSessionManager::CreateSession()
 {
-	CBinaryLoginSession* pSession = m_poolSessions.FetchObj();
+	CBinaryGameManagerSession* pSession = m_poolSessions.FetchObj();
 	return pSession;
 }
 
-bool BinaryLoginSessionManager::Init()
+bool BinaryGameManagerSessionManager::Init()
 {
 	return m_poolSessions.Init(64, 64);
 }
 
-void BinaryLoginSessionManager::Release(FxSession * pSession)
+void BinaryGameManagerSessionManager::Release(FxSession * pSession)
 {
 	Assert(0);
 }
 
-void BinaryLoginSessionManager::Release(CBinaryLoginSession * pSession)
+void BinaryGameManagerSessionManager::Release(CBinaryGameManagerSession * pSession)
 {
-	m_mapLoginSessions.erase(pSession->GetServerId());
+	m_mapGameManagerSessions.erase(pSession->GetServerId());
 	m_poolSessions.ReleaseObj(pSession);
 }
 

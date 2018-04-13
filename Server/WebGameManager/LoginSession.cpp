@@ -25,9 +25,9 @@ void CLoginSession::OnConnect(void)
 	GameProto::ServerInfo oInfo;
 	oInfo.set_dw_server_id(GameServer::Instance()->GetServerid());
 	//oInfo.set_sz_listen_ip((*it)->GetRemoteIPStr());
-	oInfo.set_dw_login_port(GameServer::Instance()->GetLoginPort());
+	//oInfo.set_dw_login_port(GameServer::Instance()->GetLoginPort());
 	//oInfo.set_dw_team_port((*it)->m_dwTeamPort);
-	oInfo.set_dw_game_server_manager_port(GameServer::Instance()->GetGameManagerPort());
+	//oInfo.set_dw_game_server_manager_port(GameServer::Instance()->GetGameManagerPort());
 
 	CNetStream oWriteStream(ENetStreamType_Write, g_pLoginSessionBuf, g_dwLoginSessionBuffLen);
 	oWriteStream.WriteString(oInfo.GetTypeName());
