@@ -3,6 +3,7 @@
 #include "gamedefine.h"
 #include "PlayerSession.h"
 #include "GameServer.h"
+#include "LoginSession.h"
 #include "msg_proto/web_game.pb.h"
 
 const static unsigned int g_dwCenterSessionBuffLen = 64 * 1024;
@@ -22,11 +23,11 @@ CCenterSession::~CCenterSession()
 void CCenterSession::OnConnect(void)
 {
 	GameProto::ServerInfo oInfo;
-	//oInfo.set_dw_server_id();
+	oInfo.set_dw_server_id(GameServer::Instance()->GetServerid());
 	//oInfo.set_sz_listen_ip((*it)->GetRemoteIPStr());
-	//oInfo.set_dw_login_port((*it)->m_dwLoginPort);
+	oInfo.set_dw_login_port(GameServer::Instance()->GetLoginPort());
 	//oInfo.set_dw_team_port((*it)->m_dwTeamPort);
-	//oInfo.set_dw_game_server_manager_port((*it)->m_dwGameServerManagerPort);
+	oInfo.set_dw_game_server_manager_port(GameServer::Instance()->GetGameManagerPort());
 
 	CNetStream oWriteStream(ENetStreamType_Write, g_pCenterSessionBuf, g_dwCenterSessionBuffLen);
 	oWriteStream.WriteString(oInfo.GetTypeName());
@@ -69,7 +70,25 @@ void CCenterSession::Release(void)
 
 bool CCenterSession::OnServerInfo(CCenterSession& refSession, google::protobuf::Message& refMsg)
 {
-	return false;
+	GameProto::ServerInfo* pMsg = dynamic_cast<GameProto::ServerInfo*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	
+	if (pMsg->dw_server_id() / 10000 == GameProto::ST_Login)
+	{
+		CBinaryLoginSession* pLoginSession = GameServer::Instance()->GetLoginSessionManager().CreateSession();
+		if (FxNetGetModule()->TcpConnect(pLoginSession, inet_addr(pMsg->sz_listen_ip().c_str()), false) == INVALID_SOCKET)
+		{
+			LogExe(LogLv_Critical, "connect to login : %d faild", pMsg->dw_server_id());
+		}
+		else
+		{
+			LogExe(LogLv_Debug, "connect to login %s:%d", pMsg->sz_listen_ip().c_str(), pMsg->dw_server_id());
+		}
+	}
+	return true;
 }
 
 //////////////////////////////////////////////////////////////////////////

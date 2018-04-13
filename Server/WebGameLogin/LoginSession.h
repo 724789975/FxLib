@@ -26,8 +26,9 @@ public:
 	virtual UINT32		GetRecvSize() { return 64 * 1024; };
 
 	virtual void		Init();
+	unsigned int		GetServerId() { return m_dwServerId; }
 
-	bool				OnGameNotifyGameManagerInfo(CLoginSession& refSession, google::protobuf::Message& refMsg);
+	bool				OnServerInfo(CLoginSession& refSession, google::protobuf::Message& refMsg);
 private:
 	char m_dataRecvBuf[1024 * 1024];
 	CallBackDispatcher::ProtoCallBackDispatch<CLoginSession, CLoginSession> m_oProtoDispatch;
@@ -54,13 +55,14 @@ public:
 	virtual ~BinaryLoginSessionManager() {}
 
 	virtual CBinaryLoginSession* CreateSession();
-
+	void OnSessionConnected(unsigned int dwServer_id, CBinaryLoginSession* pBinaryLoginSession);
 	bool Init();
 	virtual void Release(FxSession* pSession);
 	void Release(CBinaryLoginSession* pSession);
 
 private:
 	TDynamicPoolEx<CBinaryLoginSession> m_poolSessions;
+	std::map<unsigned int, CBinaryLoginSession*> m_mapLoginSessions;		//<serverid, 连接的指针>
 };
 
 

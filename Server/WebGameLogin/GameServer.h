@@ -40,6 +40,7 @@ private:
 	PlayerManager m_oPlayerManager;
 
 	BinaryLoginSessionManager m_oLoginSessionManager;
+	IFxListenSocket* m_pLoginListenSocket;
 
 	unsigned int m_dwServerId;
 

@@ -11,7 +11,7 @@ static char g_pLoginSessionBuf[g_dwLoginSessionBuffLen];
 CLoginSession::CLoginSession()
 	:m_oProtoDispatch(*this)
 {
-	m_oProtoDispatch.RegistFunction(GameProto::GameNotifyGameManagerInfo::descriptor(), &CLoginSession::OnGameNotifyGameManagerInfo);
+	m_oProtoDispatch.RegistFunction(GameProto::ServerInfo::descriptor(), &CLoginSession::OnServerInfo);
 }
 
 
@@ -22,6 +22,19 @@ CLoginSession::~CLoginSession()
 void CLoginSession::OnConnect(void)
 {
 	//向对方发送本服务器信息
+	GameProto::ServerInfo oInfo;
+	oInfo.set_dw_server_id(GameServer::Instance()->GetServerid());
+	//oInfo.set_sz_listen_ip((*it)->GetRemoteIPStr());
+	oInfo.set_dw_login_port(GameServer::Instance()->GetLoginPort());
+	//oInfo.set_dw_team_port((*it)->m_dwTeamPort);
+	oInfo.set_dw_game_server_manager_port(GameServer::Instance()->GetGameManagerPort());
+
+	CNetStream oWriteStream(ENetStreamType_Write, g_pLoginSessionBuf, g_dwLoginSessionBuffLen);
+	oWriteStream.WriteString(oInfo.GetTypeName());
+	std::string szResult;
+	oInfo.SerializeToString(&szResult);
+	oWriteStream.WriteData(szResult.c_str(), szResult.size());
+	Send(g_pLoginSessionBuf, g_dwLoginSessionBuffLen - oWriteStream.GetDataLength());
 }
 
 void CLoginSession::OnClose(void)
@@ -61,15 +74,17 @@ void CLoginSession::Init()
 	m_dwServerId = 0;
 }
 
-bool CLoginSession::OnGameNotifyGameManagerInfo(CLoginSession& refSession, google::protobuf::Message& refMsg)
+bool CLoginSession::OnServerInfo(CLoginSession& refSession, google::protobuf::Message& refMsg)
 {
-	GameProto::GameNotifyGameManagerInfo* pMsg = dynamic_cast<GameProto::GameNotifyGameManagerInfo*>(&refMsg);
+	GameProto::ServerInfo* pMsg = dynamic_cast<GameProto::ServerInfo*>(&refMsg);
 	if (pMsg == NULL)
 	{
 		return false;
 	}
 
-	return true;
+	m_dwServerId = pMsg->dw_server_id();
+	//todo
+	//GameServer::Instance()->GetLoginSessionManager().OnSessionConnected(m_dwServerId, this);
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -96,6 +111,11 @@ CBinaryLoginSession * BinaryLoginSessionManager::CreateSession()
 	return pSession;
 }
 
+void BinaryLoginSessionManager::OnSessionConnected(unsigned int dwServer_id, CBinaryLoginSession* pBinaryLoginSession)
+{
+	m_mapLoginSessions[dwServer_id] = pBinaryLoginSession;
+}
+
 bool BinaryLoginSessionManager::Init()
 {
 	return m_poolSessions.Init(64, 64);
@@ -108,6 +128,8 @@ void BinaryLoginSessionManager::Release(FxSession * pSession)
 
 void BinaryLoginSessionManager::Release(CBinaryLoginSession * pSession)
 {
+	//m_mapLoginSessions.erase(pSession->)
 	m_poolSessions.ReleaseObj(pSession);
+	m_mapLoginSessions.erase(pSession->GetRemoteIP());
 }
 
