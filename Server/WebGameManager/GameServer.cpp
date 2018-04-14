@@ -14,11 +14,13 @@ GameServer::~GameServer()
 {
 }
 
-bool GameServer::Init(std::string szServerListenIp, unsigned short wServerListenPort, std::string szPlayerListenIp, unsigned short wPlayerListenPort)
+bool GameServer::Init(unsigned int dwServerId, std::string szCenterIp, unsigned short wCenterPort, unsigned short wServerListenPort, unsigned short wPlayerListenPort)
 {
-	m_szServerListenIp = szServerListenIp;
+	m_dwServerId = dwServerId;
+	m_szCenterIp = szCenterIp;
+	m_wCenterPort = wCenterPort;
+	
 	m_wServerListenPort = wServerListenPort;
-	m_szPlayerListenIp = szPlayerListenIp;
 	m_wPlayerListenPort = wPlayerListenPort;
 
 	if (!m_oBinaryServerSessionManager.Init())
@@ -40,14 +42,19 @@ bool GameServer::Init(std::string szServerListenIp, unsigned short wServerListen
 		return false;
 	}
 
-	m_pServerListenSocket = pNet->Listen(&GameServer::Instance()->GetBinaryServerSessionManager(), SLT_CommonTcp, inet_addr(m_szServerListenIp.c_str()), m_wServerListenPort);
+	m_pServerListenSocket = pNet->Listen(&m_oBinaryServerSessionManager, SLT_CommonTcp, 0, m_wServerListenPort);
 	if (m_pServerListenSocket == NULL)
 	{
 		return false;
 	}
 
-	m_pPlayerListenSocket = pNet->Listen(&GameServer::Instance()->GetWebSocketPlayerSessionManager(), SLT_WebSocket, inet_addr(m_szPlayerListenIp.c_str()), m_wPlayerListenPort);
+	m_pPlayerListenSocket = pNet->Listen(&m_oWebSocketPlayerSessionManager, SLT_WebSocket, 0, m_wPlayerListenPort);
 	if (m_pPlayerListenSocket == NULL)
+	{
+		return false;
+	}
+
+	if (pNet->TcpConnect(&m_oCenterSession, inet_addr(m_szCenterIp.c_str()), wCenterPort, false) == INVALID_SOCKET)
 	{
 		return false;
 	}

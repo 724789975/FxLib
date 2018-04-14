@@ -98,6 +98,10 @@ bool CBinaryGameManagerSession::OnServerInfo(CGameManagerSession& refSession, go
 	}
 
 	m_dwServerId = pMsg->dw_server_id();
+
+	LogExe(LogLv_Debug, "server : %d connected, listen ip : %s login_port : %d, team_port : %d, game_manager_port : %d",
+		pMsg->dw_server_id(), pMsg->sz_listen_ip().c_str(), pMsg->dw_login_port(),
+		pMsg->dw_team_port(), pMsg->dw_game_server_manager_port());
 	GameServer::Instance()->GetGameManagerSessionManager().GetGameManagerSessions()[m_dwServerId] = this;
 	LogExe(LogLv_Debug, "server id : %d connected", m_dwServerId);
 	return true;

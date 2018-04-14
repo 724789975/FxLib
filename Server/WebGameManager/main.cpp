@@ -12,8 +12,11 @@
 unsigned int g_dwPort = 20000;
 bool g_bRun = true;
 
-DEFINE_uint32(server_port, 30001, "server port");
-DEFINE_uint32(player_port, 30002, "player port");
+DEFINE_uint32(server_id, 30001, "server id");
+DEFINE_uint32(server_port, 31001, "server port");
+DEFINE_uint32(player_port, 31002, "player port");
+DEFINE_string(center_ip, "127.0.0.1", "center ip");
+DEFINE_uint32(center_port, 40000, "center port");
 
 void EndFun(int n)
 {
@@ -59,7 +62,7 @@ int main(int argc, char **argv)
 	}
 	//----------------------order can't change end-----------------------//
 
-	if (!GameServer::Instance()->Init("127.0.0.1", FLAGS_server_port, "0.0.0.0", FLAGS_player_port))
+	if (!GameServer::Instance()->Init(FLAGS_server_id, FLAGS_center_ip, FLAGS_center_port, FLAGS_server_port, FLAGS_player_port))
 	{
 		g_bRun = false;
 		goto STOP;

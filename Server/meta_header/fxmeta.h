@@ -133,6 +133,7 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 					PrintTrace(strLog + nLenStr);\
 				}\
 				fprintf(pFile, "%s", strLog);\
+				printf("%s", strLog);\
 			}\
 			else\
 			{\

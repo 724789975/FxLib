@@ -75,11 +75,15 @@ bool CCenterSession::OnServerInfo(CCenterSession& refSession, google::protobuf::
 	{
 		return false;
 	}
+
+	LogExe(LogLv_Debug, "server : %d info, listen ip : %s login_port : %d, team_port : %d, game_manager_port : %d",
+		pMsg->dw_server_id(), pMsg->sz_listen_ip().c_str(), pMsg->dw_login_port(),
+		pMsg->dw_team_port(), pMsg->dw_game_server_manager_port());
 	
 	if (pMsg->dw_server_id() / 10000 == GameProto::ST_Login)
 	{
 		CBinaryLoginSession* pLoginSession = GameServer::Instance()->GetLoginSessionManager().CreateSession();
-		if (FxNetGetModule()->TcpConnect(pLoginSession, inet_addr(pMsg->sz_listen_ip().c_str()), false) == INVALID_SOCKET)
+		if (FxNetGetModule()->TcpConnect(pLoginSession, inet_addr(pMsg->sz_listen_ip().c_str()), pMsg->dw_login_port(), false) == INVALID_SOCKET)
 		{
 			LogExe(LogLv_Critical, "connect to login : %d faild", pMsg->dw_server_id());
 		}

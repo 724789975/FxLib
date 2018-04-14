@@ -78,6 +78,9 @@ bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::
 
 	pMsg->set_sz_listen_ip(GetRemoteIPStr());
 
+	LogExe(LogLv_Debug, "server : %d connected, listen ip : %s login_port : %d, team_port : %d, game_manager_port : %d",
+		m_dwServerId, GetRemoteIPStr(), m_dwLoginPort, m_dwTeamPort, m_dwGameServerManagerPort);
+
 	if (m_dwServerId / 10000 == GameProto::ST_Login)
 	{
 		// 如果是login连上了 那么 应该向其他的所有服务器发消息 让其他服务器连接这个login 包含其他的login

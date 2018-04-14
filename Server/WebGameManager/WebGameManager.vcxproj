@@ -165,6 +165,7 @@
     <ClCompile Include="..\common\fxtimer.cpp" />
     <ClCompile Include="..\common\log_thread.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
+    <ClCompile Include="CenterSession.cpp" />
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="LoginSession.cpp" />
     <ClCompile Include="main.cpp" />
@@ -175,6 +176,7 @@
     <ClCompile Include="SocketSession.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CenterSession.h" />
     <ClInclude Include="gamedefine.h" />
     <ClInclude Include="GameServer.h" />
     <ClInclude Include="LoginSession.h" />

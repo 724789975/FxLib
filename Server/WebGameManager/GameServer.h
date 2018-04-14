@@ -8,6 +8,7 @@
 #include "ServerSession.h"
 #include "PlayerSession.h"
 #include "LoginSession.h"
+#include "CenterSession.h"
 
 class GameServer : public TSingleton<GameServer>
 {
@@ -15,24 +16,20 @@ public:
 	GameServer();
 	virtual ~GameServer();
 
-	bool Init(std::string szServerListenIp, unsigned short wServerListenPort, std::string szPlayerListenIp, unsigned short wPlayerListenPort);
+	bool Init(unsigned int dwServerId, std::string szCenterIp, unsigned short wCenterPort, unsigned short wServerListenPort, unsigned short wPlayerListenPort);
 	bool Stop();
 
 	bool AddRequestPlayer(CPlayerSession* pPlayer);
 	bool DelRequestPlayer(CPlayerSession* pPlayer);
 
-	WebSocketPlayerSessionManager& GetWebSocketPlayerSessionManager() { return m_oWebSocketPlayerSessionManager; }
-	BinaryServerSessionManager& GetBinaryServerSessionManager() { return m_oBinaryServerSessionManager; }
+	//WebSocketPlayerSessionManager& GetWebSocketPlayerSessionManager() { return m_oWebSocketPlayerSessionManager; }
+	//BinaryServerSessionManager& GetBinaryServerSessionManager() { return m_oBinaryServerSessionManager; }
 
 	BinaryLoginSessionManager& GetLoginSessionManager() { return m_oBinaryLoginSessionManager; }
 
-	std::string GetServerListenIp() { return m_szServerListenIp; }
 	unsigned short GetServerListenPort() { return m_wServerListenPort; }
 
-	unsigned int GetServerid()
-	{
-		return 0;
-	}
+	unsigned int GetServerid() { return m_dwServerId; }
 
 private:
 	WebSocketPlayerSessionManager m_oWebSocketPlayerSessionManager;
@@ -40,15 +37,20 @@ private:
 
 	BinaryLoginSessionManager m_oBinaryLoginSessionManager;
 
+	CBinaryCenterSession m_oCenterSession;
+
 	IFxListenSocket* m_pServerListenSocket;
 	IFxListenSocket* m_pPlayerListenSocket;
 
 	std::set<CPlayerSession*> m_setRequestPlayer;
 
-	std::string m_szServerListenIp;
 	unsigned short m_wServerListenPort;
-	std::string m_szPlayerListenIp;
 	unsigned short m_wPlayerListenPort;
+
+	unsigned int m_dwServerId;
+
+	std::string m_szCenterIp;
+	unsigned short m_wCenterPort;
 };
 
 

@@ -20,7 +20,7 @@ bool StartProccess(unsigned long long qwPlayerPoint)
 	char szBuffer[512] = { 0 };
 	GetExePath();
 	sprintf(szBuffer, "--game_manager_ip %s --game_manager_port %d --player_point %llu",
-		GameServer::Instance()->GetServerListenIp().c_str(), GameServer::Instance()->GetServerListenPort(), qwPlayerPoint);
+		"127.0.0.1", GameServer::Instance()->GetServerListenPort(), qwPlayerPoint);
 	shell.lpParameters = szBuffer;
 	shell.lpDirectory = GetExePath();
 	shell.nShow = SW_SHOWNORMAL;
@@ -30,7 +30,7 @@ bool StartProccess(unsigned long long qwPlayerPoint)
 	char szExePath[512] = { 0 };
 	sprintf(szExePath, "%s/WebGame", GetExePath());
 	char szServerIp[32] = { 0 };
-	sprintf(szServerIp, "%s", GameServer::Instance()->GetServerListenIp().c_str());
+	sprintf(szServerIp, "%s", "127.0.0.1");
 	char szServerPort[8] = { 0 };
 	sprintf(szServerPort, "%d", GameServer::Instance()->GetServerListenPort());
 	char szPlayerPoint[16] = { 0 };

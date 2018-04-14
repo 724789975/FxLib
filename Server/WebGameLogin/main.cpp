@@ -12,12 +12,12 @@
 bool g_bRun = true;
 
 DEFINE_uint32(server_id, 10001, "server id");
-DEFINE_uint32(player_port, 31002, "player port");
+DEFINE_uint32(player_port, 11001, "player port");
 DEFINE_string(center_ip, "127.0.0.1", "center ip");
 DEFINE_uint32(center_port, 40000, "center port");
-DEFINE_uint32(login_port, 32001, "login port");
-DEFINE_uint32(team_port, 33001, "team port");
-DEFINE_uint32(game_manager_port, 34001, "game manager port");
+DEFINE_uint32(login_port, 11002, "login port");
+DEFINE_uint32(team_port, 11003, "team port");
+DEFINE_uint32(game_manager_port, 11004, "game manager port");
 
 void EndFun(int n)
 {

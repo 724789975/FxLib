@@ -54,7 +54,7 @@ bool GameServer::Init(unsigned int dwServerId, std::string szPlayerListenIp, uns
 
 	m_szGameCenterIp = szGameCenterIp;
 	m_wGameCenterPort = wGameCenterPort;
-	if (pNet->TcpConnect(&m_oCenterSession, 0, m_wGameCenterPort, false) == INVALID_SOCKET)
+	if (pNet->TcpConnect(&m_oCenterSession, inet_addr(m_szGameCenterIp.c_str()), m_wGameCenterPort, false) == INVALID_SOCKET)
 	{
 		return false;
 	}
