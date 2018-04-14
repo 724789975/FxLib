@@ -1,7 +1,6 @@
 #include "LoginSession.h"
 #include "netstream.h"
 #include "gamedefine.h"
-#include "PlayerSession.h"
 #include "GameServer.h"
 #include "msg_proto/web_game.pb.h"
 
@@ -25,9 +24,9 @@ void CLoginSession::OnConnect(void)
 	GameProto::ServerInfo oInfo;
 	oInfo.set_dw_server_id(GameServer::Instance()->GetServerid());
 	//oInfo.set_sz_listen_ip((*it)->GetRemoteIPStr());
-	oInfo.set_dw_login_port(GameServer::Instance()->GetLoginPort());
-	oInfo.set_dw_team_port(GameServer::Instance()->GetTeamPort());
-	oInfo.set_dw_game_server_manager_port(GameServer::Instance()->GetGameManagerPort());
+	//oInfo.set_dw_login_port(GameServer::Instance()->GetLoginPort());
+	//oInfo.set_dw_team_port((*it)->m_dwTeamPort);
+	//oInfo.set_dw_game_server_manager_port(GameServer::Instance()->GetGameManagerPort());
 
 	CNetStream oWriteStream(ENetStreamType_Write, g_pLoginSessionBuf, g_dwLoginSessionBuffLen);
 	oWriteStream.WriteString(oInfo.GetTypeName());
@@ -97,7 +96,6 @@ bool CBinaryLoginSession::OnServerInfo(CLoginSession& refSession, google::protob
 	}
 
 	m_dwServerId = pMsg->dw_server_id();
-
 	LogExe(LogLv_Debug, "server : %d connected, listen ip : %s login_port : %d, team_port : %d, game_manager_port : %d",
 		pMsg->dw_server_id(), pMsg->sz_listen_ip().c_str(), pMsg->dw_login_port(),
 		pMsg->dw_team_port(), pMsg->dw_game_server_manager_port());

@@ -1,25 +1,25 @@
-#include "LoginSession.h"
+#include "TeamSession.h"
 #include "netstream.h"
 #include "gamedefine.h"
 #include "PlayerSession.h"
 #include "GameServer.h"
 #include "msg_proto/web_game.pb.h"
 
-const static unsigned int g_dwLoginSessionBuffLen = 64 * 1024;
-static char g_pLoginSessionBuf[g_dwLoginSessionBuffLen];
+const static unsigned int g_dwTeamSessionBuffLen = 64 * 1024;
+static char g_pTeamSessionBuf[g_dwTeamSessionBuffLen];
 
-CLoginSession::CLoginSession()
+CTeamSession::CTeamSession()
 	:m_oProtoDispatch(*this)
 {
-	m_oProtoDispatch.RegistFunction(GameProto::ServerInfo::descriptor(), &CLoginSession::OnServerInfo);
+	m_oProtoDispatch.RegistFunction(GameProto::ServerInfo::descriptor(), &CTeamSession::OnServerInfo);
 }
 
 
-CLoginSession::~CLoginSession()
+CTeamSession::~CTeamSession()
 {
 }
 
-void CLoginSession::OnConnect(void)
+void CTeamSession::OnConnect(void)
 {
 	//向对方发送本服务器信息
 	GameProto::ServerInfo oInfo;
@@ -29,25 +29,25 @@ void CLoginSession::OnConnect(void)
 	oInfo.set_dw_team_port(GameServer::Instance()->GetTeamPort());
 	oInfo.set_dw_game_server_manager_port(GameServer::Instance()->GetGameManagerPort());
 
-	CNetStream oWriteStream(ENetStreamType_Write, g_pLoginSessionBuf, g_dwLoginSessionBuffLen);
+	CNetStream oWriteStream(ENetStreamType_Write, g_pTeamSessionBuf, g_dwTeamSessionBuffLen);
 	oWriteStream.WriteString(oInfo.GetTypeName());
 	std::string szResult;
 	oInfo.SerializeToString(&szResult);
 	oWriteStream.WriteData(szResult.c_str(), szResult.size());
-	Send(g_pLoginSessionBuf, g_dwLoginSessionBuffLen - oWriteStream.GetDataLength());
+	Send(g_pTeamSessionBuf, g_dwTeamSessionBuffLen - oWriteStream.GetDataLength());
 }
 
-void CLoginSession::OnClose(void)
+void CTeamSession::OnClose(void)
 {
 
 }
 
-void CLoginSession::OnError(UINT32 dwErrorNo)
+void CTeamSession::OnError(UINT32 dwErrorNo)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
 }
 
-void CLoginSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void CTeamSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	std::string szProtocolName;
@@ -61,7 +61,7 @@ void CLoginSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	}
 }
 
-void CLoginSession::Release(void)
+void CTeamSession::Release(void)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
 	OnDestroy();
@@ -69,26 +69,27 @@ void CLoginSession::Release(void)
 	FxSession::Init(NULL);
 }
 
-void CLoginSession::Init()
+void CTeamSession::Init()
 {
 	m_dwServerId = 0;
 }
 
-bool CLoginSession::OnServerInfo(CLoginSession& refSession, google::protobuf::Message& refMsg)
+bool CTeamSession::OnServerInfo(CTeamSession& refSession, google::protobuf::Message& refMsg)
 {
 	return OnServerInfo(refSession, refMsg);
 }
 
 //////////////////////////////////////////////////////////////////////////
-CBinaryLoginSession::CBinaryLoginSession()
+CBinaryTeamSession::CBinaryTeamSession()
+{
+	
+}
+
+CBinaryTeamSession::~CBinaryTeamSession()
 {
 }
 
-CBinaryLoginSession::~CBinaryLoginSession()
-{
-}
-
-bool CBinaryLoginSession::OnServerInfo(CLoginSession& refSession, google::protobuf::Message& refMsg)
+bool CBinaryTeamSession::OnServerInfo(CTeamSession& refSession, google::protobuf::Message& refMsg)
 {
 	GameProto::ServerInfo* pMsg = dynamic_cast<GameProto::ServerInfo*>(&refMsg);
 	if (pMsg == NULL)
@@ -101,12 +102,12 @@ bool CBinaryLoginSession::OnServerInfo(CLoginSession& refSession, google::protob
 	LogExe(LogLv_Debug, "server : %d connected, listen ip : %s login_port : %d, team_port : %d, game_manager_port : %d",
 		pMsg->dw_server_id(), pMsg->sz_listen_ip().c_str(), pMsg->dw_login_port(),
 		pMsg->dw_team_port(), pMsg->dw_game_server_manager_port());
-	GameServer::Instance()->GetLoginSessionManager().GetLoginSessions()[m_dwServerId] = this;
+	GameServer::Instance()->GetTeamSessionManager().GetTeamSessions()[m_dwServerId] = this;
 	LogExe(LogLv_Debug, "server id : %d connected", m_dwServerId);
 	return true;
 }
 
-void CBinaryLoginSession::Release(void)
+void CBinaryTeamSession::Release(void)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
 	OnDestroy();
@@ -115,25 +116,25 @@ void CBinaryLoginSession::Release(void)
 }
 
 //////////////////////////////////////////////////////////////////////////
-CBinaryLoginSession * BinaryLoginSessionManager::CreateSession()
+CBinaryTeamSession * BinaryTeamSessionManager::CreateSession()
 {
-	CBinaryLoginSession* pSession = m_poolSessions.FetchObj();
+	CBinaryTeamSession* pSession = m_poolSessions.FetchObj();
 	return pSession;
 }
 
-bool BinaryLoginSessionManager::Init()
+bool BinaryTeamSessionManager::Init()
 {
 	return m_poolSessions.Init(64, 64);
 }
 
-void BinaryLoginSessionManager::Release(FxSession * pSession)
+void BinaryTeamSessionManager::Release(FxSession * pSession)
 {
 	Assert(0);
 }
 
-void BinaryLoginSessionManager::Release(CBinaryLoginSession * pSession)
+void BinaryTeamSessionManager::Release(CBinaryTeamSession * pSession)
 {
-	m_mapLoginSessions.erase(pSession->GetServerId());
+	m_mapTeamSessions.erase(pSession->GetServerId());
 	m_poolSessions.ReleaseObj(pSession);
 }
 

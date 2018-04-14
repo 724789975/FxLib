@@ -30,6 +30,10 @@ bool GameServer::Init(unsigned int dwServerId, std::string szPlayerListenIp, uns
 	{
 		return false;
 	}
+	if (!m_oTeamSessionManager.Init())
+	{
+		return false;
+	}
 	if (!m_oGameManagerSessionManager.Init())
 	{
 		return false;
@@ -70,6 +74,12 @@ bool GameServer::Init(unsigned int dwServerId, std::string szPlayerListenIp, uns
 		return false;
 	}
 
+	m_pTeamListenSocket = pNet->Listen(&m_oTeamSessionManager, SLT_CommonTcp, 0, m_wTeamPort);
+	if (m_pTeamListenSocket == NULL)
+	{
+		return false;
+	}
+
 	m_pGameManagerListenSocket = pNet->Listen(&m_oGameManagerSessionManager, SLT_CommonTcp, 0, m_wGameManagerPort);
 	if (m_pGameManagerListenSocket == NULL)
 	{
@@ -84,4 +94,3 @@ bool GameServer::Stop()
 	// todo
 	return false;
 }
-
