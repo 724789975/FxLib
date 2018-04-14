@@ -14,7 +14,7 @@ public:
 	FxRedisConnection(void);
 	virtual ~FxRedisConnection(void);
 
-    bool			Connect(const std::string& szHost, unsigned int dwPort);
+    bool			Connect(const std::string& szHost, unsigned int dwPort, std::string szPassword);
 	bool            ReConnect();
 	bool			Close();
 
@@ -27,6 +27,7 @@ private:
 private:
 	redisContext* m_pRedisContext;
 	std::string m_szHost;
+	std::string m_szPassword;
 	unsigned int m_dwPort;
 };
 

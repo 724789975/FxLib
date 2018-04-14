@@ -17,10 +17,11 @@ FxRedisConnection::~FxRedisConnection(void)
 	//}
 }
 
-bool FxRedisConnection::Connect(const std::string& szHost, unsigned int dwPort)
+bool FxRedisConnection::Connect(const std::string& szHost, unsigned int dwPort, std::string szPassword)
 {
 	m_szHost = szHost;
 	m_dwPort = dwPort;
+	m_szPassword = szPassword;
 	return ReConnect();
 }
 
@@ -39,12 +40,23 @@ bool FxRedisConnection::ReConnect()
 	struct timeval timeout = { 1, 500000 }; // 1.5 seconds
 	Close();
 
-	this->m_pRedisContext = redisConnectWithTimeout(m_szHost.c_str(), m_dwPort, timeout);
+	m_pRedisContext = redisConnectWithTimeout(m_szHost.c_str(), m_dwPort, timeout);
 	if (m_pRedisContext->err)
 	{
 		redisFree(m_pRedisContext);
 		m_pRedisContext = NULL;
 		return false;
+	}
+
+	if (!m_szPassword.empty())
+	{
+		redisReply* reply = (redisReply*)redisCommand(m_pRedisContext, "AUTH %s", m_szPassword.c_str());
+		if (reply->type == REDIS_REPLY_ERROR)
+		{
+			freeReplyObject(reply);
+			return false;
+		}
+		freeReplyObject(reply);
 	}
 
 	return true;

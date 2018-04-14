@@ -140,6 +140,7 @@
     <ClCompile Include="redisclient.cpp" />
     <ClCompile Include="redisconnection.cpp" />
     <ClCompile Include="redismodule.cpp" />
+    <ClCompile Include="redisquery.cpp" />
     <ClCompile Include="redisreader.cpp" />
     <ClCompile Include="fxredis.cpp" />
     <ClCompile Include="RedisConn.cpp" />
@@ -148,6 +149,7 @@
     <ClInclude Include="redisclient.h" />
     <ClInclude Include="redisconnection.h" />
     <ClInclude Include="redismodule.h" />
+    <ClInclude Include="redisquery.h" />
     <ClInclude Include="redisreader.h" />
     <ClInclude Include="RedisConn.h" />
   </ItemGroup>

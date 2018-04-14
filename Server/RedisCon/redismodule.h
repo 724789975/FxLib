@@ -1,5 +1,5 @@
-#ifndef __DBDBMODULE_H_2009_0824__
-#define __DBDBMODULE_H_2009_0824__
+#ifndef __REDIS_MODULE_H__
+#define __REDIS_MODULE_H__
 
 #include <map>
 #include "fxredis.h"
@@ -8,6 +8,7 @@
 #include "redisclient.h"
 #include "dynamicpoolex.h"
 #include "lock.h"
+#include "redisquery.h"
 
 class FxRedisModule : public TSingleton<FxRedisModule>, public IRedisModule
 {
@@ -20,14 +21,17 @@ public:
 	virtual void        Release(void);
 	virtual const char* GetModuleName(void);
 
-	virtual bool		Open(const char* szHost, unsigned int dwPort, unsigned int dwRedisId);
+	virtual bool		Open(const char* szHost, unsigned int dwPort, std::string szPassword, unsigned int dwRedisId);
 	virtual void        Close(UINT32 dwDBId);
-	virtual bool AddQuery(IRedisQuery*poQuery);
+	virtual bool		AddQuery(IRedisQuery*poQuery);
 	virtual bool        Run(UINT32 dwCount);
+
+	//主线程阻塞查询
+	virtual void		QueryDirect(IRedisQuery* poQuery);
 
     bool                Init();
     void                Uninit();
-    void AddResult(IRedisQuery* poQuery);
+    void				AddResult(IRedisQuery* poQuery);
 
     FxRedisReader*      FetchReader();
     void                ReleaseReader(FxRedisReader* poReader);
@@ -42,7 +46,8 @@ private:
     TDynamicPoolEx<FxRedisReader>   m_oReaderPool;
 	std::list<IRedisQuery*>       m_oResultList;
 	std::map<UINT32, FxRedisClient*> m_mapDBClient;
+	std::map<UINT32, FxRedisQuery> m_mapRedisQuery;
 };
 
-#endif  // __DBDBMODULE_H_2009_0824__
+#endif  // __REDIS_MODULE_H__
 

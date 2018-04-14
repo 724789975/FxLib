@@ -48,7 +48,7 @@ RedisTest t1;
 int main(int argc, char **argv)
 {
 	//----------------------order can't change begin-----------------------//
-	gflags::SetUsageMessage("ChatServer");
+	gflags::SetUsageMessage("RedisTest");
 	gflags::ParseCommandLineFlags(&argc, &argv, false);
 	signal(SIGINT, EndFun);
 	signal(SIGTERM, EndFun);
@@ -60,13 +60,16 @@ int main(int argc, char **argv)
 	GetTimeHandler()->Run();
 	//----------------------order can't change end-----------------------//
 
-	if (!FxRedisGetModule()->Open("127.0.0.1", 6379, 0))
+	if (!FxRedisGetModule()->Open("127.0.0.1", 16379, "1", 0))
 	{
 		LogExe(LogLv_Info, "%s", "db connected failed~~~~");
 		goto STOP;
 	}
 
-	FxRedisGetModule()->AddQuery(&t1);
+	//FxRedisGetModule()->AddQuery(&t1);
+	FxRedisGetModule()->QueryDirect(&t1);
+
+	//t1.OnQuery()
 
 	while (g_bRun)
 	{

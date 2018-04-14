@@ -80,11 +80,13 @@ class IRedisModule
 public:
 	virtual						~IRedisModule() {}
 
-	virtual bool				Open(const char* szHost, unsigned int dwPort, unsigned int dwRedisId) = 0;
+	virtual bool				Open(const char* szHost, unsigned int dwPort, std::string szPassword, unsigned int dwRedisId) = 0;
 
 	virtual void				Close(unsigned int dwDBId) = 0;
 
-	virtual bool				AddQuery(IRedisQuery *poQuery) = 0;
+	virtual bool				AddQuery(IRedisQuery* poQuery) = 0;
+	//主线程阻塞查询
+	virtual void				QueryDirect(IRedisQuery* poQuery) = 0;
 
 	virtual bool				Run(unsigned int dwCount = -1) = 0;
 };

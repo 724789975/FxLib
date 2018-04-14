@@ -23,7 +23,7 @@ const char * FxRedisModule::GetModuleName(void)
 	return "FXREDIS";
 }
 
-bool FxRedisModule::Open(const char* szHost, unsigned int dwPort, unsigned int dwRedisId)
+bool FxRedisModule::Open(const char* szHost, unsigned int dwPort, std::string szPassword, unsigned int dwRedisId)
 {
 	FxRedisClient *poMySqlClient = FindDBClient(dwRedisId);
 	if(poMySqlClient != NULL)
@@ -39,7 +39,7 @@ bool FxRedisModule::Open(const char* szHost, unsigned int dwPort, unsigned int d
 		return false;
 	}
 
-	if(false == poMySqlClient->ConnectRedis(szHost, dwPort))
+	if(false == poMySqlClient->ConnectRedis(szHost, dwPort, szPassword))
 	{
 		delete poMySqlClient;
 		return false;
@@ -52,6 +52,8 @@ bool FxRedisModule::Open(const char* szHost, unsigned int dwPort, unsigned int d
 	}
 
 	m_mapDBClient[dwRedisId] = poMySqlClient;
+
+	m_mapRedisQuery[dwRedisId].ConnectRedis(szHost, dwPort, szPassword);
 
 	return true;
 }
@@ -99,9 +101,14 @@ bool FxRedisModule::Run(UINT32 dwCount)
     return bRet;
 }
 
+void FxRedisModule::QueryDirect(IRedisQuery* poQuery)
+{
+	m_mapRedisQuery[poQuery->GetDBId()].Query(poQuery);
+}
+
 bool FxRedisModule::Init()
 {
-    return m_oReaderPool.Init(1000, 100);
+    return m_oReaderPool.Init(1000, 1000);
 }
 
 void FxRedisModule::Uninit()

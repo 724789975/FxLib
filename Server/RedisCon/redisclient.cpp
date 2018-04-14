@@ -50,7 +50,7 @@ void FxRedisClient::Stop()
 	}
 }
 
-bool FxRedisClient::ConnectRedis(const std::string& szHost, unsigned int dwPort)
+bool FxRedisClient::ConnectRedis(const std::string& szHost, unsigned int dwPort, std::string szPassword)
 {
 	m_poMySqlConn = new FxRedisConnection;
 	if(NULL == m_poMySqlConn)
@@ -59,7 +59,7 @@ bool FxRedisClient::ConnectRedis(const std::string& szHost, unsigned int dwPort)
 		return false;
 	}
 
-	if(!m_poMySqlConn->Connect(szHost, dwPort))                                                                              
+	if(!m_poMySqlConn->Connect(szHost, dwPort, szPassword))                                                                              
 	{
 		LogExe(LogLv_Error, "Connect to redis %s:%d error", szHost.c_str(), dwPort);
 		return false;

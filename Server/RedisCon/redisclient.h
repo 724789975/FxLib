@@ -1,5 +1,5 @@
-#ifndef __DBCLIENT_H_2009_0824__
-#define __DBCLIENT_H_2009_0824__
+#ifndef __REDIS_CLIENT_H__
+#define __REDIS_CLIENT_H__
 
 #include <list>
 #include <time.h>
@@ -19,7 +19,7 @@ public:
 	virtual void		Stop();
 
 	bool		        Start();
-	bool				ConnectRedis(const std::string& szHost, unsigned int dwPort);
+	bool				ConnectRedis(const std::string& szHost, unsigned int dwPort, std::string szPassword);
 	bool		        AddQuery(IRedisQuery* poQuery);
 	
 private:
@@ -40,5 +40,5 @@ private:
 	char				m_szLogPath[64];
 };
 
-#endif	// __DBCLIENT_H_2009_0824__
+#endif	// __REDIS_CLIENT_H__
 
