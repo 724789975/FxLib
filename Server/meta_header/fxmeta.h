@@ -163,19 +163,10 @@ inline const char* GetSeparator()
 #endif
 
 //#define ThreadLog(eLevel, pFile, dwThreadId, strFmt, ...)
-#define ThreadLog(eLevel, pFile, szLogFile, strFmt, ...)\
+#define ThreadLog(eLevel, pFile, strFmt, ...)\
 {\
 	{\
 		char strLog[2048] = {0};\
-		if (pFile == NULL)\
-		{\
-			pFile = fopen(szLogFile, "a+");\
-		}\
-		if (Access(szLogFile, 0) == -1)\
-		{\
-			fclose(pFile);\
-			pFile = fopen(szLogFile, "a+");\
-		}\
 		if (pFile)\
 		{\
 			if((eLevel < LogLv_Count))\

@@ -145,33 +145,29 @@ int GetPid()
 FILE* GetLogFile()
 {
 	static FILE* pFile = NULL;
-	static bool bInted = false;
 	static char sstrPath[512] = { 0 };
 	static char strLogPath[512] = { 0 };
-	if (bInted)
-	{
-		if (Access(strLogPath, 0) == -1)
-		{
-			fclose(pFile);
-			pFile = fopen(sstrPath, "a+");
-		}
-		return pFile;
-	}
-	sprintf(strLogPath, "./%s_%d_exe_log.txt", GetExeName(), GetPid());
+	unsigned int dwTime = GetTimeHandler()->GetSecond() - GetTimeHandler()->GetSecond() % 3600;
+	sprintf(strLogPath, "./%s_%d_%d_exe_log.txt", GetExeName(), GetPid(), dwTime);
 
-	if (strcmp(strLogPath, sstrPath) != 0)
+	//if (strcmp(strLogPath, sstrPath) != 0)
+	//{
+	//	if (pFile)
+	//	{
+	//		fclose(pFile);
+	//		pFile = NULL;
+	//	}
+	//	sprintf(sstrPath, "%s", strLogPath);
+	//	pFile = fopen(sstrPath, "a+");
+	//}
+	if (Access(strLogPath, 0) == -1)
 	{
 		if (pFile)
 		{
 			fclose(pFile);
 			pFile = NULL;
 		}
-		sprintf(sstrPath, "%s", strLogPath);
-		pFile = fopen(sstrPath, "a+");
-		if (pFile)
-		{
-			bInted = true;
-		}
+		pFile = fopen(strLogPath, "a+");
 	}
 	return pFile;
 }

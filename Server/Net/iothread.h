@@ -27,8 +27,7 @@ public:
 	void					Uninit();
 
 	UINT32					GetThreadId();
-	FILE*&					GetFile() { return m_pFile; }
-	const char*				GetLogFile() { return m_szLogPath; }
+	FILE*&					GetFile();
 
 	void					AddConnectSocket(IFxConnectSocket* pSock);
 	void					DelConnectSocket(IFxConnectSocket* pSock);

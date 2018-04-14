@@ -134,13 +134,13 @@ bool FxUDPListenSock::StopListen()
 {
 	if (SSTATE_LISTEN != GetState())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "state : %d != SSTATE_LISTEN", (UINT32)GetState());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d != SSTATE_LISTEN", (UINT32)GetState());
 		return false;
 	}
 
 	if (INVALID_SOCKET == GetSock())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "socket : %d == INVALID_SOCKET", GetSock());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "socket : %d == INVALID_SOCKET", GetSock());
 		return false;
 	}
 
@@ -191,7 +191,7 @@ bool FxUDPListenSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
 {
 	if (SSTATE_INVALID == GetState())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "state : %d == SSTATE_INVALID", (UINT32)GetState());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d == SSTATE_INVALID", (UINT32)GetState());
 
 		return false;
 	}
@@ -252,7 +252,7 @@ void FxUDPListenSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTra
 		if (false == bRet)
 		{
 			int dwErr = WSAGetLastError();
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "OnParserIoEvent failed, errno %d", dwErr);
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "OnParserIoEvent failed, errno %d", dwErr);
 
 			closesocket(pSPerUDPIoData->hSock);
 			PostAccept(*pSPerUDPIoData);
@@ -261,7 +261,7 @@ void FxUDPListenSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTra
 		}
 		if (dwByteTransferred != sizeof(UDPPacketHeader))
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "%s", "recv length error !!!");
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "%s", "recv length error !!!");
 			PostAccept(*pSPerUDPIoData);
 			m_oLock.UnLock();
 			return;
@@ -271,7 +271,7 @@ void FxUDPListenSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTra
 
 		if ((ESocketState)pUDPPacketHeader->m_cStatus != SSTATE_CONNECT)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "recv socket state error want : %d, recv : %d !!!",
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "recv socket state error want : %d, recv : %d !!!",
 				SSTATE_CONNECT, pUDPPacketHeader->m_cStatus);
 			PostAccept(*pSPerUDPIoData);
 			m_oLock.UnLock();
@@ -280,7 +280,7 @@ void FxUDPListenSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTra
 
 		if (pUDPPacketHeader->m_cSyn != 1)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "recv socket syn error want : %d, recv : %d !!!",
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "recv socket syn error want : %d, recv : %d !!!",
 				1, pUDPPacketHeader->m_cSyn);
 			PostAccept(*pSPerUDPIoData);
 			m_oLock.UnLock();
@@ -296,7 +296,7 @@ void FxUDPListenSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTra
 		m_oLock.Lock();
 		if (bRet)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "%s", "listen socket has stoped but ret is true");
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "%s", "listen socket has stoped but ret is true");
 		}
 		else
 		{
@@ -307,7 +307,7 @@ void FxUDPListenSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTra
 	break;
 	default:
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "state : %d != SSTATE_LISTEN", (UINT32)GetState());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d != SSTATE_LISTEN", (UINT32)GetState());
 
 		Close();        // 未知错误，不应该发生//
 	}
@@ -320,7 +320,7 @@ void FxUDPListenSock::OnParserIoEvent(int dwEvents)
 	if (dwEvents & EPOLLERR)
 	{
 		PushNetEvent(NETEVT_ERROR, errno);
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "get error event errno : %d", errno);
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "get error event errno : %d", errno);
 
 		Close();
 		return;
@@ -384,7 +384,7 @@ bool FxUDPListenSock::PostAccept(SPerUDPIoData& oSPerIoData)
 	if (INVALID_SOCKET == hNewSock)
 	{
 		int dwErr = WSAGetLastError();
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "WSASocket failed, errno %d", dwErr);
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "WSASocket failed, errno %d", dwErr);
 		return false;
 	}
 	oSPerIoData.hSock = hNewSock;
@@ -402,7 +402,7 @@ bool FxUDPListenSock::PostAccept(SPerUDPIoData& oSPerIoData)
 	{
 		if (WSAGetLastError() != WSA_IO_PENDING)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "WSARecvFrom errno : %d, socket : %d, socket id : %d",
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "WSARecvFrom errno : %d, socket : %d, socket id : %d",
 				WSAGetLastError(), GetSock(), GetSockId());
 			return false;
 		}
@@ -416,7 +416,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 
 	if (SSTATE_LISTEN != GetState())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "state : %d != SSTATE_LISTEN", GetState());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d != SSTATE_LISTEN", GetState());
 
 		closesocket(hSock);
 		return;
@@ -426,7 +426,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		FxUDPConnectSock* poSock = FxMySockMgr::Instance()->CreateUdpSock();
 		if (NULL == poSock)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "CCPSock::OnAccept, create CCPSock failed");
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "CCPSock::OnAccept, create CCPSock failed");
 
 			closesocket(hSock);
 			PostAccept(*pstPerIoData);
@@ -436,7 +436,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		FxConnection* poConnection = FxConnectionMgr::Instance()->Create();
 		if (NULL == poConnection)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "CCPSock::OnAccept, create Connection failed");
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "CCPSock::OnAccept, create Connection failed");
 
 			closesocket(hSock);
 			PostAccept(*pstPerIoData);
@@ -457,7 +457,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		FxSession* poSession = m_poSessionFactory->CreateSession();
 		if (NULL == poSession)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "CCPSock::OnAccept, CreateSession failed");
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "CCPSock::OnAccept, CreateSession failed");
 
 			closesocket(hSock);
 			PostAccept(*pstPerIoData);
@@ -469,7 +469,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		FxIoThread* poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSock());
 		if (NULL == poIoThreadHandler)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "CCPSock::OnAccept, get iothread failed");
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "CCPSock::OnAccept, get iothread failed");
 
 			closesocket(hSock);
 			PostAccept(*pstPerIoData);
@@ -595,7 +595,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		{
 			if (WSAGetLastError() != WSA_IO_PENDING)
 			{
-				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "sendto errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "sendto errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
 				PostAccept(*pstPerIoData);
 				poSock->Close();
@@ -611,7 +611,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		if (getsockname(poSock->GetSock(), (sockaddr*)(&stLocalAddr), &nLocalAddrLen) == SOCKET_ERROR)
 		{
 			int dwErr = WSAGetLastError();
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "getsockname error: %d", dwErr);
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "getsockname error: %d", dwErr);
 
 			closesocket(hSock);
 			PostAccept(*pstPerIoData);
@@ -627,7 +627,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 
 		if (false == poSock->AddEvent())
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "poSock->AddEvent failed");
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "poSock->AddEvent failed");
 
 			poSock->Close();
 		}
@@ -637,7 +637,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		{
 			if (WSAGetLastError() != WSA_IO_PENDING)
 			{
-				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "connect errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "connect errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
 				PostAccept(*pstPerIoData);
 				poSock->Close();
@@ -649,7 +649,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		{
 			int dwErr = WSAGetLastError();
 			poSock->PushNetEvent(NETEVT_ERROR, dwErr);
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "poSock->PostRecv failed, errno : %d", dwErr);
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "poSock->PostRecv failed, errno : %d", dwErr);
 
 			poSock->Close();
 		}
@@ -672,17 +672,17 @@ void FxUDPListenSock::OnAccept()
 	{
 		if (oUDPPacketHeader.m_cAck != 0)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "ack error want : 0, recv : %d", oUDPPacketHeader.m_cAck);
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "ack error want : 0, recv : %d", oUDPPacketHeader.m_cAck);
 			return;
 		}
 		if (oUDPPacketHeader.m_cSyn != 1)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "syn error want : 1, recv : %d", oUDPPacketHeader.m_cSyn);
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "syn error want : 1, recv : %d", oUDPPacketHeader.m_cSyn);
 			return;
 		}
 		if (oUDPPacketHeader.m_cStatus != SSTATE_CONNECT)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "statu error want : SSTATE_CONNECT, recv : %d", oUDPPacketHeader.m_cStatus);
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "statu error want : SSTATE_CONNECT, recv : %d", oUDPPacketHeader.m_cStatus);
 			return;
 		}
 	}
@@ -696,7 +696,7 @@ void FxUDPListenSock::OnAccept()
 	FxUDPConnectSock* poSock = FxMySockMgr::Instance()->CreateUdpSock();
 	if (NULL == poSock)
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "CCPSock::OnAccept, create CCPSock failed");
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "CCPSock::OnAccept, create CCPSock failed");
 
 		close(hAcceptSock);
 		return;
@@ -705,7 +705,7 @@ void FxUDPListenSock::OnAccept()
 	FxConnection* poConnection = FxConnectionMgr::Instance()->Create();
 	if (NULL == poConnection)
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "CCPSock::OnAccept, create Connection failed");
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "CCPSock::OnAccept, create Connection failed");
 
 		close(hAcceptSock);
 		FxMySockMgr::Instance()->Release(poSock);
@@ -725,7 +725,7 @@ void FxUDPListenSock::OnAccept()
 	FxSession* poSession = m_poSessionFactory->CreateSession();
 	if (NULL == poSession)
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "CCPSock::OnAccept, CreateSession failed");
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "CCPSock::OnAccept, CreateSession failed");
 
 		close(hAcceptSock);
 		FxMySockMgr::Instance()->Release(poSock);
@@ -739,7 +739,7 @@ void FxUDPListenSock::OnAccept()
 	FxIoThread* poIoThreadHandler = FxNetModule::Instance()->FetchIoThread(poSock->GetSock());
 	if (NULL == poIoThreadHandler)
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "CCPSock::OnAccept, get iothread failed");
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "CCPSock::OnAccept, get iothread failed");
 
 		close(hAcceptSock);
 		FxMySockMgr::Instance()->Release(poSock);
@@ -867,9 +867,9 @@ void FxUDPListenSock::OnAccept()
 	{
 #ifdef WIN32
 		int dwErr = WSAGetLastError();
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind failed, errno %d", dwErr);
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "bind failed, errno %d", dwErr);
 #else
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "bind failed, errno %d", errno);
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "bind failed, errno %d", errno);
 #endif // WIN32
 		return;
 	}
@@ -882,7 +882,7 @@ void FxUDPListenSock::OnAccept()
 	{
 		if (errno != EINPROGRESS && errno != EINTR && errno != EAGAIN)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "sendto errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "sendto errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
 
 			poSock->Close();
 			return;
@@ -902,7 +902,7 @@ void FxUDPListenSock::OnAccept()
 	if (getsockname(poSock->GetSock(), (sockaddr*)&stLocalAddr, &nLocalAddrLen) < 0)
 	{
 		close(hAcceptSock);
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "socket getsockname error : %d, socket : %d, socket id %d", errno, GetSock(), GetSockId());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "socket getsockname error : %d, socket : %d, socket id %d", errno, GetSock(), GetSockId());
 		poSock->Close();
 		return;
 	}
@@ -914,7 +914,7 @@ void FxUDPListenSock::OnAccept()
 
 	if (false == poSock->AddEvent())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "poSock->AddEvent failed");
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "poSock->AddEvent failed");
 
 		poSock->Close();
 	}
@@ -924,7 +924,7 @@ void FxUDPListenSock::OnAccept()
 	{
 		if (errno != EINPROGRESS && errno != EINTR && errno != EAGAIN)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "connect errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "connect errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
 
 			poSock->Close();
 			return;
@@ -998,7 +998,7 @@ bool FxUDPConnectSock::Init()
 		m_poSendBuf = FxLoopBuffMgr::Instance()->Fetch();
 		if (NULL == m_poSendBuf)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "NULL == m_poSendBuf, socket : %d, socket id : %d", GetSock(), GetSockId());
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "NULL == m_poSendBuf, socket : %d, socket id : %d", GetSock(), GetSockId());
 			return false;
 		}
 	}
@@ -1008,7 +1008,7 @@ bool FxUDPConnectSock::Init()
 		m_poRecvBuf = FxLoopBuffMgr::Instance()->Fetch();
 		if (NULL == m_poRecvBuf)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "NULL == m_poRecvBuf, socket : %d, socket id : %d", GetSock(), GetSockId());
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "NULL == m_poRecvBuf, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 			return false;
 		}
@@ -1016,14 +1016,14 @@ bool FxUDPConnectSock::Init()
 
 	if (!m_poRecvBuf->Init(RECV_BUFF_SIZE))
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "m_poRecvBuf->Init failed, socket : %d, socket id : %d", GetSock(), GetSockId());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "m_poRecvBuf->Init failed, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		return false;
 	}
 
 	if (!m_poSendBuf->Init(SEND_BUFF_SIZE))
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "m_poSendBuf->Init failed, socket : %d, socket id : %d", GetSock(), GetSockId());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "m_poSendBuf->Init failed, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		return false;
 	}
@@ -1258,7 +1258,7 @@ bool FxUDPConnectSock::AddEvent()
 	if (!m_poIoThreadHandler->AddEvent(GetSock(), this))
 	{
 		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "error : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "error : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
 		Close();
 		return false;
@@ -1267,7 +1267,7 @@ bool FxUDPConnectSock::AddEvent()
 	if (!m_poIoThreadHandler->AddEvent(GetSock(), EPOLLOUT | EPOLLIN, this))
 	{
 		PushNetEvent(NETEVT_ERROR, errno);
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "error : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "error : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
 
 		Close();
 		return false;
@@ -1689,7 +1689,7 @@ bool FxUDPConnectSock::PostClose()
 #ifdef WIN32
 	if (false == IsConnected())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		return false;
 	}
@@ -1699,7 +1699,7 @@ bool FxUDPConnectSock::PostClose()
 
 	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(0), (ULONG_PTR)this, &m_stRecvIoData.stOverlapped))
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "PostQueuedCompletionStatus errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "PostQueuedCompletionStatus errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
 		return false;
 	}
@@ -1716,7 +1716,7 @@ bool FxUDPConnectSock::PostRecv()
 {
 	if (false == IsConnected())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		return false;
 	}
@@ -1756,7 +1756,7 @@ bool FxUDPConnectSock::PostRecv()
 	{
 		if (WSAGetLastError() != WSA_IO_PENDING)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "WSARecvFrom errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "WSARecvFrom errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
 			InterlockedCompareExchange(&m_nPostRecv, 0, 1);
 			return false;
@@ -1802,7 +1802,7 @@ void FxUDPConnectSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTr
 	default:
 	{
 		// 如果其他状态收到消息 肯定不对
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "state : %d, error", (UINT32)GetState());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d, error", (UINT32)GetState());
 		Close();        // 未知错误，不应该发生//
 	}
 	break;
@@ -1813,7 +1813,7 @@ void FxUDPConnectSock::OnParserIoEvent(int dwEvents)
 {
 	if (!IsConnected() && GetState() != SSTATE_CONNECT)
 	{
-		ThreadLog(LogLv_Critical, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "state error : %d, socket : %d, socket id : %d", GetState(), GetSock(), GetSockId());
+		ThreadLog(LogLv_Critical, m_poIoThreadHandler->GetFile(), "state error : %d, socket : %d, socket id : %d", GetState(), GetSock(), GetSockId());
 		PushNetEvent(NETEVT_ERROR, errno);
 		Close();
 		return;
@@ -1839,7 +1839,7 @@ void FxUDPConnectSock::OnParserIoEvent(int dwEvents)
 		{
 			return;
 		}
-		ThreadLog(LogLv_Critical, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "error : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+		ThreadLog(LogLv_Critical, m_poIoThreadHandler->GetFile(), "error : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
 		PushNetEvent(NETEVT_ERROR, errno);
 		Close();
 	}
@@ -1851,7 +1851,7 @@ void FxUDPConnectSock::Update()
 {
 	if (!PostSend())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == PostSend(), socket : %d, socket id : %d", GetSock(), GetSockId());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "false == PostSend(), socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		PushNetEvent(NETEVT_ERROR, errno);
 		Close();
@@ -1870,7 +1870,7 @@ bool FxUDPConnectSock::PostSend()
 
 		if (--m_dAckTimeoutRetry <= 0)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "ack_timeout_retry <= 0, socket : %d, socket id : %d", GetSock(), GetSockId());
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "ack_timeout_retry <= 0, socket : %d, socket id : %d", GetSock(), GetSockId());
 			return false;
 		}
 	}
@@ -2080,13 +2080,13 @@ bool FxUDPConnectSock::PostSend()
 					return true;
 				}
 
-				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "send nRet < 0 err : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "send nRet < 0 err : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
 
 				return false;
 			}
 			else if (0 == nRet)
 			{
-				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "send 0 == nRet, socket : %d, socket id : %d", GetSock(), GetSockId());
+				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "send 0 == nRet, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 				return false;
 			}
@@ -2146,13 +2146,13 @@ bool FxUDPConnectSock::PostSend()
 				return true;
 			}
 
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "send nRet < 0, socket : %d, socket id : %d", GetSock(), GetSockId());
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "send nRet < 0, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 			return false;
 		}
 		else if (0 == nRet)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "send 0 == nRet, socket : %d, socket id : %d", GetSock(), GetSockId());
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "send 0 == nRet, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 			return false;
 		}
@@ -2307,7 +2307,7 @@ bool FxUDPConnectSock::PostSendFree()
 	ZeroMemory(&oUDPIoData.stOverlapped, sizeof(oUDPIoData.stOverlapped));
 	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(-1), (ULONG_PTR)this, &oUDPIoData.stOverlapped))
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "PostQueuedCompletionStatus error : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "PostQueuedCompletionStatus error : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 		return false;
 	}
 	return true;
@@ -2325,7 +2325,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 	if (false == bRet)
 	{
 		int nErr = WSAGetLastError();
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == bRet errno : %d, socket : %d, socket id : %d", nErr, GetSock(), GetSockId());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "false == bRet errno : %d, socket : %d, socket id : %d", nErr, GetSock(), GetSockId());
 
 		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
 		m_dwLastError = nErr;
@@ -2381,7 +2381,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 
 		if (refPacket.m_cStatus != SSTATE_ESTABLISH)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "recv packet state err %d, socket : %d, socket id : %d", refPacket.m_cStatus, GetSock(), GetSockId());
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "recv packet state err %d, socket : %d, socket id : %d", refPacket.m_cStatus, GetSock(), GetSockId());
 			Close();
 			return;
 		}
@@ -2538,7 +2538,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 						int n = m_poRecvBuf->GetInCursorPtr(pBuffRecv);
 						if (n < wSize)
 						{
-							ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "recv errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+							ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "recv errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
 
 							PushNetEvent(NETEVT_ERROR, errno);
 							Close();
@@ -2605,7 +2605,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 				m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen);
 				if (-1 == m_nPacketLen)
 				{
-					ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+					ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 					InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
 					m_dwLastError = NET_RECVBUFF_ERROR;
@@ -2633,7 +2633,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 							int nNewLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
 							if ((int)(GetDataHeader()->GetHeaderLength()) - nLen > nNewLen)
 							{
-								ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+								ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 								InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
 								m_dwLastError = NET_RECVBUFF_ERROR;
@@ -2646,7 +2646,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 							m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, GetDataHeader()->GetHeaderLength());
 							if (0 >= m_nPacketLen)
 							{
-								ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+								ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 								InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
 								m_dwLastError = NET_RECVBUFF_ERROR;
@@ -2709,7 +2709,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 	{
 		if (false == PostRecv())
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == PostRecv, socket : %d, socket id : %d", GetSock(), GetSockId());
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "false == PostRecv, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 			m_dwLastError = WSAGetLastError();
 			Close();
@@ -2727,7 +2727,7 @@ void FxUDPConnectSock::OnRecv()
 {
 	if (false == IsConnected())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		return;
 	}
@@ -2750,7 +2750,7 @@ void FxUDPConnectSock::OnRecv()
 		// can't allocate buffer, disconnect.
 		if (btBufferId >= m_oRecvWindow.s_dwWindowSize)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "can't allocate buffer, socket : %d, socket id : %d", GetSock(), GetSockId());
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "can't allocate buffer, socket : %d, socket id : %d", GetSock(), GetSockId());
 			Close();
 			return;
 		}
@@ -2761,7 +2761,7 @@ void FxUDPConnectSock::OnRecv()
 		{
 			if ((errno != EAGAIN) && (errno != EINPROGRESS) && (errno != EINTR))
 			{
-				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "recv errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "recv errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
 
 				PushNetEvent(NETEVT_ERROR, errno);
 				Close();
@@ -2771,7 +2771,7 @@ void FxUDPConnectSock::OnRecv()
 		}
 		if (0 == nLen)
 		{
-			ThreadLog(LogLv_Debug, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "recv len 0");
+			ThreadLog(LogLv_Debug, m_poIoThreadHandler->GetFile(), "recv len 0");
 			Close();
 			return;
 		}
@@ -2782,7 +2782,7 @@ void FxUDPConnectSock::OnRecv()
 			pBuffer[0] = m_oRecvWindow.m_btFreeBufferId;
 			m_oRecvWindow.m_btFreeBufferId = btBufferId;
 
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "recv packet head err, socket : %d, socket id : %d", GetSock(), GetSockId());
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "recv packet head err, socket : %d, socket id : %d", GetSock(), GetSockId());
 			Close();
 			return;
 		}
@@ -2792,7 +2792,7 @@ void FxUDPConnectSock::OnRecv()
 
 		if (refPacket.m_cStatus != SSTATE_ESTABLISH)
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "recv packet state err %d, socket : %d, socket id : %d", refPacket.m_cStatus, GetSock(), GetSockId());
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "recv packet state err %d, socket : %d, socket id : %d", refPacket.m_cStatus, GetSock(), GetSockId());
 			Close();
 			return;
 		}
@@ -2946,7 +2946,7 @@ void FxUDPConnectSock::OnRecv()
 						int n = m_poRecvBuf->GetInCursorPtr(pBuffRecv);
 						if (n < wSize)
 						{
-							ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "recv errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+							ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "recv errno : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
 
 							PushNetEvent(NETEVT_ERROR, errno);
 							Close();
@@ -3013,7 +3013,7 @@ void FxUDPConnectSock::OnRecv()
 				m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen);
 				if (-1 == m_nPacketLen)
 				{
-					ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+					ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 					nUsedLen += nLen;
 					m_poRecvBuf->CostUsedBuff(nUsedLen);
@@ -3043,7 +3043,7 @@ void FxUDPConnectSock::OnRecv()
 							int nNewLen = m_poRecvBuf->GetUsedCursorPtr(pUseBuf);
 							if ((int)(GetDataHeader()->GetHeaderLength()) - nLen > nNewLen)
 							{
-								ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+								ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 								nUsedLen += nLen;
 								m_poRecvBuf->CostUsedBuff(nUsedLen);
@@ -3058,7 +3058,7 @@ void FxUDPConnectSock::OnRecv()
 							m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, GetDataHeader()->GetHeaderLength());
 							if (0 >= m_nPacketLen)
 							{
-								ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
+								ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "header error, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 								nUsedLen += nLen;
 								m_poRecvBuf->CostUsedBuff(nUsedLen);
@@ -3123,7 +3123,7 @@ void FxUDPConnectSock::OnSend()
 {
 	if (!IsConnected())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		return;
 	}
@@ -3133,7 +3133,7 @@ void FxUDPConnectSock::OnSend()
 	if (!m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLIN, this))
 	{
 		PushNetEvent(NETEVT_ERROR, errno);
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), m_poIoThreadHandler->GetLogFile(), "error : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "error : %d, socket : %d, socket id : %d", errno, GetSock(), GetSockId());
 
 		Close();
 		return;
