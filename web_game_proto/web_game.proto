@@ -24,6 +24,8 @@ enum ETeamType
 enum EErrorCode
 {
 	EC_NONE = 0;
+	EC_MakeTeamNotIdle = 1;		//创建队伍时 角色状态不是idle
+	EC_NoTeamServer = 2;		//没有组队服务器
 }
 
 //player->login

@@ -62,8 +62,9 @@ namespace GameProto {
             "cnZlcl9tYW5hZ2VyX3BvcnQYBCABKA0SFQoNZHdfbG9naW5fcG9ydBgFIAEo",
             "DSpJCgtFU2VydmVyVHlwZRILCgdTVF9OT05FEAASDAoIU1RfTG9naW4QARIL",
             "CgdTVF9UZWFtEAISEgoOU1RfR2FtZU1hbmFnZXIQAyonCglFVGVhbVR5cGUS",
-            "CwoHVFRfTk9ORRAAEg0KCVRUX05vcm1hbBABKhkKCkVFcnJvckNvZGUSCwoH",
-            "RUNfTk9ORRAAYgZwcm90bzM="));
+            "CwoHVFRfTk9ORRAAEg0KCVRUX05vcm1hbBABKkYKCkVFcnJvckNvZGUSCwoH",
+            "RUNfTk9ORRAAEhYKEkVDX01ha2VUZWFtTm90SWRsZRABEhMKD0VDX05vVGVh",
+            "bVNlcnZlchACYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::GameProto.WebDataReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProto.EServerType), typeof(global::GameProto.ETeamType), typeof(global::GameProto.EErrorCode), }, new pbr::GeneratedClrTypeInfo[] {
@@ -118,6 +119,14 @@ namespace GameProto {
   /// </summary>
   public enum EErrorCode {
     [pbr::OriginalName("EC_NONE")] EcNone = 0,
+    /// <summary>
+    ///创建队伍时 角色状态不是idle
+    /// </summary>
+    [pbr::OriginalName("EC_MakeTeamNotIdle")] EcMakeTeamNotIdle = 1,
+    /// <summary>
+    ///没有组队服务器
+    /// </summary>
+    [pbr::OriginalName("EC_NoTeamServer")] EcNoTeamServer = 2,
   }
 
   #endregion

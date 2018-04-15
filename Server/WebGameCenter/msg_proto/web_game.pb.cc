@@ -869,11 +869,12 @@ void AddDescriptorsImpl() {
       "\n\rdw_login_port\030\005 \001(\r*I\n\013EServerType\022\013\n\007"
       "ST_NONE\020\000\022\014\n\010ST_Login\020\001\022\013\n\007ST_Team\020\002\022\022\n\016"
       "ST_GameManager\020\003*\'\n\tETeamType\022\013\n\007TT_NONE"
-      "\020\000\022\r\n\tTT_Normal\020\001*\031\n\nEErrorCode\022\013\n\007EC_NO"
-      "NE\020\000b\006proto3"
+      "\020\000\022\r\n\tTT_Normal\020\001*F\n\nEErrorCode\022\013\n\007EC_NO"
+      "NE\020\000\022\026\n\022EC_MakeTeamNotIdle\020\001\022\023\n\017EC_NoTea"
+      "mServer\020\002b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 1772);
+      descriptor, 1817);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "web_game.proto", &protobuf_RegisterTypes);
   ::protobuf_web_5fdata_2eproto::AddDescriptors();
@@ -928,6 +929,8 @@ const ::google::protobuf::EnumDescriptor* EErrorCode_descriptor() {
 bool EErrorCode_IsValid(int value) {
   switch (value) {
     case 0:
+    case 1:
+    case 2:
       return true;
     default:
       return false;

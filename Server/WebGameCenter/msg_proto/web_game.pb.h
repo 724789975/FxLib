@@ -229,12 +229,14 @@ inline bool ETeamType_Parse(
 }
 enum EErrorCode {
   EC_NONE = 0,
+  EC_MakeTeamNotIdle = 1,
+  EC_NoTeamServer = 2,
   EErrorCode_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   EErrorCode_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool EErrorCode_IsValid(int value);
 const EErrorCode EErrorCode_MIN = EC_NONE;
-const EErrorCode EErrorCode_MAX = EC_NONE;
+const EErrorCode EErrorCode_MAX = EC_NoTeamServer;
 const int EErrorCode_ARRAYSIZE = EErrorCode_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* EErrorCode_descriptor();

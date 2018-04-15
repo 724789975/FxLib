@@ -30,6 +30,8 @@ public:
 private:
 	CPlayerSession* m_pSession;
 
+	EPlayrState m_eState;
+
 	UINT64 m_qwPyayerId;
 	std::string m_szNickName;
 	std::string m_szAvatar;

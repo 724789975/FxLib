@@ -58,14 +58,6 @@ void CLoginSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	}
 }
 
-void CLoginSession::Release(void)
-{
-	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
-	OnDestroy();
-
-	FxSession::Init(NULL);
-}
-
 void CLoginSession::Init()
 {
 	m_dwServerId = 0;
@@ -76,6 +68,35 @@ bool CLoginSession::OnServerInfo(CLoginSession& refSession, google::protobuf::Me
 	return OnServerInfo(refSession, refMsg);
 }
 
+bool CLoginSession::OnLoginRequestTeamMakeTeam(CLoginSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::LoginRequestTeamMakeTeam* pMsg = dynamic_cast<GameProto::LoginRequestTeamMakeTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	return false;
+}
+
+bool CLoginSession::OnLoginRequestTeamInviteTeam(CLoginSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::LoginRequestTeamInviteTeam* pMsg = dynamic_cast<GameProto::LoginRequestTeamInviteTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	return false;
+}
+
+bool CLoginSession::OnLoginRequestTeamChangeSlot(CLoginSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::LoginRequestTeamChangeSlot* pMsg = dynamic_cast<GameProto::LoginRequestTeamChangeSlot*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	return false;
+}
 //////////////////////////////////////////////////////////////////////////
 CBinaryLoginSession::CBinaryLoginSession()
 {
@@ -104,10 +125,10 @@ bool CBinaryLoginSession::OnServerInfo(CLoginSession& refSession, google::protob
 
 void CBinaryLoginSession::Release(void)
 {
-	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
-	OnDestroy();
+	//LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
+	//OnDestroy();
 
-	FxSession::Init(NULL);
+	//FxSession::Init(NULL);
 }
 
 //////////////////////////////////////////////////////////////////////////
