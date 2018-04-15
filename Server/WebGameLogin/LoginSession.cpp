@@ -12,6 +12,9 @@ CLoginSession::CLoginSession()
 	:m_oProtoDispatch(*this)
 {
 	m_oProtoDispatch.RegistFunction(GameProto::ServerInfo::descriptor(), &CLoginSession::OnServerInfo);
+	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamMakeTeam::descriptor(), &CLoginSession::OnLoginRequestTeamMakeTeam);
+	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamInviteTeam::descriptor(), &CLoginSession::OnLoginRequestTeamInviteTeam);
+	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamChangeSlot::descriptor(), &CLoginSession::OnLoginRequestTeamChangeSlot);
 }
 
 
@@ -67,6 +70,36 @@ void CLoginSession::Init()
 bool CLoginSession::OnServerInfo(CLoginSession& refSession, google::protobuf::Message& refMsg)
 {
 	return OnServerInfo(refSession, refMsg);
+}
+
+bool CLoginSession::OnLoginRequestTeamMakeTeam(CLoginSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::LoginRequestTeamMakeTeam* pMsg = dynamic_cast<GameProto::LoginRequestTeamMakeTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	return false;
+}
+
+bool CLoginSession::OnLoginRequestTeamInviteTeam(CLoginSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::LoginRequestTeamInviteTeam* pMsg = dynamic_cast<GameProto::LoginRequestTeamInviteTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	return false;
+}
+
+bool CLoginSession::OnLoginRequestTeamChangeSlot(CLoginSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::LoginRequestTeamChangeSlot* pMsg = dynamic_cast<GameProto::LoginRequestTeamChangeSlot*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	return false;
 }
 
 //////////////////////////////////////////////////////////////////////////

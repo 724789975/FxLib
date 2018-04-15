@@ -5,12 +5,19 @@ package GameProto;
 import "web_data.proto";
 
 //服务器类型
-enum ServerType
+enum EServerType
 {
 	ST_NONE = 0;
 	ST_Login = 1;
 	ST_Team = 2;
 	ST_GameManager = 3;
+}
+
+//组队的类型
+enum ETeamType
+{
+	TT_NONE = 0;
+	TT_Normal = 1;
 }
 
 //错误码
