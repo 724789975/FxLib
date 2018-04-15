@@ -2,6 +2,7 @@
 #include "netstream.h"
 #include "GameServer.h"
 #include "msg_proto/web_game.pb.h"
+#include "gamedefine.h"
 
 const static unsigned int g_dwServerSessionBuffLen = 64 * 1024;
 static char g_pServerSessionBuf[g_dwServerSessionBuffLen];
@@ -45,14 +46,6 @@ void CServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	}
 }
 
-void CServerSession::Release(void)
-{
-	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
-	OnDestroy();
-
-	FxSession::Init(NULL);
-}
-
 void CServerSession::Init()
 {
 	m_dwServerId = 0;
@@ -91,12 +84,10 @@ bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::
 			{
 				continue;
 			}
-			CNetStream oWriteStream(ENetStreamType_Write, g_pServerSessionBuf, g_dwServerSessionBuffLen);
-			oWriteStream.WriteString(pMsg->GetTypeName());
-			std::string szResult;
-			pMsg->SerializeToString(&szResult);
-			oWriteStream.WriteData(szResult.c_str(), szResult.size());
-			(*it)->Send(g_pServerSessionBuf, g_dwServerSessionBuffLen - oWriteStream.GetDataLength());
+			char* pBuf = NULL;
+			unsigned int dwBufLen = 0;
+			ProtoUtility::MakeProtoSendBuffer(*pMsg, pBuf, dwBufLen);
+			(*it)->Send(pBuf, dwBufLen);
 		}
 	}
 	else
@@ -120,12 +111,10 @@ bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::
 			oInfo.set_dw_team_port((*it)->m_dwTeamPort);
 			oInfo.set_dw_game_server_manager_port((*it)->m_dwGameServerManagerPort);
 
-			CNetStream oWriteStream(ENetStreamType_Write, g_pServerSessionBuf, g_dwServerSessionBuffLen);
-			oWriteStream.WriteString(oInfo.GetTypeName());
-			std::string szResult;
-			oInfo.SerializeToString(&szResult);
-			oWriteStream.WriteData(szResult.c_str(), szResult.size());
-			Send(g_pServerSessionBuf, g_dwServerSessionBuffLen - oWriteStream.GetDataLength());
+			char* pBuf = NULL;
+			unsigned int dwBufLen = 0;
+			ProtoUtility::MakeProtoSendBuffer(oInfo, pBuf, dwBufLen);
+			Send(pBuf, dwBufLen);
 		}
 	}
 }
@@ -144,7 +133,8 @@ void CBinaryServerSession::Release(void)
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
 	OnDestroy();
 
-	FxSession::Init(NULL);
+	//FxSession::Init(NULL);
+	GameServer::Instance()->GetBinaryServerSessionManager().Release(this);
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -23,12 +23,12 @@ void CGameManagerSession::OnConnect(void)
 	oInfo.set_dw_server_port(GameServer::Instance()->GetServerListenPort());
 	oInfo.set_dw_slave_server_port(GameServer::Instance()->GetSlaveServerListenPort());
 	oInfo.set_qw_player_point(GameServer::Instance()->GetPlayerPoint());
-	CNetStream oStream(ENetStreamType_Write, g_pGameManagerSessionBuf, g_dwGameManagerSessionBuffLen);
-	oStream.WriteString(oInfo.GetTypeName());
 
-	std::string szInfo = oInfo.SerializeAsString();
-	oStream.WriteData(szInfo.c_str(), szInfo.size());
-	Send(g_pGameManagerSessionBuf, g_dwGameManagerSessionBuffLen - oStream.GetDataLength());
+
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oInfo, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
 }
 
 void CGameManagerSession::OnClose(void)

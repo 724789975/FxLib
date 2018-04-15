@@ -1,26 +1,27 @@
-#include "LoginSession.h"
+#include "CenterSession.h"
 #include "netstream.h"
 #include "gamedefine.h"
+#include "PlayerSession.h"
 #include "GameServer.h"
+#include "LoginSession.h"
 #include "msg_proto/web_game.pb.h"
 
-const static unsigned int g_dwLoginSessionBuffLen = 64 * 1024;
-static char g_pLoginSessionBuf[g_dwLoginSessionBuffLen];
+const static unsigned int g_dwCenterSessionBuffLen = 64 * 1024;
+static char g_pCenterSessionBuf[g_dwCenterSessionBuffLen];
 
-CLoginSession::CLoginSession()
+CCenterSession::CCenterSession()
 	:m_oProtoDispatch(*this)
 {
-	m_oProtoDispatch.RegistFunction(GameProto::ServerInfo::descriptor(), &CLoginSession::OnServerInfo);
+	m_oProtoDispatch.RegistFunction(GameProto::ServerInfo::descriptor(), &CCenterSession::OnServerInfo);
 }
 
 
-CLoginSession::~CLoginSession()
+CCenterSession::~CCenterSession()
 {
 }
 
-void CLoginSession::OnConnect(void)
+void CCenterSession::OnConnect(void)
 {
-	//向对方发送本服务器信息
 	GameProto::ServerInfo oInfo;
 	oInfo.set_dw_server_id(GameServer::Instance()->GetServerid());
 	//oInfo.set_sz_listen_ip((*it)->GetRemoteIPStr());
@@ -34,17 +35,17 @@ void CLoginSession::OnConnect(void)
 	Send(pBuf, dwBufLen);
 }
 
-void CLoginSession::OnClose(void)
+void CCenterSession::OnClose(void)
 {
-
+	//Reconnect();
 }
 
-void CLoginSession::OnError(UINT32 dwErrorNo)
+void CCenterSession::OnError(UINT32 dwErrorNo)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
 }
 
-void CLoginSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void CCenterSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	std::string szProtocolName;
@@ -58,78 +59,76 @@ void CLoginSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	}
 }
 
-void CLoginSession::Release(void)
+void CCenterSession::Release(void)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
 	OnDestroy();
 
-	FxSession::Init(NULL);
+	//Init(NULL);
 }
 
-void CLoginSession::Init()
-{
-	m_dwServerId = 0;
-}
-
-bool CLoginSession::OnServerInfo(CLoginSession& refSession, google::protobuf::Message& refMsg)
-{
-	return OnServerInfo(refSession, refMsg);
-}
-
-//////////////////////////////////////////////////////////////////////////
-CBinaryLoginSession::CBinaryLoginSession()
-{
-}
-
-CBinaryLoginSession::~CBinaryLoginSession()
-{
-}
-
-bool CBinaryLoginSession::OnServerInfo(CLoginSession& refSession, google::protobuf::Message& refMsg)
+bool CCenterSession::OnServerInfo(CCenterSession& refSession, google::protobuf::Message& refMsg)
 {
 	GameProto::ServerInfo* pMsg = dynamic_cast<GameProto::ServerInfo*>(&refMsg);
 	if (pMsg == NULL)
 	{
 		return false;
 	}
-
-	m_dwServerId = pMsg->dw_server_id();
-	LogExe(LogLv_Debug, "server : %d connected, listen ip : %s login_port : %d, team_port : %d, game_manager_port : %d",
+	
+	LogExe(LogLv_Debug, "server : %d info, listen ip : %s login_port : %d, team_port : %d, game_manager_port : %d",
 		pMsg->dw_server_id(), pMsg->sz_listen_ip().c_str(), pMsg->dw_login_port(),
 		pMsg->dw_team_port(), pMsg->dw_game_server_manager_port());
-	GameServer::Instance()->GetLoginSessionManager().GetLoginSessions()[m_dwServerId] = this;
-	LogExe(LogLv_Debug, "server id : %d connected", m_dwServerId);
+	if (pMsg->dw_server_id() / 10000 == GameProto::ST_Login)
+	{
+		CBinaryLoginSession* pLoginSession = GameServer::Instance()->GetLoginSessionManager().CreateSession();
+		if (FxNetGetModule()->TcpConnect(pLoginSession, inet_addr(pMsg->sz_listen_ip().c_str()), pMsg->dw_game_server_manager_port(), false) == INVALID_SOCKET)
+		{
+			LogExe(LogLv_Critical, "connect to login : %d faild", pMsg->dw_server_id());
+		}
+		else
+		{
+			LogExe(LogLv_Debug, "connect to login %s:%d", pMsg->sz_listen_ip().c_str(), pMsg->dw_server_id());
+		}
+	}
 	return true;
 }
 
-void CBinaryLoginSession::Release(void)
+//////////////////////////////////////////////////////////////////////////
+CBinaryCenterSession::CBinaryCenterSession()
+{
+}
+
+CBinaryCenterSession::~CBinaryCenterSession()
+{
+}
+
+void CBinaryCenterSession::Release(void)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
 	OnDestroy();
 
-	FxSession::Init(NULL);
+	//Init(NULL);
 }
 
 //////////////////////////////////////////////////////////////////////////
-CBinaryLoginSession * BinaryLoginSessionManager::CreateSession()
+CBinaryCenterSession * BinaryCenterSessionManager::CreateSession()
 {
-	CBinaryLoginSession* pSession = m_poolSessions.FetchObj();
+	CBinaryCenterSession* pSession = m_poolSessions.FetchObj();
 	return pSession;
 }
 
-bool BinaryLoginSessionManager::Init()
+bool BinaryCenterSessionManager::Init()
 {
 	return m_poolSessions.Init(64, 64);
 }
 
-void BinaryLoginSessionManager::Release(FxSession * pSession)
+void BinaryCenterSessionManager::Release(FxSession * pSession)
 {
 	Assert(0);
 }
 
-void BinaryLoginSessionManager::Release(CBinaryLoginSession * pSession)
+void BinaryCenterSessionManager::Release(CBinaryCenterSession * pSession)
 {
-	m_mapLoginSessions.erase(pSession->GetServerId());
 	m_poolSessions.ReleaseObj(pSession);
 }
 

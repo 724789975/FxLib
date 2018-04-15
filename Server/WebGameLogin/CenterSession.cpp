@@ -29,16 +29,15 @@ void CCenterSession::OnConnect(void)
 	oInfo.set_dw_team_port(GameServer::Instance()->GetTeamPort());
 	oInfo.set_dw_game_server_manager_port(GameServer::Instance()->GetGameManagerPort());
 
-	CNetStream oWriteStream(ENetStreamType_Write, g_pCenterSessionBuf, g_dwCenterSessionBuffLen);
-	oWriteStream.WriteString(oInfo.GetTypeName());
-	std::string szResult;
-	oInfo.SerializeToString(&szResult);
-	oWriteStream.WriteData(szResult.c_str(), szResult.size());
-	Send(g_pCenterSessionBuf, g_dwCenterSessionBuffLen - oWriteStream.GetDataLength());
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oInfo, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
 }
 
 void CCenterSession::OnClose(void)
 {
+	//Reconnect();
 }
 
 void CCenterSession::OnError(UINT32 dwErrorNo)
@@ -58,14 +57,6 @@ void CCenterSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	{
 		LogExe(LogLv_Debug, "%s proccess error", szProtocolName.c_str());
 	}
-}
-
-void CCenterSession::Release(void)
-{
-	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
-	OnDestroy();
-
-	Init(NULL);
 }
 
 bool CCenterSession::OnServerInfo(CCenterSession& refSession, google::protobuf::Message& refMsg)
@@ -106,10 +97,10 @@ CBinaryCenterSession::~CBinaryCenterSession()
 
 void CBinaryCenterSession::Release(void)
 {
-	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
-	OnDestroy();
+	//LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
+	//OnDestroy();
 
-	Init(NULL);
+	//Init(NULL);
 }
 
 //////////////////////////////////////////////////////////////////////////

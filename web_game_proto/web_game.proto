@@ -2,6 +2,8 @@
 //只能用这种命名方式 不能用小写 下划线
 package GameProto;
 
+import "web_data.proto";
+
 //服务器类型
 enum ServerType
 {
@@ -9,6 +11,12 @@ enum ServerType
 	ST_Login = 1;
 	ST_Team = 2;
 	ST_GameManager = 3;
+}
+
+//错误码
+enum EErrorCode
+{
+	EC_NONE = 0;
 }
 
 //player->login
@@ -22,10 +30,88 @@ message PlayerRequestLogin
 	string sz_token = 6;
 }
 
+message PlayerRequestLoginMakeTeam
+{
+}
+
+message PlayerRequestLoginInviteTeam
+{
+	repeated uint64 qw_player_id = 1;
+}
+
+message PlayerRequestLoginChangeSlot
+{
+	uint32 dw_slot_id = 1;
+}
+
 //login->player
 message LoginAckPlayerLoginResult
 {
 	uint32 dw_result = 1;
+}
+
+message LoginAckPlayerMakeTeam
+{
+	uint32 dw_result = 1;
+}
+
+message LoginNotifyPlayerTeamInfo
+{
+	repeated TeamRoleData team_role_data = 1;
+}
+
+message LoginAckPlayerInviteTeam
+{
+	uint32 dw_result = 1;
+}
+
+message LoginAckPlayerChangeSlot
+{
+	uint32 dw_result = 1;
+}
+
+//login->team
+message LoginRequestTeamMakeTeam
+{
+	uint64 qw_player_id = 1;
+	RoleData role_data = 2;
+}
+
+message LoginRequestTeamInviteTeam
+{
+	uint32 dw_result = 1;
+	uint32 dw_slot = 2;
+}
+
+message LoginRequestTeamChangeSlot
+{
+	uint32 dw_result = 1;
+	uint32 dw_slot = 2;
+}
+
+//team->login
+message TeamAckLoginMakeTeam
+{
+	uint32 dw_result = 1;
+	uint64 qw_player_id = 2;
+	uint64 qw_team_id = 3;
+}
+
+message TeamNotifyLoginTeamInfo
+{
+	repeated TeamRoleData team_role_data = 1;
+}
+
+message TeamAckLoginInviteTeam
+{
+	uint32 dw_result = 1;
+	uint32 dw_slot = 2;
+}
+
+message TeamAckLoginChangeSlot
+{
+	uint32 dw_result = 1;
+	uint32 dw_slot = 2;
 }
 
 //game->gamemanager

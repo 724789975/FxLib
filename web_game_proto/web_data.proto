@@ -1,0 +1,17 @@
+﻿syntax = "proto3";
+//只能用这种命名方式 不能用小写 下划线
+package GameProto;
+
+message RoleData
+{
+	uint64 qw_player_id = 1;
+	string sz_nick_name = 2;
+	string sz_avatar = 3;
+	uint32 dw_sex = 4;
+}
+
+message TeamRoleData
+{
+	RoleData role_data = 1;
+	uint32 dw_slot_id = 2;
+}

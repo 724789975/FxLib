@@ -33,7 +33,7 @@ Player* PlayerManager::OnPlayerLogin(CPlayerSession* pSession, GameProto::Player
 	{
 		pPlayer = &m_mapPlayers[refLogin.qw_player_id()];
 	}
-	pPlayer->Init(pSession, refLogin);
+	pPlayer->OnPlayerRequestLogin(*pSession, refLogin);
 
 	return pPlayer;
 }

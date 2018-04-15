@@ -28,7 +28,11 @@ public:
 
 	virtual void		Init();
 
-	bool				OnPlayerRequestLogin(CPlayerSession& refSession, google::protobuf::Message& refMsg);
+	bool		OnPlayerRequestLogin(CPlayerSession& refSession, google::protobuf::Message& refMsg);
+	bool		OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, google::protobuf::Message& refMsg);
+	bool		OnPlayerRequestLoginInviteTeam(CPlayerSession& refSession, google::protobuf::Message& refMsg);
+	bool		OnPlayerRequestLoginChangeSlot(CPlayerSession& refSession, google::protobuf::Message& refMsg);
+
 private:
 	char m_dataRecvBuf[1024 * 1024];
 	UINT64 m_qwPlayerId;

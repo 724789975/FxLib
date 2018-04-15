@@ -3,8 +3,8 @@
 #include <string>
 #include <sstream>
 
-const static unsigned int g_dwChatPlayerBuffLen = 64 * 1024;
-static char g_pChatPlayerBuff[g_dwChatPlayerBuffLen];
+const static unsigned int g_dwPlayerBuffLen = 64 * 1024;
+static char g_pPlayerBuff[g_dwPlayerBuffLen];
 
 Player::Player()
 	: m_pSession(NULL)
@@ -17,9 +17,9 @@ Player::~Player()
 {
 }
 
-bool Player::Init(CPlayerSession* pSession, GameProto::PlayerRequestLogin& refLogin)
+bool Player::OnPlayerRequestLogin(CPlayerSession& refSession, GameProto::PlayerRequestLogin& refLogin)
 {
-	m_pSession = pSession;
+	m_pSession = &refSession;
 	m_qwPyayerId = refLogin.qw_player_id();
 	m_szNickName = refLogin.sz_nick_name();
 	m_szAvatar = refLogin.sz_avatar();
@@ -27,5 +27,20 @@ bool Player::Init(CPlayerSession* pSession, GameProto::PlayerRequestLogin& refLo
 	m_dwBalance = refLogin.dw_balance();
 	m_szToken = refLogin.sz_token();
 
+	return true;
+}
+
+bool Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto::PlayerRequestLoginMakeTeam& refMsg)
+{
+	return true;
+}
+
+bool Player::OnPlayerRequestLoginInviteTeam(CPlayerSession& refSession, GameProto::PlayerRequestLoginInviteTeam& refMsg)
+{
+	return true;
+}
+
+bool Player::OnPlayerRequestLoginChangeSlot(CPlayerSession& refSession, GameProto::PlayerRequestLoginChangeSlot& refMsg)
+{
 	return true;
 }

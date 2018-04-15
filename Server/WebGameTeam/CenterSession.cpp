@@ -28,12 +28,10 @@ void CCenterSession::OnConnect(void)
 	//oInfo.set_dw_team_port((*it)->m_dwTeamPort);
 	//oInfo.set_dw_game_server_manager_port(GameServer::Instance()->GetGameManagerPort());
 
-	CNetStream oWriteStream(ENetStreamType_Write, g_pCenterSessionBuf, g_dwCenterSessionBuffLen);
-	oWriteStream.WriteString(oInfo.GetTypeName());
-	std::string szResult;
-	oInfo.SerializeToString(&szResult);
-	oWriteStream.WriteData(szResult.c_str(), szResult.size());
-	Send(g_pCenterSessionBuf, g_dwCenterSessionBuffLen - oWriteStream.GetDataLength());
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oInfo, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
 }
 
 void CCenterSession::OnClose(void)

@@ -169,6 +169,7 @@
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="LoginSession.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="msg_proto\web_data.pb.cc" />
     <ClCompile Include="msg_proto\web_game.pb.cc" />
     <ClCompile Include="proto_dispatcher.cpp" />
     <ClCompile Include="SocketSession.cpp" />
@@ -178,6 +179,7 @@
     <ClInclude Include="gamedefine.h" />
     <ClInclude Include="GameServer.h" />
     <ClInclude Include="LoginSession.h" />
+    <ClInclude Include="msg_proto\web_data.pb.h" />
     <ClInclude Include="msg_proto\web_game.pb.h" />
     <ClInclude Include="SocketSession.h" />
   </ItemGroup>

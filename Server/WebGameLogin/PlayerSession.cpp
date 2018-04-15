@@ -17,6 +17,9 @@ CPlayerSession::CPlayerSession()
 	:m_oProtoDispatch(*this)
 {
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLogin::descriptor(), &CPlayerSession::OnPlayerRequestLogin);
+	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginMakeTeam::descriptor(), &CPlayerSession::OnPlayerRequestLoginMakeTeam);
+	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginInviteTeam::descriptor(), &CPlayerSession::OnPlayerRequestLoginInviteTeam);
+	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginChangeSlot::descriptor(), &CPlayerSession::OnPlayerRequestLoginChangeSlot);
 }
 
 
@@ -78,15 +81,70 @@ bool CPlayerSession::OnPlayerRequestLogin(CPlayerSession& refSession, google::pr
 
 	GameServer::Instance()->GetPlayerManager().OnPlayerLogin(this, *pMsg);
 
-	CNetStream oWriteStream(ENetStreamType_Write, g_pPlayerSessionBuf, g_dwPlayerSessionBuffLen);
 	GameProto::LoginAckPlayerLoginResult oResult;
 	oResult.set_dw_result(1);
-	oWriteStream.WriteString(oResult.GetTypeName());
-	std::string szResult;
-	oResult.SerializeToString(&szResult);
-	oWriteStream.WriteData(szResult.c_str(), szResult.size());
 
-	Send(g_pPlayerSessionBuf, g_dwPlayerSessionBuffLen - oWriteStream.GetDataLength());
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
+	return true;
+}
+
+bool CPlayerSession::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::PlayerRequestLoginMakeTeam* pMsg = dynamic_cast<GameProto::PlayerRequestLoginMakeTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	Player* pPlayer =  GameServer::Instance()->GetPlayerManager().GetPlayer(m_qwPlayerId);
+	if (pPlayer)
+	{
+		return pPlayer->OnPlayerRequestLoginMakeTeam(*this, *pMsg);
+	}
+	else
+	{
+		LogExe(LogLv_Critical, "can't find player %llu", m_qwPlayerId);
+	}
+	return true;
+}
+
+bool CPlayerSession::OnPlayerRequestLoginInviteTeam(CPlayerSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::PlayerRequestLoginInviteTeam* pMsg = dynamic_cast<GameProto::PlayerRequestLoginInviteTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(m_qwPlayerId);
+	if (pPlayer)
+	{
+		return pPlayer->OnPlayerRequestLoginInviteTeam(*this, *pMsg);
+	}
+	else
+	{
+		LogExe(LogLv_Critical, "can't find player %llu", m_qwPlayerId);
+	}
+	return true;
+}
+
+bool CPlayerSession::OnPlayerRequestLoginChangeSlot(CPlayerSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::PlayerRequestLoginChangeSlot* pMsg = dynamic_cast<GameProto::PlayerRequestLoginChangeSlot*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(m_qwPlayerId);
+	if (pPlayer)
+	{
+		return pPlayer->OnPlayerRequestLoginChangeSlot(*this, *pMsg);
+	}
+	else
+	{
+		LogExe(LogLv_Critical, "can't find player %llu", m_qwPlayerId);
+	}
 	return true;
 }
 

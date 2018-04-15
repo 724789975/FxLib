@@ -72,13 +72,11 @@ bool CServerSession::OnGameNotifyGameManagerInfo(CServerSession& refSession, goo
 		oResult.set_dw_result(0);
 		pPlayer->OnGameInfo(*pMsg);
 	}
-	CNetStream oWriteStream(ENetStreamType_Write, g_pServerSessionBuf, g_dwServerSessionBuffLen);
-	oWriteStream.WriteString(oResult.GetTypeName());
-	std::string szResult;
-	oResult.SerializeToString(&szResult);
-	oWriteStream.WriteData(szResult.c_str(), szResult.size());
 
-	Send(g_pServerSessionBuf, g_dwServerSessionBuffLen - oWriteStream.GetDataLength());
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
 	return true;
 }
 

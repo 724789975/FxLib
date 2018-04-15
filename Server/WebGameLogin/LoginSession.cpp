@@ -29,12 +29,10 @@ void CLoginSession::OnConnect(void)
 	oInfo.set_dw_team_port(GameServer::Instance()->GetTeamPort());
 	oInfo.set_dw_game_server_manager_port(GameServer::Instance()->GetGameManagerPort());
 
-	CNetStream oWriteStream(ENetStreamType_Write, g_pLoginSessionBuf, g_dwLoginSessionBuffLen);
-	oWriteStream.WriteString(oInfo.GetTypeName());
-	std::string szResult;
-	oInfo.SerializeToString(&szResult);
-	oWriteStream.WriteData(szResult.c_str(), szResult.size());
-	Send(g_pLoginSessionBuf, g_dwLoginSessionBuffLen - oWriteStream.GetDataLength());
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oInfo, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
 }
 
 void CLoginSession::OnClose(void)
@@ -59,14 +57,6 @@ void CLoginSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	{
 		LogExe(LogLv_Debug, "%s proccess error", szProtocolName.c_str());
 	}
-}
-
-void CLoginSession::Release(void)
-{
-	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
-	OnDestroy();
-
-	FxSession::Init(NULL);
 }
 
 void CLoginSession::Init()
@@ -111,7 +101,7 @@ void CBinaryLoginSession::Release(void)
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
 	OnDestroy();
 
-	FxSession::Init(NULL);
+	GameServer::Instance()->GetLoginSessionManager().Release(this);
 }
 
 //////////////////////////////////////////////////////////////////////////

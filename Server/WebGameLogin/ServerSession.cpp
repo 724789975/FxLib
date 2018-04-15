@@ -48,14 +48,6 @@ void CServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	}
 }
 
-void CServerSession::Release(void)
-{
-	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
-	OnDestroy();
-
-	Init(NULL);
-}
-
 bool CServerSession::OnGameNotifyGameManagerInfo(CServerSession& refSession, google::protobuf::Message& refMsg)
 {
 	GameProto::GameNotifyGameManagerInfo* pMsg = dynamic_cast<GameProto::GameNotifyGameManagerInfo*>(&refMsg);
@@ -78,10 +70,12 @@ CBinaryServerSession::~CBinaryServerSession()
 
 void CBinaryServerSession::Release(void)
 {
-	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
-	OnDestroy();
+	//LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
+	//OnDestroy();
 
-	Init(NULL);
+	//Init(NULL);
+
+	//GameServer::Instance()->getser
 }
 
 //////////////////////////////////////////////////////////////////////////
