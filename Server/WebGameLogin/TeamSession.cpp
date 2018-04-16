@@ -69,6 +69,60 @@ bool CTeamSession::OnServerInfo(CTeamSession& refSession, google::protobuf::Mess
 	return OnServerInfo(refSession, refMsg);
 }
 
+bool CTeamSession::OnTeamAckLoginMakeTeam(CTeamSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::TeamAckLoginMakeTeam* pMsg = dynamic_cast<GameProto::TeamAckLoginMakeTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(pMsg->qw_player_id());
+	if (pPlayer == NULL)
+	{
+		LogExe(LogLv_Critical, "create team error playerid : %llu, teamid : %llu", pMsg->qw_player_id(), pMsg->qw_team_id());
+		return true;
+	}
+
+	GameProto::LoginAckPlayerLoginResult oResult;
+	oResult.set_dw_result(pMsg->dw_result());
+	oResult.set_qw_team_id(pMsg->qw_team_id());
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+	pPlayer->GetSession()->Send(pBuf, dwBufLen);
+	return true;
+}
+
+bool CTeamSession::OnTeamNotifyLoginTeamInfo(CTeamSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::TeamNotifyLoginTeamInfo* pMsg = dynamic_cast<GameProto::TeamNotifyLoginTeamInfo*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool CTeamSession::OnTeamAckLoginInviteTeam(CTeamSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::TeamAckLoginInviteTeam* pMsg = dynamic_cast<GameProto::TeamAckLoginInviteTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool CTeamSession::OnTeamAckLoginChangeSlot(CTeamSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::TeamAckLoginChangeSlot* pMsg = dynamic_cast<GameProto::TeamAckLoginChangeSlot*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	return true;
+}
+
 //////////////////////////////////////////////////////////////////////////
 CBinaryTeamSession::CBinaryTeamSession()
 {

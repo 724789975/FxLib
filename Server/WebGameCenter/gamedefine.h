@@ -25,5 +25,10 @@ namespace ProtoUtility
 	}
 }
 
+namespace RedisConstant
+{
+	static const char* szTeamId = "team_id";
+}
+
 
 #endif // !__GameDefine_H__

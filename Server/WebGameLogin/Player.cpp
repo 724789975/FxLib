@@ -40,6 +40,8 @@ bool Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto:
 	GameProto::LoginRequestTeamMakeTeam oTeam;
 	oTeam.set_qw_player_id(m_qwPyayerId);
 
+	LogExe(LogLv_Debug, "player : %llu want to make team", m_qwPyayerId);
+
 	GameProto::RoleData* pRoleData = oTeam.mutable_role_data();
 	pRoleData->set_qw_player_id(m_qwPyayerId);
 	pRoleData->set_sz_nick_name(m_szNickName);

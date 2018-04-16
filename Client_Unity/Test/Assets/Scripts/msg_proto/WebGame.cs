@@ -31,40 +31,40 @@ namespace GameProto {
             "ASgJIhwKGlBsYXllclJlcXVlc3RMb2dpbk1ha2VUZWFtIjQKHFBsYXllclJl",
             "cXVlc3RMb2dpbkludml0ZVRlYW0SFAoMcXdfcGxheWVyX2lkGAEgAygEIjIK",
             "HFBsYXllclJlcXVlc3RMb2dpbkNoYW5nZVNsb3QSEgoKZHdfc2xvdF9pZBgB",
-            "IAEoDSIuChlMb2dpbkFja1BsYXllckxvZ2luUmVzdWx0EhEKCWR3X3Jlc3Vs",
-            "dBgBIAEoDSIrChZMb2dpbkFja1BsYXllck1ha2VUZWFtEhEKCWR3X3Jlc3Vs",
-            "dBgBIAEoDSJMChlMb2dpbk5vdGlmeVBsYXllclRlYW1JbmZvEi8KDnRlYW1f",
-            "cm9sZV9kYXRhGAEgAygLMhcuR2FtZVByb3RvLlRlYW1Sb2xlRGF0YSItChhM",
-            "b2dpbkFja1BsYXllckludml0ZVRlYW0SEQoJZHdfcmVzdWx0GAEgASgNIi0K",
-            "GExvZ2luQWNrUGxheWVyQ2hhbmdlU2xvdBIRCglkd19yZXN1bHQYASABKA0i",
-            "WAoYTG9naW5SZXF1ZXN0VGVhbU1ha2VUZWFtEhQKDHF3X3BsYXllcl9pZBgB",
-            "IAEoBBImCglyb2xlX2RhdGEYAiABKAsyEy5HYW1lUHJvdG8uUm9sZURhdGEi",
-            "QAoaTG9naW5SZXF1ZXN0VGVhbUludml0ZVRlYW0SEQoJZHdfcmVzdWx0GAEg",
-            "ASgNEg8KB2R3X3Nsb3QYAiABKA0iQAoaTG9naW5SZXF1ZXN0VGVhbUNoYW5n",
-            "ZVNsb3QSEQoJZHdfcmVzdWx0GAEgASgNEg8KB2R3X3Nsb3QYAiABKA0iUwoU",
-            "VGVhbUFja0xvZ2luTWFrZVRlYW0SEQoJZHdfcmVzdWx0GAEgASgNEhQKDHF3",
-            "X3BsYXllcl9pZBgCIAEoBBISCgpxd190ZWFtX2lkGAMgASgEIkoKF1RlYW1O",
-            "b3RpZnlMb2dpblRlYW1JbmZvEi8KDnRlYW1fcm9sZV9kYXRhGAEgAygLMhcu",
-            "R2FtZVByb3RvLlRlYW1Sb2xlRGF0YSI8ChZUZWFtQWNrTG9naW5JbnZpdGVU",
-            "ZWFtEhEKCWR3X3Jlc3VsdBgBIAEoDRIPCgdkd19zbG90GAIgASgNIjwKFlRl",
-            "YW1BY2tMb2dpbkNoYW5nZVNsb3QSEQoJZHdfcmVzdWx0GAEgASgNEg8KB2R3",
-            "X3Nsb3QYAiABKA0iggEKGUdhbWVOb3RpZnlHYW1lTWFuYWdlckluZm8SFgoO",
-            "ZHdfcGxheWVyX3BvcnQYASABKA0SFgoOZHdfc2VydmVyX3BvcnQYAiABKA0S",
-            "HAoUZHdfc2xhdmVfc2VydmVyX3BvcnQYAyABKA0SFwoPcXdfcGxheWVyX3Bv",
-            "aW50GAQgASgEIjEKHEdhbWVNYW5hZ2VyQWNrR2FtZUluZm9SZXN1bHQSEQoJ",
-            "ZHdfcmVzdWx0GAEgASgNIjEKHFBsYXllclJlcXVlc3RHYW1lTWFuYWdlcklu",
-            "Zm8SEQoJZHdfcmVzdWx0GAEgASgNIm4KHkdhbWVNYW5hZ2VyQWNrUGxheWVy",
-            "SW5mb1Jlc3VsdBIWCg5kd19wbGF5ZXJfcG9ydBgBIAEoDRIWCg5kd19zZXJ2",
-            "ZXJfcG9ydBgCIAEoDRIcChRkd19zbGF2ZV9zZXJ2ZXJfcG9ydBgDIAEoDSIo",
-            "ChVQbGF5ZXJSZXF1ZXN0R2FtZVRlc3QSDwoHc3pfdGVzdBgBIAEoCSKKAQoK",
-            "U2VydmVySW5mbxIUCgxkd19zZXJ2ZXJfaWQYASABKA0SFAoMc3pfbGlzdGVu",
-            "X2lwGAIgASgJEhQKDGR3X3RlYW1fcG9ydBgDIAEoDRIjChtkd19nYW1lX3Nl",
-            "cnZlcl9tYW5hZ2VyX3BvcnQYBCABKA0SFQoNZHdfbG9naW5fcG9ydBgFIAEo",
-            "DSpJCgtFU2VydmVyVHlwZRILCgdTVF9OT05FEAASDAoIU1RfTG9naW4QARIL",
-            "CgdTVF9UZWFtEAISEgoOU1RfR2FtZU1hbmFnZXIQAyonCglFVGVhbVR5cGUS",
-            "CwoHVFRfTk9ORRAAEg0KCVRUX05vcm1hbBABKkYKCkVFcnJvckNvZGUSCwoH",
-            "RUNfTk9ORRAAEhYKEkVDX01ha2VUZWFtTm90SWRsZRABEhMKD0VDX05vVGVh",
-            "bVNlcnZlchACYgZwcm90bzM="));
+            "IAEoDSJCChlMb2dpbkFja1BsYXllckxvZ2luUmVzdWx0EhEKCWR3X3Jlc3Vs",
+            "dBgBIAEoDRISCgpxd190ZWFtX2lkGAIgASgEIisKFkxvZ2luQWNrUGxheWVy",
+            "TWFrZVRlYW0SEQoJZHdfcmVzdWx0GAEgASgNIkwKGUxvZ2luTm90aWZ5UGxh",
+            "eWVyVGVhbUluZm8SLwoOdGVhbV9yb2xlX2RhdGEYASADKAsyFy5HYW1lUHJv",
+            "dG8uVGVhbVJvbGVEYXRhIi0KGExvZ2luQWNrUGxheWVySW52aXRlVGVhbRIR",
+            "Cglkd19yZXN1bHQYASABKA0iLQoYTG9naW5BY2tQbGF5ZXJDaGFuZ2VTbG90",
+            "EhEKCWR3X3Jlc3VsdBgBIAEoDSJYChhMb2dpblJlcXVlc3RUZWFtTWFrZVRl",
+            "YW0SFAoMcXdfcGxheWVyX2lkGAEgASgEEiYKCXJvbGVfZGF0YRgCIAEoCzIT",
+            "LkdhbWVQcm90by5Sb2xlRGF0YSJAChpMb2dpblJlcXVlc3RUZWFtSW52aXRl",
+            "VGVhbRIRCglkd19yZXN1bHQYASABKA0SDwoHZHdfc2xvdBgCIAEoDSJAChpM",
+            "b2dpblJlcXVlc3RUZWFtQ2hhbmdlU2xvdBIRCglkd19yZXN1bHQYASABKA0S",
+            "DwoHZHdfc2xvdBgCIAEoDSJTChRUZWFtQWNrTG9naW5NYWtlVGVhbRIRCglk",
+            "d19yZXN1bHQYASABKA0SFAoMcXdfcGxheWVyX2lkGAIgASgEEhIKCnF3X3Rl",
+            "YW1faWQYAyABKAQiSgoXVGVhbU5vdGlmeUxvZ2luVGVhbUluZm8SLwoOdGVh",
+            "bV9yb2xlX2RhdGEYASADKAsyFy5HYW1lUHJvdG8uVGVhbVJvbGVEYXRhIjwK",
+            "FlRlYW1BY2tMb2dpbkludml0ZVRlYW0SEQoJZHdfcmVzdWx0GAEgASgNEg8K",
+            "B2R3X3Nsb3QYAiABKA0iPAoWVGVhbUFja0xvZ2luQ2hhbmdlU2xvdBIRCglk",
+            "d19yZXN1bHQYASABKA0SDwoHZHdfc2xvdBgCIAEoDSKCAQoZR2FtZU5vdGlm",
+            "eUdhbWVNYW5hZ2VySW5mbxIWCg5kd19wbGF5ZXJfcG9ydBgBIAEoDRIWCg5k",
+            "d19zZXJ2ZXJfcG9ydBgCIAEoDRIcChRkd19zbGF2ZV9zZXJ2ZXJfcG9ydBgD",
+            "IAEoDRIXCg9xd19wbGF5ZXJfcG9pbnQYBCABKAQiMQocR2FtZU1hbmFnZXJB",
+            "Y2tHYW1lSW5mb1Jlc3VsdBIRCglkd19yZXN1bHQYASABKA0iMQocUGxheWVy",
+            "UmVxdWVzdEdhbWVNYW5hZ2VySW5mbxIRCglkd19yZXN1bHQYASABKA0ibgoe",
+            "R2FtZU1hbmFnZXJBY2tQbGF5ZXJJbmZvUmVzdWx0EhYKDmR3X3BsYXllcl9w",
+            "b3J0GAEgASgNEhYKDmR3X3NlcnZlcl9wb3J0GAIgASgNEhwKFGR3X3NsYXZl",
+            "X3NlcnZlcl9wb3J0GAMgASgNIigKFVBsYXllclJlcXVlc3RHYW1lVGVzdBIP",
+            "Cgdzel90ZXN0GAEgASgJIooBCgpTZXJ2ZXJJbmZvEhQKDGR3X3NlcnZlcl9p",
+            "ZBgBIAEoDRIUCgxzel9saXN0ZW5faXAYAiABKAkSFAoMZHdfdGVhbV9wb3J0",
+            "GAMgASgNEiMKG2R3X2dhbWVfc2VydmVyX21hbmFnZXJfcG9ydBgEIAEoDRIV",
+            "Cg1kd19sb2dpbl9wb3J0GAUgASgNKkkKC0VTZXJ2ZXJUeXBlEgsKB1NUX05P",
+            "TkUQABIMCghTVF9Mb2dpbhABEgsKB1NUX1RlYW0QAhISCg5TVF9HYW1lTWFu",
+            "YWdlchADKicKCUVUZWFtVHlwZRILCgdUVF9OT05FEAASDQoJVFRfTm9ybWFs",
+            "EAEqRgoKRUVycm9yQ29kZRILCgdFQ19OT05FEAASFgoSRUNfTWFrZVRlYW1O",
+            "b3RJZGxlEAESEwoPRUNfTm9UZWFtU2VydmVyEAJiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::GameProto.WebDataReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProto.EServerType), typeof(global::GameProto.ETeamType), typeof(global::GameProto.EErrorCode), }, new pbr::GeneratedClrTypeInfo[] {
@@ -72,7 +72,7 @@ namespace GameProto {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLoginMakeTeam), global::GameProto.PlayerRequestLoginMakeTeam.Parser, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLoginInviteTeam), global::GameProto.PlayerRequestLoginInviteTeam.Parser, new[]{ "QwPlayerId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLoginChangeSlot), global::GameProto.PlayerRequestLoginChangeSlot.Parser, new[]{ "DwSlotId" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerLoginResult), global::GameProto.LoginAckPlayerLoginResult.Parser, new[]{ "DwResult" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerLoginResult), global::GameProto.LoginAckPlayerLoginResult.Parser, new[]{ "DwResult", "QwTeamId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerMakeTeam), global::GameProto.LoginAckPlayerMakeTeam.Parser, new[]{ "DwResult" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginNotifyPlayerTeamInfo), global::GameProto.LoginNotifyPlayerTeamInfo.Parser, new[]{ "TeamRoleData" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerInviteTeam), global::GameProto.LoginAckPlayerInviteTeam.Parser, new[]{ "DwResult" }, null, null, null),
@@ -785,6 +785,7 @@ namespace GameProto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public LoginAckPlayerLoginResult(LoginAckPlayerLoginResult other) : this() {
       dwResult_ = other.dwResult_;
+      qwTeamId_ = other.qwTeamId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -804,6 +805,17 @@ namespace GameProto {
       }
     }
 
+    /// <summary>Field number for the "qw_team_id" field.</summary>
+    public const int QwTeamIdFieldNumber = 2;
+    private ulong qwTeamId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong QwTeamId {
+      get { return qwTeamId_; }
+      set {
+        qwTeamId_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as LoginAckPlayerLoginResult);
@@ -818,6 +830,7 @@ namespace GameProto {
         return true;
       }
       if (DwResult != other.DwResult) return false;
+      if (QwTeamId != other.QwTeamId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -825,6 +838,7 @@ namespace GameProto {
     public override int GetHashCode() {
       int hash = 1;
       if (DwResult != 0) hash ^= DwResult.GetHashCode();
+      if (QwTeamId != 0UL) hash ^= QwTeamId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -842,6 +856,10 @@ namespace GameProto {
         output.WriteRawTag(8);
         output.WriteUInt32(DwResult);
       }
+      if (QwTeamId != 0UL) {
+        output.WriteRawTag(16);
+        output.WriteUInt64(QwTeamId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -852,6 +870,9 @@ namespace GameProto {
       int size = 0;
       if (DwResult != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwResult);
+      }
+      if (QwTeamId != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(QwTeamId);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -867,6 +888,9 @@ namespace GameProto {
       if (other.DwResult != 0) {
         DwResult = other.DwResult;
       }
+      if (other.QwTeamId != 0UL) {
+        QwTeamId = other.QwTeamId;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -880,6 +904,10 @@ namespace GameProto {
             break;
           case 8: {
             DwResult = input.ReadUInt32();
+            break;
+          }
+          case 16: {
+            QwTeamId = input.ReadUInt64();
             break;
           }
         }

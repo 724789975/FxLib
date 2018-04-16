@@ -98,7 +98,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(TargetDIr)libprotobufd.lib;ws2_32.lib;dbghelp.lib;libmysql.lib;$(TargetDir)gflags_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(TargetDIr)libprotobufd.lib;ws2_32.lib;dbghelp.lib;libmysql.lib;$(TargetDir)gflags_static.lib;$(TargetDIr)hiredis.lib;$(TargetDIr)Win32_Interop.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../mysql/lib/libmtd;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -186,6 +186,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Net\Net.vcxproj">
       <Project>{5f97e034-3d07-4fce-9a0d-410661e3c32a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\RedisCon\RedisCon.vcxproj">
+      <Project>{e46b34d1-23ff-434d-ad85-df5e0ed821f4}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
