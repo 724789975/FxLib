@@ -77,7 +77,7 @@ bool CLoginSession::OnLoginRequestTeamMakeTeam(CLoginSession& refSession, google
 	class RedisTeamId : public IRedisQuery
 	{
 	public:
-		RedisTeamId() : m_qwTeamId(0) {}
+		RedisTeamId() : m_qwTeamId(0), m_pReader(NULL) {}
 		~RedisTeamId() {}
 
 		virtual int					GetDBId(void) { return 0; }

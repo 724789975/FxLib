@@ -31,9 +31,9 @@ namespace GameProto {
             "ASgJIhwKGlBsYXllclJlcXVlc3RMb2dpbk1ha2VUZWFtIjQKHFBsYXllclJl",
             "cXVlc3RMb2dpbkludml0ZVRlYW0SFAoMcXdfcGxheWVyX2lkGAEgAygEIjIK",
             "HFBsYXllclJlcXVlc3RMb2dpbkNoYW5nZVNsb3QSEgoKZHdfc2xvdF9pZBgB",
-            "IAEoDSJCChlMb2dpbkFja1BsYXllckxvZ2luUmVzdWx0EhEKCWR3X3Jlc3Vs",
-            "dBgBIAEoDRISCgpxd190ZWFtX2lkGAIgASgEIisKFkxvZ2luQWNrUGxheWVy",
-            "TWFrZVRlYW0SEQoJZHdfcmVzdWx0GAEgASgNIkwKGUxvZ2luTm90aWZ5UGxh",
+            "IAEoDSIuChlMb2dpbkFja1BsYXllckxvZ2luUmVzdWx0EhEKCWR3X3Jlc3Vs",
+            "dBgBIAEoDSI/ChZMb2dpbkFja1BsYXllck1ha2VUZWFtEhEKCWR3X3Jlc3Vs",
+            "dBgBIAEoDRISCgpxd190ZWFtX2lkGAIgASgEIkwKGUxvZ2luTm90aWZ5UGxh",
             "eWVyVGVhbUluZm8SLwoOdGVhbV9yb2xlX2RhdGEYASADKAsyFy5HYW1lUHJv",
             "dG8uVGVhbVJvbGVEYXRhIi0KGExvZ2luQWNrUGxheWVySW52aXRlVGVhbRIR",
             "Cglkd19yZXN1bHQYASABKA0iLQoYTG9naW5BY2tQbGF5ZXJDaGFuZ2VTbG90",
@@ -72,8 +72,8 @@ namespace GameProto {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLoginMakeTeam), global::GameProto.PlayerRequestLoginMakeTeam.Parser, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLoginInviteTeam), global::GameProto.PlayerRequestLoginInviteTeam.Parser, new[]{ "QwPlayerId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLoginChangeSlot), global::GameProto.PlayerRequestLoginChangeSlot.Parser, new[]{ "DwSlotId" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerLoginResult), global::GameProto.LoginAckPlayerLoginResult.Parser, new[]{ "DwResult", "QwTeamId" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerMakeTeam), global::GameProto.LoginAckPlayerMakeTeam.Parser, new[]{ "DwResult" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerLoginResult), global::GameProto.LoginAckPlayerLoginResult.Parser, new[]{ "DwResult" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerMakeTeam), global::GameProto.LoginAckPlayerMakeTeam.Parser, new[]{ "DwResult", "QwTeamId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginNotifyPlayerTeamInfo), global::GameProto.LoginNotifyPlayerTeamInfo.Parser, new[]{ "TeamRoleData" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerInviteTeam), global::GameProto.LoginAckPlayerInviteTeam.Parser, new[]{ "DwResult" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerChangeSlot), global::GameProto.LoginAckPlayerChangeSlot.Parser, new[]{ "DwResult" }, null, null, null),
@@ -785,13 +785,142 @@ namespace GameProto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public LoginAckPlayerLoginResult(LoginAckPlayerLoginResult other) : this() {
       dwResult_ = other.dwResult_;
-      qwTeamId_ = other.qwTeamId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public LoginAckPlayerLoginResult Clone() {
       return new LoginAckPlayerLoginResult(this);
+    }
+
+    /// <summary>Field number for the "dw_result" field.</summary>
+    public const int DwResultFieldNumber = 1;
+    private uint dwResult_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint DwResult {
+      get { return dwResult_; }
+      set {
+        dwResult_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as LoginAckPlayerLoginResult);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(LoginAckPlayerLoginResult other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (DwResult != other.DwResult) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (DwResult != 0) hash ^= DwResult.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (DwResult != 0) {
+        output.WriteRawTag(8);
+        output.WriteUInt32(DwResult);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (DwResult != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwResult);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(LoginAckPlayerLoginResult other) {
+      if (other == null) {
+        return;
+      }
+      if (other.DwResult != 0) {
+        DwResult = other.DwResult;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            DwResult = input.ReadUInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class LoginAckPlayerMakeTeam : pb::IMessage<LoginAckPlayerMakeTeam> {
+    private static readonly pb::MessageParser<LoginAckPlayerMakeTeam> _parser = new pb::MessageParser<LoginAckPlayerMakeTeam>(() => new LoginAckPlayerMakeTeam());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<LoginAckPlayerMakeTeam> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[5]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public LoginAckPlayerMakeTeam() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public LoginAckPlayerMakeTeam(LoginAckPlayerMakeTeam other) : this() {
+      dwResult_ = other.dwResult_;
+      qwTeamId_ = other.qwTeamId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public LoginAckPlayerMakeTeam Clone() {
+      return new LoginAckPlayerMakeTeam(this);
     }
 
     /// <summary>Field number for the "dw_result" field.</summary>
@@ -818,11 +947,11 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as LoginAckPlayerLoginResult);
+      return Equals(other as LoginAckPlayerMakeTeam);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(LoginAckPlayerLoginResult other) {
+    public bool Equals(LoginAckPlayerMakeTeam other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -881,7 +1010,7 @@ namespace GameProto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(LoginAckPlayerLoginResult other) {
+    public void MergeFrom(LoginAckPlayerMakeTeam other) {
       if (other == null) {
         return;
       }
@@ -908,135 +1037,6 @@ namespace GameProto {
           }
           case 16: {
             QwTeamId = input.ReadUInt64();
-            break;
-          }
-        }
-      }
-    }
-
-  }
-
-  public sealed partial class LoginAckPlayerMakeTeam : pb::IMessage<LoginAckPlayerMakeTeam> {
-    private static readonly pb::MessageParser<LoginAckPlayerMakeTeam> _parser = new pb::MessageParser<LoginAckPlayerMakeTeam>(() => new LoginAckPlayerMakeTeam());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<LoginAckPlayerMakeTeam> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[5]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public LoginAckPlayerMakeTeam() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public LoginAckPlayerMakeTeam(LoginAckPlayerMakeTeam other) : this() {
-      dwResult_ = other.dwResult_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public LoginAckPlayerMakeTeam Clone() {
-      return new LoginAckPlayerMakeTeam(this);
-    }
-
-    /// <summary>Field number for the "dw_result" field.</summary>
-    public const int DwResultFieldNumber = 1;
-    private uint dwResult_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint DwResult {
-      get { return dwResult_; }
-      set {
-        dwResult_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as LoginAckPlayerMakeTeam);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(LoginAckPlayerMakeTeam other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (DwResult != other.DwResult) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (DwResult != 0) hash ^= DwResult.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (DwResult != 0) {
-        output.WriteRawTag(8);
-        output.WriteUInt32(DwResult);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (DwResult != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwResult);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(LoginAckPlayerMakeTeam other) {
-      if (other == null) {
-        return;
-      }
-      if (other.DwResult != 0) {
-        DwResult = other.DwResult;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 8: {
-            DwResult = input.ReadUInt32();
             break;
           }
         }

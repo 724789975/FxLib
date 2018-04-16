@@ -57,12 +57,12 @@ message PlayerRequestLoginChangeSlot
 message LoginAckPlayerLoginResult
 {
 	uint32 dw_result = 1;
-	uint64 qw_team_id = 2;
 }
 
 message LoginAckPlayerMakeTeam
 {
 	uint32 dw_result = 1;
+	uint64 qw_team_id = 2;
 }
 
 message LoginNotifyPlayerTeamInfo

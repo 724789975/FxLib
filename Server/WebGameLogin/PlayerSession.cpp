@@ -80,9 +80,10 @@ bool CPlayerSession::OnPlayerRequestLogin(CPlayerSession& refSession, google::pr
 	}
 
 	GameServer::Instance()->GetPlayerManager().OnPlayerLogin(this, *pMsg);
+	m_qwPlayerId = pMsg->qw_player_id();
 
 	GameProto::LoginAckPlayerLoginResult oResult;
-	oResult.set_dw_result(1);
+	oResult.set_dw_result(0);
 
 	char* pBuf = NULL;
 	unsigned int dwBufLen = 0;
