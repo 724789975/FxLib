@@ -184,12 +184,6 @@
     <ClInclude Include="SocketSession.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Database\Database.vcxproj">
-      <Project>{80844bda-1f06-4850-83a8-dcab973131ba}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\LuaLib\LuaLib.vcxproj">
-      <Project>{ea521660-35b5-4c46-8aa0-545c78441734}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Net\Net.vcxproj">
       <Project>{5f97e034-3d07-4fce-9a0d-410661e3c32a}</Project>
     </ProjectReference>
