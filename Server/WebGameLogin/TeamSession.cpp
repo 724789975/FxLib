@@ -12,6 +12,10 @@ CTeamSession::CTeamSession()
 	:m_oProtoDispatch(*this)
 {
 	m_oProtoDispatch.RegistFunction(GameProto::ServerInfo::descriptor(), &CTeamSession::OnServerInfo);
+	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginMakeTeam::descriptor(), &CTeamSession::OnTeamAckLoginMakeTeam);
+	m_oProtoDispatch.RegistFunction(GameProto::TeamNotifyLoginTeamInfo::descriptor(), &CTeamSession::OnTeamNotifyLoginTeamInfo);
+	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginInviteTeam::descriptor(), &CTeamSession::OnTeamAckLoginInviteTeam);
+	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginChangeSlot::descriptor(), &CTeamSession::OnTeamAckLoginChangeSlot);
 }
 
 
@@ -67,6 +71,61 @@ void CTeamSession::Init()
 bool CTeamSession::OnServerInfo(CTeamSession& refSession, google::protobuf::Message& refMsg)
 {
 	return OnServerInfo(refSession, refMsg);
+}
+
+bool CTeamSession::OnTeamAckLoginMakeTeam(CTeamSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::TeamAckLoginMakeTeam* pMsg = dynamic_cast<GameProto::TeamAckLoginMakeTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(pMsg->qw_player_id());
+	if (pPlayer == NULL)
+	{
+		LogExe(LogLv_Critical, "create team error playerid : %llu, teamid : %llu", pMsg->qw_player_id(), pMsg->qw_team_id());
+		return true;
+	}
+
+	LogExe(LogLv_Debug, "create team playerid : %llu, teamid : %llu", pMsg->qw_player_id(), pMsg->qw_team_id());
+	GameProto::LoginAckPlayerMakeTeam oResult;
+	oResult.set_dw_result(pMsg->dw_result());
+	oResult.set_qw_team_id(pMsg->qw_team_id());
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+	pPlayer->GetSession()->Send(pBuf, dwBufLen);
+	return true;
+}
+
+bool CTeamSession::OnTeamNotifyLoginTeamInfo(CTeamSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::TeamNotifyLoginTeamInfo* pMsg = dynamic_cast<GameProto::TeamNotifyLoginTeamInfo*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool CTeamSession::OnTeamAckLoginInviteTeam(CTeamSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::TeamAckLoginInviteTeam* pMsg = dynamic_cast<GameProto::TeamAckLoginInviteTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool CTeamSession::OnTeamAckLoginChangeSlot(CTeamSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::TeamAckLoginChangeSlot* pMsg = dynamic_cast<GameProto::TeamAckLoginChangeSlot*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	return true;
 }
 
 //////////////////////////////////////////////////////////////////////////

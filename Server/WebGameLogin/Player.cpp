@@ -40,6 +40,8 @@ bool Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto:
 	GameProto::LoginRequestTeamMakeTeam oTeam;
 	oTeam.set_qw_player_id(m_qwPyayerId);
 
+	LogExe(LogLv_Debug, "player : %llu want to make team", m_qwPyayerId);
+
 	GameProto::RoleData* pRoleData = oTeam.mutable_role_data();
 	pRoleData->set_qw_player_id(m_qwPyayerId);
 	pRoleData->set_sz_nick_name(m_szNickName);
@@ -75,7 +77,7 @@ bool Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto:
 	static unsigned int s_dwTeamIndex;
 	unsigned int dwTeamIndex = ++s_dwTeamIndex % refSessions.size();
 	std::map<unsigned int, CBinaryTeamSession*>::iterator it = refSessions.begin();
-	for (int i = 0; i <= dwTeamIndex; ++i)
+	for (int i = 0; i < dwTeamIndex; ++i)
 	{
 		++it;
 	}

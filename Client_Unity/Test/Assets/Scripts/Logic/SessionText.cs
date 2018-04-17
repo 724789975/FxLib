@@ -40,6 +40,7 @@ public class SessionText : MonoBehaviour
 
         m_pSession.RegistMessage("GameProto.PlayerRequestGameTest", OnTest);
         m_pSession.RegistMessage("GameProto.LoginAckPlayerLoginResult", OnLoginAckPlayerLoginResult);
+        m_pSession.RegistMessage("GameProto.LoginAckPlayerMakeTeam", OnLoginAckPlayerMakeTeam);
     }
 	
 	// Update is called once per frame
@@ -79,6 +80,20 @@ public class SessionText : MonoBehaviour
 		//ushort.TryParse(m_textPort.text, out H5Manager.Instance().m_wLoginPort);
 	}
 
+    public void MakeTeam()
+    {
+        GameProto.PlayerRequestLoginMakeTeam oTeam = new GameProto.PlayerRequestLoginMakeTeam();
+        byte[] pData = new byte[1024];
+        FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
+        pStream.WriteString("GameProto.PlayerRequestLoginMakeTeam");
+        byte[] pProto = new byte[oTeam.CalculateSize()];
+        Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
+        oTeam.WriteTo(oStream);
+        pStream.WriteData(pProto, (uint)pProto.Length);
+
+        m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+    }
+
 	int dw1 = 0;
 	public void OnTest(byte[] pBuf)
 	{
@@ -116,6 +131,18 @@ public class SessionText : MonoBehaviour
         }
 
         H5Helper.H5LogStr("login ret : " + oRet.DwResult.ToString());
+    }
+
+    public void OnLoginAckPlayerMakeTeam(byte[] pBuf)
+    {
+        GameProto.LoginAckPlayerMakeTeam oRet = GameProto.LoginAckPlayerMakeTeam.Parser.ParseFrom(pBuf);
+        if (oRet == null)
+        {
+            H5Helper.H5LogStr("OnLoginAckPlayerMakeTeam error parse");
+            return;
+        }
+
+        H5Helper.H5LogStr("team create ret : " + oRet.DwResult.ToString() + " team id : " + oRet.QwTeamId.ToString());
     }
 
     public void OnRoleData(string szData)

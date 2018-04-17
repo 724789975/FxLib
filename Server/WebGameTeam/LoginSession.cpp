@@ -3,6 +3,7 @@
 #include "gamedefine.h"
 #include "GameServer.h"
 #include "msg_proto/web_game.pb.h"
+#include "fxredis.h"
 
 const static unsigned int g_dwLoginSessionBuffLen = 64 * 1024;
 static char g_pLoginSessionBuf[g_dwLoginSessionBuffLen];
@@ -11,6 +12,9 @@ CLoginSession::CLoginSession()
 	:m_oProtoDispatch(*this)
 {
 	m_oProtoDispatch.RegistFunction(GameProto::ServerInfo::descriptor(), &CLoginSession::OnServerInfo);
+	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamMakeTeam::descriptor(), &CLoginSession::OnLoginRequestTeamMakeTeam);
+	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamInviteTeam::descriptor(), &CLoginSession::OnLoginRequestTeamInviteTeam);
+	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamChangeSlot::descriptor(), &CLoginSession::OnLoginRequestTeamChangeSlot);
 }
 
 
@@ -70,11 +74,56 @@ bool CLoginSession::OnServerInfo(CLoginSession& refSession, google::protobuf::Me
 
 bool CLoginSession::OnLoginRequestTeamMakeTeam(CLoginSession& refSession, google::protobuf::Message& refMsg)
 {
+	class RedisTeamId : public IRedisQuery
+	{
+	public:
+		RedisTeamId() : m_qwTeamId(0), m_pReader(NULL) {}
+		~RedisTeamId() {}
+
+		virtual int					GetDBId(void) { return 0; }
+		virtual void				OnQuery(IRedisConnection *poDBConnection)
+		{
+			char szQuery[64] = { 0 };
+			sprintf(szQuery, "incr %s", RedisConstant::szTeamId);
+			poDBConnection->Query(szQuery, &m_pReader);
+		}
+		virtual void				OnResult(void)
+		{
+			m_pReader->GetValue(m_qwTeamId);
+		}
+		virtual void				Release(void)
+		{
+			m_pReader->Release();
+		}
+
+		INT64 GetTeamId() { return m_qwTeamId; }
+
+	private:
+		IRedisDataReader* m_pReader;
+		INT64 m_qwTeamId;
+	};
 	GameProto::LoginRequestTeamMakeTeam* pMsg = dynamic_cast<GameProto::LoginRequestTeamMakeTeam*>(&refMsg);
 	if (pMsg == NULL)
 	{
 		return false;
 	}
+	//todo 创建组队信息
+	RedisTeamId oTeamId;
+	FxRedisGetModule()->QueryDirect(&oTeamId);
+	INT64 qwTeamId = oTeamId.GetTeamId();
+
+	GameProto::TeamAckLoginMakeTeam oTeamAckLoginMakeTeam;
+	oTeamAckLoginMakeTeam.set_dw_result(0);
+	oTeamAckLoginMakeTeam.set_qw_player_id(pMsg->qw_player_id());
+	oTeamAckLoginMakeTeam.set_qw_team_id(qwTeamId);
+
+	LogExe(LogLv_Debug, "player : %llu maketeam id : %llu",
+		oTeamAckLoginMakeTeam.qw_player_id(), oTeamAckLoginMakeTeam.qw_team_id());
+
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oTeamAckLoginMakeTeam, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
 	return false;
 }
 

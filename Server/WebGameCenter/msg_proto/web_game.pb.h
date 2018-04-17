@@ -887,6 +887,12 @@ class LoginAckPlayerMakeTeam : public ::google::protobuf::Message /* @@protoc_in
 
   // accessors -------------------------------------------------------
 
+  // uint64 qw_team_id = 2;
+  void clear_qw_team_id();
+  static const int kQwTeamIdFieldNumber = 2;
+  ::google::protobuf::uint64 qw_team_id() const;
+  void set_qw_team_id(::google::protobuf::uint64 value);
+
   // uint32 dw_result = 1;
   void clear_dw_result();
   static const int kDwResultFieldNumber = 1;
@@ -897,6 +903,7 @@ class LoginAckPlayerMakeTeam : public ::google::protobuf::Message /* @@protoc_in
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint64 qw_team_id_;
   ::google::protobuf::uint32 dw_result_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
@@ -2931,6 +2938,20 @@ inline void LoginAckPlayerMakeTeam::set_dw_result(::google::protobuf::uint32 val
   
   dw_result_ = value;
   // @@protoc_insertion_point(field_set:GameProto.LoginAckPlayerMakeTeam.dw_result)
+}
+
+// uint64 qw_team_id = 2;
+inline void LoginAckPlayerMakeTeam::clear_qw_team_id() {
+  qw_team_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 LoginAckPlayerMakeTeam::qw_team_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.LoginAckPlayerMakeTeam.qw_team_id)
+  return qw_team_id_;
+}
+inline void LoginAckPlayerMakeTeam::set_qw_team_id(::google::protobuf::uint64 value) {
+  
+  qw_team_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.LoginAckPlayerMakeTeam.qw_team_id)
 }
 
 // -------------------------------------------------------------------
