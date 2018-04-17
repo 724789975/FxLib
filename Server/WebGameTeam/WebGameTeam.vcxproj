@@ -173,6 +173,7 @@
     <ClCompile Include="msg_proto\web_game.pb.cc" />
     <ClCompile Include="proto_dispatcher.cpp" />
     <ClCompile Include="SocketSession.cpp" />
+    <ClCompile Include="Team.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CenterSession.h" />
@@ -182,6 +183,7 @@
     <ClInclude Include="msg_proto\web_data.pb.h" />
     <ClInclude Include="msg_proto\web_game.pb.h" />
     <ClInclude Include="SocketSession.h" />
+    <ClInclude Include="Team.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Net\Net.vcxproj">
