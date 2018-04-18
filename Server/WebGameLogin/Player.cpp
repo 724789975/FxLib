@@ -14,6 +14,7 @@ Player::Player()
 	: m_pSession(NULL)
 	, m_qwPyayerId(0)
 	, m_eState(PlayrState_Idle)
+	, m_qwTeamId(0)
 {
 }
 
@@ -71,6 +72,8 @@ bool Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto:
 		return true;
 	}
 
+	//设置状态为请求组队
+	m_eState = PlayrState_MakeTeam;
 	char* pBuf = NULL;
 	unsigned int dwBufLen = 0;
 	ProtoUtility::MakeProtoSendBuffer(oTeam, pBuf, dwBufLen);

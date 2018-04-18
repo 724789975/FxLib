@@ -88,6 +88,17 @@ bool CTeamSession::OnTeamAckLoginMakeTeam(CTeamSession& refSession, google::prot
 	}
 
 	LogExe(LogLv_Debug, "create team playerid : %llu, teamid : %llu", pMsg->qw_player_id(), pMsg->qw_team_id());
+	if (pMsg->dw_result() == GameProto::EC_NONE)
+	{
+		pPlayer->SetTeamId(pMsg->qw_team_id());
+		pPlayer->SetState(PlayrState_TeamCompleted);
+	}
+	else
+	{
+		pPlayer->SetTeamId(0);
+		pPlayer->SetState(PlayrState_Idle);
+	}
+
 	GameProto::LoginAckPlayerMakeTeam oResult;
 	oResult.set_dw_result(pMsg->dw_result());
 	oResult.set_qw_team_id(pMsg->qw_team_id());

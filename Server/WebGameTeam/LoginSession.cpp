@@ -74,17 +74,17 @@ bool CLoginSession::OnServerInfo(CLoginSession& refSession, google::protobuf::Me
 
 bool CLoginSession::OnLoginRequestTeamMakeTeam(CLoginSession& refSession, google::protobuf::Message& refMsg)
 {
-	class RedisTeamId : public IRedisQuery
+	class RedisGetTeamId : public IRedisQuery
 	{
 	public:
-		RedisTeamId() : m_qwTeamId(0), m_pReader(NULL) {}
-		~RedisTeamId() {}
+		RedisGetTeamId(UINT64 qwPlayerId) : m_qwTeamId(0), m_pReader(NULL) { m_qwPlayerId = qwPlayerId; }
+		~RedisGetTeamId() {}
 
 		virtual int					GetDBId(void) { return 0; }
 		virtual void				OnQuery(IRedisConnection *poDBConnection)
 		{
 			char szQuery[64] = { 0 };
-			sprintf(szQuery, "incr %s", RedisConstant::szTeamId);
+			sprintf(szQuery, "get %llu_%s", m_qwPlayerId, RedisConstant::szTeamId);
 			poDBConnection->Query(szQuery, &m_pReader);
 		}
 		virtual void				OnResult(void)
@@ -96,10 +96,11 @@ bool CLoginSession::OnLoginRequestTeamMakeTeam(CLoginSession& refSession, google
 			m_pReader->Release();
 		}
 
-		INT64 GetTeamId() { return m_qwTeamId; }
+		UINT64 GetTeamId() { return m_qwTeamId; }
 
 	private:
 		IRedisDataReader* m_pReader;
+		UINT64 m_qwPlayerId;
 		INT64 m_qwTeamId;
 	};
 	GameProto::LoginRequestTeamMakeTeam* pMsg = dynamic_cast<GameProto::LoginRequestTeamMakeTeam*>(&refMsg);
@@ -107,8 +108,7 @@ bool CLoginSession::OnLoginRequestTeamMakeTeam(CLoginSession& refSession, google
 	{
 		return false;
 	}
-	//todo 创建组队信息
-	RedisTeamId oTeamId;
+	RedisGetTeamId oTeamId(pMsg->qw_player_id());
 	FxRedisGetModule()->QueryDirect(&oTeamId);
 	INT64 qwTeamId = oTeamId.GetTeamId();
 

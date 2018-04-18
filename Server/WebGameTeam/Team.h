@@ -20,4 +20,17 @@ public:
 	UINT64 m_oRoleSlots[MAXCLIENTNUM];							//playerid
 };
 
+class CTeamManager
+{
+public:
+	CTeamManager();
+	~CTeamManager();
+
+	CTeam& CreateTeam();
+	bool ReleaseTeam(UINT64 qwTeamId);
+private:
+	std::map<UINT64, CTeam> m_mapTeams;						//<teamid, team>
+
+};
+
 #endif // !__Team_H__

@@ -22,6 +22,9 @@ public:
 
 	CPlayerSession* GetSession() { return m_pSession; }
 
+	void SetState(EPlayrState eState) { m_eState = eState; }
+	void SetTeamId(UINT64 qwTeamId) { m_qwTeamId = qwTeamId; }
+
 	bool OnPlayerRequestLogin(CPlayerSession& refSession, GameProto::PlayerRequestLogin& refLogin);
 	bool OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto::PlayerRequestLoginMakeTeam& refMsg);
 	bool OnPlayerRequestLoginInviteTeam(CPlayerSession& refSession, GameProto::PlayerRequestLoginInviteTeam& refMsg);
@@ -38,6 +41,8 @@ private:
 	UINT32 m_dwSex;
 	UINT32 m_dwBalance;
 	std::string m_szToken;
+
+	UINT64 m_qwTeamId;
 };
 
 #endif // !__ChatPlayer_H__
