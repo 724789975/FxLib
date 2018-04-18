@@ -16,6 +16,7 @@ static char g_pPlayerSessionBuf[g_dwPlayerSessionBuffLen];
 CPlayerSession::CPlayerSession()
 	:m_oProtoDispatch(*this)
 {
+	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginServerId::descriptor(), &CPlayerSession::OnPlayerRequestLoginServerId);
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLogin::descriptor(), &CPlayerSession::OnPlayerRequestLogin);
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginMakeTeam::descriptor(), &CPlayerSession::OnPlayerRequestLoginMakeTeam);
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginInviteTeam::descriptor(), &CPlayerSession::OnPlayerRequestLoginInviteTeam);
@@ -29,7 +30,6 @@ CPlayerSession::~CPlayerSession()
 
 void CPlayerSession::OnConnect(void)
 {
-
 }
 
 void CPlayerSession::OnClose(void)
@@ -69,6 +69,23 @@ void CPlayerSession::Release(void)
 void CPlayerSession::Init()
 {
 	m_qwPlayerId = 0;
+}
+
+bool CPlayerSession::OnPlayerRequestLoginServerId(CPlayerSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::PlayerRequestLoginServerId* pMsg = dynamic_cast<GameProto::PlayerRequestLoginServerId*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	GameProto::LoginAckPlayerServerId oResult;
+	oResult.set_dw_result(0);
+	oResult.set_dw_server_id(GameServer::Instance()->GetServerid());
+
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
 }
 
 bool CPlayerSession::OnPlayerRequestLogin(CPlayerSession& refSession, google::protobuf::Message& refMsg)

@@ -36,7 +36,8 @@ class ServerListInfo
 	// Use this for initialization
 	void Start ()
 	{
-        StartCoroutine(H5Helper.SendGet("http://quchifan.wang/portal/index.php/api/server_list/index", OnServerInfo));
+        //StartCoroutine(H5Helper.SendGet("http://quchifan.wang/portal/index.php/api/server_list/index", OnServerInfo));
+        StartCoroutine(H5Helper.SendGet("http://127.0.0.1/portal/index.php/api/server_list/index", OnServerInfo));
 	}
 	
 	// Update is called once per frame
@@ -47,7 +48,7 @@ class ServerListInfo
 
     public void OnServerInfo(string szData)
     {
-        Debug.Log(szData);
+		H5Helper.H5LogStr(szData);
         ServerListInfo oServerList = JsonUtility.FromJson<ServerListInfo>(szData);
 
         if (oServerList.server_infos.Count == 0)

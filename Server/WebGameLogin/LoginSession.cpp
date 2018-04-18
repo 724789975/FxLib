@@ -17,7 +17,6 @@ CLoginSession::CLoginSession()
 	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamChangeSlot::descriptor(), &CLoginSession::OnLoginRequestTeamChangeSlot);
 }
 
-
 CLoginSession::~CLoginSession()
 {
 }

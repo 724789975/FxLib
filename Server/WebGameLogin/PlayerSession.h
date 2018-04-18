@@ -28,6 +28,7 @@ public:
 
 	virtual void		Init();
 
+	bool		OnPlayerRequestLoginServerId(CPlayerSession& refSession, google::protobuf::Message& refMsg);
 	bool		OnPlayerRequestLogin(CPlayerSession& refSession, google::protobuf::Message& refMsg);
 	bool		OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, google::protobuf::Message& refMsg);
 	bool		OnPlayerRequestLoginInviteTeam(CPlayerSession& refSession, google::protobuf::Message& refMsg);

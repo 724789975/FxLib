@@ -13,6 +13,7 @@ unsigned int g_dwPort = 20000;
 bool g_bRun = true;
 
 DEFINE_uint32(server_id, 30001, "server id");
+DEFINE_string(server_ip, "127.0.0.1", "server ip");
 DEFINE_uint32(server_port, 31001, "server port");
 DEFINE_uint32(player_port, 31002, "player port");
 DEFINE_string(center_ip, "127.0.0.1", "center ip");
