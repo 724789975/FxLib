@@ -5,6 +5,7 @@ using UnityEngine;
 [System.Serializable]
 class ServerInfo
 {
+	public uint id = 0;
     public ushort login_port = 0;
     public string login_ip = "";
     public string url_host = "";
@@ -36,8 +37,8 @@ class ServerListInfo
 	// Use this for initialization
 	void Start ()
 	{
-        //StartCoroutine(H5Helper.SendGet("http://quchifan.wang/portal/index.php/api/server_list/index", OnServerInfo));
-        StartCoroutine(H5Helper.SendGet("http://127.0.0.1/portal/index.php/api/server_list/index", OnServerInfo));
+        StartCoroutine(H5Helper.SendGet("http://quchifan.wang/portal/index.php/api/server_list/index", OnServerInfo));
+        //StartCoroutine(H5Helper.SendGet("http://127.0.0.1/portal/index.php/api/server_list/index", OnServerInfo));
 	}
 	
 	// Update is called once per frame
