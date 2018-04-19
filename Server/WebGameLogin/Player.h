@@ -32,6 +32,8 @@ public:
 
 	void OnTeamKick();
 
+	void OnClose();
+
 private:
 	CPlayerSession* m_pSession;
 

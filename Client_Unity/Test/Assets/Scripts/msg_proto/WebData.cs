@@ -26,14 +26,14 @@ namespace GameProto {
           string.Concat(
             "Cg53ZWJfZGF0YS5wcm90bxIJR2FtZVByb3RvIlkKCFJvbGVEYXRhEhQKDHF3",
             "X3BsYXllcl9pZBgBIAEoBBIUCgxzel9uaWNrX25hbWUYAiABKAkSEQoJc3pf",
-            "YXZhdGFyGAMgASgJEg4KBmR3X3NleBgEIAEoDSJKCgxUZWFtUm9sZURhdGES",
+            "YXZhdGFyGAMgASgJEg4KBmR3X3NleBgEIAEoDSJgCgxUZWFtUm9sZURhdGES",
             "JgoJcm9sZV9kYXRhGAEgASgLMhMuR2FtZVByb3RvLlJvbGVEYXRhEhIKCmR3",
-            "X3Nsb3RfaWQYAiABKA1iBnByb3RvMw=="));
+            "X3Nsb3RfaWQYAiABKA0SFAoMZHdfc2VydmVyX2lkGAMgASgNYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.RoleData), global::GameProto.RoleData.Parser, new[]{ "QwPlayerId", "SzNickName", "SzAvatar", "DwSex" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.TeamRoleData), global::GameProto.TeamRoleData.Parser, new[]{ "RoleData", "DwSlotId" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.TeamRoleData), global::GameProto.TeamRoleData.Parser, new[]{ "RoleData", "DwSlotId", "DwServerId" }, null, null, null)
           }));
     }
     #endregion
@@ -280,6 +280,7 @@ namespace GameProto {
     public TeamRoleData(TeamRoleData other) : this() {
       RoleData = other.roleData_ != null ? other.RoleData.Clone() : null;
       dwSlotId_ = other.dwSlotId_;
+      dwServerId_ = other.dwServerId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -310,6 +311,17 @@ namespace GameProto {
       }
     }
 
+    /// <summary>Field number for the "dw_server_id" field.</summary>
+    public const int DwServerIdFieldNumber = 3;
+    private uint dwServerId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint DwServerId {
+      get { return dwServerId_; }
+      set {
+        dwServerId_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as TeamRoleData);
@@ -325,6 +337,7 @@ namespace GameProto {
       }
       if (!object.Equals(RoleData, other.RoleData)) return false;
       if (DwSlotId != other.DwSlotId) return false;
+      if (DwServerId != other.DwServerId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -333,6 +346,7 @@ namespace GameProto {
       int hash = 1;
       if (roleData_ != null) hash ^= RoleData.GetHashCode();
       if (DwSlotId != 0) hash ^= DwSlotId.GetHashCode();
+      if (DwServerId != 0) hash ^= DwServerId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -354,6 +368,10 @@ namespace GameProto {
         output.WriteRawTag(16);
         output.WriteUInt32(DwSlotId);
       }
+      if (DwServerId != 0) {
+        output.WriteRawTag(24);
+        output.WriteUInt32(DwServerId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -367,6 +385,9 @@ namespace GameProto {
       }
       if (DwSlotId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwSlotId);
+      }
+      if (DwServerId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwServerId);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -388,6 +409,9 @@ namespace GameProto {
       if (other.DwSlotId != 0) {
         DwSlotId = other.DwSlotId;
       }
+      if (other.DwServerId != 0) {
+        DwServerId = other.DwServerId;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -408,6 +432,10 @@ namespace GameProto {
           }
           case 16: {
             DwSlotId = input.ReadUInt32();
+            break;
+          }
+          case 24: {
+            DwServerId = input.ReadUInt32();
             break;
           }
         }

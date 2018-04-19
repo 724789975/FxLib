@@ -16,6 +16,8 @@ CTeamSession::CTeamSession()
 	m_oProtoDispatch.RegistFunction(GameProto::TeamNotifyLoginTeamInfo::descriptor(), &CTeamSession::OnTeamNotifyLoginTeamInfo);
 	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginInviteTeam::descriptor(), &CTeamSession::OnTeamAckLoginInviteTeam);
 	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginChangeSlot::descriptor(), &CTeamSession::OnTeamAckLoginChangeSlot);
+	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginKickPlayer::descriptor(), &CTeamSession::OnTeamAckLoginKickPlayer);
+	
 }
 
 
@@ -102,6 +104,7 @@ bool CTeamSession::OnTeamAckLoginMakeTeam(CTeamSession& refSession, google::prot
 	GameProto::LoginAckPlayerMakeTeam oResult;
 	oResult.set_dw_result(pMsg->dw_result());
 	oResult.set_qw_team_id(pMsg->qw_team_id());
+	oResult.set_dw_slot_id(pMsg->dw_slot_id());
 	char* pBuf = NULL;
 	unsigned int dwBufLen = 0;
 	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
@@ -136,6 +139,29 @@ bool CTeamSession::OnTeamAckLoginChangeSlot(CTeamSession& refSession, google::pr
 	{
 		return false;
 	}
+	return true;
+}
+
+bool CTeamSession::OnTeamAckLoginKickPlayer(CTeamSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::TeamAckLoginKickPlayer* pMsg = dynamic_cast<GameProto::TeamAckLoginKickPlayer*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	if (pMsg->dw_result() != 0)
+	{
+		LogExe(LogLv_Critical, "kick player : %llu result : %d", pMsg->qw_player_id(), pMsg->dw_result());
+		return true;
+	}
+	LogExe(LogLv_Debug, "kick player : %llu result : %d", pMsg->qw_player_id(), pMsg->dw_result());
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(pMsg->qw_player_id());
+	if (pPlayer)
+	{
+		pPlayer->SetTeamInfo(0, 0);
+	}
+
 	return true;
 }
 

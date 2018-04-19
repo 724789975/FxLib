@@ -30,8 +30,8 @@ CTeam::~CTeam()
 		UINT64 m_qwPlayerId;
 	};
 
-	for (std::map<UINT64, GameProto::TeamRoleData >::iterator it = m_mapRoles.begin();
-		it != m_mapRoles.end(); ++it)
+	for (std::map<UINT64, GameProto::TeamRoleData >::iterator it = m_mapPlayers.begin();
+		it != m_mapPlayers.end(); ++it)
 	{
 		RedisTeamRelease oRelease(it->first);
 		FxRedisGetModule()->QueryDirect(&oRelease);
@@ -40,12 +40,12 @@ CTeam::~CTeam()
 
 bool CTeam::InsertIntoTeam(const GameProto::RoleData& refRoleData)
 {
-	if (m_mapRoles.size() >= MAXCLIENTNUM)
+	if (m_mapPlayers.size() >= MAXCLIENTNUM)
 	{
 		LogExe(LogLv_Critical, "players has enough");
 		return false;
 	}
-	if (m_mapRoles.find(refRoleData.qw_player_id()) != m_mapRoles.end())
+	if (m_mapPlayers.find(refRoleData.qw_player_id()) != m_mapPlayers.end())
 	{
 		LogExe(LogLv_Critical, "players : %llu already in team", refRoleData.qw_player_id());
 		return false;
@@ -53,10 +53,10 @@ bool CTeam::InsertIntoTeam(const GameProto::RoleData& refRoleData)
 	bool bInsert = false;
 	for (int i = 0; i < MAXCLIENTNUM; ++i)
 	{
-		if (m_oRoleSlots[i] == 0)
+		if (m_oPlayerSlots[i] == 0)
 		{
-			m_oRoleSlots[i] = refRoleData.qw_player_id();
-			GameProto::TeamRoleData& refTeamRoleData = m_mapRoles[refRoleData.qw_player_id()];
+			m_oPlayerSlots[i] = refRoleData.qw_player_id();
+			GameProto::TeamRoleData& refTeamRoleData = m_mapPlayers[refRoleData.qw_player_id()];
 			refTeamRoleData.mutable_role_data()->CopyFrom(refRoleData);
 			refTeamRoleData.set_dw_slot_id(i);
 			bInsert = true;
@@ -66,13 +66,24 @@ bool CTeam::InsertIntoTeam(const GameProto::RoleData& refRoleData)
 	return bInsert;
 }
 
-GameProto::TeamRoleData* CTeam::GetTeamRoleData(UINT64 qwPlayerId)
+bool CTeam::KickPlayer(UINT64 qwPlayerId)
 {
-	if (m_mapRoles.find(qwPlayerId) == m_mapRoles.end())
+	if (m_mapPlayers.find(qwPlayerId) == m_mapPlayers.end())
 	{
 		return false;
 	}
-	return &m_mapRoles[qwPlayerId];
+	m_oPlayerSlots[m_mapPlayers[qwPlayerId].dw_slot_id()] = 0;
+	m_mapPlayers.erase(qwPlayerId);
+	return true;
+}
+
+GameProto::TeamRoleData* CTeam::GetTeamRoleData(UINT64 qwPlayerId)
+{
+	if (m_mapPlayers.find(qwPlayerId) == m_mapPlayers.end())
+	{
+		return false;
+	}
+	return &m_mapPlayers[qwPlayerId];
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -82,6 +93,15 @@ CTeamManager::CTeamManager()
 
 CTeamManager::~CTeamManager()
 {
+}
+
+CTeam* CTeamManager::GetTeam(UINT64 qwTeamId)
+{
+	if (m_mapTeams.find(qwTeamId) == m_mapTeams.end())
+	{
+		return NULL;
+	}
+	return &m_mapTeams[qwTeamId];
 }
 
 CTeam& CTeamManager::CreateTeam(UINT64 qwTeamId)

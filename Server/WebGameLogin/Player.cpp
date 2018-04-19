@@ -137,4 +137,26 @@ void Player::OnTeamKick()
 	GameProto::LoginNotifyPlayerTeamKick oResult;
 	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
 	m_pSession->Send(pBuf, dwBufLen);
+
+	m_dwTeamServerId = 0;
+	m_qwTeamId = 0;
+}
+
+void Player::OnClose()
+{
+	if (m_qwTeamId)
+	{
+		std::map<unsigned int, CBinaryTeamSession*>::iterator it =
+			GameServer::Instance()->GetTeamSessionManager().GetTeamSessions().find(m_dwTeamServerId);
+		if (it != GameServer::Instance()->GetTeamSessionManager().GetTeamSessions().end())
+		{
+			GameProto::LoginRequestTeamKickPlayer oKickPlayer;
+			oKickPlayer.set_qw_player_id(m_qwPyayerId);
+			oKickPlayer.set_qw_team_id(m_qwTeamId);
+			char* pBuf = NULL;
+			unsigned int dwBufLen = 0;
+			ProtoUtility::MakeProtoSendBuffer(oKickPlayer, pBuf, dwBufLen);
+			it->second->Send(pBuf, dwBufLen);
+		}
+	}
 }

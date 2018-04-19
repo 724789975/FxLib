@@ -26,6 +26,7 @@ enum EErrorCode
 	EC_NONE = 0;
 	EC_MakeTeamNotIdle = 1;		//创建队伍时 角色状态不是idle
 	EC_NoTeamServer = 2;		//没有组队服务器
+	EC_NoTeamId = 3;			//没有队伍
 }
 
 //player->login
@@ -73,6 +74,7 @@ message LoginAckPlayerMakeTeam
 {
 	uint32 dw_result = 1;
 	uint64 qw_team_id = 2;
+	uint32 dw_slot_id = 3;
 }
 
 message LoginNotifyPlayerTeamInfo
@@ -104,13 +106,19 @@ message LoginRequestTeamMakeTeam
 message LoginRequestTeamInviteTeam
 {
 	uint32 dw_result = 1;
-	uint32 dw_slot = 2;
+	uint32 dw_slot_id = 2;
 }
 
 message LoginRequestTeamChangeSlot
 {
 	uint32 dw_result = 1;
-	uint32 dw_slot = 2;
+	uint32 dw_slot_id = 2;
+}
+
+message LoginRequestTeamKickPlayer
+{
+	uint64 qw_player_id = 1;
+	uint64 qw_team_id = 2;
 }
 
 //team->login
@@ -137,6 +145,12 @@ message TeamAckLoginChangeSlot
 {
 	uint32 dw_result = 1;
 	uint32 dw_slot = 2;
+}
+
+message TeamAckLoginKickPlayer
+{
+	uint32 dw_result = 1;
+	uint64 qw_player_id = 2;
 }
 
 //game->gamemanager

@@ -34,7 +34,16 @@ void CPlayerSession::OnConnect(void)
 
 void CPlayerSession::OnClose(void)
 {
-
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(m_qwPlayerId);
+	if (pPlayer)
+	{
+		pPlayer->OnClose();
+	}
+	else
+	{
+		LogExe(LogLv_Critical, "can't find player %llu", m_qwPlayerId);
+		Close();
+	}
 }
 
 void CPlayerSession::OnError(UINT32 dwErrorNo)
@@ -54,16 +63,6 @@ void CPlayerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	{
 		LogExe(LogLv_Debug, "%s proccess error", szProtocolName.c_str());
 	}
-}
-
-void CPlayerSession::Release(void)
-{
-	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
-
-	GameServer::Instance()->GetPlayerManager().OnSessionClose(m_qwPlayerId);
-	OnDestroy();
-
-	FxSession::Init(NULL);
 }
 
 void CPlayerSession::Init()
@@ -171,9 +170,11 @@ bool CPlayerSession::OnPlayerRequestLoginChangeSlot(CPlayerSession& refSession, 
 void CWebSocketPlayerSession::Release(void)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
+
+	GameServer::Instance()->GetPlayerManager().OnSessionClose(m_qwPlayerId);
 	OnDestroy();
 
-	FxSession::Init(NULL);
+	GameServer::Instance()->GetPlayerSessionManager().Release(this);
 }
 
 //////////////////////////////////////////////////////////////////////////

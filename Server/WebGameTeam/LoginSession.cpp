@@ -82,6 +82,7 @@ bool CLoginSession::OnLoginRequestTeamMakeTeam(CLoginSession& refSession, google
 	CTeam& refTeam = GameServer::Instance()->GetTeamManager().CreateTeam(pMsg->qw_team_id());
 	refTeam.InsertIntoTeam(pMsg->role_data());
 	GameProto::TeamRoleData* pTeamRoleData = refTeam.GetTeamRoleData(pMsg->role_data().qw_player_id());
+	pTeamRoleData->set_dw_server_id(m_dwServerId);
 	if (pTeamRoleData == NULL)
 	{
 		Assert(0);
@@ -100,7 +101,7 @@ bool CLoginSession::OnLoginRequestTeamMakeTeam(CLoginSession& refSession, google
 	unsigned int dwBufLen = 0;
 	ProtoUtility::MakeProtoSendBuffer(oTeamAckLoginMakeTeam, pBuf, dwBufLen);
 	Send(pBuf, dwBufLen);
-	return false;
+	return true;
 }
 
 bool CLoginSession::OnLoginRequestTeamInviteTeam(CLoginSession& refSession, google::protobuf::Message& refMsg)
@@ -110,7 +111,7 @@ bool CLoginSession::OnLoginRequestTeamInviteTeam(CLoginSession& refSession, goog
 	{
 		return false;
 	}
-	return false;
+	return true;
 }
 
 bool CLoginSession::OnLoginRequestTeamChangeSlot(CLoginSession& refSession, google::protobuf::Message& refMsg)
@@ -120,8 +121,39 @@ bool CLoginSession::OnLoginRequestTeamChangeSlot(CLoginSession& refSession, goog
 	{
 		return false;
 	}
-	return false;
+	return true;
 }
+
+bool CLoginSession::OnLoginRequestTeamKickPlayer(CLoginSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::LoginRequestTeamKickPlayer* pMsg = dynamic_cast<GameProto::LoginRequestTeamKickPlayer*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	CTeam* pTeam = GameServer::Instance()->GetTeamManager().GetTeam(pMsg->qw_team_id());
+	GameProto::TeamAckLoginKickPlayer oKickPlayer;
+	oKickPlayer.set_qw_player_id(pMsg->qw_player_id());
+	if (pTeam == NULL)
+	{
+		oKickPlayer.set_dw_result(GameProto::EC_NoTeamId);
+		LogExe(LogLv_Critical, "player : %llu want leave team : %llu no team id", pMsg->qw_player_id(), pMsg->qw_team_id());
+	}
+	else
+	{
+		if (!pTeam->KickPlayer(pMsg->qw_player_id()))
+		{
+			oKickPlayer.set_dw_result(GameProto::EC_NoTeamId);
+			LogExe(LogLv_Critical, "player : %llu want leave team : %llu kick fail", pMsg->qw_player_id(), pMsg->qw_team_id());
+		}
+	}
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oKickPlayer, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
+	return true;
+}
+
 //////////////////////////////////////////////////////////////////////////
 CBinaryLoginSession::CBinaryLoginSession()
 {

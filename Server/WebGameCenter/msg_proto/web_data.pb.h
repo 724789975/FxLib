@@ -296,12 +296,19 @@ class TeamRoleData : public ::google::protobuf::Message /* @@protoc_insertion_po
   ::google::protobuf::uint32 dw_slot_id() const;
   void set_dw_slot_id(::google::protobuf::uint32 value);
 
+  // uint32 dw_server_id = 3;
+  void clear_dw_server_id();
+  static const int kDwServerIdFieldNumber = 3;
+  ::google::protobuf::uint32 dw_server_id() const;
+  void set_dw_server_id(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:GameProto.TeamRoleData)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::GameProto::RoleData* role_data_;
   ::google::protobuf::uint32 dw_slot_id_;
+  ::google::protobuf::uint32 dw_server_id_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fdata_2eproto::TableStruct;
   friend void ::protobuf_web_5fdata_2eproto::InitDefaultsTeamRoleDataImpl();
@@ -517,6 +524,20 @@ inline void TeamRoleData::set_dw_slot_id(::google::protobuf::uint32 value) {
   
   dw_slot_id_ = value;
   // @@protoc_insertion_point(field_set:GameProto.TeamRoleData.dw_slot_id)
+}
+
+// uint32 dw_server_id = 3;
+inline void TeamRoleData::clear_dw_server_id() {
+  dw_server_id_ = 0u;
+}
+inline ::google::protobuf::uint32 TeamRoleData::dw_server_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.TeamRoleData.dw_server_id)
+  return dw_server_id_;
+}
+inline void TeamRoleData::set_dw_server_id(::google::protobuf::uint32 value) {
+  
+  dw_server_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.TeamRoleData.dw_server_id)
 }
 
 #ifdef __GNUC__

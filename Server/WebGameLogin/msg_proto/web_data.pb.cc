@@ -94,6 +94,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::TeamRoleData, role_data_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::TeamRoleData, dw_slot_id_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::TeamRoleData, dw_server_id_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::GameProto::RoleData)},
@@ -129,13 +130,13 @@ void AddDescriptorsImpl() {
   static const char descriptor[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
       "\n\016web_data.proto\022\tGameProto\"Y\n\010RoleData\022"
       "\024\n\014qw_player_id\030\001 \001(\004\022\024\n\014sz_nick_name\030\002 "
-      "\001(\t\022\021\n\tsz_avatar\030\003 \001(\t\022\016\n\006dw_sex\030\004 \001(\r\"J"
+      "\001(\t\022\021\n\tsz_avatar\030\003 \001(\t\022\016\n\006dw_sex\030\004 \001(\r\"`"
       "\n\014TeamRoleData\022&\n\trole_data\030\001 \001(\0132\023.Game"
-      "Proto.RoleData\022\022\n\ndw_slot_id\030\002 \001(\rb\006prot"
-      "o3"
+      "Proto.RoleData\022\022\n\ndw_slot_id\030\002 \001(\r\022\024\n\014dw"
+      "_server_id\030\003 \001(\rb\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 202);
+      descriptor, 224);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "web_data.proto", &protobuf_RegisterTypes);
 }
@@ -556,6 +557,7 @@ void TeamRoleData::InitAsDefaultInstance() {
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int TeamRoleData::kRoleDataFieldNumber;
 const int TeamRoleData::kDwSlotIdFieldNumber;
+const int TeamRoleData::kDwServerIdFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 TeamRoleData::TeamRoleData()
@@ -576,14 +578,16 @@ TeamRoleData::TeamRoleData(const TeamRoleData& from)
   } else {
     role_data_ = NULL;
   }
-  dw_slot_id_ = from.dw_slot_id_;
+  ::memcpy(&dw_slot_id_, &from.dw_slot_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&dw_server_id_) -
+    reinterpret_cast<char*>(&dw_slot_id_)) + sizeof(dw_server_id_));
   // @@protoc_insertion_point(copy_constructor:GameProto.TeamRoleData)
 }
 
 void TeamRoleData::SharedCtor() {
   ::memset(&role_data_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&dw_slot_id_) -
-      reinterpret_cast<char*>(&role_data_)) + sizeof(dw_slot_id_));
+      reinterpret_cast<char*>(&dw_server_id_) -
+      reinterpret_cast<char*>(&role_data_)) + sizeof(dw_server_id_));
   _cached_size_ = 0;
 }
 
@@ -629,7 +633,9 @@ void TeamRoleData::Clear() {
     delete role_data_;
   }
   role_data_ = NULL;
-  dw_slot_id_ = 0u;
+  ::memset(&dw_slot_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&dw_server_id_) -
+      reinterpret_cast<char*>(&dw_slot_id_)) + sizeof(dw_server_id_));
   _internal_metadata_.Clear();
 }
 
@@ -663,6 +669,20 @@ bool TeamRoleData::MergePartialFromCodedStream(
           DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
                    ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
                  input, &dw_slot_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 dw_server_id = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &dw_server_id_)));
         } else {
           goto handle_unusual;
         }
@@ -706,6 +726,11 @@ void TeamRoleData::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->dw_slot_id(), output);
   }
 
+  // uint32 dw_server_id = 3;
+  if (this->dw_server_id() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->dw_server_id(), output);
+  }
+
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
@@ -730,6 +755,11 @@ void TeamRoleData::SerializeWithCachedSizes(
   // uint32 dw_slot_id = 2;
   if (this->dw_slot_id() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->dw_slot_id(), target);
+  }
+
+  // uint32 dw_server_id = 3;
+  if (this->dw_server_id() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->dw_server_id(), target);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -761,6 +791,13 @@ size_t TeamRoleData::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->dw_slot_id());
+  }
+
+  // uint32 dw_server_id = 3;
+  if (this->dw_server_id() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->dw_server_id());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -798,6 +835,9 @@ void TeamRoleData::MergeFrom(const TeamRoleData& from) {
   if (from.dw_slot_id() != 0) {
     set_dw_slot_id(from.dw_slot_id());
   }
+  if (from.dw_server_id() != 0) {
+    set_dw_server_id(from.dw_server_id());
+  }
 }
 
 void TeamRoleData::CopyFrom(const ::google::protobuf::Message& from) {
@@ -826,6 +866,7 @@ void TeamRoleData::InternalSwap(TeamRoleData* other) {
   using std::swap;
   swap(role_data_, other->role_data_);
   swap(dw_slot_id_, other->dw_slot_id_);
+  swap(dw_server_id_, other->dw_server_id_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
