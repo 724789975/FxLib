@@ -38,6 +38,43 @@ CTeam::~CTeam()
 	}
 }
 
+bool CTeam::InsertIntoTeam(const GameProto::RoleData& refRoleData)
+{
+	if (m_mapRoles.size() >= MAXCLIENTNUM)
+	{
+		LogExe(LogLv_Critical, "players has enough");
+		return false;
+	}
+	if (m_mapRoles.find(refRoleData.qw_player_id()) != m_mapRoles.end())
+	{
+		LogExe(LogLv_Critical, "players : %llu already in team", refRoleData.qw_player_id());
+		return false;
+	}
+	bool bInsert = false;
+	for (int i = 0; i < MAXCLIENTNUM; ++i)
+	{
+		if (m_oRoleSlots[i] == 0)
+		{
+			m_oRoleSlots[i] = refRoleData.qw_player_id();
+			GameProto::TeamRoleData& refTeamRoleData = m_mapRoles[refRoleData.qw_player_id()];
+			refTeamRoleData.mutable_role_data()->CopyFrom(refRoleData);
+			refTeamRoleData.set_dw_slot_id(i);
+			bInsert = true;
+			break;
+		}
+	}
+	return bInsert;
+}
+
+GameProto::TeamRoleData* CTeam::GetTeamRoleData(UINT64 qwPlayerId)
+{
+	if (m_mapRoles.find(qwPlayerId) == m_mapRoles.end())
+	{
+		return false;
+	}
+	return &m_mapRoles[qwPlayerId];
+}
+
 //////////////////////////////////////////////////////////////////////////
 CTeamManager::CTeamManager()
 {
@@ -47,39 +84,8 @@ CTeamManager::~CTeamManager()
 {
 }
 
-CTeam& CTeamManager::CreateTeam()
+CTeam& CTeamManager::CreateTeam(UINT64 qwTeamId)
 {
-	class RedisTeamId : public IRedisQuery
-	{
-	public:
-		RedisTeamId() : m_qwTeamId(0), m_pReader(NULL) {}
-		~RedisTeamId() {}
-
-		virtual int					GetDBId(void) { return 0; }
-		virtual void				OnQuery(IRedisConnection *poDBConnection)
-		{
-			char szQuery[64] = { 0 };
-			sprintf(szQuery, "incr %s", RedisConstant::szTeamId);
-			poDBConnection->Query(szQuery, &m_pReader);
-		}
-		virtual void				OnResult(void)
-		{
-			m_pReader->GetValue(m_qwTeamId);
-		}
-		virtual void				Release(void)
-		{
-			m_pReader->Release();
-		}
-
-		UINT64 GetTeamId() { return m_qwTeamId; }
-
-	private:
-		IRedisDataReader* m_pReader;
-		INT64 m_qwTeamId;
-	};
-	RedisTeamId oTeamId;
-	FxRedisGetModule()->QueryDirect(&oTeamId);
-	UINT64 qwTeamId = oTeamId.GetTeamId();
 	if (m_mapTeams.find(qwTeamId) != m_mapTeams.end())
 	{
 		LogExe(LogLv_Critical, "already has team id : %llu", qwTeamId);

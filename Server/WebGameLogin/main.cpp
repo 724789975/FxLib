@@ -5,6 +5,7 @@
 #include "PlayerSession.h"
 #include "ServerSession.h"
 #include "GameServer.h"
+#include "fxredis.h"
 
 #include <signal.h>
 #include "gflags/gflags.h"
@@ -61,6 +62,11 @@ int main(int argc, char **argv)
 		g_bRun = false;
 		goto STOP;
 	}
+	if (!FxRedisGetModule()->Open("127.0.0.1", 16379, "1", 0))
+	{
+		LogExe(LogLv_Info, "%s", "redis connected failed~~~~");
+		goto STOP;
+	}
 	//----------------------order can't change end-----------------------//
 
 	if (!GameServer::Instance()->Init(FLAGS_server_id,
@@ -73,6 +79,7 @@ int main(int argc, char **argv)
 	while (g_bRun)
 	{
 		GetTimeHandler()->Run();
+		FxRedisGetModule()->Run();
 		pNet->Run(0xffffffff);
 		FxSleep(1);
 	}

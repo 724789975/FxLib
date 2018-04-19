@@ -90,12 +90,12 @@ bool CTeamSession::OnTeamAckLoginMakeTeam(CTeamSession& refSession, google::prot
 	LogExe(LogLv_Debug, "create team playerid : %llu, teamid : %llu", pMsg->qw_player_id(), pMsg->qw_team_id());
 	if (pMsg->dw_result() == GameProto::EC_NONE)
 	{
-		pPlayer->SetTeamId(pMsg->qw_team_id());
+		pPlayer->SetTeamInfo(pMsg->qw_team_id(), m_dwServerId);
 		pPlayer->SetState(PlayrState_TeamCompleted);
 	}
 	else
 	{
-		pPlayer->SetTeamId(0);
+		pPlayer->SetTeamInfo(0, 0);
 		pPlayer->SetState(PlayrState_Idle);
 	}
 

@@ -23,12 +23,14 @@ public:
 	CPlayerSession* GetSession() { return m_pSession; }
 
 	void SetState(EPlayrState eState) { m_eState = eState; }
-	void SetTeamId(UINT64 qwTeamId) { m_qwTeamId = qwTeamId; }
+	void SetTeamInfo(UINT64 qwTeamId, UINT32 dwTeamServerId) { m_qwTeamId = qwTeamId; m_dwTeamServerId = dwTeamServerId; }
 
 	bool OnPlayerRequestLogin(CPlayerSession& refSession, GameProto::PlayerRequestLogin& refLogin);
-	bool OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto::PlayerRequestLoginMakeTeam& refMsg);
+	void OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto::PlayerRequestLoginMakeTeam& refMsg);
 	bool OnPlayerRequestLoginInviteTeam(CPlayerSession& refSession, GameProto::PlayerRequestLoginInviteTeam& refMsg);
 	bool OnPlayerRequestLoginChangeSlot(CPlayerSession& refSession, GameProto::PlayerRequestLoginChangeSlot& refMsg);
+
+	void OnTeamKick();
 
 private:
 	CPlayerSession* m_pSession;
@@ -43,6 +45,7 @@ private:
 	std::string m_szToken;
 
 	UINT64 m_qwTeamId;
+	UINT32 m_dwTeamServerId;
 };
 
 #endif // !__ChatPlayer_H__

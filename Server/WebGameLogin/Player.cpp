@@ -6,6 +6,7 @@
 #include "gamedefine.h"
 #include "TeamSession.h"
 #include "GameServer.h"
+#include "fxredis.h"
 
 const static unsigned int g_dwPlayerBuffLen = 64 * 1024;
 static char g_pPlayerBuff[g_dwPlayerBuffLen];
@@ -15,6 +16,7 @@ Player::Player()
 	, m_qwPyayerId(0)
 	, m_eState(PlayrState_Idle)
 	, m_qwTeamId(0)
+	, m_dwTeamServerId(0)
 {
 }
 
@@ -36,19 +38,8 @@ bool Player::OnPlayerRequestLogin(CPlayerSession& refSession, GameProto::PlayerR
 	return true;
 }
 
-bool Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto::PlayerRequestLoginMakeTeam& refMsg)
+void Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto::PlayerRequestLoginMakeTeam& refMsg)
 {
-	GameProto::LoginRequestTeamMakeTeam oTeam;
-	oTeam.set_qw_player_id(m_qwPyayerId);
-
-	LogExe(LogLv_Debug, "player : %llu want to make team", m_qwPyayerId);
-
-	GameProto::RoleData* pRoleData = oTeam.mutable_role_data();
-	pRoleData->set_qw_player_id(m_qwPyayerId);
-	pRoleData->set_sz_nick_name(m_szNickName);
-	pRoleData->set_sz_avatar(m_szAvatar);
-	pRoleData->set_dw_sex(m_dwSex);
-
 	if (m_eState != PlayrState_Idle)
 	{
 		//只能在idle的情况下 才能创建队伍
@@ -58,7 +49,7 @@ bool Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto:
 		unsigned int dwBufLen = 0;
 		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
 		m_pSession->Send(pBuf, dwBufLen);
-		return true;
+		return;
 	}
 	std::map<unsigned int, CBinaryTeamSession*>& refSessions = GameServer::Instance()->GetTeamSessionManager().GetTeamSessions();
 	if (refSessions.size() == 0)
@@ -69,8 +60,44 @@ bool Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto:
 		unsigned int dwBufLen = 0;
 		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
 		m_pSession->Send(pBuf, dwBufLen);
-		return true;
+		return;
 	}
+	GameProto::LoginRequestTeamMakeTeam oTeam;
+
+	LogExe(LogLv_Debug, "player : %llu want to make team", m_qwPyayerId);
+
+	GameProto::RoleData* pRoleData = oTeam.mutable_role_data();
+	pRoleData->set_qw_player_id(m_qwPyayerId);
+	pRoleData->set_sz_nick_name(m_szNickName);
+	pRoleData->set_sz_avatar(m_szAvatar);
+	pRoleData->set_dw_sex(m_dwSex);
+
+	class RedisTeamId : public IRedisQuery
+	{
+	public:
+		RedisTeamId() : m_qwTeamId(0), m_pReader(NULL) {}
+		~RedisTeamId() {}
+
+		virtual int					GetDBId(void) { return 0; }
+		virtual void				OnQuery(IRedisConnection *poDBConnection)
+		{
+			char szQuery[64] = { 0 };
+			sprintf(szQuery, "incr %s", RedisConstant::szTeamId);
+			poDBConnection->Query(szQuery, &m_pReader);
+		}
+		virtual void OnResult(void) { m_pReader->GetValue(m_qwTeamId); }
+		virtual void Release(void) { m_pReader->Release(); }
+
+		INT64 GetTeamId() { return m_qwTeamId; }
+
+	private:
+		IRedisDataReader* m_pReader;
+		INT64 m_qwTeamId;
+	};
+
+	RedisTeamId oTeamId;
+	FxRedisGetModule()->QueryDirect(&oTeamId);
+	oTeam.set_qw_team_id(oTeamId.GetTeamId());
 
 	//设置状态为请求组队
 	m_eState = PlayrState_MakeTeam;
@@ -85,7 +112,7 @@ bool Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto:
 		++it;
 	}
 	(it->second)->Send(pBuf, dwBufLen);
-	return true;
+	return;
 }
 
 bool Player::OnPlayerRequestLoginInviteTeam(CPlayerSession& refSession, GameProto::PlayerRequestLoginInviteTeam& refMsg)
@@ -96,4 +123,18 @@ bool Player::OnPlayerRequestLoginInviteTeam(CPlayerSession& refSession, GameProt
 bool Player::OnPlayerRequestLoginChangeSlot(CPlayerSession& refSession, GameProto::PlayerRequestLoginChangeSlot& refMsg)
 {
 	return true;
+}
+
+void Player::OnTeamKick()
+{
+	if (m_eState != PlayrState_MakeTeam && m_eState != PlayrState_TeamCompleted)
+	{
+		return;
+	}
+	m_eState = PlayrState_Idle;
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	GameProto::LoginNotifyPlayerTeamKick oResult;
+	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+	m_pSession->Send(pBuf, dwBufLen);
 }

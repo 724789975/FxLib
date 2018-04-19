@@ -90,11 +90,15 @@ message LoginAckPlayerChangeSlot
 	uint32 dw_result = 1;
 }
 
+message LoginNotifyPlayerTeamKick	//队伍踢人
+{
+}
+
 //login->team
 message LoginRequestTeamMakeTeam
 {
-	uint64 qw_player_id = 1;
-	RoleData role_data = 2;
+	RoleData role_data = 1;
+	uint64 qw_team_id = 2;
 }
 
 message LoginRequestTeamInviteTeam
@@ -115,7 +119,7 @@ message TeamAckLoginMakeTeam
 	uint32 dw_result = 1;
 	uint64 qw_player_id = 2;
 	uint64 qw_team_id = 3;
-	uint32 dw_team_server_id = 4;
+	uint32 dw_slot_id = 4;
 }
 
 message TeamNotifyLoginTeamInfo

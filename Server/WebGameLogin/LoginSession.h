@@ -29,9 +29,6 @@ public:
 	unsigned int		GetServerId() { return m_dwServerId; }
 
 	virtual bool		OnServerInfo(CLoginSession& refSession, google::protobuf::Message& refMsg);
-	virtual bool		OnLoginRequestTeamMakeTeam(CLoginSession& refSession, google::protobuf::Message& refMsg);
-	virtual bool		OnLoginRequestTeamInviteTeam(CLoginSession& refSession, google::protobuf::Message& refMsg);
-	virtual bool		OnLoginRequestTeamChangeSlot(CLoginSession& refSession, google::protobuf::Message& refMsg);
 
 protected:
 	unsigned int m_dwServerId;

@@ -4,6 +4,7 @@
 #include <vector>
 #include "netstream.h"
 #include "fxdb.h"
+#include "mysql.h"
 
 #define IDLENTH 64
 

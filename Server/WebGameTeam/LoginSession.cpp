@@ -25,7 +25,7 @@ void CLoginSession::OnConnect(void)
 {
 	//向对方发送本服务器信息
 	GameProto::ServerInfo oInfo;
-	oInfo.set_dw_server_id(GameServer::Instance()->GetServerid());
+	oInfo.set_dw_server_id(GameServer::Instance()->GetServerId());
 	//oInfo.set_sz_listen_ip((*it)->GetRemoteIPStr());
 	//oInfo.set_dw_login_port(GameServer::Instance()->GetLoginPort());
 	//oInfo.set_dw_team_port((*it)->m_dwTeamPort);
@@ -73,48 +73,25 @@ bool CLoginSession::OnServerInfo(CLoginSession& refSession, google::protobuf::Me
 
 bool CLoginSession::OnLoginRequestTeamMakeTeam(CLoginSession& refSession, google::protobuf::Message& refMsg)
 {
-	class RedisGetTeamId : public IRedisQuery
-	{
-	public:
-		RedisGetTeamId(UINT64 qwPlayerId) : m_qwTeamId(0), m_pReader(NULL) { m_qwPlayerId = qwPlayerId; }
-		~RedisGetTeamId() {}
-
-		virtual int					GetDBId(void) { return 0; }
-		virtual void				OnQuery(IRedisConnection *poDBConnection)
-		{
-			char szQuery[64] = { 0 };
-			sprintf(szQuery, "get %llu_%s", m_qwPlayerId, RedisConstant::szTeamId);
-			poDBConnection->Query(szQuery, &m_pReader);
-		}
-		virtual void				OnResult(void)
-		{
-			m_pReader->GetValue(m_qwTeamId);
-		}
-		virtual void				Release(void)
-		{
-			m_pReader->Release();
-		}
-
-		UINT64 GetTeamId() { return m_qwTeamId; }
-
-	private:
-		IRedisDataReader* m_pReader;
-		UINT64 m_qwPlayerId;
-		INT64 m_qwTeamId;
-	};
 	GameProto::LoginRequestTeamMakeTeam* pMsg = dynamic_cast<GameProto::LoginRequestTeamMakeTeam*>(&refMsg);
 	if (pMsg == NULL)
 	{
 		return false;
 	}
-	RedisGetTeamId oTeamId(pMsg->qw_player_id());
-	FxRedisGetModule()->QueryDirect(&oTeamId);
-	INT64 qwTeamId = oTeamId.GetTeamId();
+
+	CTeam& refTeam = GameServer::Instance()->GetTeamManager().CreateTeam(pMsg->qw_team_id());
+	refTeam.InsertIntoTeam(pMsg->role_data());
+	GameProto::TeamRoleData* pTeamRoleData = refTeam.GetTeamRoleData(pMsg->role_data().qw_player_id());
+	if (pTeamRoleData == NULL)
+	{
+		Assert(0);
+	}
 
 	GameProto::TeamAckLoginMakeTeam oTeamAckLoginMakeTeam;
 	oTeamAckLoginMakeTeam.set_dw_result(0);
-	oTeamAckLoginMakeTeam.set_qw_player_id(pMsg->qw_player_id());
-	oTeamAckLoginMakeTeam.set_qw_team_id(qwTeamId);
+	oTeamAckLoginMakeTeam.set_qw_player_id(pMsg->role_data().qw_player_id());
+	oTeamAckLoginMakeTeam.set_qw_team_id(pMsg->qw_team_id());
+	oTeamAckLoginMakeTeam.set_dw_slot_id(pTeamRoleData->dw_slot_id());
 
 	LogExe(LogLv_Debug, "player : %llu maketeam id : %llu",
 		oTeamAckLoginMakeTeam.qw_player_id(), oTeamAckLoginMakeTeam.qw_team_id());

@@ -119,11 +119,12 @@ bool CPlayerSession::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, go
 	Player* pPlayer =  GameServer::Instance()->GetPlayerManager().GetPlayer(m_qwPlayerId);
 	if (pPlayer)
 	{
-		return pPlayer->OnPlayerRequestLoginMakeTeam(*this, *pMsg);
+		pPlayer->OnPlayerRequestLoginMakeTeam(*this, *pMsg);
 	}
 	else
 	{
 		LogExe(LogLv_Critical, "can't find player %llu", m_qwPlayerId);
+		Close();
 	}
 	return true;
 }

@@ -33,7 +33,7 @@
 #include <assert.h>
 
 #include "fxmeta.h"
-#include <mysql.h>
+//#include <mysql.h>
 
 #ifdef	FXN_DLLCLASS
 #ifndef DLLCLASS_DECL
@@ -55,6 +55,7 @@
 
 const char FXDB_MODULENAME[]        = "FXMySQLDB";
 
+enum enum_field_types;
 enum EFxDBCode
 {
     FXDB_ERR_UNKNOWN    = -4,       // 未知错误

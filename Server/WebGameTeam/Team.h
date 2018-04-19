@@ -15,6 +15,10 @@ public:
 	virtual UINT64* GetRedTeam() { return m_oRoleSlots; }
 	virtual UINT64* GetBlueTeam() { return m_oRoleSlots + MAXCLIENTNUM / 2; }
 
+	bool InsertIntoTeam(const GameProto::RoleData& refRoleData);
+
+	GameProto::TeamRoleData* GetTeamRoleData(UINT64 qwPlayerId);
+
 	std::map<UINT64, GameProto::TeamRoleData> m_mapRoles;		//<playerid, data>
 
 	UINT64 m_oRoleSlots[MAXCLIENTNUM];							//playerid
@@ -26,7 +30,7 @@ public:
 	CTeamManager();
 	~CTeamManager();
 
-	CTeam& CreateTeam();
+	CTeam& CreateTeam(UINT64 qwTeamId);
 	bool ReleaseTeam(UINT64 qwTeamId);
 private:
 	std::map<UINT64, CTeam> m_mapTeams;						//<teamid, team>

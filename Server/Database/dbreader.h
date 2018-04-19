@@ -2,6 +2,7 @@
 #define __DBREADER_H_2009_0824__
 
 #include "fxdb.h"
+#include "mysql.h"
 
 class FxMySQLReader : public IDataReader
 {

@@ -2,6 +2,7 @@
 #define __DB_STMT_H_2012_11_28__
 
 #include "fxdb.h"
+#include "mysql.h"
 
 class FxMySQLConnection;
 
