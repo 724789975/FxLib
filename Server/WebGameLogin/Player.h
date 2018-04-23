@@ -11,7 +11,9 @@ enum EPlayrState
 	PlayrState_Login,		//登录 这个暂时不用
 	PlayrState_MakeTeam,	//请求组队
 	PlayrState_TeamCompleted,	//组队完成
-	PlayrState_Game,		//游戏
+	PlayrState_GamePrepare,		//准备游戏
+	PlayrState_GameCountingSeconds,		//游戏读秒 犹豫的时间
+	PlayrState_GamIng,		//游戏中
 };
 
 class Player

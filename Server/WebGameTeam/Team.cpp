@@ -3,7 +3,9 @@
 
 
 CTeam::CTeam()
+	: m_qwLeader(0)
 {
+	memset(m_oPlayerSlots, 0, MAXCLIENTNUM);
 }
 
 CTeam::~CTeam()
@@ -81,7 +83,7 @@ GameProto::TeamRoleData* CTeam::GetTeamRoleData(UINT64 qwPlayerId)
 {
 	if (m_mapPlayers.find(qwPlayerId) == m_mapPlayers.end())
 	{
-		return false;
+		return NULL;
 	}
 	return &m_mapPlayers[qwPlayerId];
 }

@@ -82,12 +82,9 @@ bool CLoginSession::OnLoginRequestTeamMakeTeam(CLoginSession& refSession, google
 	CTeam& refTeam = GameServer::Instance()->GetTeamManager().CreateTeam(pMsg->qw_team_id());
 	refTeam.InsertIntoTeam(pMsg->role_data());
 	GameProto::TeamRoleData* pTeamRoleData = refTeam.GetTeamRoleData(pMsg->role_data().qw_player_id());
-	pTeamRoleData->set_dw_server_id(m_dwServerId);
-	if (pTeamRoleData == NULL)
-	{
-		Assert(0);
-	}
+	Assert(pTeamRoleData);
 
+	pTeamRoleData->set_dw_server_id(m_dwServerId);
 	GameProto::TeamAckLoginMakeTeam oTeamAckLoginMakeTeam;
 	oTeamAckLoginMakeTeam.set_dw_result(0);
 	oTeamAckLoginMakeTeam.set_qw_player_id(pMsg->role_data().qw_player_id());
@@ -151,6 +148,11 @@ bool CLoginSession::OnLoginRequestTeamKickPlayer(CLoginSession& refSession, goog
 	unsigned int dwBufLen = 0;
 	ProtoUtility::MakeProtoSendBuffer(oKickPlayer, pBuf, dwBufLen);
 	Send(pBuf, dwBufLen);
+
+	if (pTeam->GetTeamNum() == 0)
+	{
+		GameServer::Instance()->GetTeamManager().ReleaseTeam(pMsg->qw_team_id());
+	}
 	return true;
 }
 
@@ -182,10 +184,11 @@ bool CBinaryLoginSession::OnServerInfo(CLoginSession& refSession, google::protob
 
 void CBinaryLoginSession::Release(void)
 {
-	//LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
-	//OnDestroy();
+	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p", GetRemoteIPStr(), GetRemotePort(), GetConnection());
+	OnDestroy();
 
 	//FxSession::Init(NULL);
+	GameServer::Instance()->GetLoginSessionManager().Release(this);
 }
 
 //////////////////////////////////////////////////////////////////////////

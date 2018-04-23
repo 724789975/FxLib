@@ -4,7 +4,7 @@ find ./ -name '*log.txt' | xargs rm
 
 sleep 1
 
-./WebGameManager --server_id 30001 --server_port 30001 --server_port 3o002 --center_ip 127.0.0.1 --center_port 40000 &
+./WebGameManager --server_id 30001 --server_port 30001 --server_port 30002 --center_ip 127.0.0.1 --center_port 40000 &
 sleep 1
 ./WebGameManager --server_id 30002 --server_port 30011 --server_port 30012 --center_ip 127.0.0.1 --center_port 40000 &
 

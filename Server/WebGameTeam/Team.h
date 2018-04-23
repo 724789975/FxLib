@@ -11,7 +11,7 @@ public:
 	CTeam();
 	~CTeam();
 
-	UINT32 GetTeamNum() { return MAXCLIENTNUM / 2; }			//一边有多少人
+	UINT32 GetTeamNum() { return m_mapPlayers.size(); }			//一边有多少人
 	virtual UINT64* GetRedTeam() { return m_oPlayerSlots; }
 	virtual UINT64* GetBlueTeam() { return m_oPlayerSlots + MAXCLIENTNUM / 2; }
 
@@ -23,6 +23,7 @@ public:
 	std::map<UINT64, GameProto::TeamRoleData> m_mapPlayers;		//<playerid, data>
 
 	UINT64 m_oPlayerSlots[MAXCLIENTNUM];							//playerid
+	UINT64 m_qwLeader;
 };
 
 class CTeamManager

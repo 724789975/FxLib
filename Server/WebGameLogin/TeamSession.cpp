@@ -17,9 +17,7 @@ CTeamSession::CTeamSession()
 	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginInviteTeam::descriptor(), &CTeamSession::OnTeamAckLoginInviteTeam);
 	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginChangeSlot::descriptor(), &CTeamSession::OnTeamAckLoginChangeSlot);
 	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginKickPlayer::descriptor(), &CTeamSession::OnTeamAckLoginKickPlayer);
-	
 }
-
 
 CTeamSession::~CTeamSession()
 {
@@ -43,7 +41,6 @@ void CTeamSession::OnConnect(void)
 
 void CTeamSession::OnClose(void)
 {
-
 }
 
 void CTeamSession::OnError(UINT32 dwErrorNo)

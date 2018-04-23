@@ -58,6 +58,10 @@ message PlayerRequestLoginChangeSlot
 	uint32 dw_slot_id = 1;
 }
 
+message PlayerRequestLoginGameStart
+{
+}
+
 //login->player
 message LoginAckPlayerServerId
 {

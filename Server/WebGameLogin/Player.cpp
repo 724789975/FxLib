@@ -40,10 +40,10 @@ bool Player::OnPlayerRequestLogin(CPlayerSession& refSession, GameProto::PlayerR
 
 void Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto::PlayerRequestLoginMakeTeam& refMsg)
 {
+	GameProto::LoginAckPlayerMakeTeam oResult;
 	if (m_eState != PlayrState_Idle)
 	{
 		//只能在idle的情况下 才能创建队伍
-		GameProto::LoginAckPlayerLoginResult oResult;
 		oResult.set_dw_result(GameProto::EC_MakeTeamNotIdle);
 		char* pBuf = NULL;
 		unsigned int dwBufLen = 0;
@@ -54,7 +54,6 @@ void Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto:
 	std::map<unsigned int, CBinaryTeamSession*>& refSessions = GameServer::Instance()->GetTeamSessionManager().GetTeamSessions();
 	if (refSessions.size() == 0)
 	{
-		GameProto::LoginAckPlayerLoginResult oResult;
 		oResult.set_dw_result(GameProto::EC_NoTeamServer);
 		char* pBuf = NULL;
 		unsigned int dwBufLen = 0;
@@ -97,13 +96,13 @@ void Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto:
 
 	RedisTeamId oTeamId;
 	FxRedisGetModule()->QueryDirect(&oTeamId);
-	oTeam.set_qw_team_id(oTeamId.GetTeamId());
+	oResult.set_qw_team_id(oTeamId.GetTeamId());
 
 	//设置状态为请求组队
 	m_eState = PlayrState_MakeTeam;
 	char* pBuf = NULL;
 	unsigned int dwBufLen = 0;
-	ProtoUtility::MakeProtoSendBuffer(oTeam, pBuf, dwBufLen);
+	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
 	static unsigned int s_dwTeamIndex;
 	unsigned int dwTeamIndex = ++s_dwTeamIndex % refSessions.size();
 	std::map<unsigned int, CBinaryTeamSession*>::iterator it = refSessions.begin();
