@@ -63,6 +63,10 @@ bool CTeam::InsertIntoTeam(const GameProto::RoleData& refRoleData)
 			refTeamRoleData.mutable_role_data()->CopyFrom(refRoleData);
 			refTeamRoleData.set_dw_slot_id(i);
 			bInsert = true;
+			if (m_qwLeader == 0)
+			{
+				m_qwLeader = refRoleData.qw_player_id();
+			}
 			break;
 		}
 	}

@@ -165,6 +165,66 @@ bool CLoginSession::OnLoginRequestTeamGameStart(CLoginSession& refSession, googl
 		return false;
 	}
 
+	GameProto::TeamAckLoginGameStart oResult;
+	oResult.set_qw_player_id(pMsg->qw_player_id());
+	oResult.set_qw_team_id(pMsg->qw_team_id());
+	CTeam* pTeam = GameServer::Instance()->GetTeamManager().GetTeam(pMsg->qw_team_id());
+	if (pTeam == NULL)
+	{
+		LogExe(LogLv_Critical, "can't find team id : %llu, player id : %llu", pMsg->qw_team_id(), pMsg->qw_player_id());
+		oResult.set_dw_result(GameProto::EC_NoTeamId);
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		Send(pBuf, dwBufLen);
+		return true;
+	}
+	if (pTeam->GetLeaderId() != pMsg->qw_player_id())
+	{
+		LogExe(LogLv_Info, "player not leader team id : %llu, player id : %llu", pMsg->qw_team_id(), pMsg->qw_player_id());
+		oResult.set_dw_result(GameProto::EC_NotLeader);
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		Send(pBuf, dwBufLen);
+		return true;
+	}
+	if (pTeam->GetState() == CTeam::ETS_StartGame)
+	{
+		LogExe(LogLv_Info, "team already has start id : %llu, player id : %llu", pMsg->qw_team_id(), pMsg->qw_player_id());
+		oResult.set_dw_result(GameProto::EC_TeamHasStart);
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		Send(pBuf, dwBufLen);
+		return true;
+	}
+	std::map<unsigned int, CBinaryGameManagerSession*>& refSessions = GameServer::Instance()->GetGameManagerSessionManager().GetGameManagerSessions();
+	if (refSessions.size() == 0)
+	{
+		LogExe(LogLv_Info, "no game manager server team id : %llu, player id : %llu", pMsg->qw_team_id(), pMsg->qw_player_id());
+		oResult.set_dw_result(GameProto::EC_NoGameManagerServer);
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		Send(pBuf, dwBufLen);
+		return true;
+	}
+	pTeam->SetState(CTeam::ETS_StartGame);
+	static unsigned int s_dwTeamIndex;
+	unsigned int dwTeamIndex = ++s_dwTeamIndex % refSessions.size();
+	std::map<unsigned int, CBinaryGameManagerSession*>::iterator it = refSessions.begin();
+	for (int i = 0; i < dwTeamIndex; ++i)
+	{
+		++it;
+	}
+	GameProto::TeamRequestGameManagerGameStart oRequest;
+	oRequest.set_qw_team_id(pMsg->qw_team_id());
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oRequest, pBuf, dwBufLen);
+	(it->second)->Send(pBuf, dwBufLen);
+
 	return true;
 }
 

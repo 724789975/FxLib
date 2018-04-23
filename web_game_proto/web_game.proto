@@ -26,7 +26,10 @@ enum EErrorCode
 	EC_NONE = 0;
 	EC_MakeTeamNotIdle = 1;		//创建队伍时 角色状态不是idle
 	EC_NoTeamServer = 2;		//没有组队服务器
-	EC_NoTeamId = 3;			//没有队伍
+	EC_NoTeamId = 3;			//没有这个队伍
+	EC_NotLeader = 4;			//没有队伍
+	EC_TeamHasStart = 5;		//队伍已经申请开始游戏
+	EC_NoGameManagerServer = 6;	//没有游戏管理服务器
 }
 
 //player->login
@@ -161,6 +164,19 @@ message TeamAckLoginKickPlayer
 {
 	uint32 dw_result = 1;
 	uint64 qw_player_id = 2;
+}
+
+message TeamAckLoginGameStart
+{
+	uint32 dw_result = 1;
+	uint64 qw_player_id = 2;
+	uint64 qw_team_id = 3;
+}
+
+//team->gamemanager
+message TeamRequestGameManagerGameStart
+{
+	uint64 qw_team_id = 1;
 }
 
 //game->gamemanager

@@ -7,13 +7,13 @@
 //后面可以加其他模式
 class CTeam
 {
+public:
 	enum ETeamState
 	{
 		ETS_NONE,
 		ETS_Idle,
 		ETS_StartGame,
 	};
-public:
 	CTeam();
 	~CTeam();
 
@@ -24,11 +24,15 @@ public:
 	bool InsertIntoTeam(const GameProto::RoleData& refRoleData);
 	bool KickPlayer(UINT64 qwPlayerId);
 
+	UINT64 GetLeaderId() { return m_qwLeader; }
+	ETeamState GetState() { return m_eState; }
+	void SetState(ETeamState eState) { m_eState = eState; }
+
 	GameProto::TeamRoleData* GetTeamRoleData(UINT64 qwPlayerId);
 
 	std::map<UINT64, GameProto::TeamRoleData> m_mapPlayers;		//<playerid, data>
 
-	UINT64 m_oPlayerSlots[MAXCLIENTNUM];							//playerid
+	UINT64 m_oPlayerSlots[MAXCLIENTNUM];						//playerid
 	UINT64 m_qwLeader;
 
 	ETeamState m_eState;
