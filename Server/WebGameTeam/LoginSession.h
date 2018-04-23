@@ -33,6 +33,7 @@ public:
 	bool		OnLoginRequestTeamInviteTeam(CLoginSession& refSession, google::protobuf::Message& refMsg);
 	bool		OnLoginRequestTeamChangeSlot(CLoginSession& refSession, google::protobuf::Message& refMsg);
 	bool		OnLoginRequestTeamKickPlayer(CLoginSession& refSession, google::protobuf::Message& refMsg);
+	bool		OnLoginRequestTeamGameStart(CLoginSession& refSession, google::protobuf::Message& refMsg);
 
 protected:
 	unsigned int m_dwServerId;

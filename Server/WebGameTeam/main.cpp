@@ -14,6 +14,7 @@ bool g_bRun = true;
 DEFINE_uint32(server_id, 20001, "server id");
 DEFINE_string(center_ip, "127.0.0.1", "center ip");
 DEFINE_uint32(center_port, 40000, "center port");
+DEFINE_uint32(game_manager_port, 20001, "game manager port");
 
 void EndFun(int n)
 {
@@ -64,7 +65,7 @@ int main(int argc, char **argv)
 	}
 	//----------------------order can't change end-----------------------//
 
-	if (!GameServer::Instance()->Init(FLAGS_server_id, FLAGS_center_ip, FLAGS_center_port))
+	if (!GameServer::Instance()->Init(FLAGS_server_id, FLAGS_center_ip, FLAGS_center_port, FLAGS_game_manager_port))
 	{
 		g_bRun = false;
 		goto STOP;

@@ -7,6 +7,7 @@
 #include "singleton.h"
 #include "LoginSession.h"
 #include "CenterSession.h"
+#include "GameManagerSession.h"
 #include "Team.h"
 
 class GameServer : public TSingleton<GameServer>
@@ -15,12 +16,16 @@ public:
 	GameServer();
 	virtual ~GameServer();
 
-	bool Init(unsigned int dwServerId, std::string szCenterIp, unsigned short wCenterPort);
+	bool Init(unsigned int dwServerId, std::string szCenterIp, unsigned short wCenterPort, unsigned short wGameManagerPort);
+
 	bool Stop();
 
 	unsigned int GetServerId() { return m_dwServerId; }
 	BinaryLoginSessionManager& GetLoginSessionManager() { return m_oBinaryLoginSessionManager; }
+	BinaryGameManagerSessionManager& GetGameManagerSessionManager() { return m_oBinaryGameManagerSessionManager; }
 	CTeamManager& GetTeamManager() { return m_oTeamManager; }
+
+	unsigned short GetGameManagerPort() { return m_wGameManagerPort; }
 
 private:
 
@@ -28,8 +33,8 @@ private:
 
 	CBinaryCenterSession m_oCenterSession;
 
-	IFxListenSocket* m_pServerListenSocket;
-	IFxListenSocket* m_pPlayerListenSocket;
+	BinaryGameManagerSessionManager m_oBinaryGameManagerSessionManager;
+	IFxListenSocket* m_pGameManagerListenSocket;
 
 	CTeamManager m_oTeamManager;
 
@@ -37,6 +42,8 @@ private:
 
 	std::string m_szCenterIp;
 	unsigned short m_wCenterPort;
+
+	unsigned short m_wGameManagerPort;
 };
 
 

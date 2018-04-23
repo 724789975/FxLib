@@ -20,9 +20,9 @@ start WebGameManager --server_id 30001 --server_port 30001 --player_port 30002 -
 
 ping -n 1 127.0.0.1
 
-start WebGameTeam --server_id 20001 --center_ip 127.0.0.1 --center_port 40000
+start WebGameTeam --server_id 20001 --center_ip 127.0.0.1 --center_port 40000 -- game_manager_port 20001
 ::ping -n 1 127.0.0.1
-::start WebGameTeam --server_id 20002 --center_ip 127.0.0.1 --center_port 40000
+::start WebGameTeam --server_id 20002 --center_ip 127.0.0.1 --center_port 40000 -- game_manager_port 20011
 
 ping -n 1 127.0.0.1
 

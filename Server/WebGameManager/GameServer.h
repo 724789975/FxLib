@@ -9,6 +9,7 @@
 #include "PlayerSession.h"
 #include "LoginSession.h"
 #include "CenterSession.h"
+#include "TeamSession.h"
 
 class GameServer : public TSingleton<GameServer>
 {
@@ -26,6 +27,7 @@ public:
 	//BinaryServerSessionManager& GetBinaryServerSessionManager() { return m_oBinaryServerSessionManager; }
 
 	BinaryLoginSessionManager& GetLoginSessionManager() { return m_oBinaryLoginSessionManager; }
+	BinaryTeamSessionManager& GetTeamSessionManager() { return m_oBinaryTeamSessionManager; }
 
 	unsigned short GetServerListenPort() { return m_wServerListenPort; }
 
@@ -41,6 +43,8 @@ private:
 
 	IFxListenSocket* m_pServerListenSocket;
 	IFxListenSocket* m_pPlayerListenSocket;
+
+	BinaryTeamSessionManager m_oBinaryTeamSessionManager;
 
 	std::set<CPlayerSession*> m_setRequestPlayer;
 

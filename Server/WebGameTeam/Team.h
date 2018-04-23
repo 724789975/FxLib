@@ -7,6 +7,12 @@
 //后面可以加其他模式
 class CTeam
 {
+	enum ETeamState
+	{
+		ETS_NONE,
+		ETS_Idle,
+		ETS_StartGame,
+	};
 public:
 	CTeam();
 	~CTeam();
@@ -24,6 +30,8 @@ public:
 
 	UINT64 m_oPlayerSlots[MAXCLIENTNUM];							//playerid
 	UINT64 m_qwLeader;
+
+	ETeamState m_eState;
 };
 
 class CTeamManager

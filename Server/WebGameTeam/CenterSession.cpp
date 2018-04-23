@@ -26,7 +26,7 @@ void CCenterSession::OnConnect(void)
 	//oInfo.set_sz_listen_ip((*it)->GetRemoteIPStr());
 	//oInfo.set_dw_login_port(GameServer::Instance()->GetLoginPort());
 	//oInfo.set_dw_team_port((*it)->m_dwTeamPort);
-	//oInfo.set_dw_game_server_manager_port(GameServer::Instance()->GetGameManagerPort());
+	oInfo.set_dw_game_server_manager_port(GameServer::Instance()->GetGameManagerPort());
 
 	char* pBuf = NULL;
 	unsigned int dwBufLen = 0;

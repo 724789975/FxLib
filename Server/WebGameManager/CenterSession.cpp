@@ -78,7 +78,11 @@ bool CCenterSession::OnServerInfo(CCenterSession& refSession, google::protobuf::
 	LogExe(LogLv_Debug, "server : %d info, listen ip : %s login_port : %d, team_port : %d, game_manager_port : %d",
 		pMsg->dw_server_id(), pMsg->sz_listen_ip().c_str(), pMsg->dw_login_port(),
 		pMsg->dw_team_port(), pMsg->dw_game_server_manager_port());
-	if (pMsg->dw_server_id() / 10000 == GameProto::ST_Login)
+
+	GameProto::EServerType eServerType = (GameProto::EServerType)(pMsg->dw_server_id() / 10000);
+	switch (eServerType)
+	{
+	case GameProto::ST_Login:
 	{
 		CBinaryLoginSession* pLoginSession = GameServer::Instance()->GetLoginSessionManager().CreateSession();
 		if (FxNetGetModule()->TcpConnect(pLoginSession, inet_addr(pMsg->sz_listen_ip().c_str()), pMsg->dw_game_server_manager_port(), false) == INVALID_SOCKET)
@@ -90,6 +94,27 @@ bool CCenterSession::OnServerInfo(CCenterSession& refSession, google::protobuf::
 			LogExe(LogLv_Debug, "connect to login %s:%d", pMsg->sz_listen_ip().c_str(), pMsg->dw_server_id());
 		}
 	}
+		break;
+	case GameProto::ST_Team:
+	{
+		CBinaryTeamSession* pTeamSession = GameServer::Instance()->GetTeamSessionManager().CreateSession();
+		if (FxNetGetModule()->TcpConnect(pTeamSession, inet_addr(pMsg->sz_listen_ip().c_str()), pMsg->dw_game_server_manager_port(), false) == INVALID_SOCKET)
+		{
+			LogExe(LogLv_Critical, "connect to team : %d faild", pMsg->dw_server_id());
+		}
+		else
+		{
+			LogExe(LogLv_Debug, "connect to team %s:%d", pMsg->sz_listen_ip().c_str(), pMsg->dw_server_id());
+		}
+	}
+		break;
+	default:
+	{
+		Assert(0);
+	}
+		break;
+	}
+
 	return true;
 }
 

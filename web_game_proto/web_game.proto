@@ -125,6 +125,12 @@ message LoginRequestTeamKickPlayer
 	uint64 qw_team_id = 2;
 }
 
+message LoginRequestTeamGameStart
+{
+	uint64 qw_team_id = 1;
+	uint64 qw_player_id = 2;
+}
+
 //team->login
 message TeamAckLoginMakeTeam
 {
@@ -201,3 +207,4 @@ message ServerInfo
 	uint32 dw_game_server_manager_port = 4;
 	uint32 dw_login_port = 5;
 }
+

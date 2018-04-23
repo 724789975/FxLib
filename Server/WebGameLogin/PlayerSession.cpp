@@ -167,6 +167,25 @@ bool CPlayerSession::OnPlayerRequestLoginChangeSlot(CPlayerSession& refSession, 
 	return true;
 }
 
+bool CPlayerSession::OnPlayerRequestLoginGameStart(CPlayerSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::PlayerRequestLoginGameStart* pMsg = dynamic_cast<GameProto::PlayerRequestLoginGameStart*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(m_qwPlayerId);
+	if (pPlayer)
+	{
+		return pPlayer->OnPlayerRequestLoginGameStart(*this, *pMsg);
+	}
+	else
+	{
+		LogExe(LogLv_Critical, "can't find player %llu", m_qwPlayerId);
+	}
+	return true;
+}
+
 //////////////////////////////////////////////////////////////////////////
 void CWebSocketPlayerSession::Release(void)
 {

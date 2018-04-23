@@ -124,6 +124,28 @@ bool Player::OnPlayerRequestLoginChangeSlot(CPlayerSession& refSession, GameProt
 	return true;
 }
 
+bool Player::OnPlayerRequestLoginGameStart(CPlayerSession& refSession, GameProto::PlayerRequestLoginGameStart& refMsg)
+{
+	std::map<unsigned int, CBinaryTeamSession*>& refSessions = GameServer::Instance()->GetTeamSessionManager().GetTeamSessions();
+	std::map<unsigned int, CBinaryTeamSession*>::iterator it = refSessions.find(m_dwTeamServerId);
+	if (it == refSessions.end())
+	{
+		LogExe(LogLv_Critical, "find team server error id : %d, team id : %llu", m_dwTeamServerId, m_qwTeamId);
+		return true;
+	}
+
+	GameProto::LoginRequestTeamGameStart oRequest;
+	oRequest.set_qw_player_id(m_qwPyayerId);
+	oRequest.set_qw_team_id(m_qwTeamId);
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oRequest, pBuf, dwBufLen);
+	LogExe(LogLv_Debug, "%s, team id : %llu, player id : %llu, team server id :%d",
+		oRequest.GetTypeName().c_str(), m_qwTeamId, m_qwPyayerId, m_dwTeamServerId);
+	(it->second)->Send(pBuf, dwBufLen);
+	return true;
+}
+
 void Player::OnTeamKick()
 {
 	if (m_eState != PlayrState_MakeTeam && m_eState != PlayrState_TeamCompleted)

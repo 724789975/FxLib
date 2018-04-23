@@ -175,6 +175,7 @@
     <ClCompile Include="proto_dispatcher.cpp" />
     <ClCompile Include="ServerSession.cpp" />
     <ClCompile Include="SocketSession.cpp" />
+    <ClCompile Include="TeamSession.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CenterSession.h" />
@@ -186,6 +187,7 @@
     <ClInclude Include="PlayerSession.h" />
     <ClInclude Include="ServerSession.h" />
     <ClInclude Include="SocketSession.h" />
+    <ClInclude Include="TeamSession.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Net\Net.vcxproj">

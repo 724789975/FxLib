@@ -35,6 +35,10 @@ bool GameServer::Init(unsigned int dwServerId, std::string szCenterIp, unsigned 
 	{
 		return false;
 	}
+	if (!m_oBinaryTeamSessionManager.Init())
+	{
+		return false;
+	}
 
 	IFxNet* pNet = FxNetGetModule();
 	if (!pNet)

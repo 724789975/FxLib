@@ -4,6 +4,7 @@
 
 CTeam::CTeam()
 	: m_qwLeader(0)
+	, m_eState(ETS_Idle)
 {
 	memset(m_oPlayerSlots, 0, MAXCLIENTNUM);
 }

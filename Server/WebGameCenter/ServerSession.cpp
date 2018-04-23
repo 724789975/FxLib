@@ -74,7 +74,10 @@ bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::
 	LogExe(LogLv_Debug, "server : %d connected, listen ip : %s login_port : %d, team_port : %d, game_manager_port : %d",
 		m_dwServerId, GetRemoteIPStr(), m_dwLoginPort, m_dwTeamPort, m_dwGameServerManagerPort);
 
-	if (m_dwServerId / 10000 == GameProto::ST_Login)
+	enum GameProto::EServerType eServerType = (GameProto::EServerType)(m_dwServerId / 10000);
+	switch (eServerType)
+	{
+	case GameProto::ST_Login:
 	{
 		// 如果是login连上了 那么 应该向其他的所有服务器发消息 让其他服务器连接这个login 包含其他的login
 		std::set<CBinaryServerSession*>& refSessions = GameServer::Instance()->GetBinaryServerSessionManager().GetSessions();
@@ -90,9 +93,10 @@ bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::
 			(*it)->Send(pBuf, dwBufLen);
 		}
 	}
-	else
+		break;
+	case GameProto::ST_Team:
 	{
-		// 如果是其他服务器 那么应该向这个服务器发送所有login的信息 让他去连login
+		// 如果是组队服务器 那么应该向这个服务器发送所有login的信息 让他去连login
 		std::set<CBinaryServerSession*>& refSessions = GameServer::Instance()->GetBinaryServerSessionManager().GetSessions();
 		for (std::set<CBinaryServerSession*>::iterator it = refSessions.begin(); it != refSessions.end(); ++it)
 		{
@@ -100,7 +104,50 @@ bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::
 			{
 				continue;
 			}
-			if (m_dwServerId / 10000 != GameProto::ST_Login)
+			GameProto::EServerType eCTeamType = (GameProto::EServerType)((*it)->m_dwServerId / 10000);
+			switch (eCTeamType)
+			{
+			case GameProto::ST_Login:
+			{
+				GameProto::ServerInfo oInfo;
+				oInfo.set_dw_server_id((*it)->m_dwServerId);
+				oInfo.set_sz_listen_ip((*it)->GetRemoteIPStr());
+				oInfo.set_dw_login_port((*it)->m_dwLoginPort);
+				oInfo.set_dw_team_port((*it)->m_dwTeamPort);
+				oInfo.set_dw_game_server_manager_port((*it)->m_dwGameServerManagerPort);
+
+				char* pBuf = NULL;
+				unsigned int dwBufLen = 0;
+				ProtoUtility::MakeProtoSendBuffer(oInfo, pBuf, dwBufLen);
+				Send(pBuf, dwBufLen);
+			}
+				break;
+			case GameProto::ST_GameManager:
+			{
+				char* pBuf = NULL;
+				unsigned int dwBufLen = 0;
+				ProtoUtility::MakeProtoSendBuffer(*pMsg, pBuf, dwBufLen);
+				(*it)->Send(pBuf, dwBufLen);
+			}
+				break;
+			default:
+			{ continue; }
+				break;
+			}
+		}
+	}
+		break;
+	case GameProto::ST_GameManager:
+	{
+		// 如果是游戏管理服 那么应该向这个服务器发送所有login 和 team的信息 让他去连login team
+		std::set<CBinaryServerSession*>& refSessions = GameServer::Instance()->GetBinaryServerSessionManager().GetSessions();
+		for (std::set<CBinaryServerSession*>::iterator it = refSessions.begin(); it != refSessions.end(); ++it)
+		{
+			if ((*it)->m_dwServerId == 0)
+			{
+				continue;
+			}
+			if (((*it)->m_dwServerId / 10000 != GameProto::ST_Login) && ((*it)->m_dwServerId / 10000 != GameProto::ST_Team))
 			{
 				continue;
 			}
@@ -116,6 +163,13 @@ bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::
 			ProtoUtility::MakeProtoSendBuffer(oInfo, pBuf, dwBufLen);
 			Send(pBuf, dwBufLen);
 		}
+	}
+		break;
+	default:
+	{
+		Assert(0);
+	}
+		break;
 	}
 }
 
