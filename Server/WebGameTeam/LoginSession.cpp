@@ -223,6 +223,7 @@ bool CLoginSession::OnLoginRequestTeamGameStart(CLoginSession& refSession, googl
 	char* pBuf = NULL;
 	unsigned int dwBufLen = 0;
 	ProtoUtility::MakeProtoSendBuffer(oRequest, pBuf, dwBufLen);
+	LogExe(LogLv_Debug, "team id : %llu, player id : %llu request start game", pMsg->qw_team_id(), pMsg->qw_player_id());
 	(it->second)->Send(pBuf, dwBufLen);
 
 	return true;
