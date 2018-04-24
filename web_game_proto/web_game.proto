@@ -24,12 +24,13 @@ enum ETeamType
 enum EErrorCode
 {
 	EC_NONE = 0;
-	EC_MakeTeamNotIdle = 1;		//创建队伍时 角色状态不是idle
-	EC_NoTeamServer = 2;		//没有组队服务器
-	EC_NoTeamId = 3;			//没有这个队伍
-	EC_NotLeader = 4;			//没有队伍
-	EC_TeamHasStart = 5;		//队伍已经申请开始游戏
-	EC_NoGameManagerServer = 6;	//没有游戏管理服务器
+	EC_AlreadyInTeam = 1;		//已经在队伍中了
+	EC_MakeTeamNotIdle = 2;		//创建队伍时 角色状态不是idle
+	EC_NoTeamServer = 3;		//没有组队服务器
+	EC_NoTeamId = 4;			//没有这个队伍
+	EC_NotLeader = 5;			//没有队伍
+	EC_TeamHasStart = 6;		//队伍已经申请开始游戏
+	EC_NoGameManagerServer = 7;	//没有游戏管理服务器
 }
 
 //player->login
@@ -180,13 +181,25 @@ message TeamRequestGameManagerGameStart
 	repeated uint64 qw_player_ids = 2;
 }
 
+//gamemanager->team
+message GameManagerAckTeamGameStart
+{
+	uint32 dw_result = 1;
+	uint32 dw_player_port = 2;
+	uint32 dw_server_port = 3;
+	uint32 dw_slave_server_port = 4;
+	uint64 qw_team_id = 5;
+	string sz_listen_ip = 6;
+}
+
 //game->gamemanager
 message GameNotifyGameManagerInfo
 {
 	uint32 dw_player_port = 1;
 	uint32 dw_server_port = 2;
 	uint32 dw_slave_server_port = 3;
-	uint64 qw_player_point = 4;
+	uint64 qw_team_id = 4;
+	uint32 dw_team_server_id = 5;
 }
 
 //gamemanager->game

@@ -21,6 +21,7 @@ CPlayerSession::CPlayerSession()
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginMakeTeam::descriptor(), &CPlayerSession::OnPlayerRequestLoginMakeTeam);
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginInviteTeam::descriptor(), &CPlayerSession::OnPlayerRequestLoginInviteTeam);
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginChangeSlot::descriptor(), &CPlayerSession::OnPlayerRequestLoginChangeSlot);
+	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginGameStart::descriptor(), &CPlayerSession::OnPlayerRequestLoginGameStart);
 }
 
 

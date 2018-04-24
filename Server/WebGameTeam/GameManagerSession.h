@@ -29,6 +29,7 @@ public:
 	unsigned int		GetServerId() { return m_dwServerId; }
 
 	virtual bool		OnServerInfo(CGameManagerSession& refSession, google::protobuf::Message& refMsg);
+	virtual bool		OnGameManagerAckTeamGameStart(CGameManagerSession& refSession, google::protobuf::Message& refMsg);
 
 protected:
 	unsigned int m_dwServerId;

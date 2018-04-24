@@ -11,6 +11,7 @@ CGameManagerSession::CGameManagerSession()
 	:m_oProtoDispatch(*this)
 {
 	m_oProtoDispatch.RegistFunction(GameProto::ServerInfo::descriptor(), &CGameManagerSession::OnServerInfo);
+	m_oProtoDispatch.RegistFunction(GameProto::GameManagerAckTeamGameStart::descriptor(), &CGameManagerSession::OnGameManagerAckTeamGameStart);
 }
 
 
@@ -65,6 +66,18 @@ void CGameManagerSession::Init()
 bool CGameManagerSession::OnServerInfo(CGameManagerSession& refSession, google::protobuf::Message& refMsg)
 {
 	return OnServerInfo(refSession, refMsg);
+}
+
+bool CGameManagerSession::OnGameManagerAckTeamGameStart(CGameManagerSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::GameManagerAckTeamGameStart* pMsg = dynamic_cast<GameProto::GameManagerAckTeamGameStart*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	// todo 收到回包 处理相关逻辑
+	return true;
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -16,6 +16,7 @@ CLoginSession::CLoginSession()
 	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamInviteTeam::descriptor(), &CLoginSession::OnLoginRequestTeamInviteTeam);
 	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamChangeSlot::descriptor(), &CLoginSession::OnLoginRequestTeamChangeSlot);
 	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamKickPlayer::descriptor(), &CLoginSession::OnLoginRequestTeamKickPlayer);
+	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamGameStart::descriptor(), &CLoginSession::OnLoginRequestTeamGameStart);
 }
 
 CLoginSession::~CLoginSession()

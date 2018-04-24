@@ -22,8 +22,8 @@ void CGameManagerSession::OnConnect(void)
 	oInfo.set_dw_player_port(GameServer::Instance()->GetPlayerListenPort());
 	oInfo.set_dw_server_port(GameServer::Instance()->GetServerListenPort());
 	oInfo.set_dw_slave_server_port(GameServer::Instance()->GetSlaveServerListenPort());
-	oInfo.set_qw_player_point(GameServer::Instance()->GetPlayerPoint());
-
+	oInfo.set_qw_team_id(GameServer::Instance()->GetTeamId());
+	oInfo.set_dw_team_server_id(GameServer::Instance()->GetTeamServerId());
 
 	char* pBuf = NULL;
 	unsigned int dwBufLen = 0;

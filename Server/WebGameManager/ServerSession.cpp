@@ -65,18 +65,36 @@ bool CServerSession::OnGameNotifyGameManagerInfo(CServerSession& refSession, goo
 	}
 
 	GameProto::GameManagerAckGameInfoResult oResult;
-	oResult.set_dw_result(1);
-	CPlayerSession* pPlayer = (CPlayerSession*)pMsg->qw_player_point();
-	if (GameServer::Instance()->DelRequestPlayer(pPlayer))
+	std::map<unsigned int, CBinaryTeamSession *>& refSSessions = GameServer::Instance()->GetTeamSessionManager().GetTeamSessions();
+	std::map<unsigned int, CBinaryTeamSession *>::iterator it = refSSessions.find(pMsg->dw_team_server_id());
+	if (it == refSSessions.end())
 	{
-		oResult.set_dw_result(0);
-		pPlayer->OnGameInfo(*pMsg);
+		oResult.set_dw_result(GameProto::EC_NoTeamServer);
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		Send(pBuf, dwBufLen);
+		LogExe(LogLv_Critical, "find team server error, team server id : %d", pMsg->dw_team_server_id());
+		return true;
 	}
+	oResult.set_dw_result(0);
 
 	char* pBuf = NULL;
 	unsigned int dwBufLen = 0;
 	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
 	Send(pBuf, dwBufLen);
+
+	GameProto::GameManagerAckTeamGameStart oGameManagerAckTeamGameStart;
+	oGameManagerAckTeamGameStart.set_dw_result(0);
+	oGameManagerAckTeamGameStart.set_dw_player_port(pMsg->dw_player_port());
+	oGameManagerAckTeamGameStart.set_dw_server_port(pMsg->dw_server_port());
+	oGameManagerAckTeamGameStart.set_dw_slave_server_port(pMsg->dw_slave_server_port());
+	oGameManagerAckTeamGameStart.set_qw_team_id(pMsg->qw_team_id());
+	oGameManagerAckTeamGameStart.set_sz_listen_ip(GameServer::Instance()->GetServerIp());
+	char* pBufStart = NULL;
+	unsigned int dwBufStartLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oGameManagerAckTeamGameStart, pBufStart, dwBufStartLen);
+	it->second->Send(pBufStart, dwBufStartLen);
 	return true;
 }
 

@@ -8,7 +8,7 @@
 const static unsigned int g_dwTeamSessionBuffLen = 64 * 1024;
 static char g_pTeamSessionBuf[g_dwTeamSessionBuffLen];
 
-bool StartProccess(unsigned long long qwTeamId, char* szRoles)
+bool StartProccess(unsigned long long qwTeamId, unsigned int dwTeamServerId, char* szRoles)
 {
 #ifdef WIN32
 	SHELLEXECUTEINFO shell = { sizeof(shell) };
@@ -17,8 +17,10 @@ bool StartProccess(unsigned long long qwTeamId, char* szRoles)
 	shell.lpFile = "WebGame.exe";
 	char szBuffer[512] = { 0 };
 	GetExePath();
-	sprintf(szBuffer, "--game_manager_ip %s --game_manager_port %d --team_id %llu --roles %s",
-		"127.0.0.1", GameServer::Instance()->GetServerListenPort(), qwTeamId, szRoles);
+	sprintf(szBuffer, "--game_manager_ip %s --game_manager_port %d --team_id %llu --team_server_id %d --roles %s",
+		"127.0.0.1", GameServer::Instance()->GetServerListenPort(), qwTeamId, dwTeamServerId, szRoles);
+
+	LogExe(LogLv_Debug, "%s", szBuffer);
 	shell.lpParameters = szBuffer;
 	shell.lpDirectory = GetExePath();
 	shell.nShow = SW_SHOWNORMAL;
@@ -31,15 +33,18 @@ bool StartProccess(unsigned long long qwTeamId, char* szRoles)
 	sprintf(szServerIp, "%s", "127.0.0.1");
 	char szServerPort[8] = { 0 };
 	sprintf(szServerPort, "%d", GameServer::Instance()->GetServerListenPort());
-	char szPlayerPoint[16] = { 0 };
-	sprintf(szPlayerPoint, "%llu", qwTeamId);
+	char szTeamId[32] = { 0 };
+	sprintf(szTeamId, "%llu", qwTeamId);
+	char szTeamServerId[32] = { 0 };
+	sprintf(szTeamServerId, "%d", dwTeamServerId);
 	char *arg[] = { szExePath, "--game_manager_ip", szServerIp,
-		"--game_manager_port", szServerPort, "--team_id", qwTeamId, "--roles", szRoles, 0 };
+		"--game_manager_port", szServerPort, "--team_id", szTeamId, "--team_server_id", szTeamServerId, "--roles", szRoles, 0 };
+	LogExe(LogLv_Debug, "%s %s %s %s %s %s %s %s %s %s %s",
+		arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], arg[6], arg[7], arg[8], arg[9], arg[10]);
 	int pid = vfork();
 	if (pid < 0)
 	{
-		LogExe(LogLv_Error, "%s %s %s %s %s %s %s",
-			arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], arg[6]);
+		LogExe(LogLv_Critical, "start game fail");
 		return false;
 	}
 
@@ -60,6 +65,7 @@ CTeamSession::CTeamSession()
 	:m_oProtoDispatch(*this)
 {
 	m_oProtoDispatch.RegistFunction(GameProto::ServerInfo::descriptor(), &CTeamSession::OnServerInfo);
+	m_oProtoDispatch.RegistFunction(GameProto::TeamRequestGameManagerGameStart::descriptor(), &CTeamSession::OnTeamRequestGameManagerGameStart);
 }
 
 CTeamSession::~CTeamSession()
@@ -130,8 +136,8 @@ bool CTeamSession::OnTeamRequestGameManagerGameStart(CTeamSession& refSession, g
 	{
 		dwLen += sprintf(szRoles + dwLen, "%llu,", pMsg->qw_player_ids(i));
 	}
-	szRoles[dwLen] = ']';
-	StartProccess(pMsg->qw_team_id(), szRoles);
+	szRoles[dwLen - 1] = ']';
+	StartProccess(pMsg->qw_team_id(), m_dwServerId, szRoles);
 	return true;
 }
 

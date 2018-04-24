@@ -18,9 +18,9 @@ public:
 	~CTeam();
 
 	UINT32 GetTeamNum() { return m_mapPlayers.size(); }			//一边有多少人
-	virtual UINT64* GetTeam() { return m_oPlayerSlots; }
-	virtual UINT64* GetRedTeam() { return m_oPlayerSlots; }
-	virtual UINT64* GetBlueTeam() { return m_oPlayerSlots + MAXCLIENTNUM / 2; }
+	virtual UINT64* GetTeam() { return m_pPlayerSlots; }
+	virtual UINT64* GetRedTeam() { return m_pPlayerSlots; }
+	virtual UINT64* GetBlueTeam() { return m_pPlayerSlots + MAXCLIENTNUM / 2; }
 
 	bool InsertIntoTeam(const GameProto::RoleData& refRoleData);
 	bool KickPlayer(UINT64 qwPlayerId);
@@ -34,7 +34,7 @@ public:
 
 	std::map<UINT64, GameProto::TeamRoleData> m_mapPlayers;		//<playerid, data>
 
-	UINT64 m_oPlayerSlots[MAXCLIENTNUM];						//playerid
+	UINT64 m_pPlayerSlots[MAXCLIENTNUM];						//playerid
 	UINT64 m_qwLeader;
 
 	ETeamState m_eState;

@@ -94,6 +94,20 @@ public class SessionText : MonoBehaviour
 
 		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
 	}
+	
+	public void TeamStart()
+	{
+		GameProto.PlayerRequestLoginGameStart oTeam = new GameProto.PlayerRequestLoginGameStart();
+		byte[] pData = new byte[1024];
+		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
+		pStream.WriteString("GameProto.PlayerRequestLoginGameStart");
+		byte[] pProto = new byte[oTeam.CalculateSize()];
+		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
+		oTeam.WriteTo(oStream);
+		pStream.WriteData(pProto, (uint)pProto.Length);
+
+		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+	}
 
 	int dw1 = 0;
 	public void OnTest(byte[] pBuf)

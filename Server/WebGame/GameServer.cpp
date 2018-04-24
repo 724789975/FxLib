@@ -10,6 +10,7 @@ GameServer::GameServer()
 	, m_wServerListenPort(0)
 	, m_wSlaveServerListenPort(0)
 	, m_qwTeamId(0)
+	, m_dwTeamServerId(0)
 {
 }
 
@@ -24,9 +25,10 @@ bool GameServer::OnTimer(double fSecond)
 	exit(0);
 }
 
-bool GameServer::Init(unsigned int dwGameManagerIp, unsigned short wGameManagerPort, unsigned long long qwTeamId)
+bool GameServer::Init(unsigned int dwGameManagerIp, unsigned short wGameManagerPort, unsigned long long qwTeamId, unsigned int dwTeamServerId)
 {
 	m_qwTeamId = qwTeamId;
+	m_dwTeamServerId = dwTeamServerId;
 	IFxNet* pNet = FxNetGetModule();
 	if (!pNet)
 	{

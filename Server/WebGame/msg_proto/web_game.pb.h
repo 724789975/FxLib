@@ -38,7 +38,7 @@ namespace protobuf_web_5fgame_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[31];
+  static const ::google::protobuf::internal::ParseTable schema[32];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -94,6 +94,8 @@ void InitDefaultsTeamAckLoginGameStartImpl();
 void InitDefaultsTeamAckLoginGameStart();
 void InitDefaultsTeamRequestGameManagerGameStartImpl();
 void InitDefaultsTeamRequestGameManagerGameStart();
+void InitDefaultsGameManagerAckTeamGameStartImpl();
+void InitDefaultsGameManagerAckTeamGameStart();
 void InitDefaultsGameNotifyGameManagerInfoImpl();
 void InitDefaultsGameNotifyGameManagerInfo();
 void InitDefaultsGameManagerAckGameInfoResultImpl();
@@ -132,6 +134,7 @@ inline void InitDefaults() {
   InitDefaultsTeamAckLoginKickPlayer();
   InitDefaultsTeamAckLoginGameStart();
   InitDefaultsTeamRequestGameManagerGameStart();
+  InitDefaultsGameManagerAckTeamGameStart();
   InitDefaultsGameNotifyGameManagerInfo();
   InitDefaultsGameManagerAckGameInfoResult();
   InitDefaultsPlayerRequestGameManagerInfo();
@@ -147,6 +150,9 @@ extern GameManagerAckGameInfoResultDefaultTypeInternal _GameManagerAckGameInfoRe
 class GameManagerAckPlayerInfoResult;
 class GameManagerAckPlayerInfoResultDefaultTypeInternal;
 extern GameManagerAckPlayerInfoResultDefaultTypeInternal _GameManagerAckPlayerInfoResult_default_instance_;
+class GameManagerAckTeamGameStart;
+class GameManagerAckTeamGameStartDefaultTypeInternal;
+extern GameManagerAckTeamGameStartDefaultTypeInternal _GameManagerAckTeamGameStart_default_instance_;
 class GameNotifyGameManagerInfo;
 class GameNotifyGameManagerInfoDefaultTypeInternal;
 extern GameNotifyGameManagerInfoDefaultTypeInternal _GameNotifyGameManagerInfo_default_instance_;
@@ -283,12 +289,13 @@ inline bool ETeamType_Parse(
 }
 enum EErrorCode {
   EC_NONE = 0,
-  EC_MakeTeamNotIdle = 1,
-  EC_NoTeamServer = 2,
-  EC_NoTeamId = 3,
-  EC_NotLeader = 4,
-  EC_TeamHasStart = 5,
-  EC_NoGameManagerServer = 6,
+  EC_AlreadyInTeam = 1,
+  EC_MakeTeamNotIdle = 2,
+  EC_NoTeamServer = 3,
+  EC_NoTeamId = 4,
+  EC_NotLeader = 5,
+  EC_TeamHasStart = 6,
+  EC_NoGameManagerServer = 7,
   EErrorCode_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   EErrorCode_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
@@ -2963,6 +2970,148 @@ class TeamRequestGameManagerGameStart : public ::google::protobuf::Message /* @@
 };
 // -------------------------------------------------------------------
 
+class GameManagerAckTeamGameStart : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameManagerAckTeamGameStart) */ {
+ public:
+  GameManagerAckTeamGameStart();
+  virtual ~GameManagerAckTeamGameStart();
+
+  GameManagerAckTeamGameStart(const GameManagerAckTeamGameStart& from);
+
+  inline GameManagerAckTeamGameStart& operator=(const GameManagerAckTeamGameStart& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GameManagerAckTeamGameStart(GameManagerAckTeamGameStart&& from) noexcept
+    : GameManagerAckTeamGameStart() {
+    *this = ::std::move(from);
+  }
+
+  inline GameManagerAckTeamGameStart& operator=(GameManagerAckTeamGameStart&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GameManagerAckTeamGameStart& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GameManagerAckTeamGameStart* internal_default_instance() {
+    return reinterpret_cast<const GameManagerAckTeamGameStart*>(
+               &_GameManagerAckTeamGameStart_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    25;
+
+  void Swap(GameManagerAckTeamGameStart* other);
+  friend void swap(GameManagerAckTeamGameStart& a, GameManagerAckTeamGameStart& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GameManagerAckTeamGameStart* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  GameManagerAckTeamGameStart* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const GameManagerAckTeamGameStart& from);
+  void MergeFrom(const GameManagerAckTeamGameStart& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(GameManagerAckTeamGameStart* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // string sz_listen_ip = 6;
+  void clear_sz_listen_ip();
+  static const int kSzListenIpFieldNumber = 6;
+  const ::std::string& sz_listen_ip() const;
+  void set_sz_listen_ip(const ::std::string& value);
+  #if LANG_CXX11
+  void set_sz_listen_ip(::std::string&& value);
+  #endif
+  void set_sz_listen_ip(const char* value);
+  void set_sz_listen_ip(const char* value, size_t size);
+  ::std::string* mutable_sz_listen_ip();
+  ::std::string* release_sz_listen_ip();
+  void set_allocated_sz_listen_ip(::std::string* sz_listen_ip);
+
+  // uint32 dw_result = 1;
+  void clear_dw_result();
+  static const int kDwResultFieldNumber = 1;
+  ::google::protobuf::uint32 dw_result() const;
+  void set_dw_result(::google::protobuf::uint32 value);
+
+  // uint32 dw_player_port = 2;
+  void clear_dw_player_port();
+  static const int kDwPlayerPortFieldNumber = 2;
+  ::google::protobuf::uint32 dw_player_port() const;
+  void set_dw_player_port(::google::protobuf::uint32 value);
+
+  // uint32 dw_server_port = 3;
+  void clear_dw_server_port();
+  static const int kDwServerPortFieldNumber = 3;
+  ::google::protobuf::uint32 dw_server_port() const;
+  void set_dw_server_port(::google::protobuf::uint32 value);
+
+  // uint32 dw_slave_server_port = 4;
+  void clear_dw_slave_server_port();
+  static const int kDwSlaveServerPortFieldNumber = 4;
+  ::google::protobuf::uint32 dw_slave_server_port() const;
+  void set_dw_slave_server_port(::google::protobuf::uint32 value);
+
+  // uint64 qw_team_id = 5;
+  void clear_qw_team_id();
+  static const int kQwTeamIdFieldNumber = 5;
+  ::google::protobuf::uint64 qw_team_id() const;
+  void set_qw_team_id(::google::protobuf::uint64 value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.GameManagerAckTeamGameStart)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr sz_listen_ip_;
+  ::google::protobuf::uint32 dw_result_;
+  ::google::protobuf::uint32 dw_player_port_;
+  ::google::protobuf::uint32 dw_server_port_;
+  ::google::protobuf::uint32 dw_slave_server_port_;
+  ::google::protobuf::uint64 qw_team_id_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsGameManagerAckTeamGameStartImpl();
+};
+// -------------------------------------------------------------------
+
 class GameNotifyGameManagerInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameNotifyGameManagerInfo) */ {
  public:
   GameNotifyGameManagerInfo();
@@ -2998,7 +3147,7 @@ class GameNotifyGameManagerInfo : public ::google::protobuf::Message /* @@protoc
                &_GameNotifyGameManagerInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    25;
+    26;
 
   void Swap(GameNotifyGameManagerInfo* other);
   friend void swap(GameNotifyGameManagerInfo& a, GameNotifyGameManagerInfo& b) {
@@ -3057,11 +3206,11 @@ class GameNotifyGameManagerInfo : public ::google::protobuf::Message /* @@protoc
   ::google::protobuf::uint32 dw_server_port() const;
   void set_dw_server_port(::google::protobuf::uint32 value);
 
-  // uint64 qw_player_point = 4;
-  void clear_qw_player_point();
-  static const int kQwPlayerPointFieldNumber = 4;
-  ::google::protobuf::uint64 qw_player_point() const;
-  void set_qw_player_point(::google::protobuf::uint64 value);
+  // uint64 qw_team_id = 4;
+  void clear_qw_team_id();
+  static const int kQwTeamIdFieldNumber = 4;
+  ::google::protobuf::uint64 qw_team_id() const;
+  void set_qw_team_id(::google::protobuf::uint64 value);
 
   // uint32 dw_slave_server_port = 3;
   void clear_dw_slave_server_port();
@@ -3069,14 +3218,21 @@ class GameNotifyGameManagerInfo : public ::google::protobuf::Message /* @@protoc
   ::google::protobuf::uint32 dw_slave_server_port() const;
   void set_dw_slave_server_port(::google::protobuf::uint32 value);
 
+  // uint32 dw_team_server_id = 5;
+  void clear_dw_team_server_id();
+  static const int kDwTeamServerIdFieldNumber = 5;
+  ::google::protobuf::uint32 dw_team_server_id() const;
+  void set_dw_team_server_id(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:GameProto.GameNotifyGameManagerInfo)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::uint32 dw_player_port_;
   ::google::protobuf::uint32 dw_server_port_;
-  ::google::protobuf::uint64 qw_player_point_;
+  ::google::protobuf::uint64 qw_team_id_;
   ::google::protobuf::uint32 dw_slave_server_port_;
+  ::google::protobuf::uint32 dw_team_server_id_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
   friend void ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyGameManagerInfoImpl();
@@ -3118,7 +3274,7 @@ class GameManagerAckGameInfoResult : public ::google::protobuf::Message /* @@pro
                &_GameManagerAckGameInfoResult_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    26;
+    27;
 
   void Swap(GameManagerAckGameInfoResult* other);
   friend void swap(GameManagerAckGameInfoResult& a, GameManagerAckGameInfoResult& b) {
@@ -3217,7 +3373,7 @@ class PlayerRequestGameManagerInfo : public ::google::protobuf::Message /* @@pro
                &_PlayerRequestGameManagerInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    27;
+    28;
 
   void Swap(PlayerRequestGameManagerInfo* other);
   friend void swap(PlayerRequestGameManagerInfo& a, PlayerRequestGameManagerInfo& b) {
@@ -3316,7 +3472,7 @@ class GameManagerAckPlayerInfoResult : public ::google::protobuf::Message /* @@p
                &_GameManagerAckPlayerInfoResult_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    28;
+    29;
 
   void Swap(GameManagerAckPlayerInfoResult* other);
   friend void swap(GameManagerAckPlayerInfoResult& a, GameManagerAckPlayerInfoResult& b) {
@@ -3429,7 +3585,7 @@ class PlayerRequestGameTest : public ::google::protobuf::Message /* @@protoc_ins
                &_PlayerRequestGameTest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    29;
+    30;
 
   void Swap(PlayerRequestGameTest* other);
   friend void swap(PlayerRequestGameTest& a, PlayerRequestGameTest& b) {
@@ -3536,7 +3692,7 @@ class ServerInfo : public ::google::protobuf::Message /* @@protoc_insertion_poin
                &_ServerInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    30;
+    31;
 
   void Swap(ServerInfo* other);
   friend void swap(ServerInfo& a, ServerInfo& b) {
@@ -4550,6 +4706,133 @@ TeamRequestGameManagerGameStart::mutable_qw_player_ids() {
 
 // -------------------------------------------------------------------
 
+// GameManagerAckTeamGameStart
+
+// uint32 dw_result = 1;
+inline void GameManagerAckTeamGameStart::clear_dw_result() {
+  dw_result_ = 0u;
+}
+inline ::google::protobuf::uint32 GameManagerAckTeamGameStart::dw_result() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameManagerAckTeamGameStart.dw_result)
+  return dw_result_;
+}
+inline void GameManagerAckTeamGameStart::set_dw_result(::google::protobuf::uint32 value) {
+  
+  dw_result_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameManagerAckTeamGameStart.dw_result)
+}
+
+// uint32 dw_player_port = 2;
+inline void GameManagerAckTeamGameStart::clear_dw_player_port() {
+  dw_player_port_ = 0u;
+}
+inline ::google::protobuf::uint32 GameManagerAckTeamGameStart::dw_player_port() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameManagerAckTeamGameStart.dw_player_port)
+  return dw_player_port_;
+}
+inline void GameManagerAckTeamGameStart::set_dw_player_port(::google::protobuf::uint32 value) {
+  
+  dw_player_port_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameManagerAckTeamGameStart.dw_player_port)
+}
+
+// uint32 dw_server_port = 3;
+inline void GameManagerAckTeamGameStart::clear_dw_server_port() {
+  dw_server_port_ = 0u;
+}
+inline ::google::protobuf::uint32 GameManagerAckTeamGameStart::dw_server_port() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameManagerAckTeamGameStart.dw_server_port)
+  return dw_server_port_;
+}
+inline void GameManagerAckTeamGameStart::set_dw_server_port(::google::protobuf::uint32 value) {
+  
+  dw_server_port_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameManagerAckTeamGameStart.dw_server_port)
+}
+
+// uint32 dw_slave_server_port = 4;
+inline void GameManagerAckTeamGameStart::clear_dw_slave_server_port() {
+  dw_slave_server_port_ = 0u;
+}
+inline ::google::protobuf::uint32 GameManagerAckTeamGameStart::dw_slave_server_port() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameManagerAckTeamGameStart.dw_slave_server_port)
+  return dw_slave_server_port_;
+}
+inline void GameManagerAckTeamGameStart::set_dw_slave_server_port(::google::protobuf::uint32 value) {
+  
+  dw_slave_server_port_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameManagerAckTeamGameStart.dw_slave_server_port)
+}
+
+// uint64 qw_team_id = 5;
+inline void GameManagerAckTeamGameStart::clear_qw_team_id() {
+  qw_team_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 GameManagerAckTeamGameStart::qw_team_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameManagerAckTeamGameStart.qw_team_id)
+  return qw_team_id_;
+}
+inline void GameManagerAckTeamGameStart::set_qw_team_id(::google::protobuf::uint64 value) {
+  
+  qw_team_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameManagerAckTeamGameStart.qw_team_id)
+}
+
+// string sz_listen_ip = 6;
+inline void GameManagerAckTeamGameStart::clear_sz_listen_ip() {
+  sz_listen_ip_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& GameManagerAckTeamGameStart::sz_listen_ip() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameManagerAckTeamGameStart.sz_listen_ip)
+  return sz_listen_ip_.GetNoArena();
+}
+inline void GameManagerAckTeamGameStart::set_sz_listen_ip(const ::std::string& value) {
+  
+  sz_listen_ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:GameProto.GameManagerAckTeamGameStart.sz_listen_ip)
+}
+#if LANG_CXX11
+inline void GameManagerAckTeamGameStart::set_sz_listen_ip(::std::string&& value) {
+  
+  sz_listen_ip_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:GameProto.GameManagerAckTeamGameStart.sz_listen_ip)
+}
+#endif
+inline void GameManagerAckTeamGameStart::set_sz_listen_ip(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  sz_listen_ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:GameProto.GameManagerAckTeamGameStart.sz_listen_ip)
+}
+inline void GameManagerAckTeamGameStart::set_sz_listen_ip(const char* value, size_t size) {
+  
+  sz_listen_ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:GameProto.GameManagerAckTeamGameStart.sz_listen_ip)
+}
+inline ::std::string* GameManagerAckTeamGameStart::mutable_sz_listen_ip() {
+  
+  // @@protoc_insertion_point(field_mutable:GameProto.GameManagerAckTeamGameStart.sz_listen_ip)
+  return sz_listen_ip_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* GameManagerAckTeamGameStart::release_sz_listen_ip() {
+  // @@protoc_insertion_point(field_release:GameProto.GameManagerAckTeamGameStart.sz_listen_ip)
+  
+  return sz_listen_ip_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void GameManagerAckTeamGameStart::set_allocated_sz_listen_ip(::std::string* sz_listen_ip) {
+  if (sz_listen_ip != NULL) {
+    
+  } else {
+    
+  }
+  sz_listen_ip_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), sz_listen_ip);
+  // @@protoc_insertion_point(field_set_allocated:GameProto.GameManagerAckTeamGameStart.sz_listen_ip)
+}
+
+// -------------------------------------------------------------------
+
 // GameNotifyGameManagerInfo
 
 // uint32 dw_player_port = 1;
@@ -4594,18 +4877,32 @@ inline void GameNotifyGameManagerInfo::set_dw_slave_server_port(::google::protob
   // @@protoc_insertion_point(field_set:GameProto.GameNotifyGameManagerInfo.dw_slave_server_port)
 }
 
-// uint64 qw_player_point = 4;
-inline void GameNotifyGameManagerInfo::clear_qw_player_point() {
-  qw_player_point_ = GOOGLE_ULONGLONG(0);
+// uint64 qw_team_id = 4;
+inline void GameNotifyGameManagerInfo::clear_qw_team_id() {
+  qw_team_id_ = GOOGLE_ULONGLONG(0);
 }
-inline ::google::protobuf::uint64 GameNotifyGameManagerInfo::qw_player_point() const {
-  // @@protoc_insertion_point(field_get:GameProto.GameNotifyGameManagerInfo.qw_player_point)
-  return qw_player_point_;
+inline ::google::protobuf::uint64 GameNotifyGameManagerInfo::qw_team_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyGameManagerInfo.qw_team_id)
+  return qw_team_id_;
 }
-inline void GameNotifyGameManagerInfo::set_qw_player_point(::google::protobuf::uint64 value) {
+inline void GameNotifyGameManagerInfo::set_qw_team_id(::google::protobuf::uint64 value) {
   
-  qw_player_point_ = value;
-  // @@protoc_insertion_point(field_set:GameProto.GameNotifyGameManagerInfo.qw_player_point)
+  qw_team_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyGameManagerInfo.qw_team_id)
+}
+
+// uint32 dw_team_server_id = 5;
+inline void GameNotifyGameManagerInfo::clear_dw_team_server_id() {
+  dw_team_server_id_ = 0u;
+}
+inline ::google::protobuf::uint32 GameNotifyGameManagerInfo::dw_team_server_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyGameManagerInfo.dw_team_server_id)
+  return dw_team_server_id_;
+}
+inline void GameNotifyGameManagerInfo::set_dw_team_server_id(::google::protobuf::uint32 value) {
+  
+  dw_team_server_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyGameManagerInfo.dw_team_server_id)
 }
 
 // -------------------------------------------------------------------
@@ -4863,6 +5160,8 @@ inline void ServerInfo::set_dw_login_port(::google::protobuf::uint32 value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

@@ -14,6 +14,7 @@ DEFINE_uint32(game_manager_port, 30001, "game manager port");
 DEFINE_uint64(team_id, 0, "player point");
 DEFINE_uint32(game_time, 60, "game_time");
 DEFINE_string(roles, "[]", "roles");
+DEFINE_uint32(team_server_id, 0, "team_server_id");
 
 void EndFun(int n)
 {
@@ -59,7 +60,7 @@ int main(int argc, char **argv)
 	//----------------------order can't change end-----------------------//
 
 	GetTimeHandler()->AddDelayTimer(FLAGS_game_time, GameServer::Instance());
-	if (!GameServer::Instance()->Init(inet_addr(FLAGS_game_manager_ip.c_str()), FLAGS_game_manager_port, FLAGS_team_id))
+	if (!GameServer::Instance()->Init(inet_addr(FLAGS_game_manager_ip.c_str()), FLAGS_game_manager_port, FLAGS_team_id, FLAGS_team_server_id))
 	{
 		g_bRun = false;
 		goto STOP;

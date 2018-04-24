@@ -6,7 +6,7 @@ CTeam::CTeam()
 	: m_qwLeader(0)
 	, m_eState(ETS_Idle)
 {
-	memset(m_oPlayerSlots, 0, MAXCLIENTNUM);
+	memset(m_pPlayerSlots, 0, sizeof(m_pPlayerSlots));
 }
 
 CTeam::~CTeam()
@@ -56,9 +56,9 @@ bool CTeam::InsertIntoTeam(const GameProto::RoleData& refRoleData)
 	bool bInsert = false;
 	for (int i = 0; i < MAXCLIENTNUM; ++i)
 	{
-		if (m_oPlayerSlots[i] == 0)
+		if (m_pPlayerSlots[i] == 0)
 		{
-			m_oPlayerSlots[i] = refRoleData.qw_player_id();
+			m_pPlayerSlots[i] = refRoleData.qw_player_id();
 			GameProto::TeamRoleData& refTeamRoleData = m_mapPlayers[refRoleData.qw_player_id()];
 			refTeamRoleData.mutable_role_data()->CopyFrom(refRoleData);
 			refTeamRoleData.set_dw_slot_id(i);
@@ -79,7 +79,7 @@ bool CTeam::KickPlayer(UINT64 qwPlayerId)
 	{
 		return false;
 	}
-	m_oPlayerSlots[m_mapPlayers[qwPlayerId].dw_slot_id()] = 0;
+	m_pPlayerSlots[m_mapPlayers[qwPlayerId].dw_slot_id()] = 0;
 	m_mapPlayers.erase(qwPlayerId);
 	return true;
 }

@@ -73,23 +73,3 @@ bool GameServer::Stop()
 	return false;
 }
 
-bool GameServer::AddRequestPlayer(CPlayerSession* pPlayer)
-{
-	if (m_setRequestPlayer.find(pPlayer) == m_setRequestPlayer.end())
-	{
-		m_setRequestPlayer.insert(pPlayer);
-		return true;
-	}
-	return false;
-}
-
-bool GameServer::DelRequestPlayer(CPlayerSession* pPlayer)
-{
-	if (m_setRequestPlayer.find(pPlayer) == m_setRequestPlayer.end())
-	{
-		return false;
-	}
-	m_setRequestPlayer.erase(pPlayer);
-	return true;
-}
-
