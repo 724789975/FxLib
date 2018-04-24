@@ -10,53 +10,7 @@
 #include<unistd.h>
 #endif // WIN32
 
-bool StartProccess(unsigned long long qwPlayerPoint)
-{
-#ifdef WIN32
-	SHELLEXECUTEINFO shell = { sizeof(shell) };
-	shell.fMask = SEE_MASK_NOCLOSEPROCESS;
-	shell.lpVerb = "open";
-	shell.lpFile = "WebGame.exe";
-	char szBuffer[512] = { 0 };
-	GetExePath();
-	sprintf(szBuffer, "--game_manager_ip %s --game_manager_port %d --player_point %llu",
-		"127.0.0.1", GameServer::Instance()->GetServerListenPort(), qwPlayerPoint);
-	shell.lpParameters = szBuffer;
-	shell.lpDirectory = GetExePath();
-	shell.nShow = SW_SHOWNORMAL;
-	BOOL ret = ShellExecuteEx(&shell);
-	return ret == TRUE;
-#else
-	char szExePath[512] = { 0 };
-	sprintf(szExePath, "%s/WebGame", GetExePath());
-	char szServerIp[32] = { 0 };
-	sprintf(szServerIp, "%s", "127.0.0.1");
-	char szServerPort[8] = { 0 };
-	sprintf(szServerPort, "%d", GameServer::Instance()->GetServerListenPort());
-	char szPlayerPoint[16] = { 0 };
-	sprintf(szPlayerPoint, "%llu", qwPlayerPoint);
-	char *arg[] = { szExePath, "--game_manager_ip", szServerIp,
-		"--game_manager_port", szServerPort, "--player_point", szPlayerPoint, 0 };
-	int pid = vfork();
-	if (pid < 0)
-	{
-		LogExe(LogLv_Error, "%s %s %s %s %s %s %s",
-			arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], arg[6]);
-		return false;
-	}
 
-	if (pid == 0)
-	{
-		execv(arg[0], arg);
-		_exit(0);
-	}
-	else
-	{
-		return true;
-	}
-	return false;
-#endif // WIN32
-}
 
 const static unsigned int g_dwPlayerSessionBuffLen = 64 * 1024;
 static char g_pPlayerSessionBuf[g_dwPlayerSessionBuffLen];

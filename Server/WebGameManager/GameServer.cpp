@@ -14,9 +14,10 @@ GameServer::~GameServer()
 {
 }
 
-bool GameServer::Init(unsigned int dwServerId, std::string szCenterIp, unsigned short wCenterPort, unsigned short wServerListenPort, unsigned short wPlayerListenPort)
+bool GameServer::Init(unsigned int dwServerId, std::string szServerIp, std::string szCenterIp, unsigned short wCenterPort, unsigned short wServerListenPort, unsigned short wPlayerListenPort)
 {
 	m_dwServerId = dwServerId;
+	m_szServerIp = szServerIp;
 	m_szCenterIp = szCenterIp;
 	m_wCenterPort = wCenterPort;
 	

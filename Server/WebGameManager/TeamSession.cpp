@@ -8,15 +8,58 @@
 const static unsigned int g_dwTeamSessionBuffLen = 64 * 1024;
 static char g_pTeamSessionBuf[g_dwTeamSessionBuffLen];
 
+bool StartProccess(unsigned long long qwTeamId, char* szRoles)
+{
+#ifdef WIN32
+	SHELLEXECUTEINFO shell = { sizeof(shell) };
+	shell.fMask = SEE_MASK_NOCLOSEPROCESS;
+	shell.lpVerb = "open";
+	shell.lpFile = "WebGame.exe";
+	char szBuffer[512] = { 0 };
+	GetExePath();
+	sprintf(szBuffer, "--game_manager_ip %s --game_manager_port %d --player_point %llu --roles %s",
+		"127.0.0.1", GameServer::Instance()->GetServerListenPort(), qwTeamId, szRoles);
+	shell.lpParameters = szBuffer;
+	shell.lpDirectory = GetExePath();
+	shell.nShow = SW_SHOWNORMAL;
+	BOOL ret = ShellExecuteEx(&shell);
+	return ret == TRUE;
+#else
+	char szExePath[512] = { 0 };
+	sprintf(szExePath, "%s/WebGame", GetExePath());
+	char szServerIp[32] = { 0 };
+	sprintf(szServerIp, "%s", "127.0.0.1");
+	char szServerPort[8] = { 0 };
+	sprintf(szServerPort, "%d", GameServer::Instance()->GetServerListenPort());
+	char szPlayerPoint[16] = { 0 };
+	sprintf(szPlayerPoint, "%llu", qwTeamId);
+	char *arg[] = { szExePath, "--game_manager_ip", szServerIp,
+		"--game_manager_port", szServerPort, "--player_point", qwTeamId, "--roles", szRoles, 0 };
+	int pid = vfork();
+	if (pid < 0)
+	{
+		LogExe(LogLv_Error, "%s %s %s %s %s %s %s",
+			arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], arg[6]);
+		return false;
+	}
+
+	if (pid == 0)
+	{
+		execv(arg[0], arg);
+		_exit(0);
+	}
+	else
+	{
+		return true;
+	}
+	return false;
+#endif // WIN32
+}
+
 CTeamSession::CTeamSession()
 	:m_oProtoDispatch(*this)
 {
 	m_oProtoDispatch.RegistFunction(GameProto::ServerInfo::descriptor(), &CTeamSession::OnServerInfo);
-	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginMakeTeam::descriptor(), &CTeamSession::OnTeamAckLoginMakeTeam);
-	m_oProtoDispatch.RegistFunction(GameProto::TeamNotifyLoginTeamInfo::descriptor(), &CTeamSession::OnTeamNotifyLoginTeamInfo);
-	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginInviteTeam::descriptor(), &CTeamSession::OnTeamAckLoginInviteTeam);
-	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginChangeSlot::descriptor(), &CTeamSession::OnTeamAckLoginChangeSlot);
-	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginKickPlayer::descriptor(), &CTeamSession::OnTeamAckLoginKickPlayer);
 }
 
 CTeamSession::~CTeamSession()
@@ -27,7 +70,7 @@ void CTeamSession::OnConnect(void)
 {
 	//向对方发送本服务器信息
 	GameProto::ServerInfo oInfo;
-	oInfo.set_dw_server_id(GameServer::Instance()->GetServerid());
+	oInfo.set_dw_server_id(GameServer::Instance()->GetServerId());
 	//oInfo.set_sz_listen_ip((*it)->GetRemoteIPStr());
 	//oInfo.set_dw_login_port(GameServer::Instance()->GetLoginPort());
 	//oInfo.set_dw_team_port(GameServer::Instance()->GetTeamPort());
@@ -72,60 +115,23 @@ bool CTeamSession::OnServerInfo(CTeamSession& refSession, google::protobuf::Mess
 	return OnServerInfo(refSession, refMsg);
 }
 
-bool CTeamSession::OnTeamAckLoginMakeTeam(CTeamSession& refSession, google::protobuf::Message& refMsg)
+bool CTeamSession::OnTeamRequestGameManagerGameStart(CTeamSession& refSession, google::protobuf::Message& refMsg)
 {
-	GameProto::TeamAckLoginMakeTeam* pMsg = dynamic_cast<GameProto::TeamAckLoginMakeTeam*>(&refMsg);
-	if (pMsg == NULL)
-	{
-		return false;
-	}
-	return true;
-}
-
-bool CTeamSession::OnTeamNotifyLoginTeamInfo(CTeamSession& refSession, google::protobuf::Message& refMsg)
-{
-	GameProto::TeamNotifyLoginTeamInfo* pMsg = dynamic_cast<GameProto::TeamNotifyLoginTeamInfo*>(&refMsg);
-	if (pMsg == NULL)
-	{
-		return false;
-	}
-	return true;
-}
-
-bool CTeamSession::OnTeamAckLoginInviteTeam(CTeamSession& refSession, google::protobuf::Message& refMsg)
-{
-	GameProto::TeamAckLoginInviteTeam* pMsg = dynamic_cast<GameProto::TeamAckLoginInviteTeam*>(&refMsg);
-	if (pMsg == NULL)
-	{
-		return false;
-	}
-	return true;
-}
-
-bool CTeamSession::OnTeamAckLoginChangeSlot(CTeamSession& refSession, google::protobuf::Message& refMsg)
-{
-	GameProto::TeamAckLoginChangeSlot* pMsg = dynamic_cast<GameProto::TeamAckLoginChangeSlot*>(&refMsg);
-	if (pMsg == NULL)
-	{
-		return false;
-	}
-	return true;
-}
-
-bool CTeamSession::OnTeamAckLoginKickPlayer(CTeamSession& refSession, google::protobuf::Message& refMsg)
-{
-	GameProto::TeamAckLoginKickPlayer* pMsg = dynamic_cast<GameProto::TeamAckLoginKickPlayer*>(&refMsg);
+	GameProto::TeamRequestGameManagerGameStart* pMsg = dynamic_cast<GameProto::TeamRequestGameManagerGameStart*>(&refMsg);
 	if (pMsg == NULL)
 	{
 		return false;
 	}
 
-	if (pMsg->dw_result() != 0)
+	char szRoles[MAXCLIENTNUM * 32] = {0};
+	UINT64 dwLen = 0;
+	dwLen += sprintf(szRoles + dwLen, "[");
+	for (int i = 0; i < pMsg->qw_player_ids_size(); ++i)
 	{
-		LogExe(LogLv_Critical, "kick player : %llu result : %d", pMsg->qw_player_id(), pMsg->dw_result());
-		return true;
+		dwLen += sprintf(szRoles + dwLen, "%llu,", pMsg->qw_player_ids(i));
 	}
-
+	szRoles[dwLen] = ']';
+	StartProccess(pMsg->qw_team_id(), szRoles);
 	return true;
 }
 

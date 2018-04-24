@@ -63,7 +63,7 @@ int main(int argc, char **argv)
 	}
 	//----------------------order can't change end-----------------------//
 
-	if (!GameServer::Instance()->Init(FLAGS_server_id, FLAGS_center_ip, FLAGS_center_port, FLAGS_server_port, FLAGS_player_port))
+	if (!GameServer::Instance()->Init(FLAGS_server_id, FLAGS_server_ip, FLAGS_center_ip, FLAGS_center_port, FLAGS_server_port, FLAGS_player_port))
 	{
 		g_bRun = false;
 		goto STOP;

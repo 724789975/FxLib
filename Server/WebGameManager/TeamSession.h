@@ -29,11 +29,7 @@ public:
 	unsigned int		GetServerId() { return m_dwServerId; }
 
 	virtual bool		OnServerInfo(CTeamSession& refSession, google::protobuf::Message& refMsg);
-	bool		OnTeamAckLoginMakeTeam(CTeamSession& refSession, google::protobuf::Message& refMsg);
-	bool		OnTeamNotifyLoginTeamInfo(CTeamSession& refSession, google::protobuf::Message& refMsg);
-	bool		OnTeamAckLoginInviteTeam(CTeamSession& refSession, google::protobuf::Message& refMsg);
-	bool		OnTeamAckLoginChangeSlot(CTeamSession& refSession, google::protobuf::Message& refMsg);
-	bool		OnTeamAckLoginKickPlayer(CTeamSession& refSession, google::protobuf::Message& refMsg);
+	bool		OnTeamRequestGameManagerGameStart(CTeamSession& refSession, google::protobuf::Message& refMsg);
 
 protected:
 	unsigned int m_dwServerId;

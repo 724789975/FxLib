@@ -17,7 +17,7 @@ public:
 	GameServer();
 	virtual ~GameServer();
 
-	bool Init(unsigned int dwServerId, std::string szCenterIp, unsigned short wCenterPort, unsigned short wServerListenPort, unsigned short wPlayerListenPort);
+	bool Init(unsigned int dwServerId, std::string szServerIp, std::string szCenterIp, unsigned short wCenterPort, unsigned short wServerListenPort, unsigned short wPlayerListenPort);
 	bool Stop();
 
 	bool AddRequestPlayer(CPlayerSession* pPlayer);
@@ -31,7 +31,8 @@ public:
 
 	unsigned short GetServerListenPort() { return m_wServerListenPort; }
 
-	unsigned int GetServerid() { return m_dwServerId; }
+	std::string GetServerIp() { return m_szServerIp; }
+	unsigned int GetServerId() { return m_dwServerId; }
 
 private:
 	WebSocketPlayerSessionManager m_oWebSocketPlayerSessionManager;
@@ -53,6 +54,7 @@ private:
 
 	unsigned int m_dwServerId;
 
+	std::string m_szServerIp;						//有些服务器外网ip需要显式的指定
 	std::string m_szCenterIp;
 	unsigned short m_wCenterPort;
 };

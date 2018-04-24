@@ -23,7 +23,7 @@ void CLoginSession::OnConnect(void)
 {
 	//向对方发送本服务器信息
 	GameProto::ServerInfo oInfo;
-	oInfo.set_dw_server_id(GameServer::Instance()->GetServerid());
+	oInfo.set_dw_server_id(GameServer::Instance()->GetServerId());
 	//oInfo.set_sz_listen_ip((*it)->GetRemoteIPStr());
 	//oInfo.set_dw_login_port(GameServer::Instance()->GetLoginPort());
 	//oInfo.set_dw_team_port((*it)->m_dwTeamPort);

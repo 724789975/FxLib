@@ -214,12 +214,17 @@ bool CLoginSession::OnLoginRequestTeamGameStart(CLoginSession& refSession, googl
 	static unsigned int s_dwTeamIndex;
 	unsigned int dwTeamIndex = ++s_dwTeamIndex % refSessions.size();
 	std::map<unsigned int, CBinaryGameManagerSession*>::iterator it = refSessions.begin();
-	for (int i = 0; i < dwTeamIndex; ++i)
+	for (unsigned int i = 0; i < dwTeamIndex; ++i)
 	{
 		++it;
 	}
 	GameProto::TeamRequestGameManagerGameStart oRequest;
 	oRequest.set_qw_team_id(pMsg->qw_team_id());
+	for (UINT32 i = 0; i < MAXCLIENTNUM; ++i)
+	{
+		oRequest.add_qw_player_ids(pTeam->GetTeam()[i]);
+	}
+
 	char* pBuf = NULL;
 	unsigned int dwBufLen = 0;
 	ProtoUtility::MakeProtoSendBuffer(oRequest, pBuf, dwBufLen);

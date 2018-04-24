@@ -2932,6 +2932,18 @@ class TeamRequestGameManagerGameStart : public ::google::protobuf::Message /* @@
 
   // accessors -------------------------------------------------------
 
+  // repeated uint64 qw_player_ids = 2;
+  int qw_player_ids_size() const;
+  void clear_qw_player_ids();
+  static const int kQwPlayerIdsFieldNumber = 2;
+  ::google::protobuf::uint64 qw_player_ids(int index) const;
+  void set_qw_player_ids(int index, ::google::protobuf::uint64 value);
+  void add_qw_player_ids(::google::protobuf::uint64 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+      qw_player_ids() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+      mutable_qw_player_ids();
+
   // uint64 qw_team_id = 1;
   void clear_qw_team_id();
   static const int kQwTeamIdFieldNumber = 1;
@@ -2942,6 +2954,8 @@ class TeamRequestGameManagerGameStart : public ::google::protobuf::Message /* @@
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > qw_player_ids_;
+  mutable int _qw_player_ids_cached_byte_size_;
   ::google::protobuf::uint64 qw_team_id_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
@@ -4502,6 +4516,36 @@ inline void TeamRequestGameManagerGameStart::set_qw_team_id(::google::protobuf::
   
   qw_team_id_ = value;
   // @@protoc_insertion_point(field_set:GameProto.TeamRequestGameManagerGameStart.qw_team_id)
+}
+
+// repeated uint64 qw_player_ids = 2;
+inline int TeamRequestGameManagerGameStart::qw_player_ids_size() const {
+  return qw_player_ids_.size();
+}
+inline void TeamRequestGameManagerGameStart::clear_qw_player_ids() {
+  qw_player_ids_.Clear();
+}
+inline ::google::protobuf::uint64 TeamRequestGameManagerGameStart::qw_player_ids(int index) const {
+  // @@protoc_insertion_point(field_get:GameProto.TeamRequestGameManagerGameStart.qw_player_ids)
+  return qw_player_ids_.Get(index);
+}
+inline void TeamRequestGameManagerGameStart::set_qw_player_ids(int index, ::google::protobuf::uint64 value) {
+  qw_player_ids_.Set(index, value);
+  // @@protoc_insertion_point(field_set:GameProto.TeamRequestGameManagerGameStart.qw_player_ids)
+}
+inline void TeamRequestGameManagerGameStart::add_qw_player_ids(::google::protobuf::uint64 value) {
+  qw_player_ids_.Add(value);
+  // @@protoc_insertion_point(field_add:GameProto.TeamRequestGameManagerGameStart.qw_player_ids)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+TeamRequestGameManagerGameStart::qw_player_ids() const {
+  // @@protoc_insertion_point(field_list:GameProto.TeamRequestGameManagerGameStart.qw_player_ids)
+  return qw_player_ids_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+TeamRequestGameManagerGameStart::mutable_qw_player_ids() {
+  // @@protoc_insertion_point(field_mutable_list:GameProto.TeamRequestGameManagerGameStart.qw_player_ids)
+  return &qw_player_ids_;
 }
 
 // -------------------------------------------------------------------

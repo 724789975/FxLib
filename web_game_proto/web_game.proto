@@ -177,6 +177,7 @@ message TeamAckLoginGameStart
 message TeamRequestGameManagerGameStart
 {
 	uint64 qw_team_id = 1;
+	repeated uint64 qw_player_ids = 2;
 }
 
 //game->gamemanager

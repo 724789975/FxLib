@@ -18,6 +18,7 @@ public:
 	~CTeam();
 
 	UINT32 GetTeamNum() { return m_mapPlayers.size(); }			//一边有多少人
+	virtual UINT64* GetTeam() { return m_oPlayerSlots; }
 	virtual UINT64* GetRedTeam() { return m_oPlayerSlots; }
 	virtual UINT64* GetBlueTeam() { return m_oPlayerSlots + MAXCLIENTNUM / 2; }
 
@@ -29,6 +30,7 @@ public:
 	void SetState(ETeamState eState) { m_eState = eState; }
 
 	GameProto::TeamRoleData* GetTeamRoleData(UINT64 qwPlayerId);
+	std::map<UINT64, GameProto::TeamRoleData>& GetTeamRoles() { return m_mapPlayers; }
 
 	std::map<UINT64, GameProto::TeamRoleData> m_mapPlayers;		//<playerid, data>
 
