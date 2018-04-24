@@ -17,7 +17,7 @@ bool StartProccess(unsigned long long qwTeamId, char* szRoles)
 	shell.lpFile = "WebGame.exe";
 	char szBuffer[512] = { 0 };
 	GetExePath();
-	sprintf(szBuffer, "--game_manager_ip %s --game_manager_port %d --player_point %llu --roles %s",
+	sprintf(szBuffer, "--game_manager_ip %s --game_manager_port %d --team_id %llu --roles %s",
 		"127.0.0.1", GameServer::Instance()->GetServerListenPort(), qwTeamId, szRoles);
 	shell.lpParameters = szBuffer;
 	shell.lpDirectory = GetExePath();
@@ -34,7 +34,7 @@ bool StartProccess(unsigned long long qwTeamId, char* szRoles)
 	char szPlayerPoint[16] = { 0 };
 	sprintf(szPlayerPoint, "%llu", qwTeamId);
 	char *arg[] = { szExePath, "--game_manager_ip", szServerIp,
-		"--game_manager_port", szServerPort, "--player_point", qwTeamId, "--roles", szRoles, 0 };
+		"--game_manager_port", szServerPort, "--team_id", qwTeamId, "--roles", szRoles, 0 };
 	int pid = vfork();
 	if (pid < 0)
 	{

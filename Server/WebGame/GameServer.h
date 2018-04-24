@@ -17,7 +17,7 @@ public:
 
 	virtual bool OnTimer(double fSecond);
 
-	bool Init(unsigned int dwGameManagerIp, unsigned short wGameManagerPort, unsigned long long qwPlayerPoint);
+	bool Init(unsigned int dwGameManagerIp, unsigned short wGameManagerPort, unsigned long long qwTeamId);
 	bool Stop();
 
 	bool GameEnd();
@@ -27,7 +27,7 @@ public:
 	unsigned short GetPlayerListenPort() { return m_wPlayerListenPort; }
 	unsigned short GetServerListenPort() { return m_wServerListenPort; }
 	unsigned short GetSlaveServerListenPort() { return m_wSlaveServerListenPort; }
-	unsigned long long GetPlayerPoint() { return m_qwPlayerPoint; }
+	unsigned long long GetPlayerPoint() { return m_qwTeamId; }
 	WebSocketServerSessionManager& GetWebSocketServerSessionManager() { return m_oWebSocketServerSessionManager; }
 
 private:
@@ -43,7 +43,7 @@ private:
 	IFxListenSocket* m_pSlaveServerListenSocket;
 	unsigned short m_wSlaveServerListenPort;
 
-	unsigned long long m_qwPlayerPoint;
+	unsigned long long m_qwTeamId;
 };
 
 
