@@ -26,10 +26,10 @@ ARFLAGS			= -rc
 #==========================================================
 #  Commands
 CODE_DIR = ./ ../common
-INCLUDE_DIR =./ ../gflags ../meta_header/ ../lua ../tolua ../mysql/include ../protobuf-3.5.1 
-LIB_FILE = -L../Debug -Lcrypto -lpthread -lLuaLib -lNet -lDatabase -lgflags -lprotobuf
+INCLUDE_DIR =./ ../gflags ../meta_header/ ../protobuf-3.5.1 ../redis-3.2.1/deps/hiredis/
+LIB_FILE = -L../Debug -Lcrypto -lpthread -lNet -lgflags -lprotobuf -lRedisCon -lhiredis
 OUTPUT_DIR =../Debug
-OUTPUT = WebGameManager
+OUTPUT = WebGameTeam
 #==========================================================
 
 OBJS = $(foreach i, $(CODE_DIR), $(shell find $(i) -name "*.cpp"))
