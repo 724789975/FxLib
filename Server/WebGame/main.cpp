@@ -24,7 +24,7 @@ void EndFun(int n)
 	}
 	else
 	{
-		printf("unknown signal : %d !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n", n);
+		printf("unknown signal : %d !!!!!!!!!!!!!!!!!!!!!!!!!!!\n", n);
 	}
 }
 

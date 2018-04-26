@@ -171,6 +171,7 @@ bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::
 	}
 		break;
 	}
+	return true;
 }
 
 //////////////////////////////////////////////////////////////////////////

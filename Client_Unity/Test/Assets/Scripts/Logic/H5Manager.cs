@@ -60,7 +60,23 @@ public class H5Manager : SingletonObject<H5Manager>
         {
             item(m_pLoginSession);
         }
-		m_pLoginSession.InitSession(SessionObject.SessionType.SessionType_WebSocket, GameInstance.Instance().proLoginIp, GameInstance.Instance().proLoginPort);
+		m_pLoginSession.InitSession(SessionObject.SessionType.SessionType_WebSocket,
+			GameInstance.Instance().proLoginIp, GameInstance.Instance().proLoginPort);
+	}
+
+	public void ConnectGame(string szGameIp, ushort wPort)
+	{
+		if (m_pGameSession != null)
+		{
+			m_pGameSession.m_pSession.Close();
+		}
+
+		m_pGameSession = gameObject.AddComponent<SessionObject>();
+		foreach (var item in m_setGameSessionResetCallBack)
+		{
+			item(m_pGameSession);
+		}
+		m_pGameSession.InitSession(SessionObject.SessionType.SessionType_WebSocket, szGameIp, wPort);
 	}
 
 	static public void ParseUrl(string strOrgUrl, out string strBaseUrl, out NameValueCollection nvcParams)
@@ -109,8 +125,19 @@ public class H5Manager : SingletonObject<H5Manager>
 		return m_pLoginSession;
 	}
 
-    public delegate void OnLoginSessionReset(SessionObject obj);
+	public SessionObject GetServerSession()
+	{
+		return m_pGameSession;
+	}
 
-    public HashSet<OnLoginSessionReset> m_setLoginSessionResetCallBack = new HashSet<OnLoginSessionReset>();
+	public HashSet<OnSessionReset> GetLoginSessionResetCallBack() { return m_setLoginSessionResetCallBack; }
+	public HashSet<OnSessionReset> GetGameSessionResetCallBack() { return m_setGameSessionResetCallBack; }
+
+	public delegate void OnSessionReset(SessionObject obj);
+
+    public HashSet<OnSessionReset> m_setLoginSessionResetCallBack = new HashSet<OnSessionReset>();
     public SessionObject m_pLoginSession = null;
+
+	public HashSet<OnSessionReset> m_setGameSessionResetCallBack = new HashSet<OnSessionReset>();
+	public SessionObject m_pGameSession = null;
 }

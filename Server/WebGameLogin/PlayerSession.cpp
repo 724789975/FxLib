@@ -87,6 +87,7 @@ bool CPlayerSession::OnPlayerRequestLoginServerId(CPlayerSession& refSession, go
 	unsigned int dwBufLen = 0;
 	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
 	Send(pBuf, dwBufLen);
+	return true;
 }
 
 bool CPlayerSession::OnPlayerRequestLogin(CPlayerSession& refSession, google::protobuf::Message& refMsg)

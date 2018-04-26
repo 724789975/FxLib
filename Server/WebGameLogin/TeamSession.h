@@ -34,6 +34,7 @@ public:
 	bool		OnTeamAckLoginInviteTeam(CTeamSession& refSession, google::protobuf::Message& refMsg);
 	bool		OnTeamAckLoginChangeSlot(CTeamSession& refSession, google::protobuf::Message& refMsg);
 	bool		OnTeamAckLoginKickPlayer(CTeamSession& refSession, google::protobuf::Message& refMsg);
+	bool		OnTeamAckLoginGameStart(CTeamSession& refSession, google::protobuf::Message& refMsg);
 
 protected:
 	unsigned int m_dwServerId;

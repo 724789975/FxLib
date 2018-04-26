@@ -54,6 +54,7 @@ void CLoginSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	CNetStream oStream(pBuf, dwLen);
 	std::string szProtocolName;
 	oStream.ReadString(szProtocolName);
+	LogExe(LogLv_Debug, "server id : %d, protocol name : %s", m_dwServerId, szProtocolName.c_str());
 	unsigned int dwProtoLen = oStream.GetDataLength();
 	char* pData = oStream.ReadData(dwProtoLen);
 	if (!m_oProtoDispatch.Dispatch(szProtocolName.c_str(),

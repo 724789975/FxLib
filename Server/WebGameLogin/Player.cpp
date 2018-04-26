@@ -116,7 +116,8 @@ void Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto:
 	static unsigned int s_dwTeamIndex;
 	unsigned int dwTeamIndex = ++s_dwTeamIndex % refSessions.size();
 	std::map<unsigned int, CBinaryTeamSession*>::iterator it = refSessions.begin();
-	for (int i = 0; i < dwTeamIndex; ++i)
+	for (unsigned
+		int i = 0; i < dwTeamIndex; ++i)
 	{
 		++it;
 	}

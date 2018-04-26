@@ -49,6 +49,7 @@ void CGameManagerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	CNetStream oStream(pBuf, dwLen);
 	std::string szProtocolName;
 	oStream.ReadString(szProtocolName);
+	LogExe(LogLv_Debug, "server id : %d, protocol name : %s", m_dwServerId, szProtocolName.c_str());
 	unsigned int dwProtoLen = oStream.GetDataLength();
 	char* pData = oStream.ReadData(dwProtoLen);
 	if (!m_oProtoDispatch.Dispatch(szProtocolName.c_str(),
@@ -76,7 +77,41 @@ bool CGameManagerSession::OnGameManagerAckTeamGameStart(CGameManagerSession& ref
 		return false;
 	}
 
-	// todo 收到回包 处理相关逻辑
+	CTeam* pTeam = GameServer::Instance()->GetTeamManager().GetTeam(pMsg->qw_team_id());
+	if (pTeam == NULL)
+	{
+		LogExe(LogLv_Critical, "get team error id : %llu", pMsg->qw_team_id());
+		return true;
+	}
+	if (pMsg->dw_result() != 0)
+	{
+		LogExe(LogLv_Critical, "get team start error : %d, team id : %llu", pMsg->dw_result(), pMsg->qw_team_id());
+		pTeam->SetState(CTeam::ETS_Idle);
+		return true;
+	}
+	GameProto::TeamAckLoginGameStart oResult;
+	oResult.set_dw_result(pMsg->dw_result());
+	oResult.set_dw_player_port(pMsg->dw_player_port());
+	oResult.set_dw_server_port(pMsg->dw_server_port());
+	oResult.set_dw_slave_server_port(pMsg->dw_slave_server_port());
+	oResult.set_sz_listen_ip(pMsg->sz_listen_ip());
+	oResult.set_qw_team_id(pMsg->qw_team_id());
+	std::map<UINT64, GameProto::TeamRoleData>& refRoles = pTeam->GetTeamRoles();
+	std::map<unsigned int, CBinaryLoginSession*>& refLoginSessions = GameServer::Instance()->GetLoginSessionManager().GetLoginSessions();
+	for (std::map<UINT64, GameProto::TeamRoleData>::iterator it = refRoles.begin();
+		it != refRoles.end(); ++it)
+	{
+		std::map<unsigned int, CBinaryLoginSession*>::iterator it1 = refLoginSessions.find((it->second).dw_server_id());
+		if (it1 == refLoginSessions.end())
+		{
+			continue;
+		}
+		oResult.set_qw_player_id(it->first);
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		it1->second->Send(pBuf, dwBufLen);
+	}
 	return true;
 }
 

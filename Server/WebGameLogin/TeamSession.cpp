@@ -17,6 +17,7 @@ CTeamSession::CTeamSession()
 	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginInviteTeam::descriptor(), &CTeamSession::OnTeamAckLoginInviteTeam);
 	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginChangeSlot::descriptor(), &CTeamSession::OnTeamAckLoginChangeSlot);
 	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginKickPlayer::descriptor(), &CTeamSession::OnTeamAckLoginKickPlayer);
+	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginGameStart::descriptor(), &CTeamSession::OnTeamAckLoginGameStart);
 }
 
 CTeamSession::~CTeamSession()
@@ -52,6 +53,7 @@ void CTeamSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	std::string szProtocolName;
+	LogExe(LogLv_Debug, "server id : %d, protocol name : %s", m_dwServerId, szProtocolName.c_str());
 	oStream.ReadString(szProtocolName);
 	unsigned int dwProtoLen = oStream.GetDataLength();
 	char* pData = oStream.ReadData(dwProtoLen);
@@ -158,6 +160,36 @@ bool CTeamSession::OnTeamAckLoginKickPlayer(CTeamSession& refSession, google::pr
 	{
 		pPlayer->SetTeamInfo(0, 0);
 	}
+
+	return true;
+}
+
+bool CTeamSession::OnTeamAckLoginGameStart(CTeamSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::TeamAckLoginGameStart* pMsg = dynamic_cast<GameProto::TeamAckLoginGameStart*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(pMsg->qw_player_id());
+	if (pPlayer == NULL)
+	{
+		LogExe(LogLv_Critical, "player : %llu not in this server", pMsg->qw_player_id());
+		return true;
+	}
+	GameProto::LoginAckPlayerGameStart oResult;
+	oResult.set_dw_result(pMsg->dw_result());
+	oResult.set_dw_player_port(pMsg->dw_player_port());
+	oResult.set_dw_server_port(pMsg->dw_server_port());
+	oResult.set_dw_slave_server_port(pMsg->dw_slave_server_port());
+	oResult.set_sz_listen_ip(pMsg->sz_listen_ip());
+	oResult.set_qw_team_id(pMsg->qw_team_id());
+
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+	pPlayer->GetSession()->Send(pBuf, dwBufLen);
 
 	return true;
 }

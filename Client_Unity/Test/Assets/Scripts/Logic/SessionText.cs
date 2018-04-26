@@ -29,7 +29,7 @@ public class SessionText : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
-		H5Manager.Instance().m_setLoginSessionResetCallBack.Add(OnLoginSessionReset);
+		H5Manager.Instance().GetLoginSessionResetCallBack().Add(OnLoginSessionReset);
 	}
 
 	public void OnLoginSessionReset(SessionObject obj)
@@ -43,6 +43,7 @@ public class SessionText : MonoBehaviour
 		m_pSession.RegistMessage("GameProto.LoginAckPlayerServerId", OnLoginAckPlayerServerId);
 		m_pSession.RegistMessage("GameProto.LoginAckPlayerLoginResult", OnLoginAckPlayerLoginResult);
 		m_pSession.RegistMessage("GameProto.LoginAckPlayerMakeTeam", OnLoginAckPlayerMakeTeam);
+		m_pSession.RegistMessage("GameProto.LoginAckPlayerGameStart", OnLoginAckPlayerGameStart);
 	}
 
 	// Update is called once per frame
@@ -180,6 +181,16 @@ public class SessionText : MonoBehaviour
 		}
 
 		H5Helper.H5LogStr("team create ret : " + oRet.DwResult.ToString() + " team id : " + oRet.QwTeamId.ToString());
+	}
+	public void OnLoginAckPlayerGameStart(byte[] pBuf)
+	{
+		GameProto.LoginAckPlayerGameStart oRet = GameProto.LoginAckPlayerGameStart.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			H5Helper.H5LogStr("OnLoginAckPlayerGameStart error parse");
+			return;
+		}
+		H5Helper.H5LogStr(oRet.ToString());
 	}
 
 	public void OnRoleData(string szData)
