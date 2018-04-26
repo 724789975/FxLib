@@ -4,6 +4,7 @@
 #include <set>
 #include <vector>
 #include <map>
+#include <string>
 #include "lock.h"
 // -----------------------------------------------------------------------------------------
 #define PROCESS_REPLY_ERROR if(reply == NULL) { this->disconn();return false; } \
