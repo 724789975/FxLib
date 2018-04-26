@@ -15,11 +15,11 @@ public:
 
 	bool		Prepare(const char* pszSQL, UINT32 dwParamNum, UINT32 dwResultNum);
 
-	void		BindParam(enum_field_types eFieldType, void* pBuf, UINT32 dwSize);
+	void		BindParam(unsigned int eFieldType, void* pBuf, UINT32 dwSize);
 
 	bool		BindParamComplete();
 
-	void		BindResult(enum_field_types eFieldType, void* pBuf, UINT32 dwBufSize, UINT32* pdwLength);
+	void		BindResult(unsigned int eFieldType, void* pBuf, UINT32 dwBufSize, UINT32* pdwLength);
 
 	bool		BindResultComplete();
 

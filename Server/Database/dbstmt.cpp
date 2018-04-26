@@ -34,10 +34,10 @@ bool FxMySQLStmt::Prepare( const char* pszSQL, UINT32 dwParamNum, UINT32 dwResul
 	return true;
 }
 
-void FxMySQLStmt::BindParam(enum_field_types eFieldType, void* pBuf, UINT32 dwSize)
+void FxMySQLStmt::BindParam(unsigned int eFieldType, void* pBuf, UINT32 dwSize)
 {
 	unsigned long dwLength = dwSize;
-	m_pParamsBind[m_dwCurBindParamPos].buffer_type = eFieldType;
+	m_pParamsBind[m_dwCurBindParamPos].buffer_type = (enum_field_types)eFieldType;
 	m_pParamsBind[m_dwCurBindParamPos].buffer = pBuf;
 	m_pParamsBind[m_dwCurBindParamPos].buffer_length = dwSize;
 	m_pParamsBind[m_dwCurBindParamPos].length = &dwLength;
@@ -53,9 +53,9 @@ bool FxMySQLStmt::BindParamComplete()
 	return true;
 }
 
-void FxMySQLStmt::BindResult(enum_field_types eFieldType, void* pBuf, UINT32 dwBufSize, UINT32* pdwLength)
+void FxMySQLStmt::BindResult(unsigned int eFieldType, void* pBuf, UINT32 dwBufSize, UINT32* pdwLength)
 {
-	m_pResultsBind[m_dwCurBindResultPos].buffer_type = eFieldType;
+	m_pResultsBind[m_dwCurBindResultPos].buffer_type = (enum_field_types)eFieldType;
 	m_pResultsBind[m_dwCurBindResultPos].buffer = pBuf;
 	m_pResultsBind[m_dwCurBindResultPos].buffer_length = dwBufSize;
 	m_pResultsBind[m_dwCurBindResultPos].length = (unsigned long*)pdwLength;

@@ -55,7 +55,6 @@
 
 const char FXDB_MODULENAME[]        = "FXMySQLDB";
 
-enum enum_field_types;
 enum EFxDBCode
 {
     FXDB_ERR_UNKNOWN    = -4,       // 未知错误
@@ -109,11 +108,11 @@ public:
 
 	virtual bool		Prepare(const char* pszSQL, UINT32 dwParamNum, UINT32 dwResultNum) = 0;
 
-	virtual void		BindParam(enum_field_types eFieldType, void* pBuf, UINT32 dwSize) = 0;
+	virtual void		BindParam(unsigned int eFieldType, void* pBuf, UINT32 dwSize) = 0;
 
 	virtual bool		BindParamComplete() = 0;
 
-	virtual void		BindResult(enum_field_types eFieldType, void* pBuf, UINT32 dwBufSize, UINT32* pdwLength) = 0;
+	virtual void		BindResult(unsigned int eFieldType, void* pBuf, UINT32 dwBufSize, UINT32* pdwLength) = 0;
 
 	virtual bool		BindResultComplete() = 0;
 
