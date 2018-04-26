@@ -10,7 +10,6 @@ static char g_pServerSessionBuf[g_dwServerSessionBuffLen];
 CServerSession::CServerSession()
 	: m_oProtoDispatch(*this)
 {
-	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestGameTest::descriptor(), &CServerSession::OnPlayerRequestGameTest);
 }
 
 
@@ -53,27 +52,6 @@ void CServerSession::Release(void)
 	OnDestroy();
 
 	Init(NULL);
-}
-
-bool CServerSession::OnPlayerRequestGameTest(CServerSession& refSession, google::protobuf::Message& refMsg)
-{
-	GameProto::PlayerRequestGameTest* pMsg = dynamic_cast<GameProto::PlayerRequestGameTest*>(&refMsg);
-	if (pMsg == NULL)
-	{
-		return false;
-	}
-
-	LogExe(LogLv_Debug, "recv : %s", pMsg->sz_test().c_str());
-
-	CNetStream oWriteStream(ENetStreamType_Write, g_pServerSessionBuf, g_dwServerSessionBuffLen);
-	oWriteStream.WriteString(pMsg->GetTypeName());
-	std::string szResult;
-	pMsg->SerializeToString(&szResult);
-	oWriteStream.WriteData(szResult.c_str(), szResult.size());
-
-	Send(g_pServerSessionBuf, g_dwServerSessionBuffLen - oWriteStream.GetDataLength());
-
-	return true;
 }
 
 //void CServerSession::OnGameNotifyGameManagerInfo(const char* pBuf, UINT32 dwLen)

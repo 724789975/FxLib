@@ -138,6 +138,7 @@ bool CLoginSession::OnLoginRequestTeamKickPlayer(CLoginSession& refSession, goog
 	{
 		oKickPlayer.set_dw_result(GameProto::EC_NoTeamId);
 		LogExe(LogLv_Critical, "player : %llu want leave team : %llu no team id", pMsg->qw_player_id(), pMsg->qw_team_id());
+		return true;
 	}
 	else
 	{

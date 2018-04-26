@@ -143,7 +143,9 @@
     <ClCompile Include="redisquery.cpp" />
     <ClCompile Include="redisreader.cpp" />
     <ClCompile Include="fxredis.cpp" />
-    <ClCompile Include="RedisConn.cpp" />
+    <ClCompile Include="RedisConn.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="redisclient.h" />
@@ -151,7 +153,9 @@
     <ClInclude Include="redismodule.h" />
     <ClInclude Include="redisquery.h" />
     <ClInclude Include="redisreader.h" />
-    <ClInclude Include="RedisConn.h" />
+    <ClInclude Include="RedisConn.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClInclude>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

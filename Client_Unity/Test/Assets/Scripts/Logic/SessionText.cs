@@ -34,12 +34,11 @@ public class SessionText : MonoBehaviour
 
 	public void OnLoginSessionReset(SessionObject obj)
 	{
-		m_pSession = H5Manager.Instance().GetLoginSession();
+		m_pSession = obj;
 		m_pSession.m_pfOnConnect.Add(OnConnect);
 		m_pSession.m_pfOnError.Add(OnError);
 		m_pSession.m_pfOnClose.Add(OnClose);
 
-		m_pSession.RegistMessage("GameProto.PlayerRequestGameTest", OnTest);
 		m_pSession.RegistMessage("GameProto.LoginAckPlayerServerId", OnLoginAckPlayerServerId);
 		m_pSession.RegistMessage("GameProto.LoginAckPlayerLoginResult", OnLoginAckPlayerLoginResult);
 		m_pSession.RegistMessage("GameProto.LoginAckPlayerMakeTeam", OnLoginAckPlayerMakeTeam);
@@ -110,32 +109,7 @@ public class SessionText : MonoBehaviour
 		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
 	}
 
-	int dw1 = 0;
-	public void OnTest(byte[] pBuf)
-	{
-		GameProto.PlayerRequestGameTest oTest = GameProto.PlayerRequestGameTest.Parser.ParseFrom(pBuf);
-		if (oTest == null)
-		{
-			H5Helper.H5LogStr("OnTest error parse");
-			return;
-		}
 
-		m_textText.text = oTest.SzTest;
-
-		oTest.SzTest = String.Format("{0}, {1}, {2}, {3}, {4}, {5}",
-			"sessionobject.cs", 106, "SessionObject::OnRecv", dw1++,
-			ToString(), DateTime.Now.ToLocalTime().ToString());
-
-		byte[] pData = new byte[1024];
-		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
-		pStream.WriteString("GameProto.PlayerRequestGameTest");
-		byte[] pProto = new byte[oTest.CalculateSize()];
-		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
-		oTest.WriteTo(oStream);
-		pStream.WriteData(pProto, (uint)pProto.Length);
-
-		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
-	}
 
 	public void OnLoginAckPlayerServerId(byte[] pBuf)
 	{
@@ -180,7 +154,7 @@ public class SessionText : MonoBehaviour
 			return;
 		}
 
-		H5Helper.H5LogStr("team create ret : " + oRet.DwResult.ToString() + " team id : " + oRet.QwTeamId.ToString());
+		H5Helper.H5LogStr(oRet.ToString());
 	}
 	public void OnLoginAckPlayerGameStart(byte[] pBuf)
 	{
@@ -191,6 +165,8 @@ public class SessionText : MonoBehaviour
 			return;
 		}
 		H5Helper.H5LogStr(oRet.ToString());
+
+		H5Manager.Instance().ConnectGame(oRet.SzListenIp, (ushort)oRet.DwPlayerPort);
 	}
 
 	public void OnRoleData(string szData)
@@ -225,9 +201,12 @@ public class SessionText : MonoBehaviour
 			m_pSession.m_pfOnError.Remove(OnError);
 			m_pSession.m_pfOnClose.Remove(OnClose);
 
-			m_pSession.UnRegistMessage("GameProto.PlayerRequestGameTest");
+			m_pSession.UnRegistMessage("GameProto.LoginAckPlayerServerId");
+			m_pSession.UnRegistMessage("GameProto.LoginAckPlayerLoginResult");
+			m_pSession.UnRegistMessage("GameProto.LoginAckPlayerMakeTeam");
+			m_pSession.UnRegistMessage("GameProto.LoginAckPlayerGameStart");
 		}
-		H5Manager.Instance().m_setLoginSessionResetCallBack.Remove(OnLoginSessionReset);
+		H5Manager.Instance().GetLoginSessionResetCallBack().Remove(OnLoginSessionReset);
 	}
 
 	public UnityEngine.UI.Text m_textText;

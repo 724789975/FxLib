@@ -112,6 +112,8 @@ bool CGameManagerSession::OnGameManagerAckTeamGameStart(CGameManagerSession& ref
 		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
 		it1->second->Send(pBuf, dwBufLen);
 	}
+
+	GameServer::Instance()->GetTeamManager().ReleaseTeam(pMsg->qw_team_id());
 	return true;
 }
 

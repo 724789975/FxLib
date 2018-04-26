@@ -264,6 +264,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_pLoginSession: {fileID: 0}
+  m_pGameSession: {fileID: 0}
 --- !u!114 &41146180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1058,6 +1059,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 1582737339}
+  - component: {fileID: 1582737338}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -1065,6 +1067,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1582737338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1582737337}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56167f411c2676a42af8f6891d13ddb7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_pSession: {fileID: 0}
 --- !u!4 &1582737339
 Transform:
   m_ObjectHideFlags: 0

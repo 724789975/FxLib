@@ -10,6 +10,7 @@ CPlayerSession::CPlayerSession()
 	: m_oProtoDispatch(*this)
 {
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestGameManagerInfo::descriptor(), &CPlayerSession::OnRequestGameManagerInfo);
+	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestGameTest::descriptor(), &CPlayerSession::OnPlayerRequestGameTest);
 }
 
 CPlayerSession::~CPlayerSession()
@@ -56,6 +57,24 @@ void CPlayerSession::Release(void)
 bool CPlayerSession::OnRequestGameManagerInfo(CPlayerSession& refSession, google::protobuf::Message& refMsg)
 {
 	return false;
+}
+
+bool CPlayerSession::OnPlayerRequestGameTest(CPlayerSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::PlayerRequestGameTest* pMsg = dynamic_cast<GameProto::PlayerRequestGameTest*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	LogExe(LogLv_Debug, "recv : %s", pMsg->sz_test().c_str());
+
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(*pMsg, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
+
+	return true;
 }
 
 //////////////////////////////////////////////////////////////////////////
