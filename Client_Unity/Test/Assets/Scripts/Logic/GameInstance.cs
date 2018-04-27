@@ -2,19 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-class ServerInfo
-{
-	public uint id = 0;
-    public ushort login_port = 0;
-    public string login_ip = "";
-    public string url_host = "";
-}
-[System.Serializable]
-class ServerListInfo
-{
-    public List<ServerInfo> server_infos = new List<ServerInfo>();
-}
 
     public class GameInstance: SingletonObject<GameInstance>
 {
@@ -59,12 +46,17 @@ class ServerListInfo
         }
         ServerInfo oServerInfo = oServerList.server_infos[0];
 
-        m_szLoginIp = oServerInfo.login_ip;
-        m_wLoginPort = oServerInfo.login_port;
-        m_szUrlHost = oServerInfo.url_host;
+		m_pServerList = Instantiate(m_pServerList, m_pUiCanvas);
+		m_pServerList.GetComponent<LoginServerList>().SetServerListInfo(oServerList);
+	}
 
-        //GameStart();
+	public void SetServerInfo(ServerInfo oServerInfo)
+	{
+		m_szLoginIp = oServerInfo.login_ip;
+		m_wLoginPort = oServerInfo.login_port;
+		m_szUrlHost = oServerInfo.url_host;
     }
+
     public void GameStart()
     {
         H5Manager.Instance().ConnectLogin();
@@ -82,7 +74,6 @@ class ServerListInfo
 	public GamePlayType proGamePlayType
 	{
 		get { return m_eGamePlayType; }
-		set { m_eGamePlayType = value; }
 	}
 
     public ushort proLoginPort {get { return m_wLoginPort; } }
@@ -103,6 +94,9 @@ class ServerListInfo
     public string m_szUrlHost;
 
     public string m_szGetRoleUri;
+
+	public GameObject m_pServerList;
+	public Transform m_pUiCanvas;
 
 	[Header("Platform Info")]
 	public string m_szPlatform = "";
