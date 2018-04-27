@@ -3,6 +3,7 @@
 #include "msg_proto/web_data.pb.h"
 #include "gamedefine.h"
 #include <map>
+#include "fxmeta.h"
 
 //后面可以加其他模式
 class CTeam

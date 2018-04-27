@@ -1,5 +1,5 @@
 
-DIRS = Database LuaLib Net WebGameManager WebGame TestServer
+DIRS = Database LuaLib Net RedisCon WebGameManager WebGame WebGameLogin WebGameTeam WebGameCenter
 
 release:
 	@for dir in ${DIRS}; do\
