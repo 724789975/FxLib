@@ -31,7 +31,7 @@ public class LoginServerInfo : MonoBehaviour {
 	public void SetServerInfo(ServerInfo oServerInfo)
 	{
 		m_pServerInfo = oServerInfo;
-		m_txtServerInfo.text = oServerInfo.id.ToString() + ":" + oServerInfo.login_ip + ":" + oServerInfo.login_port.ToString();
+		m_txtServerInfo.text = oServerInfo.id.ToString() + ":" + oServerInfo.login_ip + ":" + oServerInfo.login_port.ToString() + ":" + oServerInfo.url_host;
 	}
 
 	public ServerInfo m_pServerInfo = null;
