@@ -14,9 +14,9 @@ start WebGameCenter --server_port 40000
 
 ping -n 1 127.0.0.1
 
-start WebGameManager --server_id 30001 --server_port 30001 --player_port 30002 --center_ip 127.0.0.1 --center_port 40000
+start WebGameManager --server_id 30001 --server_ip 127.0.0.1 --server_port 30001 --player_port 30002 --center_ip 127.0.0.1 --center_port 40000
 ::ping -n 1 127.0.0.1
-::start WebGameManager --server_id 30002 --server_port 30011 --player_port 30012 --center_ip 127.0.0.1 --center_port 40000
+::start WebGameManager --server_id 30002 --server_ip 127.0.0.1 --server_port 30011 --player_port 30012 --center_ip 127.0.0.1 --center_port 40000
 
 ping -n 1 127.0.0.1
 

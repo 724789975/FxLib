@@ -23,7 +23,7 @@ class RoleDataRet
 	public string descrp = "";
 }
 
-public class SessionText : MonoBehaviour
+public class LoginControler: MonoBehaviour
 {
 
 	// Use this for initialization
@@ -108,8 +108,6 @@ public class SessionText : MonoBehaviour
 
 		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
 	}
-
-
 
 	public void OnLoginAckPlayerServerId(byte[] pBuf)
 	{
@@ -210,6 +208,5 @@ public class SessionText : MonoBehaviour
 	}
 
 	public UnityEngine.UI.Text m_textText;
-	public UnityEngine.UI.Text m_textPort;
 	public SessionObject m_pSession;
 }
