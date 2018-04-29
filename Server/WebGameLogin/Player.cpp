@@ -214,4 +214,59 @@ void Player::OnClose()
 			it->second->Send(pBuf, dwBufLen);
 		}
 	}
+
+	class RedisServerId : public IRedisQuery
+	{
+	public:
+		RedisServerId(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId), m_qwServerId(0), m_pReader(NULL) {}
+		~RedisServerId() {}
+
+		virtual int					GetDBId(void) { return 0; }
+		virtual void				OnQuery(IRedisConnection *poDBConnection)
+		{
+			char szQuery[64] = { 0 };
+			sprintf(szQuery, "ZSCORE %s %llu", RedisConstant::szOnLinePlayer, m_qwPlayerId);
+			poDBConnection->Query(szQuery, &m_pReader);
+		}
+		virtual void OnResult(void) { m_pReader->GetValue(m_qwServerId); }
+		virtual void Release(void) { m_pReader->Release(); }
+
+		INT64 GetServerId() { return m_qwServerId; }
+
+	private:
+		IRedisDataReader* m_pReader;
+		INT64 m_qwServerId;
+		UINT64 m_qwPlayerId;
+	};
+
+	RedisServerId oServerId(m_qwPyayerId);
+	FxRedisGetModule()->QueryDirect(&oServerId);
+	UINT32 dwServerId = oServerId.GetServerId();
+
+	if (dwServerId == GameServer::Instance()->GetServerid())
+	{
+		class RedisSetServerId : public IRedisQuery
+		{
+		public:
+			RedisSetServerId(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId), m_qwServerId(0) {}
+			~RedisSetServerId() {}
+
+			virtual int					GetDBId(void) { return 0; }
+			virtual void				OnQuery(IRedisConnection *poDBConnection)
+			{
+				char szQuery[64] = { 0 };
+				sprintf(szQuery, "ZREM %s %llu", RedisConstant::szOnLinePlayer, m_qwPlayerId);
+				poDBConnection->Query(szQuery);
+			}
+			virtual void OnResult(void) { }
+			virtual void Release(void) { }
+
+		private:
+			INT64 m_qwServerId;
+			UINT64 m_qwPlayerId;
+		};
+
+		RedisServerId oSetServerId(m_qwPyayerId);
+		FxRedisGetModule()->QueryDirect(&oSetServerId);
+	}
 }

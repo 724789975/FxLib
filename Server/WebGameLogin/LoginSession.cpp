@@ -12,6 +12,7 @@ CLoginSession::CLoginSession()
 	:m_oProtoDispatch(*this)
 {
 	m_oProtoDispatch.RegistFunction(GameProto::ServerInfo::descriptor(), &CLoginSession::OnServerInfo);
+	m_oProtoDispatch.RegistFunction(GameProto::LoginNotifyLoginPlayerKick::descriptor(), &CLoginSession::OnLoginNotifyLoginPlayerKick);
 }
 
 CLoginSession::~CLoginSession()
