@@ -29,6 +29,7 @@ public:
 	unsigned int		GetServerId() { return m_dwServerId; }
 
 	virtual bool		OnServerInfo(CLoginSession& refSession, google::protobuf::Message& refMsg);
+	virtual bool		OnLoginNotifyLoginPlayerKick(CLoginSession& refSession, google::protobuf::Message& refMsg);
 
 protected:
 	unsigned int m_dwServerId;
@@ -63,6 +64,7 @@ public:
 	void Release(CBinaryLoginSession* pSession);
 
 	std::map<unsigned int, CBinaryLoginSession*>& GetLoginSessions() { return m_mapLoginSessions; }
+	CBinaryLoginSession* GetLoginSession(unsigned int dwServerId);
 
 private:
 	TDynamicPoolEx<CBinaryLoginSession> m_poolSessions;

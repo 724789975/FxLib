@@ -69,6 +69,27 @@ bool CLoginSession::OnServerInfo(CLoginSession& refSession, google::protobuf::Me
 	return OnServerInfo(refSession, refMsg);
 }
 
+bool CLoginSession::OnLoginNotifyLoginPlayerKick(CLoginSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::LoginNotifyLoginPlayerKick* pMsg = dynamic_cast<GameProto::LoginNotifyLoginPlayerKick*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(pMsg->qw_player_id());
+	if (pPlayer)
+	{
+		GameProto::LoginNotifyPlayerGameKick oKick;
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oKick, pBuf, dwBufLen);
+		pPlayer->GetSession()->Send(pBuf, dwBufLen);
+		pPlayer->GetSession()->Close();
+	}
+
+	return true;
+}
+
 //////////////////////////////////////////////////////////////////////////
 CBinaryLoginSession::CBinaryLoginSession()
 {
@@ -125,5 +146,15 @@ void BinaryLoginSessionManager::Release(CBinaryLoginSession * pSession)
 {
 	m_mapLoginSessions.erase(pSession->GetServerId());
 	m_poolSessions.ReleaseObj(pSession);
+}
+
+CBinaryLoginSession* BinaryLoginSessionManager::GetLoginSession(unsigned int dwServerId)
+{
+	if (m_mapLoginSessions.find(dwServerId) == m_mapLoginSessions.end())
+	{
+		return NULL;
+	}
+
+	return m_mapLoginSessions[dwServerId];
 }
 

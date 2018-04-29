@@ -60,6 +60,11 @@ class LoginAckPlayerLoginResultDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<LoginAckPlayerLoginResult>
       _instance;
 } _LoginAckPlayerLoginResult_default_instance_;
+class LoginNotifyPlayerGameKickDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<LoginNotifyPlayerGameKick>
+      _instance;
+} _LoginNotifyPlayerGameKick_default_instance_;
 class LoginAckPlayerMakeTeamDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<LoginAckPlayerMakeTeam>
@@ -90,6 +95,11 @@ class LoginAckPlayerGameStartDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<LoginAckPlayerGameStart>
       _instance;
 } _LoginAckPlayerGameStart_default_instance_;
+class LoginNotifyLoginPlayerKickDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<LoginNotifyLoginPlayerKick>
+      _instance;
+} _LoginNotifyLoginPlayerKick_default_instance_;
 class LoginRequestTeamMakeTeamDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<LoginRequestTeamMakeTeam>
@@ -355,6 +365,27 @@ void InitDefaultsLoginAckPlayerLoginResult() {
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsLoginAckPlayerLoginResultImpl);
 }
 
+void InitDefaultsLoginNotifyPlayerGameKickImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::GameProto::_LoginNotifyPlayerGameKick_default_instance_;
+    new (ptr) ::GameProto::LoginNotifyPlayerGameKick();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::GameProto::LoginNotifyPlayerGameKick::InitAsDefaultInstance();
+}
+
+void InitDefaultsLoginNotifyPlayerGameKick() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsLoginNotifyPlayerGameKickImpl);
+}
+
 void InitDefaultsLoginAckPlayerMakeTeamImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -480,6 +511,27 @@ void InitDefaultsLoginAckPlayerGameStartImpl() {
 void InitDefaultsLoginAckPlayerGameStart() {
   static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsLoginAckPlayerGameStartImpl);
+}
+
+void InitDefaultsLoginNotifyLoginPlayerKickImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::GameProto::_LoginNotifyLoginPlayerKick_default_instance_;
+    new (ptr) ::GameProto::LoginNotifyLoginPlayerKick();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::GameProto::LoginNotifyLoginPlayerKick::InitAsDefaultInstance();
+}
+
+void InitDefaultsLoginNotifyLoginPlayerKick() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsLoginNotifyLoginPlayerKickImpl);
 }
 
 void InitDefaultsLoginRequestTeamMakeTeamImpl() {
@@ -883,7 +935,7 @@ void InitDefaultsServerInfo() {
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsServerInfoImpl);
 }
 
-::google::protobuf::Metadata file_level_metadata[33];
+::google::protobuf::Metadata file_level_metadata[35];
 const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors[3];
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
@@ -939,6 +991,12 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::LoginAckPlayerLoginResult, dw_result_),
   ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::LoginNotifyPlayerGameKick, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::LoginNotifyPlayerGameKick, dw_result_),
+  ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::LoginAckPlayerMakeTeam, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -980,6 +1038,12 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::LoginAckPlayerGameStart, dw_slave_server_port_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::LoginAckPlayerGameStart, sz_listen_ip_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::LoginAckPlayerGameStart, qw_team_id_),
+  ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::LoginNotifyLoginPlayerKick, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::LoginNotifyLoginPlayerKick, qw_player_id_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::LoginRequestTeamMakeTeam, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -1137,31 +1201,33 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROT
   { 33, -1, sizeof(::GameProto::PlayerRequestLoginGameStart)},
   { 38, -1, sizeof(::GameProto::LoginAckPlayerServerId)},
   { 45, -1, sizeof(::GameProto::LoginAckPlayerLoginResult)},
-  { 51, -1, sizeof(::GameProto::LoginAckPlayerMakeTeam)},
-  { 59, -1, sizeof(::GameProto::LoginNotifyPlayerTeamInfo)},
-  { 65, -1, sizeof(::GameProto::LoginAckPlayerInviteTeam)},
-  { 71, -1, sizeof(::GameProto::LoginAckPlayerChangeSlot)},
-  { 77, -1, sizeof(::GameProto::LoginNotifyPlayerTeamKick)},
-  { 82, -1, sizeof(::GameProto::LoginAckPlayerGameStart)},
-  { 93, -1, sizeof(::GameProto::LoginRequestTeamMakeTeam)},
-  { 100, -1, sizeof(::GameProto::LoginRequestTeamInviteTeam)},
-  { 107, -1, sizeof(::GameProto::LoginRequestTeamChangeSlot)},
-  { 114, -1, sizeof(::GameProto::LoginRequestTeamKickPlayer)},
-  { 121, -1, sizeof(::GameProto::LoginRequestTeamGameStart)},
-  { 128, -1, sizeof(::GameProto::TeamAckLoginMakeTeam)},
-  { 137, -1, sizeof(::GameProto::TeamNotifyLoginTeamInfo)},
-  { 143, -1, sizeof(::GameProto::TeamAckLoginInviteTeam)},
-  { 150, -1, sizeof(::GameProto::TeamAckLoginChangeSlot)},
-  { 157, -1, sizeof(::GameProto::TeamAckLoginKickPlayer)},
-  { 164, -1, sizeof(::GameProto::TeamAckLoginGameStart)},
-  { 176, -1, sizeof(::GameProto::TeamRequestGameManagerGameStart)},
-  { 183, -1, sizeof(::GameProto::GameManagerAckTeamGameStart)},
-  { 194, -1, sizeof(::GameProto::GameNotifyGameManagerInfo)},
-  { 204, -1, sizeof(::GameProto::GameManagerAckGameInfoResult)},
-  { 210, -1, sizeof(::GameProto::PlayerRequestGameManagerInfo)},
-  { 216, -1, sizeof(::GameProto::GameManagerAckPlayerInfoResult)},
-  { 224, -1, sizeof(::GameProto::PlayerRequestGameTest)},
-  { 230, -1, sizeof(::GameProto::ServerInfo)},
+  { 51, -1, sizeof(::GameProto::LoginNotifyPlayerGameKick)},
+  { 57, -1, sizeof(::GameProto::LoginAckPlayerMakeTeam)},
+  { 65, -1, sizeof(::GameProto::LoginNotifyPlayerTeamInfo)},
+  { 71, -1, sizeof(::GameProto::LoginAckPlayerInviteTeam)},
+  { 77, -1, sizeof(::GameProto::LoginAckPlayerChangeSlot)},
+  { 83, -1, sizeof(::GameProto::LoginNotifyPlayerTeamKick)},
+  { 88, -1, sizeof(::GameProto::LoginAckPlayerGameStart)},
+  { 99, -1, sizeof(::GameProto::LoginNotifyLoginPlayerKick)},
+  { 105, -1, sizeof(::GameProto::LoginRequestTeamMakeTeam)},
+  { 112, -1, sizeof(::GameProto::LoginRequestTeamInviteTeam)},
+  { 119, -1, sizeof(::GameProto::LoginRequestTeamChangeSlot)},
+  { 126, -1, sizeof(::GameProto::LoginRequestTeamKickPlayer)},
+  { 133, -1, sizeof(::GameProto::LoginRequestTeamGameStart)},
+  { 140, -1, sizeof(::GameProto::TeamAckLoginMakeTeam)},
+  { 149, -1, sizeof(::GameProto::TeamNotifyLoginTeamInfo)},
+  { 155, -1, sizeof(::GameProto::TeamAckLoginInviteTeam)},
+  { 162, -1, sizeof(::GameProto::TeamAckLoginChangeSlot)},
+  { 169, -1, sizeof(::GameProto::TeamAckLoginKickPlayer)},
+  { 176, -1, sizeof(::GameProto::TeamAckLoginGameStart)},
+  { 188, -1, sizeof(::GameProto::TeamRequestGameManagerGameStart)},
+  { 195, -1, sizeof(::GameProto::GameManagerAckTeamGameStart)},
+  { 206, -1, sizeof(::GameProto::GameNotifyGameManagerInfo)},
+  { 216, -1, sizeof(::GameProto::GameManagerAckGameInfoResult)},
+  { 222, -1, sizeof(::GameProto::PlayerRequestGameManagerInfo)},
+  { 228, -1, sizeof(::GameProto::GameManagerAckPlayerInfoResult)},
+  { 236, -1, sizeof(::GameProto::PlayerRequestGameTest)},
+  { 242, -1, sizeof(::GameProto::ServerInfo)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -1173,12 +1239,14 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_PlayerRequestLoginGameStart_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_LoginAckPlayerServerId_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_LoginAckPlayerLoginResult_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_LoginNotifyPlayerGameKick_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_LoginAckPlayerMakeTeam_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_LoginNotifyPlayerTeamInfo_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_LoginAckPlayerInviteTeam_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_LoginAckPlayerChangeSlot_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_LoginNotifyPlayerTeamKick_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_LoginAckPlayerGameStart_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_LoginNotifyLoginPlayerKick_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_LoginRequestTeamMakeTeam_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_LoginRequestTeamInviteTeam_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_LoginRequestTeamChangeSlot_default_instance_),
@@ -1216,7 +1284,7 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_PROTOBUF_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 33);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 35);
 }
 
 void AddDescriptorsImpl() {
@@ -1234,72 +1302,74 @@ void AddDescriptorsImpl() {
       "equestLoginGameStart\"A\n\026LoginAckPlayerSe"
       "rverId\022\021\n\tdw_result\030\001 \001(\r\022\024\n\014dw_server_i"
       "d\030\002 \001(\r\".\n\031LoginAckPlayerLoginResult\022\021\n\t"
-      "dw_result\030\001 \001(\r\"S\n\026LoginAckPlayerMakeTea"
-      "m\022\021\n\tdw_result\030\001 \001(\r\022\022\n\nqw_team_id\030\002 \001(\004"
-      "\022\022\n\ndw_slot_id\030\003 \001(\r\"L\n\031LoginNotifyPlaye"
-      "rTeamInfo\022/\n\016team_role_data\030\001 \003(\0132\027.Game"
-      "Proto.TeamRoleData\"-\n\030LoginAckPlayerInvi"
-      "teTeam\022\021\n\tdw_result\030\001 \001(\r\"-\n\030LoginAckPla"
-      "yerChangeSlot\022\021\n\tdw_result\030\001 \001(\r\"\033\n\031Logi"
-      "nNotifyPlayerTeamKick\"\244\001\n\027LoginAckPlayer"
-      "GameStart\022\021\n\tdw_result\030\001 \001(\r\022\026\n\016dw_playe"
-      "r_port\030\002 \001(\r\022\026\n\016dw_server_port\030\003 \001(\r\022\034\n\024"
-      "dw_slave_server_port\030\004 \001(\r\022\024\n\014sz_listen_"
-      "ip\030\005 \001(\t\022\022\n\nqw_team_id\030\006 \001(\004\"V\n\030LoginReq"
-      "uestTeamMakeTeam\022&\n\trole_data\030\001 \001(\0132\023.Ga"
-      "meProto.RoleData\022\022\n\nqw_team_id\030\002 \001(\004\"C\n\032"
-      "LoginRequestTeamInviteTeam\022\021\n\tdw_result\030"
-      "\001 \001(\r\022\022\n\ndw_slot_id\030\002 \001(\r\"C\n\032LoginReques"
-      "tTeamChangeSlot\022\021\n\tdw_result\030\001 \001(\r\022\022\n\ndw"
-      "_slot_id\030\002 \001(\r\"F\n\032LoginRequestTeamKickPl"
-      "ayer\022\024\n\014qw_player_id\030\001 \001(\004\022\022\n\nqw_team_id"
-      "\030\002 \001(\004\"E\n\031LoginRequestTeamGameStart\022\022\n\nq"
-      "w_team_id\030\001 \001(\004\022\024\n\014qw_player_id\030\002 \001(\004\"g\n"
-      "\024TeamAckLoginMakeTeam\022\021\n\tdw_result\030\001 \001(\r"
-      "\022\024\n\014qw_player_id\030\002 \001(\004\022\022\n\nqw_team_id\030\003 \001"
-      "(\004\022\022\n\ndw_slot_id\030\004 \001(\r\"J\n\027TeamNotifyLogi"
-      "nTeamInfo\022/\n\016team_role_data\030\001 \003(\0132\027.Game"
-      "Proto.TeamRoleData\"<\n\026TeamAckLoginInvite"
-      "Team\022\021\n\tdw_result\030\001 \001(\r\022\017\n\007dw_slot\030\002 \001(\r"
-      "\"<\n\026TeamAckLoginChangeSlot\022\021\n\tdw_result\030"
-      "\001 \001(\r\022\017\n\007dw_slot\030\002 \001(\r\"A\n\026TeamAckLoginKi"
-      "ckPlayer\022\021\n\tdw_result\030\001 \001(\r\022\024\n\014qw_player"
-      "_id\030\002 \001(\004\"\270\001\n\025TeamAckLoginGameStart\022\021\n\td"
-      "w_result\030\001 \001(\r\022\026\n\016dw_player_port\030\002 \001(\r\022\026"
-      "\n\016dw_server_port\030\003 \001(\r\022\034\n\024dw_slave_serve"
-      "r_port\030\004 \001(\r\022\024\n\014sz_listen_ip\030\005 \001(\t\022\024\n\014qw"
-      "_player_id\030\006 \001(\004\022\022\n\nqw_team_id\030\007 \001(\004\"L\n\037"
-      "TeamRequestGameManagerGameStart\022\022\n\nqw_te"
-      "am_id\030\001 \001(\004\022\025\n\rqw_player_ids\030\002 \003(\004\"\250\001\n\033G"
-      "ameManagerAckTeamGameStart\022\021\n\tdw_result\030"
-      "\001 \001(\r\022\026\n\016dw_player_port\030\002 \001(\r\022\026\n\016dw_serv"
-      "er_port\030\003 \001(\r\022\034\n\024dw_slave_server_port\030\004 "
-      "\001(\r\022\022\n\nqw_team_id\030\005 \001(\004\022\024\n\014sz_listen_ip\030"
-      "\006 \001(\t\"\230\001\n\031GameNotifyGameManagerInfo\022\026\n\016d"
-      "w_player_port\030\001 \001(\r\022\026\n\016dw_server_port\030\002 "
-      "\001(\r\022\034\n\024dw_slave_server_port\030\003 \001(\r\022\022\n\nqw_"
-      "team_id\030\004 \001(\004\022\031\n\021dw_team_server_id\030\005 \001(\r"
-      "\"1\n\034GameManagerAckGameInfoResult\022\021\n\tdw_r"
-      "esult\030\001 \001(\r\"1\n\034PlayerRequestGameManagerI"
-      "nfo\022\021\n\tdw_result\030\001 \001(\r\"n\n\036GameManagerAck"
-      "PlayerInfoResult\022\026\n\016dw_player_port\030\001 \001(\r"
-      "\022\026\n\016dw_server_port\030\002 \001(\r\022\034\n\024dw_slave_ser"
-      "ver_port\030\003 \001(\r\"(\n\025PlayerRequestGameTest\022"
-      "\017\n\007sz_test\030\001 \001(\t\"\212\001\n\nServerInfo\022\024\n\014dw_se"
-      "rver_id\030\001 \001(\r\022\024\n\014sz_listen_ip\030\002 \001(\t\022\024\n\014d"
-      "w_team_port\030\003 \001(\r\022#\n\033dw_game_server_mana"
-      "ger_port\030\004 \001(\r\022\025\n\rdw_login_port\030\005 \001(\r*I\n"
-      "\013EServerType\022\013\n\007ST_NONE\020\000\022\014\n\010ST_Login\020\001\022"
-      "\013\n\007ST_Team\020\002\022\022\n\016ST_GameManager\020\003*\'\n\tETea"
-      "mType\022\013\n\007TT_NONE\020\000\022\r\n\tTT_Normal\020\001*\260\001\n\nEE"
-      "rrorCode\022\013\n\007EC_NONE\020\000\022\024\n\020EC_AlreadyInTea"
-      "m\020\001\022\026\n\022EC_MakeTeamNotIdle\020\002\022\023\n\017EC_NoTeam"
-      "Server\020\003\022\017\n\013EC_NoTeamId\020\004\022\020\n\014EC_NotLeade"
-      "r\020\005\022\023\n\017EC_TeamHasStart\020\006\022\032\n\026EC_NoGameMan"
-      "agerServer\020\007b\006proto3"
+      "dw_result\030\001 \001(\r\".\n\031LoginNotifyPlayerGame"
+      "Kick\022\021\n\tdw_result\030\001 \001(\r\"S\n\026LoginAckPlaye"
+      "rMakeTeam\022\021\n\tdw_result\030\001 \001(\r\022\022\n\nqw_team_"
+      "id\030\002 \001(\004\022\022\n\ndw_slot_id\030\003 \001(\r\"L\n\031LoginNot"
+      "ifyPlayerTeamInfo\022/\n\016team_role_data\030\001 \003("
+      "\0132\027.GameProto.TeamRoleData\"-\n\030LoginAckPl"
+      "ayerInviteTeam\022\021\n\tdw_result\030\001 \001(\r\"-\n\030Log"
+      "inAckPlayerChangeSlot\022\021\n\tdw_result\030\001 \001(\r"
+      "\"\033\n\031LoginNotifyPlayerTeamKick\"\244\001\n\027LoginA"
+      "ckPlayerGameStart\022\021\n\tdw_result\030\001 \001(\r\022\026\n\016"
+      "dw_player_port\030\002 \001(\r\022\026\n\016dw_server_port\030\003"
+      " \001(\r\022\034\n\024dw_slave_server_port\030\004 \001(\r\022\024\n\014sz"
+      "_listen_ip\030\005 \001(\t\022\022\n\nqw_team_id\030\006 \001(\004\"2\n\032"
+      "LoginNotifyLoginPlayerKick\022\024\n\014qw_player_"
+      "id\030\001 \001(\004\"V\n\030LoginRequestTeamMakeTeam\022&\n\t"
+      "role_data\030\001 \001(\0132\023.GameProto.RoleData\022\022\n\n"
+      "qw_team_id\030\002 \001(\004\"C\n\032LoginRequestTeamInvi"
+      "teTeam\022\021\n\tdw_result\030\001 \001(\r\022\022\n\ndw_slot_id\030"
+      "\002 \001(\r\"C\n\032LoginRequestTeamChangeSlot\022\021\n\td"
+      "w_result\030\001 \001(\r\022\022\n\ndw_slot_id\030\002 \001(\r\"F\n\032Lo"
+      "ginRequestTeamKickPlayer\022\024\n\014qw_player_id"
+      "\030\001 \001(\004\022\022\n\nqw_team_id\030\002 \001(\004\"E\n\031LoginReque"
+      "stTeamGameStart\022\022\n\nqw_team_id\030\001 \001(\004\022\024\n\014q"
+      "w_player_id\030\002 \001(\004\"g\n\024TeamAckLoginMakeTea"
+      "m\022\021\n\tdw_result\030\001 \001(\r\022\024\n\014qw_player_id\030\002 \001"
+      "(\004\022\022\n\nqw_team_id\030\003 \001(\004\022\022\n\ndw_slot_id\030\004 \001"
+      "(\r\"J\n\027TeamNotifyLoginTeamInfo\022/\n\016team_ro"
+      "le_data\030\001 \003(\0132\027.GameProto.TeamRoleData\"<"
+      "\n\026TeamAckLoginInviteTeam\022\021\n\tdw_result\030\001 "
+      "\001(\r\022\017\n\007dw_slot\030\002 \001(\r\"<\n\026TeamAckLoginChan"
+      "geSlot\022\021\n\tdw_result\030\001 \001(\r\022\017\n\007dw_slot\030\002 \001"
+      "(\r\"A\n\026TeamAckLoginKickPlayer\022\021\n\tdw_resul"
+      "t\030\001 \001(\r\022\024\n\014qw_player_id\030\002 \001(\004\"\270\001\n\025TeamAc"
+      "kLoginGameStart\022\021\n\tdw_result\030\001 \001(\r\022\026\n\016dw"
+      "_player_port\030\002 \001(\r\022\026\n\016dw_server_port\030\003 \001"
+      "(\r\022\034\n\024dw_slave_server_port\030\004 \001(\r\022\024\n\014sz_l"
+      "isten_ip\030\005 \001(\t\022\024\n\014qw_player_id\030\006 \001(\004\022\022\n\n"
+      "qw_team_id\030\007 \001(\004\"L\n\037TeamRequestGameManag"
+      "erGameStart\022\022\n\nqw_team_id\030\001 \001(\004\022\025\n\rqw_pl"
+      "ayer_ids\030\002 \003(\004\"\250\001\n\033GameManagerAckTeamGam"
+      "eStart\022\021\n\tdw_result\030\001 \001(\r\022\026\n\016dw_player_p"
+      "ort\030\002 \001(\r\022\026\n\016dw_server_port\030\003 \001(\r\022\034\n\024dw_"
+      "slave_server_port\030\004 \001(\r\022\022\n\nqw_team_id\030\005 "
+      "\001(\004\022\024\n\014sz_listen_ip\030\006 \001(\t\"\230\001\n\031GameNotify"
+      "GameManagerInfo\022\026\n\016dw_player_port\030\001 \001(\r\022"
+      "\026\n\016dw_server_port\030\002 \001(\r\022\034\n\024dw_slave_serv"
+      "er_port\030\003 \001(\r\022\022\n\nqw_team_id\030\004 \001(\004\022\031\n\021dw_"
+      "team_server_id\030\005 \001(\r\"1\n\034GameManagerAckGa"
+      "meInfoResult\022\021\n\tdw_result\030\001 \001(\r\"1\n\034Playe"
+      "rRequestGameManagerInfo\022\021\n\tdw_result\030\001 \001"
+      "(\r\"n\n\036GameManagerAckPlayerInfoResult\022\026\n\016"
+      "dw_player_port\030\001 \001(\r\022\026\n\016dw_server_port\030\002"
+      " \001(\r\022\034\n\024dw_slave_server_port\030\003 \001(\r\"(\n\025Pl"
+      "ayerRequestGameTest\022\017\n\007sz_test\030\001 \001(\t\"\212\001\n"
+      "\nServerInfo\022\024\n\014dw_server_id\030\001 \001(\r\022\024\n\014sz_"
+      "listen_ip\030\002 \001(\t\022\024\n\014dw_team_port\030\003 \001(\r\022#\n"
+      "\033dw_game_server_manager_port\030\004 \001(\r\022\025\n\rdw"
+      "_login_port\030\005 \001(\r*I\n\013EServerType\022\013\n\007ST_N"
+      "ONE\020\000\022\014\n\010ST_Login\020\001\022\013\n\007ST_Team\020\002\022\022\n\016ST_G"
+      "ameManager\020\003*\'\n\tETeamType\022\013\n\007TT_NONE\020\000\022\r"
+      "\n\tTT_Normal\020\001*\260\001\n\nEErrorCode\022\013\n\007EC_NONE\020"
+      "\000\022\024\n\020EC_AlreadyInTeam\020\001\022\026\n\022EC_MakeTeamNo"
+      "tIdle\020\002\022\023\n\017EC_NoTeamServer\020\003\022\017\n\013EC_NoTea"
+      "mId\020\004\022\020\n\014EC_NotLeader\020\005\022\023\n\017EC_TeamHasSta"
+      "rt\020\006\022\032\n\026EC_NoGameManagerServer\020\007b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 2980);
+      descriptor, 3080);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "web_game.proto", &protobuf_RegisterTypes);
   ::protobuf_web_5fdata_2eproto::AddDescriptors();
@@ -3458,6 +3528,244 @@ void LoginAckPlayerLoginResult::InternalSwap(LoginAckPlayerLoginResult* other) {
 
 // ===================================================================
 
+void LoginNotifyPlayerGameKick::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int LoginNotifyPlayerGameKick::kDwResultFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+LoginNotifyPlayerGameKick::LoginNotifyPlayerGameKick()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_web_5fgame_2eproto::InitDefaultsLoginNotifyPlayerGameKick();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:GameProto.LoginNotifyPlayerGameKick)
+}
+LoginNotifyPlayerGameKick::LoginNotifyPlayerGameKick(const LoginNotifyPlayerGameKick& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  dw_result_ = from.dw_result_;
+  // @@protoc_insertion_point(copy_constructor:GameProto.LoginNotifyPlayerGameKick)
+}
+
+void LoginNotifyPlayerGameKick::SharedCtor() {
+  dw_result_ = 0u;
+  _cached_size_ = 0;
+}
+
+LoginNotifyPlayerGameKick::~LoginNotifyPlayerGameKick() {
+  // @@protoc_insertion_point(destructor:GameProto.LoginNotifyPlayerGameKick)
+  SharedDtor();
+}
+
+void LoginNotifyPlayerGameKick::SharedDtor() {
+}
+
+void LoginNotifyPlayerGameKick::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* LoginNotifyPlayerGameKick::descriptor() {
+  ::protobuf_web_5fgame_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_web_5fgame_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const LoginNotifyPlayerGameKick& LoginNotifyPlayerGameKick::default_instance() {
+  ::protobuf_web_5fgame_2eproto::InitDefaultsLoginNotifyPlayerGameKick();
+  return *internal_default_instance();
+}
+
+LoginNotifyPlayerGameKick* LoginNotifyPlayerGameKick::New(::google::protobuf::Arena* arena) const {
+  LoginNotifyPlayerGameKick* n = new LoginNotifyPlayerGameKick;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void LoginNotifyPlayerGameKick::Clear() {
+// @@protoc_insertion_point(message_clear_start:GameProto.LoginNotifyPlayerGameKick)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  dw_result_ = 0u;
+  _internal_metadata_.Clear();
+}
+
+bool LoginNotifyPlayerGameKick::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:GameProto.LoginNotifyPlayerGameKick)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // uint32 dw_result = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &dw_result_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:GameProto.LoginNotifyPlayerGameKick)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:GameProto.LoginNotifyPlayerGameKick)
+  return false;
+#undef DO_
+}
+
+void LoginNotifyPlayerGameKick::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:GameProto.LoginNotifyPlayerGameKick)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint32 dw_result = 1;
+  if (this->dw_result() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->dw_result(), output);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
+  }
+  // @@protoc_insertion_point(serialize_end:GameProto.LoginNotifyPlayerGameKick)
+}
+
+::google::protobuf::uint8* LoginNotifyPlayerGameKick::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:GameProto.LoginNotifyPlayerGameKick)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint32 dw_result = 1;
+  if (this->dw_result() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->dw_result(), target);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:GameProto.LoginNotifyPlayerGameKick)
+  return target;
+}
+
+size_t LoginNotifyPlayerGameKick::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:GameProto.LoginNotifyPlayerGameKick)
+  size_t total_size = 0;
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
+  }
+  // uint32 dw_result = 1;
+  if (this->dw_result() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->dw_result());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void LoginNotifyPlayerGameKick::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:GameProto.LoginNotifyPlayerGameKick)
+  GOOGLE_DCHECK_NE(&from, this);
+  const LoginNotifyPlayerGameKick* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const LoginNotifyPlayerGameKick>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:GameProto.LoginNotifyPlayerGameKick)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:GameProto.LoginNotifyPlayerGameKick)
+    MergeFrom(*source);
+  }
+}
+
+void LoginNotifyPlayerGameKick::MergeFrom(const LoginNotifyPlayerGameKick& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:GameProto.LoginNotifyPlayerGameKick)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.dw_result() != 0) {
+    set_dw_result(from.dw_result());
+  }
+}
+
+void LoginNotifyPlayerGameKick::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:GameProto.LoginNotifyPlayerGameKick)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void LoginNotifyPlayerGameKick::CopyFrom(const LoginNotifyPlayerGameKick& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:GameProto.LoginNotifyPlayerGameKick)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool LoginNotifyPlayerGameKick::IsInitialized() const {
+  return true;
+}
+
+void LoginNotifyPlayerGameKick::Swap(LoginNotifyPlayerGameKick* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void LoginNotifyPlayerGameKick::InternalSwap(LoginNotifyPlayerGameKick* other) {
+  using std::swap;
+  swap(dw_result_, other->dw_result_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata LoginNotifyPlayerGameKick::GetMetadata() const {
+  protobuf_web_5fgame_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_web_5fgame_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
 void LoginAckPlayerMakeTeam::InitAsDefaultInstance() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
@@ -5126,6 +5434,244 @@ void LoginAckPlayerGameStart::InternalSwap(LoginAckPlayerGameStart* other) {
 }
 
 ::google::protobuf::Metadata LoginAckPlayerGameStart::GetMetadata() const {
+  protobuf_web_5fgame_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_web_5fgame_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
+void LoginNotifyLoginPlayerKick::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int LoginNotifyLoginPlayerKick::kQwPlayerIdFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+LoginNotifyLoginPlayerKick::LoginNotifyLoginPlayerKick()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_web_5fgame_2eproto::InitDefaultsLoginNotifyLoginPlayerKick();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:GameProto.LoginNotifyLoginPlayerKick)
+}
+LoginNotifyLoginPlayerKick::LoginNotifyLoginPlayerKick(const LoginNotifyLoginPlayerKick& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  qw_player_id_ = from.qw_player_id_;
+  // @@protoc_insertion_point(copy_constructor:GameProto.LoginNotifyLoginPlayerKick)
+}
+
+void LoginNotifyLoginPlayerKick::SharedCtor() {
+  qw_player_id_ = GOOGLE_ULONGLONG(0);
+  _cached_size_ = 0;
+}
+
+LoginNotifyLoginPlayerKick::~LoginNotifyLoginPlayerKick() {
+  // @@protoc_insertion_point(destructor:GameProto.LoginNotifyLoginPlayerKick)
+  SharedDtor();
+}
+
+void LoginNotifyLoginPlayerKick::SharedDtor() {
+}
+
+void LoginNotifyLoginPlayerKick::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* LoginNotifyLoginPlayerKick::descriptor() {
+  ::protobuf_web_5fgame_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_web_5fgame_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const LoginNotifyLoginPlayerKick& LoginNotifyLoginPlayerKick::default_instance() {
+  ::protobuf_web_5fgame_2eproto::InitDefaultsLoginNotifyLoginPlayerKick();
+  return *internal_default_instance();
+}
+
+LoginNotifyLoginPlayerKick* LoginNotifyLoginPlayerKick::New(::google::protobuf::Arena* arena) const {
+  LoginNotifyLoginPlayerKick* n = new LoginNotifyLoginPlayerKick;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void LoginNotifyLoginPlayerKick::Clear() {
+// @@protoc_insertion_point(message_clear_start:GameProto.LoginNotifyLoginPlayerKick)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  qw_player_id_ = GOOGLE_ULONGLONG(0);
+  _internal_metadata_.Clear();
+}
+
+bool LoginNotifyLoginPlayerKick::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:GameProto.LoginNotifyLoginPlayerKick)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // uint64 qw_player_id = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &qw_player_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:GameProto.LoginNotifyLoginPlayerKick)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:GameProto.LoginNotifyLoginPlayerKick)
+  return false;
+#undef DO_
+}
+
+void LoginNotifyLoginPlayerKick::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:GameProto.LoginNotifyLoginPlayerKick)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint64 qw_player_id = 1;
+  if (this->qw_player_id() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(1, this->qw_player_id(), output);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
+  }
+  // @@protoc_insertion_point(serialize_end:GameProto.LoginNotifyLoginPlayerKick)
+}
+
+::google::protobuf::uint8* LoginNotifyLoginPlayerKick::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:GameProto.LoginNotifyLoginPlayerKick)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint64 qw_player_id = 1;
+  if (this->qw_player_id() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(1, this->qw_player_id(), target);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:GameProto.LoginNotifyLoginPlayerKick)
+  return target;
+}
+
+size_t LoginNotifyLoginPlayerKick::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:GameProto.LoginNotifyLoginPlayerKick)
+  size_t total_size = 0;
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
+  }
+  // uint64 qw_player_id = 1;
+  if (this->qw_player_id() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->qw_player_id());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void LoginNotifyLoginPlayerKick::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:GameProto.LoginNotifyLoginPlayerKick)
+  GOOGLE_DCHECK_NE(&from, this);
+  const LoginNotifyLoginPlayerKick* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const LoginNotifyLoginPlayerKick>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:GameProto.LoginNotifyLoginPlayerKick)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:GameProto.LoginNotifyLoginPlayerKick)
+    MergeFrom(*source);
+  }
+}
+
+void LoginNotifyLoginPlayerKick::MergeFrom(const LoginNotifyLoginPlayerKick& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:GameProto.LoginNotifyLoginPlayerKick)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.qw_player_id() != 0) {
+    set_qw_player_id(from.qw_player_id());
+  }
+}
+
+void LoginNotifyLoginPlayerKick::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:GameProto.LoginNotifyLoginPlayerKick)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void LoginNotifyLoginPlayerKick::CopyFrom(const LoginNotifyLoginPlayerKick& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:GameProto.LoginNotifyLoginPlayerKick)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool LoginNotifyLoginPlayerKick::IsInitialized() const {
+  return true;
+}
+
+void LoginNotifyLoginPlayerKick::Swap(LoginNotifyLoginPlayerKick* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void LoginNotifyLoginPlayerKick::InternalSwap(LoginNotifyLoginPlayerKick* other) {
+  using std::swap;
+  swap(qw_player_id_, other->qw_player_id_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata LoginNotifyLoginPlayerKick::GetMetadata() const {
   protobuf_web_5fgame_2eproto::protobuf_AssignDescriptorsOnce();
   return ::protobuf_web_5fgame_2eproto::file_level_metadata[kIndexInFileMessages];
 }

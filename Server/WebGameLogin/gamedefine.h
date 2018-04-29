@@ -28,6 +28,7 @@ namespace ProtoUtility
 namespace RedisConstant
 {
 	static const char* szTeamId = "team_id";
+	static const char* szOnLinePlayer = "online_player";	//在线的玩家 <playerid, serverid>
 }
 
 

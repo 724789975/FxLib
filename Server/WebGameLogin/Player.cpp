@@ -35,6 +35,29 @@ bool Player::OnPlayerRequestLogin(CPlayerSession& refSession, GameProto::PlayerR
 	m_dwBalance = refLogin.dw_balance();
 	m_szToken = refLogin.sz_token();
 
+	class RedisServerId : public IRedisQuery
+	{
+	public:
+		RedisServerId(UINT64 qwPlayerId, UINT32 dwServerId) : m_qwPlayerId(qwPlayerId), m_dwServerId(dwServerId) {}
+		~RedisServerId() {}
+
+		virtual int					GetDBId(void) { return 0; }
+		virtual void				OnQuery(IRedisConnection *poDBConnection)
+		{
+			char szQuery[64] = { 0 };
+			sprintf(szQuery, "ZADD %s %llu, %d", RedisConstant::szOnLinePlayer, m_qwPlayerId, m_dwServerId);
+			poDBConnection->Query(szQuery);
+		}
+		virtual void OnResult(void) { }
+		virtual void Release(void) { }
+	private:
+		UINT32 m_dwServerId;
+		UINT64 m_qwPlayerId;
+	};
+
+	RedisServerId oServerId(refLogin.qw_player_id(), GameServer::Instance()->GetServerid());
+	FxRedisGetModule()->QueryDirect(&oServerId);
+
 	return true;
 }
 

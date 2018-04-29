@@ -1,5 +1,5 @@
 #include "PlayerManager.h"
-
+#include "gamedefine.h"
 
 
 PlayerManager::PlayerManager()
@@ -26,6 +26,11 @@ Player* PlayerManager::OnPlayerLogin(CPlayerSession* pSession, GameProto::Player
 	std::map<UINT64, Player>::iterator it = m_mapPlayers.find(refLogin.qw_player_id());
 	if (it != m_mapPlayers.end())
 	{
+		GameProto::LoginNotifyPlayerGameKick oKick;
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oKick, pBuf, dwBufLen);
+		it->second.GetSession()->Send(pBuf, dwBufLen);
 		it->second.GetSession()->Close();
 		pPlayer = &(it->second);
 	}

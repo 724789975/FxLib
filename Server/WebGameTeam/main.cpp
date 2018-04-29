@@ -31,7 +31,7 @@ void EndFun(int n)
 int main(int argc, char **argv)
 {
 	//----------------------order can't change begin-----------------------//
-	gflags::SetUsageMessage("WebGameManager");
+	gflags::SetUsageMessage("WebGameTeam");
 	gflags::ParseCommandLineFlags(&argc, &argv, false);
 	signal(SIGINT, EndFun);
 	signal(SIGTERM, EndFun);

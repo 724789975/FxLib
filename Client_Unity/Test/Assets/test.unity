@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657886, g: 0.4964127, b: 0.57481724, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -284,12 +284,12 @@ MonoBehaviour:
     type: 2}
   m_pUiCanvas: {fileID: 16600680}
   m_szPlatform: unity_test
-  m_szName: test
+  m_szName: test1
   m_szHeadImage: no pic
   m_dwSex: 0
-  m_szAccessToken: asdfghjk
+  m_szAccessToken: asdfghjk1
   m_dwExpiresDate: 7200
-  m_szOpenId: unity
+  m_szOpenId: unity1
 --- !u!1 &301302416
 GameObject:
   m_ObjectHideFlags: 0
@@ -866,7 +866,7 @@ GameObject:
   - component: {fileID: 1582737339}
   - component: {fileID: 1582737338}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: GameControl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
