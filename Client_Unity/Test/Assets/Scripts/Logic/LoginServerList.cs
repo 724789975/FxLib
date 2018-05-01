@@ -39,5 +39,4 @@ public class LoginServerList : MonoBehaviour
 
 	public Object m_pObj;
 	public Transform m_pContentTransform;
-	public UnityEngine.UI.ScrollRect m_pScrollRect;
 }

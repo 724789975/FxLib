@@ -38,7 +38,7 @@ namespace protobuf_web_5fgame_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[35];
+  static const ::google::protobuf::internal::ParseTable schema[39];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -56,6 +56,8 @@ void InitDefaultsPlayerRequestLoginChangeSlotImpl();
 void InitDefaultsPlayerRequestLoginChangeSlot();
 void InitDefaultsPlayerRequestLoginGameStartImpl();
 void InitDefaultsPlayerRequestLoginGameStart();
+void InitDefaultsPlayerRequestLoginOnLinePlayerImpl();
+void InitDefaultsPlayerRequestLoginOnLinePlayer();
 void InitDefaultsLoginAckPlayerServerIdImpl();
 void InitDefaultsLoginAckPlayerServerId();
 void InitDefaultsLoginAckPlayerLoginResultImpl();
@@ -68,14 +70,20 @@ void InitDefaultsLoginNotifyPlayerTeamInfoImpl();
 void InitDefaultsLoginNotifyPlayerTeamInfo();
 void InitDefaultsLoginAckPlayerInviteTeamImpl();
 void InitDefaultsLoginAckPlayerInviteTeam();
+void InitDefaultsLoginNotifyPlayerInviteTeamImpl();
+void InitDefaultsLoginNotifyPlayerInviteTeam();
 void InitDefaultsLoginAckPlayerChangeSlotImpl();
 void InitDefaultsLoginAckPlayerChangeSlot();
 void InitDefaultsLoginNotifyPlayerTeamKickImpl();
 void InitDefaultsLoginNotifyPlayerTeamKick();
 void InitDefaultsLoginAckPlayerGameStartImpl();
 void InitDefaultsLoginAckPlayerGameStart();
+void InitDefaultsLoginAckPlayerOnLinePlayerImpl();
+void InitDefaultsLoginAckPlayerOnLinePlayer();
 void InitDefaultsLoginNotifyLoginPlayerKickImpl();
 void InitDefaultsLoginNotifyLoginPlayerKick();
+void InitDefaultsLoginNotifyLoginInviteTeamImpl();
+void InitDefaultsLoginNotifyLoginInviteTeam();
 void InitDefaultsLoginRequestTeamMakeTeamImpl();
 void InitDefaultsLoginRequestTeamMakeTeam();
 void InitDefaultsLoginRequestTeamInviteTeamImpl();
@@ -121,16 +129,20 @@ inline void InitDefaults() {
   InitDefaultsPlayerRequestLoginInviteTeam();
   InitDefaultsPlayerRequestLoginChangeSlot();
   InitDefaultsPlayerRequestLoginGameStart();
+  InitDefaultsPlayerRequestLoginOnLinePlayer();
   InitDefaultsLoginAckPlayerServerId();
   InitDefaultsLoginAckPlayerLoginResult();
   InitDefaultsLoginNotifyPlayerGameKick();
   InitDefaultsLoginAckPlayerMakeTeam();
   InitDefaultsLoginNotifyPlayerTeamInfo();
   InitDefaultsLoginAckPlayerInviteTeam();
+  InitDefaultsLoginNotifyPlayerInviteTeam();
   InitDefaultsLoginAckPlayerChangeSlot();
   InitDefaultsLoginNotifyPlayerTeamKick();
   InitDefaultsLoginAckPlayerGameStart();
+  InitDefaultsLoginAckPlayerOnLinePlayer();
   InitDefaultsLoginNotifyLoginPlayerKick();
+  InitDefaultsLoginNotifyLoginInviteTeam();
   InitDefaultsLoginRequestTeamMakeTeam();
   InitDefaultsLoginRequestTeamInviteTeam();
   InitDefaultsLoginRequestTeamChangeSlot();
@@ -180,15 +192,24 @@ extern LoginAckPlayerLoginResultDefaultTypeInternal _LoginAckPlayerLoginResult_d
 class LoginAckPlayerMakeTeam;
 class LoginAckPlayerMakeTeamDefaultTypeInternal;
 extern LoginAckPlayerMakeTeamDefaultTypeInternal _LoginAckPlayerMakeTeam_default_instance_;
+class LoginAckPlayerOnLinePlayer;
+class LoginAckPlayerOnLinePlayerDefaultTypeInternal;
+extern LoginAckPlayerOnLinePlayerDefaultTypeInternal _LoginAckPlayerOnLinePlayer_default_instance_;
 class LoginAckPlayerServerId;
 class LoginAckPlayerServerIdDefaultTypeInternal;
 extern LoginAckPlayerServerIdDefaultTypeInternal _LoginAckPlayerServerId_default_instance_;
+class LoginNotifyLoginInviteTeam;
+class LoginNotifyLoginInviteTeamDefaultTypeInternal;
+extern LoginNotifyLoginInviteTeamDefaultTypeInternal _LoginNotifyLoginInviteTeam_default_instance_;
 class LoginNotifyLoginPlayerKick;
 class LoginNotifyLoginPlayerKickDefaultTypeInternal;
 extern LoginNotifyLoginPlayerKickDefaultTypeInternal _LoginNotifyLoginPlayerKick_default_instance_;
 class LoginNotifyPlayerGameKick;
 class LoginNotifyPlayerGameKickDefaultTypeInternal;
 extern LoginNotifyPlayerGameKickDefaultTypeInternal _LoginNotifyPlayerGameKick_default_instance_;
+class LoginNotifyPlayerInviteTeam;
+class LoginNotifyPlayerInviteTeamDefaultTypeInternal;
+extern LoginNotifyPlayerInviteTeamDefaultTypeInternal _LoginNotifyPlayerInviteTeam_default_instance_;
 class LoginNotifyPlayerTeamInfo;
 class LoginNotifyPlayerTeamInfoDefaultTypeInternal;
 extern LoginNotifyPlayerTeamInfoDefaultTypeInternal _LoginNotifyPlayerTeamInfo_default_instance_;
@@ -231,6 +252,9 @@ extern PlayerRequestLoginInviteTeamDefaultTypeInternal _PlayerRequestLoginInvite
 class PlayerRequestLoginMakeTeam;
 class PlayerRequestLoginMakeTeamDefaultTypeInternal;
 extern PlayerRequestLoginMakeTeamDefaultTypeInternal _PlayerRequestLoginMakeTeam_default_instance_;
+class PlayerRequestLoginOnLinePlayer;
+class PlayerRequestLoginOnLinePlayerDefaultTypeInternal;
+extern PlayerRequestLoginOnLinePlayerDefaultTypeInternal _PlayerRequestLoginOnLinePlayer_default_instance_;
 class PlayerRequestLoginServerId;
 class PlayerRequestLoginServerIdDefaultTypeInternal;
 extern PlayerRequestLoginServerIdDefaultTypeInternal _PlayerRequestLoginServerId_default_instance_;
@@ -314,12 +338,13 @@ enum EErrorCode {
   EC_NotLeader = 5,
   EC_TeamHasStart = 6,
   EC_NoGameManagerServer = 7,
+  EC_PlayerNotOnline = 8,
   EErrorCode_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   EErrorCode_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool EErrorCode_IsValid(int value);
 const EErrorCode EErrorCode_MIN = EC_NONE;
-const EErrorCode EErrorCode_MAX = EC_NoGameManagerServer;
+const EErrorCode EErrorCode_MAX = EC_PlayerNotOnline;
 const int EErrorCode_ARRAYSIZE = EErrorCode_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* EErrorCode_descriptor();
@@ -758,24 +783,17 @@ class PlayerRequestLoginInviteTeam : public ::google::protobuf::Message /* @@pro
 
   // accessors -------------------------------------------------------
 
-  // repeated uint64 qw_player_id = 1;
-  int qw_player_id_size() const;
+  // uint64 qw_player_id = 1;
   void clear_qw_player_id();
   static const int kQwPlayerIdFieldNumber = 1;
-  ::google::protobuf::uint64 qw_player_id(int index) const;
-  void set_qw_player_id(int index, ::google::protobuf::uint64 value);
-  void add_qw_player_id(::google::protobuf::uint64 value);
-  const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
-      qw_player_id() const;
-  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
-      mutable_qw_player_id();
+  ::google::protobuf::uint64 qw_player_id() const;
+  void set_qw_player_id(::google::protobuf::uint64 value);
 
   // @@protoc_insertion_point(class_scope:GameProto.PlayerRequestLoginInviteTeam)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > qw_player_id_;
-  mutable int _qw_player_id_cached_byte_size_;
+  ::google::protobuf::uint64 qw_player_id_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
   friend void ::protobuf_web_5fgame_2eproto::InitDefaultsPlayerRequestLoginInviteTeamImpl();
@@ -973,6 +991,98 @@ class PlayerRequestLoginGameStart : public ::google::protobuf::Message /* @@prot
 };
 // -------------------------------------------------------------------
 
+class PlayerRequestLoginOnLinePlayer : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.PlayerRequestLoginOnLinePlayer) */ {
+ public:
+  PlayerRequestLoginOnLinePlayer();
+  virtual ~PlayerRequestLoginOnLinePlayer();
+
+  PlayerRequestLoginOnLinePlayer(const PlayerRequestLoginOnLinePlayer& from);
+
+  inline PlayerRequestLoginOnLinePlayer& operator=(const PlayerRequestLoginOnLinePlayer& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  PlayerRequestLoginOnLinePlayer(PlayerRequestLoginOnLinePlayer&& from) noexcept
+    : PlayerRequestLoginOnLinePlayer() {
+    *this = ::std::move(from);
+  }
+
+  inline PlayerRequestLoginOnLinePlayer& operator=(PlayerRequestLoginOnLinePlayer&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PlayerRequestLoginOnLinePlayer& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const PlayerRequestLoginOnLinePlayer* internal_default_instance() {
+    return reinterpret_cast<const PlayerRequestLoginOnLinePlayer*>(
+               &_PlayerRequestLoginOnLinePlayer_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    6;
+
+  void Swap(PlayerRequestLoginOnLinePlayer* other);
+  friend void swap(PlayerRequestLoginOnLinePlayer& a, PlayerRequestLoginOnLinePlayer& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline PlayerRequestLoginOnLinePlayer* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  PlayerRequestLoginOnLinePlayer* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const PlayerRequestLoginOnLinePlayer& from);
+  void MergeFrom(const PlayerRequestLoginOnLinePlayer& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(PlayerRequestLoginOnLinePlayer* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:GameProto.PlayerRequestLoginOnLinePlayer)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsPlayerRequestLoginOnLinePlayerImpl();
+};
+// -------------------------------------------------------------------
+
 class LoginAckPlayerServerId : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.LoginAckPlayerServerId) */ {
  public:
   LoginAckPlayerServerId();
@@ -1008,7 +1118,7 @@ class LoginAckPlayerServerId : public ::google::protobuf::Message /* @@protoc_in
                &_LoginAckPlayerServerId_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    6;
+    7;
 
   void Swap(LoginAckPlayerServerId* other);
   friend void swap(LoginAckPlayerServerId& a, LoginAckPlayerServerId& b) {
@@ -1114,7 +1224,7 @@ class LoginAckPlayerLoginResult : public ::google::protobuf::Message /* @@protoc
                &_LoginAckPlayerLoginResult_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    7;
+    8;
 
   void Swap(LoginAckPlayerLoginResult* other);
   friend void swap(LoginAckPlayerLoginResult& a, LoginAckPlayerLoginResult& b) {
@@ -1213,7 +1323,7 @@ class LoginNotifyPlayerGameKick : public ::google::protobuf::Message /* @@protoc
                &_LoginNotifyPlayerGameKick_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    8;
+    9;
 
   void Swap(LoginNotifyPlayerGameKick* other);
   friend void swap(LoginNotifyPlayerGameKick& a, LoginNotifyPlayerGameKick& b) {
@@ -1312,7 +1422,7 @@ class LoginAckPlayerMakeTeam : public ::google::protobuf::Message /* @@protoc_in
                &_LoginAckPlayerMakeTeam_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    9;
+    10;
 
   void Swap(LoginAckPlayerMakeTeam* other);
   friend void swap(LoginAckPlayerMakeTeam& a, LoginAckPlayerMakeTeam& b) {
@@ -1425,7 +1535,7 @@ class LoginNotifyPlayerTeamInfo : public ::google::protobuf::Message /* @@protoc
                &_LoginNotifyPlayerTeamInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    10;
+    11;
 
   void Swap(LoginNotifyPlayerTeamInfo* other);
   friend void swap(LoginNotifyPlayerTeamInfo& a, LoginNotifyPlayerTeamInfo& b) {
@@ -1530,7 +1640,7 @@ class LoginAckPlayerInviteTeam : public ::google::protobuf::Message /* @@protoc_
                &_LoginAckPlayerInviteTeam_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    11;
+    12;
 
   void Swap(LoginAckPlayerInviteTeam* other);
   friend void swap(LoginAckPlayerInviteTeam& a, LoginAckPlayerInviteTeam& b) {
@@ -1594,6 +1704,119 @@ class LoginAckPlayerInviteTeam : public ::google::protobuf::Message /* @@protoc_
 };
 // -------------------------------------------------------------------
 
+class LoginNotifyPlayerInviteTeam : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.LoginNotifyPlayerInviteTeam) */ {
+ public:
+  LoginNotifyPlayerInviteTeam();
+  virtual ~LoginNotifyPlayerInviteTeam();
+
+  LoginNotifyPlayerInviteTeam(const LoginNotifyPlayerInviteTeam& from);
+
+  inline LoginNotifyPlayerInviteTeam& operator=(const LoginNotifyPlayerInviteTeam& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  LoginNotifyPlayerInviteTeam(LoginNotifyPlayerInviteTeam&& from) noexcept
+    : LoginNotifyPlayerInviteTeam() {
+    *this = ::std::move(from);
+  }
+
+  inline LoginNotifyPlayerInviteTeam& operator=(LoginNotifyPlayerInviteTeam&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const LoginNotifyPlayerInviteTeam& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const LoginNotifyPlayerInviteTeam* internal_default_instance() {
+    return reinterpret_cast<const LoginNotifyPlayerInviteTeam*>(
+               &_LoginNotifyPlayerInviteTeam_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    13;
+
+  void Swap(LoginNotifyPlayerInviteTeam* other);
+  friend void swap(LoginNotifyPlayerInviteTeam& a, LoginNotifyPlayerInviteTeam& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline LoginNotifyPlayerInviteTeam* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  LoginNotifyPlayerInviteTeam* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const LoginNotifyPlayerInviteTeam& from);
+  void MergeFrom(const LoginNotifyPlayerInviteTeam& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(LoginNotifyPlayerInviteTeam* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // uint64 qw_player_id = 1;
+  void clear_qw_player_id();
+  static const int kQwPlayerIdFieldNumber = 1;
+  ::google::protobuf::uint64 qw_player_id() const;
+  void set_qw_player_id(::google::protobuf::uint64 value);
+
+  // uint64 qw_team_id = 2;
+  void clear_qw_team_id();
+  static const int kQwTeamIdFieldNumber = 2;
+  ::google::protobuf::uint64 qw_team_id() const;
+  void set_qw_team_id(::google::protobuf::uint64 value);
+
+  // uint32 dw_team_server_id = 3;
+  void clear_dw_team_server_id();
+  static const int kDwTeamServerIdFieldNumber = 3;
+  ::google::protobuf::uint32 dw_team_server_id() const;
+  void set_dw_team_server_id(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.LoginNotifyPlayerInviteTeam)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint64 qw_player_id_;
+  ::google::protobuf::uint64 qw_team_id_;
+  ::google::protobuf::uint32 dw_team_server_id_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsLoginNotifyPlayerInviteTeamImpl();
+};
+// -------------------------------------------------------------------
+
 class LoginAckPlayerChangeSlot : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.LoginAckPlayerChangeSlot) */ {
  public:
   LoginAckPlayerChangeSlot();
@@ -1629,7 +1852,7 @@ class LoginAckPlayerChangeSlot : public ::google::protobuf::Message /* @@protoc_
                &_LoginAckPlayerChangeSlot_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    12;
+    14;
 
   void Swap(LoginAckPlayerChangeSlot* other);
   friend void swap(LoginAckPlayerChangeSlot& a, LoginAckPlayerChangeSlot& b) {
@@ -1728,7 +1951,7 @@ class LoginNotifyPlayerTeamKick : public ::google::protobuf::Message /* @@protoc
                &_LoginNotifyPlayerTeamKick_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    13;
+    15;
 
   void Swap(LoginNotifyPlayerTeamKick* other);
   friend void swap(LoginNotifyPlayerTeamKick& a, LoginNotifyPlayerTeamKick& b) {
@@ -1820,7 +2043,7 @@ class LoginAckPlayerGameStart : public ::google::protobuf::Message /* @@protoc_i
                &_LoginAckPlayerGameStart_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    14;
+    16;
 
   void Swap(LoginAckPlayerGameStart* other);
   friend void swap(LoginAckPlayerGameStart& a, LoginAckPlayerGameStart& b) {
@@ -1927,6 +2150,119 @@ class LoginAckPlayerGameStart : public ::google::protobuf::Message /* @@protoc_i
 };
 // -------------------------------------------------------------------
 
+class LoginAckPlayerOnLinePlayer : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.LoginAckPlayerOnLinePlayer) */ {
+ public:
+  LoginAckPlayerOnLinePlayer();
+  virtual ~LoginAckPlayerOnLinePlayer();
+
+  LoginAckPlayerOnLinePlayer(const LoginAckPlayerOnLinePlayer& from);
+
+  inline LoginAckPlayerOnLinePlayer& operator=(const LoginAckPlayerOnLinePlayer& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  LoginAckPlayerOnLinePlayer(LoginAckPlayerOnLinePlayer&& from) noexcept
+    : LoginAckPlayerOnLinePlayer() {
+    *this = ::std::move(from);
+  }
+
+  inline LoginAckPlayerOnLinePlayer& operator=(LoginAckPlayerOnLinePlayer&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const LoginAckPlayerOnLinePlayer& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const LoginAckPlayerOnLinePlayer* internal_default_instance() {
+    return reinterpret_cast<const LoginAckPlayerOnLinePlayer*>(
+               &_LoginAckPlayerOnLinePlayer_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    17;
+
+  void Swap(LoginAckPlayerOnLinePlayer* other);
+  friend void swap(LoginAckPlayerOnLinePlayer& a, LoginAckPlayerOnLinePlayer& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline LoginAckPlayerOnLinePlayer* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  LoginAckPlayerOnLinePlayer* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const LoginAckPlayerOnLinePlayer& from);
+  void MergeFrom(const LoginAckPlayerOnLinePlayer& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(LoginAckPlayerOnLinePlayer* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // repeated uint64 qw_player_id = 2;
+  int qw_player_id_size() const;
+  void clear_qw_player_id();
+  static const int kQwPlayerIdFieldNumber = 2;
+  ::google::protobuf::uint64 qw_player_id(int index) const;
+  void set_qw_player_id(int index, ::google::protobuf::uint64 value);
+  void add_qw_player_id(::google::protobuf::uint64 value);
+  const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+      qw_player_id() const;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+      mutable_qw_player_id();
+
+  // uint32 dw_result = 1;
+  void clear_dw_result();
+  static const int kDwResultFieldNumber = 1;
+  ::google::protobuf::uint32 dw_result() const;
+  void set_dw_result(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.LoginAckPlayerOnLinePlayer)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::RepeatedField< ::google::protobuf::uint64 > qw_player_id_;
+  mutable int _qw_player_id_cached_byte_size_;
+  ::google::protobuf::uint32 dw_result_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsLoginAckPlayerOnLinePlayerImpl();
+};
+// -------------------------------------------------------------------
+
 class LoginNotifyLoginPlayerKick : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.LoginNotifyLoginPlayerKick) */ {
  public:
   LoginNotifyLoginPlayerKick();
@@ -1962,7 +2298,7 @@ class LoginNotifyLoginPlayerKick : public ::google::protobuf::Message /* @@proto
                &_LoginNotifyLoginPlayerKick_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    15;
+    18;
 
   void Swap(LoginNotifyLoginPlayerKick* other);
   friend void swap(LoginNotifyLoginPlayerKick& a, LoginNotifyLoginPlayerKick& b) {
@@ -2026,6 +2362,126 @@ class LoginNotifyLoginPlayerKick : public ::google::protobuf::Message /* @@proto
 };
 // -------------------------------------------------------------------
 
+class LoginNotifyLoginInviteTeam : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.LoginNotifyLoginInviteTeam) */ {
+ public:
+  LoginNotifyLoginInviteTeam();
+  virtual ~LoginNotifyLoginInviteTeam();
+
+  LoginNotifyLoginInviteTeam(const LoginNotifyLoginInviteTeam& from);
+
+  inline LoginNotifyLoginInviteTeam& operator=(const LoginNotifyLoginInviteTeam& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  LoginNotifyLoginInviteTeam(LoginNotifyLoginInviteTeam&& from) noexcept
+    : LoginNotifyLoginInviteTeam() {
+    *this = ::std::move(from);
+  }
+
+  inline LoginNotifyLoginInviteTeam& operator=(LoginNotifyLoginInviteTeam&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const LoginNotifyLoginInviteTeam& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const LoginNotifyLoginInviteTeam* internal_default_instance() {
+    return reinterpret_cast<const LoginNotifyLoginInviteTeam*>(
+               &_LoginNotifyLoginInviteTeam_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    19;
+
+  void Swap(LoginNotifyLoginInviteTeam* other);
+  friend void swap(LoginNotifyLoginInviteTeam& a, LoginNotifyLoginInviteTeam& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline LoginNotifyLoginInviteTeam* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  LoginNotifyLoginInviteTeam* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const LoginNotifyLoginInviteTeam& from);
+  void MergeFrom(const LoginNotifyLoginInviteTeam& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(LoginNotifyLoginInviteTeam* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // uint64 qw_invite_id = 1;
+  void clear_qw_invite_id();
+  static const int kQwInviteIdFieldNumber = 1;
+  ::google::protobuf::uint64 qw_invite_id() const;
+  void set_qw_invite_id(::google::protobuf::uint64 value);
+
+  // uint64 qw_invitee_id = 2;
+  void clear_qw_invitee_id();
+  static const int kQwInviteeIdFieldNumber = 2;
+  ::google::protobuf::uint64 qw_invitee_id() const;
+  void set_qw_invitee_id(::google::protobuf::uint64 value);
+
+  // uint64 qw_team_id = 3;
+  void clear_qw_team_id();
+  static const int kQwTeamIdFieldNumber = 3;
+  ::google::protobuf::uint64 qw_team_id() const;
+  void set_qw_team_id(::google::protobuf::uint64 value);
+
+  // uint32 dw_team_server_id = 4;
+  void clear_dw_team_server_id();
+  static const int kDwTeamServerIdFieldNumber = 4;
+  ::google::protobuf::uint32 dw_team_server_id() const;
+  void set_dw_team_server_id(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.LoginNotifyLoginInviteTeam)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint64 qw_invite_id_;
+  ::google::protobuf::uint64 qw_invitee_id_;
+  ::google::protobuf::uint64 qw_team_id_;
+  ::google::protobuf::uint32 dw_team_server_id_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsLoginNotifyLoginInviteTeamImpl();
+};
+// -------------------------------------------------------------------
+
 class LoginRequestTeamMakeTeam : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.LoginRequestTeamMakeTeam) */ {
  public:
   LoginRequestTeamMakeTeam();
@@ -2061,7 +2517,7 @@ class LoginRequestTeamMakeTeam : public ::google::protobuf::Message /* @@protoc_
                &_LoginRequestTeamMakeTeam_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    16;
+    20;
 
   void Swap(LoginRequestTeamMakeTeam* other);
   friend void swap(LoginRequestTeamMakeTeam& a, LoginRequestTeamMakeTeam& b) {
@@ -2170,7 +2626,7 @@ class LoginRequestTeamInviteTeam : public ::google::protobuf::Message /* @@proto
                &_LoginRequestTeamInviteTeam_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    17;
+    21;
 
   void Swap(LoginRequestTeamInviteTeam* other);
   friend void swap(LoginRequestTeamInviteTeam& a, LoginRequestTeamInviteTeam& b) {
@@ -2276,7 +2732,7 @@ class LoginRequestTeamChangeSlot : public ::google::protobuf::Message /* @@proto
                &_LoginRequestTeamChangeSlot_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    18;
+    22;
 
   void Swap(LoginRequestTeamChangeSlot* other);
   friend void swap(LoginRequestTeamChangeSlot& a, LoginRequestTeamChangeSlot& b) {
@@ -2382,7 +2838,7 @@ class LoginRequestTeamKickPlayer : public ::google::protobuf::Message /* @@proto
                &_LoginRequestTeamKickPlayer_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    19;
+    23;
 
   void Swap(LoginRequestTeamKickPlayer* other);
   friend void swap(LoginRequestTeamKickPlayer& a, LoginRequestTeamKickPlayer& b) {
@@ -2488,7 +2944,7 @@ class LoginRequestTeamGameStart : public ::google::protobuf::Message /* @@protoc
                &_LoginRequestTeamGameStart_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    20;
+    24;
 
   void Swap(LoginRequestTeamGameStart* other);
   friend void swap(LoginRequestTeamGameStart& a, LoginRequestTeamGameStart& b) {
@@ -2594,7 +3050,7 @@ class TeamAckLoginMakeTeam : public ::google::protobuf::Message /* @@protoc_inse
                &_TeamAckLoginMakeTeam_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    21;
+    25;
 
   void Swap(TeamAckLoginMakeTeam* other);
   friend void swap(TeamAckLoginMakeTeam& a, TeamAckLoginMakeTeam& b) {
@@ -2714,7 +3170,7 @@ class TeamNotifyLoginTeamInfo : public ::google::protobuf::Message /* @@protoc_i
                &_TeamNotifyLoginTeamInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    22;
+    26;
 
   void Swap(TeamNotifyLoginTeamInfo* other);
   friend void swap(TeamNotifyLoginTeamInfo& a, TeamNotifyLoginTeamInfo& b) {
@@ -2819,7 +3275,7 @@ class TeamAckLoginInviteTeam : public ::google::protobuf::Message /* @@protoc_in
                &_TeamAckLoginInviteTeam_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    23;
+    27;
 
   void Swap(TeamAckLoginInviteTeam* other);
   friend void swap(TeamAckLoginInviteTeam& a, TeamAckLoginInviteTeam& b) {
@@ -2925,7 +3381,7 @@ class TeamAckLoginChangeSlot : public ::google::protobuf::Message /* @@protoc_in
                &_TeamAckLoginChangeSlot_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    24;
+    28;
 
   void Swap(TeamAckLoginChangeSlot* other);
   friend void swap(TeamAckLoginChangeSlot& a, TeamAckLoginChangeSlot& b) {
@@ -3031,7 +3487,7 @@ class TeamAckLoginKickPlayer : public ::google::protobuf::Message /* @@protoc_in
                &_TeamAckLoginKickPlayer_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    25;
+    29;
 
   void Swap(TeamAckLoginKickPlayer* other);
   friend void swap(TeamAckLoginKickPlayer& a, TeamAckLoginKickPlayer& b) {
@@ -3137,7 +3593,7 @@ class TeamAckLoginGameStart : public ::google::protobuf::Message /* @@protoc_ins
                &_TeamAckLoginGameStart_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    26;
+    30;
 
   void Swap(TeamAckLoginGameStart* other);
   friend void swap(TeamAckLoginGameStart& a, TeamAckLoginGameStart& b) {
@@ -3286,7 +3742,7 @@ class TeamRequestGameManagerGameStart : public ::google::protobuf::Message /* @@
                &_TeamRequestGameManagerGameStart_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    27;
+    31;
 
   void Swap(TeamRequestGameManagerGameStart* other);
   friend void swap(TeamRequestGameManagerGameStart& a, TeamRequestGameManagerGameStart& b) {
@@ -3399,7 +3855,7 @@ class GameManagerAckTeamGameStart : public ::google::protobuf::Message /* @@prot
                &_GameManagerAckTeamGameStart_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    28;
+    32;
 
   void Swap(GameManagerAckTeamGameStart* other);
   friend void swap(GameManagerAckTeamGameStart& a, GameManagerAckTeamGameStart& b) {
@@ -3541,7 +3997,7 @@ class GameNotifyGameManagerInfo : public ::google::protobuf::Message /* @@protoc
                &_GameNotifyGameManagerInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    29;
+    33;
 
   void Swap(GameNotifyGameManagerInfo* other);
   friend void swap(GameNotifyGameManagerInfo& a, GameNotifyGameManagerInfo& b) {
@@ -3668,7 +4124,7 @@ class GameManagerAckGameInfoResult : public ::google::protobuf::Message /* @@pro
                &_GameManagerAckGameInfoResult_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    30;
+    34;
 
   void Swap(GameManagerAckGameInfoResult* other);
   friend void swap(GameManagerAckGameInfoResult& a, GameManagerAckGameInfoResult& b) {
@@ -3767,7 +4223,7 @@ class PlayerRequestGameManagerInfo : public ::google::protobuf::Message /* @@pro
                &_PlayerRequestGameManagerInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    31;
+    35;
 
   void Swap(PlayerRequestGameManagerInfo* other);
   friend void swap(PlayerRequestGameManagerInfo& a, PlayerRequestGameManagerInfo& b) {
@@ -3866,7 +4322,7 @@ class GameManagerAckPlayerInfoResult : public ::google::protobuf::Message /* @@p
                &_GameManagerAckPlayerInfoResult_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    32;
+    36;
 
   void Swap(GameManagerAckPlayerInfoResult* other);
   friend void swap(GameManagerAckPlayerInfoResult& a, GameManagerAckPlayerInfoResult& b) {
@@ -3979,7 +4435,7 @@ class PlayerRequestGameTest : public ::google::protobuf::Message /* @@protoc_ins
                &_PlayerRequestGameTest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    33;
+    37;
 
   void Swap(PlayerRequestGameTest* other);
   friend void swap(PlayerRequestGameTest& a, PlayerRequestGameTest& b) {
@@ -4086,7 +4542,7 @@ class ServerInfo : public ::google::protobuf::Message /* @@protoc_insertion_poin
                &_ServerInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    34;
+    38;
 
   void Swap(ServerInfo* other);
   friend void swap(ServerInfo& a, ServerInfo& b) {
@@ -4408,34 +4864,18 @@ inline void PlayerRequestLogin::set_allocated_sz_token(::std::string* sz_token) 
 
 // PlayerRequestLoginInviteTeam
 
-// repeated uint64 qw_player_id = 1;
-inline int PlayerRequestLoginInviteTeam::qw_player_id_size() const {
-  return qw_player_id_.size();
-}
+// uint64 qw_player_id = 1;
 inline void PlayerRequestLoginInviteTeam::clear_qw_player_id() {
-  qw_player_id_.Clear();
+  qw_player_id_ = GOOGLE_ULONGLONG(0);
 }
-inline ::google::protobuf::uint64 PlayerRequestLoginInviteTeam::qw_player_id(int index) const {
+inline ::google::protobuf::uint64 PlayerRequestLoginInviteTeam::qw_player_id() const {
   // @@protoc_insertion_point(field_get:GameProto.PlayerRequestLoginInviteTeam.qw_player_id)
-  return qw_player_id_.Get(index);
-}
-inline void PlayerRequestLoginInviteTeam::set_qw_player_id(int index, ::google::protobuf::uint64 value) {
-  qw_player_id_.Set(index, value);
-  // @@protoc_insertion_point(field_set:GameProto.PlayerRequestLoginInviteTeam.qw_player_id)
-}
-inline void PlayerRequestLoginInviteTeam::add_qw_player_id(::google::protobuf::uint64 value) {
-  qw_player_id_.Add(value);
-  // @@protoc_insertion_point(field_add:GameProto.PlayerRequestLoginInviteTeam.qw_player_id)
-}
-inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
-PlayerRequestLoginInviteTeam::qw_player_id() const {
-  // @@protoc_insertion_point(field_list:GameProto.PlayerRequestLoginInviteTeam.qw_player_id)
   return qw_player_id_;
 }
-inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
-PlayerRequestLoginInviteTeam::mutable_qw_player_id() {
-  // @@protoc_insertion_point(field_mutable_list:GameProto.PlayerRequestLoginInviteTeam.qw_player_id)
-  return &qw_player_id_;
+inline void PlayerRequestLoginInviteTeam::set_qw_player_id(::google::protobuf::uint64 value) {
+  
+  qw_player_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.PlayerRequestLoginInviteTeam.qw_player_id)
 }
 
 // -------------------------------------------------------------------
@@ -4459,6 +4899,10 @@ inline void PlayerRequestLoginChangeSlot::set_dw_slot_id(::google::protobuf::uin
 // -------------------------------------------------------------------
 
 // PlayerRequestLoginGameStart
+
+// -------------------------------------------------------------------
+
+// PlayerRequestLoginOnLinePlayer
 
 // -------------------------------------------------------------------
 
@@ -4625,6 +5069,52 @@ inline void LoginAckPlayerInviteTeam::set_dw_result(::google::protobuf::uint32 v
 
 // -------------------------------------------------------------------
 
+// LoginNotifyPlayerInviteTeam
+
+// uint64 qw_player_id = 1;
+inline void LoginNotifyPlayerInviteTeam::clear_qw_player_id() {
+  qw_player_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 LoginNotifyPlayerInviteTeam::qw_player_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.LoginNotifyPlayerInviteTeam.qw_player_id)
+  return qw_player_id_;
+}
+inline void LoginNotifyPlayerInviteTeam::set_qw_player_id(::google::protobuf::uint64 value) {
+  
+  qw_player_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.LoginNotifyPlayerInviteTeam.qw_player_id)
+}
+
+// uint64 qw_team_id = 2;
+inline void LoginNotifyPlayerInviteTeam::clear_qw_team_id() {
+  qw_team_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 LoginNotifyPlayerInviteTeam::qw_team_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.LoginNotifyPlayerInviteTeam.qw_team_id)
+  return qw_team_id_;
+}
+inline void LoginNotifyPlayerInviteTeam::set_qw_team_id(::google::protobuf::uint64 value) {
+  
+  qw_team_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.LoginNotifyPlayerInviteTeam.qw_team_id)
+}
+
+// uint32 dw_team_server_id = 3;
+inline void LoginNotifyPlayerInviteTeam::clear_dw_team_server_id() {
+  dw_team_server_id_ = 0u;
+}
+inline ::google::protobuf::uint32 LoginNotifyPlayerInviteTeam::dw_team_server_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.LoginNotifyPlayerInviteTeam.dw_team_server_id)
+  return dw_team_server_id_;
+}
+inline void LoginNotifyPlayerInviteTeam::set_dw_team_server_id(::google::protobuf::uint32 value) {
+  
+  dw_team_server_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.LoginNotifyPlayerInviteTeam.dw_team_server_id)
+}
+
+// -------------------------------------------------------------------
+
 // LoginAckPlayerChangeSlot
 
 // uint32 dw_result = 1;
@@ -4774,6 +5264,54 @@ inline void LoginAckPlayerGameStart::set_qw_team_id(::google::protobuf::uint64 v
 
 // -------------------------------------------------------------------
 
+// LoginAckPlayerOnLinePlayer
+
+// uint32 dw_result = 1;
+inline void LoginAckPlayerOnLinePlayer::clear_dw_result() {
+  dw_result_ = 0u;
+}
+inline ::google::protobuf::uint32 LoginAckPlayerOnLinePlayer::dw_result() const {
+  // @@protoc_insertion_point(field_get:GameProto.LoginAckPlayerOnLinePlayer.dw_result)
+  return dw_result_;
+}
+inline void LoginAckPlayerOnLinePlayer::set_dw_result(::google::protobuf::uint32 value) {
+  
+  dw_result_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.LoginAckPlayerOnLinePlayer.dw_result)
+}
+
+// repeated uint64 qw_player_id = 2;
+inline int LoginAckPlayerOnLinePlayer::qw_player_id_size() const {
+  return qw_player_id_.size();
+}
+inline void LoginAckPlayerOnLinePlayer::clear_qw_player_id() {
+  qw_player_id_.Clear();
+}
+inline ::google::protobuf::uint64 LoginAckPlayerOnLinePlayer::qw_player_id(int index) const {
+  // @@protoc_insertion_point(field_get:GameProto.LoginAckPlayerOnLinePlayer.qw_player_id)
+  return qw_player_id_.Get(index);
+}
+inline void LoginAckPlayerOnLinePlayer::set_qw_player_id(int index, ::google::protobuf::uint64 value) {
+  qw_player_id_.Set(index, value);
+  // @@protoc_insertion_point(field_set:GameProto.LoginAckPlayerOnLinePlayer.qw_player_id)
+}
+inline void LoginAckPlayerOnLinePlayer::add_qw_player_id(::google::protobuf::uint64 value) {
+  qw_player_id_.Add(value);
+  // @@protoc_insertion_point(field_add:GameProto.LoginAckPlayerOnLinePlayer.qw_player_id)
+}
+inline const ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >&
+LoginAckPlayerOnLinePlayer::qw_player_id() const {
+  // @@protoc_insertion_point(field_list:GameProto.LoginAckPlayerOnLinePlayer.qw_player_id)
+  return qw_player_id_;
+}
+inline ::google::protobuf::RepeatedField< ::google::protobuf::uint64 >*
+LoginAckPlayerOnLinePlayer::mutable_qw_player_id() {
+  // @@protoc_insertion_point(field_mutable_list:GameProto.LoginAckPlayerOnLinePlayer.qw_player_id)
+  return &qw_player_id_;
+}
+
+// -------------------------------------------------------------------
+
 // LoginNotifyLoginPlayerKick
 
 // uint64 qw_player_id = 1;
@@ -4788,6 +5326,66 @@ inline void LoginNotifyLoginPlayerKick::set_qw_player_id(::google::protobuf::uin
   
   qw_player_id_ = value;
   // @@protoc_insertion_point(field_set:GameProto.LoginNotifyLoginPlayerKick.qw_player_id)
+}
+
+// -------------------------------------------------------------------
+
+// LoginNotifyLoginInviteTeam
+
+// uint64 qw_invite_id = 1;
+inline void LoginNotifyLoginInviteTeam::clear_qw_invite_id() {
+  qw_invite_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 LoginNotifyLoginInviteTeam::qw_invite_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.LoginNotifyLoginInviteTeam.qw_invite_id)
+  return qw_invite_id_;
+}
+inline void LoginNotifyLoginInviteTeam::set_qw_invite_id(::google::protobuf::uint64 value) {
+  
+  qw_invite_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.LoginNotifyLoginInviteTeam.qw_invite_id)
+}
+
+// uint64 qw_invitee_id = 2;
+inline void LoginNotifyLoginInviteTeam::clear_qw_invitee_id() {
+  qw_invitee_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 LoginNotifyLoginInviteTeam::qw_invitee_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.LoginNotifyLoginInviteTeam.qw_invitee_id)
+  return qw_invitee_id_;
+}
+inline void LoginNotifyLoginInviteTeam::set_qw_invitee_id(::google::protobuf::uint64 value) {
+  
+  qw_invitee_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.LoginNotifyLoginInviteTeam.qw_invitee_id)
+}
+
+// uint64 qw_team_id = 3;
+inline void LoginNotifyLoginInviteTeam::clear_qw_team_id() {
+  qw_team_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 LoginNotifyLoginInviteTeam::qw_team_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.LoginNotifyLoginInviteTeam.qw_team_id)
+  return qw_team_id_;
+}
+inline void LoginNotifyLoginInviteTeam::set_qw_team_id(::google::protobuf::uint64 value) {
+  
+  qw_team_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.LoginNotifyLoginInviteTeam.qw_team_id)
+}
+
+// uint32 dw_team_server_id = 4;
+inline void LoginNotifyLoginInviteTeam::clear_dw_team_server_id() {
+  dw_team_server_id_ = 0u;
+}
+inline ::google::protobuf::uint32 LoginNotifyLoginInviteTeam::dw_team_server_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.LoginNotifyLoginInviteTeam.dw_team_server_id)
+  return dw_team_server_id_;
+}
+inline void LoginNotifyLoginInviteTeam::set_dw_team_server_id(::google::protobuf::uint32 value) {
+  
+  dw_team_server_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.LoginNotifyLoginInviteTeam.dw_team_server_id)
 }
 
 // -------------------------------------------------------------------
@@ -5812,6 +6410,14 @@ inline void ServerInfo::set_dw_login_port(::google::protobuf::uint32 value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

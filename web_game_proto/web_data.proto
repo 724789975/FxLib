@@ -16,3 +16,9 @@ message TeamRoleData
 	uint32 dw_slot_id = 2;
 	uint32 dw_server_id = 3;
 }
+
+message OnlineRoleData
+{
+	RoleData role_data = 1;
+	uint32 dw_server_id = 2;
+}

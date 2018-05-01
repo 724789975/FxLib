@@ -30,6 +30,7 @@ public:
 
 	virtual bool		OnServerInfo(CLoginSession& refSession, google::protobuf::Message& refMsg);
 	virtual bool		OnLoginNotifyLoginPlayerKick(CLoginSession& refSession, google::protobuf::Message& refMsg);
+	virtual bool		OnLoginNotifyLoginInviteTeam(CLoginSession& refSession, google::protobuf::Message& refMsg);
 
 protected:
 	unsigned int m_dwServerId;

@@ -28,12 +28,15 @@ namespace GameProto {
             "X3BsYXllcl9pZBgBIAEoBBIUCgxzel9uaWNrX25hbWUYAiABKAkSEQoJc3pf",
             "YXZhdGFyGAMgASgJEg4KBmR3X3NleBgEIAEoDSJgCgxUZWFtUm9sZURhdGES",
             "JgoJcm9sZV9kYXRhGAEgASgLMhMuR2FtZVByb3RvLlJvbGVEYXRhEhIKCmR3",
-            "X3Nsb3RfaWQYAiABKA0SFAoMZHdfc2VydmVyX2lkGAMgASgNYgZwcm90bzM="));
+            "X3Nsb3RfaWQYAiABKA0SFAoMZHdfc2VydmVyX2lkGAMgASgNIk4KDk9ubGlu",
+            "ZVJvbGVEYXRhEiYKCXJvbGVfZGF0YRgBIAEoCzITLkdhbWVQcm90by5Sb2xl",
+            "RGF0YRIUCgxkd19zZXJ2ZXJfaWQYAiABKA1iBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.RoleData), global::GameProto.RoleData.Parser, new[]{ "QwPlayerId", "SzNickName", "SzAvatar", "DwSex" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.TeamRoleData), global::GameProto.TeamRoleData.Parser, new[]{ "RoleData", "DwSlotId", "DwServerId" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.TeamRoleData), global::GameProto.TeamRoleData.Parser, new[]{ "RoleData", "DwSlotId", "DwServerId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.OnlineRoleData), global::GameProto.OnlineRoleData.Parser, new[]{ "RoleData", "DwServerId" }, null, null, null)
           }));
     }
     #endregion
@@ -435,6 +438,169 @@ namespace GameProto {
             break;
           }
           case 24: {
+            DwServerId = input.ReadUInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class OnlineRoleData : pb::IMessage<OnlineRoleData> {
+    private static readonly pb::MessageParser<OnlineRoleData> _parser = new pb::MessageParser<OnlineRoleData>(() => new OnlineRoleData());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<OnlineRoleData> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProto.WebDataReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public OnlineRoleData() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public OnlineRoleData(OnlineRoleData other) : this() {
+      RoleData = other.roleData_ != null ? other.RoleData.Clone() : null;
+      dwServerId_ = other.dwServerId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public OnlineRoleData Clone() {
+      return new OnlineRoleData(this);
+    }
+
+    /// <summary>Field number for the "role_data" field.</summary>
+    public const int RoleDataFieldNumber = 1;
+    private global::GameProto.RoleData roleData_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProto.RoleData RoleData {
+      get { return roleData_; }
+      set {
+        roleData_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "dw_server_id" field.</summary>
+    public const int DwServerIdFieldNumber = 2;
+    private uint dwServerId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint DwServerId {
+      get { return dwServerId_; }
+      set {
+        dwServerId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as OnlineRoleData);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(OnlineRoleData other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(RoleData, other.RoleData)) return false;
+      if (DwServerId != other.DwServerId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (roleData_ != null) hash ^= RoleData.GetHashCode();
+      if (DwServerId != 0) hash ^= DwServerId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (roleData_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(RoleData);
+      }
+      if (DwServerId != 0) {
+        output.WriteRawTag(16);
+        output.WriteUInt32(DwServerId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (roleData_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(RoleData);
+      }
+      if (DwServerId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwServerId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(OnlineRoleData other) {
+      if (other == null) {
+        return;
+      }
+      if (other.roleData_ != null) {
+        if (roleData_ == null) {
+          roleData_ = new global::GameProto.RoleData();
+        }
+        RoleData.MergeFrom(other.RoleData);
+      }
+      if (other.DwServerId != 0) {
+        DwServerId = other.DwServerId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (roleData_ == null) {
+              roleData_ = new global::GameProto.RoleData();
+            }
+            input.ReadMessage(roleData_);
+            break;
+          }
+          case 16: {
             DwServerId = input.ReadUInt32();
             break;
           }

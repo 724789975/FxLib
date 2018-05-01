@@ -42,7 +42,10 @@ public class LoginControler: MonoBehaviour
 		m_pSession.RegistMessage("GameProto.LoginAckPlayerServerId", OnLoginAckPlayerServerId);
 		m_pSession.RegistMessage("GameProto.LoginAckPlayerLoginResult", OnLoginAckPlayerLoginResult);
 		m_pSession.RegistMessage("GameProto.LoginAckPlayerMakeTeam", OnLoginAckPlayerMakeTeam);
+		m_pSession.RegistMessage("GameProto.LoginAckPlayerInviteTeam", OnLoginAckPlayerInviteTeam);
 		m_pSession.RegistMessage("GameProto.LoginAckPlayerGameStart", OnLoginAckPlayerGameStart);
+		m_pSession.RegistMessage("GameProto.LoginNotifyPlayerGameKick", OnLoginNotifyPlayerGameKick);
+		m_pSession.RegistMessage("GameProto.LoginAckPlayerOnLinePlayer", OnLoginAckPlayerOnLinePlayer);
 	}
 
 	// Update is called once per frame
@@ -67,12 +70,10 @@ public class LoginControler: MonoBehaviour
 
 	public void OnClose()
 	{
-		m_textText.text = "on close!!!!";
 		H5Helper.H5AlertString("session close");
 	}
 	public void OnError(uint dwErrorNo)
 	{
-		m_textText.text = "on error " + dwErrorNo.ToString() + "!!!!!!!";
 		H5Helper.H5AlertString("session error " + dwErrorNo.ToString());
 	}
 
@@ -101,6 +102,20 @@ public class LoginControler: MonoBehaviour
 		byte[] pData = new byte[1024];
 		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
 		pStream.WriteString("GameProto.PlayerRequestLoginGameStart");
+		byte[] pProto = new byte[oTeam.CalculateSize()];
+		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
+		oTeam.WriteTo(oStream);
+		pStream.WriteData(pProto, (uint)pProto.Length);
+
+		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+	}
+
+	public void OnlinePlayers()
+	{
+		GameProto.PlayerRequestLoginOnLinePlayer oTeam = new GameProto.PlayerRequestLoginOnLinePlayer();
+		byte[] pData = new byte[1024];
+		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
+		pStream.WriteString("GameProto.PlayerRequestLoginOnLinePlayer");
 		byte[] pProto = new byte[oTeam.CalculateSize()];
 		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
 		oTeam.WriteTo(oStream);
@@ -167,6 +182,42 @@ public class LoginControler: MonoBehaviour
 		H5Manager.Instance().ConnectGame(oRet.SzListenIp, (ushort)oRet.DwPlayerPort);
 	}
 
+	public void OnLoginAckPlayerInviteTeam(byte[] pBuf)
+	{
+		GameProto.LoginAckPlayerInviteTeam oRet = GameProto.LoginAckPlayerInviteTeam.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			H5Helper.H5LogStr("OnLoginAckPlayerInviteTeam error parse");
+			return;
+		}
+		H5Helper.H5LogStr(oRet.ToString());
+	}
+	public void OnLoginNotifyPlayerGameKick(byte[] pBuf)
+	{
+		GameProto.LoginNotifyPlayerGameKick oRet = GameProto.LoginNotifyPlayerGameKick.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			H5Helper.H5LogStr("OnLoginNotifyPlayerGameKick error parse");
+			return;
+		}
+		H5Helper.H5LogStr(oRet.ToString());
+	}
+
+	public void OnLoginAckPlayerOnLinePlayer(byte[] pBuf)
+	{
+		GameProto.LoginAckPlayerOnLinePlayer oRet = GameProto.LoginAckPlayerOnLinePlayer.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			H5Helper.H5LogStr("OnLoginAckPlayerOnLinePlayer error parse");
+			return;
+		}
+		H5Helper.H5LogStr(oRet.ToString());
+
+		GameObject go_RoleList = Instantiate(m_oRoleList, transform.parent);
+
+		go_RoleList.GetComponent<RoleList>().SetPlayerIds(oRet.QwPlayerId);
+	}
+
 	public void OnRoleData(string szData)
 	{
 		Debug.Log(szData);
@@ -207,6 +258,6 @@ public class LoginControler: MonoBehaviour
 		H5Manager.Instance().GetLoginSessionResetCallBack().Remove(OnLoginSessionReset);
 	}
 
-	public UnityEngine.UI.Text m_textText;
+	public GameObject m_oRoleList;
 	public SessionObject m_pSession;
 }

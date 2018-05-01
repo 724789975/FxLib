@@ -11,6 +11,30 @@
 const static unsigned int g_dwPlayerBuffLen = 64 * 1024;
 static char g_pPlayerBuff[g_dwPlayerBuffLen];
 
+class RedisServerId : public IRedisQuery
+{
+public:
+	RedisServerId(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId), m_qwServerId(0), m_pReader(NULL) {}
+	~RedisServerId() {}
+
+	virtual int					GetDBId(void) { return 0; }
+	virtual void				OnQuery(IRedisConnection *poDBConnection)
+	{
+		char szQuery[64] = { 0 };
+		sprintf(szQuery, "ZSCORE %s %llu", RedisConstant::szOnLinePlayer, m_qwPlayerId);
+		poDBConnection->Query(szQuery, &m_pReader);
+	}
+	virtual void OnResult(void) { m_pReader->GetValue(m_qwServerId); }
+	virtual void Release(void) { m_pReader->Release(); }
+
+	INT64 GetServerId() { return m_qwServerId; }
+
+private:
+	IRedisDataReader* m_pReader;
+	INT64 m_qwServerId;
+	UINT64 m_qwPlayerId;
+};
+
 Player::Player()
 	: m_pSession(NULL)
 	, m_qwPyayerId(0)
@@ -45,7 +69,7 @@ bool Player::OnPlayerRequestLogin(CPlayerSession& refSession, GameProto::PlayerR
 		virtual void				OnQuery(IRedisConnection *poDBConnection)
 		{
 			char szQuery[64] = { 0 };
-			sprintf(szQuery, "ZADD %s %llu, %d", RedisConstant::szOnLinePlayer, m_qwPlayerId, m_dwServerId);
+			sprintf(szQuery, "ZADD %s %d %llu", RedisConstant::szOnLinePlayer, m_dwServerId, m_qwPlayerId);
 			poDBConnection->Query(szQuery);
 		}
 		virtual void OnResult(void) { }
@@ -55,7 +79,7 @@ bool Player::OnPlayerRequestLogin(CPlayerSession& refSession, GameProto::PlayerR
 		UINT64 m_qwPlayerId;
 	};
 
-	RedisServerId oServerId(refLogin.qw_player_id(), GameServer::Instance()->GetServerid());
+	RedisServerId oServerId(refLogin.qw_player_id(), GameServer::Instance()->GetServerId());
 	FxRedisGetModule()->QueryDirect(&oServerId);
 
 	return true;
@@ -139,8 +163,7 @@ void Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto:
 	static unsigned int s_dwTeamIndex;
 	unsigned int dwTeamIndex = ++s_dwTeamIndex % refSessions.size();
 	std::map<unsigned int, CBinaryTeamSession*>::iterator it = refSessions.begin();
-	for (unsigned
-		int i = 0; i < dwTeamIndex; ++i)
+	for (unsigned int i = 0; i < dwTeamIndex; ++i)
 	{
 		++it;
 	}
@@ -150,6 +173,79 @@ void Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto:
 
 bool Player::OnPlayerRequestLoginInviteTeam(CPlayerSession& refSession, GameProto::PlayerRequestLoginInviteTeam& refMsg)
 {
+	GameProto::LoginAckPlayerInviteTeam oResult;
+	if (refMsg.qw_player_id() == m_qwPyayerId)
+	{
+		oResult.set_dw_result(GameProto::EC_AlreadyInTeam);
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		m_pSession->Send(pBuf, dwBufLen);
+		return true;
+	}
+
+	if (m_qwTeamId == 0)
+	{
+		oResult.set_dw_result(GameProto::EC_NoTeamId);
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		m_pSession->Send(pBuf, dwBufLen);
+		return true;
+	}
+
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(refMsg.qw_player_id());
+	if (pPlayer)
+	{
+		GameProto::LoginNotifyPlayerInviteTeam oNotify;
+		oNotify.set_qw_player_id(m_qwPyayerId);
+		oNotify.set_qw_team_id(m_qwTeamId);
+		oNotify.set_dw_team_server_id(m_dwTeamServerId);
+
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oNotify, pBuf, dwBufLen);
+		pPlayer->GetSession()->Send(pBuf, dwBufLen);
+
+		char* pBuf1 = NULL;
+		unsigned int dwBufLen1 = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf1, dwBufLen1);
+		m_pSession->Send(pBuf1, dwBufLen1);
+
+		return true;
+	}
+
+	RedisServerId oServerId(m_qwPyayerId);
+	FxRedisGetModule()->QueryDirect(&oServerId);
+	UINT32 dwServerId = oServerId.GetServerId();
+	CLoginSession* pLoginSession = GameServer::Instance()->GetLoginSessionManager().GetLoginSession(dwServerId);
+
+	if (pLoginSession)
+	{
+		GameProto::LoginNotifyLoginInviteTeam oNotify;
+		oNotify.set_qw_invite_id(m_qwPyayerId);
+		oNotify.set_qw_invitee_id(refMsg.qw_player_id());
+		oNotify.set_qw_team_id(m_qwTeamId);
+		oNotify.set_dw_team_server_id(m_dwTeamServerId);
+
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oNotify, pBuf, dwBufLen);
+		pLoginSession->Send(pBuf, dwBufLen);
+
+		char* pBuf1 = NULL;
+		unsigned int dwBufLen1 = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf1, dwBufLen1);
+		m_pSession->Send(pBuf1, dwBufLen1);
+
+		return true;
+	}
+
+	oResult.set_dw_result(GameProto::EC_PlayerNotOnline);
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+	m_pSession->Send(pBuf, dwBufLen);
 	return true;
 }
 
@@ -215,35 +311,11 @@ void Player::OnClose()
 		}
 	}
 
-	class RedisServerId : public IRedisQuery
-	{
-	public:
-		RedisServerId(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId), m_qwServerId(0), m_pReader(NULL) {}
-		~RedisServerId() {}
-
-		virtual int					GetDBId(void) { return 0; }
-		virtual void				OnQuery(IRedisConnection *poDBConnection)
-		{
-			char szQuery[64] = { 0 };
-			sprintf(szQuery, "ZSCORE %s %llu", RedisConstant::szOnLinePlayer, m_qwPlayerId);
-			poDBConnection->Query(szQuery, &m_pReader);
-		}
-		virtual void OnResult(void) { m_pReader->GetValue(m_qwServerId); }
-		virtual void Release(void) { m_pReader->Release(); }
-
-		INT64 GetServerId() { return m_qwServerId; }
-
-	private:
-		IRedisDataReader* m_pReader;
-		INT64 m_qwServerId;
-		UINT64 m_qwPlayerId;
-	};
-
 	RedisServerId oServerId(m_qwPyayerId);
 	FxRedisGetModule()->QueryDirect(&oServerId);
 	UINT32 dwServerId = oServerId.GetServerId();
 
-	if (dwServerId == GameServer::Instance()->GetServerid())
+	if (dwServerId == GameServer::Instance()->GetServerId())
 	{
 		class RedisSetServerId : public IRedisQuery
 		{

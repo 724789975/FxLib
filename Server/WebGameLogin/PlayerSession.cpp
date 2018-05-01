@@ -23,6 +23,7 @@ CPlayerSession::CPlayerSession()
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginInviteTeam::descriptor(), &CPlayerSession::OnPlayerRequestLoginInviteTeam);
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginChangeSlot::descriptor(), &CPlayerSession::OnPlayerRequestLoginChangeSlot);
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginGameStart::descriptor(), &CPlayerSession::OnPlayerRequestLoginGameStart);
+	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginOnLinePlayer::descriptor(), &CPlayerSession::OnPlayerRequestLoginOnLinePlayer);
 }
 
 
@@ -82,7 +83,7 @@ bool CPlayerSession::OnPlayerRequestLoginServerId(CPlayerSession& refSession, go
 	}
 	GameProto::LoginAckPlayerServerId oResult;
 	oResult.set_dw_result(0);
-	oResult.set_dw_server_id(GameServer::Instance()->GetServerid());
+	oResult.set_dw_server_id(GameServer::Instance()->GetServerId());
 
 	char* pBuf = NULL;
 	unsigned int dwBufLen = 0;
@@ -102,7 +103,7 @@ bool CPlayerSession::OnPlayerRequestLogin(CPlayerSession& refSession, google::pr
 	class RedisServerId : public IRedisQuery
 	{
 	public:
-		RedisServerId(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId), m_qwServerId(0), m_pReader(NULL) {}
+		RedisServerId(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId), m_dwServerId(0), m_pReader(NULL) {}
 		~RedisServerId() {}
 
 		virtual int					GetDBId(void) { return 0; }
@@ -112,14 +113,14 @@ bool CPlayerSession::OnPlayerRequestLogin(CPlayerSession& refSession, google::pr
 			sprintf(szQuery, "ZSCORE %s %llu", RedisConstant::szOnLinePlayer, m_qwPlayerId);
 			poDBConnection->Query(szQuery, &m_pReader);
 		}
-		virtual void OnResult(void) { m_pReader->GetValue(m_qwServerId); }
+		virtual void OnResult(void) { INT64 qwServerId; m_pReader->GetValue(qwServerId); m_dwServerId = (UINT32)qwServerId; }
 		virtual void Release(void) { m_pReader->Release(); }
 
-		INT64 GetServerId() { return m_qwServerId; }
+		UINT32 GetServerId() { return m_dwServerId; }
 
 	private:
 		IRedisDataReader* m_pReader;
-		INT64 m_qwServerId;
+		UINT32 m_dwServerId;
 		UINT64 m_qwPlayerId;
 	};
 
@@ -221,6 +222,61 @@ bool CPlayerSession::OnPlayerRequestLoginGameStart(CPlayerSession& refSession, g
 	{
 		LogExe(LogLv_Critical, "can't find player %llu", m_qwPlayerId);
 	}
+	return true;
+}
+
+bool CPlayerSession::OnPlayerRequestLoginOnLinePlayer(CPlayerSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::PlayerRequestLoginOnLinePlayer* pMsg = dynamic_cast<GameProto::PlayerRequestLoginOnLinePlayer*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+	
+	class RedisPlayerIds : public IRedisQuery
+	{
+	public:
+		RedisPlayerIds() : m_pReader(NULL) {}
+		~RedisPlayerIds() {}
+
+		virtual int					GetDBId(void) { return 0; }
+		virtual void				OnQuery(IRedisConnection *poDBConnection)
+		{
+			char szQuery[64] = { 0 };
+			sprintf(szQuery, "ZRANGE %s 0 -1", RedisConstant::szOnLinePlayer);
+			poDBConnection->Query(szQuery, &m_pReader);
+		}
+		virtual void OnResult(void)
+		{
+			std::vector<std::string> vecIds;
+			m_pReader->GetValue(vecIds);
+			for (std::vector<std::string>::iterator it = vecIds.begin(); it != vecIds.end(); ++it)
+			{
+				m_vecPlayers.push_back(atoll(it->c_str()));
+			}
+		}
+		virtual void Release(void) { m_pReader->Release(); }
+
+		std::vector<UINT64>& GetPlayers() { return m_vecPlayers; }
+
+	private:
+		IRedisDataReader* m_pReader;
+		std::vector<UINT64> m_vecPlayers;
+	};
+
+	RedisPlayerIds oServerPlayerIds;
+	FxRedisGetModule()->QueryDirect(&oServerPlayerIds);
+
+	GameProto::LoginAckPlayerOnLinePlayer oResult;
+	std::vector<UINT64>& ref_vecPlayers = oServerPlayerIds.GetPlayers();
+	for (std::vector<UINT64>::iterator it = ref_vecPlayers.begin(); it != ref_vecPlayers.end(); ++it)
+	{
+		oResult.add_qw_player_id(*it);
+	}
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
 	return true;
 }
 

@@ -30,7 +30,7 @@ public:
 	BinaryTeamSessionManager& GetTeamSessionManager() { return m_oTeamSessionManager; }
 	BinaryGameManagerSessionManager& GetGameManagerSessionManager() { return m_oGameManagerSessionManager; }
 
-	unsigned int GetServerid() { return m_dwServerId; }
+	unsigned int GetServerId() { return m_dwServerId; }
 	unsigned short GetLoginPort() { return m_wLoginPort; }
 	unsigned short GetTeamPort() { return m_wTeamPort; }
 	unsigned short GetGameManagerPort() { return m_wGameManagerPort; }

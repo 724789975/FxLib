@@ -28,9 +28,10 @@ enum EErrorCode
 	EC_MakeTeamNotIdle = 2;		//创建队伍时 角色状态不是idle
 	EC_NoTeamServer = 3;		//没有组队服务器
 	EC_NoTeamId = 4;			//没有这个队伍
-	EC_NotLeader = 5;			//没有队伍
+	EC_NotLeader = 5;			//没有队长
 	EC_TeamHasStart = 6;		//队伍已经申请开始游戏
 	EC_NoGameManagerServer = 7;	//没有游戏管理服务器
+	EC_PlayerNotOnline = 8;		//玩家不在线
 }
 
 //player->login
@@ -54,7 +55,7 @@ message PlayerRequestLoginMakeTeam
 
 message PlayerRequestLoginInviteTeam
 {
-	repeated uint64 qw_player_id = 1;
+	uint64 qw_player_id = 1;
 }
 
 message PlayerRequestLoginChangeSlot
@@ -63,6 +64,10 @@ message PlayerRequestLoginChangeSlot
 }
 
 message PlayerRequestLoginGameStart
+{
+}
+
+message PlayerRequestLoginOnLinePlayer
 {
 }
 
@@ -100,6 +105,13 @@ message LoginAckPlayerInviteTeam
 	uint32 dw_result = 1;
 }
 
+message LoginNotifyPlayerInviteTeam
+{
+	uint64 qw_player_id = 1;	//谁邀请的
+	uint64 qw_team_id = 2;		//邀请的队伍id
+	uint32 dw_team_server_id = 3;
+}
+
 message LoginAckPlayerChangeSlot
 {
 	uint32 dw_result = 1;
@@ -119,10 +131,24 @@ message LoginAckPlayerGameStart
 	uint64 qw_team_id = 6;
 }
 
+message LoginAckPlayerOnLinePlayer
+{
+	uint32 dw_result = 1;
+	repeated uint64 qw_player_id = 2;
+}
+
 //login->login
 message LoginNotifyLoginPlayerKick
 {
 	uint64 qw_player_id = 1;
+}
+
+message LoginNotifyLoginInviteTeam
+{
+	uint64 qw_invite_id = 1;	//谁邀请的
+	uint64 qw_invitee_id = 2;	//被邀请的
+	uint64 qw_team_id = 3;		//邀请的队伍id
+	uint32 dw_team_server_id = 4;
 }
 
 //login->team

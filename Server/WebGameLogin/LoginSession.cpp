@@ -23,7 +23,7 @@ void CLoginSession::OnConnect(void)
 {
 	//向对方发送本服务器信息
 	GameProto::ServerInfo oInfo;
-	oInfo.set_dw_server_id(GameServer::Instance()->GetServerid());
+	oInfo.set_dw_server_id(GameServer::Instance()->GetServerId());
 	//oInfo.set_sz_listen_ip((*it)->GetRemoteIPStr());
 	oInfo.set_dw_login_port(GameServer::Instance()->GetLoginPort());
 	oInfo.set_dw_team_port(GameServer::Instance()->GetTeamPort());
@@ -88,6 +88,33 @@ bool CLoginSession::OnLoginNotifyLoginPlayerKick(CLoginSession& refSession, goog
 		pPlayer->GetSession()->Close();
 	}
 
+	return true;
+}
+
+bool CLoginSession::OnLoginNotifyLoginInviteTeam(CLoginSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::LoginNotifyLoginInviteTeam* pMsg = dynamic_cast<GameProto::LoginNotifyLoginInviteTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(pMsg->qw_invitee_id());
+	if (!pPlayer)
+	{
+		LogExe(LogLv_Critical, "can't find player : %llu", pMsg->qw_invitee_id());
+		return true;
+	}
+
+	GameProto::LoginNotifyPlayerInviteTeam oNotify;
+	oNotify.set_qw_player_id(pMsg->qw_invite_id());
+	oNotify.set_qw_team_id(pMsg->qw_team_id());
+	oNotify.set_dw_team_server_id(pMsg->dw_team_server_id());
+
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oNotify, pBuf, dwBufLen);
+	pPlayer->GetSession()->Send(pBuf, dwBufLen);
 	return true;
 }
 

@@ -36,7 +36,7 @@ namespace protobuf_web_5fdata_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[2];
+  static const ::google::protobuf::internal::ParseTable schema[3];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -46,12 +46,18 @@ void InitDefaultsRoleDataImpl();
 void InitDefaultsRoleData();
 void InitDefaultsTeamRoleDataImpl();
 void InitDefaultsTeamRoleData();
+void InitDefaultsOnlineRoleDataImpl();
+void InitDefaultsOnlineRoleData();
 inline void InitDefaults() {
   InitDefaultsRoleData();
   InitDefaultsTeamRoleData();
+  InitDefaultsOnlineRoleData();
 }
 }  // namespace protobuf_web_5fdata_2eproto
 namespace GameProto {
+class OnlineRoleData;
+class OnlineRoleDataDefaultTypeInternal;
+extern OnlineRoleDataDefaultTypeInternal _OnlineRoleData_default_instance_;
 class RoleData;
 class RoleDataDefaultTypeInternal;
 extern RoleDataDefaultTypeInternal _RoleData_default_instance_;
@@ -313,6 +319,115 @@ class TeamRoleData : public ::google::protobuf::Message /* @@protoc_insertion_po
   friend struct ::protobuf_web_5fdata_2eproto::TableStruct;
   friend void ::protobuf_web_5fdata_2eproto::InitDefaultsTeamRoleDataImpl();
 };
+// -------------------------------------------------------------------
+
+class OnlineRoleData : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.OnlineRoleData) */ {
+ public:
+  OnlineRoleData();
+  virtual ~OnlineRoleData();
+
+  OnlineRoleData(const OnlineRoleData& from);
+
+  inline OnlineRoleData& operator=(const OnlineRoleData& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  OnlineRoleData(OnlineRoleData&& from) noexcept
+    : OnlineRoleData() {
+    *this = ::std::move(from);
+  }
+
+  inline OnlineRoleData& operator=(OnlineRoleData&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const OnlineRoleData& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const OnlineRoleData* internal_default_instance() {
+    return reinterpret_cast<const OnlineRoleData*>(
+               &_OnlineRoleData_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    2;
+
+  void Swap(OnlineRoleData* other);
+  friend void swap(OnlineRoleData& a, OnlineRoleData& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline OnlineRoleData* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  OnlineRoleData* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const OnlineRoleData& from);
+  void MergeFrom(const OnlineRoleData& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(OnlineRoleData* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // .GameProto.RoleData role_data = 1;
+  bool has_role_data() const;
+  void clear_role_data();
+  static const int kRoleDataFieldNumber = 1;
+  const ::GameProto::RoleData& role_data() const;
+  ::GameProto::RoleData* release_role_data();
+  ::GameProto::RoleData* mutable_role_data();
+  void set_allocated_role_data(::GameProto::RoleData* role_data);
+
+  // uint32 dw_server_id = 2;
+  void clear_dw_server_id();
+  static const int kDwServerIdFieldNumber = 2;
+  ::google::protobuf::uint32 dw_server_id() const;
+  void set_dw_server_id(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.OnlineRoleData)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::GameProto::RoleData* role_data_;
+  ::google::protobuf::uint32 dw_server_id_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fdata_2eproto::TableStruct;
+  friend void ::protobuf_web_5fdata_2eproto::InitDefaultsOnlineRoleDataImpl();
+};
 // ===================================================================
 
 
@@ -540,9 +655,79 @@ inline void TeamRoleData::set_dw_server_id(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:GameProto.TeamRoleData.dw_server_id)
 }
 
+// -------------------------------------------------------------------
+
+// OnlineRoleData
+
+// .GameProto.RoleData role_data = 1;
+inline bool OnlineRoleData::has_role_data() const {
+  return this != internal_default_instance() && role_data_ != NULL;
+}
+inline void OnlineRoleData::clear_role_data() {
+  if (GetArenaNoVirtual() == NULL && role_data_ != NULL) {
+    delete role_data_;
+  }
+  role_data_ = NULL;
+}
+inline const ::GameProto::RoleData& OnlineRoleData::role_data() const {
+  const ::GameProto::RoleData* p = role_data_;
+  // @@protoc_insertion_point(field_get:GameProto.OnlineRoleData.role_data)
+  return p != NULL ? *p : *reinterpret_cast<const ::GameProto::RoleData*>(
+      &::GameProto::_RoleData_default_instance_);
+}
+inline ::GameProto::RoleData* OnlineRoleData::release_role_data() {
+  // @@protoc_insertion_point(field_release:GameProto.OnlineRoleData.role_data)
+  
+  ::GameProto::RoleData* temp = role_data_;
+  role_data_ = NULL;
+  return temp;
+}
+inline ::GameProto::RoleData* OnlineRoleData::mutable_role_data() {
+  
+  if (role_data_ == NULL) {
+    role_data_ = new ::GameProto::RoleData;
+  }
+  // @@protoc_insertion_point(field_mutable:GameProto.OnlineRoleData.role_data)
+  return role_data_;
+}
+inline void OnlineRoleData::set_allocated_role_data(::GameProto::RoleData* role_data) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete role_data_;
+  }
+  if (role_data) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      role_data = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, role_data, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  role_data_ = role_data;
+  // @@protoc_insertion_point(field_set_allocated:GameProto.OnlineRoleData.role_data)
+}
+
+// uint32 dw_server_id = 2;
+inline void OnlineRoleData::clear_dw_server_id() {
+  dw_server_id_ = 0u;
+}
+inline ::google::protobuf::uint32 OnlineRoleData::dw_server_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.OnlineRoleData.dw_server_id)
+  return dw_server_id_;
+}
+inline void OnlineRoleData::set_dw_server_id(::google::protobuf::uint32 value) {
+  
+  dw_server_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.OnlineRoleData.dw_server_id)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 

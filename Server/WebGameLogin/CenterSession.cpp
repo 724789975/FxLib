@@ -23,7 +23,7 @@ CCenterSession::~CCenterSession()
 void CCenterSession::OnConnect(void)
 {
 	GameProto::ServerInfo oInfo;
-	oInfo.set_dw_server_id(GameServer::Instance()->GetServerid());
+	oInfo.set_dw_server_id(GameServer::Instance()->GetServerId());
 	//oInfo.set_sz_listen_ip((*it)->GetRemoteIPStr());
 	oInfo.set_dw_login_port(GameServer::Instance()->GetLoginPort());
 	oInfo.set_dw_team_port(GameServer::Instance()->GetTeamPort());
