@@ -46,7 +46,8 @@ public class LoginControler: MonoBehaviour
 		m_pSession.RegistMessage("GameProto.LoginAckPlayerGameStart", OnLoginAckPlayerGameStart);
 		m_pSession.RegistMessage("GameProto.LoginNotifyPlayerGameKick", OnLoginNotifyPlayerGameKick);
 		m_pSession.RegistMessage("GameProto.LoginAckPlayerOnLinePlayer", OnLoginAckPlayerOnLinePlayer);
-	}
+		m_pSession.RegistMessage("GameProto.LoginNotifyPlayerInviteTeam", OnLoginNotifyPlayerInviteTeam);
+    }
 
 	// Update is called once per frame
 	void Update()
@@ -167,7 +168,7 @@ public class LoginControler: MonoBehaviour
 			return;
 		}
 
-		H5Helper.H5LogStr(oRet.ToString());
+		H5Helper.H5LogStr("make team ret : " + oRet.DwResult.ToString() + " slot : " + oRet.DwSlotId.ToString() + " team_id : " + oRet.QwTeamId.ToString());
 	}
 	public void OnLoginAckPlayerGameStart(byte[] pBuf)
 	{
@@ -177,7 +178,7 @@ public class LoginControler: MonoBehaviour
 			H5Helper.H5LogStr("OnLoginAckPlayerGameStart error parse");
 			return;
 		}
-		H5Helper.H5LogStr(oRet.ToString());
+		H5Helper.H5LogStr("game start : " + oRet.DwResult.ToString());
 
 		H5Manager.Instance().ConnectGame(oRet.SzListenIp, (ushort)oRet.DwPlayerPort);
 	}
@@ -190,7 +191,7 @@ public class LoginControler: MonoBehaviour
 			H5Helper.H5LogStr("OnLoginAckPlayerInviteTeam error parse");
 			return;
 		}
-		H5Helper.H5LogStr(oRet.ToString());
+		H5Helper.H5LogStr("invite team ret : " + oRet.DwResult.ToString());
 	}
 	public void OnLoginNotifyPlayerGameKick(byte[] pBuf)
 	{
@@ -200,7 +201,7 @@ public class LoginControler: MonoBehaviour
 			H5Helper.H5LogStr("OnLoginNotifyPlayerGameKick error parse");
 			return;
 		}
-		H5Helper.H5LogStr(oRet.ToString());
+		H5Helper.H5LogStr("game kick ret : " + oRet.DwResult.ToString());
 	}
 
 	public void OnLoginAckPlayerOnLinePlayer(byte[] pBuf)
@@ -211,11 +212,23 @@ public class LoginControler: MonoBehaviour
 			H5Helper.H5LogStr("OnLoginAckPlayerOnLinePlayer error parse");
 			return;
 		}
-		H5Helper.H5LogStr(oRet.ToString());
+		H5Helper.H5LogStr("online player ret : " + oRet.DwResult.ToString());
 
 		GameObject go_RoleList = Instantiate(m_oRoleList, transform.parent);
 
 		go_RoleList.GetComponent<RoleList>().SetPlayerIds(oRet.QwPlayerId);
+	}
+
+	public void OnLoginNotifyPlayerInviteTeam(byte[] pBuf)
+	{
+		GameProto.LoginNotifyPlayerInviteTeam oRet = GameProto.LoginNotifyPlayerInviteTeam.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			H5Helper.H5LogStr("OnLoginAckPlayerOnLinePlayer error parse");
+			return;
+		}
+
+		H5Helper.H5LogStr("on invitee team player id : " + oRet.QwPlayerId.ToString() + " team id : " + oRet.QwTeamId.ToString());
 	}
 
 	public void OnRoleData(string szData)

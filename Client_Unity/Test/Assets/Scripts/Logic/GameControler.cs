@@ -82,7 +82,7 @@ public class GameControler : MonoBehaviour
 			return;
 		}
 
-		H5Helper.H5LogStr(oTest.ToString());
+		H5Helper.H5LogStr(oTest.SzTest.ToString());
 
 		oTest.SzTest = String.Format("{0}, {1}, {2}, {3}, {4}, {5}",
 			"sessionobject.cs", 106, "SessionObject::OnRecv", dw1++,
