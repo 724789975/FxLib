@@ -197,6 +197,15 @@ bool Player::OnPlayerRequestLoginInviteTeam(CPlayerSession& refSession, GameProt
 	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(refMsg.qw_player_id());
 	if (pPlayer)
 	{
+		if (pPlayer->GetTeamId())
+		{
+			oResult.set_dw_result(GameProto::EC_AlreadyInTeam);
+			char* pBuf = NULL;
+			unsigned int dwBufLen = 0;
+			ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+			m_pSession->Send(pBuf, dwBufLen);
+			return true;
+		}
 		GameProto::LoginNotifyPlayerInviteTeam oNotify;
 		oNotify.set_qw_player_id(m_qwPyayerId);
 		oNotify.set_qw_team_id(m_qwTeamId);
@@ -222,7 +231,7 @@ bool Player::OnPlayerRequestLoginInviteTeam(CPlayerSession& refSession, GameProt
 
 	if (pLoginSession)
 	{
-		GameProto::LoginNotifyLoginInviteTeam oNotify;
+		GameProto::LoginRequestLoginInviteTeam oNotify;
 		oNotify.set_qw_invite_id(m_qwPyayerId);
 		oNotify.set_qw_invitee_id(refMsg.qw_player_id());
 		oNotify.set_qw_team_id(m_qwTeamId);
@@ -232,11 +241,6 @@ bool Player::OnPlayerRequestLoginInviteTeam(CPlayerSession& refSession, GameProt
 		unsigned int dwBufLen = 0;
 		ProtoUtility::MakeProtoSendBuffer(oNotify, pBuf, dwBufLen);
 		pLoginSession->Send(pBuf, dwBufLen);
-
-		char* pBuf1 = NULL;
-		unsigned int dwBufLen1 = 0;
-		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf1, dwBufLen1);
-		m_pSession->Send(pBuf1, dwBufLen1);
 
 		return true;
 	}

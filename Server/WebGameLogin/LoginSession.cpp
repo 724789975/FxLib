@@ -91,18 +91,39 @@ bool CLoginSession::OnLoginNotifyLoginPlayerKick(CLoginSession& refSession, goog
 	return true;
 }
 
-bool CLoginSession::OnLoginNotifyLoginInviteTeam(CLoginSession& refSession, google::protobuf::Message& refMsg)
+bool CLoginSession::OnLoginRequestLoginInviteTeam(CLoginSession& refSession, google::protobuf::Message& refMsg)
 {
-	GameProto::LoginNotifyLoginInviteTeam* pMsg = dynamic_cast<GameProto::LoginNotifyLoginInviteTeam*>(&refMsg);
+	GameProto::LoginRequestLoginInviteTeam* pMsg = dynamic_cast<GameProto::LoginRequestLoginInviteTeam*>(&refMsg);
 	if (pMsg == NULL)
 	{
 		return false;
 	}
 
+	GameProto::LoginAckLoginInviteTeam oResult;
 	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(pMsg->qw_invitee_id());
 	if (!pPlayer)
 	{
 		LogExe(LogLv_Critical, "can't find player : %llu", pMsg->qw_invitee_id());
+		oResult.set_dw_result(GameProto::EC_CannotFindPlayer);
+		oResult.set_qw_invite_id(pMsg->qw_invite_id());
+		oResult.set_qw_invitee_id(pMsg->qw_invitee_id());
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		Send(pBuf, dwBufLen);
+		return true;
+	}
+
+	if (pPlayer->GetTeamId())
+	{
+		LogExe(LogLv_Critical, "already in team player : %llu", pMsg->qw_invitee_id());
+		oResult.set_dw_result(GameProto::EC_AlreadyInTeam);
+		oResult.set_qw_invite_id(pMsg->qw_invite_id());
+		oResult.set_qw_invitee_id(pMsg->qw_invitee_id());
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		Send(pBuf, dwBufLen);
 		return true;
 	}
 
@@ -115,6 +136,29 @@ bool CLoginSession::OnLoginNotifyLoginInviteTeam(CLoginSession& refSession, goog
 	unsigned int dwBufLen = 0;
 	ProtoUtility::MakeProtoSendBuffer(oNotify, pBuf, dwBufLen);
 	pPlayer->GetSession()->Send(pBuf, dwBufLen);
+
+	return true;
+}
+
+bool CLoginSession::OnLoginAckLoginInviteTeam(CLoginSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::LoginAckLoginInviteTeam* pMsg = dynamic_cast<GameProto::LoginAckLoginInviteTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(pMsg->qw_invite_id());
+	if (pPlayer)
+	{
+		GameProto::LoginAckPlayerInviteTeam oResult;
+		oResult.set_dw_result(pMsg->dw_result());
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		pPlayer->GetSession()->Send(pBuf, dwBufLen);
+	}
+
 	return true;
 }
 

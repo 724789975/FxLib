@@ -24,6 +24,9 @@ public:
 
 	CPlayerSession* GetSession() { return m_pSession; }
 
+	UINT64 GetPlayerId() { return m_qwPyayerId; }
+	UINT64 GetTeamId() { return m_qwTeamId; }
+
 	void SetState(EPlayrState eState) { m_eState = eState; }
 	void SetTeamInfo(UINT64 qwTeamId, UINT32 dwTeamServerId) { m_qwTeamId = qwTeamId; m_dwTeamServerId = dwTeamServerId; }
 
