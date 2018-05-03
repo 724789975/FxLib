@@ -52,61 +52,65 @@ namespace GameProto {
             "X3BvcnQYAyABKA0SHAoUZHdfc2xhdmVfc2VydmVyX3BvcnQYBCABKA0SFAoM",
             "c3pfbGlzdGVuX2lwGAUgASgJEhIKCnF3X3RlYW1faWQYBiABKAQiRQoaTG9n",
             "aW5BY2tQbGF5ZXJPbkxpbmVQbGF5ZXISEQoJZHdfcmVzdWx0GAEgASgNEhQK",
-            "DHF3X3BsYXllcl9pZBgCIAMoBCIyChpMb2dpbk5vdGlmeUxvZ2luUGxheWVy",
-            "S2ljaxIUCgxxd19wbGF5ZXJfaWQYASABKAQieQobTG9naW5SZXF1ZXN0TG9n",
-            "aW5JbnZpdGVUZWFtEhQKDHF3X2ludml0ZV9pZBgBIAEoBBIVCg1xd19pbnZp",
-            "dGVlX2lkGAIgASgEEhIKCnF3X3RlYW1faWQYAyABKAQSGQoRZHdfdGVhbV9z",
-            "ZXJ2ZXJfaWQYBCABKA0iWQoXTG9naW5BY2tMb2dpbkludml0ZVRlYW0SEQoJ",
-            "ZHdfcmVzdWx0GAEgASgNEhQKDHF3X2ludml0ZV9pZBgCIAEoBBIVCg1xd19p",
-            "bnZpdGVlX2lkGAMgASgEIlYKGExvZ2luUmVxdWVzdFRlYW1NYWtlVGVhbRIm",
-            "Cglyb2xlX2RhdGEYASABKAsyEy5HYW1lUHJvdG8uUm9sZURhdGESEgoKcXdf",
-            "dGVhbV9pZBgCIAEoBCJDChpMb2dpblJlcXVlc3RUZWFtSW52aXRlVGVhbRIR",
-            "Cglkd19yZXN1bHQYASABKA0SEgoKZHdfc2xvdF9pZBgCIAEoDSJDChpMb2dp",
-            "blJlcXVlc3RUZWFtQ2hhbmdlU2xvdBIRCglkd19yZXN1bHQYASABKA0SEgoK",
-            "ZHdfc2xvdF9pZBgCIAEoDSJGChpMb2dpblJlcXVlc3RUZWFtS2lja1BsYXll",
-            "chIUCgxxd19wbGF5ZXJfaWQYASABKAQSEgoKcXdfdGVhbV9pZBgCIAEoBCJF",
-            "ChlMb2dpblJlcXVlc3RUZWFtR2FtZVN0YXJ0EhIKCnF3X3RlYW1faWQYASAB",
-            "KAQSFAoMcXdfcGxheWVyX2lkGAIgASgEImAKGUxvZ2luUmVxdWVzdFRlYW1F",
-            "bnRlclRlYW0SFAoMcXdfcGxheWVyX2lkGAEgASgEEhkKEWR3X3RlYW1fc2Vy",
-            "dmVyX2lkGAIgASgNEhIKCnF3X3RlYW1faWQYAyABKAQiZwoUVGVhbUFja0xv",
-            "Z2luTWFrZVRlYW0SEQoJZHdfcmVzdWx0GAEgASgNEhQKDHF3X3BsYXllcl9p",
-            "ZBgCIAEoBBISCgpxd190ZWFtX2lkGAMgASgEEhIKCmR3X3Nsb3RfaWQYBCAB",
-            "KA0iSgoXVGVhbU5vdGlmeUxvZ2luVGVhbUluZm8SLwoOdGVhbV9yb2xlX2Rh",
-            "dGEYASADKAsyFy5HYW1lUHJvdG8uVGVhbVJvbGVEYXRhIjwKFlRlYW1BY2tM",
-            "b2dpbkludml0ZVRlYW0SEQoJZHdfcmVzdWx0GAEgASgNEg8KB2R3X3Nsb3QY",
-            "AiABKA0iPAoWVGVhbUFja0xvZ2luQ2hhbmdlU2xvdBIRCglkd19yZXN1bHQY",
-            "ASABKA0SDwoHZHdfc2xvdBgCIAEoDSJBChZUZWFtQWNrTG9naW5LaWNrUGxh",
-            "eWVyEhEKCWR3X3Jlc3VsdBgBIAEoDRIUCgxxd19wbGF5ZXJfaWQYAiABKAQi",
-            "uAEKFVRlYW1BY2tMb2dpbkdhbWVTdGFydBIRCglkd19yZXN1bHQYASABKA0S",
-            "FgoOZHdfcGxheWVyX3BvcnQYAiABKA0SFgoOZHdfc2VydmVyX3BvcnQYAyAB",
-            "KA0SHAoUZHdfc2xhdmVfc2VydmVyX3BvcnQYBCABKA0SFAoMc3pfbGlzdGVu",
-            "X2lwGAUgASgJEhQKDHF3X3BsYXllcl9pZBgGIAEoBBISCgpxd190ZWFtX2lk",
-            "GAcgASgEIkwKH1RlYW1SZXF1ZXN0R2FtZU1hbmFnZXJHYW1lU3RhcnQSEgoK",
-            "cXdfdGVhbV9pZBgBIAEoBBIVCg1xd19wbGF5ZXJfaWRzGAIgAygEIqgBChtH",
-            "YW1lTWFuYWdlckFja1RlYW1HYW1lU3RhcnQSEQoJZHdfcmVzdWx0GAEgASgN",
-            "EhYKDmR3X3BsYXllcl9wb3J0GAIgASgNEhYKDmR3X3NlcnZlcl9wb3J0GAMg",
-            "ASgNEhwKFGR3X3NsYXZlX3NlcnZlcl9wb3J0GAQgASgNEhIKCnF3X3RlYW1f",
-            "aWQYBSABKAQSFAoMc3pfbGlzdGVuX2lwGAYgASgJIpgBChlHYW1lTm90aWZ5",
-            "R2FtZU1hbmFnZXJJbmZvEhYKDmR3X3BsYXllcl9wb3J0GAEgASgNEhYKDmR3",
-            "X3NlcnZlcl9wb3J0GAIgASgNEhwKFGR3X3NsYXZlX3NlcnZlcl9wb3J0GAMg",
-            "ASgNEhIKCnF3X3RlYW1faWQYBCABKAQSGQoRZHdfdGVhbV9zZXJ2ZXJfaWQY",
-            "BSABKA0iMQocR2FtZU1hbmFnZXJBY2tHYW1lSW5mb1Jlc3VsdBIRCglkd19y",
-            "ZXN1bHQYASABKA0iMQocUGxheWVyUmVxdWVzdEdhbWVNYW5hZ2VySW5mbxIR",
-            "Cglkd19yZXN1bHQYASABKA0ibgoeR2FtZU1hbmFnZXJBY2tQbGF5ZXJJbmZv",
-            "UmVzdWx0EhYKDmR3X3BsYXllcl9wb3J0GAEgASgNEhYKDmR3X3NlcnZlcl9w",
-            "b3J0GAIgASgNEhwKFGR3X3NsYXZlX3NlcnZlcl9wb3J0GAMgASgNIigKFVBs",
-            "YXllclJlcXVlc3RHYW1lVGVzdBIPCgdzel90ZXN0GAEgASgJIooBCgpTZXJ2",
-            "ZXJJbmZvEhQKDGR3X3NlcnZlcl9pZBgBIAEoDRIUCgxzel9saXN0ZW5faXAY",
-            "AiABKAkSFAoMZHdfdGVhbV9wb3J0GAMgASgNEiMKG2R3X2dhbWVfc2VydmVy",
-            "X21hbmFnZXJfcG9ydBgEIAEoDRIVCg1kd19sb2dpbl9wb3J0GAUgASgNKkkK",
-            "C0VTZXJ2ZXJUeXBlEgsKB1NUX05PTkUQABIMCghTVF9Mb2dpbhABEgsKB1NU",
-            "X1RlYW0QAhISCg5TVF9HYW1lTWFuYWdlchADKicKCUVUZWFtVHlwZRILCgdU",
-            "VF9OT05FEAASDQoJVFRfTm9ybWFsEAEq4QEKCkVFcnJvckNvZGUSCwoHRUNf",
-            "Tk9ORRAAEhQKEEVDX0FscmVhZHlJblRlYW0QARIWChJFQ19NYWtlVGVhbU5v",
-            "dElkbGUQAhITCg9FQ19Ob1RlYW1TZXJ2ZXIQAxIPCgtFQ19Ob1RlYW1JZBAE",
-            "EhAKDEVDX05vdExlYWRlchAFEhMKD0VDX1RlYW1IYXNTdGFydBAGEhoKFkVD",
-            "X05vR2FtZU1hbmFnZXJTZXJ2ZXIQBxIWChJFQ19QbGF5ZXJOb3RPbmxpbmUQ",
-            "CBIXChNFQ19DYW5ub3RGaW5kUGxheWVyEAliBnByb3RvMw=="));
+            "DHF3X3BsYXllcl9pZBgCIAMoBCIsChdMb2dpbkFja1BsYXllckVudGVyVGVh",
+            "bRIRCglkd19yZXN1bHQYASABKA0iMgoaTG9naW5Ob3RpZnlMb2dpblBsYXll",
+            "cktpY2sSFAoMcXdfcGxheWVyX2lkGAEgASgEInkKG0xvZ2luUmVxdWVzdExv",
+            "Z2luSW52aXRlVGVhbRIUCgxxd19pbnZpdGVfaWQYASABKAQSFQoNcXdfaW52",
+            "aXRlZV9pZBgCIAEoBBISCgpxd190ZWFtX2lkGAMgASgEEhkKEWR3X3RlYW1f",
+            "c2VydmVyX2lkGAQgASgNIlkKF0xvZ2luQWNrTG9naW5JbnZpdGVUZWFtEhEK",
+            "CWR3X3Jlc3VsdBgBIAEoDRIUCgxxd19pbnZpdGVfaWQYAiABKAQSFQoNcXdf",
+            "aW52aXRlZV9pZBgDIAEoBCJWChhMb2dpblJlcXVlc3RUZWFtTWFrZVRlYW0S",
+            "JgoJcm9sZV9kYXRhGAEgASgLMhMuR2FtZVByb3RvLlJvbGVEYXRhEhIKCnF3",
+            "X3RlYW1faWQYAiABKAQiQwoaTG9naW5SZXF1ZXN0VGVhbUludml0ZVRlYW0S",
+            "EQoJZHdfcmVzdWx0GAEgASgNEhIKCmR3X3Nsb3RfaWQYAiABKA0iQwoaTG9n",
+            "aW5SZXF1ZXN0VGVhbUNoYW5nZVNsb3QSEQoJZHdfcmVzdWx0GAEgASgNEhIK",
+            "CmR3X3Nsb3RfaWQYAiABKA0iRgoaTG9naW5SZXF1ZXN0VGVhbUtpY2tQbGF5",
+            "ZXISFAoMcXdfcGxheWVyX2lkGAEgASgEEhIKCnF3X3RlYW1faWQYAiABKAQi",
+            "RQoZTG9naW5SZXF1ZXN0VGVhbUdhbWVTdGFydBISCgpxd190ZWFtX2lkGAEg",
+            "ASgEEhQKDHF3X3BsYXllcl9pZBgCIAEoBCJXChlMb2dpblJlcXVlc3RUZWFt",
+            "RW50ZXJUZWFtEhIKCnF3X3RlYW1faWQYASABKAQSJgoJcm9sZV9kYXRhGAIg",
+            "ASgLMhMuR2FtZVByb3RvLlJvbGVEYXRhImcKFFRlYW1BY2tMb2dpbk1ha2VU",
+            "ZWFtEhEKCWR3X3Jlc3VsdBgBIAEoDRIUCgxxd19wbGF5ZXJfaWQYAiABKAQS",
+            "EgoKcXdfdGVhbV9pZBgDIAEoBBISCgpkd19zbG90X2lkGAQgASgNIl4KF1Rl",
+            "YW1Ob3RpZnlMb2dpblRlYW1JbmZvEi8KDnRlYW1fcm9sZV9kYXRhGAEgAygL",
+            "MhcuR2FtZVByb3RvLlRlYW1Sb2xlRGF0YRISCgpxd190ZWFtX2lkGAIgASgE",
+            "IjwKFlRlYW1BY2tMb2dpbkludml0ZVRlYW0SEQoJZHdfcmVzdWx0GAEgASgN",
+            "Eg8KB2R3X3Nsb3QYAiABKA0iPAoWVGVhbUFja0xvZ2luQ2hhbmdlU2xvdBIR",
+            "Cglkd19yZXN1bHQYASABKA0SDwoHZHdfc2xvdBgCIAEoDSJBChZUZWFtQWNr",
+            "TG9naW5LaWNrUGxheWVyEhEKCWR3X3Jlc3VsdBgBIAEoDRIUCgxxd19wbGF5",
+            "ZXJfaWQYAiABKAQiuAEKFVRlYW1BY2tMb2dpbkdhbWVTdGFydBIRCglkd19y",
+            "ZXN1bHQYASABKA0SFgoOZHdfcGxheWVyX3BvcnQYAiABKA0SFgoOZHdfc2Vy",
+            "dmVyX3BvcnQYAyABKA0SHAoUZHdfc2xhdmVfc2VydmVyX3BvcnQYBCABKA0S",
+            "FAoMc3pfbGlzdGVuX2lwGAUgASgJEhQKDHF3X3BsYXllcl9pZBgGIAEoBBIS",
+            "Cgpxd190ZWFtX2lkGAcgASgEIlQKFVRlYW1BY2tMb2dpbkVudGVyVGVhbRIR",
+            "Cglkd19yZXN1bHQYASABKA0SFAoMcXdfcGxheWVyX2lkGAIgASgEEhIKCnF3",
+            "X3RlYW1faWQYAyABKAQiTAofVGVhbVJlcXVlc3RHYW1lTWFuYWdlckdhbWVT",
+            "dGFydBISCgpxd190ZWFtX2lkGAEgASgEEhUKDXF3X3BsYXllcl9pZHMYAiAD",
+            "KAQiqAEKG0dhbWVNYW5hZ2VyQWNrVGVhbUdhbWVTdGFydBIRCglkd19yZXN1",
+            "bHQYASABKA0SFgoOZHdfcGxheWVyX3BvcnQYAiABKA0SFgoOZHdfc2VydmVy",
+            "X3BvcnQYAyABKA0SHAoUZHdfc2xhdmVfc2VydmVyX3BvcnQYBCABKA0SEgoK",
+            "cXdfdGVhbV9pZBgFIAEoBBIUCgxzel9saXN0ZW5faXAYBiABKAkimAEKGUdh",
+            "bWVOb3RpZnlHYW1lTWFuYWdlckluZm8SFgoOZHdfcGxheWVyX3BvcnQYASAB",
+            "KA0SFgoOZHdfc2VydmVyX3BvcnQYAiABKA0SHAoUZHdfc2xhdmVfc2VydmVy",
+            "X3BvcnQYAyABKA0SEgoKcXdfdGVhbV9pZBgEIAEoBBIZChFkd190ZWFtX3Nl",
+            "cnZlcl9pZBgFIAEoDSIxChxHYW1lTWFuYWdlckFja0dhbWVJbmZvUmVzdWx0",
+            "EhEKCWR3X3Jlc3VsdBgBIAEoDSIxChxQbGF5ZXJSZXF1ZXN0R2FtZU1hbmFn",
+            "ZXJJbmZvEhEKCWR3X3Jlc3VsdBgBIAEoDSJuCh5HYW1lTWFuYWdlckFja1Bs",
+            "YXllckluZm9SZXN1bHQSFgoOZHdfcGxheWVyX3BvcnQYASABKA0SFgoOZHdf",
+            "c2VydmVyX3BvcnQYAiABKA0SHAoUZHdfc2xhdmVfc2VydmVyX3BvcnQYAyAB",
+            "KA0iKAoVUGxheWVyUmVxdWVzdEdhbWVUZXN0Eg8KB3N6X3Rlc3QYASABKAki",
+            "igEKClNlcnZlckluZm8SFAoMZHdfc2VydmVyX2lkGAEgASgNEhQKDHN6X2xp",
+            "c3Rlbl9pcBgCIAEoCRIUCgxkd190ZWFtX3BvcnQYAyABKA0SIwobZHdfZ2Ft",
+            "ZV9zZXJ2ZXJfbWFuYWdlcl9wb3J0GAQgASgNEhUKDWR3X2xvZ2luX3BvcnQY",
+            "BSABKA0qSQoLRVNlcnZlclR5cGUSCwoHU1RfTk9ORRAAEgwKCFNUX0xvZ2lu",
+            "EAESCwoHU1RfVGVhbRACEhIKDlNUX0dhbWVNYW5hZ2VyEAMqJwoJRVRlYW1U",
+            "eXBlEgsKB1RUX05PTkUQABINCglUVF9Ob3JtYWwQASqMAgoKRUVycm9yQ29k",
+            "ZRILCgdFQ19OT05FEAASFAoQRUNfQWxyZWFkeUluVGVhbRABEhYKEkVDX01h",
+            "a2VUZWFtTm90SWRsZRACEhcKE0VDX0Nhbm5vdEZpbmRQbGF5ZXIQAxIPCgtF",
+            "Q19Ob1RlYW1JZBAEEhAKDEVDX05vdExlYWRlchAFEhMKD0VDX1RlYW1IYXNT",
+            "dGFydBAGEhoKFkVDX05vR2FtZU1hbmFnZXJTZXJ2ZXIQBxITCg9FQ19Ob1Rl",
+            "YW1TZXJ2ZXIQCBIUChBFQ19Ob0xvZ2luU2VydmVyEAkSFgoSRUNfUGxheWVy",
+            "Tm90T25saW5lEAoSEwoPRUNfRmFpbEludG9UZWFtEAtiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::GameProto.WebDataReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProto.EServerType), typeof(global::GameProto.ETeamType), typeof(global::GameProto.EErrorCode), }, new pbr::GeneratedClrTypeInfo[] {
@@ -129,6 +133,7 @@ namespace GameProto {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginNotifyPlayerTeamKick), global::GameProto.LoginNotifyPlayerTeamKick.Parser, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerGameStart), global::GameProto.LoginAckPlayerGameStart.Parser, new[]{ "DwResult", "DwPlayerPort", "DwServerPort", "DwSlaveServerPort", "SzListenIp", "QwTeamId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerOnLinePlayer), global::GameProto.LoginAckPlayerOnLinePlayer.Parser, new[]{ "DwResult", "QwPlayerId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerEnterTeam), global::GameProto.LoginAckPlayerEnterTeam.Parser, new[]{ "DwResult" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginNotifyLoginPlayerKick), global::GameProto.LoginNotifyLoginPlayerKick.Parser, new[]{ "QwPlayerId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginRequestLoginInviteTeam), global::GameProto.LoginRequestLoginInviteTeam.Parser, new[]{ "QwInviteId", "QwInviteeId", "QwTeamId", "DwTeamServerId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckLoginInviteTeam), global::GameProto.LoginAckLoginInviteTeam.Parser, new[]{ "DwResult", "QwInviteId", "QwInviteeId" }, null, null, null),
@@ -137,13 +142,14 @@ namespace GameProto {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginRequestTeamChangeSlot), global::GameProto.LoginRequestTeamChangeSlot.Parser, new[]{ "DwResult", "DwSlotId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginRequestTeamKickPlayer), global::GameProto.LoginRequestTeamKickPlayer.Parser, new[]{ "QwPlayerId", "QwTeamId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginRequestTeamGameStart), global::GameProto.LoginRequestTeamGameStart.Parser, new[]{ "QwTeamId", "QwPlayerId" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginRequestTeamEnterTeam), global::GameProto.LoginRequestTeamEnterTeam.Parser, new[]{ "QwPlayerId", "DwTeamServerId", "QwTeamId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginRequestTeamEnterTeam), global::GameProto.LoginRequestTeamEnterTeam.Parser, new[]{ "QwTeamId", "RoleData" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.TeamAckLoginMakeTeam), global::GameProto.TeamAckLoginMakeTeam.Parser, new[]{ "DwResult", "QwPlayerId", "QwTeamId", "DwSlotId" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.TeamNotifyLoginTeamInfo), global::GameProto.TeamNotifyLoginTeamInfo.Parser, new[]{ "TeamRoleData" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.TeamNotifyLoginTeamInfo), global::GameProto.TeamNotifyLoginTeamInfo.Parser, new[]{ "TeamRoleData", "QwTeamId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.TeamAckLoginInviteTeam), global::GameProto.TeamAckLoginInviteTeam.Parser, new[]{ "DwResult", "DwSlot" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.TeamAckLoginChangeSlot), global::GameProto.TeamAckLoginChangeSlot.Parser, new[]{ "DwResult", "DwSlot" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.TeamAckLoginKickPlayer), global::GameProto.TeamAckLoginKickPlayer.Parser, new[]{ "DwResult", "QwPlayerId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.TeamAckLoginGameStart), global::GameProto.TeamAckLoginGameStart.Parser, new[]{ "DwResult", "DwPlayerPort", "DwServerPort", "DwSlaveServerPort", "SzListenIp", "QwPlayerId", "QwTeamId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.TeamAckLoginEnterTeam), global::GameProto.TeamAckLoginEnterTeam.Parser, new[]{ "DwResult", "QwPlayerId", "QwTeamId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.TeamRequestGameManagerGameStart), global::GameProto.TeamRequestGameManagerGameStart.Parser, new[]{ "QwTeamId", "QwPlayerIds" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameManagerAckTeamGameStart), global::GameProto.GameManagerAckTeamGameStart.Parser, new[]{ "DwResult", "DwPlayerPort", "DwServerPort", "DwSlaveServerPort", "QwTeamId", "SzListenIp" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyGameManagerInfo), global::GameProto.GameNotifyGameManagerInfo.Parser, new[]{ "DwPlayerPort", "DwServerPort", "DwSlaveServerPort", "QwTeamId", "DwTeamServerId" }, null, null, null),
@@ -190,9 +196,9 @@ namespace GameProto {
     /// </summary>
     [pbr::OriginalName("EC_MakeTeamNotIdle")] EcMakeTeamNotIdle = 2,
     /// <summary>
-    ///没有组队服务器
+    ///查无此人
     /// </summary>
-    [pbr::OriginalName("EC_NoTeamServer")] EcNoTeamServer = 3,
+    [pbr::OriginalName("EC_CannotFindPlayer")] EcCannotFindPlayer = 3,
     /// <summary>
     ///没有这个队伍
     /// </summary>
@@ -210,13 +216,21 @@ namespace GameProto {
     /// </summary>
     [pbr::OriginalName("EC_NoGameManagerServer")] EcNoGameManagerServer = 7,
     /// <summary>
+    ///没有组队服务器
+    /// </summary>
+    [pbr::OriginalName("EC_NoTeamServer")] EcNoTeamServer = 8,
+    /// <summary>
+    ///没有登录服务器
+    /// </summary>
+    [pbr::OriginalName("EC_NoLoginServer")] EcNoLoginServer = 9,
+    /// <summary>
     ///玩家不在线
     /// </summary>
-    [pbr::OriginalName("EC_PlayerNotOnline")] EcPlayerNotOnline = 8,
+    [pbr::OriginalName("EC_PlayerNotOnline")] EcPlayerNotOnline = 10,
     /// <summary>
-    ///查无此人
+    ///加入队伍失败
     /// </summary>
-    [pbr::OriginalName("EC_CannotFindPlayer")] EcCannotFindPlayer = 9,
+    [pbr::OriginalName("EC_FailIntoTeam")] EcFailIntoTeam = 11,
   }
 
   #endregion
@@ -3009,6 +3023,135 @@ namespace GameProto {
 
   }
 
+  public sealed partial class LoginAckPlayerEnterTeam : pb::IMessage<LoginAckPlayerEnterTeam> {
+    private static readonly pb::MessageParser<LoginAckPlayerEnterTeam> _parser = new pb::MessageParser<LoginAckPlayerEnterTeam>(() => new LoginAckPlayerEnterTeam());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<LoginAckPlayerEnterTeam> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[19]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public LoginAckPlayerEnterTeam() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public LoginAckPlayerEnterTeam(LoginAckPlayerEnterTeam other) : this() {
+      dwResult_ = other.dwResult_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public LoginAckPlayerEnterTeam Clone() {
+      return new LoginAckPlayerEnterTeam(this);
+    }
+
+    /// <summary>Field number for the "dw_result" field.</summary>
+    public const int DwResultFieldNumber = 1;
+    private uint dwResult_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint DwResult {
+      get { return dwResult_; }
+      set {
+        dwResult_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as LoginAckPlayerEnterTeam);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(LoginAckPlayerEnterTeam other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (DwResult != other.DwResult) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (DwResult != 0) hash ^= DwResult.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (DwResult != 0) {
+        output.WriteRawTag(8);
+        output.WriteUInt32(DwResult);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (DwResult != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwResult);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(LoginAckPlayerEnterTeam other) {
+      if (other == null) {
+        return;
+      }
+      if (other.DwResult != 0) {
+        DwResult = other.DwResult;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            DwResult = input.ReadUInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
   /// <summary>
   ///login->login
   /// </summary>
@@ -3020,7 +3163,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[19]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[20]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3149,7 +3292,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[20]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[21]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3371,7 +3514,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[21]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[22]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3565,7 +3708,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[22]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[23]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3728,7 +3871,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[23]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[24]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -3885,7 +4028,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[24]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[25]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4042,7 +4185,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[25]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[26]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4199,7 +4342,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[26]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[27]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4356,7 +4499,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[27]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[28]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4373,9 +4516,8 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public LoginRequestTeamEnterTeam(LoginRequestTeamEnterTeam other) : this() {
-      qwPlayerId_ = other.qwPlayerId_;
-      dwTeamServerId_ = other.dwTeamServerId_;
       qwTeamId_ = other.qwTeamId_;
+      RoleData = other.roleData_ != null ? other.RoleData.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -4384,36 +4526,25 @@ namespace GameProto {
       return new LoginRequestTeamEnterTeam(this);
     }
 
-    /// <summary>Field number for the "qw_player_id" field.</summary>
-    public const int QwPlayerIdFieldNumber = 1;
-    private ulong qwPlayerId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public ulong QwPlayerId {
-      get { return qwPlayerId_; }
-      set {
-        qwPlayerId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "dw_team_server_id" field.</summary>
-    public const int DwTeamServerIdFieldNumber = 2;
-    private uint dwTeamServerId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint DwTeamServerId {
-      get { return dwTeamServerId_; }
-      set {
-        dwTeamServerId_ = value;
-      }
-    }
-
     /// <summary>Field number for the "qw_team_id" field.</summary>
-    public const int QwTeamIdFieldNumber = 3;
+    public const int QwTeamIdFieldNumber = 1;
     private ulong qwTeamId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public ulong QwTeamId {
       get { return qwTeamId_; }
       set {
         qwTeamId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "role_data" field.</summary>
+    public const int RoleDataFieldNumber = 2;
+    private global::GameProto.RoleData roleData_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProto.RoleData RoleData {
+      get { return roleData_; }
+      set {
+        roleData_ = value;
       }
     }
 
@@ -4430,18 +4561,16 @@ namespace GameProto {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (QwPlayerId != other.QwPlayerId) return false;
-      if (DwTeamServerId != other.DwTeamServerId) return false;
       if (QwTeamId != other.QwTeamId) return false;
+      if (!object.Equals(RoleData, other.RoleData)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
-      if (QwPlayerId != 0UL) hash ^= QwPlayerId.GetHashCode();
-      if (DwTeamServerId != 0) hash ^= DwTeamServerId.GetHashCode();
       if (QwTeamId != 0UL) hash ^= QwTeamId.GetHashCode();
+      if (roleData_ != null) hash ^= RoleData.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -4455,17 +4584,13 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
-      if (QwPlayerId != 0UL) {
-        output.WriteRawTag(8);
-        output.WriteUInt64(QwPlayerId);
-      }
-      if (DwTeamServerId != 0) {
-        output.WriteRawTag(16);
-        output.WriteUInt32(DwTeamServerId);
-      }
       if (QwTeamId != 0UL) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(8);
         output.WriteUInt64(QwTeamId);
+      }
+      if (roleData_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(RoleData);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -4475,14 +4600,11 @@ namespace GameProto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
-      if (QwPlayerId != 0UL) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(QwPlayerId);
-      }
-      if (DwTeamServerId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwTeamServerId);
-      }
       if (QwTeamId != 0UL) {
         size += 1 + pb::CodedOutputStream.ComputeUInt64Size(QwTeamId);
+      }
+      if (roleData_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(RoleData);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -4495,14 +4617,14 @@ namespace GameProto {
       if (other == null) {
         return;
       }
-      if (other.QwPlayerId != 0UL) {
-        QwPlayerId = other.QwPlayerId;
-      }
-      if (other.DwTeamServerId != 0) {
-        DwTeamServerId = other.DwTeamServerId;
-      }
       if (other.QwTeamId != 0UL) {
         QwTeamId = other.QwTeamId;
+      }
+      if (other.roleData_ != null) {
+        if (roleData_ == null) {
+          roleData_ = new global::GameProto.RoleData();
+        }
+        RoleData.MergeFrom(other.RoleData);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -4516,15 +4638,14 @@ namespace GameProto {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            QwPlayerId = input.ReadUInt64();
-            break;
-          }
-          case 16: {
-            DwTeamServerId = input.ReadUInt32();
-            break;
-          }
-          case 24: {
             QwTeamId = input.ReadUInt64();
+            break;
+          }
+          case 18: {
+            if (roleData_ == null) {
+              roleData_ = new global::GameProto.RoleData();
+            }
+            input.ReadMessage(roleData_);
             break;
           }
         }
@@ -4544,7 +4665,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[28]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[29]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4757,7 +4878,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[29]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[30]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -4775,6 +4896,7 @@ namespace GameProto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public TeamNotifyLoginTeamInfo(TeamNotifyLoginTeamInfo other) : this() {
       teamRoleData_ = other.teamRoleData_.Clone();
+      qwTeamId_ = other.qwTeamId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -4793,6 +4915,17 @@ namespace GameProto {
       get { return teamRoleData_; }
     }
 
+    /// <summary>Field number for the "qw_team_id" field.</summary>
+    public const int QwTeamIdFieldNumber = 2;
+    private ulong qwTeamId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong QwTeamId {
+      get { return qwTeamId_; }
+      set {
+        qwTeamId_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as TeamNotifyLoginTeamInfo);
@@ -4807,6 +4940,7 @@ namespace GameProto {
         return true;
       }
       if(!teamRoleData_.Equals(other.teamRoleData_)) return false;
+      if (QwTeamId != other.QwTeamId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -4814,6 +4948,7 @@ namespace GameProto {
     public override int GetHashCode() {
       int hash = 1;
       hash ^= teamRoleData_.GetHashCode();
+      if (QwTeamId != 0UL) hash ^= QwTeamId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -4828,6 +4963,10 @@ namespace GameProto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
       teamRoleData_.WriteTo(output, _repeated_teamRoleData_codec);
+      if (QwTeamId != 0UL) {
+        output.WriteRawTag(16);
+        output.WriteUInt64(QwTeamId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -4837,6 +4976,9 @@ namespace GameProto {
     public int CalculateSize() {
       int size = 0;
       size += teamRoleData_.CalculateSize(_repeated_teamRoleData_codec);
+      if (QwTeamId != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(QwTeamId);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -4849,6 +4991,9 @@ namespace GameProto {
         return;
       }
       teamRoleData_.Add(other.teamRoleData_);
+      if (other.QwTeamId != 0UL) {
+        QwTeamId = other.QwTeamId;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -4862,6 +5007,10 @@ namespace GameProto {
             break;
           case 10: {
             teamRoleData_.AddEntriesFrom(input, _repeated_teamRoleData_codec);
+            break;
+          }
+          case 16: {
+            QwTeamId = input.ReadUInt64();
             break;
           }
         }
@@ -4878,7 +5027,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[30]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[31]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5035,7 +5184,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[31]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[32]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5192,7 +5341,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[32]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[33]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5349,7 +5498,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[33]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[34]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5638,6 +5787,191 @@ namespace GameProto {
 
   }
 
+  public sealed partial class TeamAckLoginEnterTeam : pb::IMessage<TeamAckLoginEnterTeam> {
+    private static readonly pb::MessageParser<TeamAckLoginEnterTeam> _parser = new pb::MessageParser<TeamAckLoginEnterTeam>(() => new TeamAckLoginEnterTeam());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<TeamAckLoginEnterTeam> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[35]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public TeamAckLoginEnterTeam() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public TeamAckLoginEnterTeam(TeamAckLoginEnterTeam other) : this() {
+      dwResult_ = other.dwResult_;
+      qwPlayerId_ = other.qwPlayerId_;
+      qwTeamId_ = other.qwTeamId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public TeamAckLoginEnterTeam Clone() {
+      return new TeamAckLoginEnterTeam(this);
+    }
+
+    /// <summary>Field number for the "dw_result" field.</summary>
+    public const int DwResultFieldNumber = 1;
+    private uint dwResult_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint DwResult {
+      get { return dwResult_; }
+      set {
+        dwResult_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "qw_player_id" field.</summary>
+    public const int QwPlayerIdFieldNumber = 2;
+    private ulong qwPlayerId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong QwPlayerId {
+      get { return qwPlayerId_; }
+      set {
+        qwPlayerId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "qw_team_id" field.</summary>
+    public const int QwTeamIdFieldNumber = 3;
+    private ulong qwTeamId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong QwTeamId {
+      get { return qwTeamId_; }
+      set {
+        qwTeamId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as TeamAckLoginEnterTeam);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(TeamAckLoginEnterTeam other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (DwResult != other.DwResult) return false;
+      if (QwPlayerId != other.QwPlayerId) return false;
+      if (QwTeamId != other.QwTeamId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (DwResult != 0) hash ^= DwResult.GetHashCode();
+      if (QwPlayerId != 0UL) hash ^= QwPlayerId.GetHashCode();
+      if (QwTeamId != 0UL) hash ^= QwTeamId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (DwResult != 0) {
+        output.WriteRawTag(8);
+        output.WriteUInt32(DwResult);
+      }
+      if (QwPlayerId != 0UL) {
+        output.WriteRawTag(16);
+        output.WriteUInt64(QwPlayerId);
+      }
+      if (QwTeamId != 0UL) {
+        output.WriteRawTag(24);
+        output.WriteUInt64(QwTeamId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (DwResult != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwResult);
+      }
+      if (QwPlayerId != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(QwPlayerId);
+      }
+      if (QwTeamId != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(QwTeamId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(TeamAckLoginEnterTeam other) {
+      if (other == null) {
+        return;
+      }
+      if (other.DwResult != 0) {
+        DwResult = other.DwResult;
+      }
+      if (other.QwPlayerId != 0UL) {
+        QwPlayerId = other.QwPlayerId;
+      }
+      if (other.QwTeamId != 0UL) {
+        QwTeamId = other.QwTeamId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            DwResult = input.ReadUInt32();
+            break;
+          }
+          case 16: {
+            QwPlayerId = input.ReadUInt64();
+            break;
+          }
+          case 24: {
+            QwTeamId = input.ReadUInt64();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
   /// <summary>
   ///team->gamemanager
   /// </summary>
@@ -5649,7 +5983,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[34]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[36]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -5802,7 +6136,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[35]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[37]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6074,7 +6408,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[36]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[38]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6318,7 +6652,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[37]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[39]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6450,7 +6784,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[38]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[40]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6582,7 +6916,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[39]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[41]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6770,7 +7104,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[40]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[42]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -6902,7 +7236,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[41]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[43]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

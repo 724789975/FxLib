@@ -280,6 +280,56 @@ bool CPlayerSession::OnPlayerRequestLoginOnLinePlayer(CPlayerSession& refSession
 	return true;
 }
 
+bool CPlayerSession::OnPlayerRequestLoginEnterTeam(CPlayerSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::PlayerRequestLoginEnterTeam* pMsg = dynamic_cast<GameProto::PlayerRequestLoginEnterTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(m_qwPlayerId);
+	if (pPlayer == NULL)
+	{
+		LogExe(LogLv_Critical, "cann't find player : %llu", m_qwPlayerId);
+		GameProto::LoginAckPlayerEnterTeam oResult;
+		oResult.set_dw_result(GameProto::EC_CannotFindPlayer);
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		Send(pBuf, dwBufLen);
+		return true;
+	}
+
+	CBinaryTeamSession* pTeamSession = GameServer::Instance()->GetTeamSessionManager().GetTeamSession(pMsg->dw_team_server_id());
+	if (pTeamSession == NULL)
+	{
+		LogExe(LogLv_Critical, "no team server player : %llu, team server id : %d", m_qwPlayerId, pMsg->dw_team_server_id());
+		GameProto::LoginAckPlayerEnterTeam oResult;
+		oResult.set_dw_result(GameProto::EC_NoTeamServer);
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		Send(pBuf, dwBufLen);
+		return true;
+	}
+
+	GameProto::LoginRequestTeamEnterTeam oRequest;
+	oRequest.set_qw_team_id(pMsg->qw_team_id());
+	GameProto::RoleData* pRoleData = oRequest.mutable_role_data();
+	pRoleData->set_qw_player_id(pPlayer->GetPlayerId());
+	pRoleData->set_dw_sex(pPlayer->GetSex());
+	pRoleData->set_sz_avatar(pPlayer->GetAvatar());
+	pRoleData->set_sz_nick_name(pPlayer->GetNickName());
+
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oRequest, pBuf, dwBufLen);
+	pTeamSession->Send(pBuf, dwBufLen);
+
+	return true;
+}
+
 //////////////////////////////////////////////////////////////////////////
 void CWebSocketPlayerSession::Release(void)
 {

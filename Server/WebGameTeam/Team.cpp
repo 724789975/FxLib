@@ -1,5 +1,8 @@
 #include "Team.h"
+#include "LoginSession.h"
+#include "GameServer.h"
 #include "fxredis.h"
+#include "msg_proto/web_game.pb.h"
 
 
 CTeam::CTeam()
@@ -82,6 +85,31 @@ bool CTeam::KickPlayer(UINT64 qwPlayerId)
 	m_pPlayerSlots[m_mapPlayers[qwPlayerId].dw_slot_id()] = 0;
 	m_mapPlayers.erase(qwPlayerId);
 	return true;
+}
+
+void CTeam::NotifyPlayer()
+{
+	GameProto::TeamNotifyLoginTeamInfo oNotify;
+	oNotify.set_qw_team_id(m_qwLeader);
+	for (std::map<UINT64, GameProto::TeamRoleData >::iterator it = m_mapPlayers.begin();
+		it != m_mapPlayers.end(); ++it)
+	{
+		GameProto::TeamRoleData* pTeamRoleData = oNotify.add_team_role_data();
+		pTeamRoleData->CopyFrom(it->second);
+	}
+
+	for (std::map<UINT64, GameProto::TeamRoleData >::iterator it = m_mapPlayers.begin();
+		it != m_mapPlayers.end(); ++it)
+	{
+		CBinaryLoginSession* pLoginSession = GameServer::Instance()->GetLoginSessionManager().GetLoginSession(it->second.dw_server_id());
+		if (pLoginSession)
+		{
+			char* pBuf = NULL;
+			unsigned int dwBufLen = 0;
+			ProtoUtility::MakeProtoSendBuffer(oNotify, pBuf, dwBufLen);
+			pLoginSession->Send(pBuf, dwBufLen);
+		}
+	}
 }
 
 GameProto::TeamRoleData* CTeam::GetTeamRoleData(UINT64 qwPlayerId)

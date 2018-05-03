@@ -35,6 +35,7 @@ public:
 	bool		OnTeamAckLoginChangeSlot(CTeamSession& refSession, google::protobuf::Message& refMsg);
 	bool		OnTeamAckLoginKickPlayer(CTeamSession& refSession, google::protobuf::Message& refMsg);
 	bool		OnTeamAckLoginGameStart(CTeamSession& refSession, google::protobuf::Message& refMsg);
+	bool		OnTeamAckLoginEnterTeam(CTeamSession& refSession, google::protobuf::Message& refMsg);
 
 protected:
 	unsigned int m_dwServerId;
@@ -69,6 +70,7 @@ public:
 	void Release(CBinaryTeamSession* pSession);
 
 	std::map<unsigned int, CBinaryTeamSession*>& GetTeamSessions() { return m_mapTeamSessions; }
+	CBinaryTeamSession* GetTeamSession(UINT32 dwTeamServerId);
 
 private:
 	TDynamicPoolEx<CBinaryTeamSession> m_poolSessions;

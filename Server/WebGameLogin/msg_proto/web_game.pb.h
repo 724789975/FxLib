@@ -38,7 +38,7 @@ namespace protobuf_web_5fgame_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[42];
+  static const ::google::protobuf::internal::ParseTable schema[44];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -82,6 +82,8 @@ void InitDefaultsLoginAckPlayerGameStartImpl();
 void InitDefaultsLoginAckPlayerGameStart();
 void InitDefaultsLoginAckPlayerOnLinePlayerImpl();
 void InitDefaultsLoginAckPlayerOnLinePlayer();
+void InitDefaultsLoginAckPlayerEnterTeamImpl();
+void InitDefaultsLoginAckPlayerEnterTeam();
 void InitDefaultsLoginNotifyLoginPlayerKickImpl();
 void InitDefaultsLoginNotifyLoginPlayerKick();
 void InitDefaultsLoginRequestLoginInviteTeamImpl();
@@ -112,6 +114,8 @@ void InitDefaultsTeamAckLoginKickPlayerImpl();
 void InitDefaultsTeamAckLoginKickPlayer();
 void InitDefaultsTeamAckLoginGameStartImpl();
 void InitDefaultsTeamAckLoginGameStart();
+void InitDefaultsTeamAckLoginEnterTeamImpl();
+void InitDefaultsTeamAckLoginEnterTeam();
 void InitDefaultsTeamRequestGameManagerGameStartImpl();
 void InitDefaultsTeamRequestGameManagerGameStart();
 void InitDefaultsGameManagerAckTeamGameStartImpl();
@@ -148,6 +152,7 @@ inline void InitDefaults() {
   InitDefaultsLoginNotifyPlayerTeamKick();
   InitDefaultsLoginAckPlayerGameStart();
   InitDefaultsLoginAckPlayerOnLinePlayer();
+  InitDefaultsLoginAckPlayerEnterTeam();
   InitDefaultsLoginNotifyLoginPlayerKick();
   InitDefaultsLoginRequestLoginInviteTeam();
   InitDefaultsLoginAckLoginInviteTeam();
@@ -163,6 +168,7 @@ inline void InitDefaults() {
   InitDefaultsTeamAckLoginChangeSlot();
   InitDefaultsTeamAckLoginKickPlayer();
   InitDefaultsTeamAckLoginGameStart();
+  InitDefaultsTeamAckLoginEnterTeam();
   InitDefaultsTeamRequestGameManagerGameStart();
   InitDefaultsGameManagerAckTeamGameStart();
   InitDefaultsGameNotifyGameManagerInfo();
@@ -192,6 +198,9 @@ extern LoginAckLoginInviteTeamDefaultTypeInternal _LoginAckLoginInviteTeam_defau
 class LoginAckPlayerChangeSlot;
 class LoginAckPlayerChangeSlotDefaultTypeInternal;
 extern LoginAckPlayerChangeSlotDefaultTypeInternal _LoginAckPlayerChangeSlot_default_instance_;
+class LoginAckPlayerEnterTeam;
+class LoginAckPlayerEnterTeamDefaultTypeInternal;
+extern LoginAckPlayerEnterTeamDefaultTypeInternal _LoginAckPlayerEnterTeam_default_instance_;
 class LoginAckPlayerGameStart;
 class LoginAckPlayerGameStartDefaultTypeInternal;
 extern LoginAckPlayerGameStartDefaultTypeInternal _LoginAckPlayerGameStart_default_instance_;
@@ -282,6 +291,9 @@ extern ServerInfoDefaultTypeInternal _ServerInfo_default_instance_;
 class TeamAckLoginChangeSlot;
 class TeamAckLoginChangeSlotDefaultTypeInternal;
 extern TeamAckLoginChangeSlotDefaultTypeInternal _TeamAckLoginChangeSlot_default_instance_;
+class TeamAckLoginEnterTeam;
+class TeamAckLoginEnterTeamDefaultTypeInternal;
+extern TeamAckLoginEnterTeamDefaultTypeInternal _TeamAckLoginEnterTeam_default_instance_;
 class TeamAckLoginGameStart;
 class TeamAckLoginGameStartDefaultTypeInternal;
 extern TeamAckLoginGameStartDefaultTypeInternal _TeamAckLoginGameStart_default_instance_;
@@ -351,19 +363,21 @@ enum EErrorCode {
   EC_NONE = 0,
   EC_AlreadyInTeam = 1,
   EC_MakeTeamNotIdle = 2,
-  EC_NoTeamServer = 3,
+  EC_CannotFindPlayer = 3,
   EC_NoTeamId = 4,
   EC_NotLeader = 5,
   EC_TeamHasStart = 6,
   EC_NoGameManagerServer = 7,
-  EC_PlayerNotOnline = 8,
-  EC_CannotFindPlayer = 9,
+  EC_NoTeamServer = 8,
+  EC_NoLoginServer = 9,
+  EC_PlayerNotOnline = 10,
+  EC_FailIntoTeam = 11,
   EErrorCode_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   EErrorCode_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool EErrorCode_IsValid(int value);
 const EErrorCode EErrorCode_MIN = EC_NONE;
-const EErrorCode EErrorCode_MAX = EC_CannotFindPlayer;
+const EErrorCode EErrorCode_MAX = EC_FailIntoTeam;
 const int EErrorCode_ARRAYSIZE = EErrorCode_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* EErrorCode_descriptor();
@@ -2388,6 +2402,105 @@ class LoginAckPlayerOnLinePlayer : public ::google::protobuf::Message /* @@proto
 };
 // -------------------------------------------------------------------
 
+class LoginAckPlayerEnterTeam : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.LoginAckPlayerEnterTeam) */ {
+ public:
+  LoginAckPlayerEnterTeam();
+  virtual ~LoginAckPlayerEnterTeam();
+
+  LoginAckPlayerEnterTeam(const LoginAckPlayerEnterTeam& from);
+
+  inline LoginAckPlayerEnterTeam& operator=(const LoginAckPlayerEnterTeam& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  LoginAckPlayerEnterTeam(LoginAckPlayerEnterTeam&& from) noexcept
+    : LoginAckPlayerEnterTeam() {
+    *this = ::std::move(from);
+  }
+
+  inline LoginAckPlayerEnterTeam& operator=(LoginAckPlayerEnterTeam&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const LoginAckPlayerEnterTeam& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const LoginAckPlayerEnterTeam* internal_default_instance() {
+    return reinterpret_cast<const LoginAckPlayerEnterTeam*>(
+               &_LoginAckPlayerEnterTeam_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    19;
+
+  void Swap(LoginAckPlayerEnterTeam* other);
+  friend void swap(LoginAckPlayerEnterTeam& a, LoginAckPlayerEnterTeam& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline LoginAckPlayerEnterTeam* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  LoginAckPlayerEnterTeam* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const LoginAckPlayerEnterTeam& from);
+  void MergeFrom(const LoginAckPlayerEnterTeam& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(LoginAckPlayerEnterTeam* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // uint32 dw_result = 1;
+  void clear_dw_result();
+  static const int kDwResultFieldNumber = 1;
+  ::google::protobuf::uint32 dw_result() const;
+  void set_dw_result(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.LoginAckPlayerEnterTeam)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint32 dw_result_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsLoginAckPlayerEnterTeamImpl();
+};
+// -------------------------------------------------------------------
+
 class LoginNotifyLoginPlayerKick : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.LoginNotifyLoginPlayerKick) */ {
  public:
   LoginNotifyLoginPlayerKick();
@@ -2423,7 +2536,7 @@ class LoginNotifyLoginPlayerKick : public ::google::protobuf::Message /* @@proto
                &_LoginNotifyLoginPlayerKick_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    19;
+    20;
 
   void Swap(LoginNotifyLoginPlayerKick* other);
   friend void swap(LoginNotifyLoginPlayerKick& a, LoginNotifyLoginPlayerKick& b) {
@@ -2522,7 +2635,7 @@ class LoginRequestLoginInviteTeam : public ::google::protobuf::Message /* @@prot
                &_LoginRequestLoginInviteTeam_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    20;
+    21;
 
   void Swap(LoginRequestLoginInviteTeam* other);
   friend void swap(LoginRequestLoginInviteTeam& a, LoginRequestLoginInviteTeam& b) {
@@ -2642,7 +2755,7 @@ class LoginAckLoginInviteTeam : public ::google::protobuf::Message /* @@protoc_i
                &_LoginAckLoginInviteTeam_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    21;
+    22;
 
   void Swap(LoginAckLoginInviteTeam* other);
   friend void swap(LoginAckLoginInviteTeam& a, LoginAckLoginInviteTeam& b) {
@@ -2755,7 +2868,7 @@ class LoginRequestTeamMakeTeam : public ::google::protobuf::Message /* @@protoc_
                &_LoginRequestTeamMakeTeam_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    22;
+    23;
 
   void Swap(LoginRequestTeamMakeTeam* other);
   friend void swap(LoginRequestTeamMakeTeam& a, LoginRequestTeamMakeTeam& b) {
@@ -2864,7 +2977,7 @@ class LoginRequestTeamInviteTeam : public ::google::protobuf::Message /* @@proto
                &_LoginRequestTeamInviteTeam_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    23;
+    24;
 
   void Swap(LoginRequestTeamInviteTeam* other);
   friend void swap(LoginRequestTeamInviteTeam& a, LoginRequestTeamInviteTeam& b) {
@@ -2970,7 +3083,7 @@ class LoginRequestTeamChangeSlot : public ::google::protobuf::Message /* @@proto
                &_LoginRequestTeamChangeSlot_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    24;
+    25;
 
   void Swap(LoginRequestTeamChangeSlot* other);
   friend void swap(LoginRequestTeamChangeSlot& a, LoginRequestTeamChangeSlot& b) {
@@ -3076,7 +3189,7 @@ class LoginRequestTeamKickPlayer : public ::google::protobuf::Message /* @@proto
                &_LoginRequestTeamKickPlayer_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    25;
+    26;
 
   void Swap(LoginRequestTeamKickPlayer* other);
   friend void swap(LoginRequestTeamKickPlayer& a, LoginRequestTeamKickPlayer& b) {
@@ -3182,7 +3295,7 @@ class LoginRequestTeamGameStart : public ::google::protobuf::Message /* @@protoc
                &_LoginRequestTeamGameStart_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    26;
+    27;
 
   void Swap(LoginRequestTeamGameStart* other);
   friend void swap(LoginRequestTeamGameStart& a, LoginRequestTeamGameStart& b) {
@@ -3288,7 +3401,7 @@ class LoginRequestTeamEnterTeam : public ::google::protobuf::Message /* @@protoc
                &_LoginRequestTeamEnterTeam_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    27;
+    28;
 
   void Swap(LoginRequestTeamEnterTeam* other);
   friend void swap(LoginRequestTeamEnterTeam& a, LoginRequestTeamEnterTeam& b) {
@@ -3335,31 +3448,27 @@ class LoginRequestTeamEnterTeam : public ::google::protobuf::Message /* @@protoc
 
   // accessors -------------------------------------------------------
 
-  // uint64 qw_player_id = 1;
-  void clear_qw_player_id();
-  static const int kQwPlayerIdFieldNumber = 1;
-  ::google::protobuf::uint64 qw_player_id() const;
-  void set_qw_player_id(::google::protobuf::uint64 value);
+  // .GameProto.RoleData role_data = 2;
+  bool has_role_data() const;
+  void clear_role_data();
+  static const int kRoleDataFieldNumber = 2;
+  const ::GameProto::RoleData& role_data() const;
+  ::GameProto::RoleData* release_role_data();
+  ::GameProto::RoleData* mutable_role_data();
+  void set_allocated_role_data(::GameProto::RoleData* role_data);
 
-  // uint64 qw_team_id = 3;
+  // uint64 qw_team_id = 1;
   void clear_qw_team_id();
-  static const int kQwTeamIdFieldNumber = 3;
+  static const int kQwTeamIdFieldNumber = 1;
   ::google::protobuf::uint64 qw_team_id() const;
   void set_qw_team_id(::google::protobuf::uint64 value);
-
-  // uint32 dw_team_server_id = 2;
-  void clear_dw_team_server_id();
-  static const int kDwTeamServerIdFieldNumber = 2;
-  ::google::protobuf::uint32 dw_team_server_id() const;
-  void set_dw_team_server_id(::google::protobuf::uint32 value);
 
   // @@protoc_insertion_point(class_scope:GameProto.LoginRequestTeamEnterTeam)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::uint64 qw_player_id_;
+  ::GameProto::RoleData* role_data_;
   ::google::protobuf::uint64 qw_team_id_;
-  ::google::protobuf::uint32 dw_team_server_id_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
   friend void ::protobuf_web_5fgame_2eproto::InitDefaultsLoginRequestTeamEnterTeamImpl();
@@ -3401,7 +3510,7 @@ class TeamAckLoginMakeTeam : public ::google::protobuf::Message /* @@protoc_inse
                &_TeamAckLoginMakeTeam_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    28;
+    29;
 
   void Swap(TeamAckLoginMakeTeam* other);
   friend void swap(TeamAckLoginMakeTeam& a, TeamAckLoginMakeTeam& b) {
@@ -3521,7 +3630,7 @@ class TeamNotifyLoginTeamInfo : public ::google::protobuf::Message /* @@protoc_i
                &_TeamNotifyLoginTeamInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    29;
+    30;
 
   void Swap(TeamNotifyLoginTeamInfo* other);
   friend void swap(TeamNotifyLoginTeamInfo& a, TeamNotifyLoginTeamInfo& b) {
@@ -3580,11 +3689,18 @@ class TeamNotifyLoginTeamInfo : public ::google::protobuf::Message /* @@protoc_i
   const ::google::protobuf::RepeatedPtrField< ::GameProto::TeamRoleData >&
       team_role_data() const;
 
+  // uint64 qw_team_id = 2;
+  void clear_qw_team_id();
+  static const int kQwTeamIdFieldNumber = 2;
+  ::google::protobuf::uint64 qw_team_id() const;
+  void set_qw_team_id(::google::protobuf::uint64 value);
+
   // @@protoc_insertion_point(class_scope:GameProto.TeamNotifyLoginTeamInfo)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::GameProto::TeamRoleData > team_role_data_;
+  ::google::protobuf::uint64 qw_team_id_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
   friend void ::protobuf_web_5fgame_2eproto::InitDefaultsTeamNotifyLoginTeamInfoImpl();
@@ -3626,7 +3742,7 @@ class TeamAckLoginInviteTeam : public ::google::protobuf::Message /* @@protoc_in
                &_TeamAckLoginInviteTeam_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    30;
+    31;
 
   void Swap(TeamAckLoginInviteTeam* other);
   friend void swap(TeamAckLoginInviteTeam& a, TeamAckLoginInviteTeam& b) {
@@ -3732,7 +3848,7 @@ class TeamAckLoginChangeSlot : public ::google::protobuf::Message /* @@protoc_in
                &_TeamAckLoginChangeSlot_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    31;
+    32;
 
   void Swap(TeamAckLoginChangeSlot* other);
   friend void swap(TeamAckLoginChangeSlot& a, TeamAckLoginChangeSlot& b) {
@@ -3838,7 +3954,7 @@ class TeamAckLoginKickPlayer : public ::google::protobuf::Message /* @@protoc_in
                &_TeamAckLoginKickPlayer_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    32;
+    33;
 
   void Swap(TeamAckLoginKickPlayer* other);
   friend void swap(TeamAckLoginKickPlayer& a, TeamAckLoginKickPlayer& b) {
@@ -3944,7 +4060,7 @@ class TeamAckLoginGameStart : public ::google::protobuf::Message /* @@protoc_ins
                &_TeamAckLoginGameStart_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    33;
+    34;
 
   void Swap(TeamAckLoginGameStart* other);
   friend void swap(TeamAckLoginGameStart& a, TeamAckLoginGameStart& b) {
@@ -4058,6 +4174,119 @@ class TeamAckLoginGameStart : public ::google::protobuf::Message /* @@protoc_ins
 };
 // -------------------------------------------------------------------
 
+class TeamAckLoginEnterTeam : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.TeamAckLoginEnterTeam) */ {
+ public:
+  TeamAckLoginEnterTeam();
+  virtual ~TeamAckLoginEnterTeam();
+
+  TeamAckLoginEnterTeam(const TeamAckLoginEnterTeam& from);
+
+  inline TeamAckLoginEnterTeam& operator=(const TeamAckLoginEnterTeam& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  TeamAckLoginEnterTeam(TeamAckLoginEnterTeam&& from) noexcept
+    : TeamAckLoginEnterTeam() {
+    *this = ::std::move(from);
+  }
+
+  inline TeamAckLoginEnterTeam& operator=(TeamAckLoginEnterTeam&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const TeamAckLoginEnterTeam& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const TeamAckLoginEnterTeam* internal_default_instance() {
+    return reinterpret_cast<const TeamAckLoginEnterTeam*>(
+               &_TeamAckLoginEnterTeam_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    35;
+
+  void Swap(TeamAckLoginEnterTeam* other);
+  friend void swap(TeamAckLoginEnterTeam& a, TeamAckLoginEnterTeam& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline TeamAckLoginEnterTeam* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  TeamAckLoginEnterTeam* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const TeamAckLoginEnterTeam& from);
+  void MergeFrom(const TeamAckLoginEnterTeam& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(TeamAckLoginEnterTeam* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // uint64 qw_player_id = 2;
+  void clear_qw_player_id();
+  static const int kQwPlayerIdFieldNumber = 2;
+  ::google::protobuf::uint64 qw_player_id() const;
+  void set_qw_player_id(::google::protobuf::uint64 value);
+
+  // uint64 qw_team_id = 3;
+  void clear_qw_team_id();
+  static const int kQwTeamIdFieldNumber = 3;
+  ::google::protobuf::uint64 qw_team_id() const;
+  void set_qw_team_id(::google::protobuf::uint64 value);
+
+  // uint32 dw_result = 1;
+  void clear_dw_result();
+  static const int kDwResultFieldNumber = 1;
+  ::google::protobuf::uint32 dw_result() const;
+  void set_dw_result(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.TeamAckLoginEnterTeam)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint64 qw_player_id_;
+  ::google::protobuf::uint64 qw_team_id_;
+  ::google::protobuf::uint32 dw_result_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsTeamAckLoginEnterTeamImpl();
+};
+// -------------------------------------------------------------------
+
 class TeamRequestGameManagerGameStart : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.TeamRequestGameManagerGameStart) */ {
  public:
   TeamRequestGameManagerGameStart();
@@ -4093,7 +4322,7 @@ class TeamRequestGameManagerGameStart : public ::google::protobuf::Message /* @@
                &_TeamRequestGameManagerGameStart_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    34;
+    36;
 
   void Swap(TeamRequestGameManagerGameStart* other);
   friend void swap(TeamRequestGameManagerGameStart& a, TeamRequestGameManagerGameStart& b) {
@@ -4206,7 +4435,7 @@ class GameManagerAckTeamGameStart : public ::google::protobuf::Message /* @@prot
                &_GameManagerAckTeamGameStart_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    35;
+    37;
 
   void Swap(GameManagerAckTeamGameStart* other);
   friend void swap(GameManagerAckTeamGameStart& a, GameManagerAckTeamGameStart& b) {
@@ -4348,7 +4577,7 @@ class GameNotifyGameManagerInfo : public ::google::protobuf::Message /* @@protoc
                &_GameNotifyGameManagerInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    36;
+    38;
 
   void Swap(GameNotifyGameManagerInfo* other);
   friend void swap(GameNotifyGameManagerInfo& a, GameNotifyGameManagerInfo& b) {
@@ -4475,7 +4704,7 @@ class GameManagerAckGameInfoResult : public ::google::protobuf::Message /* @@pro
                &_GameManagerAckGameInfoResult_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    37;
+    39;
 
   void Swap(GameManagerAckGameInfoResult* other);
   friend void swap(GameManagerAckGameInfoResult& a, GameManagerAckGameInfoResult& b) {
@@ -4574,7 +4803,7 @@ class PlayerRequestGameManagerInfo : public ::google::protobuf::Message /* @@pro
                &_PlayerRequestGameManagerInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    38;
+    40;
 
   void Swap(PlayerRequestGameManagerInfo* other);
   friend void swap(PlayerRequestGameManagerInfo& a, PlayerRequestGameManagerInfo& b) {
@@ -4673,7 +4902,7 @@ class GameManagerAckPlayerInfoResult : public ::google::protobuf::Message /* @@p
                &_GameManagerAckPlayerInfoResult_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    39;
+    41;
 
   void Swap(GameManagerAckPlayerInfoResult* other);
   friend void swap(GameManagerAckPlayerInfoResult& a, GameManagerAckPlayerInfoResult& b) {
@@ -4786,7 +5015,7 @@ class PlayerRequestGameTest : public ::google::protobuf::Message /* @@protoc_ins
                &_PlayerRequestGameTest_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    40;
+    42;
 
   void Swap(PlayerRequestGameTest* other);
   friend void swap(PlayerRequestGameTest& a, PlayerRequestGameTest& b) {
@@ -4893,7 +5122,7 @@ class ServerInfo : public ::google::protobuf::Message /* @@protoc_insertion_poin
                &_ServerInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    41;
+    43;
 
   void Swap(ServerInfo* other);
   friend void swap(ServerInfo& a, ServerInfo& b) {
@@ -5695,6 +5924,24 @@ LoginAckPlayerOnLinePlayer::mutable_qw_player_id() {
 
 // -------------------------------------------------------------------
 
+// LoginAckPlayerEnterTeam
+
+// uint32 dw_result = 1;
+inline void LoginAckPlayerEnterTeam::clear_dw_result() {
+  dw_result_ = 0u;
+}
+inline ::google::protobuf::uint32 LoginAckPlayerEnterTeam::dw_result() const {
+  // @@protoc_insertion_point(field_get:GameProto.LoginAckPlayerEnterTeam.dw_result)
+  return dw_result_;
+}
+inline void LoginAckPlayerEnterTeam::set_dw_result(::google::protobuf::uint32 value) {
+  
+  dw_result_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.LoginAckPlayerEnterTeam.dw_result)
+}
+
+// -------------------------------------------------------------------
+
 // LoginNotifyLoginPlayerKick
 
 // uint64 qw_player_id = 1;
@@ -6011,35 +6258,7 @@ inline void LoginRequestTeamGameStart::set_qw_player_id(::google::protobuf::uint
 
 // LoginRequestTeamEnterTeam
 
-// uint64 qw_player_id = 1;
-inline void LoginRequestTeamEnterTeam::clear_qw_player_id() {
-  qw_player_id_ = GOOGLE_ULONGLONG(0);
-}
-inline ::google::protobuf::uint64 LoginRequestTeamEnterTeam::qw_player_id() const {
-  // @@protoc_insertion_point(field_get:GameProto.LoginRequestTeamEnterTeam.qw_player_id)
-  return qw_player_id_;
-}
-inline void LoginRequestTeamEnterTeam::set_qw_player_id(::google::protobuf::uint64 value) {
-  
-  qw_player_id_ = value;
-  // @@protoc_insertion_point(field_set:GameProto.LoginRequestTeamEnterTeam.qw_player_id)
-}
-
-// uint32 dw_team_server_id = 2;
-inline void LoginRequestTeamEnterTeam::clear_dw_team_server_id() {
-  dw_team_server_id_ = 0u;
-}
-inline ::google::protobuf::uint32 LoginRequestTeamEnterTeam::dw_team_server_id() const {
-  // @@protoc_insertion_point(field_get:GameProto.LoginRequestTeamEnterTeam.dw_team_server_id)
-  return dw_team_server_id_;
-}
-inline void LoginRequestTeamEnterTeam::set_dw_team_server_id(::google::protobuf::uint32 value) {
-  
-  dw_team_server_id_ = value;
-  // @@protoc_insertion_point(field_set:GameProto.LoginRequestTeamEnterTeam.dw_team_server_id)
-}
-
-// uint64 qw_team_id = 3;
+// uint64 qw_team_id = 1;
 inline void LoginRequestTeamEnterTeam::clear_qw_team_id() {
   qw_team_id_ = GOOGLE_ULONGLONG(0);
 }
@@ -6051,6 +6270,50 @@ inline void LoginRequestTeamEnterTeam::set_qw_team_id(::google::protobuf::uint64
   
   qw_team_id_ = value;
   // @@protoc_insertion_point(field_set:GameProto.LoginRequestTeamEnterTeam.qw_team_id)
+}
+
+// .GameProto.RoleData role_data = 2;
+inline bool LoginRequestTeamEnterTeam::has_role_data() const {
+  return this != internal_default_instance() && role_data_ != NULL;
+}
+inline const ::GameProto::RoleData& LoginRequestTeamEnterTeam::role_data() const {
+  const ::GameProto::RoleData* p = role_data_;
+  // @@protoc_insertion_point(field_get:GameProto.LoginRequestTeamEnterTeam.role_data)
+  return p != NULL ? *p : *reinterpret_cast<const ::GameProto::RoleData*>(
+      &::GameProto::_RoleData_default_instance_);
+}
+inline ::GameProto::RoleData* LoginRequestTeamEnterTeam::release_role_data() {
+  // @@protoc_insertion_point(field_release:GameProto.LoginRequestTeamEnterTeam.role_data)
+  
+  ::GameProto::RoleData* temp = role_data_;
+  role_data_ = NULL;
+  return temp;
+}
+inline ::GameProto::RoleData* LoginRequestTeamEnterTeam::mutable_role_data() {
+  
+  if (role_data_ == NULL) {
+    role_data_ = new ::GameProto::RoleData;
+  }
+  // @@protoc_insertion_point(field_mutable:GameProto.LoginRequestTeamEnterTeam.role_data)
+  return role_data_;
+}
+inline void LoginRequestTeamEnterTeam::set_allocated_role_data(::GameProto::RoleData* role_data) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(role_data_);
+  }
+  if (role_data) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      role_data = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, role_data, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  role_data_ = role_data;
+  // @@protoc_insertion_point(field_set_allocated:GameProto.LoginRequestTeamEnterTeam.role_data)
 }
 
 // -------------------------------------------------------------------
@@ -6142,6 +6405,20 @@ inline const ::google::protobuf::RepeatedPtrField< ::GameProto::TeamRoleData >&
 TeamNotifyLoginTeamInfo::team_role_data() const {
   // @@protoc_insertion_point(field_list:GameProto.TeamNotifyLoginTeamInfo.team_role_data)
   return team_role_data_;
+}
+
+// uint64 qw_team_id = 2;
+inline void TeamNotifyLoginTeamInfo::clear_qw_team_id() {
+  qw_team_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 TeamNotifyLoginTeamInfo::qw_team_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.TeamNotifyLoginTeamInfo.qw_team_id)
+  return qw_team_id_;
+}
+inline void TeamNotifyLoginTeamInfo::set_qw_team_id(::google::protobuf::uint64 value) {
+  
+  qw_team_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.TeamNotifyLoginTeamInfo.qw_team_id)
 }
 
 // -------------------------------------------------------------------
@@ -6379,6 +6656,52 @@ inline void TeamAckLoginGameStart::set_qw_team_id(::google::protobuf::uint64 val
   
   qw_team_id_ = value;
   // @@protoc_insertion_point(field_set:GameProto.TeamAckLoginGameStart.qw_team_id)
+}
+
+// -------------------------------------------------------------------
+
+// TeamAckLoginEnterTeam
+
+// uint32 dw_result = 1;
+inline void TeamAckLoginEnterTeam::clear_dw_result() {
+  dw_result_ = 0u;
+}
+inline ::google::protobuf::uint32 TeamAckLoginEnterTeam::dw_result() const {
+  // @@protoc_insertion_point(field_get:GameProto.TeamAckLoginEnterTeam.dw_result)
+  return dw_result_;
+}
+inline void TeamAckLoginEnterTeam::set_dw_result(::google::protobuf::uint32 value) {
+  
+  dw_result_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.TeamAckLoginEnterTeam.dw_result)
+}
+
+// uint64 qw_player_id = 2;
+inline void TeamAckLoginEnterTeam::clear_qw_player_id() {
+  qw_player_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 TeamAckLoginEnterTeam::qw_player_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.TeamAckLoginEnterTeam.qw_player_id)
+  return qw_player_id_;
+}
+inline void TeamAckLoginEnterTeam::set_qw_player_id(::google::protobuf::uint64 value) {
+  
+  qw_player_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.TeamAckLoginEnterTeam.qw_player_id)
+}
+
+// uint64 qw_team_id = 3;
+inline void TeamAckLoginEnterTeam::clear_qw_team_id() {
+  qw_team_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 TeamAckLoginEnterTeam::qw_team_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.TeamAckLoginEnterTeam.qw_team_id)
+  return qw_team_id_;
+}
+inline void TeamAckLoginEnterTeam::set_qw_team_id(::google::protobuf::uint64 value) {
+  
+  qw_team_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.TeamAckLoginEnterTeam.qw_team_id)
 }
 
 // -------------------------------------------------------------------
@@ -6885,6 +7208,10 @@ inline void ServerInfo::set_dw_login_port(::google::protobuf::uint32 value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

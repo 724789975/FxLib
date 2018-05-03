@@ -18,6 +18,7 @@ CTeamSession::CTeamSession()
 	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginChangeSlot::descriptor(), &CTeamSession::OnTeamAckLoginChangeSlot);
 	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginKickPlayer::descriptor(), &CTeamSession::OnTeamAckLoginKickPlayer);
 	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginGameStart::descriptor(), &CTeamSession::OnTeamAckLoginGameStart);
+	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginEnterTeam::descriptor(), &CTeamSession::OnTeamAckLoginEnterTeam);
 }
 
 CTeamSession::~CTeamSession()
@@ -194,6 +195,34 @@ bool CTeamSession::OnTeamAckLoginGameStart(CTeamSession& refSession, google::pro
 	return true;
 }
 
+bool CTeamSession::OnTeamAckLoginEnterTeam(CTeamSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::TeamAckLoginEnterTeam* pMsg = dynamic_cast<GameProto::TeamAckLoginEnterTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(pMsg->qw_player_id());
+	if (pPlayer == NULL)
+	{
+		LogExe(LogLv_Critical, "find player fail player id : %llu, team id : %llu", pMsg->qw_player_id(), pMsg->qw_team_id());
+		return true;
+	}
+
+	pPlayer->SetState(PlayrState_TeamCompleted);
+	pPlayer->SetTeamInfo(pMsg->qw_team_id(), m_dwServerId);
+
+	GameProto::LoginAckPlayerEnterTeam oResult;
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+	pPlayer->GetSession()->Send(pBuf, dwBufLen);
+	return true;
+
+	return true;
+}
+
 //////////////////////////////////////////////////////////////////////////
 CBinaryTeamSession::CBinaryTeamSession()
 {
@@ -252,5 +281,14 @@ void BinaryTeamSessionManager::Release(CBinaryTeamSession * pSession)
 {
 	m_mapTeamSessions.erase(pSession->GetServerId());
 	m_poolSessions.ReleaseObj(pSession);
+}
+
+CBinaryTeamSession* BinaryTeamSessionManager::GetTeamSession(UINT32 dwTeamServerId)
+{
+	if (m_mapTeamSessions.find(dwTeamServerId) == m_mapTeamSessions.end())
+	{
+		return NULL;
+	}
+	return m_mapTeamSessions[dwTeamServerId];
 }
 

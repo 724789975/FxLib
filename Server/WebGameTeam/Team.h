@@ -26,19 +26,25 @@ public:
 	bool InsertIntoTeam(const GameProto::RoleData& refRoleData);
 	bool KickPlayer(UINT64 qwPlayerId);
 
+	void NotifyPlayer();
+
 	UINT64 GetLeaderId() { return m_qwLeader; }
 	ETeamState GetState() { return m_eState; }
+	
+	void SetTeamId(UINT32 dwTeamId) { m_dwTeamId = dwTeamId; }
+	UINT32 GetTeamId(UINT32 dwTeamId) { return dwTeamId; }
+
 	void SetState(ETeamState eState) { m_eState = eState; }
 
 	GameProto::TeamRoleData* GetTeamRoleData(UINT64 qwPlayerId);
 	std::map<UINT64, GameProto::TeamRoleData>& GetTeamRoles() { return m_mapPlayers; }
 
 	std::map<UINT64, GameProto::TeamRoleData> m_mapPlayers;		//<playerid, data>
-
 	UINT64 m_pPlayerSlots[MAXCLIENTNUM];						//playerid
 	UINT64 m_qwLeader;
 
 	ETeamState m_eState;
+	UINT32 m_dwTeamId;
 };
 
 class CTeamManager

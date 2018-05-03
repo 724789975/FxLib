@@ -26,13 +26,15 @@ enum EErrorCode
 	EC_NONE = 0;
 	EC_AlreadyInTeam = 1;		//已经在队伍中了
 	EC_MakeTeamNotIdle = 2;		//创建队伍时 角色状态不是idle
-	EC_NoTeamServer = 3;		//没有组队服务器
+	EC_CannotFindPlayer = 3;	//查无此人
 	EC_NoTeamId = 4;			//没有这个队伍
 	EC_NotLeader = 5;			//没有队长
 	EC_TeamHasStart = 6;		//队伍已经申请开始游戏
 	EC_NoGameManagerServer = 7;	//没有游戏管理服务器
-	EC_PlayerNotOnline = 8;		//玩家不在线
-	EC_CannotFindPlayer = 9;	//查无此人
+	EC_NoTeamServer = 8;		//没有组队服务器
+	EC_NoLoginServer = 9;		//没有登录服务器
+	EC_PlayerNotOnline = 10;	//玩家不在线
+	EC_FailIntoTeam = 11;		//加入队伍失败
 }
 
 //player->login
@@ -144,6 +146,11 @@ message LoginAckPlayerOnLinePlayer
 	repeated uint64 qw_player_id = 2;
 }
 
+message LoginAckPlayerEnterTeam
+{
+	uint32 dw_result = 1;
+}
+
 //login->login
 message LoginNotifyLoginPlayerKick
 {
@@ -198,9 +205,8 @@ message LoginRequestTeamGameStart
 
 message LoginRequestTeamEnterTeam
 {
-	uint64 qw_player_id = 1;
-	uint32 dw_team_server_id = 2;
-	uint64 qw_team_id = 3;
+	uint64 qw_team_id = 1;
+	RoleData role_data = 2;
 }
 
 //team->login
@@ -215,6 +221,7 @@ message TeamAckLoginMakeTeam
 message TeamNotifyLoginTeamInfo
 {
 	repeated TeamRoleData team_role_data = 1;
+	uint64 qw_team_id = 2;
 }
 
 message TeamAckLoginInviteTeam
@@ -244,6 +251,13 @@ message TeamAckLoginGameStart
 	string sz_listen_ip = 5;
 	uint64 qw_player_id = 6;
 	uint64 qw_team_id = 7;
+}
+
+message TeamAckLoginEnterTeam
+{
+	uint32 dw_result = 1;
+	uint64 qw_player_id = 2;
+	uint64 qw_team_id = 3;
 }
 
 //team->gamemanager

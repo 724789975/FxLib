@@ -17,6 +17,7 @@ CLoginSession::CLoginSession()
 	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamChangeSlot::descriptor(), &CLoginSession::OnLoginRequestTeamChangeSlot);
 	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamKickPlayer::descriptor(), &CLoginSession::OnLoginRequestTeamKickPlayer);
 	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamGameStart::descriptor(), &CLoginSession::OnLoginRequestTeamGameStart);
+	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamEnterTeam::descriptor(), &CLoginSession::OnLoginRequestTeamEnterTeam);
 }
 
 CLoginSession::~CLoginSession()
@@ -237,6 +238,52 @@ bool CLoginSession::OnLoginRequestTeamGameStart(CLoginSession& refSession, googl
 	return true;
 }
 
+bool CLoginSession::OnLoginRequestTeamEnterTeam(CLoginSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::LoginRequestTeamEnterTeam* pMsg = dynamic_cast<GameProto::LoginRequestTeamEnterTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	const GameProto::RoleData& refRoleData = pMsg->role_data();
+	GameProto::TeamAckLoginEnterTeam oResult;
+	oResult.set_qw_player_id(refRoleData.qw_player_id());
+	oResult.set_qw_team_id(pMsg->qw_team_id());
+	CTeam* pTeam = GameServer::Instance()->GetTeamManager().GetTeam(pMsg->qw_team_id());
+	if (pTeam == NULL)
+	{
+		LogExe(LogLv_Critical, "cann't find team id : %llu, player id : %llu", pMsg->qw_team_id(), refRoleData.qw_player_id());
+		oResult.set_dw_result(GameProto::EC_NoTeamId);
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		Send(pBuf, dwBufLen);
+		return true;
+	}
+
+	if (!pTeam->InsertIntoTeam(*(pMsg->mutable_role_data())))
+	{
+		LogExe(LogLv_Critical, "cann't enter team id : %llu, player id : %llu", pMsg->qw_team_id(), refRoleData.qw_player_id());
+		oResult.set_dw_result(GameProto::EC_FailIntoTeam);
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		Send(pBuf, dwBufLen);
+		return true;
+	}
+
+	//notify
+	pTeam->NotifyPlayer();
+
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
+
+	return true;
+}
+
 //////////////////////////////////////////////////////////////////////////
 CBinaryLoginSession::CBinaryLoginSession()
 {
@@ -293,5 +340,14 @@ void BinaryLoginSessionManager::Release(CBinaryLoginSession * pSession)
 {
 	m_mapLoginSessions.erase(pSession->GetServerId());
 	m_poolSessions.ReleaseObj(pSession);
+}
+
+CBinaryLoginSession* BinaryLoginSessionManager::GetLoginSession(UINT32 dwServerId)
+{
+	if (m_mapLoginSessions.find(dwServerId) == m_mapLoginSessions.end())
+	{
+		return NULL;
+	}
+	return m_mapLoginSessions[dwServerId];
 }
 

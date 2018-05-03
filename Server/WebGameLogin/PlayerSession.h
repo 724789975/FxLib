@@ -35,6 +35,7 @@ public:
 	bool		OnPlayerRequestLoginChangeSlot(CPlayerSession& refSession, google::protobuf::Message& refMsg);
 	bool		OnPlayerRequestLoginGameStart(CPlayerSession& refSession, google::protobuf::Message& refMsg);
 	bool		OnPlayerRequestLoginOnLinePlayer(CPlayerSession& refSession, google::protobuf::Message& refMsg);
+	bool		OnPlayerRequestLoginEnterTeam(CPlayerSession& refSession, google::protobuf::Message& refMsg);
 
 protected:
 	UINT64 m_qwPlayerId;
