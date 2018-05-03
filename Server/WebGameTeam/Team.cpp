@@ -104,6 +104,7 @@ void CTeam::NotifyPlayer()
 		CBinaryLoginSession* pLoginSession = GameServer::Instance()->GetLoginSessionManager().GetLoginSession(it->second.dw_server_id());
 		if (pLoginSession)
 		{
+			oNotify.set_qw_player_id(it->first);
 			char* pBuf = NULL;
 			unsigned int dwBufLen = 0;
 			ProtoUtility::MakeProtoSendBuffer(oNotify, pBuf, dwBufLen);

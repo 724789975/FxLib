@@ -119,6 +119,24 @@ bool CTeamSession::OnTeamNotifyLoginTeamInfo(CTeamSession& refSession, google::p
 	{
 		return false;
 	}
+
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(pMsg->qw_player_id());
+	if (pPlayer == NULL)
+	{
+		LogExe(LogLv_Critical, "find player fail, player id : %llu, team id : %llu", pMsg->qw_player_id(), pMsg->qw_team_id());
+		return true;
+	}
+
+	GameProto::LoginNotifyPlayerTeamInfo oNotify;
+	for (int i = 0; i < pMsg->team_role_data_size(); ++i)
+	{
+		oNotify.add_team_role_data()->CopyFrom(pMsg->team_role_data(i));
+	}
+	oNotify.set_qw_team_id(pMsg->qw_team_id());
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oNotify, pBuf, dwBufLen);
+	pPlayer->GetSession()->Send(pBuf, dwBufLen);
 	return true;
 }
 

@@ -107,6 +107,7 @@ message LoginAckPlayerMakeTeam
 message LoginNotifyPlayerTeamInfo
 {
 	repeated TeamRoleData team_role_data = 1;
+	uint64 qw_team_id = 2;
 }
 
 message LoginAckPlayerInviteTeam
@@ -222,6 +223,7 @@ message TeamNotifyLoginTeamInfo
 {
 	repeated TeamRoleData team_role_data = 1;
 	uint64 qw_team_id = 2;
+	uint64 qw_player_id = 3;
 }
 
 message TeamAckLoginInviteTeam

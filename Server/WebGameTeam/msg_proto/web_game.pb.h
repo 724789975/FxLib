@@ -1733,11 +1733,18 @@ class LoginNotifyPlayerTeamInfo : public ::google::protobuf::Message /* @@protoc
   const ::google::protobuf::RepeatedPtrField< ::GameProto::TeamRoleData >&
       team_role_data() const;
 
+  // uint64 qw_team_id = 2;
+  void clear_qw_team_id();
+  static const int kQwTeamIdFieldNumber = 2;
+  ::google::protobuf::uint64 qw_team_id() const;
+  void set_qw_team_id(::google::protobuf::uint64 value);
+
   // @@protoc_insertion_point(class_scope:GameProto.LoginNotifyPlayerTeamInfo)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::GameProto::TeamRoleData > team_role_data_;
+  ::google::protobuf::uint64 qw_team_id_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
   friend void ::protobuf_web_5fgame_2eproto::InitDefaultsLoginNotifyPlayerTeamInfoImpl();
@@ -3695,12 +3702,19 @@ class TeamNotifyLoginTeamInfo : public ::google::protobuf::Message /* @@protoc_i
   ::google::protobuf::uint64 qw_team_id() const;
   void set_qw_team_id(::google::protobuf::uint64 value);
 
+  // uint64 qw_player_id = 3;
+  void clear_qw_player_id();
+  static const int kQwPlayerIdFieldNumber = 3;
+  ::google::protobuf::uint64 qw_player_id() const;
+  void set_qw_player_id(::google::protobuf::uint64 value);
+
   // @@protoc_insertion_point(class_scope:GameProto.TeamNotifyLoginTeamInfo)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::RepeatedPtrField< ::GameProto::TeamRoleData > team_role_data_;
   ::google::protobuf::uint64 qw_team_id_;
+  ::google::protobuf::uint64 qw_player_id_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
   friend void ::protobuf_web_5fgame_2eproto::InitDefaultsTeamNotifyLoginTeamInfoImpl();
@@ -5661,6 +5675,20 @@ LoginNotifyPlayerTeamInfo::team_role_data() const {
   return team_role_data_;
 }
 
+// uint64 qw_team_id = 2;
+inline void LoginNotifyPlayerTeamInfo::clear_qw_team_id() {
+  qw_team_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 LoginNotifyPlayerTeamInfo::qw_team_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.LoginNotifyPlayerTeamInfo.qw_team_id)
+  return qw_team_id_;
+}
+inline void LoginNotifyPlayerTeamInfo::set_qw_team_id(::google::protobuf::uint64 value) {
+  
+  qw_team_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.LoginNotifyPlayerTeamInfo.qw_team_id)
+}
+
 // -------------------------------------------------------------------
 
 // LoginAckPlayerInviteTeam
@@ -6419,6 +6447,20 @@ inline void TeamNotifyLoginTeamInfo::set_qw_team_id(::google::protobuf::uint64 v
   
   qw_team_id_ = value;
   // @@protoc_insertion_point(field_set:GameProto.TeamNotifyLoginTeamInfo.qw_team_id)
+}
+
+// uint64 qw_player_id = 3;
+inline void TeamNotifyLoginTeamInfo::clear_qw_player_id() {
+  qw_player_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 TeamNotifyLoginTeamInfo::qw_player_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.TeamNotifyLoginTeamInfo.qw_player_id)
+  return qw_player_id_;
+}
+inline void TeamNotifyLoginTeamInfo::set_qw_player_id(::google::protobuf::uint64 value) {
+  
+  qw_player_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.TeamNotifyLoginTeamInfo.qw_player_id)
 }
 
 // -------------------------------------------------------------------
