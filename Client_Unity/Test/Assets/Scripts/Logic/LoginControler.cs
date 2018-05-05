@@ -47,6 +47,8 @@ public class LoginControler: MonoBehaviour
 		m_pSession.RegistMessage("GameProto.LoginNotifyPlayerGameKick", OnLoginNotifyPlayerGameKick);
 		m_pSession.RegistMessage("GameProto.LoginAckPlayerOnLinePlayer", OnLoginAckPlayerOnLinePlayer);
 		m_pSession.RegistMessage("GameProto.LoginNotifyPlayerInviteTeam", OnLoginNotifyPlayerInviteTeam);
+		m_pSession.RegistMessage("GameProto.LoginNotifyPlayerTeamInfo", OnLoginNotifyPlayerTeamInfo);
+		m_pSession.RegistMessage("GameProto.LoginAckPlayerEnterTeam", OnLoginAckPlayerEnterTeam);
     }
 
 	// Update is called once per frame
@@ -193,6 +195,7 @@ public class LoginControler: MonoBehaviour
 		}
 		H5Helper.H5LogStr("invite team ret : " + oRet.DwResult.ToString());
 	}
+
 	public void OnLoginNotifyPlayerGameKick(byte[] pBuf)
 	{
 		GameProto.LoginNotifyPlayerGameKick oRet = GameProto.LoginNotifyPlayerGameKick.Parser.ParseFrom(pBuf);
@@ -214,7 +217,7 @@ public class LoginControler: MonoBehaviour
 		}
 		H5Helper.H5LogStr("online player ret : " + oRet.DwResult.ToString());
 
-		GameObject go_RoleList = Instantiate(m_oRoleList, transform.parent);
+		GameObject go_RoleList = Instantiate(Resources.Load<GameObject>(GameObjectConstent.g_szPlayerList), transform.parent);
 
 		go_RoleList.GetComponent<RoleList>().SetPlayerIds(oRet.QwPlayerId);
 	}
@@ -229,6 +232,41 @@ public class LoginControler: MonoBehaviour
 		}
 
 		H5Helper.H5LogStr("on invitee team player id : " + oRet.QwPlayerId.ToString() + " team id : " + oRet.QwTeamId.ToString());
+
+		GameObject go_RoleList = Instantiate(Resources.Load<GameObject>(GameObjectConstent.g_szControlPanel), transform.parent);
+		go_RoleList.GetComponent<ControlPanel>().Init("player : " + oRet.QwPlayerId.ToString() + " invite you to team :" + oRet.QwTeamId.ToString(),
+			IntoInviteTeam, oRet, null, null);
+	}
+
+	public void OnLoginNotifyPlayerTeamInfo(byte[] pBuf)
+	{
+		GameProto.LoginNotifyPlayerTeamInfo oRet = GameProto.LoginNotifyPlayerTeamInfo.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			H5Helper.H5LogStr("OnLoginNotifyPlayerTeamInfo error parse");
+			return;
+		}
+		string szContent = "OnLoginNotifyPlayerTeamInfo team id : " + oRet.QwTeamId.ToString() + "\n";
+		for (int i = 0; i < oRet.TeamRoleData.Count; ++i)
+		{
+			szContent += "playerid : " + oRet.TeamRoleData[i].RoleData.QwPlayerId.ToString()
+				+ ", slot id : " + oRet.TeamRoleData[i].DwSlotId.ToString()
+				+ ", serverid : " + oRet.TeamRoleData[i].DwServerId.ToString() + "\n";
+		}
+
+		H5Helper.H5LogStr(szContent);
+	}
+
+	public void OnLoginAckPlayerEnterTeam(byte[] pBuf)
+	{
+		GameProto.LoginAckPlayerEnterTeam oRet = GameProto.LoginAckPlayerEnterTeam.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			H5Helper.H5LogStr("OnLoginAckPlayerEnterTeam error parse");
+			return;
+		}
+
+		H5Helper.H5LogStr("OnLoginAckPlayerEnterTeam result : " + oRet.DwResult.ToString());
 	}
 
 	public void OnRoleData(string szData)
@@ -255,6 +293,29 @@ public class LoginControler: MonoBehaviour
 		m_pSession.Send(pData, 2048 - pStream.GetLeftLen());
 	}
 
+	public void IntoInviteTeam(object pParam)
+	{
+		GameProto.LoginNotifyPlayerInviteTeam oInvite = pParam as GameProto.LoginNotifyPlayerInviteTeam;
+		if (oInvite == null)
+		{
+			H5Helper.H5AlertString("IntoInviteTeam parse error!!!!");
+			return;
+		}
+		GameProto.PlayerRequestLoginEnterTeam oRequest = new GameProto.PlayerRequestLoginEnterTeam();
+		oRequest.DwTeamServerId = oInvite.DwTeamServerId;
+		oRequest.QwTeamId = oInvite.QwTeamId;
+
+		byte[] pData = new byte[1024];
+		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
+		pStream.WriteString("GameProto.PlayerRequestLoginEnterTeam");
+		byte[] pProto = new byte[oRequest.CalculateSize()];
+		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
+		oRequest.WriteTo(oStream);
+		pStream.WriteData(pProto, (uint)pProto.Length);
+
+		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+	}
+
 	public void OnDestroy()
 	{
 		if (m_pSession != null)
@@ -271,6 +332,6 @@ public class LoginControler: MonoBehaviour
 		H5Manager.Instance().GetLoginSessionResetCallBack().Remove(OnLoginSessionReset);
 	}
 
-	public GameObject m_oRoleList;
+	//public GameObject m_oRoleList;
 	public SessionObject m_pSession;
 }

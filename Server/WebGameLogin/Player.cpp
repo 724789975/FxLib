@@ -11,11 +11,11 @@
 const static unsigned int g_dwPlayerBuffLen = 64 * 1024;
 static char g_pPlayerBuff[g_dwPlayerBuffLen];
 
-class RedisServerId : public IRedisQuery
+class RedisGetServerId : public IRedisQuery
 {
 public:
-	RedisServerId(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId), m_qwServerId(0), m_pReader(NULL) {}
-	~RedisServerId() {}
+	RedisGetServerId(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId), m_dwServerId(0), m_pReader(NULL) {}
+	~RedisGetServerId() {}
 
 	virtual int					GetDBId(void) { return 0; }
 	virtual void				OnQuery(IRedisConnection *poDBConnection)
@@ -24,14 +24,14 @@ public:
 		sprintf(szQuery, "ZSCORE %s %llu", RedisConstant::szOnLinePlayer, m_qwPlayerId);
 		poDBConnection->Query(szQuery, &m_pReader);
 	}
-	virtual void OnResult(void) { m_pReader->GetValue(m_qwServerId); }
+	virtual void OnResult(void) { std::string szServerId; m_pReader->GetValue(szServerId); m_dwServerId = atoi(szServerId.c_str()); }
 	virtual void Release(void) { m_pReader->Release(); }
 
-	INT64 GetServerId() { return m_qwServerId; }
+	INT32 GetServerId() { return m_dwServerId; }
 
 private:
 	IRedisDataReader* m_pReader;
-	INT64 m_qwServerId;
+	INT32 m_dwServerId;
 	UINT64 m_qwPlayerId;
 };
 
@@ -224,7 +224,7 @@ bool Player::OnPlayerRequestLoginInviteTeam(CPlayerSession& refSession, GameProt
 		return true;
 	}
 
-	RedisServerId oServerId(m_qwPyayerId);
+	RedisGetServerId oServerId(m_qwPyayerId);
 	FxRedisGetModule()->QueryDirect(&oServerId);
 	UINT32 dwServerId = oServerId.GetServerId();
 	CLoginSession* pLoginSession = GameServer::Instance()->GetLoginSessionManager().GetLoginSession(dwServerId);
@@ -315,7 +315,7 @@ void Player::OnClose()
 		}
 	}
 
-	RedisServerId oServerId(m_qwPyayerId);
+	RedisGetServerId oServerId(m_qwPyayerId);
 	FxRedisGetModule()->QueryDirect(&oServerId);
 	UINT32 dwServerId = oServerId.GetServerId();
 
@@ -342,7 +342,7 @@ void Player::OnClose()
 			UINT64 m_qwPlayerId;
 		};
 
-		RedisServerId oSetServerId(m_qwPyayerId);
+		RedisGetServerId oSetServerId(m_qwPyayerId);
 		FxRedisGetModule()->QueryDirect(&oSetServerId);
 	}
 }

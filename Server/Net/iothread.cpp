@@ -123,6 +123,10 @@ FILE*& FxIoThread::GetFile()
 		}
 		m_pFile = fopen(m_szLogPath, "a+");
 	}
+	if (m_pFile == NULL)
+	{
+		m_pFile = fopen(m_szLogPath, "a+");
+	}
 	return m_pFile;
 }
 

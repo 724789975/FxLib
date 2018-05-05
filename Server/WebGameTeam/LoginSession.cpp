@@ -272,6 +272,13 @@ bool CLoginSession::OnLoginRequestTeamEnterTeam(CLoginSession& refSession, googl
 		Send(pBuf, dwBufLen);
 		return true;
 	}
+	GameProto::TeamRoleData* pTeamRoleData = pTeam->GetTeamRoleData(refRoleData.qw_player_id());
+	if (pTeamRoleData == NULL)
+	{
+		LogExe(LogLv_Critical, "get team role data error player id : %llu", refRoleData.qw_player_id());
+		return false;
+	}
+	pTeamRoleData->set_dw_server_id(m_dwServerId);
 
 	//notify
 	pTeam->NotifyPlayer();

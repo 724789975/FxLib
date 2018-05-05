@@ -15,7 +15,6 @@ public class RoleList : MonoBehaviour {
 	{
 	}
 
-
 	public void SetPlayerIds(Google.Protobuf.Collections.RepeatedField<ulong> qwPlayerId)
 	{
 		for (int i = 0; i < qwPlayerId.Count; ++i)
