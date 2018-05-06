@@ -217,9 +217,12 @@ public class LoginControler: MonoBehaviour
 		}
 		H5Helper.H5LogStr("online player ret : " + oRet.DwResult.ToString());
 
-		GameObject go_RoleList = Instantiate(Resources.Load<GameObject>(GameObjectConstent.g_szPlayerList), transform.parent);
+		RoleList pRoleList = RoleList.CreateInstance(GameObjectConstent.g_szPlayerList, transform.parent);
+		pRoleList.SetPlayerIds(oRet.QwPlayerId);
 
-		go_RoleList.GetComponent<RoleList>().SetPlayerIds(oRet.QwPlayerId);
+		//GameObject go_RoleList = Instantiate(Resources.Load<GameObject>(GameObjectConstent.g_szPlayerList), transform.parent);
+
+		//go_RoleList.GetComponent<RoleList>().SetPlayerIds(oRet.QwPlayerId);
 	}
 
 	public void OnLoginNotifyPlayerInviteTeam(byte[] pBuf)

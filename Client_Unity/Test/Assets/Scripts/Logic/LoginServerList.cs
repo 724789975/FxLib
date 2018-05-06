@@ -9,7 +9,7 @@ public class ServerListInfo
 }
 
 
-public class LoginServerList : MonoBehaviour
+public class LoginServerList : UiSingleton<LoginServerList>
 {
 	// Use this for initialization
 	void Start ()

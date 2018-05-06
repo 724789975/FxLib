@@ -46,8 +46,8 @@ using UnityEngine;
         }
         ServerInfo oServerInfo = oServerList.server_infos[0];
 
-		m_pServerList = Instantiate(m_pServerList, m_pUiCanvas);
-		m_pServerList.GetComponent<LoginServerList>().SetServerListInfo(oServerList);
+		LoginServerList pList = LoginServerList.CreateInstance(GameObjectConstent.g_szLoginServerList, m_pUiCanvas);
+		pList.SetServerListInfo(oServerList);
 	}
 
 	public void SetServerInfo(ServerInfo oServerInfo)
@@ -95,7 +95,7 @@ using UnityEngine;
 
     public string m_szGetRoleUri;
 
-	public GameObject m_pServerList;
+	//public GameObject m_pServerList;
 	public Transform m_pUiCanvas;
 
 	[Header("Platform Info")]

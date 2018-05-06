@@ -281,8 +281,6 @@ MonoBehaviour:
   m_szLoginIp: 127.0.0.1
   m_szUrlHost: http://127.0.0.1
   m_szGetRoleUri: /portal/index.php/api/login/sendOauthUserInfo
-  m_pServerList: {fileID: 1322701792320454, guid: 89b41e674f68add4e99259d93c5a0ce7,
-    type: 2}
   m_pUiCanvas: {fileID: 16600680}
   m_szPlatform: unity_test
   m_szName: test1

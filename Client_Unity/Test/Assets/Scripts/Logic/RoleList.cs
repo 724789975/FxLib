@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RoleList : MonoBehaviour {
+public class RoleList : UiSingleton<RoleList>
+{
 
 	// Use this for initialization
 	void Start ()
 	{
+		m_buttonClose.onClick.AddListener(delegate () { Close(); });
 	}
 	
 	// Update is called once per frame
@@ -17,6 +19,10 @@ public class RoleList : MonoBehaviour {
 
 	public void SetPlayerIds(Google.Protobuf.Collections.RepeatedField<ulong> qwPlayerId)
 	{
+		for (int i = m_pContentTransform.childCount - 1; i >= 0; --i)
+		{
+			Destroy(m_pContentTransform.GetChild(i).gameObject);
+		}
 		for (int i = 0; i < qwPlayerId.Count; ++i)
 		{
 			GameObject obj = Instantiate(m_pPlayerObj, m_pContentTransform);
@@ -24,6 +30,12 @@ public class RoleList : MonoBehaviour {
 		}
 	}
 
+	public void Close()
+	{
+		Destroy(gameObject);
+	}
+
 	public GameObject m_pPlayerObj;
 	public Transform m_pContentTransform;
+	public UnityEngine.UI.Button m_buttonClose;
 }
