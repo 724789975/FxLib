@@ -10,19 +10,19 @@ public class BuildVersion
 {
     public static bool bLoadAB = false;
 
-    [MenuItem("Mytools/DeleteAllPref ")]
+    [MenuItem("BuildAB/DeleteAllPref ")]
     public static void cleanPlayerPref()
     {
         PlayerPrefs.DeleteAll();
     }
 
-    [MenuItem("Mytools/DeletePersistentPath ")]
+    [MenuItem("BuildAB/DeletePersistentPath ")]
     public static void deletePersistentPath()
     {
         Directory.Delete(Application.persistentDataPath, true);
     }
 
-    [MenuItem("Mytools/Packager ")]
+    [MenuItem("BuildAB/Packager ")]
     public static void createWindow()
     {
 		EditorWindow.GetWindow<BuildWindow>();

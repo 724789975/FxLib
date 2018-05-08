@@ -215,7 +215,7 @@ public class Packager
 
     public static void BuildAssetMarks()
     {
-        string sourcePath = Application.dataPath + "/Resource";
+        string sourcePath = Application.dataPath + "/Resources";
         List<string> fileSystemEntries = new List<string>();
 
         fileSystemEntries
@@ -257,7 +257,7 @@ public class Packager
 
     public static void WritePreloadFile()
     {
-        string sourcePath = Application.dataPath + "/Resource";
+        string sourcePath = Application.dataPath + "/Resources";
         List<string> fileSystemEntries = new List<string>();
 
         fileSystemEntries.AddRange(Directory.GetDirectories(sourcePath, "*", SearchOption.AllDirectories).Select(d => d + "\\"));
