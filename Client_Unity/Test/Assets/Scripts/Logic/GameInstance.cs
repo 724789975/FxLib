@@ -46,7 +46,7 @@ using UnityEngine;
         }
         ServerInfo oServerInfo = oServerList.server_infos[0];
 
-		LoginServerList pList = LoginServerList.CreateInstance(GameObjectConstent.g_szLoginServerList, m_pUiCanvas);
+		LoginServerList pList = LoginServerList.CreateInstance(GameObjectConstant.g_szLoginServerList, m_pUiCanvas);
 		pList.SetServerListInfo(oServerList);
 	}
 

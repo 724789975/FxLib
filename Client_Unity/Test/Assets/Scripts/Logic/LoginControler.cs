@@ -217,7 +217,7 @@ public class LoginControler: MonoBehaviour
 		}
 		H5Helper.H5LogStr("online player ret : " + oRet.DwResult.ToString());
 
-		RoleList pRoleList = RoleList.CreateInstance(GameObjectConstent.g_szPlayerList, transform.parent);
+		RoleList pRoleList = RoleList.CreateInstance(GameObjectConstant.g_szPlayerList, transform.parent);
 		pRoleList.SetPlayerIds(oRet.QwPlayerId);
 
 		//GameObject go_RoleList = Instantiate(Resources.Load<GameObject>(GameObjectConstent.g_szPlayerList), transform.parent);
@@ -236,7 +236,7 @@ public class LoginControler: MonoBehaviour
 
 		H5Helper.H5LogStr("on invitee team player id : " + oRet.QwPlayerId.ToString() + " team id : " + oRet.QwTeamId.ToString());
 
-		GameObject go_RoleList = Instantiate(Resources.Load<GameObject>(GameObjectConstent.g_szControlPanel), transform.parent);
+		GameObject go_RoleList = Instantiate(Resources.Load<GameObject>(GameObjectConstant.g_szControlPanel), transform.parent);
 		go_RoleList.GetComponent<ControlPanel>().Init("player : " + oRet.QwPlayerId.ToString() + " invite you to team :" + oRet.QwTeamId.ToString(),
 			IntoInviteTeam, oRet, null, null);
 	}
