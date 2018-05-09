@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 /// </summary>
 public class SampleDebuger
 {
-
 	[DllImport("__Internal")]
 	private static extern void LogStr(string szLog);
 
