@@ -35,7 +35,7 @@ public class SessionObject : MonoBehaviour
 
 	public bool InitSession(SessionType eType, string szIp, UInt16 wPort)
 	{
-		H5Helper.H5LogStr("type : " + eType.ToString() + ", ip : " + szIp + ", port : " + wPort);
+		SampleDebuger.Log("type : " + eType.ToString() + ", ip : " + szIp + ", port : " + wPort);
 		m_szIP = szIp;
 		m_wPort = wPort;
 		m_eSessionType = eType;
@@ -78,7 +78,7 @@ public class SessionObject : MonoBehaviour
 
 	public bool OnSessionDestroy()
 	{
-		H5Helper.H5AlertString("session obj has destroy!!!!");
+		SampleDebuger.LogError("session obj has destroy!!!!");
         Destroy(this);
 		return false;
 	}
@@ -118,7 +118,7 @@ public class SessionObject : MonoBehaviour
 
 		if (!m_mapCallBack.ContainsKey(szProtoName))
 		{
-			H5Helper.H5LogStr("can't find proto name " + szProtoName);
+			SampleDebuger.Log("can't find proto name " + szProtoName);
 			return;
 		}
 		m_mapCallBack[szProtoName](pProto);
@@ -134,7 +134,7 @@ public class SessionObject : MonoBehaviour
 	{
 		if (m_mapCallBack.ContainsKey(szProtoName))
 		{
-			H5Helper.H5AlertString("already registed proto " + szProtoName);
+			SampleDebuger.LogError("already registed proto " + szProtoName);
 			return;
 		}
 		m_mapCallBack[szProtoName] = pfCallBack;

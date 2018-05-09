@@ -41,13 +41,13 @@ class WebSocketSession : ISession
 
 	public override void OnClose()
 	{
-		H5Helper.H5LogStr("OnClose");
+		SampleDebuger.Log("OnClose");
 		m_oGameObject.OnClose();
 	}
 
 	public override void OnConnect()
 	{
-		H5Helper.H5LogStr("OnConnect");
+		SampleDebuger.Log("OnConnect");
 		m_oGameObject.OnConnect();
 	}
 
@@ -58,7 +58,7 @@ class WebSocketSession : ISession
 
 	public override void OnError(uint dwErrorNo)
 	{
-		H5Helper.H5AlertString(m_pSocket.GetError());
+		SampleDebuger.LogError(m_pSocket.GetError());
 		m_oGameObject.OnError(dwErrorNo);
 	}
 
@@ -69,7 +69,7 @@ class WebSocketSession : ISession
 
 	public override IFxClientSocket Reconnect()
 	{
-		H5Helper.H5LogStr("Reconnect");
+		SampleDebuger.Log("Reconnect");
 		m_pSocket.Init(this);
 		m_pSocket.Connect(m_oGameObject, m_szIp, m_wPort);
         return m_pSocket;

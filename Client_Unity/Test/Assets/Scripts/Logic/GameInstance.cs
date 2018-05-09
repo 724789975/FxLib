@@ -36,12 +36,12 @@ using UnityEngine;
 
     public void OnServerInfo(string szData)
     {
-		H5Helper.H5LogStr(szData);
+		SampleDebuger.Log(szData);
         ServerListInfo oServerList = JsonUtility.FromJson<ServerListInfo>(szData);
 
         if (oServerList.server_infos.Count == 0)
         {
-            H5Helper.H5AlertString("can't find server list!!!!");
+            SampleDebuger.LogError("can't find server list!!!!");
             return;
         }
         ServerInfo oServerInfo = oServerList.server_infos[0];

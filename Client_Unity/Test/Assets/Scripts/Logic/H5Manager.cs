@@ -24,7 +24,7 @@ public class H5Manager : SingletonObject<H5Manager>
 
 	public void Init(string szUrl)
 	{
-		H5Helper.H5LogStr(szUrl);
+		SampleDebuger.Log(szUrl);
 		Uri uri = new Uri(szUrl);
 		
 		string szBaseUrl;

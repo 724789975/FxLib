@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 
-public class GameControler : MonoBehaviour
+public class GameControler : SingletonObject<GameControler>
 {
 
 	// Use this for initialization
@@ -31,7 +31,7 @@ public class GameControler : MonoBehaviour
 
 	public void OnConnect()
 	{
-		H5Helper.H5LogStr("game connected");
+		SampleDebuger.Log("game connected");
 
 		GameProto.PlayerRequestGameTest oTest = new GameProto.PlayerRequestGameTest();
 
@@ -52,11 +52,11 @@ public class GameControler : MonoBehaviour
 
 	public void OnClose()
 	{
-		H5Helper.H5AlertString("session close");
+		SampleDebuger.LogError("session close");
 	}
 	public void OnError(uint dwErrorNo)
 	{
-		H5Helper.H5AlertString("session error " + dwErrorNo.ToString());
+		SampleDebuger.LogError("session error " + dwErrorNo.ToString());
 	}
 
 	public void OnDestroy()
@@ -78,11 +78,11 @@ public class GameControler : MonoBehaviour
 		GameProto.PlayerRequestGameTest oTest = GameProto.PlayerRequestGameTest.Parser.ParseFrom(pBuf);
 		if (oTest == null)
 		{
-			H5Helper.H5LogStr("OnTest error parse");
+			SampleDebuger.Log("OnTest error parse");
 			return;
 		}
 
-		H5Helper.H5LogStr(oTest.SzTest.ToString());
+		SampleDebuger.Log(oTest.SzTest.ToString());
 
 		oTest.SzTest = String.Format("{0}, {1}, {2}, {3}, {4}, {5}",
 			"sessionobject.cs", 106, "SessionObject::OnRecv", dw1++,
