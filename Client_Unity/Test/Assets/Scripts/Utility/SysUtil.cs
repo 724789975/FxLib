@@ -1,5 +1,4 @@
-﻿///PanYangzhong，创建日期:2016.11.17
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
 using System.IO;

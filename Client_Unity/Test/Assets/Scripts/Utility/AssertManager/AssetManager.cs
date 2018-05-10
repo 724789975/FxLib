@@ -1,6 +1,4 @@
-﻿///PanYangzhong 创建日期: 2016/11/24
-
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 using System.Collections;
 using System.Collections.Generic;
