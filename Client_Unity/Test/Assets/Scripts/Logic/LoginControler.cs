@@ -29,6 +29,7 @@ public class LoginControler : SingletonObject<LoginControler>
 	// Use this for initialization
 	void Start()
 	{
+		CreateInstance(this);
 		DontDestroyOnLoad(this);
 		H5Manager.Instance().GetLoginSessionResetCallBack().Add(OnLoginSessionReset);
 	}
@@ -160,6 +161,9 @@ public class LoginControler : SingletonObject<LoginControler>
 		}
 
 		SampleDebuger.Log("login ret : " + oRet.DwResult.ToString());
+
+		AssetBundleLoader.Instance().LoadLevelAsset("lobby");
+		//UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("lobby");
 	}
 
 	public void OnLoginAckPlayerMakeTeam(byte[] pBuf)
@@ -218,7 +222,7 @@ public class LoginControler : SingletonObject<LoginControler>
 		}
 		SampleDebuger.Log("online player ret : " + oRet.DwResult.ToString());
 
-		RoleList pRoleList = RoleList.CreateInstance(GameObjectConstant.g_szPlayerList, transform.parent);
+		RoleList pRoleList = RoleList.CreateInstance(GameObjectConstant.g_szPlayerList, MainCanvas.Instance().transform);
 		pRoleList.SetPlayerIds(oRet.QwPlayerId);
 
 		//GameObject go_RoleList = Instantiate(Resources.Load<GameObject>(GameObjectConstent.g_szPlayerList), transform.parent);

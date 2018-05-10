@@ -69,7 +69,6 @@ public class Version
 
 public class VersionManager:MonoBehaviour
 {
-
     static VersionManager _instance = null;
 
     public Version version = new Version("0.0.0");

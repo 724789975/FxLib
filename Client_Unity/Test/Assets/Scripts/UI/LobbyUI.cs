@@ -7,11 +7,11 @@ public class LobbyUI : SingletonObject<LobbyUI>
 	// Use this for initialization
 	void Start ()
 	{
+		CreateInstance(this);
+
 		m_buttonMakeTeam.onClick.AddListener(delegate () { LoginControler.Instance().MakeTeam(); });
 		m_buttonTeamStart.onClick.AddListener(delegate () { LoginControler.Instance().TeamStart(); });
 		m_buttonOnlinePlayers.onClick.AddListener(delegate () { LoginControler.Instance().OnlinePlayers(); });
-
-		//m_buttonMakeTeam.GetComponent<RectTransform>().SetPositionAndRotation(Vector3.zero, new Quaternion());
 	}
 	
 	// Update is called once per frame

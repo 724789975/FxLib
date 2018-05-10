@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -10,6 +11,7 @@ public class GameControler : SingletonObject<GameControler>
 	void Start()
 	{
 		DontDestroyOnLoad(this);
+		CreateInstance(this);
 		H5Manager.Instance().GetGameSessionResetCallBack().Add(OnGameSessionReset);
 	}
 
@@ -33,21 +35,25 @@ public class GameControler : SingletonObject<GameControler>
 	{
 		SampleDebuger.Log("game connected");
 
-		GameProto.PlayerRequestGameTest oTest = new GameProto.PlayerRequestGameTest();
+		AssetBundleLoader.Instance().LoadLevelAsset("gamescene", (delegate ()
+			{
+				GameProto.PlayerRequestGameTest oTest = new GameProto.PlayerRequestGameTest();
 
-		oTest.SzTest = String.Format("{0}, {1}, {2}, {3}, {4}, {5}",
-			"sessionobject.cs", 106, "SessionObject::OnRecv", dw1++,
-			ToString(), DateTime.Now.ToLocalTime().ToString());
+				oTest.SzTest = String.Format("{0}, {1}, {2}, {3}, {4}, {5}",
+					"sessionobject.cs", 106, "SessionObject::OnRecv", dw1++,
+					ToString(), DateTime.Now.ToLocalTime().ToString());
 
-		byte[] pData = new byte[1024];
-		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
-		pStream.WriteString("GameProto.PlayerRequestGameTest");
-		byte[] pProto = new byte[oTest.CalculateSize()];
-		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
-		oTest.WriteTo(oStream);
-		pStream.WriteData(pProto, (uint)pProto.Length);
+				byte[] pData = new byte[1024];
+				FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
+				pStream.WriteString("GameProto.PlayerRequestGameTest");
+				byte[] pProto = new byte[oTest.CalculateSize()];
+				Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
+				oTest.WriteTo(oStream);
+				pStream.WriteData(pProto, (uint)pProto.Length);
 
-		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+				m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+			})
+		);
 	}
 
 	public void OnClose()
@@ -70,6 +76,16 @@ public class GameControler : SingletonObject<GameControler>
 			m_pSession.UnRegistMessage("GameProto.PlayerRequestGameTest");
 		}
 		H5Manager.Instance().GetGameSessionResetCallBack().Remove(OnGameSessionReset);
+	}
+
+	public delegate void fun();
+	public IEnumerator LoadGameScene(fun fn)
+	{
+		AsyncOperation ao = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("gamescene");
+		SampleDebuger.Log(ao.progress.ToString());
+		yield return ao.progress;
+		SampleDebuger.Log(ao.progress.ToString() + " has loaded");
+        fn();
 	}
 
 	int dw1 = 0;

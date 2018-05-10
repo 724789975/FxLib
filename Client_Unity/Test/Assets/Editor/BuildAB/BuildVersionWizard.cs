@@ -45,7 +45,7 @@ public class BuildWindow : EditorWindow
 
     void OnEnable()
     {
-		myVersion = VersionEditorManager.Instance.curVersion;
+		myVersion = VersionEditorManager.Instance().curVersion;
         Packager.Init();
     }
 
@@ -60,6 +60,9 @@ public class BuildWindow : EditorWindow
             case TargetPlatform.Android:
                 ret = BuildTargetGroup.Android;
                 break;
+			case TargetPlatform.WebGL:
+				ret = BuildTargetGroup.WebGL;
+				break;
         }
         return ret;
     }
@@ -74,8 +77,8 @@ public class BuildWindow : EditorWindow
         // =========================== 3. 标记AB资源   ===========================
         if (GUILayout.Button("刷新版本", GUILayout.Height(30)))
         {
-            VersionEditorManager.Instance.curVersion = myVersion;
-            PlayerSettings.Android.bundleVersionCode = VersionEditorManager.Instance.getVersionNum();
+            VersionEditorManager.Instance().curVersion = myVersion;
+            PlayerSettings.Android.bundleVersionCode = VersionEditorManager.Instance().getVersionNum();
             PlayerSettings.bundleVersion = myVersion;
         }
 
@@ -203,7 +206,10 @@ public class BuildWindow : EditorWindow
                     break;
                 case TargetPlatform.Android:
                     BuildUtil.copyPlatformRes(BuildTarget.Android);
-                    break;
+					break;
+				case TargetPlatform.WebGL:
+					BuildUtil.copyPlatformRes(BuildTarget.WebGL);
+					break;
             }
             AssetDatabase.Refresh();
         }
@@ -227,6 +233,9 @@ public class BuildWindow : EditorWindow
                         break;
                     case TargetPlatform.Android:
                         BuildUtil.buildAndroid();
+						break;
+					case TargetPlatform.WebGL:
+						BuildUtil.buildWebGL();
                         break;
                 }
             }
@@ -254,7 +263,7 @@ public class BuildWindow : EditorWindow
 
 public class BuildUtil
 {
-    static string[] levels = { "Assets/__Scene/launcher.unity" };
+    static string[] levels = { "Assets/Scene/launcher.unity" };
 
     static public string getPath() 
     {
@@ -285,7 +294,7 @@ public class BuildUtil
 
 		PlayerSettings.Android.keyaliasName = "star";
 		PlayerSettings.Android.keystorePass = "123456";
-        PlayerSettings.Android.bundleVersionCode = VersionEditorManager.Instance.getVersionNum();
+        PlayerSettings.Android.bundleVersionCode = VersionEditorManager.Instance().getVersionNum();
         BuildPipeline.BuildPlayer(levels, BuildUtil.getPath() + "/proj.apk", BuildTarget.Android, BuildOptions.ShowBuiltPlayer);
 
     }
@@ -300,9 +309,19 @@ public class BuildUtil
         BuildPipeline.BuildPlayer(levels, BuildUtil.getPath() + "/proj_win/game.exe", BuildTarget.StandaloneWindows, BuildOptions.ShowBuiltPlayer | BuildOptions.Development);
     }
 
-    static public void copyPlatformRes(BuildTarget os)
+	static public void buildWebGL()
+	{
+		BuildTarget type = BuildTarget.WebGL;
+		//copyWWise(type);
+		copyABRes(type);
+		//createVersion();
+		AssetDatabase.Refresh();
+		//BuildPipeline.BuildPlayer(levels, Application.dataPath + "/../AssetBundles/WebGL/Scene/", BuildTarget.WebGL, BuildOptions.ShowBuiltPlayer | BuildOptions.Development);
+	}
+
+	static public void copyPlatformRes(BuildTarget os)
     {
-        copyWWise(os);
+        //copyWWise(os);
         copyABRes(os);
     }
 
@@ -346,19 +365,21 @@ public class BuildUtil
     }
 
     static public string getPlatformDir(BuildTarget os){
-        switch (os)
-        {
-            case BuildTarget.Android:
-                return "Android";
-            case BuildTarget.iOS:
-                return "iOS";
-            case BuildTarget.StandaloneWindows:
-            case BuildTarget.StandaloneWindows64:
-                return "Windows";
-             default:
-                return null;
-        }
-    }
+		switch (os)
+		{
+			case BuildTarget.Android:
+				return "Android";
+			case BuildTarget.iOS:
+				return "iOS";
+			case BuildTarget.StandaloneWindows:
+			case BuildTarget.StandaloneWindows64:
+				return "Windows";
+			case BuildTarget.WebGL:
+				return "WebGL";
+			default:
+				return null;
+		}
+	}
 
     static public string getPlatformManifest()
     {
@@ -489,8 +510,8 @@ public class BuildUtil
 	static public void PatchAll(){
 		BuildUtil.copyFullABRes ();
 		BuildUtil.copyFullWWise();
-		PatchUtil.Instance.init();
-		PatchUtil.Instance.buildPatch();
+		PatchUtil.Instance().init();
+		PatchUtil.Instance().buildPatch();
 
 	}
 }

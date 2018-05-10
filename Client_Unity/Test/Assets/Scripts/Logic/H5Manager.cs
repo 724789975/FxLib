@@ -116,7 +116,7 @@ public class H5Manager : SingletonObject<H5Manager>
 			string strValue = mc.Result("$3");
 			nvcParams.Add(strParam, strValue);
 
-			//JSTest.instance.txtRequestUrl = JSTest.instance.txtRequestUrl + "\n" + strParam + "  " + strValue;
+			//JSTest. Instance().txtRequestUrl = JSTest. Instance().txtRequestUrl + "\n" + strParam + "  " + strValue;
 		}
 	}
 

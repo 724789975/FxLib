@@ -12,6 +12,7 @@ public enum TargetPlatform{
     IOS,
 	Windows,
     Android,
+	WebGL,
 }
 
 public class Packager
@@ -28,23 +29,31 @@ public class Packager
 
     public static void Init() 
     {
-        // 判断当前所在平台 
-        if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.Android)
-        {
-            Packager.curTarget = TargetPlatform.Android;
-        }
-        else if (EditorUserBuildSettings.activeBuildTarget == BuildTarget.iOS)
-        {
-            Packager.curTarget = TargetPlatform.IOS;
-        }
-        else
-			Packager.curTarget = TargetPlatform.Windows;
-
+		// 判断当前所在平台
+		switch (EditorUserBuildSettings.activeBuildTarget)
+		{
+			case BuildTarget.iOS:
+				Packager.curTarget = TargetPlatform.IOS;
+				break;
+			case BuildTarget.Android:
+				Packager.curTarget = TargetPlatform.Android;
+				break;
+			case BuildTarget.StandaloneWindows:
+			case BuildTarget.StandaloneWindows64:
+				Packager.curTarget = TargetPlatform.Windows;
+				break;
+			case BuildTarget.WebGL:
+				Packager.curTarget = TargetPlatform.WebGL;
+				break;
+			default:
+				Packager.curTarget = TargetPlatform.Windows;
+				break;
+		}
     }
 
     public static BuildTarget getBuildTarget()
     {
-        BuildTarget target = BuildTarget.StandaloneWindows;
+		BuildTarget target = BuildTarget.StandaloneWindows;
         switch (curTarget)
         {
             case TargetPlatform.IOS:
@@ -56,8 +65,11 @@ public class Packager
                 break;
 
 			case TargetPlatform.Windows:
-                target = BuildTarget.StandaloneWindows;
+                target = BuildTarget.StandaloneWindows64;
                 break;
+			case TargetPlatform.WebGL:
+				target = BuildTarget.WebGL;
+				break;
         }
         return target;
     }
@@ -113,7 +125,7 @@ public class Packager
             Directory.CreateDirectory(resPath);
 
         if (Packager.bAssetBundle)
-			BuildPipeline.BuildAssetBundles(resPath, BuildAssetBundleOptions.ChunkBasedCompression, EditorUserBuildSettings.activeBuildTarget);
+			BuildPipeline.BuildAssetBundles(resPath, BuildAssetBundleOptions.UncompressedAssetBundle, EditorUserBuildSettings.activeBuildTarget);
     }
 
     //清除AB包
@@ -197,21 +209,23 @@ public class Packager
 
     public static string GetPlatformFolderForAssetBundles(BuildTarget target)
     {
-        switch (target)
-        {
-            case BuildTarget.Android:
-                return "Android";
-            case BuildTarget.iOS:
-                return "iOS";
-            case BuildTarget.StandaloneWindows:
-            case BuildTarget.StandaloneWindows64:
-                return "Windows";
-            // Add more build targets for your own.
-            // If you add more targets, don't forget to add the same platforms to GetPlatformFolderForAssetBundles(RuntimePlatform) function.
-            default:
-                return null;
-        }
-    }
+		switch (target)
+		{
+			case BuildTarget.Android:
+				return "Android";
+			case BuildTarget.iOS:
+				return "iOS";
+			case BuildTarget.StandaloneWindows:
+			case BuildTarget.StandaloneWindows64:
+				return "Windows";
+			case BuildTarget.WebGL:
+				return "WebGL";
+			// Add more build targets for your own.
+			// If you add more targets, don't forget to add the same platforms to GetPlatformFolderForAssetBundles(RuntimePlatform) function.
+			default:
+				return null;
+		}
+	}
 
     public static void BuildAssetMarks()
     {

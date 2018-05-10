@@ -9,25 +9,11 @@ using System.IO;
 /// <summary>
 /// 补丁生成工具
 /// </summary>
-public class PatchUtil
+public class PatchUtil : Singleton<PatchUtil>
 {
-	static PatchUtil _instance = null;
 	string sourcePath = Application.streamingAssetsPath;//源文件路径
 	string targetPath = Application.dataPath + "/../patch/";//补丁存放路径
 	List<PatchInfo> patchList = new List<PatchInfo>();
-
-	public static PatchUtil Instance
-	{
-		get
-		{
-			if (_instance == null)
-			{
-				_instance = new PatchUtil();
-				_instance.init();
-			}
-			return _instance;
-		}
-	}
 
 	public void init()
 	{
@@ -54,11 +40,11 @@ public class PatchUtil
 	public void buildPatch()
 	{
 		//1. 创建当前版本目录
-		string folderName = VersionEditorManager.Instance.curVersion.Replace(".", "_");
+		string folderName = VersionEditorManager.Instance().curVersion.Replace(".", "_");
 		folderName = targetPath + folderName;
 		if (Directory.Exists(folderName)) return;
 
-		PatchInfo patchInfo = new PatchInfo(VersionEditorManager.Instance.curVersion);
+		PatchInfo patchInfo = new PatchInfo(VersionEditorManager.Instance().curVersion);
 		Directory.CreateDirectory(folderName);
 
 		//2. 统计当前版本所有文件信息，保存至文本文件
@@ -146,7 +132,7 @@ public class PatchUtil
 		}
 
 		//4. 记录当前版本号
-		VersionEditorManager.Instance.saveVersion(targetPath + "version.txt");
+		VersionEditorManager.Instance().saveVersion(targetPath + "version.txt");
 
 
 		fs = new FileStream(folderName + "/mark.txt", FileMode.CreateNew);
