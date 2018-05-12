@@ -125,7 +125,7 @@ public class Packager
             Directory.CreateDirectory(resPath);
 
         if (Packager.bAssetBundle)
-			BuildPipeline.BuildAssetBundles(resPath, BuildAssetBundleOptions.UncompressedAssetBundle, EditorUserBuildSettings.activeBuildTarget);
+			BuildPipeline.BuildAssetBundles(resPath, BuildAssetBundleOptions.ForceRebuildAssetBundle, EditorUserBuildSettings.activeBuildTarget);
     }
 
     //清除AB包
