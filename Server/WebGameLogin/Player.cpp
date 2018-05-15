@@ -321,11 +321,11 @@ void Player::OnClose()
 
 	if (dwServerId == GameServer::Instance()->GetServerId())
 	{
-		class RedisSetServerId : public IRedisQuery
+		class RedisSetPlayerOffLine : public IRedisQuery
 		{
 		public:
-			RedisSetServerId(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId), m_qwServerId(0) {}
-			~RedisSetServerId() {}
+			RedisSetPlayerOffLine(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId), m_qwServerId(0) {}
+			~RedisSetPlayerOffLine() {}
 
 			virtual int					GetDBId(void) { return 0; }
 			virtual void				OnQuery(IRedisConnection *poDBConnection)
@@ -342,7 +342,7 @@ void Player::OnClose()
 			UINT64 m_qwPlayerId;
 		};
 
-		RedisGetServerId oSetServerId(m_qwPyayerId);
-		FxRedisGetModule()->QueryDirect(&oSetServerId);
+		RedisSetPlayerOffLine oSetPlayerOffLine (m_qwPyayerId);
+		FxRedisGetModule()->QueryDirect(&oSetPlayerOffLine );
 	}
 }

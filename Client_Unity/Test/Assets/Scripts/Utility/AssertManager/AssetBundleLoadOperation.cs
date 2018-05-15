@@ -107,7 +107,6 @@ public class AssetBundleLoadAssetOperationSimulation : AssetBundleLoadAssetOpera
 	Object							m_SimulatedObject;
     Object[]                        m_allObject;
 
-
     protected float startTime;
     protected float deltaTime = 0f;
 

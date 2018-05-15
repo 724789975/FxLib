@@ -87,13 +87,17 @@ bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::
 			{
 				continue;
 			}
+			if ((*it)->m_dwServerId == m_dwServerId)
+			{
+				continue;
+			}
 			char* pBuf = NULL;
 			unsigned int dwBufLen = 0;
 			ProtoUtility::MakeProtoSendBuffer(*pMsg, pBuf, dwBufLen);
 			(*it)->Send(pBuf, dwBufLen);
 		}
 	}
-		break;
+	break;
 	case GameProto::ST_Team:
 	{
 		// 如果是组队服务器 那么应该向这个服务器发送所有login的信息 让他去连login
@@ -101,6 +105,10 @@ bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::
 		for (std::set<CBinaryServerSession*>::iterator it = refSessions.begin(); it != refSessions.end(); ++it)
 		{
 			if ((*it)->m_dwServerId == 0)
+			{
+				continue;
+			}
+			if ((*it)->m_dwServerId == m_dwServerId)
 			{
 				continue;
 			}
@@ -121,7 +129,7 @@ bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::
 				ProtoUtility::MakeProtoSendBuffer(oInfo, pBuf, dwBufLen);
 				Send(pBuf, dwBufLen);
 			}
-				break;
+			break;
 			case GameProto::ST_GameManager:
 			{
 				char* pBuf = NULL;
@@ -129,14 +137,14 @@ bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::
 				ProtoUtility::MakeProtoSendBuffer(*pMsg, pBuf, dwBufLen);
 				(*it)->Send(pBuf, dwBufLen);
 			}
-				break;
+			break;
 			default:
 			{ continue; }
-				break;
+			break;
 			}
 		}
 	}
-		break;
+	break;
 	case GameProto::ST_GameManager:
 	{
 		// 如果是游戏管理服 那么应该向这个服务器发送所有login 和 team的信息 让他去连login team
@@ -144,6 +152,10 @@ bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::
 		for (std::set<CBinaryServerSession*>::iterator it = refSessions.begin(); it != refSessions.end(); ++it)
 		{
 			if ((*it)->m_dwServerId == 0)
+			{
+				continue;
+			}
+			if ((*it)->m_dwServerId == m_dwServerId)
 			{
 				continue;
 			}
@@ -164,12 +176,12 @@ bool CServerSession::OnServerInfo(CServerSession& refSession, google::protobuf::
 			Send(pBuf, dwBufLen);
 		}
 	}
-		break;
+	break;
 	default:
 	{
 		Assert(0);
 	}
-		break;
+	break;
 	}
 	return true;
 }

@@ -13,6 +13,8 @@ CLoginSession::CLoginSession()
 {
 	m_oProtoDispatch.RegistFunction(GameProto::ServerInfo::descriptor(), &CLoginSession::OnServerInfo);
 	m_oProtoDispatch.RegistFunction(GameProto::LoginNotifyLoginPlayerKick::descriptor(), &CLoginSession::OnLoginNotifyLoginPlayerKick);
+	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestLoginInviteTeam::descriptor(), &CLoginSession::OnLoginRequestLoginInviteTeam);
+	m_oProtoDispatch.RegistFunction(GameProto::LoginAckLoginInviteTeam::descriptor(), &CLoginSession::OnLoginAckLoginInviteTeam);
 }
 
 CLoginSession::~CLoginSession()

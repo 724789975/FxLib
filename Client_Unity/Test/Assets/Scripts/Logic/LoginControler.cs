@@ -222,12 +222,12 @@ public class LoginControler : SingletonObject<LoginControler>
 		}
 		SampleDebuger.Log("online player ret : " + oRet.DwResult.ToString());
 
-		RoleList pRoleList = RoleList.CreateInstance(GameObjectConstant.g_szPlayerList, MainCanvas.Instance().transform);
-		pRoleList.SetPlayerIds(oRet.QwPlayerId);
-
-		//GameObject go_RoleList = Instantiate(Resources.Load<GameObject>(GameObjectConstent.g_szPlayerList), transform.parent);
-
-		//go_RoleList.GetComponent<RoleList>().SetPlayerIds(oRet.QwPlayerId);
+		AssetBundleLoader.Instance().LoadAsset(GameObjectConstant.g_szPrefabPath + GameObjectConstant.g_szPlayerList, GameObjectConstant.g_szPlayerList, delegate (UnityEngine.Object ob)
+			{
+				RoleList pRoleList = RoleList.CreateInstance(ob, MainCanvas.Instance().transform);
+				pRoleList.SetPlayerIds(oRet.QwPlayerId);
+			}
+		);
 	}
 
 	public void OnLoginNotifyPlayerInviteTeam(byte[] pBuf)
@@ -241,9 +241,14 @@ public class LoginControler : SingletonObject<LoginControler>
 
 		SampleDebuger.Log("on invitee team player id : " + oRet.QwPlayerId.ToString() + " team id : " + oRet.QwTeamId.ToString());
 
-		GameObject go_RoleList = Instantiate(Resources.Load<GameObject>(GameObjectConstant.g_szControlPanel), transform.parent);
-		go_RoleList.GetComponent<ControlPanel>().Init("player : " + oRet.QwPlayerId.ToString() + " invite you to team :" + oRet.QwTeamId.ToString(),
-			IntoInviteTeam, oRet, null, null);
+		AssetBundleLoader.Instance().LoadAsset(GameObjectConstant.g_szPrefabPath + GameObjectConstant.g_szControlPanel, GameObjectConstant.g_szControlPanel, delegate (UnityEngine.Object ob)
+			{
+				GameObject go_RoleList = Instantiate((GameObject)ob, MainCanvas.Instance().transform);
+				go_RoleList.GetComponent<ControlPanel>().Init("player : " + oRet.QwPlayerId.ToString() + " invite you to team :" + oRet.QwTeamId.ToString(),
+					IntoInviteTeam, oRet, null, null);
+			}
+		);
+
 	}
 
 	public void OnLoginNotifyPlayerTeamInfo(byte[] pBuf)

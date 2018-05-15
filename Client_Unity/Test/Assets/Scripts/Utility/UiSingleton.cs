@@ -16,7 +16,7 @@ public abstract class UiSingleton<T> : MonoBehaviour where T : MonoBehaviour
 		return m_pInstance != null;
 	}
 
-	public static T CreateInstance(string szPrefabPath, Transform pTransform)
+	public static T CreateInstance(UnityEngine.Object go, Transform pTransform)
 	{
 		if (m_pInstance != null)
 		{
@@ -24,7 +24,12 @@ public abstract class UiSingleton<T> : MonoBehaviour where T : MonoBehaviour
 			return m_pInstance;
 		}
 
-		m_pInstance = Instantiate(Resources.Load<T>(szPrefabPath), pTransform);
+		GameObject g1 = Instantiate(go, pTransform) as GameObject;
+		m_pInstance = g1.GetComponent<T>();
+		if (m_pInstance == null)
+		{
+			Destroy(g1);
+		}
 		return m_pInstance;
 	}
 }
