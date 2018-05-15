@@ -77,6 +77,12 @@ public class BuildWindow : EditorWindow
 		// =========================== 3. 标记AB资源   ===========================
 		if (GUILayout.Button("刷新版本", GUILayout.Height(30)))
 		{
+			string[] szAssetBundleNames = AssetDatabase.GetAllAssetBundleNames();
+			for (int i = 0; i < szAssetBundleNames.Length; i++)
+			{
+				AssetDatabase.RemoveAssetBundleName(szAssetBundleNames[i], true);
+			}
+
 			VersionEditorManager.Instance().curVersion = myVersion;
 			PlayerSettings.Android.bundleVersionCode = VersionEditorManager.Instance().getVersionNum();
 			PlayerSettings.bundleVersion = myVersion;
@@ -311,12 +317,8 @@ public class BuildUtil
 
 	static public void buildWebGL()
 	{
-		BuildTarget type = BuildTarget.WebGL;
-		//copyWWise(type);
-		copyABRes(type);
-		//createVersion();
 		AssetDatabase.Refresh();
-		sourcePath = Application.dataPath + "/Resources";
+		string sourcePath = Application.dataPath + "/Resources";
 		DirectoryInfo folder = new DirectoryInfo(sourcePath + "/screen");
 		FileSystemInfo[] files = folder.GetFileSystemInfos();
 		int length = files.Length;
@@ -326,9 +328,15 @@ public class BuildUtil
 			{
 				string[] levels = new string[1];
 				levels[0] = files[i].FullName;
-				BuildPipeline.BuildPlayer(levels, files[i].FullName.Replace("Asset", "AssetBundles/WebGL"), BuildTarget.WebGL, BuildOptions.BuildAdditionalStreamedScenes);
+				string szOut = Packager.GetABPath() + "/Assets/Resources/screen/" + files[i].Name;
+				szOut = szOut.Replace(files[i].Extension, "");
+				BuildPipeline.BuildPlayer(levels, szOut.ToLower(), BuildTarget.WebGL, BuildOptions.CompressWithLz4HC | BuildOptions.BuildAdditionalStreamedScenes);
 			}
 		}
+		BuildTarget type = BuildTarget.WebGL;
+		//copyWWise(type);
+		copyABRes(type);
+		//createVersion();
 		BuildPipeline.BuildPlayer(levels, Application.dataPath + "/../view", BuildTarget.WebGL, BuildOptions.ShowBuiltPlayer | BuildOptions.Development);
 	}
 

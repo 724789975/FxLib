@@ -125,7 +125,10 @@ public class Packager
             Directory.CreateDirectory(resPath);
 
         if (Packager.bAssetBundle)
-			BuildPipeline.BuildAssetBundles(resPath, BuildAssetBundleOptions.ForceRebuildAssetBundle, EditorUserBuildSettings.activeBuildTarget);
+		{
+			BuildPipeline.BuildAssetBundles(resPath, BuildAssetBundleOptions.UncompressedAssetBundle | BuildAssetBundleOptions.ForceRebuildAssetBundle, EditorUserBuildSettings.activeBuildTarget);
+		}
+		AssetDatabase.Refresh();
     }
 
     //清除AB包
@@ -243,10 +246,10 @@ public class Packager
             string filePath = fileSystemEntries[i];
             string ext = Path.GetExtension(filePath).ToLower();
 
-            string assetPath = filePath.Replace(Application.dataPath, "Assets");
+			string assetPath = filePath.Replace(Application.dataPath, "Assets");
             AssetImporter import = AssetImporter.GetAtPath(assetPath);
             if (import != null)
-            {   
+            {
                 if (ext.Equals(".prefab") || ext.Equals(".png") || ext.Equals(".mat") || ext.Equals(".unity"))
                 {
                     if (!ext.Equals(".png"))

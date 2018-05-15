@@ -53,9 +53,13 @@ public class AssetBundleManager : MonoBehaviour
     static List<AssetBundleLoadOperation> m_InProgressOperations = new List<AssetBundleLoadOperation>();
     static Dictionary<string, string[]> m_Dependencies = new Dictionary<string, string[]>();
 
-    static Dictionary<string, AssetBundleCreateRequest> m_LoadingRequest = new Dictionary<string, AssetBundleCreateRequest>();
+#if UNITY_WEBGL
+	static Dictionary<string, WWW> m_LoadingRequest = new Dictionary<string, WWW>();
+#else
+	static Dictionary<string, AssetBundleCreateRequest> m_LoadingRequest = new Dictionary<string, AssetBundleCreateRequest>();
+#endif
 
-    public List<string> _removeList = new List<string>();
+	public List<string> _removeList = new List<string>();
 
     // Variants which is used to define the active variants.
     public static string[] Variants
@@ -232,7 +236,11 @@ public class AssetBundleManager : MonoBehaviour
         }
         string url = AssetBundleLoader.Instance().getBundleUrl(assetBundleName);
 		SampleDebuger.Log("ab url: " + url);
+#if UNITY_WEBGL
+		WWW request = new WWW(url);
+#else
 		AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(url);
+#endif
         m_LoadingRequest.Add(assetBundleName, request);
     }
 
@@ -304,7 +312,11 @@ public class AssetBundleManager : MonoBehaviour
         {
             foreach (var keyValue in m_LoadingRequest)
             {
-                AssetBundleCreateRequest request = keyValue.Value;
+#if UNITY_WEBGL
+				WWW request = keyValue.Value;
+#else
+				AssetBundleCreateRequest request = keyValue.Value;
+#endif
                 if (request.isDone&& request.assetBundle!=null)
                 {
                     if (!m_LoadedAssetBundles.ContainsKey(keyValue.Key))

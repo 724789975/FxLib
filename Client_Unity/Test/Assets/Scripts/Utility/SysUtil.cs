@@ -4,6 +4,9 @@ using System.Collections;
 using System.IO;
 using System.Text;
 using System;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 /// <summary>
 /// =============================== 系统工具类 ===============================
@@ -34,7 +37,25 @@ public class SysUtil
     /// <returns></returns>
     public static string GetPlatformName()
     {
-        RuntimePlatform platform = Application.platform;
+#if UNITY_EDITOR
+		switch (EditorUserBuildSettings.activeBuildTarget)
+		{
+			case BuildTarget.Android:
+				return "Android";
+			case BuildTarget.iOS:
+				return "iOS";
+			case BuildTarget.StandaloneWindows:
+			case BuildTarget.StandaloneWindows64:
+				return "Windows";
+			case BuildTarget.WebGL:
+				return "WebGL";
+			// Add more build targets for your own.
+			// If you add more targets, don't forget to add the same platforms to GetPlatformFolderForAssetBundles(RuntimePlatform) function.
+			default:
+				return null;
+		}
+#else
+		RuntimePlatform platform = Application.platform;
         switch (platform)
         {
             case RuntimePlatform.Android:
@@ -49,7 +70,8 @@ public class SysUtil
             default:
                 return null;
         }
-    }
+#endif
+	}
 
 
     /// <summary>

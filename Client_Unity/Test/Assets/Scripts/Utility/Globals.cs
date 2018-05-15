@@ -16,12 +16,15 @@ public static class Globals
         Globals.streamingPath = Application.streamingAssetsPath;
         Globals.persistenPath = Application.persistentDataPath;
        
-        #if UNITY_ANDROID
+#if UNITY_ANDROID
         	Globals.wwwStreamingPath = Application.streamingAssetsPath;
 			Globals.wwwPersistenPath = "file:///" + Application.persistentDataPath; 
-        #else
+#elif UNITY_WEBGL
+            Globals.wwwStreamingPath = Application.streamingAssetsPath;
+            Globals.wwwPersistenPath = Application.persistentDataPath;
+#else
             Globals.wwwStreamingPath = "file:///" + Application.streamingAssetsPath;
             Globals.wwwPersistenPath = "file:///" + Application.persistentDataPath;
-        #endif
-    }
+#endif
+	}
 }

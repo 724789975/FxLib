@@ -33,7 +33,7 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 
     IEnumerator Start()
     {
-        yield return new WaitForSeconds(2.0f);
+        //yield return new WaitForSeconds(2.0f);
         yield return StartCoroutine(Initialize());
     }
 
@@ -42,7 +42,7 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 		SampleDebuger.Log(getBundleDirName());
         var request = AssetBundleManager.Initialize(getBundleDirName());
 		if (request != null){
-			Debug.Log(" loading  manifest ");
+			SampleDebuger.Log("begin loading manifest");
             yield return StartCoroutine(request);
 		}
         yield return StartCoroutine(CheckVersion());
@@ -60,7 +60,7 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
         var request = AssetBundleManager.ReloadManifest(getBundleDirName());
         if (request != null)
         {
-            Debug.Log(" loading  manifest ");
+            SampleDebuger.Log("reloading manifest");
             yield return StartCoroutine(request);
         }
     }
@@ -70,12 +70,17 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
         string path = Globals.wwwPersistenPath + "/version.txt";
         WWW www = new WWW(path);
         yield return www;
-        string oldVersionStr = www.text.Trim();       
+		string oldVersionStr = "0.0.0";
+        if (www.error == null)
+		{
+			oldVersionStr = www.text.Trim();
+		}
         Version oldVersion = new Version(oldVersionStr);
         www = new WWW(Globals.wwwStreamingPath + "/version.txt");
         yield return www;
         string curVersionStr = www.text.Trim();
         Version curVersion = new Version(curVersionStr);
+		SampleDebuger.Log("old version : " + oldVersion.curVersion + ", cur version : " + curVersion.curVersion);
         if (oldVersion.IsLower(curVersion))
         {
             deleteUpdateBundle();
@@ -85,7 +90,8 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
     public string getBundleUrl(string fileName)
     {
 #if UNITY_EDITOR
-            return Application.dataPath+"/../AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
+		return Application.dataPath + "/../AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
+		//return Application.streamingAssetsPath + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
 #else
             string url = Application.streamingAssetsPath + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
 		  
