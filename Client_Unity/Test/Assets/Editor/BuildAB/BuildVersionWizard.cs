@@ -27,8 +27,8 @@ public class BuildVersion
 		{
 			EditorWindow.GetWindow<BuildWindow>();
 			Packager.Init();
-			Packager.bLoadAB = true;
-		}
+			Packager.bLoadAB = !AssetBundleManager.SimulateAssetBundleInEditor;
+	}
 
 }
 
@@ -125,6 +125,7 @@ public class BuildWindow : EditorWindow
 		if (Packager.bLoadAB != cur)
 		{
 			Packager.bLoadAB = cur;
+			AssetBundleManager.SimulateAssetBundleInEditor = !Packager.bLoadAB;
 		}
 
 		GUILayout.Space(20);

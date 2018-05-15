@@ -17,16 +17,13 @@ public class Version
 
     public Version(string ver)
     {
-
         curVersion = ver;
     }
 
     public string curVersion
     {
-
         get
         {
-
             return string.Format("{0}.{1}.{2}", mainVersion, subVersion, miniVersion);
         }
         set
@@ -85,48 +82,37 @@ public class VersionManager:MonoBehaviour
                 _instance = obj.AddComponent<VersionManager>();
                 DontDestroyOnLoad(obj);
             }
-
 #if UNITY_EDITOR
-
             // 读取 version.txt
             if(!_instance.bRead)
             {
                 byte[] content = File.ReadAllBytes(Application.streamingAssetsPath + "/version.txt");
-
                 string ver = System.Text.Encoding.UTF8.GetString(content);
 
                 _instance.curVersion = ver;
                 _instance.bRead = true;
             }
 #else
-
-
 #endif
-
             return _instance;
         }
     }
 
     public string curVersion
     {
-
         get
         {
-
             return version.curVersion;
         }
         set
         {
-
             version.curVersion = value;
 
 #if UNITY_EDITOR
-            
             saveVersion(Application.streamingAssetsPath + "/version.txt");
 #else
             saveVersion(Application.persistentDataPath + "/version.txt");
 #endif
-
         }
     }
 
