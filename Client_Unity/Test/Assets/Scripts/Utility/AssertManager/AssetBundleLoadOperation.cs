@@ -25,6 +25,8 @@ public abstract class AssetBundleLoadOperation : IEnumerator
 	abstract public bool Update ();
 	
 	abstract public bool IsDone ();
+
+	abstract public float GetProgress();
 }
 
 public abstract class AssetBundleLoadBaseOperation : AssetBundleLoadOperation
@@ -45,8 +47,12 @@ public class AssetBundleLoadLevelSimulationOperation : AssetBundleLoadBaseOperat
 	
 	public override bool IsDone ()
 	{
-      
 		return true;
+	}
+
+	public override float GetProgress()
+	{
+		return 0.0f;
 	}
 }
 
@@ -94,6 +100,11 @@ public class AssetBundleLoadLevelOperation : AssetBundleLoadBaseOperation
 
         return m_sceneRequest != null && m_sceneRequest.isDone;
 	}
+
+	public override float GetProgress()
+	{
+		return m_sceneRequest.progress;
+	}
 }
 
 public abstract class AssetBundleLoadAssetOperation : AssetBundleLoadOperation
@@ -113,16 +124,14 @@ public class AssetBundleLoadAssetOperationSimulation : AssetBundleLoadAssetOpera
     public AssetBundleLoadAssetOperationSimulation(string assetBundleName, string assetName, bool single)
 	{
 #if UNITY_EDITOR
-
         startTime = Time.realtimeSinceStartup;
-
         if (single)
         {
-            m_SimulatedObject =  AssetDatabase.LoadMainAssetAtPath(assetName);
+            m_SimulatedObject =  AssetDatabase.LoadMainAssetAtPath(assetBundleName);
         }
         else
         {
-            m_allObject = AssetDatabase.LoadAllAssetsAtPath(assetName);
+            m_allObject = AssetDatabase.LoadAllAssetsAtPath(assetBundleName);
         }
 #endif
 	}
@@ -147,6 +156,11 @@ public class AssetBundleLoadAssetOperationSimulation : AssetBundleLoadAssetOpera
             return false;
         else
 		    return true;
+	}
+
+	public override float GetProgress()
+	{
+		return 0.0f;
 	}
 }
 
@@ -210,6 +224,11 @@ public class AssetBundleLoadAssetOperationFull : AssetBundleLoadAssetOperation
             return m_Request != null && m_Request.isDone;
         else
             return m_AllRequest != null && m_AllRequest.isDone;
+	}
+
+	public override float GetProgress()
+	{
+		return m_Request.progress + m_AllRequest.progress;
 	}
 }
 

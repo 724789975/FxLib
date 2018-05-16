@@ -222,7 +222,7 @@ public class LoginControler : SingletonObject<LoginControler>
 		}
 		SampleDebuger.Log("online player ret : " + oRet.DwResult.ToString());
 
-		AssetBundleLoader.Instance().LoadAsset(GameObjectConstant.g_szPrefabPath + GameObjectConstant.g_szPlayerList, GameObjectConstant.g_szPlayerList, delegate (UnityEngine.Object ob)
+		AssetBundleLoader.Instance().LoadAsset(GameObjectConstant.GetABUIPath(GameObjectConstant.g_szPlayerList), GameObjectConstant.g_szPlayerList, delegate (UnityEngine.Object ob)
 			{
 				RoleList pRoleList = RoleList.CreateInstance(ob, MainCanvas.Instance().transform);
 				pRoleList.SetPlayerIds(oRet.QwPlayerId);

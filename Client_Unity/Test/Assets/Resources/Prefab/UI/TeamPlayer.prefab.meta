@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 89b41e674f68add4e99259d93c5a0ce7
-timeCreated: 1524763732
+guid: 5ba4463dc98af5b4294e35bf66c19572
+timeCreated: 1525075397
 licenseType: Pro
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 100100000
   userData: 
-  assetBundleName: assets/resources/prefab/loginserverlist
+  assetBundleName: assets/resources/prefab/ui/teamplayer
   assetBundleVariant: 

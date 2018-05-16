@@ -46,7 +46,7 @@ using UnityEngine;
         }
         ServerInfo oServerInfo = oServerList.server_infos[0];
 
-		AssetBundleLoader.Instance().LoadAsset(GameObjectConstant.g_szPrefabPath + GameObjectConstant.g_szLoginServerList, GameObjectConstant.g_szLoginServerList, delegate (UnityEngine.Object ob)
+		AssetBundleLoader.Instance().LoadAsset(GameObjectConstant.GetABUIPath(GameObjectConstant.g_szLoginServerList), GameObjectConstant.GetABName(GameObjectConstant.g_szLoginServerList), delegate (UnityEngine.Object ob)
 			{
 				LoginServerList pList = LoginServerList.CreateInstance(ob, m_pUiCanvas);
 				pList.SetServerListInfo(oServerList);

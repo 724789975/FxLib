@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 3075b01049b4b304786bca2c38703b78
-timeCreated: 1525074882
+guid: 1abfddc7895f4eb4aadf832a2df24d4d
+timeCreated: 1524762716
 licenseType: Pro
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 100100000
   userData: 
-  assetBundleName: assets/resources/prefab/rolelist
+  assetBundleName: assets/resources/prefab/ui/serverinfo
   assetBundleVariant: 

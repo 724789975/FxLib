@@ -4,91 +4,93 @@ using System.Collections;
 using System.IO;
 
 #if UNITY_EDITOR
-    using UnityEditor;
+using UnityEditor;
 #endif
 
 
 public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 {
-    public string[] preloadBundles;
-    const string kAssetBundlesPath = "/AssetBundles/";
+	public string[] preloadBundles;
+	const string kAssetBundlesPath = "/AssetBundles/";
 
-    //开始场景ab包配置
-    [SerializeField]
-    public string sceneAssetBundle;
-    
-    [SerializeField]
-    public string sceneName;
+	//开始场景ab包配置
+	[SerializeField]
+	public string sceneAssetBundle;
 
-    private string sceneBundlePath = "assets/resources/screen/";
-    private bool firstLoaded = false;
-    private bool isResPreloaded = false;
+	[SerializeField]
+	public string sceneName;
 
-    void Awake()
-    {
+	private string sceneBundlePath = "assets/resources/screen/";
+	private bool firstLoaded = false;
+	private bool isResPreloaded = false;
+
+	void Awake()
+	{
 		DontDestroyOnLoad(this);
 		CreateInstance(this);
-        Globals.Init();
-    }
+		Globals.Init();
+	}
 
-    IEnumerator Start()
-    {
-        //yield return new WaitForSeconds(2.0f);
-        yield return StartCoroutine(Initialize());
-    }
+	IEnumerator Start()
+	{
+		yield return new WaitForSeconds(2.0f);
+		yield return StartCoroutine(Initialize());
+	}
 
-    public IEnumerator Initialize()
-    {
-		SampleDebuger.Log(getBundleDirName());
-        var request = AssetBundleManager.Initialize(getBundleDirName());
-		if (request != null){
+	public IEnumerator Initialize()
+	{
+		SampleDebuger.Log(GetBundleDirName());
+		var request = AssetBundleManager.Initialize(GetBundleDirName());
+		if (request != null)
+		{
 			SampleDebuger.Log("begin loading manifest");
-            yield return StartCoroutine(request);
+			yield return StartCoroutine(request);
 		}
-        yield return StartCoroutine(CheckVersion());
+		yield return StartCoroutine(CheckVersion());
 
-        if (!firstLoaded && !string.IsNullOrEmpty(sceneName))
-        {
-            LoadLevelAsset(sceneName);
-            firstLoaded = true;
-        }
-        //EventDispatcher.Instance.Emit("ABRES_INIT_DONE");
-    }
+		if (!firstLoaded && !string.IsNullOrEmpty(sceneName))
+		{
+			LoadLevelAsset(sceneName);
+			firstLoaded = true;
+		}
 
-    public IEnumerator Reload()
-    {
-        var request = AssetBundleManager.ReloadManifest(getBundleDirName());
-        if (request != null)
-        {
-            SampleDebuger.Log("reloading manifest");
-            yield return StartCoroutine(request);
-        }
-    }
+		LoadLevelAsset("chose_server");
+	}
 
-    IEnumerator CheckVersion()
-    {
-        string path = Globals.wwwPersistenPath + "/version.txt";
-        WWW www = new WWW(path);
-        yield return www;
+	public IEnumerator Reload()
+	{
+		var request = AssetBundleManager.ReloadManifest(GetBundleDirName());
+		if (request != null)
+		{
+			SampleDebuger.Log("reloading manifest");
+			yield return StartCoroutine(request);
+		}
+	}
+
+	IEnumerator CheckVersion()
+	{
+		string path = Globals.wwwPersistenPath + "/version.txt";
+		WWW www = new WWW(path);
+		yield return www;
 		string oldVersionStr = "0.0.0";
-        if (www.error == null)
+		if (www.error == null)
 		{
 			oldVersionStr = www.text.Trim();
 		}
-        Version oldVersion = new Version(oldVersionStr);
-        www = new WWW(Globals.wwwStreamingPath + "/version.txt");
-        yield return www;
-        string curVersionStr = www.text.Trim();
-        Version curVersion = new Version(curVersionStr);
+		Version oldVersion = new Version(oldVersionStr);
+		www = new WWW(Globals.wwwStreamingPath + "/version.txt");
+		yield return www;
+		string curVersionStr = www.text.Trim();
+		Version curVersion = new Version(curVersionStr);
 		SampleDebuger.Log("old version : " + oldVersion.curVersion + ", cur version : " + curVersion.curVersion);
-        if (oldVersion.IsLower(curVersion))
-        {
-            deleteUpdateBundle();
-        }
-    }
+		if (oldVersion.IsLower(curVersion))
+		{
+			deleteUpdateBundle();
+		}
+	}
 
-    public string getBundleUrl(string fileName)
-    {
+	public string getBundleUrl(string fileName)
+	{
 #if UNITY_EDITOR
 		return Application.dataPath + "/../AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
 		//return Application.streamingAssetsPath + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
@@ -100,15 +102,15 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 	}
 
 	public void deleteUpdateBundle()
-    {
-        if (Directory.Exists(Application.persistentDataPath + "/AssetBundles"))
-        {
-            Directory.Delete(Application.persistentDataPath + "/AssetBundles", true);
-        }
-    }
+	{
+		if (Directory.Exists(Application.persistentDataPath + "/AssetBundles"))
+		{
+			Directory.Delete(Application.persistentDataPath + "/AssetBundles", true);
+		}
+	}
 
-    private static string getBundleDirName()
-    {
+	private static string GetBundleDirName()
+	{
 #if UNITY_EDITOR
 		switch (EditorUserBuildSettings.activeBuildTarget)
 		{
@@ -142,61 +144,61 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 	}
 
 	public void LoadAsset(string assetBundleName, string assetName, Action<UnityEngine.Object> fn)
-    {
-        StartCoroutine(OnLoadAsset(assetBundleName, assetName, fn));
-    }
+	{
+		StartCoroutine(OnLoadAsset(assetBundleName, assetName, fn));
+	}
 
-    public IEnumerator OnLoadAsset(string assetBundleName, string assetName, Action<UnityEngine.Object> fn)
-    {
-        AssetBundleLoadAssetOperation request = AssetBundleManager.LoadAssetAsync(assetBundleName, assetName, typeof(UnityEngine.Object));
-        if (request == null)
-            yield break;
-        yield return StartCoroutine(request);
+	public IEnumerator OnLoadAsset(string assetBundleName, string assetName, Action<UnityEngine.Object> fn)
+	{
+		AssetBundleLoadAssetOperation request = AssetBundleManager.LoadAssetAsync(assetBundleName, assetName, typeof(UnityEngine.Object));
+		if (request == null)
+			yield break;
+		yield return StartCoroutine(request);
 
-        UnityEngine.Object obj = request.GetAsset<UnityEngine.Object>();
-        if(fn!=null) fn(obj);
-    }
+		UnityEngine.Object obj = request.GetAsset<UnityEngine.Object>();
+		if (fn != null) fn(obj);
+	}
 
-    public void LoadAllAsset(string assetBundleName, string assetName, Action<UnityEngine.Object[]> fn)
-    {
-        StartCoroutine(OnLoadAllAsset(assetBundleName, assetName, fn));
-    }
+	public void LoadAllAsset(string assetBundleName, string assetName, Action<UnityEngine.Object[]> fn)
+	{
+		StartCoroutine(OnLoadAllAsset(assetBundleName, assetName, fn));
+	}
 
-    public IEnumerator OnLoadAllAsset(string assetBundleName, string assetName, Action<UnityEngine.Object[]> fn)
-    {
-        AssetBundleLoadAssetOperation request = AssetBundleManager.LoadAssetAsync(assetBundleName, assetName, typeof(UnityEngine.Object), false);
-        if (request == null)
-            yield break;
-        yield return StartCoroutine(request);
+	public IEnumerator OnLoadAllAsset(string assetBundleName, string assetName, Action<UnityEngine.Object[]> fn)
+	{
+		AssetBundleLoadAssetOperation request = AssetBundleManager.LoadAssetAsync(assetBundleName, assetName, typeof(UnityEngine.Object), false);
+		if (request == null)
+			yield break;
+		yield return StartCoroutine(request);
 
-        UnityEngine.Object[] obj = request.GetAllAsset<UnityEngine.Object>();
-        //Debug.Log(assetName + (obj == null ? " isn't" : " is") + " loaded successfully at frame " + Time.frameCount);
-        if(fn!=null) fn(obj);
-    }
+		UnityEngine.Object[] obj = request.GetAllAsset<UnityEngine.Object>();
+		//Debug.Log(assetName + (obj == null ? " isn't" : " is") + " loaded successfully at frame " + Time.frameCount);
+		if (fn != null) fn(obj);
+	}
 
-    public void LoadLevelAsset(string name, Action fn = null)
-    {
-        string bundle = sceneBundlePath + name;
-        StartCoroutine(LoadLevel(bundle.ToLower(), name, fn));
-    }
+	public void LoadLevelAsset(string name, Action fn = null)
+	{
+		string bundle = sceneBundlePath + name;
+		StartCoroutine(LoadLevel(bundle.ToLower(), name, fn));
+	}
 
-    protected IEnumerator LoadLevel(string assetBundleName, string levelName, Action fn)
-    {
-        // Debug.Log("Start to load scene " + levelName + " at frame " + Time.frameCount);
-        // Load level from assetBundle.
-        AssetBundleLoadBaseOperation request = AssetBundleManager.LoadLevelAsync(assetBundleName, levelName, false);
-        if (request != null)
-        {
-            yield return StartCoroutine(request);
-        }
-            
-        if (fn != null)
-        {
-            fn();
-        }
-    }
+	protected IEnumerator LoadLevel(string assetBundleName, string levelName, Action fn)
+	{
+		// Debug.Log("Start to load scene " + levelName + " at frame " + Time.frameCount);
+		// Load level from assetBundle.
+		AssetBundleLoadBaseOperation request = AssetBundleManager.LoadLevelAsync(assetBundleName, levelName, false);
+		if (request != null)
+		{
+			yield return StartCoroutine(request);
+		}
 
-    void OnDestory()
-    {
-    }
+		if (fn != null)
+		{
+			fn();
+		}
+	}
+
+	void OnDestory()
+	{
+	}
 }

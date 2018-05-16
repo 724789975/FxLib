@@ -387,7 +387,7 @@ public class AssetBundleManager : MonoBehaviour
                 ///@TODO: The error needs to differentiate that an asset bundle name doesn't exist
                 //        from that there right scene does not exist in the asset bundle...
 
-                Debug.LogError("There is no scene with name \"" + levelName + "\" in " + assetBundleName);
+                SampleDebuger.LogError("There is no scene with name \"" + levelName + "\" in " + assetBundleName);
                 return null;
             }
 

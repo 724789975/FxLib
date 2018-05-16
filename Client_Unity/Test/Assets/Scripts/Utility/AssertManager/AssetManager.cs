@@ -29,9 +29,9 @@ public class AssetManager : SingletonObject<AssetManager>
 
     private AssetCachePool _shortAssetPool; //暂存资源
 
-    private const string _cellEnityPath = "Assets/ABRes/Entity/"; //场景事件资源路径
+    private const string _cellEnityPath = "Assets/Resources/Entity/"; //场景事件资源路径
 
-    private const string _uipath = "Assets/ABRes/UI/";        //界面资源路径
+    private const string _uipath = "Assets/Resources/Prefab/UI/";        //界面资源路径
 
     private Dictionary<string, Queue<AssetPoolItem>> _entityPoolMap = new Dictionary<string,Queue<AssetPoolItem>>(); //
 
