@@ -26,6 +26,7 @@ public:
 
 	UINT64 GetPlayerId() { return m_qwPyayerId; }
 	UINT64 GetTeamId() { return m_qwTeamId; }
+	UINT32 GetTeamServerId() { return m_dwTeamServerId; }
 	std::string GetNickName() { return m_szNickName; }
 	std::string GetAvatar() { return m_szAvatar; }
 	UINT32 GetSex() { return m_dwSex; }

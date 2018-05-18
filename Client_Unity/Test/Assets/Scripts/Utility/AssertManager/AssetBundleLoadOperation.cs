@@ -228,7 +228,16 @@ public class AssetBundleLoadAssetOperationFull : AssetBundleLoadAssetOperation
 
 	public override float GetProgress()
 	{
-		return m_Request.progress + m_AllRequest.progress;
+		float fProgress = 0.0f;
+		if (m_Request != null)
+		{
+			fProgress += m_Request.progress;
+		}
+		if (m_AllRequest != null)
+		{
+			fProgress += m_AllRequest.progress;
+		}
+		return fProgress;
 	}
 }
 

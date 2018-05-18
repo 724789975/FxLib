@@ -84,13 +84,21 @@ bool CTeam::KickPlayer(UINT64 qwPlayerId)
 	}
 	m_pPlayerSlots[m_mapPlayers[qwPlayerId].dw_slot_id()] = 0;
 	m_mapPlayers.erase(qwPlayerId);
+	for (int i = 0; i < MAXCLIENTNUM; ++i)
+	{
+		if (m_pPlayerSlots[i] != 0)
+		{
+			m_qwLeader = m_pPlayerSlots[i];
+			break;
+		}
+	}
 	return true;
 }
 
 void CTeam::NotifyPlayer()
 {
 	GameProto::TeamNotifyLoginTeamInfo oNotify;
-	oNotify.set_qw_team_id(m_qwLeader);
+	oNotify.set_qw_team_id(m_qwTeamId);
 	for (std::map<UINT64, GameProto::TeamRoleData >::iterator it = m_mapPlayers.begin();
 		it != m_mapPlayers.end(); ++it)
 	{
@@ -148,6 +156,7 @@ CTeam& CTeamManager::CreateTeam(UINT64 qwTeamId)
 		Assert(0);
 	}
 
+	m_mapTeams[qwTeamId].SetTeamId(qwTeamId);
 	return m_mapTeams[qwTeamId];
 }
 

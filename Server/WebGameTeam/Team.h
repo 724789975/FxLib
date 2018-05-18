@@ -31,7 +31,7 @@ public:
 	UINT64 GetLeaderId() { return m_qwLeader; }
 	ETeamState GetState() { return m_eState; }
 	
-	void SetTeamId(UINT32 dwTeamId) { m_dwTeamId = dwTeamId; }
+	void SetTeamId(UINT64 qwTeamId) { m_qwTeamId = qwTeamId; }
 	UINT32 GetTeamId(UINT32 dwTeamId) { return dwTeamId; }
 
 	void SetState(ETeamState eState) { m_eState = eState; }
@@ -44,7 +44,7 @@ public:
 	UINT64 m_qwLeader;
 
 	ETeamState m_eState;
-	UINT32 m_dwTeamId;
+	UINT64 m_qwTeamId;
 };
 
 class CTeamManager

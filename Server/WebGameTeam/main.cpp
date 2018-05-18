@@ -15,6 +15,9 @@ DEFINE_uint32(server_id, 20001, "server id");
 DEFINE_string(center_ip, "127.0.0.1", "center ip");
 DEFINE_uint32(center_port, 40000, "center port");
 DEFINE_uint32(game_manager_port, 20001, "game manager port");
+DEFINE_string(redis_ip, "127.0.0.1", "redis ip");
+DEFINE_string(redis_pw, "1", "redis password");
+DEFINE_uint32(redis_port, 16379, "game_type");
 
 void EndFun(int n)
 {
@@ -58,7 +61,7 @@ int main(int argc, char **argv)
 		g_bRun = false;
 		goto STOP;
 	}
-	if (!FxRedisGetModule()->Open("127.0.0.1", 16379, "1", 0))
+	if (!FxRedisGetModule()->Open(FLAGS_redis_ip.c_str(), FLAGS_redis_port, FLAGS_redis_pw, 0))
 	{
 		LogExe(LogLv_Info, "%s", "redis connected failed~~~~");
 		goto STOP;

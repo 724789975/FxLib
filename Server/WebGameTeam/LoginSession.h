@@ -35,6 +35,7 @@ public:
 	bool		OnLoginRequestTeamKickPlayer(CLoginSession& refSession, google::protobuf::Message& refMsg);
 	bool		OnLoginRequestTeamGameStart(CLoginSession& refSession, google::protobuf::Message& refMsg);
 	bool		OnLoginRequestTeamEnterTeam(CLoginSession& refSession, google::protobuf::Message& refMsg);
+	bool		OnLoginRequestTeamPlayerLeave(CLoginSession& refSession, google::protobuf::Message& refMsg);
 
 protected:
 	unsigned int m_dwServerId;

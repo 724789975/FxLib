@@ -90,7 +90,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;_CRT_SECURE_NO_DEPRECATE;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>../protobuf-3.5.1;../meta_header;../gflags_win;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../protobuf-3.5.1;../meta_header;../gflags_win;../json;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <SDLCheck>
       </SDLCheck>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -98,7 +98,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(TargetDIr)libprotobufd.lib;ws2_32.lib;dbghelp.lib;$(TargetDir)gflags_static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(TargetDIr)libprotobufd.lib;ws2_32.lib;dbghelp.lib;$(TargetDir)gflags_static.lib;$(TargetDIr)hiredis.lib;$(TargetDIr)Win32_Interop.lib;$(TargetDir)lib_json.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>../mysql/lib/libmtd;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
@@ -165,11 +165,14 @@
     <ClCompile Include="..\common\fxtimer.cpp" />
     <ClCompile Include="..\common\log_thread.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
+    <ClCompile Include="GameConfigBase.cpp" />
     <ClCompile Include="GameManagerSession.cpp" />
+    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="msg_proto\web_data.pb.cc" />
     <ClCompile Include="msg_proto\web_game.pb.cc" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="PlayerSession.cpp" />
     <ClCompile Include="proto_dispatcher.cpp" />
     <ClCompile Include="ServerSession.cpp" />
@@ -177,11 +180,14 @@
     <ClCompile Include="SocketSession.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameConfigBase.h" />
     <ClInclude Include="gamedefine.h" />
     <ClInclude Include="GameManagerSession.h" />
+    <ClInclude Include="GameScene.h" />
     <ClInclude Include="GameServer.h" />
     <ClInclude Include="msg_proto\web_data.pb.h" />
     <ClInclude Include="msg_proto\web_game.pb.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="PlayerSession.h" />
     <ClInclude Include="ServerSession.h" />
     <ClInclude Include="SlaveServerSession.h" />
@@ -190,6 +196,9 @@
   <ItemGroup>
     <ProjectReference Include="..\Net\Net.vcxproj">
       <Project>{5f97e034-3d07-4fce-9a0d-410661e3c32a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\RedisCon\RedisCon.vcxproj">
+      <Project>{e46b34d1-23ff-434d-ad85-df5e0ed821f4}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

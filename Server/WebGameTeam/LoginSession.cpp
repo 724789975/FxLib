@@ -18,6 +18,8 @@ CLoginSession::CLoginSession()
 	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamKickPlayer::descriptor(), &CLoginSession::OnLoginRequestTeamKickPlayer);
 	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamGameStart::descriptor(), &CLoginSession::OnLoginRequestTeamGameStart);
 	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamEnterTeam::descriptor(), &CLoginSession::OnLoginRequestTeamEnterTeam);
+	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestTeamPlayerLeave::descriptor(), &CLoginSession::OnLoginRequestTeamPlayerLeave);
+	
 }
 
 CLoginSession::~CLoginSession()
@@ -139,7 +141,6 @@ bool CLoginSession::OnLoginRequestTeamKickPlayer(CLoginSession& refSession, goog
 	{
 		oKickPlayer.set_dw_result(GameProto::EC_NoTeamId);
 		LogExe(LogLv_Critical, "player : %llu want leave team : %llu no team id", pMsg->qw_player_id(), pMsg->qw_team_id());
-		return true;
 	}
 	else
 	{
@@ -157,6 +158,10 @@ bool CLoginSession::OnLoginRequestTeamKickPlayer(CLoginSession& refSession, goog
 	if (pTeam->GetTeamNum() == 0)
 	{
 		GameServer::Instance()->GetTeamManager().ReleaseTeam(pMsg->qw_team_id());
+	}
+	else
+	{
+		pTeam->NotifyPlayer();
 	}
 	return true;
 }
@@ -288,6 +293,46 @@ bool CLoginSession::OnLoginRequestTeamEnterTeam(CLoginSession& refSession, googl
 	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
 	Send(pBuf, dwBufLen);
 
+	return true;
+}
+
+bool CLoginSession::OnLoginRequestTeamPlayerLeave(CLoginSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::LoginRequestTeamPlayerLeave* pMsg = dynamic_cast<GameProto::LoginRequestTeamPlayerLeave*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	CTeam* pTeam = GameServer::Instance()->GetTeamManager().GetTeam(pMsg->qw_team_id());
+	GameProto::TeamAckLoginPlayerLeave oPlayerLeave;
+	oPlayerLeave.set_qw_player_id(pMsg->qw_player_id());
+	if (pTeam == NULL)
+	{
+		oPlayerLeave.set_dw_result(GameProto::EC_NoTeamId);
+		LogExe(LogLv_Critical, "player : %llu want leave team : %llu no team id", pMsg->qw_player_id(), pMsg->qw_team_id());
+	}
+	else
+	{
+		if (!pTeam->KickPlayer(pMsg->qw_player_id()))
+		{
+			oPlayerLeave.set_dw_result(GameProto::EC_NoTeamId);
+			LogExe(LogLv_Critical, "player : %llu want leave team : %llu kick fail", pMsg->qw_player_id(), pMsg->qw_team_id());
+		}
+	}
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oPlayerLeave, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
+
+	if (pTeam->GetTeamNum() == 0)
+	{
+		GameServer::Instance()->GetTeamManager().ReleaseTeam(pMsg->qw_team_id());
+	}
+	else
+	{
+		pTeam->NotifyPlayer();
+	}
 	return true;
 }
 

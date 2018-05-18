@@ -27,7 +27,6 @@ public:
 	virtual char*		GetRecvBuf() { return m_dataRecvBuf; }
 	virtual UINT32		GetRecvSize() { return 64 * 1024; };
 
-	bool				OnRequestGameManagerInfo(CPlayerSession& refSession, google::protobuf::Message& refMsg);
 	bool				OnPlayerRequestGameTest(CPlayerSession& refSession, google::protobuf::Message& refMsg);
 private:
 	char m_dataRecvBuf[1024 * 1024];

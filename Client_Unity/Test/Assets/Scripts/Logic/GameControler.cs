@@ -35,7 +35,7 @@ public class GameControler : SingletonObject<GameControler>
 	{
 		SampleDebuger.Log("game connected");
 
-		AssetBundleLoader.Instance().LoadLevelAsset("gamescene", (delegate ()
+		AssetBundleLoader.Instance().LoadLevelAsset("game_prepare", (delegate ()
 			{
 				GameProto.PlayerRequestGameTest oTest = new GameProto.PlayerRequestGameTest();
 
@@ -76,16 +76,6 @@ public class GameControler : SingletonObject<GameControler>
 			m_pSession.UnRegistMessage("GameProto.PlayerRequestGameTest");
 		}
 		H5Manager.Instance().GetGameSessionResetCallBack().Remove(OnGameSessionReset);
-	}
-
-	public delegate void fun();
-	public IEnumerator LoadGameScene(fun fn)
-	{
-		AsyncOperation ao = UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("gamescene");
-		SampleDebuger.Log(ao.progress.ToString());
-		yield return ao.progress;
-		SampleDebuger.Log(ao.progress.ToString() + " has loaded");
-        fn();
 	}
 
 	int dw1 = 0;

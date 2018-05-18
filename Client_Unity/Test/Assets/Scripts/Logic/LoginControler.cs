@@ -51,6 +51,8 @@ public class LoginControler : SingletonObject<LoginControler>
 		m_pSession.RegistMessage("GameProto.LoginNotifyPlayerInviteTeam", OnLoginNotifyPlayerInviteTeam);
 		m_pSession.RegistMessage("GameProto.LoginNotifyPlayerTeamInfo", OnLoginNotifyPlayerTeamInfo);
 		m_pSession.RegistMessage("GameProto.LoginAckPlayerEnterTeam", OnLoginAckPlayerEnterTeam);
+		m_pSession.RegistMessage("GameProto.LoginNotifyPlayerRefuseEnterTeam", OnLoginNotifyPlayerRefuseEnterTeam);
+		m_pSession.RegistMessage("GameProto.LoginAckPlayerLeaveTeam", OnLoginAckPlayerLeaveTeam);
     }
 
 	// Update is called once per frame
@@ -93,6 +95,20 @@ public class LoginControler : SingletonObject<LoginControler>
 		byte[] pData = new byte[1024];
 		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
 		pStream.WriteString("GameProto.PlayerRequestLoginMakeTeam");
+		byte[] pProto = new byte[oTeam.CalculateSize()];
+		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
+		oTeam.WriteTo(oStream);
+		pStream.WriteData(pProto, (uint)pProto.Length);
+
+		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+	}
+
+	public void LeaveTeam()
+	{
+		GameProto.PlayerRequestLoginLeaveTeam oTeam = new GameProto.PlayerRequestLoginLeaveTeam();
+		byte[] pData = new byte[1024];
+		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
+		pStream.WriteString("GameProto.PlayerRequestLoginLeaveTeam");
 		byte[] pProto = new byte[oTeam.CalculateSize()];
 		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
 		oTeam.WriteTo(oStream);
@@ -241,14 +257,13 @@ public class LoginControler : SingletonObject<LoginControler>
 
 		SampleDebuger.Log("on invitee team player id : " + oRet.QwPlayerId.ToString() + " team id : " + oRet.QwTeamId.ToString());
 
-		AssetBundleLoader.Instance().LoadAsset(GameObjectConstant.g_szPrefabPath + GameObjectConstant.g_szControlPanel, GameObjectConstant.g_szControlPanel, delegate (UnityEngine.Object ob)
+		AssetBundleLoader.Instance().LoadAsset(GameObjectConstant.GetABUIPath(GameObjectConstant.g_szControlPanel), GameObjectConstant.g_szControlPanel, delegate (UnityEngine.Object ob)
 			{
 				GameObject go_RoleList = Instantiate((GameObject)ob, MainCanvas.Instance().transform);
 				go_RoleList.GetComponent<ControlPanel>().Init("player : " + oRet.QwPlayerId.ToString() + " invite you to team :" + oRet.QwTeamId.ToString(),
-					IntoInviteTeam, oRet, null, null);
+					IntoInviteTeam, oRet, NotIntoInviteTeam, oRet);
 			}
 		);
-
 	}
 
 	public void OnLoginNotifyPlayerTeamInfo(byte[] pBuf)
@@ -280,6 +295,30 @@ public class LoginControler : SingletonObject<LoginControler>
 		}
 
 		SampleDebuger.Log("OnLoginAckPlayerEnterTeam result : " + oRet.DwResult.ToString());
+	}
+
+	public void OnLoginNotifyPlayerRefuseEnterTeam(byte[] pBuf)
+	{
+		GameProto.LoginNotifyPlayerRefuseEnterTeam oRet = GameProto.LoginNotifyPlayerRefuseEnterTeam.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.Log("OnLoginNotifyPlayerRefuseEnterTeam error parse");
+			return;
+		}
+
+		SampleDebuger.LogError("OnLoginNotifyPlayerRefuseEnterTeam reason : " + oRet.SzReason);
+	}
+
+	private void OnLoginAckPlayerLeaveTeam(byte[] pBuf)
+	{
+		GameProto.LoginAckPlayerLeaveTeam oRet = GameProto.LoginAckPlayerLeaveTeam.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.Log("OnLoginAckPlayerLeaveTeam error parse");
+			return;
+		}
+
+		SampleDebuger.Log("OnLoginAckPlayerLeaveTeam result : " + oRet.DwResult.ToString());
 	}
 
 	public void OnRoleData(string szData)
@@ -321,6 +360,30 @@ public class LoginControler : SingletonObject<LoginControler>
 		byte[] pData = new byte[1024];
 		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
 		pStream.WriteString("GameProto.PlayerRequestLoginEnterTeam");
+		byte[] pProto = new byte[oRequest.CalculateSize()];
+		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
+		oRequest.WriteTo(oStream);
+		pStream.WriteData(pProto, (uint)pProto.Length);
+
+		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+	}
+
+	public void NotIntoInviteTeam(object pParam)
+	{
+		GameProto.LoginNotifyPlayerInviteTeam oInvite = pParam as GameProto.LoginNotifyPlayerInviteTeam;
+		if (oInvite == null)
+		{
+			SampleDebuger.LogError("NotIntoInviteTeam parse error!!!!");
+			return;
+		}
+
+		GameProto.PlayerRequestLoginRefuseEnterTeam oRequest = new GameProto.PlayerRequestLoginRefuseEnterTeam();
+		oRequest.QwPlayerId = oInvite.QwPlayerId;
+		oRequest.SzReason = "refused!!!";
+
+		byte[] pData = new byte[1024];
+		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
+		pStream.WriteString("GameProto.PlayerRequestLoginRefuseEnterTeam");
 		byte[] pProto = new byte[oRequest.CalculateSize()];
 		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
 		oRequest.WriteTo(oStream);

@@ -301,9 +301,8 @@ void Player::OnClose()
 {
 	if (m_qwTeamId)
 	{
-		std::map<unsigned int, CBinaryTeamSession*>::iterator it =
-			GameServer::Instance()->GetTeamSessionManager().GetTeamSessions().find(m_dwTeamServerId);
-		if (it != GameServer::Instance()->GetTeamSessionManager().GetTeamSessions().end())
+		CBinaryTeamSession* pSession = GameServer::Instance()->GetTeamSessionManager().GetTeamSession(m_dwTeamServerId);
+		if (pSession)
 		{
 			GameProto::LoginRequestTeamKickPlayer oKickPlayer;
 			oKickPlayer.set_qw_player_id(m_qwPyayerId);
@@ -311,7 +310,7 @@ void Player::OnClose()
 			char* pBuf = NULL;
 			unsigned int dwBufLen = 0;
 			ProtoUtility::MakeProtoSendBuffer(oKickPlayer, pBuf, dwBufLen);
-			it->second->Send(pBuf, dwBufLen);
+			pSession->Send(pBuf, dwBufLen);
 		}
 	}
 

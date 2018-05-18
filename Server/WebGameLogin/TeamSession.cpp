@@ -19,6 +19,7 @@ CTeamSession::CTeamSession()
 	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginKickPlayer::descriptor(), &CTeamSession::OnTeamAckLoginKickPlayer);
 	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginGameStart::descriptor(), &CTeamSession::OnTeamAckLoginGameStart);
 	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginEnterTeam::descriptor(), &CTeamSession::OnTeamAckLoginEnterTeam);
+	m_oProtoDispatch.RegistFunction(GameProto::TeamAckLoginPlayerLeave::descriptor(), &CTeamSession::OnTeamAckLoginPlayerLeave);
 }
 
 CTeamSession::~CTeamSession()
@@ -237,7 +238,31 @@ bool CTeamSession::OnTeamAckLoginEnterTeam(CTeamSession& refSession, google::pro
 	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
 	pPlayer->GetSession()->Send(pBuf, dwBufLen);
 	return true;
+}
 
+bool CTeamSession::OnTeamAckLoginPlayerLeave(CTeamSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::TeamAckLoginPlayerLeave* pMsg = dynamic_cast<GameProto::TeamAckLoginPlayerLeave*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(pMsg->qw_player_id());
+	if (pPlayer == NULL)
+	{
+		LogExe(LogLv_Critical, "find player fail player id : %llu", pMsg->qw_player_id());
+		return true;
+	}
+
+	pPlayer->SetState(PlayrState_Idle);
+	pPlayer->SetTeamInfo(0, 0);
+
+	GameProto::LoginAckPlayerLeaveTeam oResult;
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+	pPlayer->GetSession()->Send(pBuf, dwBufLen);
 	return true;
 }
 

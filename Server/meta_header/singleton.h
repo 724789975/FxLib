@@ -41,6 +41,16 @@ public:
 		return false;
 	}
 
+	static bool CreateInstance(T* pInstance)
+	{
+		if (!m_pInstance)
+		{
+			m_pInstance = pInstance;
+			return m_pInstance != 0;
+		}
+		return false;
+	}
+
 	static bool DestroyInstance()
 	{
 		if (m_pInstance)

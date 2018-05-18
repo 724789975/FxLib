@@ -15,6 +15,7 @@ CLoginSession::CLoginSession()
 	m_oProtoDispatch.RegistFunction(GameProto::LoginNotifyLoginPlayerKick::descriptor(), &CLoginSession::OnLoginNotifyLoginPlayerKick);
 	m_oProtoDispatch.RegistFunction(GameProto::LoginRequestLoginInviteTeam::descriptor(), &CLoginSession::OnLoginRequestLoginInviteTeam);
 	m_oProtoDispatch.RegistFunction(GameProto::LoginAckLoginInviteTeam::descriptor(), &CLoginSession::OnLoginAckLoginInviteTeam);
+	m_oProtoDispatch.RegistFunction(GameProto::LoginNotifyLoginPlayerRefuseEnterTeam::descriptor(), &CLoginSession::OnLoginNotifyLoginPlayerRefuseEnterTeam);
 }
 
 CLoginSession::~CLoginSession()
@@ -151,16 +152,43 @@ bool CLoginSession::OnLoginAckLoginInviteTeam(CLoginSession& refSession, google:
 	}
 
 	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(pMsg->qw_invite_id());
-	if (pPlayer)
+	if (!pPlayer)
 	{
-		GameProto::LoginAckPlayerInviteTeam oResult;
-		oResult.set_dw_result(pMsg->dw_result());
-		char* pBuf = NULL;
-		unsigned int dwBufLen = 0;
-		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
-		pPlayer->GetSession()->Send(pBuf, dwBufLen);
+		LogExe(LogLv_Critical, "find player error : %llu", pMsg->qw_invite_id());
+		return true;
 	}
 
+	GameProto::LoginAckPlayerInviteTeam oResult;
+	oResult.set_dw_result(pMsg->dw_result());
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+	pPlayer->GetSession()->Send(pBuf, dwBufLen);
+	return true;
+}
+
+bool CLoginSession::OnLoginNotifyLoginPlayerRefuseEnterTeam(CLoginSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::LoginNotifyLoginPlayerRefuseEnterTeam* pMsg = dynamic_cast<GameProto::LoginNotifyLoginPlayerRefuseEnterTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(pMsg->qw_invite_id());
+	if (!pPlayer)
+	{
+		LogExe(LogLv_Critical, "find player error : %llu", pMsg->qw_invite_id());
+		return true;
+	}
+	GameProto::LoginNotifyPlayerRefuseEnterTeam oNoity;
+	oNoity.set_qw_player_id(pMsg->qw_invitee_id());
+	oNoity.set_sz_reason(pMsg->sz_reason());
+
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oNoity, pBuf, dwBufLen);
+	pPlayer->GetSession()->Send(pBuf, dwBufLen);
 	return true;
 }
 

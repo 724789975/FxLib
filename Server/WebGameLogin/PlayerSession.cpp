@@ -14,6 +14,30 @@
 const static unsigned int g_dwPlayerSessionBuffLen = 64 * 1024;
 static char g_pPlayerSessionBuf[g_dwPlayerSessionBuffLen];
 
+class RedisGetServerId : public IRedisQuery
+{
+public:
+	RedisGetServerId(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId), m_dwServerId(0), m_pReader(NULL) {}
+	~RedisGetServerId() {}
+
+	virtual int					GetDBId(void) { return 0; }
+	virtual void				OnQuery(IRedisConnection *poDBConnection)
+	{
+		char szQuery[64] = { 0 };
+		sprintf(szQuery, "ZSCORE %s %llu", RedisConstant::szOnLinePlayer, m_qwPlayerId);
+		poDBConnection->Query(szQuery, &m_pReader);
+	}
+	virtual void OnResult(void) { std::string szServerId; m_pReader->GetValue(szServerId); m_dwServerId = atoi(szServerId.c_str()); }
+	virtual void Release(void) { m_pReader->Release(); }
+
+	INT32 GetServerId() { return m_dwServerId; }
+
+private:
+	IRedisDataReader* m_pReader;
+	INT32 m_dwServerId;
+	UINT64 m_qwPlayerId;
+};
+
 CPlayerSession::CPlayerSession()
 	:m_oProtoDispatch(*this)
 {
@@ -25,8 +49,9 @@ CPlayerSession::CPlayerSession()
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginGameStart::descriptor(), &CPlayerSession::OnPlayerRequestLoginGameStart);
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginOnLinePlayer::descriptor(), &CPlayerSession::OnPlayerRequestLoginOnLinePlayer);
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginEnterTeam::descriptor(), &CPlayerSession::OnPlayerRequestLoginEnterTeam);
+	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginRefuseEnterTeam::descriptor(), &CPlayerSession::OnPlayerRequestLoginRefuseEnterTeam);
+	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestLoginLeaveTeam::descriptor(), &CPlayerSession::OnPlayerRequestLoginLeaveTeam);
 }
-
 
 CPlayerSession::~CPlayerSession()
 {
@@ -101,31 +126,7 @@ bool CPlayerSession::OnPlayerRequestLogin(CPlayerSession& refSession, google::pr
 		return false;
 	}
 
-	class RedisServerId : public IRedisQuery
-	{
-	public:
-		RedisServerId(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId), m_dwServerId(0), m_pReader(NULL) {}
-		~RedisServerId() {}
-
-		virtual int					GetDBId(void) { return 0; }
-		virtual void				OnQuery(IRedisConnection *poDBConnection)
-		{
-			char szQuery[64] = { 0 };
-			sprintf(szQuery, "ZSCORE %s %llu", RedisConstant::szOnLinePlayer, m_qwPlayerId);
-			poDBConnection->Query(szQuery, &m_pReader);
-		}
-		virtual void OnResult(void) { INT64 qwServerId; m_pReader->GetValue(qwServerId); m_dwServerId = (UINT32)qwServerId; }
-		virtual void Release(void) { m_pReader->Release(); }
-
-		UINT32 GetServerId() { return m_dwServerId; }
-
-	private:
-		IRedisDataReader* m_pReader;
-		UINT32 m_dwServerId;
-		UINT64 m_qwPlayerId;
-	};
-
-	RedisServerId oServerId(pMsg->qw_player_id());
+	RedisGetServerId oServerId(pMsg->qw_player_id());
 	FxRedisGetModule()->QueryDirect(&oServerId);
 	UINT32 dwServerId = oServerId.GetServerId();
 
@@ -293,12 +294,6 @@ bool CPlayerSession::OnPlayerRequestLoginEnterTeam(CPlayerSession& refSession, g
 	if (pPlayer == NULL)
 	{
 		LogExe(LogLv_Critical, "cann't find player : %llu", m_qwPlayerId);
-		GameProto::LoginAckPlayerEnterTeam oResult;
-		oResult.set_dw_result(GameProto::EC_CannotFindPlayer);
-		char* pBuf = NULL;
-		unsigned int dwBufLen = 0;
-		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
-		Send(pBuf, dwBufLen);
 		return true;
 	}
 
@@ -329,6 +324,87 @@ bool CPlayerSession::OnPlayerRequestLoginEnterTeam(CPlayerSession& refSession, g
 	pTeamSession->Send(pBuf, dwBufLen);
 
 	return true;
+}
+
+bool CPlayerSession::OnPlayerRequestLoginRefuseEnterTeam(CPlayerSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::PlayerRequestLoginRefuseEnterTeam* pMsg = dynamic_cast<GameProto::PlayerRequestLoginRefuseEnterTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(m_qwPlayerId);
+	if (pPlayer == NULL)
+	{
+		LogExe(LogLv_Critical, "cann't find player : %llu", m_qwPlayerId);
+		Close();
+		return true;
+	}
+
+	Player* pInvitePlay = GameServer::Instance()->GetPlayerManager().GetPlayer(pMsg->qw_player_id());
+	if (pInvitePlay)
+	{
+		GameProto::LoginNotifyPlayerRefuseEnterTeam oNotify;
+		oNotify.set_qw_player_id(m_qwPlayerId);
+		oNotify.set_sz_reason(pMsg->sz_reason());
+
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oNotify, pBuf, dwBufLen);
+		pInvitePlay->GetSession()->Send(pBuf, dwBufLen);
+		return true;
+	}
+
+	RedisGetServerId oServerId(pMsg->qw_player_id());
+	FxRedisGetModule()->QueryDirect(&oServerId);
+	UINT32 dwServerId = oServerId.GetServerId();
+
+	CLoginSession* pLoginSession = GameServer::Instance()->GetLoginSessionManager().GetLoginSession(dwServerId);
+	if (pLoginSession)
+	{
+		GameProto::LoginNotifyLoginPlayerRefuseEnterTeam oNotify;
+		oNotify.set_qw_invite_id(pMsg->qw_player_id());
+		oNotify.set_qw_invitee_id(m_qwPlayerId);
+		oNotify.set_sz_reason(pMsg->sz_reason());
+
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oNotify, pBuf, dwBufLen);
+		pInvitePlay->GetSession()->Send(pBuf, dwBufLen);
+		return true;
+	}
+}
+
+bool CPlayerSession::OnPlayerRequestLoginLeaveTeam(CPlayerSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::PlayerRequestLoginLeaveTeam* pMsg = dynamic_cast<GameProto::PlayerRequestLoginLeaveTeam*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(m_qwPlayerId);
+	if (pPlayer == NULL)
+	{
+		LogExe(LogLv_Critical, "cann't find player : %llu", m_qwPlayerId);
+		Close();
+		return true;
+	}
+
+	CBinaryTeamSession* pSession = GameServer::Instance()->GetTeamSessionManager().GetTeamSession(pPlayer->GetTeamServerId());
+	if (!pSession)
+	{
+		LogExe(LogLv_Critical, "cann't find team session : %llu", pPlayer->GetTeamServerId());
+		return true;
+	}
+	GameProto::LoginRequestTeamPlayerLeave oKickPlayer;
+	oKickPlayer.set_qw_player_id(pPlayer->GetPlayerId());
+	oKickPlayer.set_qw_team_id(pPlayer->GetTeamId());
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oKickPlayer, pBuf, dwBufLen);
+	pSession->Send(pBuf, dwBufLen);
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -9,7 +9,6 @@ static char g_pPlayerSessionBuf[g_dwPlayerSessionBuffLen];
 CPlayerSession::CPlayerSession()
 	: m_oProtoDispatch(*this)
 {
-	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestGameManagerInfo::descriptor(), &CPlayerSession::OnRequestGameManagerInfo);
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestGameTest::descriptor(), &CPlayerSession::OnPlayerRequestGameTest);
 }
 
@@ -52,11 +51,6 @@ void CPlayerSession::Release(void)
 	OnDestroy();
 
 	Init(NULL);
-}
-
-bool CPlayerSession::OnRequestGameManagerInfo(CPlayerSession& refSession, google::protobuf::Message& refMsg)
-{
-	return false;
 }
 
 bool CPlayerSession::OnPlayerRequestGameTest(CPlayerSession& refSession, google::protobuf::Message& refMsg)

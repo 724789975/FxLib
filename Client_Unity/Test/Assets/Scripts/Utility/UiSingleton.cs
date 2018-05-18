@@ -32,4 +32,19 @@ public abstract class UiSingleton<T> : MonoBehaviour where T : MonoBehaviour
 		}
 		return m_pInstance;
 	}
+
+	public static T CreateInstance(T pInstance)
+	{
+		if (m_pInstance != null)
+		{
+			if (m_pInstance != pInstance)
+			{
+				Destroy(pInstance);
+			}
+			return m_pInstance;
+		}
+
+		m_pInstance = pInstance;
+		return m_pInstance;
+	}
 }

@@ -30,18 +30,32 @@ namespace GameProto {
             "JgoJcm9sZV9kYXRhGAEgASgLMhMuR2FtZVByb3RvLlJvbGVEYXRhEhIKCmR3",
             "X3Nsb3RfaWQYAiABKA0SFAoMZHdfc2VydmVyX2lkGAMgASgNIk4KDk9ubGlu",
             "ZVJvbGVEYXRhEiYKCXJvbGVfZGF0YRgBIAEoCzITLkdhbWVQcm90by5Sb2xl",
-            "RGF0YRIUCgxkd19zZXJ2ZXJfaWQYAiABKA1iBnByb3RvMw=="));
+            "RGF0YRIUCgxkd19zZXJ2ZXJfaWQYAiABKA0iPwoOR2FtZUNvbmZpZ0Jhc2US",
+            "FAoMZHdfZ2FtZV90eXBlGAEgASgNEhcKD2R3X3ByZXBhcmVfdGltZRgCIAEo",
+            "DSJCChBHYW1lQ29uZmlnQ29tbW9uEi4KC2Jhc2VfY29uZmlnGAEgASgLMhku",
+            "R2FtZVByb3RvLkdhbWVDb25maWdCYXNlKicKCUVHYW1lVHlwZRILCgdHVF9O",
+            "b25lEAASDQoJR1RfQ29tbW9uEAFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProto.EGameType), }, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.RoleData), global::GameProto.RoleData.Parser, new[]{ "QwPlayerId", "SzNickName", "SzAvatar", "DwSex" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.TeamRoleData), global::GameProto.TeamRoleData.Parser, new[]{ "RoleData", "DwSlotId", "DwServerId" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.OnlineRoleData), global::GameProto.OnlineRoleData.Parser, new[]{ "RoleData", "DwServerId" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.OnlineRoleData), global::GameProto.OnlineRoleData.Parser, new[]{ "RoleData", "DwServerId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameConfigBase), global::GameProto.GameConfigBase.Parser, new[]{ "DwGameType", "DwPrepareTime" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameConfigCommon), global::GameProto.GameConfigCommon.Parser, new[]{ "BaseConfig" }, null, null, null)
           }));
     }
     #endregion
 
   }
+  #region Enums
+  public enum EGameType {
+    [pbr::OriginalName("GT_None")] GtNone = 0,
+    [pbr::OriginalName("GT_Common")] GtCommon = 1,
+  }
+
+  #endregion
+
   #region Messages
   public sealed partial class RoleData : pb::IMessage<RoleData> {
     private static readonly pb::MessageParser<RoleData> _parser = new pb::MessageParser<RoleData>(() => new RoleData());
@@ -602,6 +616,298 @@ namespace GameProto {
           }
           case 16: {
             DwServerId = input.ReadUInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class GameConfigBase : pb::IMessage<GameConfigBase> {
+    private static readonly pb::MessageParser<GameConfigBase> _parser = new pb::MessageParser<GameConfigBase>(() => new GameConfigBase());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<GameConfigBase> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProto.WebDataReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GameConfigBase() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GameConfigBase(GameConfigBase other) : this() {
+      dwGameType_ = other.dwGameType_;
+      dwPrepareTime_ = other.dwPrepareTime_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GameConfigBase Clone() {
+      return new GameConfigBase(this);
+    }
+
+    /// <summary>Field number for the "dw_game_type" field.</summary>
+    public const int DwGameTypeFieldNumber = 1;
+    private uint dwGameType_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint DwGameType {
+      get { return dwGameType_; }
+      set {
+        dwGameType_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "dw_prepare_time" field.</summary>
+    public const int DwPrepareTimeFieldNumber = 2;
+    private uint dwPrepareTime_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint DwPrepareTime {
+      get { return dwPrepareTime_; }
+      set {
+        dwPrepareTime_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as GameConfigBase);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(GameConfigBase other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (DwGameType != other.DwGameType) return false;
+      if (DwPrepareTime != other.DwPrepareTime) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (DwGameType != 0) hash ^= DwGameType.GetHashCode();
+      if (DwPrepareTime != 0) hash ^= DwPrepareTime.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (DwGameType != 0) {
+        output.WriteRawTag(8);
+        output.WriteUInt32(DwGameType);
+      }
+      if (DwPrepareTime != 0) {
+        output.WriteRawTag(16);
+        output.WriteUInt32(DwPrepareTime);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (DwGameType != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwGameType);
+      }
+      if (DwPrepareTime != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwPrepareTime);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(GameConfigBase other) {
+      if (other == null) {
+        return;
+      }
+      if (other.DwGameType != 0) {
+        DwGameType = other.DwGameType;
+      }
+      if (other.DwPrepareTime != 0) {
+        DwPrepareTime = other.DwPrepareTime;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            DwGameType = input.ReadUInt32();
+            break;
+          }
+          case 16: {
+            DwPrepareTime = input.ReadUInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class GameConfigCommon : pb::IMessage<GameConfigCommon> {
+    private static readonly pb::MessageParser<GameConfigCommon> _parser = new pb::MessageParser<GameConfigCommon>(() => new GameConfigCommon());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<GameConfigCommon> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProto.WebDataReflection.Descriptor.MessageTypes[4]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GameConfigCommon() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GameConfigCommon(GameConfigCommon other) : this() {
+      BaseConfig = other.baseConfig_ != null ? other.BaseConfig.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GameConfigCommon Clone() {
+      return new GameConfigCommon(this);
+    }
+
+    /// <summary>Field number for the "base_config" field.</summary>
+    public const int BaseConfigFieldNumber = 1;
+    private global::GameProto.GameConfigBase baseConfig_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProto.GameConfigBase BaseConfig {
+      get { return baseConfig_; }
+      set {
+        baseConfig_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as GameConfigCommon);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(GameConfigCommon other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(BaseConfig, other.BaseConfig)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (baseConfig_ != null) hash ^= BaseConfig.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (baseConfig_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(BaseConfig);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (baseConfig_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(BaseConfig);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(GameConfigCommon other) {
+      if (other == null) {
+        return;
+      }
+      if (other.baseConfig_ != null) {
+        if (baseConfig_ == null) {
+          baseConfig_ = new global::GameProto.GameConfigBase();
+        }
+        BaseConfig.MergeFrom(other.BaseConfig);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (baseConfig_ == null) {
+              baseConfig_ = new global::GameProto.GameConfigBase();
+            }
+            input.ReadMessage(baseConfig_);
             break;
           }
         }

@@ -2,6 +2,12 @@
 //只能用这种命名方式 不能用小写 下划线
 package GameProto;
 
+enum EGameType
+{
+	GT_None = 0;
+	GT_Common = 1;
+}
+
 message RoleData
 {
 	uint64 qw_player_id = 1;
@@ -22,3 +28,15 @@ message OnlineRoleData
 	RoleData role_data = 1;
 	uint32 dw_server_id = 2;
 }
+
+message GameConfigBase
+{
+	uint32 dw_game_type = 1;
+	uint32 dw_prepare_time = 2;
+}
+
+message GameConfigCommon
+{
+	GameConfigBase base_config = 1;
+}
+

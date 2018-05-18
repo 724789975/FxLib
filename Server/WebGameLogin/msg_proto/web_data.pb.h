@@ -28,6 +28,7 @@
 #include <google/protobuf/message.h>
 #include <google/protobuf/repeated_field.h>  // IWYU pragma: export
 #include <google/protobuf/extension_set.h>  // IWYU pragma: export
+#include <google/protobuf/generated_enum_reflection.h>
 #include <google/protobuf/unknown_field_set.h>
 // @@protoc_insertion_point(includes)
 
@@ -36,7 +37,7 @@ namespace protobuf_web_5fdata_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[3];
+  static const ::google::protobuf::internal::ParseTable schema[5];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -48,13 +49,25 @@ void InitDefaultsTeamRoleDataImpl();
 void InitDefaultsTeamRoleData();
 void InitDefaultsOnlineRoleDataImpl();
 void InitDefaultsOnlineRoleData();
+void InitDefaultsGameConfigBaseImpl();
+void InitDefaultsGameConfigBase();
+void InitDefaultsGameConfigCommonImpl();
+void InitDefaultsGameConfigCommon();
 inline void InitDefaults() {
   InitDefaultsRoleData();
   InitDefaultsTeamRoleData();
   InitDefaultsOnlineRoleData();
+  InitDefaultsGameConfigBase();
+  InitDefaultsGameConfigCommon();
 }
 }  // namespace protobuf_web_5fdata_2eproto
 namespace GameProto {
+class GameConfigBase;
+class GameConfigBaseDefaultTypeInternal;
+extern GameConfigBaseDefaultTypeInternal _GameConfigBase_default_instance_;
+class GameConfigCommon;
+class GameConfigCommonDefaultTypeInternal;
+extern GameConfigCommonDefaultTypeInternal _GameConfigCommon_default_instance_;
 class OnlineRoleData;
 class OnlineRoleDataDefaultTypeInternal;
 extern OnlineRoleDataDefaultTypeInternal _OnlineRoleData_default_instance_;
@@ -67,6 +80,27 @@ extern TeamRoleDataDefaultTypeInternal _TeamRoleData_default_instance_;
 }  // namespace GameProto
 namespace GameProto {
 
+enum EGameType {
+  GT_None = 0,
+  GT_Common = 1,
+  EGameType_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  EGameType_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool EGameType_IsValid(int value);
+const EGameType EGameType_MIN = GT_None;
+const EGameType EGameType_MAX = GT_Common;
+const int EGameType_ARRAYSIZE = EGameType_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* EGameType_descriptor();
+inline const ::std::string& EGameType_Name(EGameType value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    EGameType_descriptor(), value);
+}
+inline bool EGameType_Parse(
+    const ::std::string& name, EGameType* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<EGameType>(
+    EGameType_descriptor(), name, value);
+}
 // ===================================================================
 
 class RoleData : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.RoleData) */ {
@@ -428,6 +462,214 @@ class OnlineRoleData : public ::google::protobuf::Message /* @@protoc_insertion_
   friend struct ::protobuf_web_5fdata_2eproto::TableStruct;
   friend void ::protobuf_web_5fdata_2eproto::InitDefaultsOnlineRoleDataImpl();
 };
+// -------------------------------------------------------------------
+
+class GameConfigBase : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameConfigBase) */ {
+ public:
+  GameConfigBase();
+  virtual ~GameConfigBase();
+
+  GameConfigBase(const GameConfigBase& from);
+
+  inline GameConfigBase& operator=(const GameConfigBase& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GameConfigBase(GameConfigBase&& from) noexcept
+    : GameConfigBase() {
+    *this = ::std::move(from);
+  }
+
+  inline GameConfigBase& operator=(GameConfigBase&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GameConfigBase& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GameConfigBase* internal_default_instance() {
+    return reinterpret_cast<const GameConfigBase*>(
+               &_GameConfigBase_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    3;
+
+  void Swap(GameConfigBase* other);
+  friend void swap(GameConfigBase& a, GameConfigBase& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GameConfigBase* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  GameConfigBase* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const GameConfigBase& from);
+  void MergeFrom(const GameConfigBase& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(GameConfigBase* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // uint32 dw_game_type = 1;
+  void clear_dw_game_type();
+  static const int kDwGameTypeFieldNumber = 1;
+  ::google::protobuf::uint32 dw_game_type() const;
+  void set_dw_game_type(::google::protobuf::uint32 value);
+
+  // uint32 dw_prepare_time = 2;
+  void clear_dw_prepare_time();
+  static const int kDwPrepareTimeFieldNumber = 2;
+  ::google::protobuf::uint32 dw_prepare_time() const;
+  void set_dw_prepare_time(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.GameConfigBase)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint32 dw_game_type_;
+  ::google::protobuf::uint32 dw_prepare_time_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fdata_2eproto::TableStruct;
+  friend void ::protobuf_web_5fdata_2eproto::InitDefaultsGameConfigBaseImpl();
+};
+// -------------------------------------------------------------------
+
+class GameConfigCommon : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameConfigCommon) */ {
+ public:
+  GameConfigCommon();
+  virtual ~GameConfigCommon();
+
+  GameConfigCommon(const GameConfigCommon& from);
+
+  inline GameConfigCommon& operator=(const GameConfigCommon& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GameConfigCommon(GameConfigCommon&& from) noexcept
+    : GameConfigCommon() {
+    *this = ::std::move(from);
+  }
+
+  inline GameConfigCommon& operator=(GameConfigCommon&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GameConfigCommon& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GameConfigCommon* internal_default_instance() {
+    return reinterpret_cast<const GameConfigCommon*>(
+               &_GameConfigCommon_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    4;
+
+  void Swap(GameConfigCommon* other);
+  friend void swap(GameConfigCommon& a, GameConfigCommon& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GameConfigCommon* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  GameConfigCommon* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const GameConfigCommon& from);
+  void MergeFrom(const GameConfigCommon& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(GameConfigCommon* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // .GameProto.GameConfigBase base_config = 1;
+  bool has_base_config() const;
+  void clear_base_config();
+  static const int kBaseConfigFieldNumber = 1;
+  const ::GameProto::GameConfigBase& base_config() const;
+  ::GameProto::GameConfigBase* release_base_config();
+  ::GameProto::GameConfigBase* mutable_base_config();
+  void set_allocated_base_config(::GameProto::GameConfigBase* base_config);
+
+  // @@protoc_insertion_point(class_scope:GameProto.GameConfigCommon)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::GameProto::GameConfigBase* base_config_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fdata_2eproto::TableStruct;
+  friend void ::protobuf_web_5fdata_2eproto::InitDefaultsGameConfigCommonImpl();
+};
 // ===================================================================
 
 
@@ -723,9 +965,99 @@ inline void OnlineRoleData::set_dw_server_id(::google::protobuf::uint32 value) {
   // @@protoc_insertion_point(field_set:GameProto.OnlineRoleData.dw_server_id)
 }
 
+// -------------------------------------------------------------------
+
+// GameConfigBase
+
+// uint32 dw_game_type = 1;
+inline void GameConfigBase::clear_dw_game_type() {
+  dw_game_type_ = 0u;
+}
+inline ::google::protobuf::uint32 GameConfigBase::dw_game_type() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameConfigBase.dw_game_type)
+  return dw_game_type_;
+}
+inline void GameConfigBase::set_dw_game_type(::google::protobuf::uint32 value) {
+  
+  dw_game_type_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameConfigBase.dw_game_type)
+}
+
+// uint32 dw_prepare_time = 2;
+inline void GameConfigBase::clear_dw_prepare_time() {
+  dw_prepare_time_ = 0u;
+}
+inline ::google::protobuf::uint32 GameConfigBase::dw_prepare_time() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameConfigBase.dw_prepare_time)
+  return dw_prepare_time_;
+}
+inline void GameConfigBase::set_dw_prepare_time(::google::protobuf::uint32 value) {
+  
+  dw_prepare_time_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameConfigBase.dw_prepare_time)
+}
+
+// -------------------------------------------------------------------
+
+// GameConfigCommon
+
+// .GameProto.GameConfigBase base_config = 1;
+inline bool GameConfigCommon::has_base_config() const {
+  return this != internal_default_instance() && base_config_ != NULL;
+}
+inline void GameConfigCommon::clear_base_config() {
+  if (GetArenaNoVirtual() == NULL && base_config_ != NULL) {
+    delete base_config_;
+  }
+  base_config_ = NULL;
+}
+inline const ::GameProto::GameConfigBase& GameConfigCommon::base_config() const {
+  const ::GameProto::GameConfigBase* p = base_config_;
+  // @@protoc_insertion_point(field_get:GameProto.GameConfigCommon.base_config)
+  return p != NULL ? *p : *reinterpret_cast<const ::GameProto::GameConfigBase*>(
+      &::GameProto::_GameConfigBase_default_instance_);
+}
+inline ::GameProto::GameConfigBase* GameConfigCommon::release_base_config() {
+  // @@protoc_insertion_point(field_release:GameProto.GameConfigCommon.base_config)
+  
+  ::GameProto::GameConfigBase* temp = base_config_;
+  base_config_ = NULL;
+  return temp;
+}
+inline ::GameProto::GameConfigBase* GameConfigCommon::mutable_base_config() {
+  
+  if (base_config_ == NULL) {
+    base_config_ = new ::GameProto::GameConfigBase;
+  }
+  // @@protoc_insertion_point(field_mutable:GameProto.GameConfigCommon.base_config)
+  return base_config_;
+}
+inline void GameConfigCommon::set_allocated_base_config(::GameProto::GameConfigBase* base_config) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete base_config_;
+  }
+  if (base_config) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      base_config = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, base_config, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  base_config_ = base_config;
+  // @@protoc_insertion_point(field_set_allocated:GameProto.GameConfigCommon.base_config)
+}
+
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
@@ -734,6 +1066,18 @@ inline void OnlineRoleData::set_dw_server_id(::google::protobuf::uint32 value) {
 // @@protoc_insertion_point(namespace_scope)
 
 }  // namespace GameProto
+
+namespace google {
+namespace protobuf {
+
+template <> struct is_proto_enum< ::GameProto::EGameType> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::GameProto::EGameType>() {
+  return ::GameProto::EGameType_descriptor();
+}
+
+}  // namespace protobuf
+}  // namespace google
 
 // @@protoc_insertion_point(global_scope)
 

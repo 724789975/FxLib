@@ -1,8 +1,9 @@
 #include "SocketSession.h"
 #include "fxtimer.h"
-#include "fxdb.h"
 #include "fxmeta.h"
 #include "GameServer.h"
+#include "fxredis.h"
+#include "GameConfigBase.h"
 
 #include <signal.h>
 #include "gflags/gflags.h"
@@ -15,6 +16,10 @@ DEFINE_uint64(team_id, 0, "player point");
 DEFINE_uint32(game_time, 60, "game_time");
 DEFINE_string(roles, "[]", "roles");
 DEFINE_uint32(team_server_id, 0, "team_server_id");
+DEFINE_uint32(game_type, 1, "game_type");
+DEFINE_string(redis_ip, "127.0.0.1", "redis ip");
+DEFINE_string(redis_pw, "1", "redis password");
+DEFINE_uint32(redis_port, 16379, "game_type");
 
 void EndFun(int n)
 {
@@ -60,6 +65,19 @@ int main(int argc, char **argv)
 	//----------------------order can't change end-----------------------//
 
 	GetTimeHandler()->AddDelayTimer(FLAGS_game_time, GameServer::Instance());
+
+	if (!FxRedisGetModule()->Open(FLAGS_redis_ip.c_str(), FLAGS_redis_port, FLAGS_redis_pw, 0))
+	{
+		LogExe(LogLv_Error, "%s", "redis connected failed~~~~");
+		goto STOP;
+	}
+
+	if (!CGameConfigBase::Init(FLAGS_game_type))
+	{
+		LogExe(LogLv_Error, "%s", "game config init failed~~~~");
+		goto STOP;
+	}
+
 	if (!GameServer::Instance()->Init(inet_addr(FLAGS_game_manager_ip.c_str()), FLAGS_game_manager_port, FLAGS_team_id, FLAGS_team_server_id))
 	{
 		g_bRun = false;

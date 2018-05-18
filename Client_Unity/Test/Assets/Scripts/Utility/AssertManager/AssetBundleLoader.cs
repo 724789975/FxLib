@@ -41,11 +41,13 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 	{
 		SampleDebuger.Log(GetBundleDirName());
 		var request = AssetBundleManager.Initialize(GetBundleDirName());
-		if (request != null)
+		UIProgressBar.SetpAssetBundleLoadOperation(request);
+        if (request != null)
 		{
 			SampleDebuger.Log("begin loading manifest");
 			yield return StartCoroutine(request);
 		}
+		yield return new WaitForSeconds(0.5f);
 		yield return StartCoroutine(CheckVersion());
 
 		if (!firstLoaded && !string.IsNullOrEmpty(sceneName))
