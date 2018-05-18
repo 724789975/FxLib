@@ -4,6 +4,7 @@
 #include "GameServer.h"
 #include "fxredis.h"
 #include "GameConfigBase.h"
+#include "GameScene.h"
 
 #include <signal.h>
 #include "gflags/gflags.h"
@@ -75,6 +76,11 @@ int main(int argc, char **argv)
 	if (!CGameConfigBase::Init(FLAGS_game_type))
 	{
 		LogExe(LogLv_Error, "%s", "game config init failed~~~~");
+		goto STOP;
+	}
+	if (!CGameSceneBase::Init(FLAGS_game_type, FLAGS_roles))
+	{
+		LogExe(LogLv_Error, "%s", "game scene init failed~~~~");
 		goto STOP;
 	}
 
