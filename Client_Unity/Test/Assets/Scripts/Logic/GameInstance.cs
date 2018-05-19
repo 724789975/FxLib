@@ -31,7 +31,6 @@ using UnityEngine;
 	// Update is called once per frame
 	void Update ()
 	{
-		
 	}
 
     public void OnServerInfo(string szData)
@@ -74,6 +73,9 @@ using UnityEngine;
 	public void SetExpiresDate(uint dwExpiresDate) { m_dwExpiresDate = dwExpiresDate; }
 	public void SetOpenId(string szOpenId) { m_szOpenId = szOpenId; }
 
+	public void SetGameIp(string szGameIp) { m_szGameIp = szGameIp; }
+	public void SetGamePort(ushort wGamePort) { m_wGamePort = wGamePort; }
+
 	public GamePlayType m_eGamePlayType = GamePlayType.GamePlayType_NONE;
 	public GamePlayType proGamePlayType
 	{
@@ -93,6 +95,9 @@ using UnityEngine;
 	public uint proExpiresDate { get { return m_dwExpiresDate; } }
 	public string proOpenId { get { return m_szOpenId; } }
 
+	public string proGameIp { get {return m_szGameIp; } }
+	public ushort proGamePort { get { return m_wGamePort; } }
+
 	public ushort m_wLoginPort;
     public string m_szLoginIp;
     public string m_szUrlHost;
@@ -111,4 +116,7 @@ using UnityEngine;
 	public uint m_dwExpiresDate = 0;
 	public string m_szOpenId = "";
 
+	[Header("Game Info")]
+	public string m_szGameIp = "";
+	public ushort m_wGamePort = 0;
 }

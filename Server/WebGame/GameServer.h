@@ -9,15 +9,13 @@
 #include "SlaveServerSession.h"
 #include "PlayerSession.h"
 
-class GameServer : public TSingleton<GameServer>, public IFxTimer
+class GameServer : public TSingleton<GameServer>
 {
 public:
 	GameServer();
 	virtual ~GameServer();
 
-	virtual bool OnTimer(double fSecond);
-
-	bool Init(unsigned int dwGameManagerIp, unsigned short wGameManagerPort, unsigned long long qwTeamId, unsigned int dwTeamServerId);
+	bool Init(std::string szGameManagerIp, unsigned short wGameManagerPort, unsigned long long qwTeamId, unsigned int dwTeamServerId);
 	bool Stop();
 
 	bool GameEnd();

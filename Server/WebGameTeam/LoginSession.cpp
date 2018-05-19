@@ -141,6 +141,12 @@ bool CLoginSession::OnLoginRequestTeamKickPlayer(CLoginSession& refSession, goog
 	{
 		oKickPlayer.set_dw_result(GameProto::EC_NoTeamId);
 		LogExe(LogLv_Critical, "player : %llu want leave team : %llu no team id", pMsg->qw_player_id(), pMsg->qw_team_id());
+
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oKickPlayer, pBuf, dwBufLen);
+		Send(pBuf, dwBufLen);
+		return true;
 	}
 	else
 	{
@@ -311,6 +317,12 @@ bool CLoginSession::OnLoginRequestTeamPlayerLeave(CLoginSession& refSession, goo
 	{
 		oPlayerLeave.set_dw_result(GameProto::EC_NoTeamId);
 		LogExe(LogLv_Critical, "player : %llu want leave team : %llu no team id", pMsg->qw_player_id(), pMsg->qw_team_id());
+
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oPlayerLeave, pBuf, dwBufLen);
+		Send(pBuf, dwBufLen);
+		return true;
 	}
 	else
 	{

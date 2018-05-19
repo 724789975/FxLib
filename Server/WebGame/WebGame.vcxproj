@@ -178,6 +178,7 @@
     <ClCompile Include="ServerSession.cpp" />
     <ClCompile Include="SlaveServerSession.cpp" />
     <ClCompile Include="SocketSession.cpp" />
+    <ClCompile Include="Timers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameConfigBase.h" />
@@ -192,6 +193,7 @@
     <ClInclude Include="ServerSession.h" />
     <ClInclude Include="SlaveServerSession.h" />
     <ClInclude Include="SocketSession.h" />
+    <ClInclude Include="Timers.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Net\Net.vcxproj">

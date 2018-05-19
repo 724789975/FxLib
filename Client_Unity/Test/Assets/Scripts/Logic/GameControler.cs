@@ -6,13 +6,16 @@ using UnityEngine;
 
 public class GameControler : SingletonObject<GameControler>
 {
-
 	// Use this for initialization
 	void Start()
 	{
-		DontDestroyOnLoad(this);
 		CreateInstance(this);
+		DontDestroyOnLoad(this);
 		H5Manager.Instance().GetGameSessionResetCallBack().Add(OnGameSessionReset);
+		if (H5Manager.Instance().GetGameSession() != null)
+		{
+			OnGameSessionReset(H5Manager.Instance().GetGameSession());
+		}
 	}
 
 	public void OnGameSessionReset(SessionObject obj)
@@ -35,7 +38,7 @@ public class GameControler : SingletonObject<GameControler>
 	{
 		SampleDebuger.Log("game connected");
 
-		AssetBundleLoader.Instance().LoadLevelAsset("game_prepare", (delegate ()
+        AssetBundleLoader.Instance().LoadLevelAsset("game_prepare", delegate ()
 			{
 				GameProto.PlayerRequestGameTest oTest = new GameProto.PlayerRequestGameTest();
 
@@ -52,7 +55,7 @@ public class GameControler : SingletonObject<GameControler>
 				pStream.WriteData(pProto, (uint)pProto.Length);
 
 				m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
-			})
+			}
 		);
 	}
 

@@ -650,6 +650,20 @@ class PlayerRequestLogin : public ::google::protobuf::Message /* @@protoc_insert
   ::std::string* release_sz_token();
   void set_allocated_sz_token(::std::string* sz_token);
 
+  // string sz_game_ip = 7;
+  void clear_sz_game_ip();
+  static const int kSzGameIpFieldNumber = 7;
+  const ::std::string& sz_game_ip() const;
+  void set_sz_game_ip(const ::std::string& value);
+  #if LANG_CXX11
+  void set_sz_game_ip(::std::string&& value);
+  #endif
+  void set_sz_game_ip(const char* value);
+  void set_sz_game_ip(const char* value, size_t size);
+  ::std::string* mutable_sz_game_ip();
+  ::std::string* release_sz_game_ip();
+  void set_allocated_sz_game_ip(::std::string* sz_game_ip);
+
   // uint64 qw_player_id = 1;
   void clear_qw_player_id();
   static const int kQwPlayerIdFieldNumber = 1;
@@ -668,6 +682,12 @@ class PlayerRequestLogin : public ::google::protobuf::Message /* @@protoc_insert
   ::google::protobuf::uint32 dw_balance() const;
   void set_dw_balance(::google::protobuf::uint32 value);
 
+  // uint32 dw_game_port = 8;
+  void clear_dw_game_port();
+  static const int kDwGamePortFieldNumber = 8;
+  ::google::protobuf::uint32 dw_game_port() const;
+  void set_dw_game_port(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:GameProto.PlayerRequestLogin)
  private:
 
@@ -675,9 +695,11 @@ class PlayerRequestLogin : public ::google::protobuf::Message /* @@protoc_insert
   ::google::protobuf::internal::ArenaStringPtr sz_nick_name_;
   ::google::protobuf::internal::ArenaStringPtr sz_avatar_;
   ::google::protobuf::internal::ArenaStringPtr sz_token_;
+  ::google::protobuf::internal::ArenaStringPtr sz_game_ip_;
   ::google::protobuf::uint64 qw_player_id_;
   ::google::protobuf::uint32 dw_sex_;
   ::google::protobuf::uint32 dw_balance_;
+  ::google::protobuf::uint32 dw_game_port_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
   friend void ::protobuf_web_5fgame_2eproto::InitDefaultsPlayerRequestLoginImpl();
@@ -1658,17 +1680,39 @@ class LoginAckPlayerLoginResult : public ::google::protobuf::Message /* @@protoc
 
   // accessors -------------------------------------------------------
 
+  // string sz_game_ip = 2;
+  void clear_sz_game_ip();
+  static const int kSzGameIpFieldNumber = 2;
+  const ::std::string& sz_game_ip() const;
+  void set_sz_game_ip(const ::std::string& value);
+  #if LANG_CXX11
+  void set_sz_game_ip(::std::string&& value);
+  #endif
+  void set_sz_game_ip(const char* value);
+  void set_sz_game_ip(const char* value, size_t size);
+  ::std::string* mutable_sz_game_ip();
+  ::std::string* release_sz_game_ip();
+  void set_allocated_sz_game_ip(::std::string* sz_game_ip);
+
   // uint32 dw_result = 1;
   void clear_dw_result();
   static const int kDwResultFieldNumber = 1;
   ::google::protobuf::uint32 dw_result() const;
   void set_dw_result(::google::protobuf::uint32 value);
 
+  // uint32 dw_game_port = 3;
+  void clear_dw_game_port();
+  static const int kDwGamePortFieldNumber = 3;
+  ::google::protobuf::uint32 dw_game_port() const;
+  void set_dw_game_port(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:GameProto.LoginAckPlayerLoginResult)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::internal::ArenaStringPtr sz_game_ip_;
   ::google::protobuf::uint32 dw_result_;
+  ::google::protobuf::uint32 dw_game_port_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
   friend void ::protobuf_web_5fgame_2eproto::InitDefaultsLoginAckPlayerLoginResultImpl();
@@ -6244,6 +6288,73 @@ inline void PlayerRequestLogin::set_allocated_sz_token(::std::string* sz_token) 
   // @@protoc_insertion_point(field_set_allocated:GameProto.PlayerRequestLogin.sz_token)
 }
 
+// string sz_game_ip = 7;
+inline void PlayerRequestLogin::clear_sz_game_ip() {
+  sz_game_ip_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& PlayerRequestLogin::sz_game_ip() const {
+  // @@protoc_insertion_point(field_get:GameProto.PlayerRequestLogin.sz_game_ip)
+  return sz_game_ip_.GetNoArena();
+}
+inline void PlayerRequestLogin::set_sz_game_ip(const ::std::string& value) {
+  
+  sz_game_ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:GameProto.PlayerRequestLogin.sz_game_ip)
+}
+#if LANG_CXX11
+inline void PlayerRequestLogin::set_sz_game_ip(::std::string&& value) {
+  
+  sz_game_ip_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:GameProto.PlayerRequestLogin.sz_game_ip)
+}
+#endif
+inline void PlayerRequestLogin::set_sz_game_ip(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  sz_game_ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:GameProto.PlayerRequestLogin.sz_game_ip)
+}
+inline void PlayerRequestLogin::set_sz_game_ip(const char* value, size_t size) {
+  
+  sz_game_ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:GameProto.PlayerRequestLogin.sz_game_ip)
+}
+inline ::std::string* PlayerRequestLogin::mutable_sz_game_ip() {
+  
+  // @@protoc_insertion_point(field_mutable:GameProto.PlayerRequestLogin.sz_game_ip)
+  return sz_game_ip_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* PlayerRequestLogin::release_sz_game_ip() {
+  // @@protoc_insertion_point(field_release:GameProto.PlayerRequestLogin.sz_game_ip)
+  
+  return sz_game_ip_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void PlayerRequestLogin::set_allocated_sz_game_ip(::std::string* sz_game_ip) {
+  if (sz_game_ip != NULL) {
+    
+  } else {
+    
+  }
+  sz_game_ip_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), sz_game_ip);
+  // @@protoc_insertion_point(field_set_allocated:GameProto.PlayerRequestLogin.sz_game_ip)
+}
+
+// uint32 dw_game_port = 8;
+inline void PlayerRequestLogin::clear_dw_game_port() {
+  dw_game_port_ = 0u;
+}
+inline ::google::protobuf::uint32 PlayerRequestLogin::dw_game_port() const {
+  // @@protoc_insertion_point(field_get:GameProto.PlayerRequestLogin.dw_game_port)
+  return dw_game_port_;
+}
+inline void PlayerRequestLogin::set_dw_game_port(::google::protobuf::uint32 value) {
+  
+  dw_game_port_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.PlayerRequestLogin.dw_game_port)
+}
+
 // -------------------------------------------------------------------
 
 // PlayerRequestLoginMakeTeam
@@ -6447,6 +6558,73 @@ inline void LoginAckPlayerLoginResult::set_dw_result(::google::protobuf::uint32 
   
   dw_result_ = value;
   // @@protoc_insertion_point(field_set:GameProto.LoginAckPlayerLoginResult.dw_result)
+}
+
+// string sz_game_ip = 2;
+inline void LoginAckPlayerLoginResult::clear_sz_game_ip() {
+  sz_game_ip_.ClearToEmptyNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline const ::std::string& LoginAckPlayerLoginResult::sz_game_ip() const {
+  // @@protoc_insertion_point(field_get:GameProto.LoginAckPlayerLoginResult.sz_game_ip)
+  return sz_game_ip_.GetNoArena();
+}
+inline void LoginAckPlayerLoginResult::set_sz_game_ip(const ::std::string& value) {
+  
+  sz_game_ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:GameProto.LoginAckPlayerLoginResult.sz_game_ip)
+}
+#if LANG_CXX11
+inline void LoginAckPlayerLoginResult::set_sz_game_ip(::std::string&& value) {
+  
+  sz_game_ip_.SetNoArena(
+    &::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:GameProto.LoginAckPlayerLoginResult.sz_game_ip)
+}
+#endif
+inline void LoginAckPlayerLoginResult::set_sz_game_ip(const char* value) {
+  GOOGLE_DCHECK(value != NULL);
+  
+  sz_game_ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:GameProto.LoginAckPlayerLoginResult.sz_game_ip)
+}
+inline void LoginAckPlayerLoginResult::set_sz_game_ip(const char* value, size_t size) {
+  
+  sz_game_ip_.SetNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:GameProto.LoginAckPlayerLoginResult.sz_game_ip)
+}
+inline ::std::string* LoginAckPlayerLoginResult::mutable_sz_game_ip() {
+  
+  // @@protoc_insertion_point(field_mutable:GameProto.LoginAckPlayerLoginResult.sz_game_ip)
+  return sz_game_ip_.MutableNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline ::std::string* LoginAckPlayerLoginResult::release_sz_game_ip() {
+  // @@protoc_insertion_point(field_release:GameProto.LoginAckPlayerLoginResult.sz_game_ip)
+  
+  return sz_game_ip_.ReleaseNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited());
+}
+inline void LoginAckPlayerLoginResult::set_allocated_sz_game_ip(::std::string* sz_game_ip) {
+  if (sz_game_ip != NULL) {
+    
+  } else {
+    
+  }
+  sz_game_ip_.SetAllocatedNoArena(&::google::protobuf::internal::GetEmptyStringAlreadyInited(), sz_game_ip);
+  // @@protoc_insertion_point(field_set_allocated:GameProto.LoginAckPlayerLoginResult.sz_game_ip)
+}
+
+// uint32 dw_game_port = 3;
+inline void LoginAckPlayerLoginResult::clear_dw_game_port() {
+  dw_game_port_ = 0u;
+}
+inline ::google::protobuf::uint32 LoginAckPlayerLoginResult::dw_game_port() const {
+  // @@protoc_insertion_point(field_get:GameProto.LoginAckPlayerLoginResult.dw_game_port)
+  return dw_game_port_;
+}
+inline void LoginAckPlayerLoginResult::set_dw_game_port(::google::protobuf::uint32 value) {
+  
+  dw_game_port_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.LoginAckPlayerLoginResult.dw_game_port)
 }
 
 // -------------------------------------------------------------------

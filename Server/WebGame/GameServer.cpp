@@ -1,5 +1,5 @@
 #include "GameServer.h"
-
+#include "fxredis.h"
 
 
 GameServer::GameServer()
@@ -18,14 +18,7 @@ GameServer::~GameServer()
 {
 }
 
-bool GameServer::OnTimer(double fSecond)
-{
-	LogExe(LogLv_Debug, "%s", "time end~~~~~");
-	GameEnd();
-	exit(0);
-}
-
-bool GameServer::Init(unsigned int dwGameManagerIp, unsigned short wGameManagerPort, unsigned long long qwTeamId, unsigned int dwTeamServerId)
+bool GameServer::Init(std::string szGameManagerIp, unsigned short wGameManagerPort, unsigned long long qwTeamId, unsigned int dwTeamServerId)
 {
 	m_qwTeamId = qwTeamId;
 	m_dwTeamServerId = dwTeamServerId;
@@ -50,10 +43,58 @@ bool GameServer::Init(unsigned int dwGameManagerIp, unsigned short wGameManagerP
 		return false;
 	}
 
-	if (pNet->TcpConnect(&m_oBinaryGameManagerSession, dwGameManagerIp, wGameManagerPort, true) == INVALID_SOCKET)
+	if (pNet->TcpConnect(&m_oBinaryGameManagerSession, inet_addr(szGameManagerIp.c_str()), wGameManagerPort, true) == INVALID_SOCKET)
 	{
 		return false;
 	}
+
+	class RedisSetServerIp : public IRedisQuery
+	{
+	public:
+		RedisSetServerIp(UINT64 qwTeamId, std::string szGameIp) : m_qwTeamId(qwTeamId), m_szGameIp(szGameIp) {}
+		~RedisSetServerIp() {}
+
+		virtual int					GetDBId(void) { return 0; }
+		virtual void				OnQuery(IRedisConnection *poDBConnection)
+		{
+			char szQuery[64] = { 0 };
+			sprintf(szQuery, "SET %s_%llu %s", RedisConstant::szGameIp, m_qwTeamId, m_szGameIp.c_str());
+			poDBConnection->Query(szQuery);
+		}
+		virtual void OnResult(void) { }
+		virtual void Release(void) { }
+
+	private:
+		UINT64 m_qwTeamId;
+		std::string m_szGameIp;
+	};
+
+	class RedisSetServerPort : public IRedisQuery
+	{
+	public:
+		RedisSetServerPort(UINT64 qwTeamId, UINT32 dwPort) : m_qwTeamId(qwTeamId), m_dwPort(dwPort) {}
+		~RedisSetServerPort() {}
+
+		virtual int					GetDBId(void) { return 0; }
+		virtual void				OnQuery(IRedisConnection *poDBConnection)
+		{
+			char szQuery[64] = { 0 };
+			sprintf(szQuery, "SET %s_%llu %d", RedisConstant::szGamePort, m_qwTeamId, m_dwPort);
+			poDBConnection->Query(szQuery);
+		}
+		virtual void OnResult(void) { }
+		virtual void Release(void) { }
+
+	private:
+		UINT64 m_qwTeamId;
+		UINT32 m_dwPort;
+	};
+
+	RedisSetServerIp oRedisSetServerIp(qwTeamId, szGameManagerIp);
+	RedisSetServerPort oRedisSetServerPort(qwTeamId, m_wPlayerListenPort);
+	FxRedisGetModule()->QueryDirect(&oRedisSetServerIp);
+	FxRedisGetModule()->QueryDirect(&oRedisSetServerPort);
+
 	return true;
 }
 
@@ -66,5 +107,49 @@ bool GameServer::Stop()
 bool GameServer::GameEnd()
 {
 	LogExe(LogLv_Debug, "%s", "game end~~~~~");
+	class RedisDelServerIp : public IRedisQuery
+	{
+	public:
+		RedisDelServerIp(UINT64 qwTeamId) : m_qwTeamId(qwTeamId) {}
+		~RedisDelServerIp() {}
+
+		virtual int					GetDBId(void) { return 0; }
+		virtual void				OnQuery(IRedisConnection *poDBConnection)
+		{
+			char szQuery[64] = { 0 };
+			sprintf(szQuery, "DEL %s_%llu", RedisConstant::szGameIp, m_qwTeamId);
+			poDBConnection->Query(szQuery);
+		}
+		virtual void OnResult(void) { }
+		virtual void Release(void) { }
+
+	private:
+		UINT64 m_qwTeamId;
+	};
+
+	class RedisDelServerPort : public IRedisQuery
+	{
+	public:
+		RedisDelServerPort(UINT64 qwTeamId) : m_qwTeamId(qwTeamId){}
+		~RedisDelServerPort() {}
+
+		virtual int					GetDBId(void) { return 0; }
+		virtual void				OnQuery(IRedisConnection *poDBConnection)
+		{
+			char szQuery[64] = { 0 };
+			sprintf(szQuery, "SET %s_%llu", RedisConstant::szGamePort, m_qwTeamId);
+			poDBConnection->Query(szQuery);
+		}
+		virtual void OnResult(void) { }
+		virtual void Release(void) { }
+
+	private:
+		UINT64 m_qwTeamId;
+	};
+
+	RedisDelServerIp oRedisDelServerIp(m_qwTeamId);
+	RedisDelServerPort oRedisDelServerPort(m_qwTeamId);
+	FxRedisGetModule()->QueryDirect(&oRedisDelServerIp);
+	FxRedisGetModule()->QueryDirect(&oRedisDelServerPort);
 	return false;
 }

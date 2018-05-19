@@ -8,6 +8,7 @@ static char g_pPlayerSessionBuf[g_dwPlayerSessionBuffLen];
 
 CPlayerSession::CPlayerSession()
 	: m_oProtoDispatch(*this)
+	, m_qwPlayerId(0)
 {
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestGameTest::descriptor(), &CPlayerSession::OnPlayerRequestGameTest);
 }
@@ -18,12 +19,10 @@ CPlayerSession::~CPlayerSession()
 
 void CPlayerSession::OnConnect(void)
 {
-
 }
 
 void CPlayerSession::OnClose(void)
 {
-
 }
 
 void CPlayerSession::OnError(UINT32 dwErrorNo)

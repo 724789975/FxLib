@@ -10,8 +10,8 @@ public class ServerInfo
 	public string login_ip = "";
 	public string url_host = "";
 }
-public class LoginServerInfo : MonoBehaviour {
-
+public class LoginServerInfo : MonoBehaviour
+{
 	// Use this for initialization
 	void Start ()
 	{

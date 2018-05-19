@@ -25,7 +25,7 @@ CTeam::~CTeam()
 		virtual void				OnQuery(IRedisConnection *poDBConnection)
 		{
 			char szQuery[64] = { 0 };
-			sprintf(szQuery, "del %llu_%s", m_qwPlayerId,  RedisConstant::szTeamId);
+			sprintf(szQuery, "DEL %llu_%s", m_qwPlayerId,  RedisConstant::szTeamId);
 			poDBConnection->Query(szQuery);
 		}
 		virtual void				OnResult(void) { }

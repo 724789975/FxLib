@@ -32,6 +32,9 @@ private:
 	char m_dataRecvBuf[1024 * 1024];
 
 	CallBackDispatcher::ProtoCallBackDispatch<CPlayerSession, CPlayerSession> m_oProtoDispatch;
+
+protected:
+	UINT64 m_qwPlayerId;
 };
 
 class CWebSocketPlayerSession : public CPlayerSession

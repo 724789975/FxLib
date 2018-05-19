@@ -20,12 +20,14 @@ class RoleDataRet
 	public string token = "";
 	public uint last_login_server_id = 0;
 	public RoleData data = new RoleData();
+	public UInt64 team_id = 0;
+	public string game_ip = "";
+	public uint game_port = 0;
 	public string descrp = "";
 }
 
 public class LoginControler : SingletonObject<LoginControler>
 {
-
 	// Use this for initialization
 	void Start()
 	{
@@ -178,9 +180,15 @@ public class LoginControler : SingletonObject<LoginControler>
 
 		SampleDebuger.Log("login ret : " + oRet.DwResult.ToString());
 
-		AssetBundleLoader.Instance().LoadLevelAsset("lobby");
-		//UnityEngine.SceneManagement.SceneManager.LoadSceneAsync("lobby");
-	}
+		AssetBundleLoader.Instance().LoadLevelAsset("lobby", delegate()
+			{
+				if (!string.IsNullOrEmpty(GameInstance.Instance().proGameIp))
+				{
+					H5Manager.Instance().ConnectGame(GameInstance.Instance().proGameIp, GameInstance.Instance().proGamePort);
+				}
+			}
+		);
+		}
 
 	public void OnLoginAckPlayerMakeTeam(byte[] pBuf)
 	{
@@ -343,6 +351,12 @@ public class LoginControler : SingletonObject<LoginControler>
 		pStream.WriteData(pProto, (uint)pProto.Length);
 
 		m_pSession.Send(pData, 2048 - pStream.GetLeftLen());
+
+		if (!string.IsNullOrEmpty(oData.game_ip))
+		{
+			GameInstance.Instance().SetGameIp(oData.game_ip);
+			GameInstance.Instance().SetGamePort((ushort)oData.game_port);
+		}
 	}
 
 	public void IntoInviteTeam(object pParam)

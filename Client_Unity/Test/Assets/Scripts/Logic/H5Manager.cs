@@ -125,7 +125,7 @@ public class H5Manager : SingletonObject<H5Manager>
 		return m_pLoginSession;
 	}
 
-	public SessionObject GetServerSession()
+	public SessionObject GetGameSession()
 	{
 		return m_pGameSession;
 	}

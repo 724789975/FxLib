@@ -5,7 +5,7 @@
 #include "fxredis.h"
 #include "GameConfigBase.h"
 #include "GameScene.h"
-
+#include "Timers.h"
 #include <signal.h>
 #include "gflags/gflags.h"
 
@@ -13,8 +13,8 @@ bool g_bRun = true;
 
 DEFINE_string(game_manager_ip, "127.0.0.1", "game manager ip");
 DEFINE_uint32(game_manager_port, 30001, "game manager port");
-DEFINE_uint64(team_id, 0, "player point");
-DEFINE_uint32(game_time, 60, "game_time");
+DEFINE_uint64(team_id, 0, "team id");
+DEFINE_uint32(game_time, 180, "game_time");
 DEFINE_string(roles, "[]", "roles");
 DEFINE_uint32(team_server_id, 0, "team_server_id");
 DEFINE_uint32(game_type, 1, "game_type");
@@ -43,6 +43,7 @@ int main(int argc, char **argv)
 	signal(SIGTERM, EndFun);
 
 	IFxNet* pNet = FxNetGetModule();
+	GameEnd oGameEnd;
 	// must define before goto
 	if (!GetTimeHandler()->Init())
 	{
@@ -65,7 +66,7 @@ int main(int argc, char **argv)
 
 	//----------------------order can't change end-----------------------//
 
-	GetTimeHandler()->AddDelayTimer(FLAGS_game_time, GameServer::Instance());
+	GetTimeHandler()->AddDelayTimer(FLAGS_game_time, &oGameEnd);
 
 	if (!FxRedisGetModule()->Open(FLAGS_redis_ip.c_str(), FLAGS_redis_port, FLAGS_redis_pw, 0))
 	{
@@ -78,13 +79,13 @@ int main(int argc, char **argv)
 		LogExe(LogLv_Error, "%s", "game config init failed~~~~");
 		goto STOP;
 	}
-	if (!CGameSceneBase::Init(FLAGS_game_type, FLAGS_roles))
+	if (!CGameSceneBase::Init(FLAGS_game_type, FLAGS_roles, FLAGS_team_id))
 	{
 		LogExe(LogLv_Error, "%s", "game scene init failed~~~~");
 		goto STOP;
 	}
 
-	if (!GameServer::Instance()->Init(inet_addr(FLAGS_game_manager_ip.c_str()), FLAGS_game_manager_port, FLAGS_team_id, FLAGS_team_server_id))
+	if (!GameServer::Instance()->Init(FLAGS_game_manager_ip, FLAGS_game_manager_port, FLAGS_team_id, FLAGS_team_server_id))
 	{
 		g_bRun = false;
 		goto STOP;
