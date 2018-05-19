@@ -60,5 +60,5 @@ CGameSceneCommon::~CGameSceneCommon()
 
 bool CGameSceneCommon::Init()
 {
-	return false;
+	return true;
 }

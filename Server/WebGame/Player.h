@@ -9,5 +9,17 @@ public:
 	virtual ~CPlayerBase();
 };
 
+class CCommonPlayer : public CPlayerBase
+{
+public:
+	CCommonPlayer();
+
+	~CCommonPlayer();
+
+private:
+
+};
+
+
 
 #endif // __Player_H__

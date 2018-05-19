@@ -10,3 +10,14 @@ CPlayerBase::CPlayerBase()
 CPlayerBase::~CPlayerBase()
 {
 }
+
+//////////////////////////////////////////////////////////////////////////
+CCommonPlayer::CCommonPlayer()
+{
+
+}
+
+CCommonPlayer::~CCommonPlayer()
+{
+
+}
