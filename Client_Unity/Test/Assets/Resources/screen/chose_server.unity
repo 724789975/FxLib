@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657886, g: 0.4964127, b: 0.57481724, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -273,18 +273,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_eGamePlayType: 0
-  m_wLoginPort: 31002
-  m_szLoginIp: 127.0.0.1
-  m_szUrlHost: http://127.0.0.1
-  m_szGetRoleUri: /portal/index.php/api/login/sendOauthUserInfo
   m_pUiCanvas: {fileID: 16600680}
-  m_szPlatform: unity_test
-  m_szName: test1
-  m_szHeadImage: no pic
-  m_dwSex: 0
-  m_szAccessToken: asdfghjk1
-  m_dwExpiresDate: 7200
-  m_szOpenId: unity1
+  m_PlayerData:
+    m_wLoginPort: 0
+    m_szLoginIp: 
+    m_szUrlHost: 
+    m_szGetRoleUri: /portal/index.php/api/login/sendOauthUserInfo
+    m_szPlatform: qq
+    m_szName: sadf
+    m_szHeadImage: ddd
+    m_dwSex: 0
+    m_szAccessToken: cccc
+    m_dwExpiresDate: 0
+    m_szOpenId: zszszs
+    m_szGameIp: 
+    m_wGamePort: 0
+    m_qwPlayerId: 0
 --- !u!1 &1235738607
 GameObject:
   m_ObjectHideFlags: 0

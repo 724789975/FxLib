@@ -395,7 +395,7 @@ bool CPlayerSession::OnPlayerRequestLoginLeaveTeam(CPlayerSession& refSession, g
 	CBinaryTeamSession* pSession = GameServer::Instance()->GetTeamSessionManager().GetTeamSession(pPlayer->GetTeamServerId());
 	if (!pSession)
 	{
-		LogExe(LogLv_Critical, "cann't find team session : %llu", pPlayer->GetTeamServerId());
+		LogExe(LogLv_Critical, "cann't find team session : %d", pPlayer->GetTeamServerId());
 		return true;
 	}
 	GameProto::LoginRequestTeamPlayerLeave oKickPlayer;

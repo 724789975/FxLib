@@ -32,7 +32,7 @@ public:
 	virtual bool DelDelayTimer(IFxTimer* pFxTimer) = 0;
 	virtual bool AddEveryFewMinuteTimer(unsigned int dwSecond, IFxTimer* pFxTimer) = 0;
 	virtual bool DelEveryFewMinuteTimer(IFxTimer* pFxTimer) = 0;
-	virtual int GetSecond() = 0;
+	virtual unsigned int GetSecond() = 0;
 	virtual double GetMilliSecond() = 0;
 	virtual const char* GetTimeStr() = 0;
 	virtual const unsigned int GetTimeSeq() = 0;

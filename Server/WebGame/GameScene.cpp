@@ -1,4 +1,5 @@
 #include "GameScene.h"
+#include "GameConfigBase.h"
 #include "../json/json.h"
 #include "msg_proto/web_data.pb.h"
 #include "msg_proto/web_game.pb.h"
@@ -46,6 +47,7 @@ private:
 };
 
 CGameSceneBase::CGameSceneBase()
+	: m_eGameSceneState(ESS_None)
 {
 }
 
@@ -58,16 +60,16 @@ bool CGameSceneBase::Init(unsigned int dwGameType, std::string szRoles, UINT64 q
 {
 	switch ((GameProto::EGameType)(dwGameType))
 	{
-	case GameProto::GT_Common:
-	{
-		if (CreateInstance(new CGameSceneCommon) == false)
+		case GameProto::GT_Common:
 		{
-			return false;
+			if (CreateInstance(new CGameSceneCommon) == false)
+			{
+				return false;
+			}
 		}
-	}
-	break;
-	default:
-		return false;
+		break;
+		default:
+			return false;
 	}
 	Json::Value jRoles;
 	Json::Reader jReader;
@@ -91,11 +93,82 @@ bool CGameSceneBase::Init(unsigned int dwGameType, std::string szRoles, UINT64 q
 	}
 
 	Instance()->m_qwTeamId = qwTeamId;
+	Instance()->m_dwGameStartTime = GetTimeHandler()->GetSecond();
 	return Instance()->Init();
+}
+
+void CGameSceneBase::Run(double fTime)
+{
+	switch (m_eGameSceneState)
+	{
+		case ESS_None: break;
+		case ESS_Prepare: { Preparing(fTime); } break;
+		case ESS_GameReady: { GameReady(fTime); } break;
+		case ESS_Gaming: { Gaming(fTime); } break;
+		case ESS_Transact: { Transacting(fTime); } break;
+		default: {Assert(0); } break;
+	}
+}
+
+void CGameSceneBase::Preparing(double fTime)
+{
+	static UINT32 s_dwNotifyTime = m_dwGameStartTime + 5;
+
+	if (GetTimeHandler()->GetSecond() - m_dwGameStartTime > CGameConfigBase::Instance()->GetPrepareTime())
+	{
+		ChangeState(ESS_GameReady);
+		return;
+	}
+	if (GetTimeHandler()->GetSecond() > s_dwNotifyTime)
+	{
+		// todo 广播
+
+		//通知客户端频率 最后5秒 每秒一次 前面 5秒一次
+		if (s_dwNotifyTime >= m_dwGameStartTime + CGameConfigBase::Instance()->GetPrepareTime() - 5)
+		{
+			s_dwNotifyTime += 1;
+		}
+		else
+		{
+			s_dwNotifyTime += 5;
+		}
+	}
+}
+
+void CGameSceneBase::GameReady(double fTime)
+{
+
+}
+
+void CGameSceneBase::Gaming(double fTime)
+{
+
+}
+
+void CGameSceneBase::Transacting(double fTime)
+{
+
+}
+
+void CGameSceneBase::OnPrepare()
+{
+}
+
+void CGameSceneBase::OnGameReady()
+{
+}
+
+void CGameSceneBase::OnGameStart()
+{
+}
+
+void CGameSceneBase::OnTransact()
+{
 }
 
 void CGameSceneBase::GameEnd()
 {
+	LogExe(LogLv_Debug, "%s", "game end~~~~~");
 	for (int i = 0; i < MAXCLIENTNUM; ++i)
 	{
 		if (m_qwRoles[i])
@@ -103,6 +176,19 @@ void CGameSceneBase::GameEnd()
 			RedisDelPlayerTeamId oRedisDelPlayerTeamId(m_qwRoles[i]);
 			FxRedisGetModule()->QueryDirect(&oRedisDelPlayerTeamId);
 		}
+	}
+}
+
+void CGameSceneBase::ChangeState(EGameSceneState eGameSceneState)
+{
+	m_eGameSceneState = eGameSceneState;
+	switch (m_eGameSceneState)
+	{
+		case ESS_Prepare: OnPrepare(); break;
+		case ESS_GameReady: OnGameReady(); break;
+		case ESS_Gaming: OnGameStart(); break;
+		case ESS_Transact: OnTransact(); break;
+		default:Assert(0); break;
 	}
 }
 
@@ -117,7 +203,20 @@ CGameSceneCommon::~CGameSceneCommon()
 
 bool CGameSceneCommon::Init()
 {
+	for (int i = 0; i < MAXCLIENTNUM; ++i)
+	{
+		if (m_qwRoles[i] != 0)
+		{
+			m_mapPlayers[m_qwRoles[i]].SetPlayerSession(NULL);
+		}
+	}
+	ChangeState(ESS_Prepare);
 	return true;
+}
+
+void CGameSceneCommon::OnGameStart()
+{
+
 }
 
 CPlayerBase* CGameSceneCommon::GetPlayer(UINT64 qwPlayerId)

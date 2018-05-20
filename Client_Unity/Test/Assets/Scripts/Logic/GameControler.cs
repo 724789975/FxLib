@@ -40,18 +40,16 @@ public class GameControler : SingletonObject<GameControler>
 
         AssetBundleLoader.Instance().LoadLevelAsset("game_prepare", delegate ()
 			{
-				GameProto.PlayerRequestGameTest oTest = new GameProto.PlayerRequestGameTest();
+				GameProto.PlayerRequestGameEnter oRequest = new GameProto.PlayerRequestGameEnter();
 
-				oTest.SzTest = String.Format("{0}, {1}, {2}, {3}, {4}, {5}",
-					"sessionobject.cs", 106, "SessionObject::OnRecv", dw1++,
-					ToString(), DateTime.Now.ToLocalTime().ToString());
+				oRequest.QwPlayerId = PlayerData.Instance().proPlayerId;
 
 				byte[] pData = new byte[1024];
 				FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
-				pStream.WriteString("GameProto.PlayerRequestGameTest");
-				byte[] pProto = new byte[oTest.CalculateSize()];
+				pStream.WriteString("GameProto.PlayerRequestGameEnter");
+				byte[] pProto = new byte[oRequest.CalculateSize()];
 				Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
-				oTest.WriteTo(oStream);
+				oRequest.WriteTo(oStream);
 				pStream.WriteData(pProto, (uint)pProto.Length);
 
 				m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
@@ -106,6 +104,17 @@ public class GameControler : SingletonObject<GameControler>
 		pStream.WriteData(pProto, (uint)pProto.Length);
 
 		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+	}
+
+	public void OnGameAckPlayerEnter(byte[] pBuf)
+	{
+		GameProto.GameAckPlayerEnter oRet = GameProto.GameAckPlayerEnter.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.Log("OnGameAckPlayerEnter error parse");
+			return;
+		}
+		SampleDebuger.Log("game enter : " + oRet.DwResult.ToString());
 	}
 
 	public SessionObject m_pSession;

@@ -31,11 +31,11 @@ public class H5Manager : SingletonObject<H5Manager>
 		NameValueCollection nvcParam;
 		ParseUrl(szUrl, out szBaseUrl, out nvcParam);
 
-		GameInstance.Instance().SetPlatform(nvcParam.Get("platform"));
-		GameInstance.Instance().SetName(nvcParam.Get("name"));
-		GameInstance.Instance().SetHeadImage(nvcParam.Get("head_img"));
-		GameInstance.Instance().SetAccessToken(nvcParam.Get("access_token"));
-		GameInstance.Instance().SetOpenId(nvcParam.Get("openid"));
+		PlayerData.Instance().SetPlatform(nvcParam.Get("platform"));
+		PlayerData.Instance().SetName(nvcParam.Get("name"));
+		PlayerData.Instance().SetHeadImage(nvcParam.Get("head_img"));
+		PlayerData.Instance().SetAccessToken(nvcParam.Get("access_token"));
+		PlayerData.Instance().SetOpenId(nvcParam.Get("openid"));
 
 		string szSex = nvcParam.Get("sex");
 		string szExpiresDate = nvcParam.Get("expires_date");
@@ -44,8 +44,8 @@ public class H5Manager : SingletonObject<H5Manager>
         uint.TryParse(szSex, out dwSex);
 		uint.TryParse(szExpiresDate, out dwExpiresDate);
 
-		GameInstance.Instance().SetSex(dwSex);
-		GameInstance.Instance().SetExpiresDate(dwExpiresDate);
+		PlayerData.Instance().SetSex(dwSex);
+		PlayerData.Instance().SetExpiresDate(dwExpiresDate);
 	}
 
 	public void ConnectLogin()
@@ -61,7 +61,7 @@ public class H5Manager : SingletonObject<H5Manager>
             item(m_pLoginSession);
         }
 		m_pLoginSession.InitSession(SessionObject.SessionType.SessionType_WebSocket,
-			GameInstance.Instance().proLoginIp, GameInstance.Instance().proLoginPort);
+			PlayerData.Instance().proLoginIp, PlayerData.Instance().proLoginPort);
 	}
 
 	public void ConnectGame(string szGameIp, ushort wPort)

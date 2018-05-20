@@ -133,9 +133,9 @@ public:
 		return bDel;
 	}
 
-	virtual int GetSecond()
+	virtual unsigned int GetSecond()
 	{
-		return (int)m_qwSecond;
+		return (unsigned int)m_qwSecond;
 	}
 
 	virtual double GetMilliSecond()
@@ -192,7 +192,6 @@ private:
 		static time_t s_dwTime = 0;
 		s_qwSecond = GetTimeOfDay();
 
-		
 		if((unsigned int)s_qwSecond == (unsigned int)m_qwSecond)
 		{
 			m_qwSecond = s_qwSecond;

@@ -356,6 +356,17 @@ message PlayerRequestGameTest
 	string sz_test = 1;
 }
 
+message PlayerRequestGameEnter
+{
+	uint64 qw_player_id = 1;
+}
+
+//game->player
+message GameAckPlayerEnter
+{
+	uint32 dw_result = 1;
+}
+
 //serverinfo(server->server_center, server_center->server)
 message ServerInfo
 {

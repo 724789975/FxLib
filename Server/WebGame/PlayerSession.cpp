@@ -1,6 +1,8 @@
 #include "PlayerSession.h"
 #include "netstream.h"
 #include "msg_proto/web_game.pb.h"
+#include "GameScene.h"
+#include "Player.h"
 //#include "gamedefine.h"
 
 const static unsigned int g_dwPlayerSessionBuffLen = 64 * 1024;
@@ -11,6 +13,7 @@ CPlayerSession::CPlayerSession()
 	, m_qwPlayerId(0)
 {
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestGameTest::descriptor(), &CPlayerSession::OnPlayerRequestGameTest);
+	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestGameEnter::descriptor(), &CPlayerSession::OnPlayerRequestGameEnter);
 }
 
 CPlayerSession::~CPlayerSession()
@@ -67,6 +70,35 @@ bool CPlayerSession::OnPlayerRequestGameTest(CPlayerSession& refSession, google:
 	ProtoUtility::MakeProtoSendBuffer(*pMsg, pBuf, dwBufLen);
 	Send(pBuf, dwBufLen);
 
+	return true;
+}
+
+bool CPlayerSession::OnPlayerRequestGameEnter(CPlayerSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::PlayerRequestGameEnter* pMsg = dynamic_cast<GameProto::PlayerRequestGameEnter*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	GameProto::GameAckPlayerEnter oResult;
+	CPlayerBase* pPlayerBase = CGameSceneBase::Instance()->GetPlayer(pMsg->qw_player_id());
+	if (!pPlayerBase)
+	{
+		LogExe(LogLv_Critical, "player : %llu not in game", pMsg->qw_player_id());
+		oResult.set_dw_result(GameProto::EC_CannotFindPlayer);
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		Send(pBuf, dwBufLen);
+		return true;
+	}
+	pPlayerBase->SetPlayerSession(this);
+	m_qwPlayerId = pMsg->qw_player_id();
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
 	return true;
 }
 

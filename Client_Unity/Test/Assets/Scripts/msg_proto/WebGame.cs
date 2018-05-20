@@ -25,111 +25,111 @@ namespace GameProto {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
             "Cg53ZWJfZ2FtZS5wcm90bxIJR2FtZVByb3RvGg53ZWJfZGF0YS5wcm90byIc",
-            "ChpQbGF5ZXJSZXF1ZXN0TG9naW5TZXJ2ZXJJZCKzAQoSUGxheWVyUmVxdWVz",
+            "ChpQbGF5ZXJSZXF1ZXN0TG9naW5TZXJ2ZXJJZCKJAQoSUGxheWVyUmVxdWVz",
             "dExvZ2luEhQKDHF3X3BsYXllcl9pZBgBIAEoBBIUCgxzel9uaWNrX25hbWUY",
             "AiABKAkSEQoJc3pfYXZhdGFyGAMgASgJEg4KBmR3X3NleBgEIAEoDRISCgpk",
-            "d19iYWxhbmNlGAUgASgNEhAKCHN6X3Rva2VuGAYgASgJEhIKCnN6X2dhbWVf",
-            "aXAYByABKAkSFAoMZHdfZ2FtZV9wb3J0GAggASgNIhwKGlBsYXllclJlcXVl",
-            "c3RMb2dpbk1ha2VUZWFtIjQKHFBsYXllclJlcXVlc3RMb2dpbkludml0ZVRl",
-            "YW0SFAoMcXdfcGxheWVyX2lkGAEgASgEIjIKHFBsYXllclJlcXVlc3RMb2dp",
-            "bkNoYW5nZVNsb3QSEgoKZHdfc2xvdF9pZBgBIAEoDSIdChtQbGF5ZXJSZXF1",
-            "ZXN0TG9naW5HYW1lU3RhcnQiIAoeUGxheWVyUmVxdWVzdExvZ2luT25MaW5l",
-            "UGxheWVyIkwKG1BsYXllclJlcXVlc3RMb2dpbkVudGVyVGVhbRIZChFkd190",
-            "ZWFtX3NlcnZlcl9pZBgBIAEoDRISCgpxd190ZWFtX2lkGAIgASgEIkwKIVBs",
-            "YXllclJlcXVlc3RMb2dpblJlZnVzZUVudGVyVGVhbRIUCgxxd19wbGF5ZXJf",
-            "aWQYASABKAQSEQoJc3pfUmVhc29uGAIgASgJIh0KG1BsYXllclJlcXVlc3RM",
-            "b2dpbkxlYXZlVGVhbSJBChZMb2dpbkFja1BsYXllclNlcnZlcklkEhEKCWR3",
-            "X3Jlc3VsdBgBIAEoDRIUCgxkd19zZXJ2ZXJfaWQYAiABKA0iWAoZTG9naW5B",
-            "Y2tQbGF5ZXJMb2dpblJlc3VsdBIRCglkd19yZXN1bHQYASABKA0SEgoKc3pf",
-            "Z2FtZV9pcBgCIAEoCRIUCgxkd19nYW1lX3BvcnQYAyABKA0iLgoZTG9naW5O",
-            "b3RpZnlQbGF5ZXJHYW1lS2ljaxIRCglkd19yZXN1bHQYASABKA0iUwoWTG9n",
-            "aW5BY2tQbGF5ZXJNYWtlVGVhbRIRCglkd19yZXN1bHQYASABKA0SEgoKcXdf",
-            "dGVhbV9pZBgCIAEoBBISCgpkd19zbG90X2lkGAMgASgNImAKGUxvZ2luTm90",
-            "aWZ5UGxheWVyVGVhbUluZm8SLwoOdGVhbV9yb2xlX2RhdGEYASADKAsyFy5H",
-            "YW1lUHJvdG8uVGVhbVJvbGVEYXRhEhIKCnF3X3RlYW1faWQYAiABKAQiLQoY",
-            "TG9naW5BY2tQbGF5ZXJJbnZpdGVUZWFtEhEKCWR3X3Jlc3VsdBgBIAEoDSJi",
-            "ChtMb2dpbk5vdGlmeVBsYXllckludml0ZVRlYW0SFAoMcXdfcGxheWVyX2lk",
-            "GAEgASgEEhIKCnF3X3RlYW1faWQYAiABKAQSGQoRZHdfdGVhbV9zZXJ2ZXJf",
-            "aWQYAyABKA0iLQoYTG9naW5BY2tQbGF5ZXJDaGFuZ2VTbG90EhEKCWR3X3Jl",
-            "c3VsdBgBIAEoDSIbChlMb2dpbk5vdGlmeVBsYXllclRlYW1LaWNrIqQBChdM",
-            "b2dpbkFja1BsYXllckdhbWVTdGFydBIRCglkd19yZXN1bHQYASABKA0SFgoO",
-            "ZHdfcGxheWVyX3BvcnQYAiABKA0SFgoOZHdfc2VydmVyX3BvcnQYAyABKA0S",
-            "HAoUZHdfc2xhdmVfc2VydmVyX3BvcnQYBCABKA0SFAoMc3pfbGlzdGVuX2lw",
-            "GAUgASgJEhIKCnF3X3RlYW1faWQYBiABKAQiRQoaTG9naW5BY2tQbGF5ZXJP",
-            "bkxpbmVQbGF5ZXISEQoJZHdfcmVzdWx0GAEgASgNEhQKDHF3X3BsYXllcl9p",
-            "ZBgCIAMoBCIsChdMb2dpbkFja1BsYXllckVudGVyVGVhbRIRCglkd19yZXN1",
-            "bHQYASABKA0iSwogTG9naW5Ob3RpZnlQbGF5ZXJSZWZ1c2VFbnRlclRlYW0S",
-            "FAoMcXdfcGxheWVyX2lkGAEgASgEEhEKCXN6X1JlYXNvbhgCIAEoCSIsChdM",
-            "b2dpbkFja1BsYXllckxlYXZlVGVhbRIRCglkd19yZXN1bHQYASABKA0iMgoa",
-            "TG9naW5Ob3RpZnlMb2dpblBsYXllcktpY2sSFAoMcXdfcGxheWVyX2lkGAEg",
-            "ASgEInkKG0xvZ2luUmVxdWVzdExvZ2luSW52aXRlVGVhbRIUCgxxd19pbnZp",
-            "dGVfaWQYASABKAQSFQoNcXdfaW52aXRlZV9pZBgCIAEoBBISCgpxd190ZWFt",
-            "X2lkGAMgASgEEhkKEWR3X3RlYW1fc2VydmVyX2lkGAQgASgNIlkKF0xvZ2lu",
-            "QWNrTG9naW5JbnZpdGVUZWFtEhEKCWR3X3Jlc3VsdBgBIAEoDRIUCgxxd19p",
-            "bnZpdGVfaWQYAiABKAQSFQoNcXdfaW52aXRlZV9pZBgDIAEoBCJnCiVMb2dp",
-            "bk5vdGlmeUxvZ2luUGxheWVyUmVmdXNlRW50ZXJUZWFtEhQKDHF3X2ludml0",
-            "ZV9pZBgBIAEoBBIVCg1xd19pbnZpdGVlX2lkGAIgASgEEhEKCXN6X1JlYXNv",
-            "bhgDIAEoCSJWChhMb2dpblJlcXVlc3RUZWFtTWFrZVRlYW0SJgoJcm9sZV9k",
-            "YXRhGAEgASgLMhMuR2FtZVByb3RvLlJvbGVEYXRhEhIKCnF3X3RlYW1faWQY",
-            "AiABKAQiQwoaTG9naW5SZXF1ZXN0VGVhbUludml0ZVRlYW0SEQoJZHdfcmVz",
-            "dWx0GAEgASgNEhIKCmR3X3Nsb3RfaWQYAiABKA0iQwoaTG9naW5SZXF1ZXN0",
-            "VGVhbUNoYW5nZVNsb3QSEQoJZHdfcmVzdWx0GAEgASgNEhIKCmR3X3Nsb3Rf",
-            "aWQYAiABKA0iRgoaTG9naW5SZXF1ZXN0VGVhbUtpY2tQbGF5ZXISFAoMcXdf",
-            "cGxheWVyX2lkGAEgASgEEhIKCnF3X3RlYW1faWQYAiABKAQiRQoZTG9naW5S",
-            "ZXF1ZXN0VGVhbUdhbWVTdGFydBISCgpxd190ZWFtX2lkGAEgASgEEhQKDHF3",
-            "X3BsYXllcl9pZBgCIAEoBCJXChlMb2dpblJlcXVlc3RUZWFtRW50ZXJUZWFt",
-            "EhIKCnF3X3RlYW1faWQYASABKAQSJgoJcm9sZV9kYXRhGAIgASgLMhMuR2Ft",
-            "ZVByb3RvLlJvbGVEYXRhIkcKG0xvZ2luUmVxdWVzdFRlYW1QbGF5ZXJMZWF2",
-            "ZRIUCgxxd19wbGF5ZXJfaWQYASABKAQSEgoKcXdfdGVhbV9pZBgCIAEoBCJn",
-            "ChRUZWFtQWNrTG9naW5NYWtlVGVhbRIRCglkd19yZXN1bHQYASABKA0SFAoM",
-            "cXdfcGxheWVyX2lkGAIgASgEEhIKCnF3X3RlYW1faWQYAyABKAQSEgoKZHdf",
-            "c2xvdF9pZBgEIAEoDSJ0ChdUZWFtTm90aWZ5TG9naW5UZWFtSW5mbxIvCg50",
-            "ZWFtX3JvbGVfZGF0YRgBIAMoCzIXLkdhbWVQcm90by5UZWFtUm9sZURhdGES",
-            "EgoKcXdfdGVhbV9pZBgCIAEoBBIUCgxxd19wbGF5ZXJfaWQYAyABKAQiPAoW",
-            "VGVhbUFja0xvZ2luSW52aXRlVGVhbRIRCglkd19yZXN1bHQYASABKA0SDwoH",
-            "ZHdfc2xvdBgCIAEoDSI8ChZUZWFtQWNrTG9naW5DaGFuZ2VTbG90EhEKCWR3",
-            "X3Jlc3VsdBgBIAEoDRIPCgdkd19zbG90GAIgASgNIkEKFlRlYW1BY2tMb2dp",
-            "bktpY2tQbGF5ZXISEQoJZHdfcmVzdWx0GAEgASgNEhQKDHF3X3BsYXllcl9p",
-            "ZBgCIAEoBCK4AQoVVGVhbUFja0xvZ2luR2FtZVN0YXJ0EhEKCWR3X3Jlc3Vs",
-            "dBgBIAEoDRIWCg5kd19wbGF5ZXJfcG9ydBgCIAEoDRIWCg5kd19zZXJ2ZXJf",
-            "cG9ydBgDIAEoDRIcChRkd19zbGF2ZV9zZXJ2ZXJfcG9ydBgEIAEoDRIUCgxz",
-            "el9saXN0ZW5faXAYBSABKAkSFAoMcXdfcGxheWVyX2lkGAYgASgEEhIKCnF3",
-            "X3RlYW1faWQYByABKAQiVAoVVGVhbUFja0xvZ2luRW50ZXJUZWFtEhEKCWR3",
-            "X3Jlc3VsdBgBIAEoDRIUCgxxd19wbGF5ZXJfaWQYAiABKAQSEgoKcXdfdGVh",
-            "bV9pZBgDIAEoBCJCChdUZWFtQWNrTG9naW5QbGF5ZXJMZWF2ZRIRCglkd19y",
-            "ZXN1bHQYASABKA0SFAoMcXdfcGxheWVyX2lkGAIgASgEIkwKH1RlYW1SZXF1",
-            "ZXN0R2FtZU1hbmFnZXJHYW1lU3RhcnQSEgoKcXdfdGVhbV9pZBgBIAEoBBIV",
-            "Cg1xd19wbGF5ZXJfaWRzGAIgAygEIqgBChtHYW1lTWFuYWdlckFja1RlYW1H",
-            "YW1lU3RhcnQSEQoJZHdfcmVzdWx0GAEgASgNEhYKDmR3X3BsYXllcl9wb3J0",
-            "GAIgASgNEhYKDmR3X3NlcnZlcl9wb3J0GAMgASgNEhwKFGR3X3NsYXZlX3Nl",
-            "cnZlcl9wb3J0GAQgASgNEhIKCnF3X3RlYW1faWQYBSABKAQSFAoMc3pfbGlz",
-            "dGVuX2lwGAYgASgJIpgBChlHYW1lTm90aWZ5R2FtZU1hbmFnZXJJbmZvEhYK",
-            "DmR3X3BsYXllcl9wb3J0GAEgASgNEhYKDmR3X3NlcnZlcl9wb3J0GAIgASgN",
-            "EhwKFGR3X3NsYXZlX3NlcnZlcl9wb3J0GAMgASgNEhIKCnF3X3RlYW1faWQY",
-            "BCABKAQSGQoRZHdfdGVhbV9zZXJ2ZXJfaWQYBSABKA0iMQocR2FtZU1hbmFn",
-            "ZXJBY2tHYW1lSW5mb1Jlc3VsdBIRCglkd19yZXN1bHQYASABKA0iMQocUGxh",
-            "eWVyUmVxdWVzdEdhbWVNYW5hZ2VySW5mbxIRCglkd19yZXN1bHQYASABKA0i",
-            "bgoeR2FtZU1hbmFnZXJBY2tQbGF5ZXJJbmZvUmVzdWx0EhYKDmR3X3BsYXll",
-            "cl9wb3J0GAEgASgNEhYKDmR3X3NlcnZlcl9wb3J0GAIgASgNEhwKFGR3X3Ns",
-            "YXZlX3NlcnZlcl9wb3J0GAMgASgNIigKFVBsYXllclJlcXVlc3RHYW1lVGVz",
-            "dBIPCgdzel90ZXN0GAEgASgJIooBCgpTZXJ2ZXJJbmZvEhQKDGR3X3NlcnZl",
-            "cl9pZBgBIAEoDRIUCgxzel9saXN0ZW5faXAYAiABKAkSFAoMZHdfdGVhbV9w",
-            "b3J0GAMgASgNEiMKG2R3X2dhbWVfc2VydmVyX21hbmFnZXJfcG9ydBgEIAEo",
-            "DRIVCg1kd19sb2dpbl9wb3J0GAUgASgNKkkKC0VTZXJ2ZXJUeXBlEgsKB1NU",
-            "X05PTkUQABIMCghTVF9Mb2dpbhABEgsKB1NUX1RlYW0QAhISCg5TVF9HYW1l",
-            "TWFuYWdlchADKicKCUVUZWFtVHlwZRILCgdUVF9OT05FEAASDQoJVFRfTm9y",
-            "bWFsEAEqjAIKCkVFcnJvckNvZGUSCwoHRUNfTk9ORRAAEhQKEEVDX0FscmVh",
-            "ZHlJblRlYW0QARIWChJFQ19NYWtlVGVhbU5vdElkbGUQAhIXChNFQ19DYW5u",
-            "b3RGaW5kUGxheWVyEAMSDwoLRUNfTm9UZWFtSWQQBBIQCgxFQ19Ob3RMZWFk",
-            "ZXIQBRITCg9FQ19UZWFtSGFzU3RhcnQQBhIaChZFQ19Ob0dhbWVNYW5hZ2Vy",
-            "U2VydmVyEAcSEwoPRUNfTm9UZWFtU2VydmVyEAgSFAoQRUNfTm9Mb2dpblNl",
-            "cnZlchAJEhYKEkVDX1BsYXllck5vdE9ubGluZRAKEhMKD0VDX0ZhaWxJbnRv",
-            "VGVhbRALYgZwcm90bzM="));
+            "d19iYWxhbmNlGAUgASgNEhAKCHN6X3Rva2VuGAYgASgJIhwKGlBsYXllclJl",
+            "cXVlc3RMb2dpbk1ha2VUZWFtIjQKHFBsYXllclJlcXVlc3RMb2dpbkludml0",
+            "ZVRlYW0SFAoMcXdfcGxheWVyX2lkGAEgASgEIjIKHFBsYXllclJlcXVlc3RM",
+            "b2dpbkNoYW5nZVNsb3QSEgoKZHdfc2xvdF9pZBgBIAEoDSIdChtQbGF5ZXJS",
+            "ZXF1ZXN0TG9naW5HYW1lU3RhcnQiIAoeUGxheWVyUmVxdWVzdExvZ2luT25M",
+            "aW5lUGxheWVyIkwKG1BsYXllclJlcXVlc3RMb2dpbkVudGVyVGVhbRIZChFk",
+            "d190ZWFtX3NlcnZlcl9pZBgBIAEoDRISCgpxd190ZWFtX2lkGAIgASgEIkwK",
+            "IVBsYXllclJlcXVlc3RMb2dpblJlZnVzZUVudGVyVGVhbRIUCgxxd19wbGF5",
+            "ZXJfaWQYASABKAQSEQoJc3pfUmVhc29uGAIgASgJIh0KG1BsYXllclJlcXVl",
+            "c3RMb2dpbkxlYXZlVGVhbSJBChZMb2dpbkFja1BsYXllclNlcnZlcklkEhEK",
+            "CWR3X3Jlc3VsdBgBIAEoDRIUCgxkd19zZXJ2ZXJfaWQYAiABKA0iLgoZTG9n",
+            "aW5BY2tQbGF5ZXJMb2dpblJlc3VsdBIRCglkd19yZXN1bHQYASABKA0iLgoZ",
+            "TG9naW5Ob3RpZnlQbGF5ZXJHYW1lS2ljaxIRCglkd19yZXN1bHQYASABKA0i",
+            "UwoWTG9naW5BY2tQbGF5ZXJNYWtlVGVhbRIRCglkd19yZXN1bHQYASABKA0S",
+            "EgoKcXdfdGVhbV9pZBgCIAEoBBISCgpkd19zbG90X2lkGAMgASgNImAKGUxv",
+            "Z2luTm90aWZ5UGxheWVyVGVhbUluZm8SLwoOdGVhbV9yb2xlX2RhdGEYASAD",
+            "KAsyFy5HYW1lUHJvdG8uVGVhbVJvbGVEYXRhEhIKCnF3X3RlYW1faWQYAiAB",
+            "KAQiLQoYTG9naW5BY2tQbGF5ZXJJbnZpdGVUZWFtEhEKCWR3X3Jlc3VsdBgB",
+            "IAEoDSJiChtMb2dpbk5vdGlmeVBsYXllckludml0ZVRlYW0SFAoMcXdfcGxh",
+            "eWVyX2lkGAEgASgEEhIKCnF3X3RlYW1faWQYAiABKAQSGQoRZHdfdGVhbV9z",
+            "ZXJ2ZXJfaWQYAyABKA0iLQoYTG9naW5BY2tQbGF5ZXJDaGFuZ2VTbG90EhEK",
+            "CWR3X3Jlc3VsdBgBIAEoDSIbChlMb2dpbk5vdGlmeVBsYXllclRlYW1LaWNr",
+            "IqQBChdMb2dpbkFja1BsYXllckdhbWVTdGFydBIRCglkd19yZXN1bHQYASAB",
+            "KA0SFgoOZHdfcGxheWVyX3BvcnQYAiABKA0SFgoOZHdfc2VydmVyX3BvcnQY",
+            "AyABKA0SHAoUZHdfc2xhdmVfc2VydmVyX3BvcnQYBCABKA0SFAoMc3pfbGlz",
+            "dGVuX2lwGAUgASgJEhIKCnF3X3RlYW1faWQYBiABKAQiRQoaTG9naW5BY2tQ",
+            "bGF5ZXJPbkxpbmVQbGF5ZXISEQoJZHdfcmVzdWx0GAEgASgNEhQKDHF3X3Bs",
+            "YXllcl9pZBgCIAMoBCIsChdMb2dpbkFja1BsYXllckVudGVyVGVhbRIRCglk",
+            "d19yZXN1bHQYASABKA0iSwogTG9naW5Ob3RpZnlQbGF5ZXJSZWZ1c2VFbnRl",
+            "clRlYW0SFAoMcXdfcGxheWVyX2lkGAEgASgEEhEKCXN6X1JlYXNvbhgCIAEo",
+            "CSIsChdMb2dpbkFja1BsYXllckxlYXZlVGVhbRIRCglkd19yZXN1bHQYASAB",
+            "KA0iMgoaTG9naW5Ob3RpZnlMb2dpblBsYXllcktpY2sSFAoMcXdfcGxheWVy",
+            "X2lkGAEgASgEInkKG0xvZ2luUmVxdWVzdExvZ2luSW52aXRlVGVhbRIUCgxx",
+            "d19pbnZpdGVfaWQYASABKAQSFQoNcXdfaW52aXRlZV9pZBgCIAEoBBISCgpx",
+            "d190ZWFtX2lkGAMgASgEEhkKEWR3X3RlYW1fc2VydmVyX2lkGAQgASgNIlkK",
+            "F0xvZ2luQWNrTG9naW5JbnZpdGVUZWFtEhEKCWR3X3Jlc3VsdBgBIAEoDRIU",
+            "Cgxxd19pbnZpdGVfaWQYAiABKAQSFQoNcXdfaW52aXRlZV9pZBgDIAEoBCJn",
+            "CiVMb2dpbk5vdGlmeUxvZ2luUGxheWVyUmVmdXNlRW50ZXJUZWFtEhQKDHF3",
+            "X2ludml0ZV9pZBgBIAEoBBIVCg1xd19pbnZpdGVlX2lkGAIgASgEEhEKCXN6",
+            "X1JlYXNvbhgDIAEoCSJWChhMb2dpblJlcXVlc3RUZWFtTWFrZVRlYW0SJgoJ",
+            "cm9sZV9kYXRhGAEgASgLMhMuR2FtZVByb3RvLlJvbGVEYXRhEhIKCnF3X3Rl",
+            "YW1faWQYAiABKAQiQwoaTG9naW5SZXF1ZXN0VGVhbUludml0ZVRlYW0SEQoJ",
+            "ZHdfcmVzdWx0GAEgASgNEhIKCmR3X3Nsb3RfaWQYAiABKA0iQwoaTG9naW5S",
+            "ZXF1ZXN0VGVhbUNoYW5nZVNsb3QSEQoJZHdfcmVzdWx0GAEgASgNEhIKCmR3",
+            "X3Nsb3RfaWQYAiABKA0iRgoaTG9naW5SZXF1ZXN0VGVhbUtpY2tQbGF5ZXIS",
+            "FAoMcXdfcGxheWVyX2lkGAEgASgEEhIKCnF3X3RlYW1faWQYAiABKAQiRQoZ",
+            "TG9naW5SZXF1ZXN0VGVhbUdhbWVTdGFydBISCgpxd190ZWFtX2lkGAEgASgE",
+            "EhQKDHF3X3BsYXllcl9pZBgCIAEoBCJXChlMb2dpblJlcXVlc3RUZWFtRW50",
+            "ZXJUZWFtEhIKCnF3X3RlYW1faWQYASABKAQSJgoJcm9sZV9kYXRhGAIgASgL",
+            "MhMuR2FtZVByb3RvLlJvbGVEYXRhIkcKG0xvZ2luUmVxdWVzdFRlYW1QbGF5",
+            "ZXJMZWF2ZRIUCgxxd19wbGF5ZXJfaWQYASABKAQSEgoKcXdfdGVhbV9pZBgC",
+            "IAEoBCJnChRUZWFtQWNrTG9naW5NYWtlVGVhbRIRCglkd19yZXN1bHQYASAB",
+            "KA0SFAoMcXdfcGxheWVyX2lkGAIgASgEEhIKCnF3X3RlYW1faWQYAyABKAQS",
+            "EgoKZHdfc2xvdF9pZBgEIAEoDSJ0ChdUZWFtTm90aWZ5TG9naW5UZWFtSW5m",
+            "bxIvCg50ZWFtX3JvbGVfZGF0YRgBIAMoCzIXLkdhbWVQcm90by5UZWFtUm9s",
+            "ZURhdGESEgoKcXdfdGVhbV9pZBgCIAEoBBIUCgxxd19wbGF5ZXJfaWQYAyAB",
+            "KAQiPAoWVGVhbUFja0xvZ2luSW52aXRlVGVhbRIRCglkd19yZXN1bHQYASAB",
+            "KA0SDwoHZHdfc2xvdBgCIAEoDSI8ChZUZWFtQWNrTG9naW5DaGFuZ2VTbG90",
+            "EhEKCWR3X3Jlc3VsdBgBIAEoDRIPCgdkd19zbG90GAIgASgNIkEKFlRlYW1B",
+            "Y2tMb2dpbktpY2tQbGF5ZXISEQoJZHdfcmVzdWx0GAEgASgNEhQKDHF3X3Bs",
+            "YXllcl9pZBgCIAEoBCK4AQoVVGVhbUFja0xvZ2luR2FtZVN0YXJ0EhEKCWR3",
+            "X3Jlc3VsdBgBIAEoDRIWCg5kd19wbGF5ZXJfcG9ydBgCIAEoDRIWCg5kd19z",
+            "ZXJ2ZXJfcG9ydBgDIAEoDRIcChRkd19zbGF2ZV9zZXJ2ZXJfcG9ydBgEIAEo",
+            "DRIUCgxzel9saXN0ZW5faXAYBSABKAkSFAoMcXdfcGxheWVyX2lkGAYgASgE",
+            "EhIKCnF3X3RlYW1faWQYByABKAQiVAoVVGVhbUFja0xvZ2luRW50ZXJUZWFt",
+            "EhEKCWR3X3Jlc3VsdBgBIAEoDRIUCgxxd19wbGF5ZXJfaWQYAiABKAQSEgoK",
+            "cXdfdGVhbV9pZBgDIAEoBCJCChdUZWFtQWNrTG9naW5QbGF5ZXJMZWF2ZRIR",
+            "Cglkd19yZXN1bHQYASABKA0SFAoMcXdfcGxheWVyX2lkGAIgASgEIkwKH1Rl",
+            "YW1SZXF1ZXN0R2FtZU1hbmFnZXJHYW1lU3RhcnQSEgoKcXdfdGVhbV9pZBgB",
+            "IAEoBBIVCg1xd19wbGF5ZXJfaWRzGAIgAygEIqgBChtHYW1lTWFuYWdlckFj",
+            "a1RlYW1HYW1lU3RhcnQSEQoJZHdfcmVzdWx0GAEgASgNEhYKDmR3X3BsYXll",
+            "cl9wb3J0GAIgASgNEhYKDmR3X3NlcnZlcl9wb3J0GAMgASgNEhwKFGR3X3Ns",
+            "YXZlX3NlcnZlcl9wb3J0GAQgASgNEhIKCnF3X3RlYW1faWQYBSABKAQSFAoM",
+            "c3pfbGlzdGVuX2lwGAYgASgJIpgBChlHYW1lTm90aWZ5R2FtZU1hbmFnZXJJ",
+            "bmZvEhYKDmR3X3BsYXllcl9wb3J0GAEgASgNEhYKDmR3X3NlcnZlcl9wb3J0",
+            "GAIgASgNEhwKFGR3X3NsYXZlX3NlcnZlcl9wb3J0GAMgASgNEhIKCnF3X3Rl",
+            "YW1faWQYBCABKAQSGQoRZHdfdGVhbV9zZXJ2ZXJfaWQYBSABKA0iMQocR2Ft",
+            "ZU1hbmFnZXJBY2tHYW1lSW5mb1Jlc3VsdBIRCglkd19yZXN1bHQYASABKA0i",
+            "MQocUGxheWVyUmVxdWVzdEdhbWVNYW5hZ2VySW5mbxIRCglkd19yZXN1bHQY",
+            "ASABKA0ibgoeR2FtZU1hbmFnZXJBY2tQbGF5ZXJJbmZvUmVzdWx0EhYKDmR3",
+            "X3BsYXllcl9wb3J0GAEgASgNEhYKDmR3X3NlcnZlcl9wb3J0GAIgASgNEhwK",
+            "FGR3X3NsYXZlX3NlcnZlcl9wb3J0GAMgASgNIigKFVBsYXllclJlcXVlc3RH",
+            "YW1lVGVzdBIPCgdzel90ZXN0GAEgASgJIi4KFlBsYXllclJlcXVlc3RHYW1l",
+            "RW50ZXISFAoMcXdfcGxheWVyX2lkGAEgASgEIicKEkdhbWVBY2tQbGF5ZXJF",
+            "bnRlchIRCglkd19yZXN1bHQYASABKA0iigEKClNlcnZlckluZm8SFAoMZHdf",
+            "c2VydmVyX2lkGAEgASgNEhQKDHN6X2xpc3Rlbl9pcBgCIAEoCRIUCgxkd190",
+            "ZWFtX3BvcnQYAyABKA0SIwobZHdfZ2FtZV9zZXJ2ZXJfbWFuYWdlcl9wb3J0",
+            "GAQgASgNEhUKDWR3X2xvZ2luX3BvcnQYBSABKA0qSQoLRVNlcnZlclR5cGUS",
+            "CwoHU1RfTk9ORRAAEgwKCFNUX0xvZ2luEAESCwoHU1RfVGVhbRACEhIKDlNU",
+            "X0dhbWVNYW5hZ2VyEAMqJwoJRVRlYW1UeXBlEgsKB1RUX05PTkUQABINCglU",
+            "VF9Ob3JtYWwQASqMAgoKRUVycm9yQ29kZRILCgdFQ19OT05FEAASFAoQRUNf",
+            "QWxyZWFkeUluVGVhbRABEhYKEkVDX01ha2VUZWFtTm90SWRsZRACEhcKE0VD",
+            "X0Nhbm5vdEZpbmRQbGF5ZXIQAxIPCgtFQ19Ob1RlYW1JZBAEEhAKDEVDX05v",
+            "dExlYWRlchAFEhMKD0VDX1RlYW1IYXNTdGFydBAGEhoKFkVDX05vR2FtZU1h",
+            "bmFnZXJTZXJ2ZXIQBxITCg9FQ19Ob1RlYW1TZXJ2ZXIQCBIUChBFQ19Ob0xv",
+            "Z2luU2VydmVyEAkSFgoSRUNfUGxheWVyTm90T25saW5lEAoSEwoPRUNfRmFp",
+            "bEludG9UZWFtEAtiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::GameProto.WebDataReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProto.EServerType), typeof(global::GameProto.ETeamType), typeof(global::GameProto.EErrorCode), }, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLoginServerId), global::GameProto.PlayerRequestLoginServerId.Parser, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLogin), global::GameProto.PlayerRequestLogin.Parser, new[]{ "QwPlayerId", "SzNickName", "SzAvatar", "DwSex", "DwBalance", "SzToken", "SzGameIp", "DwGamePort" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLogin), global::GameProto.PlayerRequestLogin.Parser, new[]{ "QwPlayerId", "SzNickName", "SzAvatar", "DwSex", "DwBalance", "SzToken" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLoginMakeTeam), global::GameProto.PlayerRequestLoginMakeTeam.Parser, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLoginInviteTeam), global::GameProto.PlayerRequestLoginInviteTeam.Parser, new[]{ "QwPlayerId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLoginChangeSlot), global::GameProto.PlayerRequestLoginChangeSlot.Parser, new[]{ "DwSlotId" }, null, null, null),
@@ -139,7 +139,7 @@ namespace GameProto {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLoginRefuseEnterTeam), global::GameProto.PlayerRequestLoginRefuseEnterTeam.Parser, new[]{ "QwPlayerId", "SzReason" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLoginLeaveTeam), global::GameProto.PlayerRequestLoginLeaveTeam.Parser, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerServerId), global::GameProto.LoginAckPlayerServerId.Parser, new[]{ "DwResult", "DwServerId" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerLoginResult), global::GameProto.LoginAckPlayerLoginResult.Parser, new[]{ "DwResult", "SzGameIp", "DwGamePort" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerLoginResult), global::GameProto.LoginAckPlayerLoginResult.Parser, new[]{ "DwResult" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginNotifyPlayerGameKick), global::GameProto.LoginNotifyPlayerGameKick.Parser, new[]{ "DwResult" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginAckPlayerMakeTeam), global::GameProto.LoginAckPlayerMakeTeam.Parser, new[]{ "DwResult", "QwTeamId", "DwSlotId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.LoginNotifyPlayerTeamInfo), global::GameProto.LoginNotifyPlayerTeamInfo.Parser, new[]{ "TeamRoleData", "QwTeamId" }, null, null, null),
@@ -178,6 +178,8 @@ namespace GameProto {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestGameManagerInfo), global::GameProto.PlayerRequestGameManagerInfo.Parser, new[]{ "DwResult" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameManagerAckPlayerInfoResult), global::GameProto.GameManagerAckPlayerInfoResult.Parser, new[]{ "DwPlayerPort", "DwServerPort", "DwSlaveServerPort" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestGameTest), global::GameProto.PlayerRequestGameTest.Parser, new[]{ "SzTest" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestGameEnter), global::GameProto.PlayerRequestGameEnter.Parser, new[]{ "QwPlayerId" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameAckPlayerEnter), global::GameProto.GameAckPlayerEnter.Parser, new[]{ "DwResult" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.ServerInfo), global::GameProto.ServerInfo.Parser, new[]{ "DwServerId", "SzListenIp", "DwTeamPort", "DwGameServerManagerPort", "DwLoginPort" }, null, null, null)
           }));
     }
@@ -392,8 +394,6 @@ namespace GameProto {
       dwSex_ = other.dwSex_;
       dwBalance_ = other.dwBalance_;
       szToken_ = other.szToken_;
-      szGameIp_ = other.szGameIp_;
-      dwGamePort_ = other.dwGamePort_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -468,28 +468,6 @@ namespace GameProto {
       }
     }
 
-    /// <summary>Field number for the "sz_game_ip" field.</summary>
-    public const int SzGameIpFieldNumber = 7;
-    private string szGameIp_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string SzGameIp {
-      get { return szGameIp_; }
-      set {
-        szGameIp_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "dw_game_port" field.</summary>
-    public const int DwGamePortFieldNumber = 8;
-    private uint dwGamePort_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint DwGamePort {
-      get { return dwGamePort_; }
-      set {
-        dwGamePort_ = value;
-      }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as PlayerRequestLogin);
@@ -509,8 +487,6 @@ namespace GameProto {
       if (DwSex != other.DwSex) return false;
       if (DwBalance != other.DwBalance) return false;
       if (SzToken != other.SzToken) return false;
-      if (SzGameIp != other.SzGameIp) return false;
-      if (DwGamePort != other.DwGamePort) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -523,8 +499,6 @@ namespace GameProto {
       if (DwSex != 0) hash ^= DwSex.GetHashCode();
       if (DwBalance != 0) hash ^= DwBalance.GetHashCode();
       if (SzToken.Length != 0) hash ^= SzToken.GetHashCode();
-      if (SzGameIp.Length != 0) hash ^= SzGameIp.GetHashCode();
-      if (DwGamePort != 0) hash ^= DwGamePort.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -562,14 +536,6 @@ namespace GameProto {
         output.WriteRawTag(50);
         output.WriteString(SzToken);
       }
-      if (SzGameIp.Length != 0) {
-        output.WriteRawTag(58);
-        output.WriteString(SzGameIp);
-      }
-      if (DwGamePort != 0) {
-        output.WriteRawTag(64);
-        output.WriteUInt32(DwGamePort);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -595,12 +561,6 @@ namespace GameProto {
       }
       if (SzToken.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(SzToken);
-      }
-      if (SzGameIp.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(SzGameIp);
-      }
-      if (DwGamePort != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwGamePort);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -630,12 +590,6 @@ namespace GameProto {
       }
       if (other.SzToken.Length != 0) {
         SzToken = other.SzToken;
-      }
-      if (other.SzGameIp.Length != 0) {
-        SzGameIp = other.SzGameIp;
-      }
-      if (other.DwGamePort != 0) {
-        DwGamePort = other.DwGamePort;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -670,14 +624,6 @@ namespace GameProto {
           }
           case 50: {
             SzToken = input.ReadString();
-            break;
-          }
-          case 58: {
-            SzGameIp = input.ReadString();
-            break;
-          }
-          case 64: {
-            DwGamePort = input.ReadUInt32();
             break;
           }
         }
@@ -1851,8 +1797,6 @@ namespace GameProto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public LoginAckPlayerLoginResult(LoginAckPlayerLoginResult other) : this() {
       dwResult_ = other.dwResult_;
-      szGameIp_ = other.szGameIp_;
-      dwGamePort_ = other.dwGamePort_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -1872,28 +1816,6 @@ namespace GameProto {
       }
     }
 
-    /// <summary>Field number for the "sz_game_ip" field.</summary>
-    public const int SzGameIpFieldNumber = 2;
-    private string szGameIp_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public string SzGameIp {
-      get { return szGameIp_; }
-      set {
-        szGameIp_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "dw_game_port" field.</summary>
-    public const int DwGamePortFieldNumber = 3;
-    private uint dwGamePort_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint DwGamePort {
-      get { return dwGamePort_; }
-      set {
-        dwGamePort_ = value;
-      }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as LoginAckPlayerLoginResult);
@@ -1908,8 +1830,6 @@ namespace GameProto {
         return true;
       }
       if (DwResult != other.DwResult) return false;
-      if (SzGameIp != other.SzGameIp) return false;
-      if (DwGamePort != other.DwGamePort) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -1917,8 +1837,6 @@ namespace GameProto {
     public override int GetHashCode() {
       int hash = 1;
       if (DwResult != 0) hash ^= DwResult.GetHashCode();
-      if (SzGameIp.Length != 0) hash ^= SzGameIp.GetHashCode();
-      if (DwGamePort != 0) hash ^= DwGamePort.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1936,14 +1854,6 @@ namespace GameProto {
         output.WriteRawTag(8);
         output.WriteUInt32(DwResult);
       }
-      if (SzGameIp.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(SzGameIp);
-      }
-      if (DwGamePort != 0) {
-        output.WriteRawTag(24);
-        output.WriteUInt32(DwGamePort);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1954,12 +1864,6 @@ namespace GameProto {
       int size = 0;
       if (DwResult != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwResult);
-      }
-      if (SzGameIp.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(SzGameIp);
-      }
-      if (DwGamePort != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwGamePort);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1975,12 +1879,6 @@ namespace GameProto {
       if (other.DwResult != 0) {
         DwResult = other.DwResult;
       }
-      if (other.SzGameIp.Length != 0) {
-        SzGameIp = other.SzGameIp;
-      }
-      if (other.DwGamePort != 0) {
-        DwGamePort = other.DwGamePort;
-      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -1994,14 +1892,6 @@ namespace GameProto {
             break;
           case 8: {
             DwResult = input.ReadUInt32();
-            break;
-          }
-          case 18: {
-            SzGameIp = input.ReadString();
-            break;
-          }
-          case 24: {
-            DwGamePort = input.ReadUInt32();
             break;
           }
         }
@@ -8463,6 +8353,267 @@ namespace GameProto {
 
   }
 
+  public sealed partial class PlayerRequestGameEnter : pb::IMessage<PlayerRequestGameEnter> {
+    private static readonly pb::MessageParser<PlayerRequestGameEnter> _parser = new pb::MessageParser<PlayerRequestGameEnter>(() => new PlayerRequestGameEnter());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<PlayerRequestGameEnter> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[50]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayerRequestGameEnter() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayerRequestGameEnter(PlayerRequestGameEnter other) : this() {
+      qwPlayerId_ = other.qwPlayerId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayerRequestGameEnter Clone() {
+      return new PlayerRequestGameEnter(this);
+    }
+
+    /// <summary>Field number for the "qw_player_id" field.</summary>
+    public const int QwPlayerIdFieldNumber = 1;
+    private ulong qwPlayerId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public ulong QwPlayerId {
+      get { return qwPlayerId_; }
+      set {
+        qwPlayerId_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as PlayerRequestGameEnter);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(PlayerRequestGameEnter other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (QwPlayerId != other.QwPlayerId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (QwPlayerId != 0UL) hash ^= QwPlayerId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (QwPlayerId != 0UL) {
+        output.WriteRawTag(8);
+        output.WriteUInt64(QwPlayerId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (QwPlayerId != 0UL) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt64Size(QwPlayerId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(PlayerRequestGameEnter other) {
+      if (other == null) {
+        return;
+      }
+      if (other.QwPlayerId != 0UL) {
+        QwPlayerId = other.QwPlayerId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            QwPlayerId = input.ReadUInt64();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  /// <summary>
+  ///game->player
+  /// </summary>
+  public sealed partial class GameAckPlayerEnter : pb::IMessage<GameAckPlayerEnter> {
+    private static readonly pb::MessageParser<GameAckPlayerEnter> _parser = new pb::MessageParser<GameAckPlayerEnter>(() => new GameAckPlayerEnter());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<GameAckPlayerEnter> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[51]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GameAckPlayerEnter() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GameAckPlayerEnter(GameAckPlayerEnter other) : this() {
+      dwResult_ = other.dwResult_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public GameAckPlayerEnter Clone() {
+      return new GameAckPlayerEnter(this);
+    }
+
+    /// <summary>Field number for the "dw_result" field.</summary>
+    public const int DwResultFieldNumber = 1;
+    private uint dwResult_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint DwResult {
+      get { return dwResult_; }
+      set {
+        dwResult_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as GameAckPlayerEnter);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(GameAckPlayerEnter other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (DwResult != other.DwResult) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (DwResult != 0) hash ^= DwResult.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (DwResult != 0) {
+        output.WriteRawTag(8);
+        output.WriteUInt32(DwResult);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (DwResult != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwResult);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(GameAckPlayerEnter other) {
+      if (other == null) {
+        return;
+      }
+      if (other.DwResult != 0) {
+        DwResult = other.DwResult;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            DwResult = input.ReadUInt32();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
   /// <summary>
   ///serverinfo(server->server_center, server_center->server)
   /// </summary>
@@ -8474,7 +8625,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[50]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[52]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

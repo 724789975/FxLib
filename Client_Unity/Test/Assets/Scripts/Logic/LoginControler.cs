@@ -156,15 +156,15 @@ public class LoginControler : SingletonObject<LoginControler>
 			return;
 		}
 
-		string szUrl = GameInstance.Instance().proUrlHost + GameInstance.Instance().proGetRoleUri;
+		string szUrl = PlayerData.Instance().proUrlHost + PlayerData.Instance().proGetRoleUri;
 		WWWForm form = new WWWForm();
-		form.AddField("platform", GameInstance.Instance().proPlatform);
-		form.AddField("name", GameInstance.Instance().proName);
-		form.AddField("head_img", GameInstance.Instance().proHeadImage);
-		form.AddField("sex", GameInstance.Instance().proSex.ToString());
-		form.AddField("access_token", GameInstance.Instance().proAccessToken);
-		form.AddField("expires_date", GameInstance.Instance().proExpiresDate.ToString());
-		form.AddField("openid", GameInstance.Instance().proOpenId);
+		form.AddField("platform", PlayerData.Instance().proPlatform);
+		form.AddField("name", PlayerData.Instance().proName);
+		form.AddField("head_img", PlayerData.Instance().proHeadImage);
+		form.AddField("sex", PlayerData.Instance().proSex.ToString());
+		form.AddField("access_token", PlayerData.Instance().proAccessToken);
+		form.AddField("expires_date", PlayerData.Instance().proExpiresDate.ToString());
+		form.AddField("openid", PlayerData.Instance().proOpenId);
 		form.AddField("server_id", oRet.DwServerId.ToString());
 
 		StartCoroutine(H5Helper.SendPost(szUrl, form, OnRoleData));
@@ -182,9 +182,9 @@ public class LoginControler : SingletonObject<LoginControler>
 
 		AssetBundleLoader.Instance().LoadLevelAsset("lobby", delegate()
 			{
-				if (!string.IsNullOrEmpty(GameInstance.Instance().proGameIp))
+				if (!string.IsNullOrEmpty(PlayerData.Instance().proGameIp))
 				{
-					H5Manager.Instance().ConnectGame(GameInstance.Instance().proGameIp, GameInstance.Instance().proGamePort);
+					H5Manager.Instance().ConnectGame(PlayerData.Instance().proGameIp, PlayerData.Instance().proGamePort);
 				}
 			}
 		);
@@ -342,6 +342,8 @@ public class LoginControler : SingletonObject<LoginControler>
 		oTest.DwSex = oData.data.sex;
 		oTest.DwBalance = oData.data.balance;
 
+		PlayerData.Instance().SetPlayerId(oData.data.id);
+
 		byte[] pData = new byte[2048];
 		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 2048);
 		pStream.WriteString("GameProto.PlayerRequestLogin");
@@ -354,8 +356,8 @@ public class LoginControler : SingletonObject<LoginControler>
 
 		if (!string.IsNullOrEmpty(oData.game_ip))
 		{
-			GameInstance.Instance().SetGameIp(oData.game_ip);
-			GameInstance.Instance().SetGamePort((ushort)oData.game_port);
+			PlayerData.Instance().SetGameIp(oData.game_ip);
+			PlayerData.Instance().SetGamePort((ushort)oData.game_port);
 		}
 	}
 

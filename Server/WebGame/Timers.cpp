@@ -12,3 +12,10 @@ bool GameEnd::OnTimer(double fSecond)
 	g_bRun = false;
 	return true;
 }
+
+bool GameStart::OnTimer(double fSecond)
+{
+	LogExe(LogLv_Debug, "%s", "game begin~~~~~");
+	CGameSceneBase::Instance()->ChangeState(ESS_Gaming);
+	return true;
+}

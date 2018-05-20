@@ -44,6 +44,7 @@ int main(int argc, char **argv)
 
 	IFxNet* pNet = FxNetGetModule();
 	GameEnd oGameEnd;
+	GameStart oGameStart;
 	// must define before goto
 	if (!GetTimeHandler()->Init())
 	{
@@ -90,6 +91,9 @@ int main(int argc, char **argv)
 		g_bRun = false;
 		goto STOP;
 	}
+
+
+	GetTimeHandler()->AddDelayTimer(CGameConfigBase::Instance()->GetPrepareTime(), &oGameStart);
 
 	while (g_bRun)
 	{
