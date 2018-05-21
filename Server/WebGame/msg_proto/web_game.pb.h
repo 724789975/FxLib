@@ -38,7 +38,7 @@ namespace protobuf_web_5fgame_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[53];
+  static const ::google::protobuf::internal::ParseTable schema[60];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -148,6 +148,20 @@ void InitDefaultsPlayerRequestGameEnterImpl();
 void InitDefaultsPlayerRequestGameEnter();
 void InitDefaultsGameAckPlayerEnterImpl();
 void InitDefaultsGameAckPlayerEnter();
+void InitDefaultsGameNotifyPlayerGameConfigImpl();
+void InitDefaultsGameNotifyPlayerGameConfig();
+void InitDefaultsGameNotifyPlayerGameRoleDataImpl();
+void InitDefaultsGameNotifyPlayerGameRoleData();
+void InitDefaultsGameNotifyPlayerGameSceneInfoImpl();
+void InitDefaultsGameNotifyPlayerGameSceneInfo();
+void InitDefaultsGameNotifyPlayerPrepareTimeImpl();
+void InitDefaultsGameNotifyPlayerPrepareTime();
+void InitDefaultsGameNotifyPlayerGameReadyImpl();
+void InitDefaultsGameNotifyPlayerGameReady();
+void InitDefaultsGameNotifyPlayerGameReadyTimeImpl();
+void InitDefaultsGameNotifyPlayerGameReadyTime();
+void InitDefaultsGameNotifyPlayerGameBeginImpl();
+void InitDefaultsGameNotifyPlayerGameBegin();
 void InitDefaultsServerInfoImpl();
 void InitDefaultsServerInfo();
 inline void InitDefaults() {
@@ -203,6 +217,13 @@ inline void InitDefaults() {
   InitDefaultsPlayerRequestGameTest();
   InitDefaultsPlayerRequestGameEnter();
   InitDefaultsGameAckPlayerEnter();
+  InitDefaultsGameNotifyPlayerGameConfig();
+  InitDefaultsGameNotifyPlayerGameRoleData();
+  InitDefaultsGameNotifyPlayerGameSceneInfo();
+  InitDefaultsGameNotifyPlayerPrepareTime();
+  InitDefaultsGameNotifyPlayerGameReady();
+  InitDefaultsGameNotifyPlayerGameReadyTime();
+  InitDefaultsGameNotifyPlayerGameBegin();
   InitDefaultsServerInfo();
 }
 }  // namespace protobuf_web_5fgame_2eproto
@@ -222,6 +243,27 @@ extern GameManagerAckTeamGameStartDefaultTypeInternal _GameManagerAckTeamGameSta
 class GameNotifyGameManagerInfo;
 class GameNotifyGameManagerInfoDefaultTypeInternal;
 extern GameNotifyGameManagerInfoDefaultTypeInternal _GameNotifyGameManagerInfo_default_instance_;
+class GameNotifyPlayerGameBegin;
+class GameNotifyPlayerGameBeginDefaultTypeInternal;
+extern GameNotifyPlayerGameBeginDefaultTypeInternal _GameNotifyPlayerGameBegin_default_instance_;
+class GameNotifyPlayerGameConfig;
+class GameNotifyPlayerGameConfigDefaultTypeInternal;
+extern GameNotifyPlayerGameConfigDefaultTypeInternal _GameNotifyPlayerGameConfig_default_instance_;
+class GameNotifyPlayerGameReady;
+class GameNotifyPlayerGameReadyDefaultTypeInternal;
+extern GameNotifyPlayerGameReadyDefaultTypeInternal _GameNotifyPlayerGameReady_default_instance_;
+class GameNotifyPlayerGameReadyTime;
+class GameNotifyPlayerGameReadyTimeDefaultTypeInternal;
+extern GameNotifyPlayerGameReadyTimeDefaultTypeInternal _GameNotifyPlayerGameReadyTime_default_instance_;
+class GameNotifyPlayerGameRoleData;
+class GameNotifyPlayerGameRoleDataDefaultTypeInternal;
+extern GameNotifyPlayerGameRoleDataDefaultTypeInternal _GameNotifyPlayerGameRoleData_default_instance_;
+class GameNotifyPlayerGameSceneInfo;
+class GameNotifyPlayerGameSceneInfoDefaultTypeInternal;
+extern GameNotifyPlayerGameSceneInfoDefaultTypeInternal _GameNotifyPlayerGameSceneInfo_default_instance_;
+class GameNotifyPlayerPrepareTime;
+class GameNotifyPlayerPrepareTimeDefaultTypeInternal;
+extern GameNotifyPlayerPrepareTimeDefaultTypeInternal _GameNotifyPlayerPrepareTime_default_instance_;
 class LoginAckLoginInviteTeam;
 class LoginAckLoginInviteTeamDefaultTypeInternal;
 extern LoginAckLoginInviteTeamDefaultTypeInternal _LoginAckLoginInviteTeam_default_instance_;
@@ -6094,14 +6136,730 @@ class GameAckPlayerEnter : public ::google::protobuf::Message /* @@protoc_insert
   ::google::protobuf::uint32 dw_result() const;
   void set_dw_result(::google::protobuf::uint32 value);
 
+  // uint32 dw_game_type = 2;
+  void clear_dw_game_type();
+  static const int kDwGameTypeFieldNumber = 2;
+  ::google::protobuf::uint32 dw_game_type() const;
+  void set_dw_game_type(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:GameProto.GameAckPlayerEnter)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::uint32 dw_result_;
+  ::google::protobuf::uint32 dw_game_type_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
   friend void ::protobuf_web_5fgame_2eproto::InitDefaultsGameAckPlayerEnterImpl();
+};
+// -------------------------------------------------------------------
+
+class GameNotifyPlayerGameConfig : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameNotifyPlayerGameConfig) */ {
+ public:
+  GameNotifyPlayerGameConfig();
+  virtual ~GameNotifyPlayerGameConfig();
+
+  GameNotifyPlayerGameConfig(const GameNotifyPlayerGameConfig& from);
+
+  inline GameNotifyPlayerGameConfig& operator=(const GameNotifyPlayerGameConfig& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GameNotifyPlayerGameConfig(GameNotifyPlayerGameConfig&& from) noexcept
+    : GameNotifyPlayerGameConfig() {
+    *this = ::std::move(from);
+  }
+
+  inline GameNotifyPlayerGameConfig& operator=(GameNotifyPlayerGameConfig&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GameNotifyPlayerGameConfig& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GameNotifyPlayerGameConfig* internal_default_instance() {
+    return reinterpret_cast<const GameNotifyPlayerGameConfig*>(
+               &_GameNotifyPlayerGameConfig_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    52;
+
+  void Swap(GameNotifyPlayerGameConfig* other);
+  friend void swap(GameNotifyPlayerGameConfig& a, GameNotifyPlayerGameConfig& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GameNotifyPlayerGameConfig* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  GameNotifyPlayerGameConfig* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const GameNotifyPlayerGameConfig& from);
+  void MergeFrom(const GameNotifyPlayerGameConfig& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(GameNotifyPlayerGameConfig* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // .GameProto.GameConfigCommon common_config = 2;
+  bool has_common_config() const;
+  void clear_common_config();
+  static const int kCommonConfigFieldNumber = 2;
+  const ::GameProto::GameConfigCommon& common_config() const;
+  ::GameProto::GameConfigCommon* release_common_config();
+  ::GameProto::GameConfigCommon* mutable_common_config();
+  void set_allocated_common_config(::GameProto::GameConfigCommon* common_config);
+
+  // uint32 dw_game_type = 1;
+  void clear_dw_game_type();
+  static const int kDwGameTypeFieldNumber = 1;
+  ::google::protobuf::uint32 dw_game_type() const;
+  void set_dw_game_type(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.GameNotifyPlayerGameConfig)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::GameProto::GameConfigCommon* common_config_;
+  ::google::protobuf::uint32 dw_game_type_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayerGameConfigImpl();
+};
+// -------------------------------------------------------------------
+
+class GameNotifyPlayerGameRoleData : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameNotifyPlayerGameRoleData) */ {
+ public:
+  GameNotifyPlayerGameRoleData();
+  virtual ~GameNotifyPlayerGameRoleData();
+
+  GameNotifyPlayerGameRoleData(const GameNotifyPlayerGameRoleData& from);
+
+  inline GameNotifyPlayerGameRoleData& operator=(const GameNotifyPlayerGameRoleData& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GameNotifyPlayerGameRoleData(GameNotifyPlayerGameRoleData&& from) noexcept
+    : GameNotifyPlayerGameRoleData() {
+    *this = ::std::move(from);
+  }
+
+  inline GameNotifyPlayerGameRoleData& operator=(GameNotifyPlayerGameRoleData&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GameNotifyPlayerGameRoleData& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GameNotifyPlayerGameRoleData* internal_default_instance() {
+    return reinterpret_cast<const GameNotifyPlayerGameRoleData*>(
+               &_GameNotifyPlayerGameRoleData_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    53;
+
+  void Swap(GameNotifyPlayerGameRoleData* other);
+  friend void swap(GameNotifyPlayerGameRoleData& a, GameNotifyPlayerGameRoleData& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GameNotifyPlayerGameRoleData* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  GameNotifyPlayerGameRoleData* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const GameNotifyPlayerGameRoleData& from);
+  void MergeFrom(const GameNotifyPlayerGameRoleData& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(GameNotifyPlayerGameRoleData* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // .GameProto.GameCommonRoleData common_role_data = 2;
+  bool has_common_role_data() const;
+  void clear_common_role_data();
+  static const int kCommonRoleDataFieldNumber = 2;
+  const ::GameProto::GameCommonRoleData& common_role_data() const;
+  ::GameProto::GameCommonRoleData* release_common_role_data();
+  ::GameProto::GameCommonRoleData* mutable_common_role_data();
+  void set_allocated_common_role_data(::GameProto::GameCommonRoleData* common_role_data);
+
+  // uint32 dw_game_type = 1;
+  void clear_dw_game_type();
+  static const int kDwGameTypeFieldNumber = 1;
+  ::google::protobuf::uint32 dw_game_type() const;
+  void set_dw_game_type(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.GameNotifyPlayerGameRoleData)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::GameProto::GameCommonRoleData* common_role_data_;
+  ::google::protobuf::uint32 dw_game_type_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayerGameRoleDataImpl();
+};
+// -------------------------------------------------------------------
+
+class GameNotifyPlayerGameSceneInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameNotifyPlayerGameSceneInfo) */ {
+ public:
+  GameNotifyPlayerGameSceneInfo();
+  virtual ~GameNotifyPlayerGameSceneInfo();
+
+  GameNotifyPlayerGameSceneInfo(const GameNotifyPlayerGameSceneInfo& from);
+
+  inline GameNotifyPlayerGameSceneInfo& operator=(const GameNotifyPlayerGameSceneInfo& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GameNotifyPlayerGameSceneInfo(GameNotifyPlayerGameSceneInfo&& from) noexcept
+    : GameNotifyPlayerGameSceneInfo() {
+    *this = ::std::move(from);
+  }
+
+  inline GameNotifyPlayerGameSceneInfo& operator=(GameNotifyPlayerGameSceneInfo&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GameNotifyPlayerGameSceneInfo& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GameNotifyPlayerGameSceneInfo* internal_default_instance() {
+    return reinterpret_cast<const GameNotifyPlayerGameSceneInfo*>(
+               &_GameNotifyPlayerGameSceneInfo_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    54;
+
+  void Swap(GameNotifyPlayerGameSceneInfo* other);
+  friend void swap(GameNotifyPlayerGameSceneInfo& a, GameNotifyPlayerGameSceneInfo& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GameNotifyPlayerGameSceneInfo* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  GameNotifyPlayerGameSceneInfo* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const GameNotifyPlayerGameSceneInfo& from);
+  void MergeFrom(const GameNotifyPlayerGameSceneInfo& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(GameNotifyPlayerGameSceneInfo* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // .GameProto.GameCommonSceneInfo common_scene_info = 2;
+  bool has_common_scene_info() const;
+  void clear_common_scene_info();
+  static const int kCommonSceneInfoFieldNumber = 2;
+  const ::GameProto::GameCommonSceneInfo& common_scene_info() const;
+  ::GameProto::GameCommonSceneInfo* release_common_scene_info();
+  ::GameProto::GameCommonSceneInfo* mutable_common_scene_info();
+  void set_allocated_common_scene_info(::GameProto::GameCommonSceneInfo* common_scene_info);
+
+  // uint32 dw_game_type = 1;
+  void clear_dw_game_type();
+  static const int kDwGameTypeFieldNumber = 1;
+  ::google::protobuf::uint32 dw_game_type() const;
+  void set_dw_game_type(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.GameNotifyPlayerGameSceneInfo)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::GameProto::GameCommonSceneInfo* common_scene_info_;
+  ::google::protobuf::uint32 dw_game_type_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayerGameSceneInfoImpl();
+};
+// -------------------------------------------------------------------
+
+class GameNotifyPlayerPrepareTime : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameNotifyPlayerPrepareTime) */ {
+ public:
+  GameNotifyPlayerPrepareTime();
+  virtual ~GameNotifyPlayerPrepareTime();
+
+  GameNotifyPlayerPrepareTime(const GameNotifyPlayerPrepareTime& from);
+
+  inline GameNotifyPlayerPrepareTime& operator=(const GameNotifyPlayerPrepareTime& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GameNotifyPlayerPrepareTime(GameNotifyPlayerPrepareTime&& from) noexcept
+    : GameNotifyPlayerPrepareTime() {
+    *this = ::std::move(from);
+  }
+
+  inline GameNotifyPlayerPrepareTime& operator=(GameNotifyPlayerPrepareTime&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GameNotifyPlayerPrepareTime& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GameNotifyPlayerPrepareTime* internal_default_instance() {
+    return reinterpret_cast<const GameNotifyPlayerPrepareTime*>(
+               &_GameNotifyPlayerPrepareTime_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    55;
+
+  void Swap(GameNotifyPlayerPrepareTime* other);
+  friend void swap(GameNotifyPlayerPrepareTime& a, GameNotifyPlayerPrepareTime& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GameNotifyPlayerPrepareTime* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  GameNotifyPlayerPrepareTime* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const GameNotifyPlayerPrepareTime& from);
+  void MergeFrom(const GameNotifyPlayerPrepareTime& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(GameNotifyPlayerPrepareTime* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // uint32 dw_left_time = 1;
+  void clear_dw_left_time();
+  static const int kDwLeftTimeFieldNumber = 1;
+  ::google::protobuf::uint32 dw_left_time() const;
+  void set_dw_left_time(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.GameNotifyPlayerPrepareTime)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint32 dw_left_time_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayerPrepareTimeImpl();
+};
+// -------------------------------------------------------------------
+
+class GameNotifyPlayerGameReady : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameNotifyPlayerGameReady) */ {
+ public:
+  GameNotifyPlayerGameReady();
+  virtual ~GameNotifyPlayerGameReady();
+
+  GameNotifyPlayerGameReady(const GameNotifyPlayerGameReady& from);
+
+  inline GameNotifyPlayerGameReady& operator=(const GameNotifyPlayerGameReady& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GameNotifyPlayerGameReady(GameNotifyPlayerGameReady&& from) noexcept
+    : GameNotifyPlayerGameReady() {
+    *this = ::std::move(from);
+  }
+
+  inline GameNotifyPlayerGameReady& operator=(GameNotifyPlayerGameReady&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GameNotifyPlayerGameReady& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GameNotifyPlayerGameReady* internal_default_instance() {
+    return reinterpret_cast<const GameNotifyPlayerGameReady*>(
+               &_GameNotifyPlayerGameReady_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    56;
+
+  void Swap(GameNotifyPlayerGameReady* other);
+  friend void swap(GameNotifyPlayerGameReady& a, GameNotifyPlayerGameReady& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GameNotifyPlayerGameReady* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  GameNotifyPlayerGameReady* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const GameNotifyPlayerGameReady& from);
+  void MergeFrom(const GameNotifyPlayerGameReady& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(GameNotifyPlayerGameReady* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:GameProto.GameNotifyPlayerGameReady)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayerGameReadyImpl();
+};
+// -------------------------------------------------------------------
+
+class GameNotifyPlayerGameReadyTime : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameNotifyPlayerGameReadyTime) */ {
+ public:
+  GameNotifyPlayerGameReadyTime();
+  virtual ~GameNotifyPlayerGameReadyTime();
+
+  GameNotifyPlayerGameReadyTime(const GameNotifyPlayerGameReadyTime& from);
+
+  inline GameNotifyPlayerGameReadyTime& operator=(const GameNotifyPlayerGameReadyTime& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GameNotifyPlayerGameReadyTime(GameNotifyPlayerGameReadyTime&& from) noexcept
+    : GameNotifyPlayerGameReadyTime() {
+    *this = ::std::move(from);
+  }
+
+  inline GameNotifyPlayerGameReadyTime& operator=(GameNotifyPlayerGameReadyTime&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GameNotifyPlayerGameReadyTime& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GameNotifyPlayerGameReadyTime* internal_default_instance() {
+    return reinterpret_cast<const GameNotifyPlayerGameReadyTime*>(
+               &_GameNotifyPlayerGameReadyTime_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    57;
+
+  void Swap(GameNotifyPlayerGameReadyTime* other);
+  friend void swap(GameNotifyPlayerGameReadyTime& a, GameNotifyPlayerGameReadyTime& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GameNotifyPlayerGameReadyTime* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  GameNotifyPlayerGameReadyTime* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const GameNotifyPlayerGameReadyTime& from);
+  void MergeFrom(const GameNotifyPlayerGameReadyTime& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(GameNotifyPlayerGameReadyTime* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // uint32 dw_left_time = 1;
+  void clear_dw_left_time();
+  static const int kDwLeftTimeFieldNumber = 1;
+  ::google::protobuf::uint32 dw_left_time() const;
+  void set_dw_left_time(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.GameNotifyPlayerGameReadyTime)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint32 dw_left_time_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayerGameReadyTimeImpl();
+};
+// -------------------------------------------------------------------
+
+class GameNotifyPlayerGameBegin : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameNotifyPlayerGameBegin) */ {
+ public:
+  GameNotifyPlayerGameBegin();
+  virtual ~GameNotifyPlayerGameBegin();
+
+  GameNotifyPlayerGameBegin(const GameNotifyPlayerGameBegin& from);
+
+  inline GameNotifyPlayerGameBegin& operator=(const GameNotifyPlayerGameBegin& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GameNotifyPlayerGameBegin(GameNotifyPlayerGameBegin&& from) noexcept
+    : GameNotifyPlayerGameBegin() {
+    *this = ::std::move(from);
+  }
+
+  inline GameNotifyPlayerGameBegin& operator=(GameNotifyPlayerGameBegin&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GameNotifyPlayerGameBegin& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GameNotifyPlayerGameBegin* internal_default_instance() {
+    return reinterpret_cast<const GameNotifyPlayerGameBegin*>(
+               &_GameNotifyPlayerGameBegin_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    58;
+
+  void Swap(GameNotifyPlayerGameBegin* other);
+  friend void swap(GameNotifyPlayerGameBegin& a, GameNotifyPlayerGameBegin& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GameNotifyPlayerGameBegin* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  GameNotifyPlayerGameBegin* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const GameNotifyPlayerGameBegin& from);
+  void MergeFrom(const GameNotifyPlayerGameBegin& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(GameNotifyPlayerGameBegin* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // @@protoc_insertion_point(class_scope:GameProto.GameNotifyPlayerGameBegin)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayerGameBeginImpl();
 };
 // -------------------------------------------------------------------
 
@@ -6140,7 +6898,7 @@ class ServerInfo : public ::google::protobuf::Message /* @@protoc_insertion_poin
                &_ServerInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    52;
+    59;
 
   void Swap(ServerInfo* other);
   friend void swap(ServerInfo& a, ServerInfo& b) {
@@ -8487,6 +9245,250 @@ inline void GameAckPlayerEnter::set_dw_result(::google::protobuf::uint32 value) 
   // @@protoc_insertion_point(field_set:GameProto.GameAckPlayerEnter.dw_result)
 }
 
+// uint32 dw_game_type = 2;
+inline void GameAckPlayerEnter::clear_dw_game_type() {
+  dw_game_type_ = 0u;
+}
+inline ::google::protobuf::uint32 GameAckPlayerEnter::dw_game_type() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameAckPlayerEnter.dw_game_type)
+  return dw_game_type_;
+}
+inline void GameAckPlayerEnter::set_dw_game_type(::google::protobuf::uint32 value) {
+  
+  dw_game_type_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameAckPlayerEnter.dw_game_type)
+}
+
+// -------------------------------------------------------------------
+
+// GameNotifyPlayerGameConfig
+
+// uint32 dw_game_type = 1;
+inline void GameNotifyPlayerGameConfig::clear_dw_game_type() {
+  dw_game_type_ = 0u;
+}
+inline ::google::protobuf::uint32 GameNotifyPlayerGameConfig::dw_game_type() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerGameConfig.dw_game_type)
+  return dw_game_type_;
+}
+inline void GameNotifyPlayerGameConfig::set_dw_game_type(::google::protobuf::uint32 value) {
+  
+  dw_game_type_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyPlayerGameConfig.dw_game_type)
+}
+
+// .GameProto.GameConfigCommon common_config = 2;
+inline bool GameNotifyPlayerGameConfig::has_common_config() const {
+  return this != internal_default_instance() && common_config_ != NULL;
+}
+inline const ::GameProto::GameConfigCommon& GameNotifyPlayerGameConfig::common_config() const {
+  const ::GameProto::GameConfigCommon* p = common_config_;
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerGameConfig.common_config)
+  return p != NULL ? *p : *reinterpret_cast<const ::GameProto::GameConfigCommon*>(
+      &::GameProto::_GameConfigCommon_default_instance_);
+}
+inline ::GameProto::GameConfigCommon* GameNotifyPlayerGameConfig::release_common_config() {
+  // @@protoc_insertion_point(field_release:GameProto.GameNotifyPlayerGameConfig.common_config)
+  
+  ::GameProto::GameConfigCommon* temp = common_config_;
+  common_config_ = NULL;
+  return temp;
+}
+inline ::GameProto::GameConfigCommon* GameNotifyPlayerGameConfig::mutable_common_config() {
+  
+  if (common_config_ == NULL) {
+    common_config_ = new ::GameProto::GameConfigCommon;
+  }
+  // @@protoc_insertion_point(field_mutable:GameProto.GameNotifyPlayerGameConfig.common_config)
+  return common_config_;
+}
+inline void GameNotifyPlayerGameConfig::set_allocated_common_config(::GameProto::GameConfigCommon* common_config) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(common_config_);
+  }
+  if (common_config) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      common_config = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, common_config, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  common_config_ = common_config;
+  // @@protoc_insertion_point(field_set_allocated:GameProto.GameNotifyPlayerGameConfig.common_config)
+}
+
+// -------------------------------------------------------------------
+
+// GameNotifyPlayerGameRoleData
+
+// uint32 dw_game_type = 1;
+inline void GameNotifyPlayerGameRoleData::clear_dw_game_type() {
+  dw_game_type_ = 0u;
+}
+inline ::google::protobuf::uint32 GameNotifyPlayerGameRoleData::dw_game_type() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerGameRoleData.dw_game_type)
+  return dw_game_type_;
+}
+inline void GameNotifyPlayerGameRoleData::set_dw_game_type(::google::protobuf::uint32 value) {
+  
+  dw_game_type_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyPlayerGameRoleData.dw_game_type)
+}
+
+// .GameProto.GameCommonRoleData common_role_data = 2;
+inline bool GameNotifyPlayerGameRoleData::has_common_role_data() const {
+  return this != internal_default_instance() && common_role_data_ != NULL;
+}
+inline const ::GameProto::GameCommonRoleData& GameNotifyPlayerGameRoleData::common_role_data() const {
+  const ::GameProto::GameCommonRoleData* p = common_role_data_;
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerGameRoleData.common_role_data)
+  return p != NULL ? *p : *reinterpret_cast<const ::GameProto::GameCommonRoleData*>(
+      &::GameProto::_GameCommonRoleData_default_instance_);
+}
+inline ::GameProto::GameCommonRoleData* GameNotifyPlayerGameRoleData::release_common_role_data() {
+  // @@protoc_insertion_point(field_release:GameProto.GameNotifyPlayerGameRoleData.common_role_data)
+  
+  ::GameProto::GameCommonRoleData* temp = common_role_data_;
+  common_role_data_ = NULL;
+  return temp;
+}
+inline ::GameProto::GameCommonRoleData* GameNotifyPlayerGameRoleData::mutable_common_role_data() {
+  
+  if (common_role_data_ == NULL) {
+    common_role_data_ = new ::GameProto::GameCommonRoleData;
+  }
+  // @@protoc_insertion_point(field_mutable:GameProto.GameNotifyPlayerGameRoleData.common_role_data)
+  return common_role_data_;
+}
+inline void GameNotifyPlayerGameRoleData::set_allocated_common_role_data(::GameProto::GameCommonRoleData* common_role_data) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(common_role_data_);
+  }
+  if (common_role_data) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      common_role_data = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, common_role_data, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  common_role_data_ = common_role_data;
+  // @@protoc_insertion_point(field_set_allocated:GameProto.GameNotifyPlayerGameRoleData.common_role_data)
+}
+
+// -------------------------------------------------------------------
+
+// GameNotifyPlayerGameSceneInfo
+
+// uint32 dw_game_type = 1;
+inline void GameNotifyPlayerGameSceneInfo::clear_dw_game_type() {
+  dw_game_type_ = 0u;
+}
+inline ::google::protobuf::uint32 GameNotifyPlayerGameSceneInfo::dw_game_type() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerGameSceneInfo.dw_game_type)
+  return dw_game_type_;
+}
+inline void GameNotifyPlayerGameSceneInfo::set_dw_game_type(::google::protobuf::uint32 value) {
+  
+  dw_game_type_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyPlayerGameSceneInfo.dw_game_type)
+}
+
+// .GameProto.GameCommonSceneInfo common_scene_info = 2;
+inline bool GameNotifyPlayerGameSceneInfo::has_common_scene_info() const {
+  return this != internal_default_instance() && common_scene_info_ != NULL;
+}
+inline const ::GameProto::GameCommonSceneInfo& GameNotifyPlayerGameSceneInfo::common_scene_info() const {
+  const ::GameProto::GameCommonSceneInfo* p = common_scene_info_;
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerGameSceneInfo.common_scene_info)
+  return p != NULL ? *p : *reinterpret_cast<const ::GameProto::GameCommonSceneInfo*>(
+      &::GameProto::_GameCommonSceneInfo_default_instance_);
+}
+inline ::GameProto::GameCommonSceneInfo* GameNotifyPlayerGameSceneInfo::release_common_scene_info() {
+  // @@protoc_insertion_point(field_release:GameProto.GameNotifyPlayerGameSceneInfo.common_scene_info)
+  
+  ::GameProto::GameCommonSceneInfo* temp = common_scene_info_;
+  common_scene_info_ = NULL;
+  return temp;
+}
+inline ::GameProto::GameCommonSceneInfo* GameNotifyPlayerGameSceneInfo::mutable_common_scene_info() {
+  
+  if (common_scene_info_ == NULL) {
+    common_scene_info_ = new ::GameProto::GameCommonSceneInfo;
+  }
+  // @@protoc_insertion_point(field_mutable:GameProto.GameNotifyPlayerGameSceneInfo.common_scene_info)
+  return common_scene_info_;
+}
+inline void GameNotifyPlayerGameSceneInfo::set_allocated_common_scene_info(::GameProto::GameCommonSceneInfo* common_scene_info) {
+  ::google::protobuf::Arena* message_arena = GetArenaNoVirtual();
+  if (message_arena == NULL) {
+    delete reinterpret_cast< ::google::protobuf::MessageLite*>(common_scene_info_);
+  }
+  if (common_scene_info) {
+    ::google::protobuf::Arena* submessage_arena = NULL;
+    if (message_arena != submessage_arena) {
+      common_scene_info = ::google::protobuf::internal::GetOwnedMessage(
+          message_arena, common_scene_info, submessage_arena);
+    }
+    
+  } else {
+    
+  }
+  common_scene_info_ = common_scene_info;
+  // @@protoc_insertion_point(field_set_allocated:GameProto.GameNotifyPlayerGameSceneInfo.common_scene_info)
+}
+
+// -------------------------------------------------------------------
+
+// GameNotifyPlayerPrepareTime
+
+// uint32 dw_left_time = 1;
+inline void GameNotifyPlayerPrepareTime::clear_dw_left_time() {
+  dw_left_time_ = 0u;
+}
+inline ::google::protobuf::uint32 GameNotifyPlayerPrepareTime::dw_left_time() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerPrepareTime.dw_left_time)
+  return dw_left_time_;
+}
+inline void GameNotifyPlayerPrepareTime::set_dw_left_time(::google::protobuf::uint32 value) {
+  
+  dw_left_time_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyPlayerPrepareTime.dw_left_time)
+}
+
+// -------------------------------------------------------------------
+
+// GameNotifyPlayerGameReady
+
+// -------------------------------------------------------------------
+
+// GameNotifyPlayerGameReadyTime
+
+// uint32 dw_left_time = 1;
+inline void GameNotifyPlayerGameReadyTime::clear_dw_left_time() {
+  dw_left_time_ = 0u;
+}
+inline ::google::protobuf::uint32 GameNotifyPlayerGameReadyTime::dw_left_time() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerGameReadyTime.dw_left_time)
+  return dw_left_time_;
+}
+inline void GameNotifyPlayerGameReadyTime::set_dw_left_time(::google::protobuf::uint32 value) {
+  
+  dw_left_time_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyPlayerGameReadyTime.dw_left_time)
+}
+
+// -------------------------------------------------------------------
+
+// GameNotifyPlayerGameBegin
+
 // -------------------------------------------------------------------
 
 // ServerInfo
@@ -8603,6 +9605,20 @@ inline void ServerInfo::set_dw_login_port(::google::protobuf::uint32 value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

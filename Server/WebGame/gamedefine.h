@@ -33,6 +33,7 @@ namespace RedisConstant
 	static const char* szGameConfig = "game_config";
 	static const char* szGameType = "game_type";
 	static const char* szPrepareTime = "prepare_time";
+	static const char* szGameReadyTime = "game_ready_time";
 	static const char* szGameIp = "game_ip";
 	static const char* szGamePort = "game_port";
 }

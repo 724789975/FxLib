@@ -4,6 +4,8 @@
 #include "msg_proto/web_data.pb.h"
 #include "msg_proto/web_game.pb.h"
 #include "fxredis.h"
+#include "Player.h"
+#include "PlayerSession.h"
 
 class RedisSetPlayerTeamId : public IRedisQuery
 {
@@ -47,7 +49,6 @@ private:
 };
 
 CGameSceneBase::CGameSceneBase()
-	: m_eGameSceneState(ESS_None)
 {
 }
 
@@ -92,6 +93,7 @@ bool CGameSceneBase::Init(unsigned int dwGameType, std::string szRoles, UINT64 q
 		}
 	}
 
+	Instance()->m_dwGameType = dwGameType;
 	Instance()->m_qwTeamId = qwTeamId;
 	Instance()->m_dwGameStartTime = GetTimeHandler()->GetSecond();
 	return Instance()->Init();
@@ -99,13 +101,13 @@ bool CGameSceneBase::Init(unsigned int dwGameType, std::string szRoles, UINT64 q
 
 void CGameSceneBase::Run(double fTime)
 {
-	switch (m_eGameSceneState)
+	switch (GetSceneState())
 	{
-		case ESS_None: break;
-		case ESS_Prepare: { Preparing(fTime); } break;
-		case ESS_GameReady: { GameReady(fTime); } break;
-		case ESS_Gaming: { Gaming(fTime); } break;
-		case ESS_Transact: { Transacting(fTime); } break;
+		case GameProto::ESS_None: break;
+		case GameProto::ESS_Prepare: { Preparing(fTime); } break;
+		case GameProto::ESS_GameReady: { GameReady(fTime); } break;
+		case GameProto::ESS_Gaming: { Gaming(fTime); } break;
+		case GameProto::ESS_Transact: { Transacting(fTime); } break;
 		default: {Assert(0); } break;
 	}
 }
@@ -114,14 +116,17 @@ void CGameSceneBase::Preparing(double fTime)
 {
 	static UINT32 s_dwNotifyTime = m_dwGameStartTime + 5;
 
-	if (GetTimeHandler()->GetSecond() - m_dwGameStartTime > CGameConfigBase::Instance()->GetPrepareTime())
+	INT32 dwLeftTime = m_dwGameStartTime + CGameConfigBase::Instance()->GetPrepareTime() - GetTimeHandler()->GetSecond();
+	if (dwLeftTime < 0)
 	{
-		ChangeState(ESS_GameReady);
+		ChangeState(GameProto::ESS_GameReady);
 		return;
 	}
-	if (GetTimeHandler()->GetSecond() > s_dwNotifyTime)
+	GameProto::GameNotifyPlayerPrepareTime oNotify;
+	oNotify.set_dw_left_time(dwLeftTime);
+	if (GetTimeHandler()->GetSecond() >= s_dwNotifyTime)
 	{
-		// todo 广播
+		NotifyPlayer(oNotify);
 
 		//通知客户端频率 最后5秒 每秒一次 前面 5秒一次
 		if (s_dwNotifyTime >= m_dwGameStartTime + CGameConfigBase::Instance()->GetPrepareTime() - 5)
@@ -137,7 +142,21 @@ void CGameSceneBase::Preparing(double fTime)
 
 void CGameSceneBase::GameReady(double fTime)
 {
+	static UINT32 s_dwNotifyTime = m_dwGameStartTime + CGameConfigBase::Instance()->GetPrepareTime() + 1;
 
+	INT32 dwLeftTime = m_dwGameStartTime + CGameConfigBase::Instance()->GetPrepareTime() + CGameConfigBase::Instance()->GetGameReadyTime() - GetTimeHandler()->GetSecond();
+	if (dwLeftTime < 0)
+	{
+		ChangeState(GameProto::ESS_Gaming);
+		return;
+	}
+	GameProto::GameNotifyPlayerGameReadyTime oNotify;
+	oNotify.set_dw_left_time(dwLeftTime);
+	if (GetTimeHandler()->GetSecond() >= s_dwNotifyTime)
+	{
+		NotifyPlayer(oNotify);
+		s_dwNotifyTime += 1;
+	}
 }
 
 void CGameSceneBase::Gaming(double fTime)
@@ -156,10 +175,14 @@ void CGameSceneBase::OnPrepare()
 
 void CGameSceneBase::OnGameReady()
 {
+	GameProto::GameNotifyPlayerGameReady oNotify;
+	NotifyPlayer(oNotify);
 }
 
 void CGameSceneBase::OnGameStart()
 {
+	GameProto::GameNotifyPlayerGameBegin oNotify;
+	NotifyPlayer(oNotify);
 }
 
 void CGameSceneBase::OnTransact()
@@ -179,15 +202,36 @@ void CGameSceneBase::GameEnd()
 	}
 }
 
-void CGameSceneBase::ChangeState(EGameSceneState eGameSceneState)
+void CGameSceneBase::NotifyPlayer(google::protobuf::Message& refMsg)
 {
-	m_eGameSceneState = eGameSceneState;
-	switch (m_eGameSceneState)
+	for (int i = 0; i < MAXCLIENTNUM; ++i)
 	{
-		case ESS_Prepare: OnPrepare(); break;
-		case ESS_GameReady: OnGameReady(); break;
-		case ESS_Gaming: OnGameStart(); break;
-		case ESS_Transact: OnTransact(); break;
+		CPlayerBase* pPlayerBase = GetPlayer(m_qwRoles[i]);
+		if (!pPlayerBase)
+		{
+			continue;
+		}
+		if (!pPlayerBase->GetPlayerSession())
+		{
+			continue;
+		}
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(refMsg, pBuf, dwBufLen);
+		pPlayerBase->GetPlayerSession()->Send(pBuf, dwBufLen);
+	}
+}
+
+void CGameSceneBase::ChangeState(GameProto::EGameSceneState eGameSceneState)
+{
+	LogExe(LogLv_Info, "game change state : %d", (int)eGameSceneState);
+	SetSceneState(eGameSceneState);
+	switch (GetSceneState())
+	{
+		case GameProto::ESS_Prepare: OnPrepare(); break;
+		case GameProto::ESS_GameReady: OnGameReady(); break;
+		case GameProto::ESS_Gaming: OnGameStart(); break;
+		case GameProto::ESS_Transact: OnTransact(); break;
 		default:Assert(0); break;
 	}
 }
@@ -195,6 +239,7 @@ void CGameSceneBase::ChangeState(EGameSceneState eGameSceneState)
 //////////////////////////////////////////////////////////////////////////
 CGameSceneCommon::CGameSceneCommon()
 {
+	SetSceneState(GameProto::ESS_None);
 }
 
 CGameSceneCommon::~CGameSceneCommon()
@@ -210,13 +255,13 @@ bool CGameSceneCommon::Init()
 			m_mapPlayers[m_qwRoles[i]].SetPlayerSession(NULL);
 		}
 	}
-	ChangeState(ESS_Prepare);
+	ChangeState(GameProto::ESS_Prepare);
 	return true;
 }
 
 void CGameSceneCommon::OnGameStart()
 {
-
+	CGameSceneBase::OnGameStart();
 }
 
 CPlayerBase* CGameSceneCommon::GetPlayer(UINT64 qwPlayerId)
@@ -227,5 +272,21 @@ CPlayerBase* CGameSceneCommon::GetPlayer(UINT64 qwPlayerId)
 		return NULL;
 	}
 	return &(it->second);
+}
+
+GameProto::EGameSceneState CGameSceneCommon::GetSceneState()
+{
+	return m_oSceneInfo.mutable_scene_info()->state();
+}
+
+void CGameSceneCommon::FillProtoConfig(GameProto::GameNotifyPlayerGameSceneInfo& refInfo)
+{
+	refInfo.set_dw_game_type(m_dwGameType);
+	*(refInfo.mutable_common_scene_info()) = m_oSceneInfo;
+}
+
+void CGameSceneCommon::SetSceneState(GameProto::EGameSceneState eGameSceneState)
+{
+	m_oSceneInfo.mutable_scene_info()->set_state(eGameSceneState);
 }
 

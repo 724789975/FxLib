@@ -121,6 +121,7 @@ public class SessionObject : MonoBehaviour
 			SampleDebuger.Log("can't find proto name " + szProtoName);
 			return;
 		}
+		SampleDebuger.LogGreen(szProtoName);
 		m_mapCallBack[szProtoName](pProto);
 
 		//foreach (var item in m_pfOnRecv)
@@ -144,7 +145,6 @@ public class SessionObject : MonoBehaviour
     {
         m_mapCallBack.Remove(szProtoName);
     }
-
 
     FxNet.IFxClientSocket GetClientSocket() { return m_pClientSocket; }
 

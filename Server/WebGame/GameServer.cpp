@@ -137,7 +137,7 @@ bool GameServer::GameEnd()
 		virtual void				OnQuery(IRedisConnection *poDBConnection)
 		{
 			char szQuery[64] = { 0 };
-			sprintf(szQuery, "SET %s_%llu", RedisConstant::szGamePort, m_qwTeamId);
+			sprintf(szQuery, "DEL %s_%llu", RedisConstant::szGamePort, m_qwTeamId);
 			poDBConnection->Query(szQuery);
 		}
 		virtual void OnResult(void) { }

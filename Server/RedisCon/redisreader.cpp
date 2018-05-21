@@ -49,13 +49,12 @@ bool FxRedisReader::GetValue(std::vector<std::string>& refvecszValue)
 	}
 	for (unsigned int i = 0; i < reply->elements; i++)
 	{
-		if (reply->element[i]->type != REDIS_REPLY_STRING)
+		std::string szValue;
+		if (reply->element[i]->type == REDIS_REPLY_STRING)
 		{
-			return false;
+			szValue.assign(reply->element[i]->str, reply->element[i]->len);
 		}
 
-		std::string szValue;
-		szValue.assign(reply->element[i]->str, reply->element[i]->len);
 		refvecszValue.push_back(szValue);
 	}
 

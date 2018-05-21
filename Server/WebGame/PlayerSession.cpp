@@ -3,6 +3,7 @@
 #include "msg_proto/web_game.pb.h"
 #include "GameScene.h"
 #include "Player.h"
+#include "GameConfigBase.h"
 //#include "gamedefine.h"
 
 const static unsigned int g_dwPlayerSessionBuffLen = 64 * 1024;
@@ -26,6 +27,9 @@ void CPlayerSession::OnConnect(void)
 
 void CPlayerSession::OnClose(void)
 {
+	CPlayerBase* pPlayer = CGameSceneBase::Instance()->GetPlayer(m_qwPlayerId);
+	pPlayer->SetPlayerSession(NULL);
+	m_qwPlayerId = 0;
 }
 
 void CPlayerSession::OnError(UINT32 dwErrorNo)
@@ -98,6 +102,16 @@ bool CPlayerSession::OnPlayerRequestGameEnter(CPlayerSession& refSession, google
 	char* pBuf = NULL;
 	unsigned int dwBufLen = 0;
 	ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
+
+	GameProto::GameNotifyPlayerGameConfig oNotifyConfig;
+	CGameConfigBase::Instance()->FillProtoConfig(oNotifyConfig);
+	ProtoUtility::MakeProtoSendBuffer(oNotifyConfig, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
+
+	GameProto::GameNotifyPlayerGameSceneInfo oSceneInfo;
+	CGameSceneBase::Instance()->FillProtoConfig(oSceneInfo);
+	ProtoUtility::MakeProtoSendBuffer(oSceneInfo, pBuf, dwBufLen);
 	Send(pBuf, dwBufLen);
 	return true;
 }

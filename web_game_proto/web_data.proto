@@ -8,6 +8,15 @@ enum EGameType
 	GT_Common = 1;
 }
 
+enum EGameSceneState
+{
+	ESS_None = 0;
+	ESS_Prepare = 1;	//准备中
+	ESS_GameReady = 10;	//敌军还有30秒到达战场
+	ESS_Gaming = 20;	//游戏中
+	ESS_Transact = 30;	//结算中
+};
+
 message RoleData
 {
 	uint64 qw_player_id = 1;
@@ -23,6 +32,12 @@ message TeamRoleData
 	uint32 dw_server_id = 3;
 }
 
+message GameCommonRoleData
+{
+	RoleData role_data = 1;
+	uint32 dw_slot_id = 2;
+}
+
 message OnlineRoleData
 {
 	RoleData role_data = 1;
@@ -33,10 +48,21 @@ message GameConfigBase
 {
 	uint32 dw_game_type = 1;
 	uint32 dw_prepare_time = 2;
+	uint32 dw_game_ready_time = 3;
 }
 
 message GameConfigCommon
 {
 	GameConfigBase base_config = 1;
+}
+
+message GameSceneInfo
+{
+	EGameSceneState state = 1;
+}
+
+message GameCommonSceneInfo
+{
+	GameSceneInfo scene_info = 1;
 }
 

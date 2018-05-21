@@ -5,15 +5,7 @@
 #include "gamedefine.h"
 #include <map>
 #include "Player.h"
-
-enum EGameSceneState
-{
-	ESS_None = 0,
-	ESS_Prepare = 1,	//准备中
-	ESS_GameReady = 10,	//敌军还有30秒到达战场
-	ESS_Gaming = 20,	//游戏中
-	ESS_Transact = 30,	//结算中
-};
+#include "msg_proto/web_data.pb.h"
 
 class CGameSceneBase : public TSingleton<CGameSceneBase>
 {
@@ -37,11 +29,20 @@ public:
 	virtual CPlayerBase* GetPlayer(UINT64 qwPlayerId) = 0;
 	virtual void GameEnd();
 
-	void ChangeState(EGameSceneState eGameSceneState);
+	void NotifyPlayer(google::protobuf::Message& refMsg);
+
+	void ChangeState(GameProto::EGameSceneState eGameSceneState);
+
+	virtual void FillProtoConfig(GameProto::GameNotifyPlayerGameSceneInfo& refInfo) = 0;
+
+	virtual GameProto::EGameSceneState GetSceneState() = 0;
 
 protected:
 
-	EGameSceneState m_eGameSceneState;
+	virtual void SetSceneState(GameProto::EGameSceneState eGameSceneState) = 0;
+	GameProto::EGameSceneState m_eGameSceneState;
+
+	UINT32 m_dwGameType;
 
 	UINT64 m_qwRoles[MAXCLIENTNUM];
 	UINT64 m_qwTeamId;
@@ -59,8 +60,15 @@ public:
 	virtual void OnGameStart();
 
 	virtual CPlayerBase * GetPlayer(UINT64 qwPlayerId);
+
+	virtual GameProto::EGameSceneState GetSceneState();
+	virtual void FillProtoConfig(GameProto::GameNotifyPlayerGameSceneInfo& refInfo);
+protected:
+	virtual void SetSceneState(GameProto::EGameSceneState eGameSceneState);
 private:
 	std::map<UINT64, CCommonPlayer> m_mapPlayers;
+
+	GameProto::GameCommonSceneInfo m_oSceneInfo;
 };
 
 

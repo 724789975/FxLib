@@ -16,6 +16,6 @@ bool GameEnd::OnTimer(double fSecond)
 bool GameStart::OnTimer(double fSecond)
 {
 	LogExe(LogLv_Debug, "%s", "game begin~~~~~");
-	CGameSceneBase::Instance()->ChangeState(ESS_Gaming);
+	//CGameSceneBase::Instance()->ChangeState(GameProto::ESS_Gaming);
 	return true;
 }

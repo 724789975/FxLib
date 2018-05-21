@@ -92,12 +92,12 @@ int main(int argc, char **argv)
 		goto STOP;
 	}
 
-
-	GetTimeHandler()->AddDelayTimer(CGameConfigBase::Instance()->GetPrepareTime(), &oGameStart);
+	//GetTimeHandler()->AddDelayTimer(CGameConfigBase::Instance()->GetPrepareTime(), &oGameStart);
 
 	while (g_bRun)
 	{
 		GetTimeHandler()->Run();
+		CGameSceneBase::Instance()->Run(GetTimeHandler()->GetMilliSecond());
 		pNet->Run(0xffffffff);
 		FxSleep(1);
 	}

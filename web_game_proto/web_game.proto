@@ -365,6 +365,43 @@ message PlayerRequestGameEnter
 message GameAckPlayerEnter
 {
 	uint32 dw_result = 1;
+	uint32 dw_game_type = 2;
+}
+
+message GameNotifyPlayerGameConfig
+{
+	uint32 dw_game_type = 1;
+	GameConfigCommon common_config = 2;
+}
+
+message GameNotifyPlayerGameRoleData
+{
+	uint32 dw_game_type = 1;
+	GameCommonRoleData common_role_data = 2;
+}
+
+message GameNotifyPlayerGameSceneInfo
+{
+	uint32 dw_game_type = 1;
+	GameCommonSceneInfo common_scene_info = 2;
+}
+
+message GameNotifyPlayerPrepareTime
+{
+	uint32 dw_left_time = 1;
+}
+
+message GameNotifyPlayerGameReady
+{
+}
+
+message GameNotifyPlayerGameReadyTime
+{
+	uint32 dw_left_time = 1;
+}
+
+message GameNotifyPlayerGameBegin
+{
 }
 
 //serverinfo(server->server_center, server_center->server)

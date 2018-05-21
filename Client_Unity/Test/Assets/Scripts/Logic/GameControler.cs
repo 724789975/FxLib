@@ -26,6 +26,11 @@ public class GameControler : SingletonObject<GameControler>
 		m_pSession.m_pfOnClose.Add(OnClose);
 
 		m_pSession.RegistMessage("GameProto.PlayerRequestGameTest", OnPlayerRequestGameTest);
+		m_pSession.RegistMessage("GameProto.GameAckPlayerEnter", OnGameAckPlayerEnter);
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayerPrepareTime", OnGameNotifyPlayerPrepareTime);
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameBegin", OnGameNotifyPlayerGameBegin);
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameReadyTime", OnGameNotifyPlayerGameReadyTime);
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameReady", OnGameNotifyPlayerGameReady);
 	}
 
 	// Update is called once per frame
@@ -115,6 +120,56 @@ public class GameControler : SingletonObject<GameControler>
 			return;
 		}
 		SampleDebuger.Log("game enter : " + oRet.DwResult.ToString());
+	}
+
+	public void OnGameNotifyPlayerPrepareTime(byte[] pBuf)
+	{
+		GameProto.GameNotifyPlayerPrepareTime oRet = GameProto.GameNotifyPlayerPrepareTime.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.Log("OnGameNotifyPlayerPrepareTime error parse");
+			return;
+		}
+		SampleDebuger.Log("game prepare time left : " + oRet.DwLeftTime.ToString());
+	}
+
+	public void OnGameNotifyPlayerGameReady(byte[] pBuf)
+	{
+		GameProto.GameNotifyPlayerGameReady oRet = GameProto.GameNotifyPlayerGameReady.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.Log("GameNotifyPlayerGameReady error parse");
+			return;
+		}
+
+		AssetBundleLoader.Instance().LoadLevelAsset("gamescene", delegate ()
+		{
+			SampleDebuger.Log("game ready!!!!!!!!!");
+		}
+		);
+	}
+
+	public void OnGameNotifyPlayerGameReadyTime(byte[] pBuf)
+	{
+		GameProto.GameNotifyPlayerGameReadyTime oRet = GameProto.GameNotifyPlayerGameReadyTime.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.Log("GameNotifyPlayerGameReadyTime error parse");
+			return;
+		}
+		SampleDebuger.Log("game ready time left : " + oRet.DwLeftTime.ToString());
+	}
+
+	public void OnGameNotifyPlayerGameBegin(byte[] pBuf)
+	{
+		GameProto.GameNotifyPlayerGameBegin oRet = GameProto.GameNotifyPlayerGameBegin.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.Log("GameNotifyPlayerGameBegin error parse");
+			return;
+		}
+
+		SampleDebuger.Log("game begin!!!!!!!!!");
 	}
 
 	public SessionObject m_pSession;

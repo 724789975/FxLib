@@ -4,6 +4,7 @@
 #include "singleton.h"
 
 #include "msg_proto/web_data.pb.h"
+#include "msg_proto/web_game.pb.h"
 
 class CGameConfigBase : public TSingleton<CGameConfigBase>
 {
@@ -17,6 +18,9 @@ public:
 	virtual void SetGameType(unsigned int dwGameType) = 0;
 	virtual unsigned int GetGameType() = 0;
 	virtual unsigned int GetPrepareTime() = 0;
+	virtual unsigned int GetGameReadyTime() = 0;
+
+	virtual void FillProtoConfig(GameProto::GameNotifyPlayerGameConfig& refConfig) = 0;
 };
 
 class CGameCommonConfig : public CGameConfigBase
@@ -27,7 +31,9 @@ public:
 	virtual void SetGameType(unsigned int dwGameType);
 	virtual unsigned int GetGameType();
 	virtual unsigned int GetPrepareTime();
+	virtual unsigned int GetGameReadyTime();
 
+	virtual void FillProtoConfig(GameProto::GameNotifyPlayerGameConfig& refConfig);
 protected:
 private:
 

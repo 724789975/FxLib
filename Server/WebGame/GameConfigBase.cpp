@@ -50,7 +50,9 @@ bool CGameCommonConfig::Init()
 		virtual void				OnQuery(IRedisConnection *poDBConnection)
 		{
 			char szQuery[64] = { 0 };
-			sprintf(szQuery, "HMGET %s_%d %s %s", RedisConstant::szGameConfig, 1, RedisConstant::szGameType, RedisConstant::szPrepareTime);
+			sprintf(szQuery, "HMGET %s_%d %s %s %s",
+				RedisConstant::szGameConfig, 1, RedisConstant::szGameType,
+				RedisConstant::szPrepareTime, RedisConstant::szGameReadyTime);
 			poDBConnection->Query(szQuery, &m_pReader);
 		}
 		virtual void OnResult(void)
@@ -58,17 +60,20 @@ bool CGameCommonConfig::Init()
 			std::vector<std::string> vec_szServerId;
 			m_pReader->GetValue(vec_szServerId);
 			m_dwPrepareTime = atoi(vec_szServerId[1].c_str());
+			m_dwGameReadyTime = atoi(vec_szServerId[2].c_str());
 		}
 		virtual void Release(void) { m_pReader->Release(); }
 
 		IRedisDataReader* m_pReader;
 		UINT32 m_dwPrepareTime;
+		UINT32 m_dwGameReadyTime;
 	};
 
 	RedisGetGameConfig oConfig;
 	FxRedisGetModule()->QueryDirect(&oConfig);
 
 	m_oConfig.mutable_base_config()->set_dw_prepare_time(oConfig.m_dwPrepareTime);
+	m_oConfig.mutable_base_config()->set_dw_game_ready_time(oConfig.m_dwGameReadyTime);
 	return true;
 }
 
@@ -85,4 +90,15 @@ unsigned int CGameCommonConfig::GetGameType()
 unsigned int CGameCommonConfig::GetPrepareTime()
 {
 	return m_oConfig.mutable_base_config()->dw_prepare_time();
+}
+
+unsigned int CGameCommonConfig::GetGameReadyTime()
+{
+	return m_oConfig.mutable_base_config()->dw_game_ready_time();
+}
+
+void CGameCommonConfig::FillProtoConfig(GameProto::GameNotifyPlayerGameConfig& refConfig)
+{
+	refConfig.set_dw_game_type(m_oConfig.mutable_base_config()->dw_game_type());
+	*(refConfig.mutable_common_config()) = m_oConfig;
 }
