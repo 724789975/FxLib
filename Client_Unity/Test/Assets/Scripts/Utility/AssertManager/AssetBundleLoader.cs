@@ -56,7 +56,7 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 			firstLoaded = true;
 		}
 
-		LoadLevelAsset("chose_server");
+		LoadLevelAsset(GameConstant.g_szChoseServerScene);
 	}
 
 	public IEnumerator Reload()

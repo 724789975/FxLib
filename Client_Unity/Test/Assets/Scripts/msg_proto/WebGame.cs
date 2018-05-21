@@ -121,21 +121,22 @@ namespace GameProto {
             "dGlmeVBsYXllckdhbWVTY2VuZUluZm8SFAoMZHdfZ2FtZV90eXBlGAEgASgN",
             "EjkKEWNvbW1vbl9zY2VuZV9pbmZvGAIgASgLMh4uR2FtZVByb3RvLkdhbWVD",
             "b21tb25TY2VuZUluZm8iMwobR2FtZU5vdGlmeVBsYXllclByZXBhcmVUaW1l",
-            "EhQKDGR3X2xlZnRfdGltZRgBIAEoDSIbChlHYW1lTm90aWZ5UGxheWVyR2Ft",
-            "ZVJlYWR5IjUKHUdhbWVOb3RpZnlQbGF5ZXJHYW1lUmVhZHlUaW1lEhQKDGR3",
-            "X2xlZnRfdGltZRgBIAEoDSIbChlHYW1lTm90aWZ5UGxheWVyR2FtZUJlZ2lu",
-            "IooBCgpTZXJ2ZXJJbmZvEhQKDGR3X3NlcnZlcl9pZBgBIAEoDRIUCgxzel9s",
-            "aXN0ZW5faXAYAiABKAkSFAoMZHdfdGVhbV9wb3J0GAMgASgNEiMKG2R3X2dh",
-            "bWVfc2VydmVyX21hbmFnZXJfcG9ydBgEIAEoDRIVCg1kd19sb2dpbl9wb3J0",
-            "GAUgASgNKkkKC0VTZXJ2ZXJUeXBlEgsKB1NUX05PTkUQABIMCghTVF9Mb2dp",
-            "bhABEgsKB1NUX1RlYW0QAhISCg5TVF9HYW1lTWFuYWdlchADKicKCUVUZWFt",
-            "VHlwZRILCgdUVF9OT05FEAASDQoJVFRfTm9ybWFsEAEqjAIKCkVFcnJvckNv",
-            "ZGUSCwoHRUNfTk9ORRAAEhQKEEVDX0FscmVhZHlJblRlYW0QARIWChJFQ19N",
-            "YWtlVGVhbU5vdElkbGUQAhIXChNFQ19DYW5ub3RGaW5kUGxheWVyEAMSDwoL",
-            "RUNfTm9UZWFtSWQQBBIQCgxFQ19Ob3RMZWFkZXIQBRITCg9FQ19UZWFtSGFz",
-            "U3RhcnQQBhIaChZFQ19Ob0dhbWVNYW5hZ2VyU2VydmVyEAcSEwoPRUNfTm9U",
-            "ZWFtU2VydmVyEAgSFAoQRUNfTm9Mb2dpblNlcnZlchAJEhYKEkVDX1BsYXll",
-            "ck5vdE9ubGluZRAKEhMKD0VDX0ZhaWxJbnRvVGVhbRALYgZwcm90bzM="));
+            "EhQKDGR3X2xlZnRfdGltZRgBIAEoDSI1Ch1HYW1lTm90aWZ5UGxheWVyR2Ft",
+            "ZVJlYWR5VGltZRIUCgxkd19sZWZ0X3RpbWUYASABKA0iRgoZR2FtZU5vdGlm",
+            "eVBsYXllckdhbWVTdGF0ZRIpCgVzdGF0ZRgBIAEoDjIaLkdhbWVQcm90by5F",
+            "R2FtZVNjZW5lU3RhdGUiigEKClNlcnZlckluZm8SFAoMZHdfc2VydmVyX2lk",
+            "GAEgASgNEhQKDHN6X2xpc3Rlbl9pcBgCIAEoCRIUCgxkd190ZWFtX3BvcnQY",
+            "AyABKA0SIwobZHdfZ2FtZV9zZXJ2ZXJfbWFuYWdlcl9wb3J0GAQgASgNEhUK",
+            "DWR3X2xvZ2luX3BvcnQYBSABKA0qSQoLRVNlcnZlclR5cGUSCwoHU1RfTk9O",
+            "RRAAEgwKCFNUX0xvZ2luEAESCwoHU1RfVGVhbRACEhIKDlNUX0dhbWVNYW5h",
+            "Z2VyEAMqJwoJRVRlYW1UeXBlEgsKB1RUX05PTkUQABINCglUVF9Ob3JtYWwQ",
+            "ASqMAgoKRUVycm9yQ29kZRILCgdFQ19OT05FEAASFAoQRUNfQWxyZWFkeUlu",
+            "VGVhbRABEhYKEkVDX01ha2VUZWFtTm90SWRsZRACEhcKE0VDX0Nhbm5vdEZp",
+            "bmRQbGF5ZXIQAxIPCgtFQ19Ob1RlYW1JZBAEEhAKDEVDX05vdExlYWRlchAF",
+            "EhMKD0VDX1RlYW1IYXNTdGFydBAGEhoKFkVDX05vR2FtZU1hbmFnZXJTZXJ2",
+            "ZXIQBxITCg9FQ19Ob1RlYW1TZXJ2ZXIQCBIUChBFQ19Ob0xvZ2luU2VydmVy",
+            "EAkSFgoSRUNfUGxheWVyTm90T25saW5lEAoSEwoPRUNfRmFpbEludG9UZWFt",
+            "EAtiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::GameProto.WebDataReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProto.EServerType), typeof(global::GameProto.ETeamType), typeof(global::GameProto.EErrorCode), }, new pbr::GeneratedClrTypeInfo[] {
@@ -195,9 +196,8 @@ namespace GameProto {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameRoleData), global::GameProto.GameNotifyPlayerGameRoleData.Parser, new[]{ "DwGameType", "CommonRoleData" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameSceneInfo), global::GameProto.GameNotifyPlayerGameSceneInfo.Parser, new[]{ "DwGameType", "CommonSceneInfo" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerPrepareTime), global::GameProto.GameNotifyPlayerPrepareTime.Parser, new[]{ "DwLeftTime" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameReady), global::GameProto.GameNotifyPlayerGameReady.Parser, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameReadyTime), global::GameProto.GameNotifyPlayerGameReadyTime.Parser, new[]{ "DwLeftTime" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameBegin), global::GameProto.GameNotifyPlayerGameBegin.Parser, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameState), global::GameProto.GameNotifyPlayerGameState.Parser, new[]{ "State" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.ServerInfo), global::GameProto.ServerInfo.Parser, new[]{ "DwServerId", "SzListenIp", "DwTeamPort", "DwGameServerManagerPort", "DwLoginPort" }, null, null, null)
           }));
     }
@@ -9278,107 +9278,6 @@ namespace GameProto {
 
   }
 
-  public sealed partial class GameNotifyPlayerGameReady : pb::IMessage<GameNotifyPlayerGameReady> {
-    private static readonly pb::MessageParser<GameNotifyPlayerGameReady> _parser = new pb::MessageParser<GameNotifyPlayerGameReady>(() => new GameNotifyPlayerGameReady());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<GameNotifyPlayerGameReady> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[56]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public GameNotifyPlayerGameReady() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public GameNotifyPlayerGameReady(GameNotifyPlayerGameReady other) : this() {
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public GameNotifyPlayerGameReady Clone() {
-      return new GameNotifyPlayerGameReady(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override bool Equals(object other) {
-      return Equals(other as GameNotifyPlayerGameReady);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(GameNotifyPlayerGameReady other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void WriteTo(pb::CodedOutputStream output) {
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public int CalculateSize() {
-      int size = 0;
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(GameNotifyPlayerGameReady other) {
-      if (other == null) {
-        return;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(pb::CodedInputStream input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-        switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-        }
-      }
-    }
-
-  }
-
   public sealed partial class GameNotifyPlayerGameReadyTime : pb::IMessage<GameNotifyPlayerGameReadyTime> {
     private static readonly pb::MessageParser<GameNotifyPlayerGameReadyTime> _parser = new pb::MessageParser<GameNotifyPlayerGameReadyTime>(() => new GameNotifyPlayerGameReadyTime());
     private pb::UnknownFieldSet _unknownFields;
@@ -9387,7 +9286,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[57]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[56]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9508,15 +9407,15 @@ namespace GameProto {
 
   }
 
-  public sealed partial class GameNotifyPlayerGameBegin : pb::IMessage<GameNotifyPlayerGameBegin> {
-    private static readonly pb::MessageParser<GameNotifyPlayerGameBegin> _parser = new pb::MessageParser<GameNotifyPlayerGameBegin>(() => new GameNotifyPlayerGameBegin());
+  public sealed partial class GameNotifyPlayerGameState : pb::IMessage<GameNotifyPlayerGameState> {
+    private static readonly pb::MessageParser<GameNotifyPlayerGameState> _parser = new pb::MessageParser<GameNotifyPlayerGameState>(() => new GameNotifyPlayerGameState());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<GameNotifyPlayerGameBegin> Parser { get { return _parser; } }
+    public static pb::MessageParser<GameNotifyPlayerGameState> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[58]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[57]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9525,41 +9424,55 @@ namespace GameProto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public GameNotifyPlayerGameBegin() {
+    public GameNotifyPlayerGameState() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public GameNotifyPlayerGameBegin(GameNotifyPlayerGameBegin other) : this() {
+    public GameNotifyPlayerGameState(GameNotifyPlayerGameState other) : this() {
+      state_ = other.state_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public GameNotifyPlayerGameBegin Clone() {
-      return new GameNotifyPlayerGameBegin(this);
+    public GameNotifyPlayerGameState Clone() {
+      return new GameNotifyPlayerGameState(this);
+    }
+
+    /// <summary>Field number for the "state" field.</summary>
+    public const int StateFieldNumber = 1;
+    private global::GameProto.EGameSceneState state_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProto.EGameSceneState State {
+      get { return state_; }
+      set {
+        state_ = value;
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as GameNotifyPlayerGameBegin);
+      return Equals(other as GameNotifyPlayerGameState);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(GameNotifyPlayerGameBegin other) {
+    public bool Equals(GameNotifyPlayerGameState other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (State != other.State) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override int GetHashCode() {
       int hash = 1;
+      if (State != 0) hash ^= State.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -9573,6 +9486,10 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public void WriteTo(pb::CodedOutputStream output) {
+      if (State != 0) {
+        output.WriteRawTag(8);
+        output.WriteEnum((int) State);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -9581,6 +9498,9 @@ namespace GameProto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public int CalculateSize() {
       int size = 0;
+      if (State != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) State);
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -9588,9 +9508,12 @@ namespace GameProto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(GameNotifyPlayerGameBegin other) {
+    public void MergeFrom(GameNotifyPlayerGameState other) {
       if (other == null) {
         return;
+      }
+      if (other.State != 0) {
+        State = other.State;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -9603,6 +9526,10 @@ namespace GameProto {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
+          case 8: {
+            state_ = (global::GameProto.EGameSceneState) input.ReadEnum();
+            break;
+          }
         }
       }
     }
@@ -9620,7 +9547,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[59]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[58]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

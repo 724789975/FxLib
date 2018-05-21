@@ -175,14 +175,10 @@ void CGameSceneBase::OnPrepare()
 
 void CGameSceneBase::OnGameReady()
 {
-	GameProto::GameNotifyPlayerGameReady oNotify;
-	NotifyPlayer(oNotify);
 }
 
 void CGameSceneBase::OnGameStart()
 {
-	GameProto::GameNotifyPlayerGameBegin oNotify;
-	NotifyPlayer(oNotify);
 }
 
 void CGameSceneBase::OnTransact()
@@ -226,6 +222,11 @@ void CGameSceneBase::ChangeState(GameProto::EGameSceneState eGameSceneState)
 {
 	LogExe(LogLv_Info, "game change state : %d", (int)eGameSceneState);
 	SetSceneState(eGameSceneState);
+
+	GameProto::GameNotifyPlayerGameState oNotify;
+	oNotify.set_state(eGameSceneState);
+	NotifyPlayer(oNotify);
+
 	switch (GetSceneState())
 	{
 		case GameProto::ESS_Prepare: OnPrepare(); break;
@@ -257,11 +258,6 @@ bool CGameSceneCommon::Init()
 	}
 	ChangeState(GameProto::ESS_Prepare);
 	return true;
-}
-
-void CGameSceneCommon::OnGameStart()
-{
-	CGameSceneBase::OnGameStart();
 }
 
 CPlayerBase* CGameSceneCommon::GetPlayer(UINT64 qwPlayerId)

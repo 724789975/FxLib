@@ -38,7 +38,7 @@ namespace protobuf_web_5fgame_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[60];
+  static const ::google::protobuf::internal::ParseTable schema[59];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -156,12 +156,10 @@ void InitDefaultsGameNotifyPlayerGameSceneInfoImpl();
 void InitDefaultsGameNotifyPlayerGameSceneInfo();
 void InitDefaultsGameNotifyPlayerPrepareTimeImpl();
 void InitDefaultsGameNotifyPlayerPrepareTime();
-void InitDefaultsGameNotifyPlayerGameReadyImpl();
-void InitDefaultsGameNotifyPlayerGameReady();
 void InitDefaultsGameNotifyPlayerGameReadyTimeImpl();
 void InitDefaultsGameNotifyPlayerGameReadyTime();
-void InitDefaultsGameNotifyPlayerGameBeginImpl();
-void InitDefaultsGameNotifyPlayerGameBegin();
+void InitDefaultsGameNotifyPlayerGameStateImpl();
+void InitDefaultsGameNotifyPlayerGameState();
 void InitDefaultsServerInfoImpl();
 void InitDefaultsServerInfo();
 inline void InitDefaults() {
@@ -221,9 +219,8 @@ inline void InitDefaults() {
   InitDefaultsGameNotifyPlayerGameRoleData();
   InitDefaultsGameNotifyPlayerGameSceneInfo();
   InitDefaultsGameNotifyPlayerPrepareTime();
-  InitDefaultsGameNotifyPlayerGameReady();
   InitDefaultsGameNotifyPlayerGameReadyTime();
-  InitDefaultsGameNotifyPlayerGameBegin();
+  InitDefaultsGameNotifyPlayerGameState();
   InitDefaultsServerInfo();
 }
 }  // namespace protobuf_web_5fgame_2eproto
@@ -243,15 +240,9 @@ extern GameManagerAckTeamGameStartDefaultTypeInternal _GameManagerAckTeamGameSta
 class GameNotifyGameManagerInfo;
 class GameNotifyGameManagerInfoDefaultTypeInternal;
 extern GameNotifyGameManagerInfoDefaultTypeInternal _GameNotifyGameManagerInfo_default_instance_;
-class GameNotifyPlayerGameBegin;
-class GameNotifyPlayerGameBeginDefaultTypeInternal;
-extern GameNotifyPlayerGameBeginDefaultTypeInternal _GameNotifyPlayerGameBegin_default_instance_;
 class GameNotifyPlayerGameConfig;
 class GameNotifyPlayerGameConfigDefaultTypeInternal;
 extern GameNotifyPlayerGameConfigDefaultTypeInternal _GameNotifyPlayerGameConfig_default_instance_;
-class GameNotifyPlayerGameReady;
-class GameNotifyPlayerGameReadyDefaultTypeInternal;
-extern GameNotifyPlayerGameReadyDefaultTypeInternal _GameNotifyPlayerGameReady_default_instance_;
 class GameNotifyPlayerGameReadyTime;
 class GameNotifyPlayerGameReadyTimeDefaultTypeInternal;
 extern GameNotifyPlayerGameReadyTimeDefaultTypeInternal _GameNotifyPlayerGameReadyTime_default_instance_;
@@ -261,6 +252,9 @@ extern GameNotifyPlayerGameRoleDataDefaultTypeInternal _GameNotifyPlayerGameRole
 class GameNotifyPlayerGameSceneInfo;
 class GameNotifyPlayerGameSceneInfoDefaultTypeInternal;
 extern GameNotifyPlayerGameSceneInfoDefaultTypeInternal _GameNotifyPlayerGameSceneInfo_default_instance_;
+class GameNotifyPlayerGameState;
+class GameNotifyPlayerGameStateDefaultTypeInternal;
+extern GameNotifyPlayerGameStateDefaultTypeInternal _GameNotifyPlayerGameState_default_instance_;
 class GameNotifyPlayerPrepareTime;
 class GameNotifyPlayerPrepareTimeDefaultTypeInternal;
 extern GameNotifyPlayerPrepareTimeDefaultTypeInternal _GameNotifyPlayerPrepareTime_default_instance_;
@@ -6580,98 +6574,6 @@ class GameNotifyPlayerPrepareTime : public ::google::protobuf::Message /* @@prot
 };
 // -------------------------------------------------------------------
 
-class GameNotifyPlayerGameReady : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameNotifyPlayerGameReady) */ {
- public:
-  GameNotifyPlayerGameReady();
-  virtual ~GameNotifyPlayerGameReady();
-
-  GameNotifyPlayerGameReady(const GameNotifyPlayerGameReady& from);
-
-  inline GameNotifyPlayerGameReady& operator=(const GameNotifyPlayerGameReady& from) {
-    CopyFrom(from);
-    return *this;
-  }
-  #if LANG_CXX11
-  GameNotifyPlayerGameReady(GameNotifyPlayerGameReady&& from) noexcept
-    : GameNotifyPlayerGameReady() {
-    *this = ::std::move(from);
-  }
-
-  inline GameNotifyPlayerGameReady& operator=(GameNotifyPlayerGameReady&& from) noexcept {
-    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
-      if (this != &from) InternalSwap(&from);
-    } else {
-      CopyFrom(from);
-    }
-    return *this;
-  }
-  #endif
-  static const ::google::protobuf::Descriptor* descriptor();
-  static const GameNotifyPlayerGameReady& default_instance();
-
-  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const GameNotifyPlayerGameReady* internal_default_instance() {
-    return reinterpret_cast<const GameNotifyPlayerGameReady*>(
-               &_GameNotifyPlayerGameReady_default_instance_);
-  }
-  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    56;
-
-  void Swap(GameNotifyPlayerGameReady* other);
-  friend void swap(GameNotifyPlayerGameReady& a, GameNotifyPlayerGameReady& b) {
-    a.Swap(&b);
-  }
-
-  // implements Message ----------------------------------------------
-
-  inline GameNotifyPlayerGameReady* New() const PROTOBUF_FINAL { return New(NULL); }
-
-  GameNotifyPlayerGameReady* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
-  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
-  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
-  void CopyFrom(const GameNotifyPlayerGameReady& from);
-  void MergeFrom(const GameNotifyPlayerGameReady& from);
-  void Clear() PROTOBUF_FINAL;
-  bool IsInitialized() const PROTOBUF_FINAL;
-
-  size_t ByteSizeLong() const PROTOBUF_FINAL;
-  bool MergePartialFromCodedStream(
-      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
-  void SerializeWithCachedSizes(
-      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
-  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
-      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
-  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
-  private:
-  void SharedCtor();
-  void SharedDtor();
-  void SetCachedSize(int size) const PROTOBUF_FINAL;
-  void InternalSwap(GameNotifyPlayerGameReady* other);
-  private:
-  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
-    return NULL;
-  }
-  inline void* MaybeArenaPtr() const {
-    return NULL;
-  }
-  public:
-
-  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
-
-  // nested types ----------------------------------------------------
-
-  // accessors -------------------------------------------------------
-
-  // @@protoc_insertion_point(class_scope:GameProto.GameNotifyPlayerGameReady)
- private:
-
-  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  mutable int _cached_size_;
-  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
-  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayerGameReadyImpl();
-};
-// -------------------------------------------------------------------
-
 class GameNotifyPlayerGameReadyTime : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameNotifyPlayerGameReadyTime) */ {
  public:
   GameNotifyPlayerGameReadyTime();
@@ -6707,7 +6609,7 @@ class GameNotifyPlayerGameReadyTime : public ::google::protobuf::Message /* @@pr
                &_GameNotifyPlayerGameReadyTime_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    57;
+    56;
 
   void Swap(GameNotifyPlayerGameReadyTime* other);
   friend void swap(GameNotifyPlayerGameReadyTime& a, GameNotifyPlayerGameReadyTime& b) {
@@ -6771,24 +6673,24 @@ class GameNotifyPlayerGameReadyTime : public ::google::protobuf::Message /* @@pr
 };
 // -------------------------------------------------------------------
 
-class GameNotifyPlayerGameBegin : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameNotifyPlayerGameBegin) */ {
+class GameNotifyPlayerGameState : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameNotifyPlayerGameState) */ {
  public:
-  GameNotifyPlayerGameBegin();
-  virtual ~GameNotifyPlayerGameBegin();
+  GameNotifyPlayerGameState();
+  virtual ~GameNotifyPlayerGameState();
 
-  GameNotifyPlayerGameBegin(const GameNotifyPlayerGameBegin& from);
+  GameNotifyPlayerGameState(const GameNotifyPlayerGameState& from);
 
-  inline GameNotifyPlayerGameBegin& operator=(const GameNotifyPlayerGameBegin& from) {
+  inline GameNotifyPlayerGameState& operator=(const GameNotifyPlayerGameState& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  GameNotifyPlayerGameBegin(GameNotifyPlayerGameBegin&& from) noexcept
-    : GameNotifyPlayerGameBegin() {
+  GameNotifyPlayerGameState(GameNotifyPlayerGameState&& from) noexcept
+    : GameNotifyPlayerGameState() {
     *this = ::std::move(from);
   }
 
-  inline GameNotifyPlayerGameBegin& operator=(GameNotifyPlayerGameBegin&& from) noexcept {
+  inline GameNotifyPlayerGameState& operator=(GameNotifyPlayerGameState&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -6798,30 +6700,30 @@ class GameNotifyPlayerGameBegin : public ::google::protobuf::Message /* @@protoc
   }
   #endif
   static const ::google::protobuf::Descriptor* descriptor();
-  static const GameNotifyPlayerGameBegin& default_instance();
+  static const GameNotifyPlayerGameState& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const GameNotifyPlayerGameBegin* internal_default_instance() {
-    return reinterpret_cast<const GameNotifyPlayerGameBegin*>(
-               &_GameNotifyPlayerGameBegin_default_instance_);
+  static inline const GameNotifyPlayerGameState* internal_default_instance() {
+    return reinterpret_cast<const GameNotifyPlayerGameState*>(
+               &_GameNotifyPlayerGameState_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    58;
+    57;
 
-  void Swap(GameNotifyPlayerGameBegin* other);
-  friend void swap(GameNotifyPlayerGameBegin& a, GameNotifyPlayerGameBegin& b) {
+  void Swap(GameNotifyPlayerGameState* other);
+  friend void swap(GameNotifyPlayerGameState& a, GameNotifyPlayerGameState& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline GameNotifyPlayerGameBegin* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline GameNotifyPlayerGameState* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  GameNotifyPlayerGameBegin* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  GameNotifyPlayerGameState* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
   void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
-  void CopyFrom(const GameNotifyPlayerGameBegin& from);
-  void MergeFrom(const GameNotifyPlayerGameBegin& from);
+  void CopyFrom(const GameNotifyPlayerGameState& from);
+  void MergeFrom(const GameNotifyPlayerGameState& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -6837,7 +6739,7 @@ class GameNotifyPlayerGameBegin : public ::google::protobuf::Message /* @@protoc
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const PROTOBUF_FINAL;
-  void InternalSwap(GameNotifyPlayerGameBegin* other);
+  void InternalSwap(GameNotifyPlayerGameState* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -6853,13 +6755,20 @@ class GameNotifyPlayerGameBegin : public ::google::protobuf::Message /* @@protoc
 
   // accessors -------------------------------------------------------
 
-  // @@protoc_insertion_point(class_scope:GameProto.GameNotifyPlayerGameBegin)
+  // .GameProto.EGameSceneState state = 1;
+  void clear_state();
+  static const int kStateFieldNumber = 1;
+  ::GameProto::EGameSceneState state() const;
+  void set_state(::GameProto::EGameSceneState value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.GameNotifyPlayerGameState)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  int state_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
-  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayerGameBeginImpl();
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayerGameStateImpl();
 };
 // -------------------------------------------------------------------
 
@@ -6898,7 +6807,7 @@ class ServerInfo : public ::google::protobuf::Message /* @@protoc_insertion_poin
                &_ServerInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    59;
+    58;
 
   void Swap(ServerInfo* other);
   friend void swap(ServerInfo& a, ServerInfo& b) {
@@ -9465,10 +9374,6 @@ inline void GameNotifyPlayerPrepareTime::set_dw_left_time(::google::protobuf::ui
 
 // -------------------------------------------------------------------
 
-// GameNotifyPlayerGameReady
-
-// -------------------------------------------------------------------
-
 // GameNotifyPlayerGameReadyTime
 
 // uint32 dw_left_time = 1;
@@ -9487,7 +9392,21 @@ inline void GameNotifyPlayerGameReadyTime::set_dw_left_time(::google::protobuf::
 
 // -------------------------------------------------------------------
 
-// GameNotifyPlayerGameBegin
+// GameNotifyPlayerGameState
+
+// .GameProto.EGameSceneState state = 1;
+inline void GameNotifyPlayerGameState::clear_state() {
+  state_ = 0;
+}
+inline ::GameProto::EGameSceneState GameNotifyPlayerGameState::state() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerGameState.state)
+  return static_cast< ::GameProto::EGameSceneState >(state_);
+}
+inline void GameNotifyPlayerGameState::set_state(::GameProto::EGameSceneState value) {
+  
+  state_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyPlayerGameState.state)
+}
 
 // -------------------------------------------------------------------
 
@@ -9605,8 +9524,6 @@ inline void ServerInfo::set_dw_login_port(::google::protobuf::uint32 value) {
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
-// -------------------------------------------------------------------
-
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------

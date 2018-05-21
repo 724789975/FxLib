@@ -57,7 +57,6 @@ public:
 	virtual ~CGameSceneCommon();
 
 	virtual bool Init();
-	virtual void OnGameStart();
 
 	virtual CPlayerBase * GetPlayer(UINT64 qwPlayerId);
 

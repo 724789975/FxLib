@@ -28,10 +28,12 @@ public class GameControler : SingletonObject<GameControler>
 		m_pSession.RegistMessage("GameProto.PlayerRequestGameTest", OnPlayerRequestGameTest);
 		m_pSession.RegistMessage("GameProto.GameAckPlayerEnter", OnGameAckPlayerEnter);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerPrepareTime", OnGameNotifyPlayerPrepareTime);
-		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameBegin", OnGameNotifyPlayerGameBegin);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameReadyTime", OnGameNotifyPlayerGameReadyTime);
-		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameReady", OnGameNotifyPlayerGameReady);
-	}
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameConfig", OnGameNotifyPlayerGameConfig);
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameRoleData", OnGameNotifyPlayerGameRoleData);
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameSceneInfo", OnGameNotifyPlayerGameSceneInfo);
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameState", OnGameNotifyPlayerGameState);
+    }
 
 	// Update is called once per frame
 	void Update()
@@ -42,24 +44,19 @@ public class GameControler : SingletonObject<GameControler>
 	public void OnConnect()
 	{
 		SampleDebuger.Log("game connected");
+		GameProto.PlayerRequestGameEnter oRequest = new GameProto.PlayerRequestGameEnter();
 
-        AssetBundleLoader.Instance().LoadLevelAsset("game_prepare", delegate ()
-			{
-				GameProto.PlayerRequestGameEnter oRequest = new GameProto.PlayerRequestGameEnter();
+		oRequest.QwPlayerId = PlayerData.Instance().proPlayerId;
 
-				oRequest.QwPlayerId = PlayerData.Instance().proPlayerId;
+		byte[] pData = new byte[1024];
+		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
+		pStream.WriteString("GameProto.PlayerRequestGameEnter");
+		byte[] pProto = new byte[oRequest.CalculateSize()];
+		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
+		oRequest.WriteTo(oStream);
+		pStream.WriteData(pProto, (uint)pProto.Length);
 
-				byte[] pData = new byte[1024];
-				FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
-				pStream.WriteString("GameProto.PlayerRequestGameEnter");
-				byte[] pProto = new byte[oRequest.CalculateSize()];
-				Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
-				oRequest.WriteTo(oStream);
-				pStream.WriteData(pProto, (uint)pProto.Length);
-
-				m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
-			}
-		);
+		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
 	}
 
 	public void OnClose()
@@ -133,22 +130,6 @@ public class GameControler : SingletonObject<GameControler>
 		SampleDebuger.Log("game prepare time left : " + oRet.DwLeftTime.ToString());
 	}
 
-	public void OnGameNotifyPlayerGameReady(byte[] pBuf)
-	{
-		GameProto.GameNotifyPlayerGameReady oRet = GameProto.GameNotifyPlayerGameReady.Parser.ParseFrom(pBuf);
-		if (oRet == null)
-		{
-			SampleDebuger.Log("GameNotifyPlayerGameReady error parse");
-			return;
-		}
-
-		AssetBundleLoader.Instance().LoadLevelAsset("gamescene", delegate ()
-		{
-			SampleDebuger.Log("game ready!!!!!!!!!");
-		}
-		);
-	}
-
 	public void OnGameNotifyPlayerGameReadyTime(byte[] pBuf)
 	{
 		GameProto.GameNotifyPlayerGameReadyTime oRet = GameProto.GameNotifyPlayerGameReadyTime.Parser.ParseFrom(pBuf);
@@ -160,16 +141,117 @@ public class GameControler : SingletonObject<GameControler>
 		SampleDebuger.Log("game ready time left : " + oRet.DwLeftTime.ToString());
 	}
 
-	public void OnGameNotifyPlayerGameBegin(byte[] pBuf)
+	public void OnGameNotifyPlayerGameConfig(byte[] pBuf)
 	{
-		GameProto.GameNotifyPlayerGameBegin oRet = GameProto.GameNotifyPlayerGameBegin.Parser.ParseFrom(pBuf);
+		GameProto.GameNotifyPlayerGameConfig oRet = GameProto.GameNotifyPlayerGameConfig.Parser.ParseFrom(pBuf);
 		if (oRet == null)
 		{
-			SampleDebuger.Log("GameNotifyPlayerGameBegin error parse");
+			SampleDebuger.Log("OnGameNotifyPlayerGameConfig error parse");
+			return;
+		}
+	}
+
+	public void OnGameNotifyPlayerGameRoleData(byte[] pBuf)
+	{
+		GameProto.GameNotifyPlayerGameRoleData oRet = GameProto.GameNotifyPlayerGameRoleData.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.Log("OnGameNotifyPlayerGameRoleData error parse");
+			return;
+		}
+	}
+
+	public void OnGameNotifyPlayerGameSceneInfo(byte[] pBuf)
+	{
+		GameProto.GameNotifyPlayerGameSceneInfo oRet = GameProto.GameNotifyPlayerGameSceneInfo.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.Log("OnGameNotifyPlayerGameSceneInfo error parse");
 			return;
 		}
 
-		SampleDebuger.Log("game begin!!!!!!!!!");
+		switch (oRet.CommonSceneInfo.SceneInfo.State)
+		{
+			case GameProto.EGameSceneState.EssNone:
+			case GameProto.EGameSceneState.EssPrepare:
+				{
+					if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameConstant.g_szGamePrepareScene)
+					{
+						break;
+					}
+					AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szGamePrepareScene, delegate ()
+						{
+						}
+					);
+				}
+				break;
+			case GameProto.EGameSceneState.EssGameReady:
+			case GameProto.EGameSceneState.EssGaming:
+			case GameProto.EGameSceneState.EssTransact:
+				{
+					if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameConstant.g_szGameScene)
+					{
+						break;
+					}
+					AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szGameScene, delegate ()
+						{
+						}
+					);
+				}
+				break;
+			default:
+				{
+					SampleDebuger.LogError("error game state : " + ((uint)(oRet.CommonSceneInfo.SceneInfo.State)).ToString());
+				}
+				break;
+		}
+	}
+
+	public void OnGameNotifyPlayerGameState(byte[] pBuf)
+	{
+		GameProto.GameNotifyPlayerGameState oRet = GameProto.GameNotifyPlayerGameState.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.Log("OnGameNotifyPlayerGameState error parse");
+			return;
+		}
+		SampleDebuger.LogBlue("game state : " + oRet.State.ToString());
+
+		switch (oRet.State)
+		{
+			case GameProto.EGameSceneState.EssNone:
+			case GameProto.EGameSceneState.EssPrepare:
+				{
+					if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameConstant.g_szGamePrepareScene)
+					{
+						break;
+					}
+					AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szGamePrepareScene, delegate ()
+						{
+						}
+					);
+				}
+				break;
+			case GameProto.EGameSceneState.EssGameReady:
+			case GameProto.EGameSceneState.EssGaming:
+			case GameProto.EGameSceneState.EssTransact:
+				{
+					if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameConstant.g_szGameScene)
+					{
+						break;
+					}
+					AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szGameScene, delegate ()
+						{
+						}
+					);
+				}
+				break;
+			default:
+				{
+					SampleDebuger.LogError("error game state : " + ((uint)(oRet.State)).ToString());
+				}
+				break;
+		}
 	}
 
 	public SessionObject m_pSession;

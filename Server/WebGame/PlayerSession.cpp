@@ -113,6 +113,7 @@ bool CPlayerSession::OnPlayerRequestGameEnter(CPlayerSession& refSession, google
 	CGameSceneBase::Instance()->FillProtoConfig(oSceneInfo);
 	ProtoUtility::MakeProtoSendBuffer(oSceneInfo, pBuf, dwBufLen);
 	Send(pBuf, dwBufLen);
+
 	return true;
 }
 

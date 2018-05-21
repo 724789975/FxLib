@@ -37,4 +37,9 @@ public class GameObjectConstant
 public class GameConstant
 {
 	public static string g_szPatchUrl = "";
+
+	public static string g_szChoseServerScene = "chose_server";
+	public static string g_szGamePrepareScene = "game_prepare";
+	public static string g_szGameScene = "gamescene";
+	public static string g_szLobbyScene = "lobby";
 }

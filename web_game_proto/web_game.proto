@@ -391,17 +391,14 @@ message GameNotifyPlayerPrepareTime
 	uint32 dw_left_time = 1;
 }
 
-message GameNotifyPlayerGameReady
-{
-}
-
 message GameNotifyPlayerGameReadyTime
 {
 	uint32 dw_left_time = 1;
 }
 
-message GameNotifyPlayerGameBegin
+message GameNotifyPlayerGameState
 {
+	EGameSceneState state = 1;
 }
 
 //serverinfo(server->server_center, server_center->server)

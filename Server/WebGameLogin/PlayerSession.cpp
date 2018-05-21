@@ -374,6 +374,7 @@ bool CPlayerSession::OnPlayerRequestLoginRefuseEnterTeam(CPlayerSession& refSess
 		pInvitePlay->GetSession()->Send(pBuf, dwBufLen);
 		return true;
 	}
+	return true;
 }
 
 bool CPlayerSession::OnPlayerRequestLoginLeaveTeam(CPlayerSession& refSession, google::protobuf::Message& refMsg)
@@ -405,6 +406,7 @@ bool CPlayerSession::OnPlayerRequestLoginLeaveTeam(CPlayerSession& refSession, g
 	unsigned int dwBufLen = 0;
 	ProtoUtility::MakeProtoSendBuffer(oKickPlayer, pBuf, dwBufLen);
 	pSession->Send(pBuf, dwBufLen);
+	return true;
 }
 
 //////////////////////////////////////////////////////////////////////////

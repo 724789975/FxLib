@@ -180,7 +180,7 @@ public class LoginControler : SingletonObject<LoginControler>
 
 		SampleDebuger.Log("login ret : " + oRet.DwResult.ToString());
 
-		AssetBundleLoader.Instance().LoadLevelAsset("lobby", delegate()
+		AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szLobbyScene, delegate()
 			{
 				if (!string.IsNullOrEmpty(PlayerData.Instance().proGameIp))
 				{
