@@ -1,7 +1,7 @@
 FxLib
 ===
 
-[![Build Status]]
+[![Build Status](https://www.travis-ci.org/724789975/FxLib/jobs/382006781)]
 
 FxLib 是一款游戏服务器架构 网络底层实现了 tcp udp websocket 的链接方式 并实现了linux跟win跨平台的功能
 
