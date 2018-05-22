@@ -1,4 +1,4 @@
 language: csharp
-solution: ./Client_c#./FxLib/FxLib.sln
+solution: Client_c#/FxLib/FxLib.sln
 script:
-    xbuild /p:Configuration=Release ./Client_c#./FxLib/FxLib.sln
+    xbuild /p:Configuration=Release Client_c#/FxLib/FxLib.sln
