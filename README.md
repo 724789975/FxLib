@@ -2,6 +2,8 @@ FxLib
 ===
 
 [![Build Status](https://www.travis-ci.org/724789975/FxLib.svg?branch=master)](https://www.travis-ci.org/724789975/FxLib/jobs/382006781)
+[![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/724789975/FxLib/blob/master/LICENSE)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-blue.svg)](https://github.com/724789975/FxLib/pulls)
 
 FxLib 是一款游戏服务器架构 网络底层实现了 tcp udp websocket 的链接方式 并实现了linux跟win跨平台的功能
 
