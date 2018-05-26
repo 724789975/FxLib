@@ -8,7 +8,6 @@ using UnityEngine;
 #if UNITY_WEBGL && !UNITY_EDITOR
 public class WebSocket
 {
-	public delegate void Fun();
 	private Uri mUrl;
     byte[] buffer = null;
 	public WebSocket(Uri url)
@@ -110,7 +109,7 @@ public class WebSocket
         get { return (SocketState(m_NativeRef) != 0); }
     }
 
-	public Fun m_pfOnConnect;
+	public Action m_pfOnConnect;
 }
 namespace FxNet
 {

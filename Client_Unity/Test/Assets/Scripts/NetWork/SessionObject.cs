@@ -131,7 +131,7 @@ public class SessionObject : MonoBehaviour
 		//m_pfOnRecv(pBuf, dwLen);
 	}
 
-	public void RegistMessage(string szProtoName, MessageCallBack pfCallBack)
+	public void RegistMessage(string szProtoName, Action<byte[]> pfCallBack)
 	{
 		if (m_mapCallBack.ContainsKey(szProtoName))
 		{
@@ -154,17 +154,11 @@ public class SessionObject : MonoBehaviour
 	public UInt16 m_wPort = 0;
 	FxNet.IFxClientSocket m_pClientSocket;
 
-	public delegate void PFun();
-	public delegate void PFun1(uint p1);
-	public delegate void PFun2(byte[] p1, uint p2);
-	public delegate void MessageCallBack(byte[] p1);
+	public HashSet<Action> m_pfOnConnect = new HashSet<Action>();
+	public HashSet<Action> m_pfOnClose = new HashSet<Action>();
+	public HashSet<Action<uint>> m_pfOnError = new HashSet<Action<uint>>();
 
-	public HashSet<PFun> m_pfOnConnect = new HashSet<PFun>();
-	//public HashSet<PFun2> m_pfOnRecv = new HashSet<PFun2>();
-	public HashSet<PFun> m_pfOnClose = new HashSet<PFun>();
-	public HashSet<PFun1> m_pfOnError = new HashSet<PFun1>();
-
-	public Dictionary<string, MessageCallBack> m_mapCallBack = new Dictionary<string, MessageCallBack>();
+	public Dictionary<string, Action<byte[]>> m_mapCallBack = new Dictionary<string, Action<byte[]>>();
 
 #if UNITY_WEBGL && !UNITY_EDITOR
 	float m_fLastUpdate = 0.0f;

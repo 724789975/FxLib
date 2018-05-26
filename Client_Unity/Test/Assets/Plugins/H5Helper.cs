@@ -17,9 +17,7 @@ public class H5Helper : MonoBehaviour
 #endif
 	}
 
-    public delegate void CallBackFun(string szData);
-
-    public static IEnumerator SendGet(string _url, CallBackFun cbf)
+    public static IEnumerator SendGet(string _url, System.Action<string> cbf)
     {
         WWW getData = new WWW(_url);
         yield return getData;
@@ -33,7 +31,7 @@ public class H5Helper : MonoBehaviour
         }
     }
 
-    public static IEnumerator SendPost(string _url, WWWForm _wForm, CallBackFun cbf)
+    public static IEnumerator SendPost(string _url, WWWForm _wForm, System.Action<string> cbf)
     {
         WWW postData = new WWW(_url, _wForm);
         yield return postData;

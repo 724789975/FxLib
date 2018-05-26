@@ -8,7 +8,7 @@ public class GameObjectConstant
 	public static string g_szPrefabPath = "Assets/Resources/Prefab/UI/";
     public static string g_szLoginServerList = "LoginServerList.prefab";
 	public static string g_szPlayerList = "RoleList.prefab";
-	public static string g_szControlPanel = "ControlPanel.prefab";
+	public static string g_szConfirmPanel = "ControlPanel.prefab";
 
 	public static string GetABUIPath(string szPath)
 	{

@@ -265,10 +265,10 @@ public class LoginControler : SingletonObject<LoginControler>
 
 		SampleDebuger.Log("on invitee team player id : " + oRet.QwPlayerId.ToString() + " team id : " + oRet.QwTeamId.ToString());
 
-		AssetBundleLoader.Instance().LoadAsset(GameObjectConstant.GetABUIPath(GameObjectConstant.g_szControlPanel), GameObjectConstant.g_szControlPanel, delegate (UnityEngine.Object ob)
+		AssetBundleLoader.Instance().LoadAsset(GameObjectConstant.GetABUIPath(GameObjectConstant.g_szConfirmPanel), GameObjectConstant.g_szConfirmPanel, delegate (UnityEngine.Object ob)
 			{
 				GameObject go_RoleList = Instantiate((GameObject)ob, MainCanvas.Instance().transform);
-				go_RoleList.GetComponent<ControlPanel>().Init("player : " + oRet.QwPlayerId.ToString() + " invite you to team :" + oRet.QwTeamId.ToString(),
+				go_RoleList.GetComponent<ConfirmPanel>().Init("player : " + oRet.QwPlayerId.ToString() + " invite you to team :" + oRet.QwTeamId.ToString(),
 					IntoInviteTeam, oRet, NotIntoInviteTeam, oRet);
 			}
 		);

@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ControlPanel : MonoBehaviour
+public class ConfirmPanel : MonoBehaviour
 {
-	public delegate void ButtonFunc(object param);
 	// Use this for initialization
 	void Start()
 	{
@@ -17,7 +16,7 @@ public class ControlPanel : MonoBehaviour
 
 	}
 
-	public void Init(string szContnet, ButtonFunc pfConfirmFunc, object pParam1, ButtonFunc pfCancleFunc, object pParam2)
+	public void Init(string szContnet, System.Action<object> pfConfirmFunc, object pParam1, System.Action<object> pfCancleFunc, object pParam2)
 	{
 		m_pfConfirmFunc = pfConfirmFunc;
 		m_pParam1 = pParam1;
@@ -37,8 +36,8 @@ public class ControlPanel : MonoBehaviour
 	public UnityEngine.UI.Button m_buttonConfirm;
 	public UnityEngine.UI.Button m_buttonCancle;
 	public UnityEngine.UI.Text m_textContent;
-	ButtonFunc m_pfConfirmFunc;
+	System.Action<object> m_pfConfirmFunc;
     object m_pParam1;
-	ButtonFunc m_pfCancleFunc;
+	System.Action<object> m_pfCancleFunc;
     object m_pParam2;
 }
