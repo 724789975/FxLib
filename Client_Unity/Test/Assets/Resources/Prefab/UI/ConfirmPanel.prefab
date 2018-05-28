@@ -41,7 +41,7 @@ GameObject:
   - component: {fileID: 114811412463622206}
   - component: {fileID: 114593909128952338}
   m_Layer: 0
-  m_Name: ControlPanel
+  m_Name: ConfirmPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
