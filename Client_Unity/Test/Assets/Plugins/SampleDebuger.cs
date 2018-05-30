@@ -52,7 +52,7 @@ public class SampleDebuger
 		if (enableLogAll && enableLog)
 		{
 #if UNITY_WEBGL && !UNITY_EDITOR
-			LogStr(string.Format("<color={0}>{1}</color>", color, message.ToString()));
+			LogStr(string.Format("color: {0};{1}", color, message.ToString()));
 #else
 			Debuger.Log(string.Format("<color={0}>{1}</color>", color, message.ToString()));
 #endif
