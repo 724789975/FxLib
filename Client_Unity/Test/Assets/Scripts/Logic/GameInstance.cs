@@ -67,6 +67,9 @@ public class GameInstance: SingletonObject<GameInstance>
 
 	public PlayerData m_PlayerData = PlayerData.Instance();
 
+	public string proServerUrl { get { return m_szServerUrl; } }
+	public string proServerVersion { get { return m_szVersion; } }
+
 	public ushort proLoginPort { get { return m_wLoginPort; } }
 	public string proLoginIp { get { return m_szLoginIp; } }
 	public string proUrlHost { get { return m_szUrlHost; } }

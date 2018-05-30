@@ -39,7 +39,7 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 
 	public IEnumerator Initialize()
 	{
-		SampleDebuger.Log(GetBundleDirName());
+		SampleDebuger.Log("bundle dir : " + GetBundleDirName());
 		var request = AssetBundleManager.Initialize(GetBundleDirName());
 		UIProgressBar.SetpAssetBundleLoadOperation(request);
         if (request != null)
@@ -48,15 +48,16 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 			yield return StartCoroutine(request);
 		}
 		yield return new WaitForSeconds(0.5f);
-		yield return StartCoroutine(CheckVersion());
+		//yield return StartCoroutine(CheckVersion());
 
-		if (!firstLoaded && !string.IsNullOrEmpty(sceneName))
-		{
-			LoadLevelAsset(sceneName);
-			firstLoaded = true;
-		}
+		//if (!firstLoaded && !string.IsNullOrEmpty(sceneName))
+		//{
+		//	LoadLevelAsset(sceneName);
+		//	firstLoaded = true;
+		//}
 
-		LoadLevelAsset(GameConstant.g_szChoseServerScene);
+		LoadLevelAsset(GameConstant.g_szVersionUpdateScene);
+		//LoadLevelAsset(GameConstant.g_szChoseServerScene);
 	}
 
 	public IEnumerator Reload()
