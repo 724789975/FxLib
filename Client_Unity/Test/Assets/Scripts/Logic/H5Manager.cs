@@ -61,7 +61,7 @@ public class H5Manager : SingletonObject<H5Manager>
             item(m_pLoginSession);
         }
 		m_pLoginSession.InitSession(SessionObject.SessionType.SessionType_WebSocket,
-			PlayerData.Instance().proLoginIp, PlayerData.Instance().proLoginPort);
+			GameInstance.Instance().proLoginIp, GameInstance.Instance().proLoginPort);
 	}
 
 	public void ConnectGame(string szGameIp, ushort wPort)

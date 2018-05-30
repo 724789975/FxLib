@@ -156,7 +156,7 @@ public class LoginControler : SingletonObject<LoginControler>
 			return;
 		}
 
-		string szUrl = PlayerData.Instance().proUrlHost + PlayerData.Instance().proGetRoleUri;
+		string szUrl = GameInstance.Instance().proUrlHost + GameInstance.Instance().proGetRoleUri;
 		WWWForm form = new WWWForm();
 		form.AddField("platform", PlayerData.Instance().proPlatform);
 		form.AddField("name", PlayerData.Instance().proName);

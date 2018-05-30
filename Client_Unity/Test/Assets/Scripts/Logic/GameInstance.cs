@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 
-    public class GameInstance: SingletonObject<GameInstance>
+public class GameInstance: SingletonObject<GameInstance>
 {
 	public enum GamePlayType
 	{
@@ -25,13 +25,16 @@ using System;
 	// Use this for initialization
 	void Start ()
 	{
-        StartCoroutine(H5Helper.SendGet("http://quchifan.wang/portal/index.php/api/server_list/index", OnServerInfo));
-        //StartCoroutine(H5Helper.SendGet("http://127.0.0.1/portal/index.php/api/server_list/index", OnServerInfo));
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
+	}
+
+	public void GetServerInfo()
+	{
+		StartCoroutine(H5Helper.SendGet(m_szServerUrl + m_szServerInfoUri, OnServerInfo));
 	}
 
     public void OnServerInfo(string szData)
@@ -44,20 +47,17 @@ using System;
             SampleDebuger.LogError("can't find server list!!!!");
             return;
         }
-        ServerInfo oServerInfo = oServerList.server_infos[0];
 
-		AssetBundleLoader.Instance().LoadAsset(GameObjectConstant.GetABUIPath(GameObjectConstant.g_szLoginServerList), GameObjectConstant.GetABName(GameObjectConstant.g_szLoginServerList), delegate (UnityEngine.Object ob)
+		AssetBundleLoader.Instance().LoadAsset(
+			GameObjectConstant.GetABUIPath(GameObjectConstant.g_szLoginServerList),
+			GameObjectConstant.GetABName(GameObjectConstant.g_szLoginServerList),
+			delegate (UnityEngine.Object ob)
 			{
-				LoginServerList pList = LoginServerList.CreateInstance(ob, m_pUiCanvas);
+				LoginServerList pList = LoginServerList.CreateInstance(ob, MainCanvas.Instance().transform);
 				pList.SetServerListInfo(oServerList);
 			}
 		);
 	}
-
-    public void GameStart()
-    {
-        H5Manager.Instance().ConnectLogin();
-    }
 
 	public GamePlayType m_eGamePlayType = GamePlayType.GamePlayType_NONE;
 	public GamePlayType proGamePlayType
@@ -65,6 +65,28 @@ using System;
 		get { return m_eGamePlayType; }
 	}
 
-	public Transform m_pUiCanvas;
 	public PlayerData m_PlayerData = PlayerData.Instance();
+
+	public ushort proLoginPort { get { return m_wLoginPort; } }
+	public string proLoginIp { get { return m_szLoginIp; } }
+	public string proUrlHost { get { return m_szUrlHost; } }
+	public string proGetRoleUri { get { return m_szGetRoleUri; } }
+
+	public void SetServerInfo(ServerInfo oServerInfo)
+	{
+		m_szLoginIp = oServerInfo.login_ip;
+		m_wLoginPort = oServerInfo.login_port;
+		m_szUrlHost = oServerInfo.url_host;
+	}
+
+	[Header("Server Config")]
+	public string m_szServerUrl;
+	public string m_szServerInfoUri;
+
+	public ushort m_wLoginPort;
+	public string m_szLoginIp;
+
+	public string m_szUrlHost;
+	public string m_szGetRoleUri;
+	public string m_szVersion;
 }

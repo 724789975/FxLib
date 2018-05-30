@@ -24,7 +24,7 @@ public class LoginServerInfo : MonoBehaviour
 
 	public void GameStart()
 	{
-		PlayerData.Instance().SetServerInfo(m_pServerInfo);
+		GameInstance.Instance().SetServerInfo(m_pServerInfo);
 		H5Manager.Instance().ConnectLogin();
 	}
 
