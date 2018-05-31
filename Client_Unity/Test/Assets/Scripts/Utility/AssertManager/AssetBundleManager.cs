@@ -249,7 +249,7 @@ public class AssetBundleManager : MonoBehaviour
     {
         if (m_AssetBundleManifest == null)
         {
-            Debug.LogError("Please initialize AssetBundleManifest by calling AssetBundleManager.Initialize()");
+            SampleDebuger.LogError("Please initialize AssetBundleManifest by calling AssetBundleManager.Initialize()");
             return;
         }
 

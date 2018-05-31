@@ -94,7 +94,7 @@ public class AssetBundleLoadLevelOperation : AssetBundleLoadBaseOperation
 		// m_DownloadingError might come from the dependency downloading.
         if (m_sceneRequest == null && m_DownloadingError != null)
 		{
-			Debug.LogError(m_DownloadingError);
+			SampleDebuger.LogError(m_DownloadingError);
 			return true;
 		}
 

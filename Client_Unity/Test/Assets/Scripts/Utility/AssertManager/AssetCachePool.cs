@@ -101,7 +101,7 @@ public class AssetCachePool : MonoBehaviour
             }
             else
             {
-                Debug.LogError("bundle ++" + bundleName + "++ can't loading");
+                SampleDebuger.LogError("bundle ++" + bundleName + "++ can't loading");
             }
             cb(i + 1, list.Count);
         }

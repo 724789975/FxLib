@@ -331,7 +331,7 @@ public class LoginControler : SingletonObject<LoginControler>
 
 	public void OnRoleData(string szData)
 	{
-		Debug.Log(szData);
+		SampleDebuger.Log(szData);
 		RoleDataRet oData = JsonUtility.FromJson<RoleDataRet>(szData);
 
 		GameProto.PlayerRequestLogin oTest = new GameProto.PlayerRequestLogin();

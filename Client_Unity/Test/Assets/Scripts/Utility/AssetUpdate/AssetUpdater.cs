@@ -268,7 +268,7 @@ public class AssetDownloader
 
         _webClient.DownloadFileAsync(uri, tmpFile, tmpFile);
 
-		Debug.Log ("++++ downloading url: " + uri.ToString());
+		SampleDebuger.Log ("++++ downloading url: " + uri.ToString());
     }
 
     /// <summary>
@@ -313,7 +313,7 @@ public class AssetDownloader
 
     private void onDownloadProcess(object sender, DownloadProgressChangedEventArgs e)
     {
-        Debug.Log(string.Format("received: {0} total: ", e.BytesReceived, e.TotalBytesToReceive));
+        SampleDebuger.Log(string.Format("received: {0} total: ", e.BytesReceived, e.TotalBytesToReceive));
         lock (AssetDownloader.WebLock)
         {
             Loaded = e.BytesReceived;

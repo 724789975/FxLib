@@ -140,7 +140,7 @@ public class FileUtil
 			var compressed = File.OpenRead (zipFilePath);
 			DecompressToDirectory (targetPath, compressed);
 		} else {
-			Debug.LogError ("Zip不存在: " + zipFilePath);
+			SampleDebuger.LogError ("Zip不存在: " + zipFilePath);
 		}
 	}
 
