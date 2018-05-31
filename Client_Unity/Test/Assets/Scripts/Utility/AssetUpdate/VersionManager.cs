@@ -107,7 +107,7 @@ public class VersionManager:MonoBehaviour
         set
         {
             version.curVersion = value;
-            saveVersion(Application.streamingAssetsPath + "/version.txt");
+            saveVersion(Application.persistentDataPath + "/version.txt");
         }
     }
 

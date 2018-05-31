@@ -209,6 +209,7 @@ public class AssetDownloader
     public static object WebLock = new object();//线程锁
     private WebClient _webClient;
     private Queue<string> _fileQueue = new Queue<string>();
+    private HashSet<string> fileQueue = new HashSet<string>();
     private string _upzipPath;
     private string _tempPath;
 
@@ -232,7 +233,9 @@ public class AssetDownloader
 
     public void AddURL(string url)
     {
+		SampleDebuger.Log("download url : " + url);
         _fileQueue.Enqueue(url);
+		fileQueue.Add(url);
     }
 
     public void init()
@@ -255,20 +258,48 @@ public class AssetDownloader
         bFinished = false;
 
         init();
-        downloadUrl(_fileQueue.Dequeue());
+		//downloadUrl(_fileQueue.Dequeue());
+		foreach (var item in fileQueue)
+		{
+			GameInstance.Instance().StartCoroutine(downloadUrl(item));
+		}
     }
 
-    public void downloadUrl(string url)
+    public IEnumerator downloadUrl(string url)
     {
-        _curFileCount++;
+		SampleDebuger.Log(" downloading url : " + url.ToString());
+		_curFileCount++;
 
         Uri uri = new Uri(url, UriKind.Absolute);
 
-        string tmpFile = _tempPath + "/" + _curFileCount + "-" + DateTime.Now.Ticks.ToString();
+        //string tmpFile = _tempPath + "/" + _curFileCount + "-" + DateTime.Now.Ticks.ToString();
 
-        _webClient.DownloadFileAsync(uri, tmpFile, tmpFile);
+		WWW fileDown = new WWW(url);
+		yield return fileDown;
+		if (fileDown.error != null)
+		{
+			SampleDebuger.LogRed("download error : " + url);
+		}
+		else
+		{
+			FileUtil.DecompressToDirectory(_upzipPath, new MemoryStream(fileDown.bytes));
+			SampleDebuger.Log("downloaded : " + url);
+		}
+		fileQueue.Remove(fileDown.url);
+		if (fileQueue.Count == 0)
+		{
+			bFinished = true;
+		}
 
-		SampleDebuger.Log ("++++ downloading url: " + uri.ToString());
+		//SampleDebuger.Log(" downloading tmp : " + tmpFile);
+//#if UNITY_WEBGL
+//		//_webClient.DownloadFileAsync(uri, tmpFile, tmpFile);
+//		_webClient.DownloadFile(uri, tmpFile);
+//		SampleDebuger.Log(" downloading url complete : " + tmpFile);
+//		onDownloadCompelete(tmpFile);
+//#else
+//		_webClient.DownloadFileAsync(uri, tmpFile, tmpFile);
+//#endif
     }
 
     /// <summary>
@@ -284,12 +315,6 @@ public class AssetDownloader
 			File.Delete (e.UserState.ToString());
 
         }
-        //else
-        //{
-        //    _webClient.CancelAsync();
-        //    bFinished = true;
-        //}
-
 
         if (_fileQueue.Count > 0)
         {
@@ -302,16 +327,33 @@ public class AssetDownloader
                 bFinished = true;
             }
         }
-
     }
+	void onDownloadCompelete(string szFilePath)
+	{
+		FileUtil.DecompressToDirectory(_upzipPath, szFilePath);
+		File.Delete(szFilePath);
 
-    /// <summary>
-    /// 下载进度变化回调
-    /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="e"></param>
+		if (_fileQueue.Count > 0)
+		{
+			downloadUrl(_fileQueue.Dequeue());
+		}
+		else
+		{
+			lock (AssetDownloader.WebLock)
+			{
+				bFinished = true;
+			}
+		}
 
-    private void onDownloadProcess(object sender, DownloadProgressChangedEventArgs e)
+	}
+
+	/// <summary>
+	/// 下载进度变化回调
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+
+	private void onDownloadProcess(object sender, DownloadProgressChangedEventArgs e)
     {
         SampleDebuger.Log(string.Format("received: {0} total: ", e.BytesReceived, e.TotalBytesToReceive));
         lock (AssetDownloader.WebLock)

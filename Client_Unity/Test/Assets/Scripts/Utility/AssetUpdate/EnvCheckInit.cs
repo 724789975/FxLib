@@ -69,7 +69,7 @@ public class EnvCheckInit : MonoBehaviour
         yield return www;
         SampleDebuger.Log("version  = " + www.text);
 
-        if (string.IsNullOrEmpty(www.text))
+        if (string.IsNullOrEmpty(www.text) || (www.error != null))
         { //没读取到，是第一次安装，拷贝资源
             SampleDebuger.Log("First Time Launch!");
             //读取应用程序版本号
@@ -113,6 +113,7 @@ public class EnvCheckInit : MonoBehaviour
     /// </summary>
     public void StartDownload()
     {
+		SampleDebuger.Log("start down load");
         _assetUpdater.StartDownload();
     }
 
