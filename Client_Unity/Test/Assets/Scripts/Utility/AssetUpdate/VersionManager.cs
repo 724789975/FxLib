@@ -107,12 +107,7 @@ public class VersionManager:MonoBehaviour
         set
         {
             version.curVersion = value;
-
-#if UNITY_EDITOR
             saveVersion(Application.streamingAssetsPath + "/version.txt");
-#else
-            saveVersion(Application.persistentDataPath + "/version.txt");
-#endif
         }
     }
 
@@ -125,6 +120,11 @@ public class VersionManager:MonoBehaviour
     {
         return curVersion.Replace(".", "_");
     }
+
+	public static string getVersionUrl(string szVersion)
+	{
+		return szVersion.Replace(".", "_");
+	}
 
     public void saveVersion(string path)
     {

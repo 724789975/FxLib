@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657886, g: 0.4964127, b: 0.57481724, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64a29e8255ac5f341b2c8f8b851c8673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _envChecker: {fileID: 194482047}
 --- !u!114 &194482047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,14 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0964d7b4826ba4048a2ae1790fb0b8d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  statusText: {fileID: 0}
-  descText: {fileID: 0}
-  progressSlider: {fileID: 0}
-  bottomImage: {fileID: 0}
-  versionText: {fileID: 0}
-  tip: {fileID: 0}
-  enterButtonObj: {fileID: 0}
-  loadingObj: {fileID: 0}
+  _assetUpdater: {fileID: 194482046}
   tipArr: []
   tipIndex: 0
 --- !u!1 &839088270

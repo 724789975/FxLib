@@ -13,23 +13,17 @@ using System.ComponentModel;
 /// </summary>
 public class AssetUpdater : MonoBehaviour
 {
-    const string VERSION_URL = "version.txt";
-
+    //const string VERSION_URL = "version.txt";
     const string COMMON_URL  = "Common.zip";
-
 	const string CONTENT_URL = "mark.txt";
-
     private bool _isDownloading = false;
-
     private string _contentUrl = "";
-
     public Version srvVersion;
-
-    private EnvCheckInit _envChecker;
+    public EnvCheckInit _envChecker;
 
     public void Awake()
     {
-        _envChecker = GetComponent<EnvCheckInit>();
+        //_envChecker = GetComponent<EnvCheckInit>();
     }
 
     public void Update()
@@ -138,12 +132,16 @@ public class AssetUpdater : MonoBehaviour
         }  
     }
 
-	IEnumerator checkVersionContent(){
-		WWW www = getContentWWW();
+	IEnumerator checkVersionContent()
+	{
+		string szVersionContent = GameInstance.Instance().proServerUrl
+			+ string.Format(GameInstance.Instance().proServerVersionContent, VersionManager.Instance.getVersionUrl()) + "?" + Time.realtimeSinceStartup.ToString();
+		WWW www = new WWW(szVersionContent);
 		SampleDebuger.Log ("+++++++++++ checkVersionContent +++++++++++ ");
 		yield return www;
 		if (!string.IsNullOrEmpty(www.error))
 		{
+			SampleDebuger.Log(szVersionContent);
 			AssetBundleLoader.Instance().LoadAsset(GameObjectConstant.GetABUIPath(GameObjectConstant.g_szConfirmPanel), GameObjectConstant.g_szConfirmPanel, delegate (UnityEngine.Object ob)
 				{
 					GameObject go_RoleList = Instantiate((GameObject)ob, MainCanvas.Instance().transform);
@@ -156,7 +154,8 @@ public class AssetUpdater : MonoBehaviour
 						{
 							//todo 取消下载
 							SampleDebuger.LogGreen("cancel down load");
-						}, null);
+						},null
+					);
 				}
 			);
 			yield break;
@@ -179,7 +178,8 @@ public class AssetUpdater : MonoBehaviour
 						{
 							//todo 取消下载
 							SampleDebuger.LogGreen("cancel down load");
-						}, null);
+						}, null
+					);
 				}
 			);
         }
@@ -188,9 +188,17 @@ public class AssetUpdater : MonoBehaviour
     public void StartDownload()
     {
         _isDownloading = true;
-        //AssetDownloader.Intance().AddURL(getCommonURL());
-        //AssetDownloader.Intance().AddURL(getCustomURL());
-        AssetDownloader.Intance().Start();
+		string szVersionContent = GameInstance.Instance().proServerUrl
+			+ string.Format(GameInstance.Instance().proServerVersionContent, VersionManager.Instance.getVersionUrl())
+			+ "?" + Time.realtimeSinceStartup.ToString();
+		AssetDownloader.Intance().AddURL(szVersionContent);
+		string szVersion = GameInstance.Instance().proServerUrl
+			+ string.Format(GameInstance.Instance().proServerNextVersionPath, VersionManager.Instance.getVersionUrl())
+			+ "?" + Time.realtimeSinceStartup.ToString();
+		AssetDownloader.Intance().AddURL(szVersion);
+		//AssetDownloader.Intance().AddURL(getCommonURL());
+		//AssetDownloader.Intance().AddURL(getCustomURL());
+		AssetDownloader.Intance().Start();
     }
 }
 

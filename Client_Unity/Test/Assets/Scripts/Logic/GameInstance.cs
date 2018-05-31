@@ -69,6 +69,8 @@ public class GameInstance: SingletonObject<GameInstance>
 
 	public string proServerUrl { get { return m_szServerUrl; } }
 	public string proServerVersion { get { return m_szVersion; } }
+	public string proServerVersionContent { get { return m_szVersionContent; } }
+	public string proServerNextVersionPath { get { return m_szNextVersionPath; } }
 
 	public ushort proLoginPort { get { return m_wLoginPort; } }
 	public string proLoginIp { get { return m_szLoginIp; } }
@@ -92,4 +94,6 @@ public class GameInstance: SingletonObject<GameInstance>
 	public string m_szUrlHost;
 	public string m_szGetRoleUri;
 	public string m_szVersion;
+	public string m_szVersionContent;
+	public string m_szNextVersionPath;
 }

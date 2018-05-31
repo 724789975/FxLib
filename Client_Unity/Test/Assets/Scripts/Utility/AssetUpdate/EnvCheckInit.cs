@@ -10,7 +10,7 @@ using System;
 /// </summary>
 public class EnvCheckInit : MonoBehaviour
 {
-    private AssetUpdater _assetUpdater;
+    public AssetUpdater _assetUpdater;
 
     //public Text statusText;
 
@@ -28,17 +28,6 @@ public class EnvCheckInit : MonoBehaviour
 
     public string[] tipArr;
     public int tipIndex;
-#if UNITY_EDITOR || !RELEASE_VER
-    public static bool NeedSyncWithLocal = true;
-    public static bool NeedSyncWithServer = false;
-
-#elif UNITY_STANDALONE_WIN
-    static public bool NeedSyncWithLocal = true;
-    static public bool NeedSyncWithServer = false;
-#else
-    static public bool NeedSyncWithLocal = true;
-    static public bool NeedSyncWithServer = true;
-#endif
 
     string currentVersion;
 
@@ -51,7 +40,7 @@ public class EnvCheckInit : MonoBehaviour
         //Once("MainPlayer_DataLoaded", _playerDataLoaded);
         //Once("ChannelManager_initialized", LocalVerCheck);
         
-        _assetUpdater = GetComponent<AssetUpdater>();
+        //_assetUpdater = GetComponent<AssetUpdater>();
         //progressSlider.gameObject.SetActive(false);
         //enterButtonObj.SetActive(false);
         //loadingObj.SetActive(true);
@@ -66,14 +55,7 @@ public class EnvCheckInit : MonoBehaviour
     public void LocalVerCheck(params object[] args)
     {
         //progressSlider.gameObject.SetActive(true);
-        if (EnvCheckInit.NeedSyncWithLocal)
-        {        
-            StartCoroutine(checkVersion());
-        }
-        else
-        {
-            GameInit();
-        }
+		StartCoroutine(checkVersion());
     }
 
     /// <summary>
