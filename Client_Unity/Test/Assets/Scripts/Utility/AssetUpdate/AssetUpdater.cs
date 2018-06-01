@@ -129,7 +129,7 @@ public class AssetUpdater : MonoBehaviour
         {
             //进入游戏
             _envChecker.GameInit();
-        }  
+        }
     }
 
 	IEnumerator checkVersionContent()
@@ -188,14 +188,14 @@ public class AssetUpdater : MonoBehaviour
     public void StartDownload()
     {
         _isDownloading = true;
-		string szVersionContent = GameInstance.Instance().proServerUrl
-			+ string.Format(GameInstance.Instance().proServerVersionContent, VersionManager.Instance.getVersionUrl())
-			+ "?" + Time.realtimeSinceStartup.ToString();
-		AssetDownloader.Intance().AddURL(szVersionContent);
 		string szVersion = GameInstance.Instance().proServerUrl
 			+ string.Format(GameInstance.Instance().proServerNextVersionPath, VersionManager.Instance.getVersionUrl())
 			+ "?" + Time.realtimeSinceStartup.ToString();
 		AssetDownloader.Intance().AddURL(szVersion);
+		string szVersionContent = GameInstance.Instance().proServerUrl
+			+ string.Format(GameInstance.Instance().proServerVersionContent, VersionManager.Instance.getVersionUrl())
+			+ "?" + Time.realtimeSinceStartup.ToString();
+		AssetDownloader.Intance().AddURL(szVersionContent);
 		//AssetDownloader.Intance().AddURL(getCommonURL());
 		//AssetDownloader.Intance().AddURL(getCustomURL());
 		AssetDownloader.Intance().Start();
@@ -209,7 +209,6 @@ public class AssetDownloader
     public static object WebLock = new object();//线程锁
     private WebClient _webClient;
     private Queue<string> _fileQueue = new Queue<string>();
-    private HashSet<string> fileQueue = new HashSet<string>();
     private string _upzipPath;
     private string _tempPath;
 
@@ -233,9 +232,7 @@ public class AssetDownloader
 
     public void AddURL(string url)
     {
-		SampleDebuger.Log("download url : " + url);
         _fileQueue.Enqueue(url);
-		fileQueue.Add(url);
     }
 
     public void init()
@@ -258,48 +255,20 @@ public class AssetDownloader
         bFinished = false;
 
         init();
-		//downloadUrl(_fileQueue.Dequeue());
-		foreach (var item in fileQueue)
-		{
-			GameInstance.Instance().StartCoroutine(downloadUrl(item));
-		}
+        downloadUrl(_fileQueue.Dequeue());
     }
 
-    public IEnumerator downloadUrl(string url)
+    public void downloadUrl(string url)
     {
-		SampleDebuger.Log(" downloading url : " + url.ToString());
-		_curFileCount++;
+        _curFileCount++;
 
         Uri uri = new Uri(url, UriKind.Absolute);
 
-        //string tmpFile = _tempPath + "/" + _curFileCount + "-" + DateTime.Now.Ticks.ToString();
+        string tmpFile = _tempPath + "/" + _curFileCount + "-" + DateTime.Now.Ticks.ToString();
 
-		WWW fileDown = new WWW(url);
-		yield return fileDown;
-		if (fileDown.error != null)
-		{
-			SampleDebuger.LogRed("download error : " + url);
-		}
-		else
-		{
-			FileUtil.DecompressToDirectory(_upzipPath, new MemoryStream(fileDown.bytes));
-			SampleDebuger.Log("downloaded : " + url);
-		}
-		fileQueue.Remove(fileDown.url);
-		if (fileQueue.Count == 0)
-		{
-			bFinished = true;
-		}
+        _webClient.DownloadFileAsync(uri, tmpFile, tmpFile);
 
-		//SampleDebuger.Log(" downloading tmp : " + tmpFile);
-//#if UNITY_WEBGL
-//		//_webClient.DownloadFileAsync(uri, tmpFile, tmpFile);
-//		_webClient.DownloadFile(uri, tmpFile);
-//		SampleDebuger.Log(" downloading url complete : " + tmpFile);
-//		onDownloadCompelete(tmpFile);
-//#else
-//		_webClient.DownloadFileAsync(uri, tmpFile, tmpFile);
-//#endif
+		SampleDebuger.Log ("++++ downloading url: " + uri.ToString());
     }
 
     /// <summary>
@@ -315,6 +284,12 @@ public class AssetDownloader
 			File.Delete (e.UserState.ToString());
 
         }
+        //else
+        //{
+        //    _webClient.CancelAsync();
+        //    bFinished = true;
+        //}
+
 
         if (_fileQueue.Count > 0)
         {
@@ -327,33 +302,16 @@ public class AssetDownloader
                 bFinished = true;
             }
         }
+
     }
-	void onDownloadCompelete(string szFilePath)
-	{
-		FileUtil.DecompressToDirectory(_upzipPath, szFilePath);
-		File.Delete(szFilePath);
 
-		if (_fileQueue.Count > 0)
-		{
-			downloadUrl(_fileQueue.Dequeue());
-		}
-		else
-		{
-			lock (AssetDownloader.WebLock)
-			{
-				bFinished = true;
-			}
-		}
+    /// <summary>
+    /// 下载进度变化回调
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
 
-	}
-
-	/// <summary>
-	/// 下载进度变化回调
-	/// </summary>
-	/// <param name="sender"></param>
-	/// <param name="e"></param>
-
-	private void onDownloadProcess(object sender, DownloadProgressChangedEventArgs e)
+    private void onDownloadProcess(object sender, DownloadProgressChangedEventArgs e)
     {
         SampleDebuger.Log(string.Format("received: {0} total: ", e.BytesReceived, e.TotalBytesToReceive));
         lock (AssetDownloader.WebLock)
