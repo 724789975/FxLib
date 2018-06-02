@@ -1,5 +1,4 @@
-﻿///PanYangzhong 创建时间:2016/11/25
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 using System.IO;
 using UnityEngine.UI;
@@ -12,21 +11,21 @@ public class EnvCheckInit : MonoBehaviour
 {
     public AssetUpdater _assetUpdater;
 
-    //public Text statusText;
+	//public Text statusText;
 
-    //public Text descText;
+	//public Text descText;
 
-    //public Slider progressSlider;
+	public Slider progressSlider;
 
-    //public Image bottomImage;
+	//public Image bottomImage;
 
-    //public Text versionText;
-    //public Text tip;
+	//public Text versionText;
+	//public Text tip;
 
-    //public GameObject enterButtonObj;
-    //public GameObject loadingObj;
+	//public GameObject enterButtonObj;
+	//public GameObject loadingObj;
 
-    public string[] tipArr;
+	public string[] tipArr;
     public int tipIndex;
 
     string currentVersion;
@@ -125,7 +124,7 @@ public class EnvCheckInit : MonoBehaviour
     public void downloadProcess(long done, long total)
     {
 		SampleDebuger.Log("++ done: " + done + " total: " + total);
-		//progressSlider.value = done > 0 ? (float)done / (float)total : 0;
+		progressSlider.value = done > 0 ? (float)done / (float)total : 0;
 		//descText.text = LangSetting.GetWord("UI_DownLoadingRes_desc");
 		//statusText.text = Mathf.Floor(done / 1024).ToString() + "KB /" + Mathf.Floor(total / 1024).ToString() + "KB";
 	}
@@ -138,12 +137,12 @@ public class EnvCheckInit : MonoBehaviour
     /// <param name="content"></param>
     public void setProcess(int done, int total, string content = null)
     {
-        //float percent = done > 0.0f ? (float)done / (float)total : 0.0f;
-        //progressSlider.value = percent;
-        //statusText.text = ((int)(percent * 100)).ToString() + "%";
-        //if (!string.IsNullOrEmpty(content))
-        //    descText.text = content; //"游戏初始化中，此过程不消耗流量！ ";
-    }
+		float percent = done > 0.0f ? (float)done / (float)total : 0.0f;
+		progressSlider.value = percent;
+		//statusText.text = ((int)(percent * 100)).ToString() + "%";
+		//if (!string.IsNullOrEmpty(content))
+		//    descText.text = content; //"游戏初始化中，此过程不消耗流量！ ";
+	}
 
     ///<summary>
     ///开始拷贝, 完成更新应用程序的同步过程

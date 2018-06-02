@@ -234,7 +234,7 @@ public class AssetBundleManager : MonoBehaviour
         {
             return;
         }
-        string url = AssetBundleLoader.Instance().getBundleUrl(assetBundleName);
+        string url = AssetBundleLoader.Instance().GetBundleUrl(assetBundleName);
 		SampleDebuger.Log("ab url: " + url);
 #if UNITY_WEBGL
 		WWW request = new WWW(url);

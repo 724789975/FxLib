@@ -10,19 +10,7 @@ using UnityEditor;
 
 public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 {
-	public string[] preloadBundles;
-	const string kAssetBundlesPath = "/AssetBundles/";
-
-	//开始场景ab包配置
-	[SerializeField]
-	public string sceneAssetBundle;
-
-	[SerializeField]
-	public string sceneName;
-
 	private string sceneBundlePath = "assets/resources/screen/";
-	private bool firstLoaded = false;
-	private bool isResPreloaded = false;
 
 	void Awake()
 	{
@@ -48,16 +36,12 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 			yield return StartCoroutine(request);
 		}
 		yield return new WaitForSeconds(0.5f);
-		//yield return StartCoroutine(CheckVersion());
 
-		//if (!firstLoaded && !string.IsNullOrEmpty(sceneName))
-		//{
-		//	LoadLevelAsset(sceneName);
-		//	firstLoaded = true;
-		//}
-
+#if UNITY_WEBGL
+		LoadLevelAsset(GameConstant.g_szChoseServerScene);
+#else
 		LoadLevelAsset(GameConstant.g_szVersionUpdateScene);
-		//LoadLevelAsset(GameConstant.g_szChoseServerScene);
+#endif
 	}
 
 	public IEnumerator Reload()
@@ -88,11 +72,11 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 		SampleDebuger.Log("old version : " + oldVersion.curVersion + ", cur version : " + curVersion.curVersion);
 		if (oldVersion.IsLower(curVersion))
 		{
-			deleteUpdateBundle();
+			DeleteUpdateBundle();
 		}
 	}
 
-	public string getBundleUrl(string fileName)
+	public string GetBundleUrl(string fileName)
 	{
 #if UNITY_EDITOR
 		return Application.dataPath + "/../AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
@@ -104,7 +88,7 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 #endif
 	}
 
-	public void deleteUpdateBundle()
+	public void DeleteUpdateBundle()
 	{
 		if (Directory.Exists(Application.persistentDataPath + "/AssetBundles"))
 		{
@@ -181,7 +165,7 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 
 	public void LoadLevelAsset(string name, Action fn = null)
 	{
-		string bundle = sceneBundlePath + name;
+		string bundle = GameConstant.g_szSceneBundlePath + name;
 		StartCoroutine(LoadLevel(bundle.ToLower(), name, fn));
 	}
 
