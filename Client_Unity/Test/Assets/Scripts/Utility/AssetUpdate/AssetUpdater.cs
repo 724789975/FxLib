@@ -71,7 +71,7 @@ public class AssetUpdater : MonoBehaviour
         string versionStr = www.text.Trim();
         m_verServerVersion = new Version(versionStr);
         SampleDebuger.Log(" server version = " + m_verServerVersion.ToString());
-        if (VersionManager.Instance.m_verVersion.IsLower(m_verServerVersion))
+        if (VersionManager.Instance().m_verVersion.IsLower(m_verServerVersion))
         {
             StartCoroutine(CheckVersionContent());
         }
@@ -85,7 +85,7 @@ public class AssetUpdater : MonoBehaviour
 	IEnumerator CheckVersionContent()
 	{
 		string szVersionContent = GameInstance.Instance().proServerUrl
-			+ string.Format(GameInstance.Instance().proServerVersionContent, VersionManager.Instance.GetVersionUrl()) + "?" + Time.realtimeSinceStartup.ToString();
+			+ string.Format(GameInstance.Instance().proServerVersionContent, VersionManager.Instance().GetVersionUrl()) + "?" + Time.realtimeSinceStartup.ToString();
 		WWW www = new WWW(szVersionContent);
 		SampleDebuger.Log ("+++++++++++ checkVersionContent +++++++++++ ");
 		yield return www;
@@ -139,11 +139,11 @@ public class AssetUpdater : MonoBehaviour
     {
         m_bDownloading = true;
 		string szVersion = GameInstance.Instance().proServerUrl
-			+ string.Format(GameInstance.Instance().proServerNextVersionPath, VersionManager.Instance.GetVersionUrl())
+			+ string.Format(GameInstance.Instance().proServerNextVersionPath, VersionManager.Instance().GetVersionUrl())
 			+ "?" + Time.realtimeSinceStartup.ToString();
 		AssetDownloader.Instance().AddURL(szVersion);
 		string szVersionContent = GameInstance.Instance().proServerUrl
-			+ string.Format(GameInstance.Instance().proServerVersionContent, VersionManager.Instance.GetVersionUrl())
+			+ string.Format(GameInstance.Instance().proServerVersionContent, VersionManager.Instance().GetVersionUrl())
 			+ "?" + Time.realtimeSinceStartup.ToString();
 		AssetDownloader.Instance().AddURL(szVersionContent);
 		//AssetDownloader.Intance().AddURL(getCommonURL());

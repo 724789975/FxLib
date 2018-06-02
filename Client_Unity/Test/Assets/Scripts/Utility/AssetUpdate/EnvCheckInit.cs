@@ -98,7 +98,7 @@ public class EnvCheckInit : MonoBehaviour
             }
             else
             {
-                VersionManager.Instance.proCurVersion = oldVersion;
+                VersionManager.Instance().proCurVersion = oldVersion;
                 _assetUpdater.CheckVersionWithServer();
             }
         }
@@ -199,7 +199,7 @@ public class EnvCheckInit : MonoBehaviour
         SampleDebuger.Log(" writeversion");
 
         // 同步版本
-        VersionManager.Instance.proCurVersion = m_szCurrentVersion;
+        VersionManager.Instance().proCurVersion = m_szCurrentVersion;
         _assetUpdater.CheckVersionWithServer();
     }
 

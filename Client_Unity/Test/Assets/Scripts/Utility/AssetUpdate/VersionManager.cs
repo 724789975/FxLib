@@ -65,41 +65,21 @@ public class Version
 }
 
 
-public class VersionManager:MonoBehaviour
+public class VersionManager : SingletonObject<VersionManager>
 {
-    static VersionManager _instance = null;
-
     public Version m_verVersion = new Version("0.0.0");
 
-    bool m_bRead = false;
+	void Awake()
+	{
+		DontDestroyOnLoad(this);
+		CreateInstance(this);
+		byte[] content = File.ReadAllBytes(Application.streamingAssetsPath + "/version.txt");
+		string ver = System.Text.Encoding.UTF8.GetString(content);
 
-    public static VersionManager Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                GameObject obj = new GameObject();
-                _instance = obj.AddComponent<VersionManager>();
-                DontDestroyOnLoad(obj);
-            }
-#if UNITY_EDITOR
-            // 读取 version.txt
-            if(!_instance.m_bRead)
-            {
-                byte[] content = File.ReadAllBytes(Application.streamingAssetsPath + "/version.txt");
-                string ver = System.Text.Encoding.UTF8.GetString(content);
+		proCurVersion = ver;
+	}
 
-                _instance.proCurVersion = ver;
-                _instance.m_bRead = true;
-            }
-#else
-#endif
-            return _instance;
-        }
-    }
-
-    public string proCurVersion
+	public string proCurVersion
     {
         get
         {
@@ -131,34 +111,5 @@ public class VersionManager:MonoBehaviour
     {
         File.WriteAllBytes(szPath, System.Text.Encoding.UTF8.GetBytes(m_verVersion.ToString()));
 		//SampleDebuger.Log(" Update version info");
-    }
-
-    IEnumerator _checkServerVersion(Action<bool> cb)
-    {
-        WWW www = new WWW(GameConstant.g_szPatchUrl + "/version.txt?" + Time.realtimeSinceStartup.ToString()); 
-
-        yield return www;
-        if (!string.IsNullOrEmpty(www.error))
-        {
-            //无法连接资源服务器
-            SampleDebuger.LogWarning("url " + www.url + " ,error:" + www.error);
-            cb(false);
-            yield break;
-        }
-
-        if (!www.isDone)
-            yield return www;
-
-        Version srvVersion = new Version(www.text.Trim());
-        cb(m_verVersion.IsLower(srvVersion));
-    }
-
-    public void CheckServerVersion(Action<bool> cb)
-    {
-#if RELEASE_VER
-        StartCoroutine(_checkServerVersion(cb));
-#else
-        cb(false);
-#endif
     }
 }
