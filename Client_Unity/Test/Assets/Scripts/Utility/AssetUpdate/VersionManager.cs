@@ -3,13 +3,14 @@ using System.Collections;
 using System.IO;
 using System;
 
+[Serializable]
 public class Version
 {
-    public int mainVersion = 0;
+    public int m_dwMainVersion = 0;
 
-    public int subVersion = 0;
+    public int m_dwSubVersion = 0;
 
-    public int miniVersion = 0;
+    public int m_dwMiniVersion = 0;
 
     public Version()
     {
@@ -17,14 +18,14 @@ public class Version
 
     public Version(string ver)
     {
-        curVersion = ver;
+        proCurVersion = ver;
     }
 
-    public string curVersion
+    public string proCurVersion
     {
         get
         {
-            return string.Format("{0}.{1}.{2}", mainVersion, subVersion, miniVersion);
+            return string.Format("{0}.{1}.{2}", m_dwMainVersion, m_dwSubVersion, m_dwMiniVersion);
         }
         set
         {
@@ -33,21 +34,21 @@ public class Version
 
             if (t.Length > 2)
             {
-                mainVersion = int.Parse(t[0]);
-                subVersion = int.Parse(t[1]);
-                miniVersion = int.Parse(t[2]);
+                m_dwMainVersion = int.Parse(t[0]);
+                m_dwSubVersion = int.Parse(t[1]);
+                m_dwMiniVersion = int.Parse(t[2]);
             }
         }
     }
 
     override public string ToString()
     {
-        return curVersion;
+        return proCurVersion;
     }
 
     public int ToNumber()
     {
-        return mainVersion * 10000 + subVersion * 100 + miniVersion ;
+        return m_dwMainVersion * 10000 + m_dwSubVersion * 100 + m_dwMiniVersion ;
     }
 
     public bool IsLower(Version other)
@@ -56,9 +57,9 @@ public class Version
     }
 
 	public bool IsEqual(Version other){
-		return mainVersion == other.mainVersion && 
-			subVersion == other.subVersion && 
-			miniVersion == other.miniVersion;
+		return m_dwMainVersion == other.m_dwMainVersion && 
+			m_dwSubVersion == other.m_dwSubVersion && 
+			m_dwMiniVersion == other.m_dwMiniVersion;
 	
 	}
 }
@@ -68,9 +69,9 @@ public class VersionManager:MonoBehaviour
 {
     static VersionManager _instance = null;
 
-    public Version version = new Version("0.0.0");
+    public Version m_verVersion = new Version("0.0.0");
 
-    bool bRead = false;
+    bool m_bRead = false;
 
     public static VersionManager Instance
     {
@@ -84,13 +85,13 @@ public class VersionManager:MonoBehaviour
             }
 #if UNITY_EDITOR
             // 读取 version.txt
-            if(!_instance.bRead)
+            if(!_instance.m_bRead)
             {
                 byte[] content = File.ReadAllBytes(Application.streamingAssetsPath + "/version.txt");
                 string ver = System.Text.Encoding.UTF8.GetString(content);
 
-                _instance.curVersion = ver;
-                _instance.bRead = true;
+                _instance.proCurVersion = ver;
+                _instance.m_bRead = true;
             }
 #else
 #endif
@@ -98,37 +99,37 @@ public class VersionManager:MonoBehaviour
         }
     }
 
-    public string curVersion
+    public string proCurVersion
     {
         get
         {
-            return version.curVersion;
+            return m_verVersion.proCurVersion;
         }
         set
         {
-            version.curVersion = value;
-            saveVersion(Application.persistentDataPath + "/version.txt");
+            m_verVersion.proCurVersion = value;
+            SaveVersion(Application.persistentDataPath + "/version.txt");
         }
     }
 
-    public float getVersionNum()
+    public float GetVersionNum()
     {
-        return version.ToNumber();
+        return m_verVersion.ToNumber();
     }
 
-    public string getVersionUrl()
+    public string GetVersionUrl()
     {
-        return curVersion.Replace(".", "_");
+        return proCurVersion.Replace(".", "_");
     }
 
-	public static string getVersionUrl(string szVersion)
+	public static string GetVersionUrl(string szVersion)
 	{
 		return szVersion.Replace(".", "_");
 	}
 
-    public void saveVersion(string path)
+    public void SaveVersion(string szPath)
     {
-        File.WriteAllBytes(path, System.Text.Encoding.UTF8.GetBytes(version.ToString()));
+        File.WriteAllBytes(szPath, System.Text.Encoding.UTF8.GetBytes(m_verVersion.ToString()));
 		//SampleDebuger.Log(" Update version info");
     }
 
@@ -149,7 +150,7 @@ public class VersionManager:MonoBehaviour
             yield return www;
 
         Version srvVersion = new Version(www.text.Trim());
-        cb(version.IsLower(srvVersion));
+        cb(m_verVersion.IsLower(srvVersion));
     }
 
     public void CheckServerVersion(Action<bool> cb)

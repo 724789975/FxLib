@@ -95,7 +95,7 @@ public class PatchUtil : Singleton<PatchUtil>
 			ZipOutputStream winZipper = new ZipOutputStream(new FileStream(pInfo.getPatchPath() + "/Windows.zip", FileMode.Create));
 			winZipper.SetLevel(5);
 
-			string versionNum = pInfo.ver.curVersion;
+			string versionNum = pInfo.ver.proCurVersion;
 			for (int i = 0; i < diffFiles.Count; i++)
 			{
 				string fileName = diffFiles[i] as string;

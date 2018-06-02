@@ -25,10 +25,7 @@ public class EnvCheckInit : MonoBehaviour
 	//public GameObject enterButtonObj;
 	//public GameObject loadingObj;
 
-	public string[] tipArr;
-    public int tipIndex;
-
-    string currentVersion;
+    string m_szCurrentVersion;
 
     void Awake()
     {
@@ -54,14 +51,14 @@ public class EnvCheckInit : MonoBehaviour
     public void LocalVerCheck(params object[] args)
     {
         //progressSlider.gameObject.SetActive(true);
-		StartCoroutine(checkVersion());
+		StartCoroutine(CheckVersion());
     }
 
     /// <summary>
     /// 版本检查
     /// </summary>
     /// <returns></returns>
-    IEnumerator checkVersion()
+    IEnumerator CheckVersion()
     {
         string path = Globals.wwwPersistenPath + "/version.txt";
         WWW www = new WWW(path);
@@ -74,9 +71,9 @@ public class EnvCheckInit : MonoBehaviour
             //读取应用程序版本号
             www = new WWW(Globals.wwwStreamingPath + "/version.txt");
             yield return www;
-            currentVersion = www.text.Trim();
+            m_szCurrentVersion = www.text.Trim();
             //versionText.text = currentVersion;
-            beginCopy();
+            BeginCopy();
             www.Dispose();
         }
         else
@@ -87,21 +84,21 @@ public class EnvCheckInit : MonoBehaviour
             //读取应用程序版本号
             www = new WWW(Globals.wwwStreamingPath + "/version.txt");
             yield return www;
-            currentVersion = www.text.Trim();
+            m_szCurrentVersion = www.text.Trim();
             //versionText.text = currentVersion;
             //版本号小于安装程序中包含的版本号，删除旧资源再拷贝当前资源
 
             Version old_v = new Version(oldVersion);
-            Version app_v = new Version(currentVersion);
+            Version app_v = new Version(m_szCurrentVersion);
             if (old_v.IsLower(app_v))
             {
                 string abPath = Application.persistentDataPath + "/AssetBundles";
                 FileUtil.RemoveFolder(abPath);
-                beginCopy();
+                BeginCopy();
             }
             else
             {
-                VersionManager.Instance.curVersion = oldVersion;
+                VersionManager.Instance.proCurVersion = oldVersion;
                 _assetUpdater.CheckVersionWithServer();
             }
         }
@@ -121,7 +118,7 @@ public class EnvCheckInit : MonoBehaviour
     /// </summary>
     /// <param name="done"></param>
     /// <param name="total"></param>
-    public void downloadProcess(long done, long total)
+    public void DownloadProcess(long done, long total)
     {
 		SampleDebuger.Log("++ done: " + done + " total: " + total);
 		progressSlider.value = done > 0 ? (float)done / (float)total : 0;
@@ -135,7 +132,7 @@ public class EnvCheckInit : MonoBehaviour
     /// <param name="done"></param>
     /// <param name="total"></param>
     /// <param name="content"></param>
-    public void setProcess(int done, int total, string content = null)
+    public void SetProcess(int done, int total, string content = null)
     {
 		float percent = done > 0.0f ? (float)done / (float)total : 0.0f;
 		progressSlider.value = percent;
@@ -148,9 +145,9 @@ public class EnvCheckInit : MonoBehaviour
     ///开始拷贝, 完成更新应用程序的同步过程
     ///即解压安装过程
     /// </summary>
-    private void beginCopy()
+    private void BeginCopy()
     {
-        StartCoroutine(_beginCopy(Globals.wwwStreamingPath));
+        StartCoroutine(BeginCopy(Globals.wwwStreamingPath));
     }
 
     /// <summary>
@@ -158,7 +155,7 @@ public class EnvCheckInit : MonoBehaviour
     /// </summary>
     /// <param name="streamPath"></param>
     /// <returns></returns>
-    IEnumerator _beginCopy(string path)
+    IEnumerator BeginCopy(string path)
     {
         yield return new WaitForSeconds(2.0f);
         WWW www = new WWW(path + "/streamPath.txt");
@@ -183,7 +180,7 @@ public class EnvCheckInit : MonoBehaviour
 
                 File.WriteAllBytes(Application.persistentDataPath + it, www.bytes);
                 //更新进度
-                setProcess(curIndex, total);
+                SetProcess(curIndex, total);
                 www.Dispose();
 
             }
@@ -202,7 +199,7 @@ public class EnvCheckInit : MonoBehaviour
         SampleDebuger.Log(" writeversion");
 
         // 同步版本
-        VersionManager.Instance.curVersion = currentVersion;
+        VersionManager.Instance.proCurVersion = m_szCurrentVersion;
         _assetUpdater.CheckVersionWithServer();
     }
 
@@ -254,7 +251,7 @@ public class EnvCheckInit : MonoBehaviour
 		yield return 1;
 		AssetManager.Instance().PreloadAsset((done, total) =>
         {
-            setProcess(done, total);
+            SetProcess(done, total);
             if (done >= total)
             {
                 //UGuiManager.Initialize();

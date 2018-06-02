@@ -14,12 +14,9 @@ using System.ComponentModel;
 public class AssetUpdater : MonoBehaviour
 {
     //const string VERSION_URL = "version.txt";
-    const string COMMON_URL  = "Common.zip";
-	const string CONTENT_URL = "mark.txt";
-    private bool _isDownloading = false;
-    private string _contentUrl = "";
-    public Version srvVersion;
-    public EnvCheckInit _envChecker;
+    private bool m_bDownloading = false;
+    public Version m_verServerVersion;
+    public EnvCheckInit m_comEnvChecker;
 
     public void Awake()
     {
@@ -28,68 +25,21 @@ public class AssetUpdater : MonoBehaviour
 
     public void Update()
     {
-        if (_isDownloading)
+        if (m_bDownloading)
         {
-            lock (AssetDownloader.WebLock)
+            lock (AssetDownloader.Instance().m_lockWeb)
             {
-                if (AssetDownloader.Intance().bFinished)
+                if (AssetDownloader.Instance().m_bFinished)
                 {
-                    _isDownloading = false;
-                    _envChecker.LocalVerCheck();
+                    m_bDownloading = false;
+                    m_comEnvChecker.LocalVerCheck();
                 }
                 else
                 {
-                    _envChecker.downloadProcess(AssetDownloader.Intance().Loaded, AssetDownloader.Intance().Total);
+                    m_comEnvChecker.DownloadProcess(AssetDownloader.Instance().m_qwLoaded, AssetDownloader.Instance().m_qwTotal);
                 }
             }
         }
-    }
-
-    /// <summary>
-    /// 获取服务器版本
-    /// </summary>
-    /// <returns></returns>
-    private WWW getVersionWWW()
-    {
-		return new WWW(GameInstance.Instance().proServerUrl
-			+ GameInstance.Instance().proServerVersion + "?" + Time.realtimeSinceStartup.ToString());
-	}
-
-    /// <summary>
-    /// 获取更新目录
-    /// </summary>
-    /// <returns></returns>
-    private WWW getContentWWW()
-	{
-		string url = _contentUrl + "/";
-		url += VersionManager.Instance.getVersionUrl() + "/";
-		url += CONTENT_URL;
-		SampleDebuger.Log ("getContentURL:  " + url);
-		return new WWW(url + "?" + Time.realtimeSinceStartup.ToString());
-	}
-
-    /// <summary>
-    /// 获取共用资源包
-    /// </summary>
-    /// <returns></returns>
-    private string getCommonURL()
-    {
-        string url = _contentUrl + "/";
-        url += VersionManager.Instance.getVersionUrl() + "/";
-        url += COMMON_URL;
-        return url;
-    }
-
-    /// <summary>
-    /// 获取本平台资源包
-    /// </summary>
-    /// <returns></returns>
-    private string getCustomURL()
-    {
-        string url = _contentUrl + "/";
-        url += VersionManager.Instance.getVersionUrl() + "/";
-        url += SysUtil.GetPlatformName() + ".zip"; 
-        return url;
     }
 
     /// <summary>
@@ -97,10 +47,10 @@ public class AssetUpdater : MonoBehaviour
     /// </summary>
     public void CheckVersionWithServer()
     {
-		StartCoroutine(getServerVersion());
+		StartCoroutine(GetServerVersion());
     }
 
-    IEnumerator getServerVersion()
+    IEnumerator GetServerVersion()
     {
 		string szVersion = GameInstance.Instance().proServerUrl
 			+ GameInstance.Instance().proServerVersion + "?" + Time.realtimeSinceStartup.ToString();
@@ -111,7 +61,7 @@ public class AssetUpdater : MonoBehaviour
         {
 			//无法连接资源服务器
 			SampleDebuger.LogWarning ("url " + www.url + " ,error:" + www.error);
-            _envChecker.GameInit();
+            m_comEnvChecker.GameInit();
             yield break;
         }
 
@@ -119,23 +69,23 @@ public class AssetUpdater : MonoBehaviour
             yield return www;
 
         string versionStr = www.text.Trim();
-        srvVersion = new Version(versionStr);
-        SampleDebuger.Log(" server version = " + srvVersion.ToString());
-        if (VersionManager.Instance.version.IsLower(srvVersion))
+        m_verServerVersion = new Version(versionStr);
+        SampleDebuger.Log(" server version = " + m_verServerVersion.ToString());
+        if (VersionManager.Instance.m_verVersion.IsLower(m_verServerVersion))
         {
-            StartCoroutine(checkVersionContent());
+            StartCoroutine(CheckVersionContent());
         }
         else
         {
             //进入游戏
-            _envChecker.GameInit();
+            m_comEnvChecker.GameInit();
         }
     }
 
-	IEnumerator checkVersionContent()
+	IEnumerator CheckVersionContent()
 	{
 		string szVersionContent = GameInstance.Instance().proServerUrl
-			+ string.Format(GameInstance.Instance().proServerVersionContent, VersionManager.Instance.getVersionUrl()) + "?" + Time.realtimeSinceStartup.ToString();
+			+ string.Format(GameInstance.Instance().proServerVersionContent, VersionManager.Instance.GetVersionUrl()) + "?" + Time.realtimeSinceStartup.ToString();
 		WWW www = new WWW(szVersionContent);
 		SampleDebuger.Log ("+++++++++++ checkVersionContent +++++++++++ ");
 		yield return www;
@@ -163,7 +113,7 @@ public class AssetUpdater : MonoBehaviour
         //下载更新包
         if (Application.internetReachability == NetworkReachability.ReachableViaLocalAreaNetwork)
         {
-            _envChecker.StartDownload();
+            m_comEnvChecker.StartDownload();
         }
         else
 		{
@@ -173,7 +123,7 @@ public class AssetUpdater : MonoBehaviour
 					go_RoleList.GetComponent<ConfirmPanel>().Init("检测到游戏更新,请点击更新!",
 						delegate (object ob1)
 						{
-							_envChecker.StartDownload();
+							m_comEnvChecker.StartDownload();
 						}, null, delegate (object ob1)
 						{
 							//todo 取消下载
@@ -187,86 +137,74 @@ public class AssetUpdater : MonoBehaviour
 
     public void StartDownload()
     {
-        _isDownloading = true;
+        m_bDownloading = true;
 		string szVersion = GameInstance.Instance().proServerUrl
-			+ string.Format(GameInstance.Instance().proServerNextVersionPath, VersionManager.Instance.getVersionUrl())
+			+ string.Format(GameInstance.Instance().proServerNextVersionPath, VersionManager.Instance.GetVersionUrl())
 			+ "?" + Time.realtimeSinceStartup.ToString();
-		AssetDownloader.Intance().AddURL(szVersion);
+		AssetDownloader.Instance().AddURL(szVersion);
 		string szVersionContent = GameInstance.Instance().proServerUrl
-			+ string.Format(GameInstance.Instance().proServerVersionContent, VersionManager.Instance.getVersionUrl())
+			+ string.Format(GameInstance.Instance().proServerVersionContent, VersionManager.Instance.GetVersionUrl())
 			+ "?" + Time.realtimeSinceStartup.ToString();
-		AssetDownloader.Intance().AddURL(szVersionContent);
+		AssetDownloader.Instance().AddURL(szVersionContent);
 		//AssetDownloader.Intance().AddURL(getCommonURL());
 		//AssetDownloader.Intance().AddURL(getCustomURL());
-		AssetDownloader.Intance().Start();
+		AssetDownloader.Instance().Start();
     }
 }
 
 #region 大文件下载器
-public class AssetDownloader
+public class AssetDownloader : Singleton<AssetDownloader>
 {
-    private static AssetDownloader _intance = null;
-    public static object WebLock = new object();//线程锁
-    private WebClient _webClient;
-    private Queue<string> _fileQueue = new Queue<string>();
-    private string _upzipPath;
-    private string _tempPath;
-
+    public object m_lockWeb = new object();//线程锁
+    private WebClient m_webClient;
+    private Queue<string> m_queueFiles = new Queue<string>();
+    private string m_szUpZipPath;
+    private string m_szTempPath;
 
     //status
-    public bool bFinished = false;
-    public long Loaded = 0;
-    public long Total = 0;
+    public bool m_bFinished = false;
+    public long m_qwLoaded = 0;
+    public long m_qwTotal = 0;
 
-    public int _curFileCount = 0 ;
-
-
-    public static AssetDownloader Intance()
-    {
-        if (_intance == null)
-        {
-            _intance = new AssetDownloader();
-        }
-        return _intance;
-    }
+    public int m_dwCurFileCount = 0 ;
 
     public void AddURL(string url)
     {
-        _fileQueue.Enqueue(url);
+        m_queueFiles.Enqueue(url);
     }
 
-    public void init()
+    public void Init()
     {
-		_upzipPath = Application.persistentDataPath;
-        _tempPath = Application.temporaryCachePath;
+		m_szUpZipPath = Application.persistentDataPath;
+        m_szTempPath = Application.temporaryCachePath;
 
-        _webClient = new WebClient();
+        m_webClient = new WebClient();
 
-        _curFileCount = 0;
+        m_dwCurFileCount = 0;
 
-        _webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(onDownloadCompelete);
+        m_webClient.DownloadFileCompleted += new AsyncCompletedEventHandler(onDownloadCompelete);
 
-        _webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(onDownloadProcess);
+        m_webClient.DownloadProgressChanged += new DownloadProgressChangedEventHandler(OnDownloadProcess);
 
     }
 
     public void Start()
     {
-        bFinished = false;
+        m_bFinished = false;
 
-        init();
-        downloadUrl(_fileQueue.Dequeue());
+        Init();
+        DownloadUrl(m_queueFiles.Dequeue());
     }
 
-    public void downloadUrl(string url)
+    public void DownloadUrl(string url)
     {
-        _curFileCount++;
+        m_dwCurFileCount++;
 
         Uri uri = new Uri(url, UriKind.Absolute);
 
-        string tmpFile = _tempPath + "/" + _curFileCount + "-" + DateTime.Now.Ticks.ToString();
+        string tmpFile = m_szTempPath + "/" + m_dwCurFileCount + "-" + DateTime.Now.Ticks.ToString();
 
-        _webClient.DownloadFileAsync(uri, tmpFile, tmpFile);
+        m_webClient.DownloadFileAsync(uri, tmpFile, tmpFile);
 
 		SampleDebuger.Log ("++++ downloading url: " + uri.ToString());
     }
@@ -280,29 +218,21 @@ public class AssetDownloader
     {
         if (e.Error == null && !e.Cancelled)
         {
-            FileUtil.DecompressToDirectory(_upzipPath,e.UserState.ToString());
+            FileUtil.DecompressToDirectory(m_szUpZipPath,e.UserState.ToString());
 			File.Delete (e.UserState.ToString());
 
         }
-        //else
-        //{
-        //    _webClient.CancelAsync();
-        //    bFinished = true;
-        //}
-
-
-        if (_fileQueue.Count > 0)
+        if (m_queueFiles.Count > 0)
         {
-            downloadUrl(_fileQueue.Dequeue());
+            DownloadUrl(m_queueFiles.Dequeue());
         }
         else
         {
-            lock (AssetDownloader.WebLock)
+            lock (AssetDownloader.Instance().m_lockWeb)
             {
-                bFinished = true;
+                m_bFinished = true;
             }
         }
-
     }
 
     /// <summary>
@@ -311,13 +241,13 @@ public class AssetDownloader
     /// <param name="sender"></param>
     /// <param name="e"></param>
 
-    private void onDownloadProcess(object sender, DownloadProgressChangedEventArgs e)
+    private void OnDownloadProcess(object sender, DownloadProgressChangedEventArgs e)
     {
         SampleDebuger.Log(string.Format("received: {0} total: ", e.BytesReceived, e.TotalBytesToReceive));
-        lock (AssetDownloader.WebLock)
+        lock (AssetDownloader.Instance().m_lockWeb)
         {
-            Loaded = e.BytesReceived;
-            Total = e.TotalBytesToReceive;
+            m_qwLoaded = e.BytesReceived;
+            m_qwTotal = e.TotalBytesToReceive;
         }
     }
 }

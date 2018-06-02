@@ -10,8 +10,6 @@ using UnityEditor;
 
 public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 {
-	private string sceneBundlePath = "assets/resources/screen/";
-
 	void Awake()
 	{
 		DontDestroyOnLoad(this);
@@ -69,7 +67,7 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 		yield return www;
 		string curVersionStr = www.text.Trim();
 		Version curVersion = new Version(curVersionStr);
-		SampleDebuger.Log("old version : " + oldVersion.curVersion + ", cur version : " + curVersion.curVersion);
+		SampleDebuger.Log("old version : " + oldVersion.proCurVersion + ", cur version : " + curVersion.proCurVersion);
 		if (oldVersion.IsLower(curVersion))
 		{
 			DeleteUpdateBundle();

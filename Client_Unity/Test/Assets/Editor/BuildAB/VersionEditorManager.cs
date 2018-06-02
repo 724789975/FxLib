@@ -24,12 +24,12 @@ public class VersionEditorManager : Singleton<VersionEditorManager>
 		get
 		{
 
-			return version.curVersion;
+			return version.proCurVersion;
 		}
 		set
 		{
 
-			version.curVersion = value;
+			version.proCurVersion = value;
 
 #if UNITY_EDITOR
 

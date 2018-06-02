@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657886, g: 0.4964127, b: 0.57481724, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -283,7 +283,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64a29e8255ac5f341b2c8f8b851c8673, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _envChecker: {fileID: 194482047}
+  m_szServerVersion:
+    m_dwMainVersion: 0
+    m_dwSubVersion: 0
+    m_dwMiniVersion: 0
+  m_comEnvChecker: {fileID: 194482047}
 --- !u!114 &194482047
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -297,8 +301,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _assetUpdater: {fileID: 194482046}
   progressSlider: {fileID: 44256690}
-  tipArr: []
-  tipIndex: 0
 --- !u!1 &839088270
 GameObject:
   m_ObjectHideFlags: 0
