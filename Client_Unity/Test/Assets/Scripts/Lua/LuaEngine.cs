@@ -14,13 +14,34 @@ public class LuaEngine : SingletonObject<LuaEngine>
 	// Use this for initialization
 	void Start ()
 	{
-		
+		//注 一定不能放到awake中
+		m_pLuaEnv.AddLoader(StreamingLoader);
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
-		
+		if (m_pLuaEnv != null)
+		{
+			m_pLuaEnv.Tick();
+		}
+	}
+
+	void OnDestroy()
+	{
+		if (m_pLuaEnv != null)
+		{
+			m_pLuaEnv.Dispose();
+		}
+	}
+
+	private byte[] StreamingLoader(ref string szFileName)
+	{
+		SampleDebuger.LogBlue(szFileName);
+
+		//找到指定文件
+		string szContent = FileUtil.ReadTextFromFile(szFileName);
+		return System.Text.ASCIIEncoding.UTF8.GetBytes(szContent);
 	}
 
 	public LuaEnv GetLuaEnv() { return m_pLuaEnv; }

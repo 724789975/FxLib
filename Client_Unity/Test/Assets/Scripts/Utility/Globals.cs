@@ -17,14 +17,14 @@ public static class Globals
         Globals.persistenPath = Application.persistentDataPath;
        
 #if UNITY_ANDROID
-        	Globals.wwwStreamingPath = Application.streamingAssetsPath;
-			Globals.wwwPersistenPath = "file:///" + Application.persistentDataPath; 
+        Globals.wwwStreamingPath = Application.streamingAssetsPath;
+		Globals.wwwPersistenPath = "file:///" + Application.persistentDataPath; 
 #elif UNITY_WEBGL
-            Globals.wwwStreamingPath = Application.streamingAssetsPath;
-            Globals.wwwPersistenPath = Application.persistentDataPath;
+        Globals.wwwStreamingPath = Application.streamingAssetsPath;
+        Globals.wwwPersistenPath = Application.persistentDataPath;
 #else
-            Globals.wwwStreamingPath = "file:///" + Application.streamingAssetsPath;
-            Globals.wwwPersistenPath = "file:///" + Application.persistentDataPath;
+        Globals.wwwStreamingPath = "file:///" + Application.streamingAssetsPath;
+        Globals.wwwPersistenPath = "file:///" + Application.persistentDataPath;
 #endif
 	}
 }

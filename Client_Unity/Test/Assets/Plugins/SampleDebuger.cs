@@ -74,6 +74,11 @@ public class SampleDebuger
 		LogColor(message, "blue");
 	}
 
+	static public void LogYellow(object message)
+	{
+		LogColor(message, "yellow");
+	}
+
 	static public void LogError(object message)
 	{
 		if (enableLogAll && enableLog)
@@ -105,7 +110,7 @@ public class SampleDebuger
 #if UNITY_WEBGL && !UNITY_EDITOR
 			LogStr(message.ToString());
 #else
-			Debuger.LogWarning(message.ToString(), "");
+			Debuger.LogWarning(message.ToString());
 #endif
 		}
 	}

@@ -32,8 +32,6 @@ public class UpdateFileInfo
 
 public class FileUtil
 {
-    
-
 	public static string getFilePath (string path)
 	{
 #if UNITY_EDITOR
@@ -85,11 +83,13 @@ public class FileUtil
     public static string ReadTextFromFile(string path)
 	{
 		string content = "";
-		string fullPath = FileUtil.getFilePath (path);
-		try {
-			content = File.ReadAllText (fullPath);
-		} catch {
-			SampleDebuger.Log (" 没有找到文件 " + fullPath);
+		string fullPath = FileUtil.getFilePath(path);
+		try
+		{
+			content = File.ReadAllText(fullPath);
+		} catch
+		{
+			SampleDebuger.LogYellow(" 没有找到文件 " + fullPath);
 		}
 		return content;
 	}
