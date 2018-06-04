@@ -10,6 +10,7 @@ public class H5Manager : SingletonObject<H5Manager>
 	void Awake()
 	{
 		CreateInstance(this);
+		DontDestroyOnLoad(this);
 	}
 	// Use this for initialization
 	void Start ()
