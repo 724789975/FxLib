@@ -3,6 +3,7 @@ using System.Text;
 using System.Collections.Generic;
 using UnityEngine;
 using FxNet;
+using XLua;
 
 public class SessionObject : MonoBehaviour
 {
