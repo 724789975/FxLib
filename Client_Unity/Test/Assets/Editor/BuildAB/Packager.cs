@@ -124,6 +124,7 @@ public class Packager
 
         if (Packager.bAssetBundle)
 		{
+			SampleDebuger.Log("build : " + resPath);
 			BuildPipeline.BuildAssetBundles(resPath, BuildAssetBundleOptions.UncompressedAssetBundle | BuildAssetBundleOptions.ForceRebuildAssetBundle, EditorUserBuildSettings.activeBuildTarget);
 		}
 		AssetDatabase.Refresh();
