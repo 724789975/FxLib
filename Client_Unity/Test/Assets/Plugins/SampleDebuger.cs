@@ -59,6 +59,20 @@ public class SampleDebuger
 		}
 	}
 
+	static public void LogColorViolet(object message)
+	{
+		LogColor(message, "#9400D3");
+	}
+
+	/// <summary>
+	/// lua中打印日志使用蓝绿色
+	/// </summary>
+	/// <param name="message"></param>
+	static public void LogColorAquamarine(object message)
+	{
+		LogColor(message, "#00EEEE");
+	}
+
 	static public void LogGreen(object message)
 	{
 		LogColor(message, "green");

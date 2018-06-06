@@ -89,7 +89,7 @@ public class FileUtil
 			content = File.ReadAllText(fullPath);
 		} catch
 		{
-			SampleDebuger.LogYellow(" 没有找到文件 " + fullPath);
+			SampleDebuger.LogRed(" 没有找到文件 " + fullPath);
 		}
 		return content;
 	}
