@@ -35,7 +35,12 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 		}
 		yield return new WaitForSeconds(0.5f);
 
+
+
 #if UNITY_WEBGL
+		WWW www = new WWW(Globals.wwwStreamingPath + "/version.txt");
+		yield return www;
+		VersionManager.Instance().proCurVersion = www.text.Trim();
 		LoadLevelAsset(GameConstant.g_szChoseServerScene);
 #else
 		LoadLevelAsset(GameConstant.g_szVersionUpdateScene);
@@ -76,14 +81,15 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 
 	public string GetBundleUrl(string fileName)
 	{
+		string url = "";
 #if UNITY_EDITOR
-		return Application.dataPath + "/../AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
+		url = Application.dataPath + "/../AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
 		//return Application.streamingAssetsPath + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
 #else
-            string url = Application.streamingAssetsPath + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
-		  
-            return url;
+		url = Application.streamingAssetsPath + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
 #endif
+		SampleDebuger.LogGreen("bundle url : " + url);
+		return url;
 	}
 
 	public void DeleteUpdateBundle()

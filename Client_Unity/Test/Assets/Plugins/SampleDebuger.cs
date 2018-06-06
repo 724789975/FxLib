@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 public class SampleDebuger
 {
 	[DllImport("__Internal")]
-	private static extern void LogStr(string szLog);
+	private static extern void LogStr(string szStyle, string szLog);
 
 	[DllImport("__Internal")]
 	private static extern void AlertString(string szLog);
@@ -28,7 +28,7 @@ public class SampleDebuger
 		if (enableLogAll && enableLog)
 		{
 #if UNITY_WEBGL && !UNITY_EDITOR
-			LogStr(message.ToString());
+			LogStr("", message.ToString());
 #else
 			Debuger.Log(message.ToString());
 #endif
@@ -40,7 +40,7 @@ public class SampleDebuger
 		if (enableLogAll && enableLog)
 		{
 #if UNITY_WEBGL && !UNITY_EDITOR
-			LogStr(message.ToString());
+			LogStr("", message.ToString());
 #else
 			Debuger.Log(message.ToString(), context);
 #endif
@@ -52,7 +52,7 @@ public class SampleDebuger
 		if (enableLogAll && enableLog)
 		{
 #if UNITY_WEBGL && !UNITY_EDITOR
-			LogStr(string.Format("color: {0};{1}", color, message.ToString()));
+			LogStr(string.Format("color: {0};", color), message.ToString());
 #else
 			Debuger.Log(string.Format("<color={0}>{1}</color>", color, message.ToString()));
 #endif
@@ -108,7 +108,7 @@ public class SampleDebuger
 		if (enableLogAll && enableLogError)
 		{
 #if UNITY_WEBGL && !UNITY_EDITOR
-			LogStr(message.ToString());
+			LogStr("", message.ToString());
 #else
 			Debuger.LogWarning(message.ToString());
 #endif
@@ -120,7 +120,7 @@ public class SampleDebuger
 		if (enableLogAll && enableLogWarning)
 		{
 #if UNITY_WEBGL && !UNITY_EDITOR
-			LogStr(message.ToString());
+			LogStr("", message.ToString());
 #else
 			Debuger.LogWarning(message.ToString(), context);
 #endif

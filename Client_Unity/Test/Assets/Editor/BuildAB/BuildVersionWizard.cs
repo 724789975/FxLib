@@ -11,23 +11,50 @@ public class BuildVersion
 	public static bool bLoadAB = false;
 
 	[MenuItem("BuildAB/DeleteAllPref ")]
-		public static void cleanPlayerPref()
-		{
-			PlayerPrefs.DeleteAll();
-		}
+	public static void cleanPlayerPref()
+	{
+		PlayerPrefs.DeleteAll();
+	}
 
 	[MenuItem("BuildAB/DeletePersistentPath ")]
-		public static void deletePersistentPath()
-		{
-			Directory.Delete(Application.persistentDataPath, true);
-		}
+	public static void deletePersistentPath()
+	{
+		Directory.Delete(Application.persistentDataPath, true);
+	}
+
+	[MenuItem("BuildAB/AdditionalIl2CppArgs")]
+	public static void AdditionalIl2CppArgs()
+	{
+		//PlayerSettings.SetAdditionalIl2CppArgs("");
+		//PlayerSettings.SetAdditionalIl2CppArgs("-O3 -g0 -DUNITY_WEBGL=1 -s PRECISE_F32=2 -s NO_EXIT_RUNTIME=1 -s USE_WEBGL2=1 -s FULL_ES3=1 -s DISABLE_EXCEPTION_CATCHING=0 -s TOTAL_MEMORY=268435456 --memory-init-file 1 --emit-symbol-map --separate-asm --output_eol linux");
+		Debug.Log(PlayerSettings.GetAdditionalIl2CppArgs());
+	}
+
+	[MenuItem("BuildAB/ApiCompatibilityLevel")]
+	public static void ApiCompatibilityLevel()
+	{
+		Debug.Log(PlayerSettings.GetApiCompatibilityLevel(EditorUserBuildSettings.selectedBuildTargetGroup).ToString());
+	}
+
+	[MenuItem("BuildAB/ApplicationIdentifier")]
+	public static void ApplicationIdentifier()
+	{
+		//Debug.Log(EditorUserBuildSettings.selectedBuildTargetGroup.ToString());
+		Debug.Log(PlayerSettings.GetApplicationIdentifier(EditorUserBuildSettings.selectedBuildTargetGroup));
+	}
+
+	[MenuItem("BuildAB/CodeStrippingLevel")]
+	public static void CodeStrippingLevel()
+	{
+		Debug.Log(PlayerSettings.strippingLevel.ToString());
+	}
 
 	[MenuItem("BuildAB/Packager ")]
-		public static void createWindow()
-		{
-			EditorWindow.GetWindow<BuildWindow>();
-			Packager.Init();
-			Packager.bLoadAB = !AssetBundleManager.SimulateAssetBundleInEditor;
+	public static void createWindow()
+	{
+		EditorWindow.GetWindow<BuildWindow>();
+		Packager.Init();
+		Packager.bLoadAB = !AssetBundleManager.SimulateAssetBundleInEditor;
 	}
 
 }
@@ -331,14 +358,14 @@ public class BuildUtil
 				levels[0] = files[i].FullName;
 				string szOut = Packager.GetABPath() + "/Assets/Resources/screen/" + files[i].Name;
 				szOut = szOut.Replace(files[i].Extension, "");
-				BuildPipeline.BuildPlayer(levels, szOut.ToLower(), BuildTarget.WebGL, BuildOptions.CompressWithLz4HC | BuildOptions.BuildAdditionalStreamedScenes);
+				BuildPipeline.BuildPlayer(levels, szOut.ToLower(), BuildTarget.WebGL, BuildOptions.BuildAdditionalStreamedScenes | BuildOptions.AllowDebugging | BuildOptions.UncompressedAssetBundle);
 			}
 		}
 		BuildTarget type = BuildTarget.WebGL;
 		//copyWWise(type);
 		copyABRes(type);
 		//createVersion();
-		BuildPipeline.BuildPlayer(levels, Application.dataPath + "/../view", BuildTarget.WebGL, BuildOptions.ShowBuiltPlayer | BuildOptions.Development);
+		BuildPipeline.BuildPlayer(levels, Application.dataPath + "/../view", BuildTarget.WebGL, BuildOptions.ShowBuiltPlayer | BuildOptions.AllowDebugging);
 	}
 
 	static public void copyPlatformRes(BuildTarget os)

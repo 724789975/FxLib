@@ -8,9 +8,9 @@ mergeInto(LibraryManager.library,
 		stringToUTF8(url, buffer, bufferSize);
 		return buffer;
 	},
-	LogStr: function(str)
+	LogStr: function(szStyle, szContent)
 	{
-		console.log(Pointer_stringify(str));
+		console.log("%c%s", Pointer_stringify(szStyle), Pointer_stringify(szContent));
 	},
 	AlertString: function(str)
 	{

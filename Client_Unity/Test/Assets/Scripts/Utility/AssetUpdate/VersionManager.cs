@@ -56,11 +56,11 @@ public class Version
 		return ToNumber() < other.ToNumber();
     }
 
-	public bool IsEqual(Version other){
+	public bool IsEqual(Version other)
+	{
 		return m_dwMainVersion == other.m_dwMainVersion && 
 			m_dwSubVersion == other.m_dwSubVersion && 
 			m_dwMiniVersion == other.m_dwMiniVersion;
-	
 	}
 }
 
@@ -73,10 +73,12 @@ public class VersionManager : SingletonObject<VersionManager>
 	{
 		DontDestroyOnLoad(this);
 		CreateInstance(this);
+#if !UNITY_WEBGL
 		byte[] content = File.ReadAllBytes(Application.streamingAssetsPath + "/version.txt");
 		string ver = System.Text.Encoding.UTF8.GetString(content);
 
 		proCurVersion = ver;
+#endif
 	}
 
 	public string proCurVersion
@@ -88,7 +90,9 @@ public class VersionManager : SingletonObject<VersionManager>
         set
         {
             m_verVersion.proCurVersion = value;
+#if !UNITY_WEBGL
             SaveVersion(Application.persistentDataPath + "/version.txt");
+#endif
         }
     }
 
