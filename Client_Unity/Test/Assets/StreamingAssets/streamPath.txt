@@ -1,6 +1,8 @@
+/AssetBundles | 0
 /Config | 0
 /Config/PreloadAB.json | 1|0.00
 /Lua | 0
-/Lua/.main.lua.swp | 1|12.00
-/Lua/main.lua | 1|0.05
+/Lua/Logic | 0
+/Lua/Logic/GameInstance.lua | 1|0.63
+/Lua/main.lua | 1|0.13
 /version.txt | 1|0.00

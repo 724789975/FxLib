@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311947, g: 0.38074002, b: 0.3587271, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -503,10 +503,10 @@ MonoBehaviour:
   m_szLoginIp: 
   m_szUrlHost: 
   m_szGetRoleUri: portal/index.php/api/login/sendOauthUserInfo
-  m_szVersion: portal/version.txt
-  m_szVersionContent: portal/{0}/VersionContent.zip
-  m_szMarkPath: portal/{0}/mark.txt
-  m_szPlatformContentPath: portal/{0}/{1}.zip
+  m_szVersion: patch/version.txt
+  m_szVersionContent: patch/{0}/VersionContent.zip
+  m_szMarkPath: patch/{0}/mark.txt
+  m_szPlatformContentPath: patch/{0}/{1}.zip
 --- !u!4 &1406821965
 Transform:
   m_ObjectHideFlags: 0
