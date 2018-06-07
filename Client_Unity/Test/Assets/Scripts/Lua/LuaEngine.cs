@@ -16,7 +16,6 @@ public class LuaEngine : SingletonObject<LuaEngine>
 	{
 		//注 一定不能放到awake中
 		m_pLuaEnv.AddLoader(StreamingLoader);
-		m_pLuaEnv.DoString("require 'main'");
 	}
 	
 	// Update is called once per frame
@@ -36,10 +35,15 @@ public class LuaEngine : SingletonObject<LuaEngine>
 		}
 	}
 
+	public void Load()
+	{
+		m_pLuaEnv.DoString("require 'main'");
+	}
+
 	private byte[] StreamingLoader(ref string szFileName)
 	{
 		string szFilePath = "";
-#if UNITY_EDITOR
+#if UNITY_EDITOR && DEVELOP_VERSION
 		szFilePath = Globals.streamingPath + "/Lua/" + szFileName;
 #else
 		szFilePath = Globals.persistenPath + "/Lua/" + szFileName;

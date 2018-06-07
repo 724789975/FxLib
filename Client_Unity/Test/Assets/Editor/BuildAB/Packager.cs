@@ -81,35 +81,35 @@ public class Packager
     {
         //1.生成AB包
         Packager.GenerateAB();
-        
-        ////2.复制 lua 文件
-        //string luaDataPath = Application.dataPath + "/StreamingAssets/";
-        //Recursive(luaDataPath);
-        //int n = 0;
-        //foreach (string f in files)
-        //{
-        //    if (f.EndsWith(".meta")) continue;
-        //    string newfile = f.Replace(luaDataPath, "");
-        //    string newpath = resPath + "/" + newfile;
-        //    string path = Path.GetDirectoryName(newpath);
-        //    if (!Directory.Exists(path)) Directory.CreateDirectory(path);
 
-        //    if (File.Exists(newpath))
-        //    {
-        //        File.Delete(newpath);
-        //    }
-        //    if (Packager.bEncodeLua)
-        //    {
-        //        UpdateProgress(n++, files.Count, newpath);
-        //        EncodeLuaFile(f, newpath, isWin);
-        //    }
-        //    else
-        //    {
-        //        File.Copy(f, newpath, true);
-        //    }
-        //}
-        //EditorUtility.ClearProgressBar();
-    }
+		////2.复制 lua 文件
+		//string luaDataPath = Application.dataPath + "/StreamingAssets/";
+		//Recursive(luaDataPath);
+		//int n = 0;
+		//foreach (string f in files)
+		//{
+		//	if (f.EndsWith(".meta")) continue;
+		//	string newfile = f.Replace(luaDataPath, "");
+		//	string newpath = resPath + "/" + newfile;
+		//	string path = Path.GetDirectoryName(newpath);
+		//	if (!Directory.Exists(path)) Directory.CreateDirectory(path);
+
+		//	if (File.Exists(newpath))
+		//	{
+		//		File.Delete(newpath);
+		//	}
+		//	if (Packager.bEncodeLua)
+		//	{
+		//		UpdateProgress(n++, files.Count, newpath);
+		//		EncodeLuaFile(f, newpath, isWin);
+		//	}
+		//	else
+		//	{
+		//		File.Copy(f, newpath, true);
+		//	}
+		//}
+		//EditorUtility.ClearProgressBar();
+	}
 
 	public static string GetABPath(){
 		return Application.dataPath + "/../AssetBundles/" + Packager.GetPlatformFolderForAssetBundles(EditorUserBuildSettings.activeBuildTarget);

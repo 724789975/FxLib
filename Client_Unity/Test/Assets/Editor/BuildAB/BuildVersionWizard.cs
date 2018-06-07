@@ -193,32 +193,52 @@ public class BuildWindow : EditorWindow
 		if (newSelect != curSelect)
 		{
 			curSelect = newSelect;
-			int offset;
+			curSymbol = PlayerSettings.GetScriptingDefineSymbolsForGroup(curGroup);
 			switch (curSelect)
 			{
 				case 0:
-					curSymbol = PlayerSettings.GetScriptingDefineSymbolsForGroup(curGroup);
-					curSymbol = curSymbol.Replace(";RELEASE_VER", "");
-					curSymbol = curSymbol.Replace(";STORE_VERSION", "");
+					{
+						curSymbol = curSymbol.Replace("RELEASE_VER", "DEVELOP_VERSION");
+						curSymbol = curSymbol.Replace("STORE_VERSION", "DEVELOP_VERSION");
+						if (curSymbol.IndexOf("DEVELOP_VERSION", 0, curSymbol.Length) == -1)
+						{
+							if (!string.IsNullOrEmpty(curSymbol))
+							{
+								curSymbol += ";";
+							}
+							curSymbol += "DEVELOP_VERSION";
+						}
+					}
 					break;
 
 				case 1:
-					curSymbol = PlayerSettings.GetScriptingDefineSymbolsForGroup(curGroup);
-					offset = curSymbol.IndexOf(";RELEASE_VER", 0, curSymbol.Length);
-					curSymbol = curSymbol.Replace(";STORE_VERSION", "");
-					if (offset == -1)
-						curSymbol = curSymbol + ";RELEASE_VER";
+					{
+						curSymbol = curSymbol.Replace("DEVELOP_VERSION", "RELEASE_VER");
+						curSymbol = curSymbol.Replace("STORE_VERSION", "RELEASE_VER");
+						if (curSymbol.IndexOf("RELEASE_VER", 0, curSymbol.Length) == -1)
+						{
+							if (!string.IsNullOrEmpty(curSymbol))
+							{
+								curSymbol += ";";
+							}
+							curSymbol += "RELEASE_VER";
+						}
+					}
 					break;
 
 				case 2:
-					curSymbol = PlayerSettings.GetScriptingDefineSymbolsForGroup(curGroup);
-					offset = curSymbol.IndexOf(";RELEASE_VER", 0, curSymbol.Length);
-					if (offset == -1)
-						curSymbol = curSymbol + ";RELEASE_VER";
-
-					offset = curSymbol.IndexOf(";STORE_VERSION", 0, curSymbol.Length);
-					if (offset == -1)
-						curSymbol = curSymbol + ";STORE_VERSION";
+					{
+						curSymbol = curSymbol.Replace("DEVELOP_VERSION", "STORE_VERSION");
+						curSymbol = curSymbol.Replace("RELEASE_VER", "STORE_VERSION");
+						if (curSymbol.IndexOf("STORE_VERSION", 0, curSymbol.Length) == -1)
+						{
+							if (!string.IsNullOrEmpty(curSymbol))
+							{
+								curSymbol += ";";
+							}
+							curSymbol += "STORE_VERSION";
+						}
+					}
 					break;
 			}
 

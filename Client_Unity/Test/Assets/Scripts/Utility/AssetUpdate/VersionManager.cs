@@ -73,7 +73,7 @@ public class VersionManager : SingletonObject<VersionManager>
 	{
 		DontDestroyOnLoad(this);
 		CreateInstance(this);
-#if !UNITY_WEBGL
+#if !UNITY_WEBGL && FALSE
 		byte[] content = File.ReadAllBytes(Application.streamingAssetsPath + "/version.txt");
 		string ver = System.Text.Encoding.UTF8.GetString(content);
 

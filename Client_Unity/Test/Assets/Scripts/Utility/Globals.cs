@@ -3,28 +3,18 @@ using System.Collections;
 
 public static class Globals
 {
-    public static string streamingPath;
-    public static string persistenPath;
-
-    public static string wwwStreamingPath;
-    public static string wwwPersistenPath;
+    public static string streamingPath = Application.streamingAssetsPath;
+	public static string persistenPath = Application.persistentDataPath;
+#if UNITY_ANDROID
+	public static string wwwStreamingPath = Application.streamingAssetsPath;
+	public static string wwwPersistenPath = "file:///" + Application.persistentDataPath; 
+#elif UNITY_WEBGL
+	public static string wwwStreamingPath = Application.streamingAssetsPath;
+	public static string wwwPersistenPath = Application.persistentDataPath;
+#else
+	public static string wwwStreamingPath = "file:///" + Application.streamingAssetsPath;
+	public static string wwwPersistenPath = "file:///" + Application.persistentDataPath;
+#endif
 
     public static string NoticeJson;
-
-    public static void Init()
-    {
-        Globals.streamingPath = Application.streamingAssetsPath;
-        Globals.persistenPath = Application.persistentDataPath;
-       
-#if UNITY_ANDROID
-        Globals.wwwStreamingPath = Application.streamingAssetsPath;
-		Globals.wwwPersistenPath = "file:///" + Application.persistentDataPath; 
-#elif UNITY_WEBGL
-        Globals.wwwStreamingPath = Application.streamingAssetsPath;
-        Globals.wwwPersistenPath = Application.persistentDataPath;
-#else
-        Globals.wwwStreamingPath = "file:///" + Application.streamingAssetsPath;
-        Globals.wwwPersistenPath = "file:///" + Application.persistentDataPath;
-#endif
-	}
 }

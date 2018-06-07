@@ -52,11 +52,11 @@ public static class GenConfig
 		typeof(UnityEngine.Debug),
 		typeof(WaitForSeconds),
 		typeof(WWW),
-		typeof(Globals),
 		typeof(SampleDebuger),
 		typeof(SessionObject),
 		typeof(LoginControler),
 		typeof(GameControler),
+		typeof(GameInstance),
 	};
 
 	//C#静态调用Lua的配置（包括事件的原型），仅可以配delegate，interface
@@ -74,6 +74,8 @@ public static class GenConfig
 	[Hotfix]
 	public static List<Type> by_field = new List<Type>()
 	{
+		typeof(GameControler),
+		typeof(GameInstance),
 	};
 
 	[Hotfix]

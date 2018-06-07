@@ -84,14 +84,14 @@ public class AssetUpdater : MonoBehaviour
 
 	IEnumerator CheckVersionContent()
 	{
-		string szVersionContent = GameInstance.Instance().proServerUrl
-			+ string.Format(GameInstance.Instance().proServerVersionContent, VersionManager.Instance().GetVersionUrl()) + "?" + Time.realtimeSinceStartup.ToString();
-		WWW www = new WWW(szVersionContent);
+		string szVersionMark = GameInstance.Instance().proServerUrl
+			+ string.Format(GameInstance.Instance().proServerMarkPath, VersionManager.Instance().GetVersionUrl()) + "?" + Time.realtimeSinceStartup.ToString();
+		WWW www = new WWW(szVersionMark);
 		SampleDebuger.Log ("+++++++++++ checkVersionContent +++++++++++ ");
 		yield return www;
 		if (!string.IsNullOrEmpty(www.error))
 		{
-			SampleDebuger.Log(szVersionContent);
+			SampleDebuger.Log(szVersionMark);
 			AssetBundleLoader.Instance().LoadAsset(GameObjectConstant.GetABUIPath(GameObjectConstant.g_szConfirmPanel), GameObjectConstant.g_szConfirmPanel, delegate (UnityEngine.Object ob)
 				{
 					GameObject go_RoleList = Instantiate((GameObject)ob, MainCanvas.Instance().transform);
@@ -139,7 +139,8 @@ public class AssetUpdater : MonoBehaviour
     {
         m_bDownloading = true;
 		string szVersion = GameInstance.Instance().proServerUrl
-			+ string.Format(GameInstance.Instance().proServerNextVersionPath, VersionManager.Instance().GetVersionUrl())
+			+ string.Format(GameInstance.Instance().proServerPlatformContentPath,
+			VersionManager.Instance().GetVersionUrl(), SysUtil.GetPlatformName())
 			+ "?" + Time.realtimeSinceStartup.ToString();
 		AssetDownloader.Instance().AddURL(szVersion);
 		string szVersionContent = GameInstance.Instance().proServerUrl

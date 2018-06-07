@@ -162,7 +162,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.1
   applicationIdentifier: {}
   buildNumber: {}
-  AndroidBundleVersionCode: 2
+  AndroidBundleVersionCode: 3
   AndroidMinSdkVersion: 16
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -562,7 +562,7 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 2
   scriptingDefineSymbols:
-    1: MEANINGLESS;HOTFIX_ENABLE
+    1: HOTFIX_ENABLE;DEVELOP_VERSION
     13: MEANINGLESS
   platformArchitecture: {}
   scriptingBackend: {}

@@ -14,7 +14,6 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 	{
 		DontDestroyOnLoad(this);
 		CreateInstance(this);
-		Globals.Init();
 	}
 
 	IEnumerator Start()

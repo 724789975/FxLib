@@ -16,5 +16,10 @@ public class VersionUpdateInit : MonoBehaviour
 		
 	}
 
+	void OnDestroy()
+	{
+		LuaEngine.Instance().Load();
+	}
+
 	public EnvCheckInit m_pEnvCheckInit;
 }

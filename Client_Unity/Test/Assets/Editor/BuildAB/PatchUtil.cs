@@ -82,7 +82,7 @@ public class PatchUtil : Singleton<PatchUtil>
 			ArrayList diffFiles = pInfo.getDiffFiles(patchInfo);
 			if (diffFiles.Count == 0) continue;
 
-			FileStream commonStream = new FileStream(pInfo.getPatchPath() + "/Common.zip", FileMode.Create);
+			FileStream commonStream = new FileStream(pInfo.getPatchPath() + "/VersionContent.zip", FileMode.Create);
 			ZipOutputStream commonZipper = new ZipOutputStream(commonStream);
 			commonZipper.SetLevel(5);
 

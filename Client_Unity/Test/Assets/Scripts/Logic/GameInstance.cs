@@ -31,6 +31,13 @@ public class GameInstance: SingletonObject<GameInstance>
 	void Update ()
 	{
 	}
+	void OnDestroy()
+	{
+	}
+
+	void OnApplicationQuit()
+	{
+	}
 
 	public void GetServerInfo()
 	{
@@ -70,7 +77,8 @@ public class GameInstance: SingletonObject<GameInstance>
 	public string proServerUrl { get { return m_szServerUrl; } }
 	public string proServerVersion { get { return m_szVersion; } }
 	public string proServerVersionContent { get { return m_szVersionContent; } }
-	public string proServerNextVersionPath { get { return m_szNextVersionPath; } }
+	public string proServerMarkPath { get { return m_szMarkPath; } }
+	public string proServerPlatformContentPath{ get { return m_szPlatformContentPath; } }
 
 	public ushort proLoginPort { get { return m_wLoginPort; } }
 	public string proLoginIp { get { return m_szLoginIp; } }
@@ -95,5 +103,6 @@ public class GameInstance: SingletonObject<GameInstance>
 	public string m_szGetRoleUri;
 	public string m_szVersion;
 	public string m_szVersionContent;
-	public string m_szNextVersionPath;
+	public string m_szMarkPath;
+	public string m_szPlatformContentPath;
 }
