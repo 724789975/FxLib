@@ -111,7 +111,8 @@ public class Packager
 		//EditorUtility.ClearProgressBar();
 	}
 
-	public static string GetABPath(){
+	public static string GetABPath()
+	{
 		return Application.dataPath + "/../AssetBundles/" + Packager.GetPlatformFolderForAssetBundles(EditorUserBuildSettings.activeBuildTarget);
 	}
 

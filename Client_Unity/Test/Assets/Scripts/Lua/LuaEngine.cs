@@ -43,7 +43,7 @@ public class LuaEngine : SingletonObject<LuaEngine>
 	private byte[] StreamingLoader(ref string szFileName)
 	{
 		string szFilePath = "";
-#if UNITY_EDITOR && DEVELOP_VERSION
+#if (UNITY_EDITOR && DEVELOP_VERSION ) || UNITY_WEBGL
 		szFilePath = Globals.streamingPath + "/Lua/" + szFileName;
 #else
 		szFilePath = Globals.persistenPath + "/Lua/" + szFileName;

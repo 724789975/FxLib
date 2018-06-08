@@ -563,7 +563,7 @@ PlayerSettings:
   webGLCompressionFormat: 2
   scriptingDefineSymbols:
     1: HOTFIX_ENABLE;DEVELOP_VERSION
-    13: MEANINGLESS
+    13: DEVELOP_VERSION
   platformArchitecture: {}
   scriptingBackend: {}
   incrementalIl2cppBuild: {}

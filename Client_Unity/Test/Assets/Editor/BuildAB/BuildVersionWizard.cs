@@ -378,14 +378,14 @@ public class BuildUtil
 				levels[0] = files[i].FullName;
 				string szOut = Packager.GetABPath() + "/Assets/Resources/screen/" + files[i].Name;
 				szOut = szOut.Replace(files[i].Extension, "");
-				BuildPipeline.BuildPlayer(levels, szOut.ToLower(), BuildTarget.WebGL, BuildOptions.BuildAdditionalStreamedScenes | BuildOptions.AllowDebugging | BuildOptions.UncompressedAssetBundle);
+				BuildPipeline.BuildPlayer(levels, szOut.ToLower(), BuildTarget.WebGL, BuildOptions.BuildAdditionalStreamedScenes | BuildOptions.AllowDebugging | BuildOptions.UncompressedAssetBundle | BuildOptions.BuildScriptsOnly);
 			}
 		}
 		BuildTarget type = BuildTarget.WebGL;
 		//copyWWise(type);
 		copyABRes(type);
 		//createVersion();
-		BuildPipeline.BuildPlayer(levels, Application.dataPath + "/../view", BuildTarget.WebGL, BuildOptions.ShowBuiltPlayer | BuildOptions.AllowDebugging);
+		BuildPipeline.BuildPlayer(levels, Application.dataPath + "/../view", BuildTarget.WebGL, BuildOptions.ShowBuiltPlayer | BuildOptions.AllowDebugging | BuildOptions.BuildScriptsOnly);
 	}
 
 	static public void copyPlatformRes(BuildTarget os)
