@@ -93,8 +93,10 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 		if(eLevel < LogLv_Count)\
 		{\
 			int nLenStr = 0;\
-			nLenStr += sprintf(strLog + nLenStr, "%s:%d ", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
+			nLenStr += sprintf(strLog + nLenStr, "%s.%d ", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
+			nLenStr = 24;\
 			nLenStr += sprintf(strLog + nLenStr, "%s", LogLevelString[eLevel]);\
+			nLenStr = 40;\
 			nLenStr += sprintf(strLog + nLenStr, "[%s,%d,%s] ", __FILE__, __LINE__, __FUNCTION__);\
 			nLenStr += sprintf(strLog + nLenStr, strFmt, ##__VA_ARGS__);\
 			nLenStr += sprintf(strLog + nLenStr, "%s", "\n");\
@@ -124,7 +126,9 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 			{\
 				int nLenStr = 0;\
 				nLenStr += sprintf(strLog + nLenStr, "%s:%d ", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
+				nLenStr = 24;\
 				nLenStr += sprintf(strLog + nLenStr, "%s", LogLevelString[eLevel]);\
+				nLenStr = 40;\
 				nLenStr += sprintf(strLog + nLenStr, "[%s,%d,%s] ", __FILE__, __LINE__, __FUNCTION__);\
 				nLenStr += sprintf(strLog + nLenStr, strFmt, ##__VA_ARGS__);\
 				nLenStr += sprintf(strLog + nLenStr, "%s", "\n");\
