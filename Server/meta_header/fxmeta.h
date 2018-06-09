@@ -69,14 +69,14 @@ enum LOGLEVEL
 
 static const char* LogLevelString[LogLv_Count] =
 {
-		"LogLv_Error	",
-		"LogLv_Critical	",
-		"LogLv_Warn		",
-		"LogLv_Info		",
-		"LogLv_Debug	",
-		"LogLv_Debug1	",
-		"LogLv_Debug2	",
-		"LogLv_Debug3	",
+		"LogLv_Error",
+		"LogLv_Critical",
+		"LogLv_Warn",
+		"LogLv_Info",
+		"LogLv_Debug",
+		"LogLv_Debug1",
+		"LogLv_Debug2",
+		"LogLv_Debug3",
 };
 
 int GetPid();
