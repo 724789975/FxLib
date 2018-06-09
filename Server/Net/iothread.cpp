@@ -113,7 +113,7 @@ UINT32 FxIoThread::GetThreadId()
 FILE*& FxIoThread::GetFile()
 {
 	unsigned int dwTime = GetTimeHandler()->GetSecond() - GetTimeHandler()->GetSecond() % 3600;
-	sprintf(m_szLogPath, "./%s_%d_%p_%d_log.txt", GetExeName(), GetPid(), this, dwTime);
+	sprintf(m_szLogPath, "./%s_%d_%d_%p_log.txt", GetExeName(), dwTime, GetPid(), this);
 	if (Access(m_szLogPath, 0) == -1)
 	{
 		if (m_pFile)

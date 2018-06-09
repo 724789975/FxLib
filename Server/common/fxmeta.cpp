@@ -148,7 +148,7 @@ FILE* GetLogFile()
 	static char sstrPath[512] = { 0 };
 	static char strLogPath[512] = { 0 };
 	unsigned int dwTime = GetTimeHandler()->GetSecond() - GetTimeHandler()->GetSecond() % 3600;
-	sprintf(strLogPath, "./%s_%d_%d_exe_log.txt", GetExeName(), GetPid(), dwTime);
+	sprintf(strLogPath, "./%s_%d_%d_exe_log.txt", GetExeName(), dwTime, GetPid());
 
 	//if (strcmp(strLogPath, sstrPath) != 0)
 	//{

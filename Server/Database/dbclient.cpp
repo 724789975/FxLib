@@ -5,7 +5,7 @@
 FxMySqlClient::FxMySqlClient()
 {
 	__Reset();
-	sprintf(m_szLogPath, "./%s_%p_log.txt", GetExeName(), this);
+	sprintf(m_szLogPath, "./%s_%s_log.txt", GetExeName(), "mysql");
 }
 
 FxMySqlClient::~FxMySqlClient()
