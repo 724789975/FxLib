@@ -69,14 +69,14 @@ enum LOGLEVEL
 
 static const char* LogLevelString[LogLv_Count] =
 {
-		"LogLv_Error",
-		"LogLv_Critical",
-		"LogLv_Warn",
-		"LogLv_Info",
-		"LogLv_Debug",
-		"LogLv_Debug1",
-		"LogLv_Debug2",
-		"LogLv_Debug3",
+		"LogLv_Error    ",
+		"LogLv_Critical ",
+		"LogLv_Warn     ",
+		"LogLv_Info     ",
+		"LogLv_Debug    ",
+		"LogLv_Debug1   ",
+		"LogLv_Debug2   ",
+		"LogLv_Debug3   ",
 };
 
 int GetPid();
@@ -92,12 +92,9 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 		char strLog[2048] = {0};\
 		if(eLevel < LogLv_Count)\
 		{\
-			sprintf(strLog, "%s", "                                                                                ");\
 			int nLenStr = 0;\
-			nLenStr += sprintf(strLog + nLenStr, "%s.%d ", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
-			nLenStr = 24;\
+			nLenStr += sprintf(strLog + nLenStr, "%s.%d\t", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
 			nLenStr += sprintf(strLog + nLenStr, "%s", LogLevelString[eLevel]);\
-			nLenStr = 40;\
 			nLenStr += sprintf(strLog + nLenStr, "[%s,%d,%s] ", __FILE__, __LINE__, __FUNCTION__);\
 			nLenStr += sprintf(strLog + nLenStr, strFmt, ##__VA_ARGS__);\
 			nLenStr += sprintf(strLog + nLenStr, "%s", "\n");\
@@ -125,12 +122,9 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 		{\
 			if((eLevel < LogLv_Count))\
 			{\
-				sprintf(strLog, "%s", "                                                                                ");\
 				int nLenStr = 0;\
-				nLenStr += sprintf(strLog + nLenStr, "%s.%d ", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
-				nLenStr = 24;\
+				nLenStr += sprintf(strLog + nLenStr, "%s.%d\t", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
 				nLenStr += sprintf(strLog + nLenStr, "%s", LogLevelString[eLevel]);\
-				nLenStr = 41;\
 				nLenStr += sprintf(strLog + nLenStr, "[%s,%d,%s] ", __FILE__, __LINE__, __FUNCTION__);\
 				nLenStr += sprintf(strLog + nLenStr, strFmt, ##__VA_ARGS__);\
 				nLenStr += sprintf(strLog + nLenStr, "%s", "\n");\
@@ -177,12 +171,9 @@ inline const char* GetSeparator()
 		{\
 			if((eLevel < LogLv_Count))\
 			{\
-				sprintf(strLog, "%s", "                                                                                ");\
 				int nLenStr = 0;\
-				nLenStr += sprintf(strLog + nLenStr, "%s.%d ", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
-				nLenStr = 24;\
-				nLenStr += sprintf(strLog + nLenStr, "%s", LogLevelString[eLevel]);\
-				nLenStr = 40;\
+				nLenStr += sprintf(strLog + nLenStr, "%s.%d\t", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
+				nLenStr += sprintf(strLog + nLenStr, "%s ", LogLevelString[eLevel]);\
 				nLenStr += sprintf(strLog + nLenStr, "[%s,%d,%s] ", __FILE__, __LINE__, __FUNCTION__);\
 				nLenStr += sprintf(strLog + nLenStr, strFmt, ##__VA_ARGS__);\
 				nLenStr += sprintf(strLog + nLenStr, "%s", "\n");\
