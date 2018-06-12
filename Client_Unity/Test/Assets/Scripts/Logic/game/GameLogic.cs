@@ -6,9 +6,9 @@ public class GameLogic : SingletonObject<GameLogic>
 {
 	void Awake()
 	{
-		for (int i = 0; i < GameData.s_dwColumn * GameData.s_dwRow; ++i)
+		for (int i = 0; i < TetrisData.s_dwColumn * TetrisData.s_dwRow; ++i)
 		{
-			m_arrBlockInfos[i / GameData.s_dwColumn, i % GameData.s_dwColumn] = m_arrBlocks[i];
+			m_arrBlockInfos[i / TetrisData.s_dwColumn, i % TetrisData.s_dwColumn] = m_arrBlocks[i];
 		}
 	}
 
@@ -21,12 +21,18 @@ public class GameLogic : SingletonObject<GameLogic>
 	void Update ()
 	{
 	}
+
+	void SetTetrisData(TetrisData oData)
+	{
+		m_oData = oData;
+	}
 	
-	public UnityEngine.UI.Image[] m_arrBlocks = new UnityEngine.UI.Image[GameData.s_dwRow * GameData.s_dwColumn];
-	public UnityEngine.UI.Image[] m_arrNextBlocks = new UnityEngine.UI.Image[GameData.s_dwUnit * GameData.s_dwUnit];
-	public UnityEngine.UI.Image[] m_arrCurrBlocks = new UnityEngine.UI.Image[GameData.s_dwUnit * GameData.s_dwUnit];
+	public UnityEngine.UI.Image[] m_arrBlocks = new UnityEngine.UI.Image[TetrisData.s_dwRow * TetrisData.s_dwColumn];
+	public UnityEngine.UI.Image[] m_arrNextBlocks = new UnityEngine.UI.Image[TetrisData.s_dwUnit * TetrisData.s_dwUnit];
+	public UnityEngine.UI.Image[] m_arrCurrBlocks = new UnityEngine.UI.Image[TetrisData.s_dwUnit * TetrisData.s_dwUnit];
 
-	UnityEngine.UI.Image[,] m_arrBlockInfos = new UnityEngine.UI.Image[GameData.s_dwRow, GameData.s_dwColumn];
+	UnityEngine.UI.Image[,] m_arrBlockInfos = new UnityEngine.UI.Image[TetrisData.s_dwRow, TetrisData.s_dwColumn];
 
+	public TetrisData m_oData;
 }
 
