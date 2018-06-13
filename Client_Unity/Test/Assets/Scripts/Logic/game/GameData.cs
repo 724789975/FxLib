@@ -10,8 +10,8 @@ public class Tetris
 	public uint m_dwTetrisColor;
 
 	//坐标位置为左下角
-	public uint m_dwPosX;
-	public uint m_dwPosY;
+	public int m_dwPosX;
+	public int m_dwPosY;
 }
 
 [System.Serializable]
@@ -325,8 +325,8 @@ public class TetrisData
 
 public class UserTetrisData : TetrisData
 {
-	//下面有块 返回false
-	public bool CheckUnderTetris(uint dwRow, uint dwCol)
+	//下面有块 返回true
+	public bool CheckTetris(int dwRow, int dwCol)
 	{
 		if (dwRow == 0)
 		{
@@ -336,10 +336,58 @@ public class UserTetrisData : TetrisData
 		return dwColor != 0;
 	}
 
+	public bool CheckLeftTetris()
+	{
+		//检查方块左面有没有
+		for (int i = 0; i < s_dwUnit; i++)
+		{
+			uint dwBlockInfo = s_wTetrisTable[m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, 5, i];
+			if (dwBlockInfo == 0)
+			{
+				continue;
+			}
+
+			int dwCheckX = m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) - 1;
+			if (dwCheckX == 0)
+			{
+				return true;
+			}
+			if (CheckTetris(m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) - 1, m_oCurrentTetris.m_dwPosY + i))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public bool CheckRightTetris()
+	{
+		//检查方块右面有没有
+		for (int i = 0; i < s_dwUnit; i++)
+		{
+			uint dwBlockInfo = s_wTetrisTable[m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, 6, i];
+			if (dwBlockInfo == 0)
+			{
+				continue;
+			}
+
+			int dwCheckX = m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) + 1;
+			if (dwCheckX == s_dwColumn)
+			{
+				return true;
+			}
+			if (CheckTetris(dwCheckX, m_oCurrentTetris.m_dwPosY + i))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
+
 	public bool CheckDownTetris()
 	{
 		//检查方块还能不能继续下降
-		for (uint i = 0; i < s_dwDirectCount; i++)
+		for (int i = 0; i < s_dwUnit; i++)
 		{
 			uint dwBlockInfo = s_wTetrisTable[m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, 4, i];
 			if (dwBlockInfo == 0)
@@ -347,7 +395,13 @@ public class UserTetrisData : TetrisData
 				continue;
 			}
 
-			if (CheckUnderTetris(m_oCurrentTetris.m_dwPosX + i, m_oCurrentTetris.m_dwPosY + (dwBlockInfo & 0x0000000F) - 1))
+			int dwCheckY = m_oCurrentTetris.m_dwPosY + ((int)dwBlockInfo & 0x0000000F) - 1;
+			if (dwCheckY == 0)
+			{
+				//到底了
+				return true;
+			}
+			if (CheckTetris(m_oCurrentTetris.m_dwPosX + i, dwCheckY))
 			{
 				return true;
 			}
@@ -360,7 +414,7 @@ public class UserTetrisData : TetrisData
 		//方块的位置初始化于中间的方格
 		//坐标是方块的左下角
 		//下降的时候 先要找出当前方块最下面的几个块的坐标
-		if (CheckDownTetris())
+		if (!CheckDownTetris())
 		{
 			//向下移动一格
 			m_oCurrentTetris.m_dwPosY -= 1;
@@ -368,6 +422,25 @@ public class UserTetrisData : TetrisData
 		else
 		{
 			//todo 固定住 那么就不能往下移动了 换下一个方块
+		}
+		//todo发消息
+	}
+
+	public void MoveLeft()
+	{
+		if (!CheckLeftTetris())
+		{
+			m_oCurrentTetris.m_dwPosX -= 1;
+			//要发消息
+		}
+	}
+
+	public void MoveRight()
+	{
+		if (!CheckRightTetris())
+		{
+			m_oCurrentTetris.m_dwPosX += 1;
+			//要发消息
 		}
 	}
 
