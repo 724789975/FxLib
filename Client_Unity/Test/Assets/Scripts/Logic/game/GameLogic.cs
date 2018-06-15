@@ -24,12 +24,40 @@ public class GameLogic : SingletonObject<GameLogic>
 		{
 			return;
 		}
-		if (!m_oData.proNeedRefresh == false)
+
+		uint[,] dwBlockInfos = m_oData.GetTetrisInfo();
+		if (dwBlockInfos == null)
 		{
 			return;
 		}
 
-		//todo 刷新显示的方块
+		//刷新显示的方块
+		Color32 c = new Color32(255, 255, 255, 100);
+		for (int i = 0; i < TetrisData.s_dwRow; i++)
+		{
+			for (int j = 0; j < TetrisData.s_dwColumn; j++)
+			{
+				c.r = (byte)(dwBlockInfos[i, j] & 0xFF000000 >> 24);
+				c.g = (byte)(dwBlockInfos[i, j] & 0x00FF0000 >> 16);
+				c.b = (byte)(dwBlockInfos[i, j] & 0x0000FF00 >> 8);
+				m_arrBlockInfos[i, j].color = c;
+			}
+		}
+
+		if (m_oData.m_oNextTetris != null)
+		{
+			for (int i = 0; i < TetrisData.s_dwUnit; ++i)
+			{
+				for (int j = 0; j < TetrisData.s_dwUnit; ++j)
+				{
+					uint dwBlockInfo = TetrisData.s_wTetrisTable[m_oData.m_oNextTetris.m_dwTetrisShape, m_oData.m_oNextTetris.m_dwTetrisDirect, i, j];
+					c.r = (byte)(dwBlockInfo & 0xFF000000 >> 24);
+					c.g = (byte)(dwBlockInfo & 0x00FF0000 >> 16);
+					c.b = (byte)(dwBlockInfo & 0x0000FF00 >> 8);
+					m_arrNextBlocks[i * TetrisData.s_dwUnit + j].color = c;
+				}
+			}
+		}
 	}
 
 	void SetTetrisData(TetrisData oData)

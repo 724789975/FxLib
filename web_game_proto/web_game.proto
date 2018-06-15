@@ -37,6 +37,15 @@ enum EErrorCode
 	EC_FailIntoTeam = 11;		//加入队伍失败
 }
 
+//移动方向
+enum EMoveDirection
+{
+	EMD_NONE = 0;
+	EMD_Down = 1;
+	EMD_Left = 2;
+	EMD_Right = 3;
+}
+
 //player->login
 message PlayerRequestLoginServerId
 {
@@ -361,6 +370,12 @@ message PlayerRequestGameEnter
 	uint64 qw_player_id = 1;
 }
 
+message PlayerRequestGameOption
+{
+	float f_tick = 1;
+	EMoveDirection e_direction = 2;
+}
+
 //game->player
 message GameAckPlayerEnter
 {
@@ -399,6 +414,21 @@ message GameNotifyPlayerGameReadyTime
 message GameNotifyPlayerGameState
 {
 	EGameSceneState state = 1;
+}
+
+message GameNotifyPlayerGameInitTetris
+{
+	uint64 dw_player_id = 1;
+	float f_tick = 2;
+	uint32 dw_curr_tetris = 3;
+	uint32 dw_next_tetris = 4;
+}
+
+message GameNotifyPlayerNextTetris
+{
+	uint64 dw_player_id = 1;
+	float f_tick = 2;
+	uint32 dw_next_tetris = 3;
 }
 
 //serverinfo(server->server_center, server_center->server)

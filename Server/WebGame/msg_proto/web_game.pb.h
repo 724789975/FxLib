@@ -38,7 +38,7 @@ namespace protobuf_web_5fgame_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[59];
+  static const ::google::protobuf::internal::ParseTable schema[62];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -146,6 +146,8 @@ void InitDefaultsPlayerRequestGameTestImpl();
 void InitDefaultsPlayerRequestGameTest();
 void InitDefaultsPlayerRequestGameEnterImpl();
 void InitDefaultsPlayerRequestGameEnter();
+void InitDefaultsPlayerRequestGameOptionImpl();
+void InitDefaultsPlayerRequestGameOption();
 void InitDefaultsGameAckPlayerEnterImpl();
 void InitDefaultsGameAckPlayerEnter();
 void InitDefaultsGameNotifyPlayerGameConfigImpl();
@@ -160,6 +162,10 @@ void InitDefaultsGameNotifyPlayerGameReadyTimeImpl();
 void InitDefaultsGameNotifyPlayerGameReadyTime();
 void InitDefaultsGameNotifyPlayerGameStateImpl();
 void InitDefaultsGameNotifyPlayerGameState();
+void InitDefaultsGameNotifyPlayerGameInitTetrisImpl();
+void InitDefaultsGameNotifyPlayerGameInitTetris();
+void InitDefaultsGameNotifyPlayerNextTetrisImpl();
+void InitDefaultsGameNotifyPlayerNextTetris();
 void InitDefaultsServerInfoImpl();
 void InitDefaultsServerInfo();
 inline void InitDefaults() {
@@ -214,6 +220,7 @@ inline void InitDefaults() {
   InitDefaultsGameManagerAckPlayerInfoResult();
   InitDefaultsPlayerRequestGameTest();
   InitDefaultsPlayerRequestGameEnter();
+  InitDefaultsPlayerRequestGameOption();
   InitDefaultsGameAckPlayerEnter();
   InitDefaultsGameNotifyPlayerGameConfig();
   InitDefaultsGameNotifyPlayerGameRoleData();
@@ -221,6 +228,8 @@ inline void InitDefaults() {
   InitDefaultsGameNotifyPlayerPrepareTime();
   InitDefaultsGameNotifyPlayerGameReadyTime();
   InitDefaultsGameNotifyPlayerGameState();
+  InitDefaultsGameNotifyPlayerGameInitTetris();
+  InitDefaultsGameNotifyPlayerNextTetris();
   InitDefaultsServerInfo();
 }
 }  // namespace protobuf_web_5fgame_2eproto
@@ -243,6 +252,9 @@ extern GameNotifyGameManagerInfoDefaultTypeInternal _GameNotifyGameManagerInfo_d
 class GameNotifyPlayerGameConfig;
 class GameNotifyPlayerGameConfigDefaultTypeInternal;
 extern GameNotifyPlayerGameConfigDefaultTypeInternal _GameNotifyPlayerGameConfig_default_instance_;
+class GameNotifyPlayerGameInitTetris;
+class GameNotifyPlayerGameInitTetrisDefaultTypeInternal;
+extern GameNotifyPlayerGameInitTetrisDefaultTypeInternal _GameNotifyPlayerGameInitTetris_default_instance_;
 class GameNotifyPlayerGameReadyTime;
 class GameNotifyPlayerGameReadyTimeDefaultTypeInternal;
 extern GameNotifyPlayerGameReadyTimeDefaultTypeInternal _GameNotifyPlayerGameReadyTime_default_instance_;
@@ -255,6 +267,9 @@ extern GameNotifyPlayerGameSceneInfoDefaultTypeInternal _GameNotifyPlayerGameSce
 class GameNotifyPlayerGameState;
 class GameNotifyPlayerGameStateDefaultTypeInternal;
 extern GameNotifyPlayerGameStateDefaultTypeInternal _GameNotifyPlayerGameState_default_instance_;
+class GameNotifyPlayerNextTetris;
+class GameNotifyPlayerNextTetrisDefaultTypeInternal;
+extern GameNotifyPlayerNextTetrisDefaultTypeInternal _GameNotifyPlayerNextTetris_default_instance_;
 class GameNotifyPlayerPrepareTime;
 class GameNotifyPlayerPrepareTimeDefaultTypeInternal;
 extern GameNotifyPlayerPrepareTimeDefaultTypeInternal _GameNotifyPlayerPrepareTime_default_instance_;
@@ -339,6 +354,9 @@ extern PlayerRequestGameEnterDefaultTypeInternal _PlayerRequestGameEnter_default
 class PlayerRequestGameManagerInfo;
 class PlayerRequestGameManagerInfoDefaultTypeInternal;
 extern PlayerRequestGameManagerInfoDefaultTypeInternal _PlayerRequestGameManagerInfo_default_instance_;
+class PlayerRequestGameOption;
+class PlayerRequestGameOptionDefaultTypeInternal;
+extern PlayerRequestGameOptionDefaultTypeInternal _PlayerRequestGameOption_default_instance_;
 class PlayerRequestGameTest;
 class PlayerRequestGameTestDefaultTypeInternal;
 extern PlayerRequestGameTestDefaultTypeInternal _PlayerRequestGameTest_default_instance_;
@@ -479,6 +497,29 @@ inline bool EErrorCode_Parse(
     const ::std::string& name, EErrorCode* value) {
   return ::google::protobuf::internal::ParseNamedEnum<EErrorCode>(
     EErrorCode_descriptor(), name, value);
+}
+enum EMoveDirection {
+  EMD_NONE = 0,
+  EMD_Down = 1,
+  EMD_Left = 2,
+  EMD_Right = 3,
+  EMoveDirection_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  EMoveDirection_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool EMoveDirection_IsValid(int value);
+const EMoveDirection EMoveDirection_MIN = EMD_NONE;
+const EMoveDirection EMoveDirection_MAX = EMD_Right;
+const int EMoveDirection_ARRAYSIZE = EMoveDirection_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* EMoveDirection_descriptor();
+inline const ::std::string& EMoveDirection_Name(EMoveDirection value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    EMoveDirection_descriptor(), value);
+}
+inline bool EMoveDirection_Parse(
+    const ::std::string& name, EMoveDirection* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<EMoveDirection>(
+    EMoveDirection_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -6042,6 +6083,112 @@ class PlayerRequestGameEnter : public ::google::protobuf::Message /* @@protoc_in
 };
 // -------------------------------------------------------------------
 
+class PlayerRequestGameOption : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.PlayerRequestGameOption) */ {
+ public:
+  PlayerRequestGameOption();
+  virtual ~PlayerRequestGameOption();
+
+  PlayerRequestGameOption(const PlayerRequestGameOption& from);
+
+  inline PlayerRequestGameOption& operator=(const PlayerRequestGameOption& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  PlayerRequestGameOption(PlayerRequestGameOption&& from) noexcept
+    : PlayerRequestGameOption() {
+    *this = ::std::move(from);
+  }
+
+  inline PlayerRequestGameOption& operator=(PlayerRequestGameOption&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PlayerRequestGameOption& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const PlayerRequestGameOption* internal_default_instance() {
+    return reinterpret_cast<const PlayerRequestGameOption*>(
+               &_PlayerRequestGameOption_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    51;
+
+  void Swap(PlayerRequestGameOption* other);
+  friend void swap(PlayerRequestGameOption& a, PlayerRequestGameOption& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline PlayerRequestGameOption* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  PlayerRequestGameOption* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const PlayerRequestGameOption& from);
+  void MergeFrom(const PlayerRequestGameOption& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(PlayerRequestGameOption* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // float f_tick = 1;
+  void clear_f_tick();
+  static const int kFTickFieldNumber = 1;
+  float f_tick() const;
+  void set_f_tick(float value);
+
+  // .GameProto.EMoveDirection e_direction = 2;
+  void clear_e_direction();
+  static const int kEDirectionFieldNumber = 2;
+  ::GameProto::EMoveDirection e_direction() const;
+  void set_e_direction(::GameProto::EMoveDirection value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.PlayerRequestGameOption)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  float f_tick_;
+  int e_direction_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsPlayerRequestGameOptionImpl();
+};
+// -------------------------------------------------------------------
+
 class GameAckPlayerEnter : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameAckPlayerEnter) */ {
  public:
   GameAckPlayerEnter();
@@ -6077,7 +6224,7 @@ class GameAckPlayerEnter : public ::google::protobuf::Message /* @@protoc_insert
                &_GameAckPlayerEnter_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    51;
+    52;
 
   void Swap(GameAckPlayerEnter* other);
   friend void swap(GameAckPlayerEnter& a, GameAckPlayerEnter& b) {
@@ -6183,7 +6330,7 @@ class GameNotifyPlayerGameConfig : public ::google::protobuf::Message /* @@proto
                &_GameNotifyPlayerGameConfig_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    52;
+    53;
 
   void Swap(GameNotifyPlayerGameConfig* other);
   friend void swap(GameNotifyPlayerGameConfig& a, GameNotifyPlayerGameConfig& b) {
@@ -6292,7 +6439,7 @@ class GameNotifyPlayerGameRoleData : public ::google::protobuf::Message /* @@pro
                &_GameNotifyPlayerGameRoleData_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    53;
+    54;
 
   void Swap(GameNotifyPlayerGameRoleData* other);
   friend void swap(GameNotifyPlayerGameRoleData& a, GameNotifyPlayerGameRoleData& b) {
@@ -6401,7 +6548,7 @@ class GameNotifyPlayerGameSceneInfo : public ::google::protobuf::Message /* @@pr
                &_GameNotifyPlayerGameSceneInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    54;
+    55;
 
   void Swap(GameNotifyPlayerGameSceneInfo* other);
   friend void swap(GameNotifyPlayerGameSceneInfo& a, GameNotifyPlayerGameSceneInfo& b) {
@@ -6510,7 +6657,7 @@ class GameNotifyPlayerPrepareTime : public ::google::protobuf::Message /* @@prot
                &_GameNotifyPlayerPrepareTime_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    55;
+    56;
 
   void Swap(GameNotifyPlayerPrepareTime* other);
   friend void swap(GameNotifyPlayerPrepareTime& a, GameNotifyPlayerPrepareTime& b) {
@@ -6609,7 +6756,7 @@ class GameNotifyPlayerGameReadyTime : public ::google::protobuf::Message /* @@pr
                &_GameNotifyPlayerGameReadyTime_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    56;
+    57;
 
   void Swap(GameNotifyPlayerGameReadyTime* other);
   friend void swap(GameNotifyPlayerGameReadyTime& a, GameNotifyPlayerGameReadyTime& b) {
@@ -6708,7 +6855,7 @@ class GameNotifyPlayerGameState : public ::google::protobuf::Message /* @@protoc
                &_GameNotifyPlayerGameState_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    57;
+    58;
 
   void Swap(GameNotifyPlayerGameState* other);
   friend void swap(GameNotifyPlayerGameState& a, GameNotifyPlayerGameState& b) {
@@ -6772,6 +6919,239 @@ class GameNotifyPlayerGameState : public ::google::protobuf::Message /* @@protoc
 };
 // -------------------------------------------------------------------
 
+class GameNotifyPlayerGameInitTetris : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameNotifyPlayerGameInitTetris) */ {
+ public:
+  GameNotifyPlayerGameInitTetris();
+  virtual ~GameNotifyPlayerGameInitTetris();
+
+  GameNotifyPlayerGameInitTetris(const GameNotifyPlayerGameInitTetris& from);
+
+  inline GameNotifyPlayerGameInitTetris& operator=(const GameNotifyPlayerGameInitTetris& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GameNotifyPlayerGameInitTetris(GameNotifyPlayerGameInitTetris&& from) noexcept
+    : GameNotifyPlayerGameInitTetris() {
+    *this = ::std::move(from);
+  }
+
+  inline GameNotifyPlayerGameInitTetris& operator=(GameNotifyPlayerGameInitTetris&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GameNotifyPlayerGameInitTetris& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GameNotifyPlayerGameInitTetris* internal_default_instance() {
+    return reinterpret_cast<const GameNotifyPlayerGameInitTetris*>(
+               &_GameNotifyPlayerGameInitTetris_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    59;
+
+  void Swap(GameNotifyPlayerGameInitTetris* other);
+  friend void swap(GameNotifyPlayerGameInitTetris& a, GameNotifyPlayerGameInitTetris& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GameNotifyPlayerGameInitTetris* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  GameNotifyPlayerGameInitTetris* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const GameNotifyPlayerGameInitTetris& from);
+  void MergeFrom(const GameNotifyPlayerGameInitTetris& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(GameNotifyPlayerGameInitTetris* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // uint64 dw_player_id = 1;
+  void clear_dw_player_id();
+  static const int kDwPlayerIdFieldNumber = 1;
+  ::google::protobuf::uint64 dw_player_id() const;
+  void set_dw_player_id(::google::protobuf::uint64 value);
+
+  // float f_tick = 2;
+  void clear_f_tick();
+  static const int kFTickFieldNumber = 2;
+  float f_tick() const;
+  void set_f_tick(float value);
+
+  // uint32 dw_curr_tetris = 3;
+  void clear_dw_curr_tetris();
+  static const int kDwCurrTetrisFieldNumber = 3;
+  ::google::protobuf::uint32 dw_curr_tetris() const;
+  void set_dw_curr_tetris(::google::protobuf::uint32 value);
+
+  // uint32 dw_next_tetris = 4;
+  void clear_dw_next_tetris();
+  static const int kDwNextTetrisFieldNumber = 4;
+  ::google::protobuf::uint32 dw_next_tetris() const;
+  void set_dw_next_tetris(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.GameNotifyPlayerGameInitTetris)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint64 dw_player_id_;
+  float f_tick_;
+  ::google::protobuf::uint32 dw_curr_tetris_;
+  ::google::protobuf::uint32 dw_next_tetris_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayerGameInitTetrisImpl();
+};
+// -------------------------------------------------------------------
+
+class GameNotifyPlayerNextTetris : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.GameNotifyPlayerNextTetris) */ {
+ public:
+  GameNotifyPlayerNextTetris();
+  virtual ~GameNotifyPlayerNextTetris();
+
+  GameNotifyPlayerNextTetris(const GameNotifyPlayerNextTetris& from);
+
+  inline GameNotifyPlayerNextTetris& operator=(const GameNotifyPlayerNextTetris& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  GameNotifyPlayerNextTetris(GameNotifyPlayerNextTetris&& from) noexcept
+    : GameNotifyPlayerNextTetris() {
+    *this = ::std::move(from);
+  }
+
+  inline GameNotifyPlayerNextTetris& operator=(GameNotifyPlayerNextTetris&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const GameNotifyPlayerNextTetris& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const GameNotifyPlayerNextTetris* internal_default_instance() {
+    return reinterpret_cast<const GameNotifyPlayerNextTetris*>(
+               &_GameNotifyPlayerNextTetris_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    60;
+
+  void Swap(GameNotifyPlayerNextTetris* other);
+  friend void swap(GameNotifyPlayerNextTetris& a, GameNotifyPlayerNextTetris& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline GameNotifyPlayerNextTetris* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  GameNotifyPlayerNextTetris* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const GameNotifyPlayerNextTetris& from);
+  void MergeFrom(const GameNotifyPlayerNextTetris& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(GameNotifyPlayerNextTetris* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // uint64 dw_player_id = 1;
+  void clear_dw_player_id();
+  static const int kDwPlayerIdFieldNumber = 1;
+  ::google::protobuf::uint64 dw_player_id() const;
+  void set_dw_player_id(::google::protobuf::uint64 value);
+
+  // float f_tick = 2;
+  void clear_f_tick();
+  static const int kFTickFieldNumber = 2;
+  float f_tick() const;
+  void set_f_tick(float value);
+
+  // uint32 dw_next_tetris = 3;
+  void clear_dw_next_tetris();
+  static const int kDwNextTetrisFieldNumber = 3;
+  ::google::protobuf::uint32 dw_next_tetris() const;
+  void set_dw_next_tetris(::google::protobuf::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.GameNotifyPlayerNextTetris)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  ::google::protobuf::uint64 dw_player_id_;
+  float f_tick_;
+  ::google::protobuf::uint32 dw_next_tetris_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayerNextTetrisImpl();
+};
+// -------------------------------------------------------------------
+
 class ServerInfo : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.ServerInfo) */ {
  public:
   ServerInfo();
@@ -6807,7 +7187,7 @@ class ServerInfo : public ::google::protobuf::Message /* @@protoc_insertion_poin
                &_ServerInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    58;
+    61;
 
   void Swap(ServerInfo* other);
   friend void swap(ServerInfo& a, ServerInfo& b) {
@@ -9138,6 +9518,38 @@ inline void PlayerRequestGameEnter::set_qw_player_id(::google::protobuf::uint64 
 
 // -------------------------------------------------------------------
 
+// PlayerRequestGameOption
+
+// float f_tick = 1;
+inline void PlayerRequestGameOption::clear_f_tick() {
+  f_tick_ = 0;
+}
+inline float PlayerRequestGameOption::f_tick() const {
+  // @@protoc_insertion_point(field_get:GameProto.PlayerRequestGameOption.f_tick)
+  return f_tick_;
+}
+inline void PlayerRequestGameOption::set_f_tick(float value) {
+  
+  f_tick_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.PlayerRequestGameOption.f_tick)
+}
+
+// .GameProto.EMoveDirection e_direction = 2;
+inline void PlayerRequestGameOption::clear_e_direction() {
+  e_direction_ = 0;
+}
+inline ::GameProto::EMoveDirection PlayerRequestGameOption::e_direction() const {
+  // @@protoc_insertion_point(field_get:GameProto.PlayerRequestGameOption.e_direction)
+  return static_cast< ::GameProto::EMoveDirection >(e_direction_);
+}
+inline void PlayerRequestGameOption::set_e_direction(::GameProto::EMoveDirection value) {
+  
+  e_direction_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.PlayerRequestGameOption.e_direction)
+}
+
+// -------------------------------------------------------------------
+
 // GameAckPlayerEnter
 
 // uint32 dw_result = 1;
@@ -9410,6 +9822,112 @@ inline void GameNotifyPlayerGameState::set_state(::GameProto::EGameSceneState va
 
 // -------------------------------------------------------------------
 
+// GameNotifyPlayerGameInitTetris
+
+// uint64 dw_player_id = 1;
+inline void GameNotifyPlayerGameInitTetris::clear_dw_player_id() {
+  dw_player_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 GameNotifyPlayerGameInitTetris::dw_player_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerGameInitTetris.dw_player_id)
+  return dw_player_id_;
+}
+inline void GameNotifyPlayerGameInitTetris::set_dw_player_id(::google::protobuf::uint64 value) {
+  
+  dw_player_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyPlayerGameInitTetris.dw_player_id)
+}
+
+// float f_tick = 2;
+inline void GameNotifyPlayerGameInitTetris::clear_f_tick() {
+  f_tick_ = 0;
+}
+inline float GameNotifyPlayerGameInitTetris::f_tick() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerGameInitTetris.f_tick)
+  return f_tick_;
+}
+inline void GameNotifyPlayerGameInitTetris::set_f_tick(float value) {
+  
+  f_tick_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyPlayerGameInitTetris.f_tick)
+}
+
+// uint32 dw_curr_tetris = 3;
+inline void GameNotifyPlayerGameInitTetris::clear_dw_curr_tetris() {
+  dw_curr_tetris_ = 0u;
+}
+inline ::google::protobuf::uint32 GameNotifyPlayerGameInitTetris::dw_curr_tetris() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerGameInitTetris.dw_curr_tetris)
+  return dw_curr_tetris_;
+}
+inline void GameNotifyPlayerGameInitTetris::set_dw_curr_tetris(::google::protobuf::uint32 value) {
+  
+  dw_curr_tetris_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyPlayerGameInitTetris.dw_curr_tetris)
+}
+
+// uint32 dw_next_tetris = 4;
+inline void GameNotifyPlayerGameInitTetris::clear_dw_next_tetris() {
+  dw_next_tetris_ = 0u;
+}
+inline ::google::protobuf::uint32 GameNotifyPlayerGameInitTetris::dw_next_tetris() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerGameInitTetris.dw_next_tetris)
+  return dw_next_tetris_;
+}
+inline void GameNotifyPlayerGameInitTetris::set_dw_next_tetris(::google::protobuf::uint32 value) {
+  
+  dw_next_tetris_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyPlayerGameInitTetris.dw_next_tetris)
+}
+
+// -------------------------------------------------------------------
+
+// GameNotifyPlayerNextTetris
+
+// uint64 dw_player_id = 1;
+inline void GameNotifyPlayerNextTetris::clear_dw_player_id() {
+  dw_player_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 GameNotifyPlayerNextTetris::dw_player_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerNextTetris.dw_player_id)
+  return dw_player_id_;
+}
+inline void GameNotifyPlayerNextTetris::set_dw_player_id(::google::protobuf::uint64 value) {
+  
+  dw_player_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyPlayerNextTetris.dw_player_id)
+}
+
+// float f_tick = 2;
+inline void GameNotifyPlayerNextTetris::clear_f_tick() {
+  f_tick_ = 0;
+}
+inline float GameNotifyPlayerNextTetris::f_tick() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerNextTetris.f_tick)
+  return f_tick_;
+}
+inline void GameNotifyPlayerNextTetris::set_f_tick(float value) {
+  
+  f_tick_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyPlayerNextTetris.f_tick)
+}
+
+// uint32 dw_next_tetris = 3;
+inline void GameNotifyPlayerNextTetris::clear_dw_next_tetris() {
+  dw_next_tetris_ = 0u;
+}
+inline ::google::protobuf::uint32 GameNotifyPlayerNextTetris::dw_next_tetris() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerNextTetris.dw_next_tetris)
+  return dw_next_tetris_;
+}
+inline void GameNotifyPlayerNextTetris::set_dw_next_tetris(::google::protobuf::uint32 value) {
+  
+  dw_next_tetris_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyPlayerNextTetris.dw_next_tetris)
+}
+
+// -------------------------------------------------------------------
+
 // ServerInfo
 
 // uint32 dw_server_id = 1;
@@ -9640,6 +10158,12 @@ inline void ServerInfo::set_dw_login_port(::google::protobuf::uint32 value) {
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -9662,6 +10186,11 @@ template <> struct is_proto_enum< ::GameProto::EErrorCode> : ::google::protobuf:
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::GameProto::EErrorCode>() {
   return ::GameProto::EErrorCode_descriptor();
+}
+template <> struct is_proto_enum< ::GameProto::EMoveDirection> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::GameProto::EMoveDirection>() {
+  return ::GameProto::EMoveDirection_descriptor();
 }
 
 }  // namespace protobuf

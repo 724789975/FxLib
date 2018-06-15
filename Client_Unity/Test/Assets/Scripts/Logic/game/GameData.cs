@@ -17,9 +17,9 @@ public class Tetris
 [System.Serializable]
 public class TetrisData
 {
-	public static readonly uint s_dwColumn = 12;
-	public static readonly uint s_dwRow = 22;
-	public static readonly uint s_dwUnit = 4;
+	public const uint s_dwColumn = 12;
+	public const uint s_dwRow = 22;
+	public const uint s_dwUnit = 4;
 
 	//形状的数量
 	public const uint s_dwShapeCount = 7;
@@ -311,6 +311,30 @@ public class TetrisData
 	{
 		// todo
 		m_bNeedRefresh = true;
+	}
+
+	public uint[,] GetTetrisInfo()
+	{
+		if (m_bNeedRefresh == false)
+		{
+			return null;
+		}
+
+		uint[,] dwTetrisPool = (uint[,])m_dwTetrisPool.Clone();
+		for (int i = 0; i < s_dwUnit; ++i)
+		{
+			for (int j = 0; j < s_dwUnit; ++j)
+			{
+				uint dwBlockInfo = s_wTetrisTable[m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, i, j];
+				if (dwBlockInfo == 0)
+				{
+					continue;
+				}
+				dwTetrisPool[m_oCurrentTetris.m_dwPosY + j, m_oCurrentTetris.m_dwPosX + i] = m_oCurrentTetris.m_dwTetrisColor;
+			}
+		}
+		m_bNeedRefresh = false;
+		return dwTetrisPool;
 	}
 
 	//所有的方块 每个元素代表一种颜色
