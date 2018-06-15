@@ -20,6 +20,16 @@ public class GameLogic : SingletonObject<GameLogic>
 	// Update is called once per frame
 	void Update ()
 	{
+		if (m_oData == null)
+		{
+			return;
+		}
+		if (!m_oData.proNeedRefresh == false)
+		{
+			return;
+		}
+
+		//todo 刷新显示的方块
 	}
 
 	void SetTetrisData(TetrisData oData)
@@ -33,6 +43,6 @@ public class GameLogic : SingletonObject<GameLogic>
 
 	UnityEngine.UI.Image[,] m_arrBlockInfos = new UnityEngine.UI.Image[TetrisData.s_dwRow, TetrisData.s_dwColumn];
 
-	public TetrisData m_oData;
+	public TetrisData m_oData = null;
 }
 

@@ -309,6 +309,8 @@ public class TetrisData
 
 	void Sync()
 	{
+		// todo
+		m_bNeedRefresh = true;
 	}
 
 	//所有的方块 每个元素代表一种颜色
@@ -318,9 +320,13 @@ public class TetrisData
 	////下一个方块
 	//uint[,] m_dwNextBlock = new uint[s_dwUnit, s_dwUnit];
 
+	public bool proNeedRefresh { get { return m_bNeedRefresh; } }
+
 	public Tetris m_oCurrentTetris = new Tetris();
 
 	public Tetris m_oNextTetris = new Tetris();
+
+	protected bool m_bNeedRefresh = false;
 }
 
 public class UserTetrisData : TetrisData
@@ -352,7 +358,7 @@ public class UserTetrisData : TetrisData
 			{
 				return true;
 			}
-			if (CheckTetris(m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) - 1, m_oCurrentTetris.m_dwPosY + i))
+			if (CheckTetris(m_oCurrentTetris.m_dwPosY + i, dwCheckX))
 			{
 				return true;
 			}
@@ -376,7 +382,7 @@ public class UserTetrisData : TetrisData
 			{
 				return true;
 			}
-			if (CheckTetris(dwCheckX, m_oCurrentTetris.m_dwPosY + i))
+			if (CheckTetris(m_oCurrentTetris.m_dwPosY + i, dwCheckX))
 			{
 				return true;
 			}
@@ -401,7 +407,7 @@ public class UserTetrisData : TetrisData
 				//到底了
 				return true;
 			}
-			if (CheckTetris(m_oCurrentTetris.m_dwPosX + i, dwCheckY))
+			if (CheckTetris(dwCheckY, m_oCurrentTetris.m_dwPosX + i))
 			{
 				return true;
 			}
@@ -418,36 +424,106 @@ public class UserTetrisData : TetrisData
 		{
 			//向下移动一格
 			m_oCurrentTetris.m_dwPosY -= 1;
+			//todo发消息
 		}
 		else
 		{
-			//todo 固定住 那么就不能往下移动了 换下一个方块
+			//固定住 那么就不能往下移动了 换下一个方块
+			for (int i = 0; i < s_dwUnit; ++i)
+			{
+				for (int j = 0; j < s_dwUnit; ++j)
+				{
+					uint dwBlockInfo = s_wTetrisTable[m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, i, j];
+					if (dwBlockInfo == 0)
+					{
+						continue;
+					}
+					m_dwTetrisPool[m_oCurrentTetris.m_dwPosY + j, m_oCurrentTetris.m_dwPosX + i] = m_oCurrentTetris.m_dwTetrisColor;
+				}
+			}
+
+			m_oCurrentTetris = m_oNextTetris;
+			m_oNextTetris = null;
+			//todo发消息
 		}
-		//todo发消息
+
+		m_bNeedRefresh = true;
 	}
 
-	public void MoveLeft()
+	public void LeftTetris()
 	{
 		if (!CheckLeftTetris())
 		{
 			m_oCurrentTetris.m_dwPosX -= 1;
+			m_bNeedRefresh = true;
 			//要发消息
 		}
 	}
 
-	public void MoveRight()
+	public void RightTetris()
 	{
 		if (!CheckRightTetris())
 		{
 			m_oCurrentTetris.m_dwPosX += 1;
+			m_bNeedRefresh = true;
 			//要发消息
 		}
+	}
+
+	public void LeftRotation()
+	{
+		uint dwTempDir = (m_oCurrentTetris.m_dwTetrisDirect + 1) % s_dwUnit;
+		for (int i = 0; i < s_dwUnit; ++i)
+		{
+			for (int j = 0; j < s_dwUnit; ++j)
+			{
+				uint dwBlockInfo = s_wTetrisTable[m_oCurrentTetris.m_dwTetrisShape, dwTempDir, i, j];
+				if (dwBlockInfo == 0)
+				{
+					continue;
+				}
+				if(CheckTetris(m_oCurrentTetris.m_dwPosY + j, m_oCurrentTetris.m_dwPosX + i))
+				{
+					return;
+				}
+			}
+		}
+		m_oCurrentTetris.m_dwTetrisDirect = dwTempDir;
+		m_bNeedRefresh = true;
+		//要发消息
+	}
+
+	public void RightRotation()
+	{
+		uint dwTempDir = (m_oCurrentTetris.m_dwTetrisDirect - 1) % s_dwUnit;
+		for (int i = 0; i < s_dwUnit; ++i)
+		{
+			for (int j = 0; j < s_dwUnit; ++j)
+			{
+				uint dwBlockInfo = s_wTetrisTable[m_oCurrentTetris.m_dwTetrisShape, dwTempDir, i, j];
+				if (dwBlockInfo == 0)
+				{
+					continue;
+				}
+				if (CheckTetris(m_oCurrentTetris.m_dwPosY + j, m_oCurrentTetris.m_dwPosX + i))
+				{
+					return;
+				}
+			}
+		}
+		m_oCurrentTetris.m_dwTetrisDirect = dwTempDir;
+		m_bNeedRefresh = true;
+		//要发消息
 	}
 
 	public void Update(float fDeltaTime)
 	{
 		m_dTick += fDeltaTime;
 		m_dSuspendTime += fDeltaTime;
+		if (m_oNextTetris == null)
+		{
+			return;
+		}
 		if (m_dSuspendTime > proSuspendTime)
 		{
 			m_dSuspendTime = 0;
