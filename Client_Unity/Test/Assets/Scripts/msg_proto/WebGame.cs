@@ -126,25 +126,26 @@ namespace GameProto {
             "ZRIUCgxkd19sZWZ0X3RpbWUYASABKA0iNQodR2FtZU5vdGlmeVBsYXllckdh",
             "bWVSZWFkeVRpbWUSFAoMZHdfbGVmdF90aW1lGAEgASgNIkYKGUdhbWVOb3Rp",
             "ZnlQbGF5ZXJHYW1lU3RhdGUSKQoFc3RhdGUYASABKA4yGi5HYW1lUHJvdG8u",
-            "RUdhbWVTY2VuZVN0YXRlInYKHkdhbWVOb3RpZnlQbGF5ZXJHYW1lSW5pdFRl",
-            "dHJpcxIUCgxkd19wbGF5ZXJfaWQYASABKAQSDgoGZl90aWNrGAIgASgCEhYK",
-            "DmR3X2N1cnJfdGV0cmlzGAMgASgNEhYKDmR3X25leHRfdGV0cmlzGAQgASgN",
-            "IloKGkdhbWVOb3RpZnlQbGF5ZXJOZXh0VGV0cmlzEhQKDGR3X3BsYXllcl9p",
-            "ZBgBIAEoBBIOCgZmX3RpY2sYAiABKAISFgoOZHdfbmV4dF90ZXRyaXMYAyAB",
-            "KA0iigEKClNlcnZlckluZm8SFAoMZHdfc2VydmVyX2lkGAEgASgNEhQKDHN6",
-            "X2xpc3Rlbl9pcBgCIAEoCRIUCgxkd190ZWFtX3BvcnQYAyABKA0SIwobZHdf",
-            "Z2FtZV9zZXJ2ZXJfbWFuYWdlcl9wb3J0GAQgASgNEhUKDWR3X2xvZ2luX3Bv",
-            "cnQYBSABKA0qSQoLRVNlcnZlclR5cGUSCwoHU1RfTk9ORRAAEgwKCFNUX0xv",
-            "Z2luEAESCwoHU1RfVGVhbRACEhIKDlNUX0dhbWVNYW5hZ2VyEAMqJwoJRVRl",
-            "YW1UeXBlEgsKB1RUX05PTkUQABINCglUVF9Ob3JtYWwQASqMAgoKRUVycm9y",
-            "Q29kZRILCgdFQ19OT05FEAASFAoQRUNfQWxyZWFkeUluVGVhbRABEhYKEkVD",
-            "X01ha2VUZWFtTm90SWRsZRACEhcKE0VDX0Nhbm5vdEZpbmRQbGF5ZXIQAxIP",
-            "CgtFQ19Ob1RlYW1JZBAEEhAKDEVDX05vdExlYWRlchAFEhMKD0VDX1RlYW1I",
-            "YXNTdGFydBAGEhoKFkVDX05vR2FtZU1hbmFnZXJTZXJ2ZXIQBxITCg9FQ19O",
-            "b1RlYW1TZXJ2ZXIQCBIUChBFQ19Ob0xvZ2luU2VydmVyEAkSFgoSRUNfUGxh",
-            "eWVyTm90T25saW5lEAoSEwoPRUNfRmFpbEludG9UZWFtEAsqSQoORU1vdmVE",
-            "aXJlY3Rpb24SDAoIRU1EX05PTkUQABIMCghFTURfRG93bhABEgwKCEVNRF9M",
-            "ZWZ0EAISDQoJRU1EX1JpZ2h0EANiBnByb3RvMw=="));
+            "RUdhbWVTY2VuZVN0YXRlIpYBCh5HYW1lTm90aWZ5UGxheWVyR2FtZUluaXRU",
+            "ZXRyaXMSFAoMZHdfcGxheWVyX2lkGAEgASgEEg4KBmZfdGljaxgCIAEoAhIm",
+            "CgtjdXJyX3RldHJpcxgDIAEoCzIRLkdhbWVQcm90by5UZXRyaXMSJgoLbmV4",
+            "dF90ZXRyaXMYBCABKAsyES5HYW1lUHJvdG8uVGV0cmlzImoKGkdhbWVOb3Rp",
+            "ZnlQbGF5ZXJOZXh0VGV0cmlzEhQKDGR3X3BsYXllcl9pZBgBIAEoBBIOCgZm",
+            "X3RpY2sYAiABKAISJgoLbmV4dF90ZXRyaXMYAyABKAsyES5HYW1lUHJvdG8u",
+            "VGV0cmlzIooBCgpTZXJ2ZXJJbmZvEhQKDGR3X3NlcnZlcl9pZBgBIAEoDRIU",
+            "Cgxzel9saXN0ZW5faXAYAiABKAkSFAoMZHdfdGVhbV9wb3J0GAMgASgNEiMK",
+            "G2R3X2dhbWVfc2VydmVyX21hbmFnZXJfcG9ydBgEIAEoDRIVCg1kd19sb2dp",
+            "bl9wb3J0GAUgASgNKkkKC0VTZXJ2ZXJUeXBlEgsKB1NUX05PTkUQABIMCghT",
+            "VF9Mb2dpbhABEgsKB1NUX1RlYW0QAhISCg5TVF9HYW1lTWFuYWdlchADKicK",
+            "CUVUZWFtVHlwZRILCgdUVF9OT05FEAASDQoJVFRfTm9ybWFsEAEqjAIKCkVF",
+            "cnJvckNvZGUSCwoHRUNfTk9ORRAAEhQKEEVDX0FscmVhZHlJblRlYW0QARIW",
+            "ChJFQ19NYWtlVGVhbU5vdElkbGUQAhIXChNFQ19DYW5ub3RGaW5kUGxheWVy",
+            "EAMSDwoLRUNfTm9UZWFtSWQQBBIQCgxFQ19Ob3RMZWFkZXIQBRITCg9FQ19U",
+            "ZWFtSGFzU3RhcnQQBhIaChZFQ19Ob0dhbWVNYW5hZ2VyU2VydmVyEAcSEwoP",
+            "RUNfTm9UZWFtU2VydmVyEAgSFAoQRUNfTm9Mb2dpblNlcnZlchAJEhYKEkVD",
+            "X1BsYXllck5vdE9ubGluZRAKEhMKD0VDX0ZhaWxJbnRvVGVhbRALKkkKDkVN",
+            "b3ZlRGlyZWN0aW9uEgwKCEVNRF9OT05FEAASDAoIRU1EX0Rvd24QARIMCghF",
+            "TURfTGVmdBACEg0KCUVNRF9SaWdodBADYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::GameProto.WebDataReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProto.EServerType), typeof(global::GameProto.ETeamType), typeof(global::GameProto.EErrorCode), typeof(global::GameProto.EMoveDirection), }, new pbr::GeneratedClrTypeInfo[] {
@@ -207,8 +208,8 @@ namespace GameProto {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerPrepareTime), global::GameProto.GameNotifyPlayerPrepareTime.Parser, new[]{ "DwLeftTime" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameReadyTime), global::GameProto.GameNotifyPlayerGameReadyTime.Parser, new[]{ "DwLeftTime" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameState), global::GameProto.GameNotifyPlayerGameState.Parser, new[]{ "State" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameInitTetris), global::GameProto.GameNotifyPlayerGameInitTetris.Parser, new[]{ "DwPlayerId", "FTick", "DwCurrTetris", "DwNextTetris" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerNextTetris), global::GameProto.GameNotifyPlayerNextTetris.Parser, new[]{ "DwPlayerId", "FTick", "DwNextTetris" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameInitTetris), global::GameProto.GameNotifyPlayerGameInitTetris.Parser, new[]{ "DwPlayerId", "FTick", "CurrTetris", "NextTetris" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerNextTetris), global::GameProto.GameNotifyPlayerNextTetris.Parser, new[]{ "DwPlayerId", "FTick", "NextTetris" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.ServerInfo), global::GameProto.ServerInfo.Parser, new[]{ "DwServerId", "SzListenIp", "DwTeamPort", "DwGameServerManagerPort", "DwLoginPort" }, null, null, null)
           }));
     }
@@ -9741,8 +9742,8 @@ namespace GameProto {
     public GameNotifyPlayerGameInitTetris(GameNotifyPlayerGameInitTetris other) : this() {
       dwPlayerId_ = other.dwPlayerId_;
       fTick_ = other.fTick_;
-      dwCurrTetris_ = other.dwCurrTetris_;
-      dwNextTetris_ = other.dwNextTetris_;
+      CurrTetris = other.currTetris_ != null ? other.CurrTetris.Clone() : null;
+      NextTetris = other.nextTetris_ != null ? other.NextTetris.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -9773,25 +9774,25 @@ namespace GameProto {
       }
     }
 
-    /// <summary>Field number for the "dw_curr_tetris" field.</summary>
-    public const int DwCurrTetrisFieldNumber = 3;
-    private uint dwCurrTetris_;
+    /// <summary>Field number for the "curr_tetris" field.</summary>
+    public const int CurrTetrisFieldNumber = 3;
+    private global::GameProto.Tetris currTetris_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint DwCurrTetris {
-      get { return dwCurrTetris_; }
+    public global::GameProto.Tetris CurrTetris {
+      get { return currTetris_; }
       set {
-        dwCurrTetris_ = value;
+        currTetris_ = value;
       }
     }
 
-    /// <summary>Field number for the "dw_next_tetris" field.</summary>
-    public const int DwNextTetrisFieldNumber = 4;
-    private uint dwNextTetris_;
+    /// <summary>Field number for the "next_tetris" field.</summary>
+    public const int NextTetrisFieldNumber = 4;
+    private global::GameProto.Tetris nextTetris_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint DwNextTetris {
-      get { return dwNextTetris_; }
+    public global::GameProto.Tetris NextTetris {
+      get { return nextTetris_; }
       set {
-        dwNextTetris_ = value;
+        nextTetris_ = value;
       }
     }
 
@@ -9810,8 +9811,8 @@ namespace GameProto {
       }
       if (DwPlayerId != other.DwPlayerId) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(FTick, other.FTick)) return false;
-      if (DwCurrTetris != other.DwCurrTetris) return false;
-      if (DwNextTetris != other.DwNextTetris) return false;
+      if (!object.Equals(CurrTetris, other.CurrTetris)) return false;
+      if (!object.Equals(NextTetris, other.NextTetris)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -9820,8 +9821,8 @@ namespace GameProto {
       int hash = 1;
       if (DwPlayerId != 0UL) hash ^= DwPlayerId.GetHashCode();
       if (FTick != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(FTick);
-      if (DwCurrTetris != 0) hash ^= DwCurrTetris.GetHashCode();
-      if (DwNextTetris != 0) hash ^= DwNextTetris.GetHashCode();
+      if (currTetris_ != null) hash ^= CurrTetris.GetHashCode();
+      if (nextTetris_ != null) hash ^= NextTetris.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -9843,13 +9844,13 @@ namespace GameProto {
         output.WriteRawTag(21);
         output.WriteFloat(FTick);
       }
-      if (DwCurrTetris != 0) {
-        output.WriteRawTag(24);
-        output.WriteUInt32(DwCurrTetris);
+      if (currTetris_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(CurrTetris);
       }
-      if (DwNextTetris != 0) {
-        output.WriteRawTag(32);
-        output.WriteUInt32(DwNextTetris);
+      if (nextTetris_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(NextTetris);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -9865,11 +9866,11 @@ namespace GameProto {
       if (FTick != 0F) {
         size += 1 + 4;
       }
-      if (DwCurrTetris != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwCurrTetris);
+      if (currTetris_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CurrTetris);
       }
-      if (DwNextTetris != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwNextTetris);
+      if (nextTetris_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(NextTetris);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -9888,11 +9889,17 @@ namespace GameProto {
       if (other.FTick != 0F) {
         FTick = other.FTick;
       }
-      if (other.DwCurrTetris != 0) {
-        DwCurrTetris = other.DwCurrTetris;
+      if (other.currTetris_ != null) {
+        if (currTetris_ == null) {
+          currTetris_ = new global::GameProto.Tetris();
+        }
+        CurrTetris.MergeFrom(other.CurrTetris);
       }
-      if (other.DwNextTetris != 0) {
-        DwNextTetris = other.DwNextTetris;
+      if (other.nextTetris_ != null) {
+        if (nextTetris_ == null) {
+          nextTetris_ = new global::GameProto.Tetris();
+        }
+        NextTetris.MergeFrom(other.NextTetris);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -9913,12 +9920,18 @@ namespace GameProto {
             FTick = input.ReadFloat();
             break;
           }
-          case 24: {
-            DwCurrTetris = input.ReadUInt32();
+          case 26: {
+            if (currTetris_ == null) {
+              currTetris_ = new global::GameProto.Tetris();
+            }
+            input.ReadMessage(currTetris_);
             break;
           }
-          case 32: {
-            DwNextTetris = input.ReadUInt32();
+          case 34: {
+            if (nextTetris_ == null) {
+              nextTetris_ = new global::GameProto.Tetris();
+            }
+            input.ReadMessage(nextTetris_);
             break;
           }
         }
@@ -9954,7 +9967,7 @@ namespace GameProto {
     public GameNotifyPlayerNextTetris(GameNotifyPlayerNextTetris other) : this() {
       dwPlayerId_ = other.dwPlayerId_;
       fTick_ = other.fTick_;
-      dwNextTetris_ = other.dwNextTetris_;
+      NextTetris = other.nextTetris_ != null ? other.NextTetris.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -9985,14 +9998,14 @@ namespace GameProto {
       }
     }
 
-    /// <summary>Field number for the "dw_next_tetris" field.</summary>
-    public const int DwNextTetrisFieldNumber = 3;
-    private uint dwNextTetris_;
+    /// <summary>Field number for the "next_tetris" field.</summary>
+    public const int NextTetrisFieldNumber = 3;
+    private global::GameProto.Tetris nextTetris_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public uint DwNextTetris {
-      get { return dwNextTetris_; }
+    public global::GameProto.Tetris NextTetris {
+      get { return nextTetris_; }
       set {
-        dwNextTetris_ = value;
+        nextTetris_ = value;
       }
     }
 
@@ -10011,7 +10024,7 @@ namespace GameProto {
       }
       if (DwPlayerId != other.DwPlayerId) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(FTick, other.FTick)) return false;
-      if (DwNextTetris != other.DwNextTetris) return false;
+      if (!object.Equals(NextTetris, other.NextTetris)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -10020,7 +10033,7 @@ namespace GameProto {
       int hash = 1;
       if (DwPlayerId != 0UL) hash ^= DwPlayerId.GetHashCode();
       if (FTick != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(FTick);
-      if (DwNextTetris != 0) hash ^= DwNextTetris.GetHashCode();
+      if (nextTetris_ != null) hash ^= NextTetris.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -10042,9 +10055,9 @@ namespace GameProto {
         output.WriteRawTag(21);
         output.WriteFloat(FTick);
       }
-      if (DwNextTetris != 0) {
-        output.WriteRawTag(24);
-        output.WriteUInt32(DwNextTetris);
+      if (nextTetris_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(NextTetris);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -10060,8 +10073,8 @@ namespace GameProto {
       if (FTick != 0F) {
         size += 1 + 4;
       }
-      if (DwNextTetris != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwNextTetris);
+      if (nextTetris_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(NextTetris);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -10080,8 +10093,11 @@ namespace GameProto {
       if (other.FTick != 0F) {
         FTick = other.FTick;
       }
-      if (other.DwNextTetris != 0) {
-        DwNextTetris = other.DwNextTetris;
+      if (other.nextTetris_ != null) {
+        if (nextTetris_ == null) {
+          nextTetris_ = new global::GameProto.Tetris();
+        }
+        NextTetris.MergeFrom(other.NextTetris);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -10102,8 +10118,11 @@ namespace GameProto {
             FTick = input.ReadFloat();
             break;
           }
-          case 24: {
-            DwNextTetris = input.ReadUInt32();
+          case 26: {
+            if (nextTetris_ == null) {
+              nextTetris_ = new global::GameProto.Tetris();
+            }
+            input.ReadMessage(nextTetris_);
             break;
           }
         }

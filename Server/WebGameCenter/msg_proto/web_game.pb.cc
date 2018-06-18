@@ -1586,6 +1586,7 @@ void InitDefaultsGameNotifyPlayerGameInitTetrisImpl() {
 #else
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  protobuf_web_5fdata_2eproto::InitDefaultsTetris();
   {
     void* ptr = &::GameProto::_GameNotifyPlayerGameInitTetris_default_instance_;
     new (ptr) ::GameProto::GameNotifyPlayerGameInitTetris();
@@ -1607,6 +1608,7 @@ void InitDefaultsGameNotifyPlayerNextTetrisImpl() {
 #else
   ::google::protobuf::internal::InitProtobufDefaults();
 #endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  protobuf_web_5fdata_2eproto::InitDefaultsTetris();
   {
     void* ptr = &::GameProto::_GameNotifyPlayerNextTetris_default_instance_;
     new (ptr) ::GameProto::GameNotifyPlayerNextTetris();
@@ -2068,8 +2070,8 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayerGameInitTetris, dw_player_id_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayerGameInitTetris, f_tick_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayerGameInitTetris, dw_curr_tetris_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayerGameInitTetris, dw_next_tetris_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayerGameInitTetris, curr_tetris_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayerGameInitTetris, next_tetris_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayerNextTetris, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -2077,7 +2079,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayerNextTetris, dw_player_id_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayerNextTetris, f_tick_),
-  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayerNextTetris, dw_next_tetris_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayerNextTetris, next_tetris_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::ServerInfo, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -2356,30 +2358,31 @@ void AddDescriptorsImpl() {
       "\n\035GameNotifyPlayerGameReadyTime\022\024\n\014dw_le"
       "ft_time\030\001 \001(\r\"F\n\031GameNotifyPlayerGameSta"
       "te\022)\n\005state\030\001 \001(\0162\032.GameProto.EGameScene"
-      "State\"v\n\036GameNotifyPlayerGameInitTetris\022"
-      "\024\n\014dw_player_id\030\001 \001(\004\022\016\n\006f_tick\030\002 \001(\002\022\026\n"
-      "\016dw_curr_tetris\030\003 \001(\r\022\026\n\016dw_next_tetris\030"
-      "\004 \001(\r\"Z\n\032GameNotifyPlayerNextTetris\022\024\n\014d"
-      "w_player_id\030\001 \001(\004\022\016\n\006f_tick\030\002 \001(\002\022\026\n\016dw_"
-      "next_tetris\030\003 \001(\r\"\212\001\n\nServerInfo\022\024\n\014dw_s"
-      "erver_id\030\001 \001(\r\022\024\n\014sz_listen_ip\030\002 \001(\t\022\024\n\014"
-      "dw_team_port\030\003 \001(\r\022#\n\033dw_game_server_man"
-      "ager_port\030\004 \001(\r\022\025\n\rdw_login_port\030\005 \001(\r*I"
-      "\n\013EServerType\022\013\n\007ST_NONE\020\000\022\014\n\010ST_Login\020\001"
-      "\022\013\n\007ST_Team\020\002\022\022\n\016ST_GameManager\020\003*\'\n\tETe"
-      "amType\022\013\n\007TT_NONE\020\000\022\r\n\tTT_Normal\020\001*\214\002\n\nE"
-      "ErrorCode\022\013\n\007EC_NONE\020\000\022\024\n\020EC_AlreadyInTe"
-      "am\020\001\022\026\n\022EC_MakeTeamNotIdle\020\002\022\027\n\023EC_Canno"
-      "tFindPlayer\020\003\022\017\n\013EC_NoTeamId\020\004\022\020\n\014EC_Not"
-      "Leader\020\005\022\023\n\017EC_TeamHasStart\020\006\022\032\n\026EC_NoGa"
-      "meManagerServer\020\007\022\023\n\017EC_NoTeamServer\020\010\022\024"
-      "\n\020EC_NoLoginServer\020\t\022\026\n\022EC_PlayerNotOnli"
-      "ne\020\n\022\023\n\017EC_FailIntoTeam\020\013*I\n\016EMoveDirect"
-      "ion\022\014\n\010EMD_NONE\020\000\022\014\n\010EMD_Down\020\001\022\014\n\010EMD_L"
-      "eft\020\002\022\r\n\tEMD_Right\020\003b\006proto3"
+      "State\"\226\001\n\036GameNotifyPlayerGameInitTetris"
+      "\022\024\n\014dw_player_id\030\001 \001(\004\022\016\n\006f_tick\030\002 \001(\002\022&"
+      "\n\013curr_tetris\030\003 \001(\0132\021.GameProto.Tetris\022&"
+      "\n\013next_tetris\030\004 \001(\0132\021.GameProto.Tetris\"j"
+      "\n\032GameNotifyPlayerNextTetris\022\024\n\014dw_playe"
+      "r_id\030\001 \001(\004\022\016\n\006f_tick\030\002 \001(\002\022&\n\013next_tetri"
+      "s\030\003 \001(\0132\021.GameProto.Tetris\"\212\001\n\nServerInf"
+      "o\022\024\n\014dw_server_id\030\001 \001(\r\022\024\n\014sz_listen_ip\030"
+      "\002 \001(\t\022\024\n\014dw_team_port\030\003 \001(\r\022#\n\033dw_game_s"
+      "erver_manager_port\030\004 \001(\r\022\025\n\rdw_login_por"
+      "t\030\005 \001(\r*I\n\013EServerType\022\013\n\007ST_NONE\020\000\022\014\n\010S"
+      "T_Login\020\001\022\013\n\007ST_Team\020\002\022\022\n\016ST_GameManager"
+      "\020\003*\'\n\tETeamType\022\013\n\007TT_NONE\020\000\022\r\n\tTT_Norma"
+      "l\020\001*\214\002\n\nEErrorCode\022\013\n\007EC_NONE\020\000\022\024\n\020EC_Al"
+      "readyInTeam\020\001\022\026\n\022EC_MakeTeamNotIdle\020\002\022\027\n"
+      "\023EC_CannotFindPlayer\020\003\022\017\n\013EC_NoTeamId\020\004\022"
+      "\020\n\014EC_NotLeader\020\005\022\023\n\017EC_TeamHasStart\020\006\022\032"
+      "\n\026EC_NoGameManagerServer\020\007\022\023\n\017EC_NoTeamS"
+      "erver\020\010\022\024\n\020EC_NoLoginServer\020\t\022\026\n\022EC_Play"
+      "erNotOnline\020\n\022\023\n\017EC_FailIntoTeam\020\013*I\n\016EM"
+      "oveDirection\022\014\n\010EMD_NONE\020\000\022\014\n\010EMD_Down\020\001"
+      "\022\014\n\010EMD_Left\020\002\022\r\n\tEMD_Right\020\003b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 5428);
+      descriptor, 5477);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "web_game.proto", &protobuf_RegisterTypes);
   ::protobuf_web_5fdata_2eproto::AddDescriptors();
@@ -19247,12 +19250,28 @@ void GameNotifyPlayerGameState::InternalSwap(GameNotifyPlayerGameState* other) {
 // ===================================================================
 
 void GameNotifyPlayerGameInitTetris::InitAsDefaultInstance() {
+  ::GameProto::_GameNotifyPlayerGameInitTetris_default_instance_._instance.get_mutable()->curr_tetris_ = const_cast< ::GameProto::Tetris*>(
+      ::GameProto::Tetris::internal_default_instance());
+  ::GameProto::_GameNotifyPlayerGameInitTetris_default_instance_._instance.get_mutable()->next_tetris_ = const_cast< ::GameProto::Tetris*>(
+      ::GameProto::Tetris::internal_default_instance());
+}
+void GameNotifyPlayerGameInitTetris::clear_curr_tetris() {
+  if (GetArenaNoVirtual() == NULL && curr_tetris_ != NULL) {
+    delete curr_tetris_;
+  }
+  curr_tetris_ = NULL;
+}
+void GameNotifyPlayerGameInitTetris::clear_next_tetris() {
+  if (GetArenaNoVirtual() == NULL && next_tetris_ != NULL) {
+    delete next_tetris_;
+  }
+  next_tetris_ = NULL;
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int GameNotifyPlayerGameInitTetris::kDwPlayerIdFieldNumber;
 const int GameNotifyPlayerGameInitTetris::kFTickFieldNumber;
-const int GameNotifyPlayerGameInitTetris::kDwCurrTetrisFieldNumber;
-const int GameNotifyPlayerGameInitTetris::kDwNextTetrisFieldNumber;
+const int GameNotifyPlayerGameInitTetris::kCurrTetrisFieldNumber;
+const int GameNotifyPlayerGameInitTetris::kNextTetrisFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 GameNotifyPlayerGameInitTetris::GameNotifyPlayerGameInitTetris()
@@ -19268,16 +19287,26 @@ GameNotifyPlayerGameInitTetris::GameNotifyPlayerGameInitTetris(const GameNotifyP
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from.has_curr_tetris()) {
+    curr_tetris_ = new ::GameProto::Tetris(*from.curr_tetris_);
+  } else {
+    curr_tetris_ = NULL;
+  }
+  if (from.has_next_tetris()) {
+    next_tetris_ = new ::GameProto::Tetris(*from.next_tetris_);
+  } else {
+    next_tetris_ = NULL;
+  }
   ::memcpy(&dw_player_id_, &from.dw_player_id_,
-    static_cast<size_t>(reinterpret_cast<char*>(&dw_next_tetris_) -
-    reinterpret_cast<char*>(&dw_player_id_)) + sizeof(dw_next_tetris_));
+    static_cast<size_t>(reinterpret_cast<char*>(&f_tick_) -
+    reinterpret_cast<char*>(&dw_player_id_)) + sizeof(f_tick_));
   // @@protoc_insertion_point(copy_constructor:GameProto.GameNotifyPlayerGameInitTetris)
 }
 
 void GameNotifyPlayerGameInitTetris::SharedCtor() {
-  ::memset(&dw_player_id_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&dw_next_tetris_) -
-      reinterpret_cast<char*>(&dw_player_id_)) + sizeof(dw_next_tetris_));
+  ::memset(&curr_tetris_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&f_tick_) -
+      reinterpret_cast<char*>(&curr_tetris_)) + sizeof(f_tick_));
   _cached_size_ = 0;
 }
 
@@ -19287,6 +19316,8 @@ GameNotifyPlayerGameInitTetris::~GameNotifyPlayerGameInitTetris() {
 }
 
 void GameNotifyPlayerGameInitTetris::SharedDtor() {
+  if (this != internal_default_instance()) delete curr_tetris_;
+  if (this != internal_default_instance()) delete next_tetris_;
 }
 
 void GameNotifyPlayerGameInitTetris::SetCachedSize(int size) const {
@@ -19318,9 +19349,17 @@ void GameNotifyPlayerGameInitTetris::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  if (GetArenaNoVirtual() == NULL && curr_tetris_ != NULL) {
+    delete curr_tetris_;
+  }
+  curr_tetris_ = NULL;
+  if (GetArenaNoVirtual() == NULL && next_tetris_ != NULL) {
+    delete next_tetris_;
+  }
+  next_tetris_ = NULL;
   ::memset(&dw_player_id_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&dw_next_tetris_) -
-      reinterpret_cast<char*>(&dw_player_id_)) + sizeof(dw_next_tetris_));
+      reinterpret_cast<char*>(&f_tick_) -
+      reinterpret_cast<char*>(&dw_player_id_)) + sizeof(f_tick_));
   _internal_metadata_.Clear();
 }
 
@@ -19362,28 +19401,24 @@ bool GameNotifyPlayerGameInitTetris::MergePartialFromCodedStream(
         break;
       }
 
-      // uint32 dw_curr_tetris = 3;
+      // .GameProto.Tetris curr_tetris = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &dw_curr_tetris_)));
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_curr_tetris()));
         } else {
           goto handle_unusual;
         }
         break;
       }
 
-      // uint32 dw_next_tetris = 4;
+      // .GameProto.Tetris next_tetris = 4;
       case 4: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &dw_next_tetris_)));
+            static_cast< ::google::protobuf::uint8>(34u /* 34 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_next_tetris()));
         } else {
           goto handle_unusual;
         }
@@ -19426,14 +19461,16 @@ void GameNotifyPlayerGameInitTetris::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->f_tick(), output);
   }
 
-  // uint32 dw_curr_tetris = 3;
-  if (this->dw_curr_tetris() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->dw_curr_tetris(), output);
+  // .GameProto.Tetris curr_tetris = 3;
+  if (this->has_curr_tetris()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, *this->curr_tetris_, output);
   }
 
-  // uint32 dw_next_tetris = 4;
-  if (this->dw_next_tetris() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(4, this->dw_next_tetris(), output);
+  // .GameProto.Tetris next_tetris = 4;
+  if (this->has_next_tetris()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      4, *this->next_tetris_, output);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -19460,14 +19497,18 @@ void GameNotifyPlayerGameInitTetris::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->f_tick(), target);
   }
 
-  // uint32 dw_curr_tetris = 3;
-  if (this->dw_curr_tetris() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->dw_curr_tetris(), target);
+  // .GameProto.Tetris curr_tetris = 3;
+  if (this->has_curr_tetris()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        3, *this->curr_tetris_, deterministic, target);
   }
 
-  // uint32 dw_next_tetris = 4;
-  if (this->dw_next_tetris() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(4, this->dw_next_tetris(), target);
+  // .GameProto.Tetris next_tetris = 4;
+  if (this->has_next_tetris()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        4, *this->next_tetris_, deterministic, target);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -19487,6 +19528,20 @@ size_t GameNotifyPlayerGameInitTetris::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
   }
+  // .GameProto.Tetris curr_tetris = 3;
+  if (this->has_curr_tetris()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
+        *this->curr_tetris_);
+  }
+
+  // .GameProto.Tetris next_tetris = 4;
+  if (this->has_next_tetris()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
+        *this->next_tetris_);
+  }
+
   // uint64 dw_player_id = 1;
   if (this->dw_player_id() != 0) {
     total_size += 1 +
@@ -19497,20 +19552,6 @@ size_t GameNotifyPlayerGameInitTetris::ByteSizeLong() const {
   // float f_tick = 2;
   if (this->f_tick() != 0) {
     total_size += 1 + 4;
-  }
-
-  // uint32 dw_curr_tetris = 3;
-  if (this->dw_curr_tetris() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->dw_curr_tetris());
-  }
-
-  // uint32 dw_next_tetris = 4;
-  if (this->dw_next_tetris() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->dw_next_tetris());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -19542,17 +19583,17 @@ void GameNotifyPlayerGameInitTetris::MergeFrom(const GameNotifyPlayerGameInitTet
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from.has_curr_tetris()) {
+    mutable_curr_tetris()->::GameProto::Tetris::MergeFrom(from.curr_tetris());
+  }
+  if (from.has_next_tetris()) {
+    mutable_next_tetris()->::GameProto::Tetris::MergeFrom(from.next_tetris());
+  }
   if (from.dw_player_id() != 0) {
     set_dw_player_id(from.dw_player_id());
   }
   if (from.f_tick() != 0) {
     set_f_tick(from.f_tick());
-  }
-  if (from.dw_curr_tetris() != 0) {
-    set_dw_curr_tetris(from.dw_curr_tetris());
-  }
-  if (from.dw_next_tetris() != 0) {
-    set_dw_next_tetris(from.dw_next_tetris());
   }
 }
 
@@ -19580,10 +19621,10 @@ void GameNotifyPlayerGameInitTetris::Swap(GameNotifyPlayerGameInitTetris* other)
 }
 void GameNotifyPlayerGameInitTetris::InternalSwap(GameNotifyPlayerGameInitTetris* other) {
   using std::swap;
+  swap(curr_tetris_, other->curr_tetris_);
+  swap(next_tetris_, other->next_tetris_);
   swap(dw_player_id_, other->dw_player_id_);
   swap(f_tick_, other->f_tick_);
-  swap(dw_curr_tetris_, other->dw_curr_tetris_);
-  swap(dw_next_tetris_, other->dw_next_tetris_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
@@ -19597,11 +19638,19 @@ void GameNotifyPlayerGameInitTetris::InternalSwap(GameNotifyPlayerGameInitTetris
 // ===================================================================
 
 void GameNotifyPlayerNextTetris::InitAsDefaultInstance() {
+  ::GameProto::_GameNotifyPlayerNextTetris_default_instance_._instance.get_mutable()->next_tetris_ = const_cast< ::GameProto::Tetris*>(
+      ::GameProto::Tetris::internal_default_instance());
+}
+void GameNotifyPlayerNextTetris::clear_next_tetris() {
+  if (GetArenaNoVirtual() == NULL && next_tetris_ != NULL) {
+    delete next_tetris_;
+  }
+  next_tetris_ = NULL;
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int GameNotifyPlayerNextTetris::kDwPlayerIdFieldNumber;
 const int GameNotifyPlayerNextTetris::kFTickFieldNumber;
-const int GameNotifyPlayerNextTetris::kDwNextTetrisFieldNumber;
+const int GameNotifyPlayerNextTetris::kNextTetrisFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 GameNotifyPlayerNextTetris::GameNotifyPlayerNextTetris()
@@ -19617,16 +19666,21 @@ GameNotifyPlayerNextTetris::GameNotifyPlayerNextTetris(const GameNotifyPlayerNex
       _internal_metadata_(NULL),
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
+  if (from.has_next_tetris()) {
+    next_tetris_ = new ::GameProto::Tetris(*from.next_tetris_);
+  } else {
+    next_tetris_ = NULL;
+  }
   ::memcpy(&dw_player_id_, &from.dw_player_id_,
-    static_cast<size_t>(reinterpret_cast<char*>(&dw_next_tetris_) -
-    reinterpret_cast<char*>(&dw_player_id_)) + sizeof(dw_next_tetris_));
+    static_cast<size_t>(reinterpret_cast<char*>(&f_tick_) -
+    reinterpret_cast<char*>(&dw_player_id_)) + sizeof(f_tick_));
   // @@protoc_insertion_point(copy_constructor:GameProto.GameNotifyPlayerNextTetris)
 }
 
 void GameNotifyPlayerNextTetris::SharedCtor() {
-  ::memset(&dw_player_id_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&dw_next_tetris_) -
-      reinterpret_cast<char*>(&dw_player_id_)) + sizeof(dw_next_tetris_));
+  ::memset(&next_tetris_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&f_tick_) -
+      reinterpret_cast<char*>(&next_tetris_)) + sizeof(f_tick_));
   _cached_size_ = 0;
 }
 
@@ -19636,6 +19690,7 @@ GameNotifyPlayerNextTetris::~GameNotifyPlayerNextTetris() {
 }
 
 void GameNotifyPlayerNextTetris::SharedDtor() {
+  if (this != internal_default_instance()) delete next_tetris_;
 }
 
 void GameNotifyPlayerNextTetris::SetCachedSize(int size) const {
@@ -19667,9 +19722,13 @@ void GameNotifyPlayerNextTetris::Clear() {
   // Prevent compiler warnings about cached_has_bits being unused
   (void) cached_has_bits;
 
+  if (GetArenaNoVirtual() == NULL && next_tetris_ != NULL) {
+    delete next_tetris_;
+  }
+  next_tetris_ = NULL;
   ::memset(&dw_player_id_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&dw_next_tetris_) -
-      reinterpret_cast<char*>(&dw_player_id_)) + sizeof(dw_next_tetris_));
+      reinterpret_cast<char*>(&f_tick_) -
+      reinterpret_cast<char*>(&dw_player_id_)) + sizeof(f_tick_));
   _internal_metadata_.Clear();
 }
 
@@ -19711,14 +19770,12 @@ bool GameNotifyPlayerNextTetris::MergePartialFromCodedStream(
         break;
       }
 
-      // uint32 dw_next_tetris = 3;
+      // .GameProto.Tetris next_tetris = 3;
       case 3: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
-
-          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
-                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
-                 input, &dw_next_tetris_)));
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
+          DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
+               input, mutable_next_tetris()));
         } else {
           goto handle_unusual;
         }
@@ -19761,9 +19818,10 @@ void GameNotifyPlayerNextTetris::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->f_tick(), output);
   }
 
-  // uint32 dw_next_tetris = 3;
-  if (this->dw_next_tetris() != 0) {
-    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->dw_next_tetris(), output);
+  // .GameProto.Tetris next_tetris = 3;
+  if (this->has_next_tetris()) {
+    ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
+      3, *this->next_tetris_, output);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -19790,9 +19848,11 @@ void GameNotifyPlayerNextTetris::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->f_tick(), target);
   }
 
-  // uint32 dw_next_tetris = 3;
-  if (this->dw_next_tetris() != 0) {
-    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->dw_next_tetris(), target);
+  // .GameProto.Tetris next_tetris = 3;
+  if (this->has_next_tetris()) {
+    target = ::google::protobuf::internal::WireFormatLite::
+      InternalWriteMessageToArray(
+        3, *this->next_tetris_, deterministic, target);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -19812,6 +19872,13 @@ size_t GameNotifyPlayerNextTetris::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
   }
+  // .GameProto.Tetris next_tetris = 3;
+  if (this->has_next_tetris()) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::MessageSize(
+        *this->next_tetris_);
+  }
+
   // uint64 dw_player_id = 1;
   if (this->dw_player_id() != 0) {
     total_size += 1 +
@@ -19822,13 +19889,6 @@ size_t GameNotifyPlayerNextTetris::ByteSizeLong() const {
   // float f_tick = 2;
   if (this->f_tick() != 0) {
     total_size += 1 + 4;
-  }
-
-  // uint32 dw_next_tetris = 3;
-  if (this->dw_next_tetris() != 0) {
-    total_size += 1 +
-      ::google::protobuf::internal::WireFormatLite::UInt32Size(
-        this->dw_next_tetris());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -19860,14 +19920,14 @@ void GameNotifyPlayerNextTetris::MergeFrom(const GameNotifyPlayerNextTetris& fro
   ::google::protobuf::uint32 cached_has_bits = 0;
   (void) cached_has_bits;
 
+  if (from.has_next_tetris()) {
+    mutable_next_tetris()->::GameProto::Tetris::MergeFrom(from.next_tetris());
+  }
   if (from.dw_player_id() != 0) {
     set_dw_player_id(from.dw_player_id());
   }
   if (from.f_tick() != 0) {
     set_f_tick(from.f_tick());
-  }
-  if (from.dw_next_tetris() != 0) {
-    set_dw_next_tetris(from.dw_next_tetris());
   }
 }
 
@@ -19895,9 +19955,9 @@ void GameNotifyPlayerNextTetris::Swap(GameNotifyPlayerNextTetris* other) {
 }
 void GameNotifyPlayerNextTetris::InternalSwap(GameNotifyPlayerNextTetris* other) {
   using std::swap;
+  swap(next_tetris_, other->next_tetris_);
   swap(dw_player_id_, other->dw_player_id_);
   swap(f_tick_, other->f_tick_);
-  swap(dw_next_tetris_, other->dw_next_tetris_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }

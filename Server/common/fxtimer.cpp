@@ -1,5 +1,6 @@
 #include <map>
 #include <set>
+#include <stdlib.h>
 
 #include "fxtimer.h"
 #include "fxmeta.h"
@@ -42,6 +43,9 @@ public:
 		m_dwTimeZone = (int)(mktime(&tmGM) - mktime(&tmLocal)) / 3600;
 
 		m_dwDayTimeStart = (unsigned int)(t - (t - m_dwTimeZone * 3600) % 86400);
+
+		//设置随机数种子
+		srand(m_qwSecond);
 //		m_bStop = false;
 	}
 

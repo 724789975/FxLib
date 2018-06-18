@@ -50,9 +50,9 @@ bool CGameCommonConfig::Init()
 		virtual void				OnQuery(IRedisConnection *poDBConnection)
 		{
 			char szQuery[64] = { 0 };
-			sprintf(szQuery, "HMGET %s_%d %s %s %s",
+			sprintf(szQuery, "HMGET %s_%d %s %s %s %s",
 				RedisConstant::szGameConfig, 1, RedisConstant::szGameType,
-				RedisConstant::szPrepareTime, RedisConstant::szGameReadyTime);
+				RedisConstant::szPrepareTime, RedisConstant::szGameReadyTime, RedisConstant::szSuspendTime);
 			poDBConnection->Query(szQuery, &m_pReader);
 		}
 		virtual void OnResult(void)
@@ -61,12 +61,14 @@ bool CGameCommonConfig::Init()
 			m_pReader->GetValue(vec_szServerId);
 			m_dwPrepareTime = atoi(vec_szServerId[1].c_str());
 			m_dwGameReadyTime = atoi(vec_szServerId[2].c_str());
+			m_fSuspendTime = atof(vec_szServerId[3].c_str());
 		}
 		virtual void Release(void) { m_pReader->Release(); }
 
 		IRedisDataReader* m_pReader;
 		UINT32 m_dwPrepareTime;
 		UINT32 m_dwGameReadyTime;
+		float m_fSuspendTime;
 	};
 
 	RedisGetGameConfig oConfig;
@@ -74,6 +76,7 @@ bool CGameCommonConfig::Init()
 
 	m_oConfig.mutable_base_config()->set_dw_prepare_time(oConfig.m_dwPrepareTime);
 	m_oConfig.mutable_base_config()->set_dw_game_ready_time(oConfig.m_dwGameReadyTime);
+	m_oConfig.mutable_base_config()->set_f_suspend_time(oConfig.m_fSuspendTime);
 	return true;
 }
 

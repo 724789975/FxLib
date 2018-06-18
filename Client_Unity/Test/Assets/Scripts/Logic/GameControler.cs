@@ -150,6 +150,8 @@ public class GameControler : SingletonObject<GameControler>
 			SampleDebuger.Log("OnGameNotifyPlayerGameConfig error parse");
 			return;
 		}
+
+		TetrisData.InitGameConfig(oRet);
 	}
 
 	public void OnGameNotifyPlayerGameRoleData(byte[] pBuf)

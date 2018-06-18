@@ -254,6 +254,7 @@ bool CGameSceneCommon::Init()
 		if (m_qwRoles[i] != 0)
 		{
 			m_mapPlayers[m_qwRoles[i]].SetPlayerSession(NULL);
+			m_mapPlayers[m_qwRoles[i]].SetPlayerId(m_qwRoles[i]);
 		}
 	}
 	ChangeState(GameProto::ESS_Prepare);
@@ -268,6 +269,24 @@ CPlayerBase* CGameSceneCommon::GetPlayer(UINT64 qwPlayerId)
 		return NULL;
 	}
 	return &(it->second);
+}
+
+void CGameSceneCommon::OnGameStart()
+{
+	for (std::map<UINT64, CCommonPlayer>::iterator it = m_mapPlayers.begin();
+		it != m_mapPlayers.end(); ++it)
+	{
+		it->second.Init();
+	}
+}
+
+void CGameSceneCommon::Gaming(double fTime)
+{
+	for (std::map<UINT64, CCommonPlayer>::iterator it = m_mapPlayers.begin();
+		it != m_mapPlayers.end(); ++it)
+	{
+		it->second.Update(fTime);
+	}
 }
 
 GameProto::EGameSceneState CGameSceneCommon::GetSceneState()

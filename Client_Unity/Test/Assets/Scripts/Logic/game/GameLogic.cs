@@ -50,7 +50,7 @@ public class GameLogic : SingletonObject<GameLogic>
 			{
 				for (int j = 0; j < TetrisData.s_dwUnit; ++j)
 				{
-					uint dwBlockInfo = TetrisData.s_wTetrisTable[m_oData.m_oNextTetris.m_dwTetrisShape, m_oData.m_oNextTetris.m_dwTetrisDirect, i, j];
+					uint dwBlockInfo = TetrisData.s_dwTetrisTable[m_oData.m_oNextTetris.m_dwTetrisShape, m_oData.m_oNextTetris.m_dwTetrisDirect, i, j];
 					c.r = (byte)(dwBlockInfo & 0xFF000000 >> 24);
 					c.g = (byte)(dwBlockInfo & 0x00FF0000 >> 16);
 					c.b = (byte)(dwBlockInfo & 0x0000FF00 >> 8);

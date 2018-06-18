@@ -32,17 +32,20 @@ namespace GameProto {
             "b21tb25Sb2xlRGF0YRImCglyb2xlX2RhdGEYASABKAsyEy5HYW1lUHJvdG8u",
             "Um9sZURhdGESEgoKZHdfc2xvdF9pZBgCIAEoDSJOCg5PbmxpbmVSb2xlRGF0",
             "YRImCglyb2xlX2RhdGEYASABKAsyEy5HYW1lUHJvdG8uUm9sZURhdGESFAoM",
-            "ZHdfc2VydmVyX2lkGAIgASgNIlsKDkdhbWVDb25maWdCYXNlEhQKDGR3X2dh",
+            "ZHdfc2VydmVyX2lkGAIgASgNInMKDkdhbWVDb25maWdCYXNlEhQKDGR3X2dh",
             "bWVfdHlwZRgBIAEoDRIXCg9kd19wcmVwYXJlX3RpbWUYAiABKA0SGgoSZHdf",
-            "Z2FtZV9yZWFkeV90aW1lGAMgASgNIkIKEEdhbWVDb25maWdDb21tb24SLgoL",
-            "YmFzZV9jb25maWcYASABKAsyGS5HYW1lUHJvdG8uR2FtZUNvbmZpZ0Jhc2Ui",
-            "OgoNR2FtZVNjZW5lSW5mbxIpCgVzdGF0ZRgBIAEoDjIaLkdhbWVQcm90by5F",
-            "R2FtZVNjZW5lU3RhdGUiQwoTR2FtZUNvbW1vblNjZW5lSW5mbxIsCgpzY2Vu",
-            "ZV9pbmZvGAEgASgLMhguR2FtZVByb3RvLkdhbWVTY2VuZUluZm8qJwoJRUdh",
-            "bWVUeXBlEgsKB0dUX05vbmUQABINCglHVF9Db21tb24QASplCg9FR2FtZVNj",
-            "ZW5lU3RhdGUSDAoIRVNTX05vbmUQABIPCgtFU1NfUHJlcGFyZRABEhEKDUVT",
-            "U19HYW1lUmVhZHkQChIOCgpFU1NfR2FtaW5nEBQSEAoMRVNTX1RyYW5zYWN0",
-            "EB5iBnByb3RvMw=="));
+            "Z2FtZV9yZWFkeV90aW1lGAMgASgNEhYKDmZfc3VzcGVuZF90aW1lGAQgASgC",
+            "IkIKEEdhbWVDb25maWdDb21tb24SLgoLYmFzZV9jb25maWcYASABKAsyGS5H",
+            "YW1lUHJvdG8uR2FtZUNvbmZpZ0Jhc2UiOgoNR2FtZVNjZW5lSW5mbxIpCgVz",
+            "dGF0ZRgBIAEoDjIaLkdhbWVQcm90by5FR2FtZVNjZW5lU3RhdGUiQwoTR2Ft",
+            "ZUNvbW1vblNjZW5lSW5mbxIsCgpzY2VuZV9pbmZvGAEgASgLMhguR2FtZVBy",
+            "b3RvLkdhbWVTY2VuZUluZm8ieAoGVGV0cmlzEhcKD2R3X3RldHJpc19zaGFw",
+            "ZRgBIAEoDRIYChBkd190ZXRyaXNfZGlyZWN0GAIgASgNEhcKD2R3X3RldHJp",
+            "c19jb2xvchgDIAEoDRIQCghkd19wb3NfeBgEIAEoBRIQCghkd19wb3NfeRgF",
+            "IAEoBSonCglFR2FtZVR5cGUSCwoHR1RfTm9uZRAAEg0KCUdUX0NvbW1vbhAB",
+            "KmUKD0VHYW1lU2NlbmVTdGF0ZRIMCghFU1NfTm9uZRAAEg8KC0VTU19QcmVw",
+            "YXJlEAESEQoNRVNTX0dhbWVSZWFkeRAKEg4KCkVTU19HYW1pbmcQFBIQCgxF",
+            "U1NfVHJhbnNhY3QQHmIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProto.EGameType), typeof(global::GameProto.EGameSceneState), }, new pbr::GeneratedClrTypeInfo[] {
@@ -50,10 +53,11 @@ namespace GameProto {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.TeamRoleData), global::GameProto.TeamRoleData.Parser, new[]{ "RoleData", "DwSlotId", "DwServerId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameCommonRoleData), global::GameProto.GameCommonRoleData.Parser, new[]{ "RoleData", "DwSlotId" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.OnlineRoleData), global::GameProto.OnlineRoleData.Parser, new[]{ "RoleData", "DwServerId" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameConfigBase), global::GameProto.GameConfigBase.Parser, new[]{ "DwGameType", "DwPrepareTime", "DwGameReadyTime" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameConfigBase), global::GameProto.GameConfigBase.Parser, new[]{ "DwGameType", "DwPrepareTime", "DwGameReadyTime", "FSuspendTime" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameConfigCommon), global::GameProto.GameConfigCommon.Parser, new[]{ "BaseConfig" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameSceneInfo), global::GameProto.GameSceneInfo.Parser, new[]{ "State" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameCommonSceneInfo), global::GameProto.GameCommonSceneInfo.Parser, new[]{ "SceneInfo" }, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameCommonSceneInfo), global::GameProto.GameCommonSceneInfo.Parser, new[]{ "SceneInfo" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.Tetris), global::GameProto.Tetris.Parser, new[]{ "DwTetrisShape", "DwTetrisDirect", "DwTetrisColor", "DwPosX", "DwPosY" }, null, null, null)
           }));
     }
     #endregion
@@ -846,6 +850,7 @@ namespace GameProto {
       dwGameType_ = other.dwGameType_;
       dwPrepareTime_ = other.dwPrepareTime_;
       dwGameReadyTime_ = other.dwGameReadyTime_;
+      fSuspendTime_ = other.fSuspendTime_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -887,6 +892,17 @@ namespace GameProto {
       }
     }
 
+    /// <summary>Field number for the "f_suspend_time" field.</summary>
+    public const int FSuspendTimeFieldNumber = 4;
+    private float fSuspendTime_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float FSuspendTime {
+      get { return fSuspendTime_; }
+      set {
+        fSuspendTime_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
       return Equals(other as GameConfigBase);
@@ -903,6 +919,7 @@ namespace GameProto {
       if (DwGameType != other.DwGameType) return false;
       if (DwPrepareTime != other.DwPrepareTime) return false;
       if (DwGameReadyTime != other.DwGameReadyTime) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(FSuspendTime, other.FSuspendTime)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -912,6 +929,7 @@ namespace GameProto {
       if (DwGameType != 0) hash ^= DwGameType.GetHashCode();
       if (DwPrepareTime != 0) hash ^= DwPrepareTime.GetHashCode();
       if (DwGameReadyTime != 0) hash ^= DwGameReadyTime.GetHashCode();
+      if (FSuspendTime != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(FSuspendTime);
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -937,6 +955,10 @@ namespace GameProto {
         output.WriteRawTag(24);
         output.WriteUInt32(DwGameReadyTime);
       }
+      if (FSuspendTime != 0F) {
+        output.WriteRawTag(37);
+        output.WriteFloat(FSuspendTime);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -953,6 +975,9 @@ namespace GameProto {
       }
       if (DwGameReadyTime != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwGameReadyTime);
+      }
+      if (FSuspendTime != 0F) {
+        size += 1 + 4;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -973,6 +998,9 @@ namespace GameProto {
       }
       if (other.DwGameReadyTime != 0) {
         DwGameReadyTime = other.DwGameReadyTime;
+      }
+      if (other.FSuspendTime != 0F) {
+        FSuspendTime = other.FSuspendTime;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -995,6 +1023,10 @@ namespace GameProto {
           }
           case 24: {
             DwGameReadyTime = input.ReadUInt32();
+            break;
+          }
+          case 37: {
+            FSuspendTime = input.ReadFloat();
             break;
           }
         }
@@ -1394,6 +1426,250 @@ namespace GameProto {
               sceneInfo_ = new global::GameProto.GameSceneInfo();
             }
             input.ReadMessage(sceneInfo_);
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
+  public sealed partial class Tetris : pb::IMessage<Tetris> {
+    private static readonly pb::MessageParser<Tetris> _parser = new pb::MessageParser<Tetris>(() => new Tetris());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<Tetris> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProto.WebDataReflection.Descriptor.MessageTypes[8]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Tetris() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Tetris(Tetris other) : this() {
+      dwTetrisShape_ = other.dwTetrisShape_;
+      dwTetrisDirect_ = other.dwTetrisDirect_;
+      dwTetrisColor_ = other.dwTetrisColor_;
+      dwPosX_ = other.dwPosX_;
+      dwPosY_ = other.dwPosY_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public Tetris Clone() {
+      return new Tetris(this);
+    }
+
+    /// <summary>Field number for the "dw_tetris_shape" field.</summary>
+    public const int DwTetrisShapeFieldNumber = 1;
+    private uint dwTetrisShape_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint DwTetrisShape {
+      get { return dwTetrisShape_; }
+      set {
+        dwTetrisShape_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "dw_tetris_direct" field.</summary>
+    public const int DwTetrisDirectFieldNumber = 2;
+    private uint dwTetrisDirect_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint DwTetrisDirect {
+      get { return dwTetrisDirect_; }
+      set {
+        dwTetrisDirect_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "dw_tetris_color" field.</summary>
+    public const int DwTetrisColorFieldNumber = 3;
+    private uint dwTetrisColor_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public uint DwTetrisColor {
+      get { return dwTetrisColor_; }
+      set {
+        dwTetrisColor_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "dw_pos_x" field.</summary>
+    public const int DwPosXFieldNumber = 4;
+    private int dwPosX_;
+    /// <summary>
+    ///坐标位置为左下角
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int DwPosX {
+      get { return dwPosX_; }
+      set {
+        dwPosX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "dw_pos_y" field.</summary>
+    public const int DwPosYFieldNumber = 5;
+    private int dwPosY_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int DwPosY {
+      get { return dwPosY_; }
+      set {
+        dwPosY_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as Tetris);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(Tetris other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (DwTetrisShape != other.DwTetrisShape) return false;
+      if (DwTetrisDirect != other.DwTetrisDirect) return false;
+      if (DwTetrisColor != other.DwTetrisColor) return false;
+      if (DwPosX != other.DwPosX) return false;
+      if (DwPosY != other.DwPosY) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (DwTetrisShape != 0) hash ^= DwTetrisShape.GetHashCode();
+      if (DwTetrisDirect != 0) hash ^= DwTetrisDirect.GetHashCode();
+      if (DwTetrisColor != 0) hash ^= DwTetrisColor.GetHashCode();
+      if (DwPosX != 0) hash ^= DwPosX.GetHashCode();
+      if (DwPosY != 0) hash ^= DwPosY.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (DwTetrisShape != 0) {
+        output.WriteRawTag(8);
+        output.WriteUInt32(DwTetrisShape);
+      }
+      if (DwTetrisDirect != 0) {
+        output.WriteRawTag(16);
+        output.WriteUInt32(DwTetrisDirect);
+      }
+      if (DwTetrisColor != 0) {
+        output.WriteRawTag(24);
+        output.WriteUInt32(DwTetrisColor);
+      }
+      if (DwPosX != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(DwPosX);
+      }
+      if (DwPosY != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(DwPosY);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (DwTetrisShape != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwTetrisShape);
+      }
+      if (DwTetrisDirect != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwTetrisDirect);
+      }
+      if (DwTetrisColor != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwTetrisColor);
+      }
+      if (DwPosX != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(DwPosX);
+      }
+      if (DwPosY != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(DwPosY);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(Tetris other) {
+      if (other == null) {
+        return;
+      }
+      if (other.DwTetrisShape != 0) {
+        DwTetrisShape = other.DwTetrisShape;
+      }
+      if (other.DwTetrisDirect != 0) {
+        DwTetrisDirect = other.DwTetrisDirect;
+      }
+      if (other.DwTetrisColor != 0) {
+        DwTetrisColor = other.DwTetrisColor;
+      }
+      if (other.DwPosX != 0) {
+        DwPosX = other.DwPosX;
+      }
+      if (other.DwPosY != 0) {
+        DwPosY = other.DwPosY;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            DwTetrisShape = input.ReadUInt32();
+            break;
+          }
+          case 16: {
+            DwTetrisDirect = input.ReadUInt32();
+            break;
+          }
+          case 24: {
+            DwTetrisColor = input.ReadUInt32();
+            break;
+          }
+          case 32: {
+            DwPosX = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            DwPosY = input.ReadInt32();
             break;
           }
         }

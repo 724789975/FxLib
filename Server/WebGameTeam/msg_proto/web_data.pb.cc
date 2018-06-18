@@ -60,6 +60,11 @@ class GameCommonSceneInfoDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<GameCommonSceneInfo>
       _instance;
 } _GameCommonSceneInfo_default_instance_;
+class TetrisDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<Tetris>
+      _instance;
+} _Tetris_default_instance_;
 }  // namespace GameProto
 namespace protobuf_web_5fdata_2eproto {
 void InitDefaultsRoleDataImpl() {
@@ -235,7 +240,28 @@ void InitDefaultsGameCommonSceneInfo() {
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsGameCommonSceneInfoImpl);
 }
 
-::google::protobuf::Metadata file_level_metadata[8];
+void InitDefaultsTetrisImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::GameProto::_Tetris_default_instance_;
+    new (ptr) ::GameProto::Tetris();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::GameProto::Tetris::InitAsDefaultInstance();
+}
+
+void InitDefaultsTetris() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsTetrisImpl);
+}
+
+::google::protobuf::Metadata file_level_metadata[9];
 const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors[2];
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
@@ -278,6 +304,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameConfigBase, dw_game_type_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameConfigBase, dw_prepare_time_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameConfigBase, dw_game_ready_time_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameConfigBase, f_suspend_time_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameConfigCommon, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -296,6 +323,16 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameCommonSceneInfo, scene_info_),
+  ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::Tetris, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::Tetris, dw_tetris_shape_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::Tetris, dw_tetris_direct_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::Tetris, dw_tetris_color_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::Tetris, dw_pos_x_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::Tetris, dw_pos_y_),
 };
 static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::GameProto::RoleData)},
@@ -303,9 +340,10 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROT
   { 17, -1, sizeof(::GameProto::GameCommonRoleData)},
   { 24, -1, sizeof(::GameProto::OnlineRoleData)},
   { 31, -1, sizeof(::GameProto::GameConfigBase)},
-  { 39, -1, sizeof(::GameProto::GameConfigCommon)},
-  { 45, -1, sizeof(::GameProto::GameSceneInfo)},
-  { 51, -1, sizeof(::GameProto::GameCommonSceneInfo)},
+  { 40, -1, sizeof(::GameProto::GameConfigCommon)},
+  { 46, -1, sizeof(::GameProto::GameSceneInfo)},
+  { 52, -1, sizeof(::GameProto::GameCommonSceneInfo)},
+  { 58, -1, sizeof(::GameProto::Tetris)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -317,6 +355,7 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_GameConfigCommon_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_GameSceneInfo_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_GameCommonSceneInfo_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_Tetris_default_instance_),
 };
 
 void protobuf_AssignDescriptors() {
@@ -335,7 +374,7 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_PROTOBUF_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 8);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 9);
 }
 
 void AddDescriptorsImpl() {
@@ -350,21 +389,25 @@ void AddDescriptorsImpl() {
       "\n\trole_data\030\001 \001(\0132\023.GameProto.RoleData\022\022"
       "\n\ndw_slot_id\030\002 \001(\r\"N\n\016OnlineRoleData\022&\n\t"
       "role_data\030\001 \001(\0132\023.GameProto.RoleData\022\024\n\014"
-      "dw_server_id\030\002 \001(\r\"[\n\016GameConfigBase\022\024\n\014"
+      "dw_server_id\030\002 \001(\r\"s\n\016GameConfigBase\022\024\n\014"
       "dw_game_type\030\001 \001(\r\022\027\n\017dw_prepare_time\030\002 "
-      "\001(\r\022\032\n\022dw_game_ready_time\030\003 \001(\r\"B\n\020GameC"
-      "onfigCommon\022.\n\013base_config\030\001 \001(\0132\031.GameP"
-      "roto.GameConfigBase\":\n\rGameSceneInfo\022)\n\005"
-      "state\030\001 \001(\0162\032.GameProto.EGameSceneState\""
-      "C\n\023GameCommonSceneInfo\022,\n\nscene_info\030\001 \001"
-      "(\0132\030.GameProto.GameSceneInfo*\'\n\tEGameTyp"
-      "e\022\013\n\007GT_None\020\000\022\r\n\tGT_Common\020\001*e\n\017EGameSc"
-      "eneState\022\014\n\010ESS_None\020\000\022\017\n\013ESS_Prepare\020\001\022"
-      "\021\n\rESS_GameReady\020\n\022\016\n\nESS_Gaming\020\024\022\020\n\014ES"
-      "S_Transact\020\036b\006proto3"
+      "\001(\r\022\032\n\022dw_game_ready_time\030\003 \001(\r\022\026\n\016f_sus"
+      "pend_time\030\004 \001(\002\"B\n\020GameConfigCommon\022.\n\013b"
+      "ase_config\030\001 \001(\0132\031.GameProto.GameConfigB"
+      "ase\":\n\rGameSceneInfo\022)\n\005state\030\001 \001(\0162\032.Ga"
+      "meProto.EGameSceneState\"C\n\023GameCommonSce"
+      "neInfo\022,\n\nscene_info\030\001 \001(\0132\030.GameProto.G"
+      "ameSceneInfo\"x\n\006Tetris\022\027\n\017dw_tetris_shap"
+      "e\030\001 \001(\r\022\030\n\020dw_tetris_direct\030\002 \001(\r\022\027\n\017dw_"
+      "tetris_color\030\003 \001(\r\022\020\n\010dw_pos_x\030\004 \001(\005\022\020\n\010"
+      "dw_pos_y\030\005 \001(\005*\'\n\tEGameType\022\013\n\007GT_None\020\000"
+      "\022\r\n\tGT_Common\020\001*e\n\017EGameSceneState\022\014\n\010ES"
+      "S_None\020\000\022\017\n\013ESS_Prepare\020\001\022\021\n\rESS_GameRea"
+      "dy\020\n\022\016\n\nESS_Gaming\020\024\022\020\n\014ESS_Transact\020\036b\006"
+      "proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 820);
+      descriptor, 966);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "web_data.proto", &protobuf_RegisterTypes);
 }
@@ -1722,6 +1765,7 @@ void GameConfigBase::InitAsDefaultInstance() {
 const int GameConfigBase::kDwGameTypeFieldNumber;
 const int GameConfigBase::kDwPrepareTimeFieldNumber;
 const int GameConfigBase::kDwGameReadyTimeFieldNumber;
+const int GameConfigBase::kFSuspendTimeFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
 GameConfigBase::GameConfigBase()
@@ -1738,15 +1782,15 @@ GameConfigBase::GameConfigBase(const GameConfigBase& from)
       _cached_size_(0) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   ::memcpy(&dw_game_type_, &from.dw_game_type_,
-    static_cast<size_t>(reinterpret_cast<char*>(&dw_game_ready_time_) -
-    reinterpret_cast<char*>(&dw_game_type_)) + sizeof(dw_game_ready_time_));
+    static_cast<size_t>(reinterpret_cast<char*>(&f_suspend_time_) -
+    reinterpret_cast<char*>(&dw_game_type_)) + sizeof(f_suspend_time_));
   // @@protoc_insertion_point(copy_constructor:GameProto.GameConfigBase)
 }
 
 void GameConfigBase::SharedCtor() {
   ::memset(&dw_game_type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&dw_game_ready_time_) -
-      reinterpret_cast<char*>(&dw_game_type_)) + sizeof(dw_game_ready_time_));
+      reinterpret_cast<char*>(&f_suspend_time_) -
+      reinterpret_cast<char*>(&dw_game_type_)) + sizeof(f_suspend_time_));
   _cached_size_ = 0;
 }
 
@@ -1788,8 +1832,8 @@ void GameConfigBase::Clear() {
   (void) cached_has_bits;
 
   ::memset(&dw_game_type_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&dw_game_ready_time_) -
-      reinterpret_cast<char*>(&dw_game_type_)) + sizeof(dw_game_ready_time_));
+      reinterpret_cast<char*>(&f_suspend_time_) -
+      reinterpret_cast<char*>(&dw_game_type_)) + sizeof(f_suspend_time_));
   _internal_metadata_.Clear();
 }
 
@@ -1845,6 +1889,20 @@ bool GameConfigBase::MergePartialFromCodedStream(
         break;
       }
 
+      // float f_suspend_time = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(37u /* 37 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &f_suspend_time_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
       default: {
       handle_unusual:
         if (tag == 0) {
@@ -1886,6 +1944,11 @@ void GameConfigBase::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->dw_game_ready_time(), output);
   }
 
+  // float f_suspend_time = 4;
+  if (this->f_suspend_time() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(4, this->f_suspend_time(), output);
+  }
+
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
     ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
@@ -1913,6 +1976,11 @@ void GameConfigBase::SerializeWithCachedSizes(
   // uint32 dw_game_ready_time = 3;
   if (this->dw_game_ready_time() != 0) {
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->dw_game_ready_time(), target);
+  }
+
+  // float f_suspend_time = 4;
+  if (this->f_suspend_time() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(4, this->f_suspend_time(), target);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -1953,6 +2021,11 @@ size_t GameConfigBase::ByteSizeLong() const {
         this->dw_game_ready_time());
   }
 
+  // float f_suspend_time = 4;
+  if (this->f_suspend_time() != 0) {
+    total_size += 1 + 4;
+  }
+
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
   GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
   _cached_size_ = cached_size;
@@ -1991,6 +2064,9 @@ void GameConfigBase::MergeFrom(const GameConfigBase& from) {
   if (from.dw_game_ready_time() != 0) {
     set_dw_game_ready_time(from.dw_game_ready_time());
   }
+  if (from.f_suspend_time() != 0) {
+    set_f_suspend_time(from.f_suspend_time());
+  }
 }
 
 void GameConfigBase::CopyFrom(const ::google::protobuf::Message& from) {
@@ -2020,6 +2096,7 @@ void GameConfigBase::InternalSwap(GameConfigBase* other) {
   swap(dw_game_type_, other->dw_game_type_);
   swap(dw_prepare_time_, other->dw_prepare_time_);
   swap(dw_game_ready_time_, other->dw_game_ready_time_);
+  swap(f_suspend_time_, other->f_suspend_time_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }
@@ -2763,6 +2840,394 @@ void GameCommonSceneInfo::InternalSwap(GameCommonSceneInfo* other) {
 }
 
 ::google::protobuf::Metadata GameCommonSceneInfo::GetMetadata() const {
+  protobuf_web_5fdata_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_web_5fdata_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
+void Tetris::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int Tetris::kDwTetrisShapeFieldNumber;
+const int Tetris::kDwTetrisDirectFieldNumber;
+const int Tetris::kDwTetrisColorFieldNumber;
+const int Tetris::kDwPosXFieldNumber;
+const int Tetris::kDwPosYFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+Tetris::Tetris()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_web_5fdata_2eproto::InitDefaultsTetris();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:GameProto.Tetris)
+}
+Tetris::Tetris(const Tetris& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&dw_tetris_shape_, &from.dw_tetris_shape_,
+    static_cast<size_t>(reinterpret_cast<char*>(&dw_pos_y_) -
+    reinterpret_cast<char*>(&dw_tetris_shape_)) + sizeof(dw_pos_y_));
+  // @@protoc_insertion_point(copy_constructor:GameProto.Tetris)
+}
+
+void Tetris::SharedCtor() {
+  ::memset(&dw_tetris_shape_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&dw_pos_y_) -
+      reinterpret_cast<char*>(&dw_tetris_shape_)) + sizeof(dw_pos_y_));
+  _cached_size_ = 0;
+}
+
+Tetris::~Tetris() {
+  // @@protoc_insertion_point(destructor:GameProto.Tetris)
+  SharedDtor();
+}
+
+void Tetris::SharedDtor() {
+}
+
+void Tetris::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* Tetris::descriptor() {
+  ::protobuf_web_5fdata_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_web_5fdata_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const Tetris& Tetris::default_instance() {
+  ::protobuf_web_5fdata_2eproto::InitDefaultsTetris();
+  return *internal_default_instance();
+}
+
+Tetris* Tetris::New(::google::protobuf::Arena* arena) const {
+  Tetris* n = new Tetris;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void Tetris::Clear() {
+// @@protoc_insertion_point(message_clear_start:GameProto.Tetris)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&dw_tetris_shape_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&dw_pos_y_) -
+      reinterpret_cast<char*>(&dw_tetris_shape_)) + sizeof(dw_pos_y_));
+  _internal_metadata_.Clear();
+}
+
+bool Tetris::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:GameProto.Tetris)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // uint32 dw_tetris_shape = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &dw_tetris_shape_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 dw_tetris_direct = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &dw_tetris_direct_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // uint32 dw_tetris_color = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint32, ::google::protobuf::internal::WireFormatLite::TYPE_UINT32>(
+                 input, &dw_tetris_color_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 dw_pos_x = 4;
+      case 4: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(32u /* 32 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &dw_pos_x_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // int32 dw_pos_y = 5;
+      case 5: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(40u /* 40 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::int32, ::google::protobuf::internal::WireFormatLite::TYPE_INT32>(
+                 input, &dw_pos_y_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:GameProto.Tetris)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:GameProto.Tetris)
+  return false;
+#undef DO_
+}
+
+void Tetris::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:GameProto.Tetris)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint32 dw_tetris_shape = 1;
+  if (this->dw_tetris_shape() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->dw_tetris_shape(), output);
+  }
+
+  // uint32 dw_tetris_direct = 2;
+  if (this->dw_tetris_direct() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(2, this->dw_tetris_direct(), output);
+  }
+
+  // uint32 dw_tetris_color = 3;
+  if (this->dw_tetris_color() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt32(3, this->dw_tetris_color(), output);
+  }
+
+  // int32 dw_pos_x = 4;
+  if (this->dw_pos_x() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(4, this->dw_pos_x(), output);
+  }
+
+  // int32 dw_pos_y = 5;
+  if (this->dw_pos_y() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteInt32(5, this->dw_pos_y(), output);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
+  }
+  // @@protoc_insertion_point(serialize_end:GameProto.Tetris)
+}
+
+::google::protobuf::uint8* Tetris::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:GameProto.Tetris)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint32 dw_tetris_shape = 1;
+  if (this->dw_tetris_shape() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->dw_tetris_shape(), target);
+  }
+
+  // uint32 dw_tetris_direct = 2;
+  if (this->dw_tetris_direct() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(2, this->dw_tetris_direct(), target);
+  }
+
+  // uint32 dw_tetris_color = 3;
+  if (this->dw_tetris_color() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(3, this->dw_tetris_color(), target);
+  }
+
+  // int32 dw_pos_x = 4;
+  if (this->dw_pos_x() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(4, this->dw_pos_x(), target);
+  }
+
+  // int32 dw_pos_y = 5;
+  if (this->dw_pos_y() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteInt32ToArray(5, this->dw_pos_y(), target);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:GameProto.Tetris)
+  return target;
+}
+
+size_t Tetris::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:GameProto.Tetris)
+  size_t total_size = 0;
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
+  }
+  // uint32 dw_tetris_shape = 1;
+  if (this->dw_tetris_shape() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->dw_tetris_shape());
+  }
+
+  // uint32 dw_tetris_direct = 2;
+  if (this->dw_tetris_direct() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->dw_tetris_direct());
+  }
+
+  // uint32 dw_tetris_color = 3;
+  if (this->dw_tetris_color() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt32Size(
+        this->dw_tetris_color());
+  }
+
+  // int32 dw_pos_x = 4;
+  if (this->dw_pos_x() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->dw_pos_x());
+  }
+
+  // int32 dw_pos_y = 5;
+  if (this->dw_pos_y() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::Int32Size(
+        this->dw_pos_y());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void Tetris::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:GameProto.Tetris)
+  GOOGLE_DCHECK_NE(&from, this);
+  const Tetris* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const Tetris>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:GameProto.Tetris)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:GameProto.Tetris)
+    MergeFrom(*source);
+  }
+}
+
+void Tetris::MergeFrom(const Tetris& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:GameProto.Tetris)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.dw_tetris_shape() != 0) {
+    set_dw_tetris_shape(from.dw_tetris_shape());
+  }
+  if (from.dw_tetris_direct() != 0) {
+    set_dw_tetris_direct(from.dw_tetris_direct());
+  }
+  if (from.dw_tetris_color() != 0) {
+    set_dw_tetris_color(from.dw_tetris_color());
+  }
+  if (from.dw_pos_x() != 0) {
+    set_dw_pos_x(from.dw_pos_x());
+  }
+  if (from.dw_pos_y() != 0) {
+    set_dw_pos_y(from.dw_pos_y());
+  }
+}
+
+void Tetris::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:GameProto.Tetris)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void Tetris::CopyFrom(const Tetris& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:GameProto.Tetris)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool Tetris::IsInitialized() const {
+  return true;
+}
+
+void Tetris::Swap(Tetris* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void Tetris::InternalSwap(Tetris* other) {
+  using std::swap;
+  swap(dw_tetris_shape_, other->dw_tetris_shape_);
+  swap(dw_tetris_direct_, other->dw_tetris_direct_);
+  swap(dw_tetris_color_, other->dw_tetris_color_);
+  swap(dw_pos_x_, other->dw_pos_x_);
+  swap(dw_pos_y_, other->dw_pos_y_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata Tetris::GetMetadata() const {
   protobuf_web_5fdata_2eproto::protobuf_AssignDescriptorsOnce();
   return ::protobuf_web_5fdata_2eproto::file_level_metadata[kIndexInFileMessages];
 }

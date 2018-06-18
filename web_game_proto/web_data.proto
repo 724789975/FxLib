@@ -49,6 +49,7 @@ message GameConfigBase
 	uint32 dw_game_type = 1;
 	uint32 dw_prepare_time = 2;
 	uint32 dw_game_ready_time = 3;
+	float f_suspend_time = 4;
 }
 
 message GameConfigCommon
@@ -64,5 +65,16 @@ message GameSceneInfo
 message GameCommonSceneInfo
 {
 	GameSceneInfo scene_info = 1;
+}
+
+message Tetris
+{
+	uint32 dw_tetris_shape = 1;
+	uint32 dw_tetris_direct = 2;
+	uint32 dw_tetris_color = 3;
+
+	//坐标位置为左下角
+	int32 dw_pos_x = 4;
+	int32 dw_pos_y = 5;
 }
 

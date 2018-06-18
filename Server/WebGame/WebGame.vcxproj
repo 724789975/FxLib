@@ -178,6 +178,7 @@
     <ClCompile Include="ServerSession.cpp" />
     <ClCompile Include="SlaveServerSession.cpp" />
     <ClCompile Include="SocketSession.cpp" />
+    <ClCompile Include="TetrisBase.cpp" />
     <ClCompile Include="Timers.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -193,6 +194,7 @@
     <ClInclude Include="ServerSession.h" />
     <ClInclude Include="SlaveServerSession.h" />
     <ClInclude Include="SocketSession.h" />
+    <ClInclude Include="TetrisBase.h" />
     <ClInclude Include="Timers.h" />
   </ItemGroup>
   <ItemGroup>

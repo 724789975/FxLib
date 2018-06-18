@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using GameProto;
 
 [System.Serializable]
 public class Tetris
@@ -26,12 +27,34 @@ public class TetrisData
 	//方向的数量
 	public const uint s_dwDirectCount = 4;
 
-	public static void SetSuspendTime(float fSuspendTime) { s_fSuspendTime = fSuspendTime; }
-	public static float proSuspendTime { get { return s_fSuspendTime; } }
-	static float s_fSuspendTime = 0.5f;
+	public static float proSuspendTime
+	{
+		get
+		{
+			switch ((GameProto.EGameType)m_oConfig.DwGameType)
+			{
+				case EGameType.GtCommon:
+					{
+						return m_oConfig.CommonConfig.BaseConfig.FSuspendTime;
+					}
+				default:
+					{
+						System.Exception e = new System.Exception();
+						e.Source = "error game type";
+						throw e;
+					}
+			}
+		}
+	}
+
+	public static void InitGameConfig(GameNotifyPlayerGameConfig oConfig)
+	{
+		m_oConfig = oConfig;
+	}
+	static GameNotifyPlayerGameConfig m_oConfig = null;
 
 	// 7种方块的4旋转状态
-	public static readonly uint[,,,] s_wTetrisTable = new uint[7, 4, 7, 4]
+	public static readonly uint[,,,] s_dwTetrisTable = new uint[7, 4, 7, 4]
 	{
 		// I型 { 0x00F0, 0x2222, 0x00F0, 0x2222 },	第五行代表最下面的块的位置
 		{
@@ -325,7 +348,7 @@ public class TetrisData
 		{
 			for (int j = 0; j < s_dwUnit; ++j)
 			{
-				uint dwBlockInfo = s_wTetrisTable[m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, i, j];
+				uint dwBlockInfo = s_dwTetrisTable[m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, i, j];
 				if (dwBlockInfo == 0)
 				{
 					continue;
@@ -371,14 +394,14 @@ public class UserTetrisData : TetrisData
 		//检查方块左面有没有
 		for (int i = 0; i < s_dwUnit; i++)
 		{
-			uint dwBlockInfo = s_wTetrisTable[m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, 5, i];
+			uint dwBlockInfo = s_dwTetrisTable[m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, 5, i];
 			if (dwBlockInfo == 0)
 			{
 				continue;
 			}
 
 			int dwCheckX = m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) - 1;
-			if (dwCheckX == 0)
+			if (dwCheckX <= 0)
 			{
 				return true;
 			}
@@ -395,14 +418,14 @@ public class UserTetrisData : TetrisData
 		//检查方块右面有没有
 		for (int i = 0; i < s_dwUnit; i++)
 		{
-			uint dwBlockInfo = s_wTetrisTable[m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, 6, i];
+			uint dwBlockInfo = s_dwTetrisTable[m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, 6, i];
 			if (dwBlockInfo == 0)
 			{
 				continue;
 			}
 
 			int dwCheckX = m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) + 1;
-			if (dwCheckX == s_dwColumn)
+			if (dwCheckX >= s_dwColumn)
 			{
 				return true;
 			}
@@ -419,7 +442,7 @@ public class UserTetrisData : TetrisData
 		//检查方块还能不能继续下降
 		for (int i = 0; i < s_dwUnit; i++)
 		{
-			uint dwBlockInfo = s_wTetrisTable[m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, 4, i];
+			uint dwBlockInfo = s_dwTetrisTable[m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, 4, i];
 			if (dwBlockInfo == 0)
 			{
 				continue;
@@ -457,7 +480,7 @@ public class UserTetrisData : TetrisData
 			{
 				for (int j = 0; j < s_dwUnit; ++j)
 				{
-					uint dwBlockInfo = s_wTetrisTable[m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, i, j];
+					uint dwBlockInfo = s_dwTetrisTable[m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, i, j];
 					if (dwBlockInfo == 0)
 					{
 						continue;
@@ -501,7 +524,7 @@ public class UserTetrisData : TetrisData
 		{
 			for (int j = 0; j < s_dwUnit; ++j)
 			{
-				uint dwBlockInfo = s_wTetrisTable[m_oCurrentTetris.m_dwTetrisShape, dwTempDir, i, j];
+				uint dwBlockInfo = s_dwTetrisTable[m_oCurrentTetris.m_dwTetrisShape, dwTempDir, i, j];
 				if (dwBlockInfo == 0)
 				{
 					continue;
@@ -524,7 +547,7 @@ public class UserTetrisData : TetrisData
 		{
 			for (int j = 0; j < s_dwUnit; ++j)
 			{
-				uint dwBlockInfo = s_wTetrisTable[m_oCurrentTetris.m_dwTetrisShape, dwTempDir, i, j];
+				uint dwBlockInfo = s_dwTetrisTable[m_oCurrentTetris.m_dwTetrisShape, dwTempDir, i, j];
 				if (dwBlockInfo == 0)
 				{
 					continue;
@@ -559,3 +582,21 @@ public class UserTetrisData : TetrisData
 	float m_dSuspendTime = 0;
 }
 
+public class TetrisDataManager : Singleton<TetrisData>
+{
+	public TetrisData GetTetrisData(System.UInt64 qwPlayerId)
+	{
+		if (!m_mapTetrisDatas.ContainsKey(qwPlayerId))
+		{
+			return null;
+		}
+		return m_mapTetrisDatas[qwPlayerId];
+	}
+
+	Dictionary<System.UInt64, TetrisData> m_mapTetrisDatas = new Dictionary<System.UInt64, TetrisData>();
+
+	UserTetrisData m_pUserTetrisData = new UserTetrisData();
+
+	public UserTetrisData proUserTetrisData { get { return m_pUserTetrisData; } }
+
+}

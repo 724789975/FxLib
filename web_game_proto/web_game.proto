@@ -420,15 +420,15 @@ message GameNotifyPlayerGameInitTetris
 {
 	uint64 dw_player_id = 1;
 	float f_tick = 2;
-	uint32 dw_curr_tetris = 3;
-	uint32 dw_next_tetris = 4;
+	Tetris curr_tetris = 3;
+	Tetris next_tetris = 4;
 }
 
 message GameNotifyPlayerNextTetris
 {
 	uint64 dw_player_id = 1;
 	float f_tick = 2;
-	uint32 dw_next_tetris = 3;
+	Tetris next_tetris = 3;
 }
 
 //serverinfo(server->server_center, server_center->server)

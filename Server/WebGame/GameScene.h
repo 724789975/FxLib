@@ -60,6 +60,9 @@ public:
 
 	virtual CPlayerBase * GetPlayer(UINT64 qwPlayerId);
 
+	virtual void OnGameStart();
+	virtual void Gaming(double fTime);
+
 	virtual GameProto::EGameSceneState GetSceneState();
 	virtual void FillProtoConfig(GameProto::GameNotifyPlayerGameSceneInfo& refInfo);
 protected:
