@@ -34,6 +34,9 @@ public class GameControler : SingletonObject<GameControler>
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameRoleData", OnGameNotifyPlayerGameRoleData);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameSceneInfo", OnGameNotifyPlayerGameSceneInfo);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameState", OnGameNotifyPlayerGameState);
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameInitTetris", OnGameNotifyPlayerGameInitTetris);
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayerNextTetris", OnGameNotifyPlayerNextTetris);
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayerDead", OnGameNotifyPlayerDead);
     }
 
 	// Update is called once per frame
@@ -80,7 +83,7 @@ public class GameControler : SingletonObject<GameControler>
 		GameProto.PlayerRequestGameTest oTest = GameProto.PlayerRequestGameTest.Parser.ParseFrom(pBuf);
 		if (oTest == null)
 		{
-			SampleDebuger.Log("OnTest error parse");
+			SampleDebuger.LogYellow("OnTest error parse");
 			return;
 		}
 
@@ -98,10 +101,12 @@ public class GameControler : SingletonObject<GameControler>
 		GameProto.GameAckPlayerEnter oRet = GameProto.GameAckPlayerEnter.Parser.ParseFrom(pBuf);
 		if (oRet == null)
 		{
-			SampleDebuger.Log("OnGameAckPlayerEnter error parse");
+			SampleDebuger.LogYellow("OnGameAckPlayerEnter error parse");
 			return;
 		}
 		SampleDebuger.Log("game enter : " + oRet.DwResult.ToString());
+
+		TetrisDataManager.Instance().Init(PlayerData.Instance().proPlayerId);
 	}
 
 	public void OnGameNotifyPlayerPrepareTime(byte[] pBuf)
@@ -109,7 +114,7 @@ public class GameControler : SingletonObject<GameControler>
 		GameProto.GameNotifyPlayerPrepareTime oRet = GameProto.GameNotifyPlayerPrepareTime.Parser.ParseFrom(pBuf);
 		if (oRet == null)
 		{
-			SampleDebuger.Log("OnGameNotifyPlayerPrepareTime error parse");
+			SampleDebuger.LogYellow("OnGameNotifyPlayerPrepareTime error parse");
 			return;
 		}
 		SampleDebuger.Log("game prepare time left : " + oRet.DwLeftTime.ToString());
@@ -120,7 +125,7 @@ public class GameControler : SingletonObject<GameControler>
 		GameProto.GameNotifyPlayerGameReadyTime oRet = GameProto.GameNotifyPlayerGameReadyTime.Parser.ParseFrom(pBuf);
 		if (oRet == null)
 		{
-			SampleDebuger.Log("GameNotifyPlayerGameReadyTime error parse");
+			SampleDebuger.LogYellow("GameNotifyPlayerGameReadyTime error parse");
 			return;
 		}
 		SampleDebuger.Log("game ready time left : " + oRet.DwLeftTime.ToString());
@@ -131,7 +136,7 @@ public class GameControler : SingletonObject<GameControler>
 		GameProto.GameNotifyPlayerGameConfig oRet = GameProto.GameNotifyPlayerGameConfig.Parser.ParseFrom(pBuf);
 		if (oRet == null)
 		{
-			SampleDebuger.Log("OnGameNotifyPlayerGameConfig error parse");
+			SampleDebuger.LogYellow("OnGameNotifyPlayerGameConfig error parse");
 			return;
 		}
 
@@ -153,7 +158,7 @@ public class GameControler : SingletonObject<GameControler>
 		GameProto.GameNotifyPlayerGameSceneInfo oRet = GameProto.GameNotifyPlayerGameSceneInfo.Parser.ParseFrom(pBuf);
 		if (oRet == null)
 		{
-			SampleDebuger.Log("OnGameNotifyPlayerGameSceneInfo error parse");
+			SampleDebuger.LogYellow("OnGameNotifyPlayerGameSceneInfo error parse");
 			return;
 		}
 
@@ -199,7 +204,7 @@ public class GameControler : SingletonObject<GameControler>
 		GameProto.GameNotifyPlayerGameState oRet = GameProto.GameNotifyPlayerGameState.Parser.ParseFrom(pBuf);
 		if (oRet == null)
 		{
-			SampleDebuger.Log("OnGameNotifyPlayerGameState error parse");
+			SampleDebuger.LogYellow("OnGameNotifyPlayerGameState error parse");
 			return;
 		}
 		SampleDebuger.LogBlue("game state : " + oRet.State.ToString());
@@ -239,6 +244,51 @@ public class GameControler : SingletonObject<GameControler>
 				}
 				break;
 		}
+	}
+
+	public void OnGameNotifyPlayerGameInitTetris(byte[] pBuf)
+	{
+		GameProto.GameNotifyPlayerGameInitTetris oRet = GameProto.GameNotifyPlayerGameInitTetris.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.LogYellow("GameNotifyPlayerGameInitTetris error parse");
+			return;
+		}
+		TetrisData pTetrisData = TetrisDataManager.Instance().GetTetrisData(oRet.DwPlayerId);
+		if (pTetrisData == null)
+		{
+			SampleDebuger.LogYellow("can't find tetris data player id : " + oRet.DwPlayerId.ToString());
+			return;
+		}
+		pTetrisData.Sync(oRet);
+	}
+
+	public void OnGameNotifyPlayerNextTetris(byte[] pBuf)
+	{
+		GameProto.GameNotifyPlayerNextTetris oRet = GameProto.GameNotifyPlayerNextTetris.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.LogYellow("GameNotifyPlayerNextTetris error parse");
+			return;
+		}
+		TetrisData pTetrisData = TetrisDataManager.Instance().GetTetrisData(oRet.DwPlayerId);
+		if (pTetrisData == null)
+		{
+			SampleDebuger.LogYellow("can't find tetris data player id : " + oRet.DwPlayerId.ToString());
+			return;
+		}
+		pTetrisData.Sync(oRet);
+	}
+
+	public void OnGameNotifyPlayerDead(byte[] pBuf)
+	{
+		GameProto.GameNotifyPlayerDead oRet = GameProto.GameNotifyPlayerDead.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.LogYellow("GameNotifyPlayerDead error parse");
+			return;
+		}
+		SampleDebuger.LogGreen("player : " + oRet.DwPlayerId.ToString() + " dead");
 	}
 
 	public SessionObject proSession { get{ return m_pSession; } }

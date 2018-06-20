@@ -29,6 +29,8 @@ public:
 
 	bool				OnPlayerRequestGameTest(CPlayerSession& refSession, google::protobuf::Message& refMsg);
 	bool				OnPlayerRequestGameEnter(CPlayerSession& refSession, google::protobuf::Message& refMsg);
+	bool				OnPlayerRequestMove(CPlayerSession& refSession, google::protobuf::Message& refMsg);
+	bool				PlayerRequestRotation(CPlayerSession& refSession, google::protobuf::Message& refMsg);
 private:
 	char m_dataRecvBuf[1024 * 1024];
 

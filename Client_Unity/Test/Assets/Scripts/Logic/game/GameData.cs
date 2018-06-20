@@ -12,6 +12,15 @@ public class Tetris
 	//坐标位置为左下角
 	public int m_dwPosX;
 	public int m_dwPosY;
+
+	public void Init(GameProto.Tetris oTetris)
+	{
+		m_dwTetrisShape = oTetris.DwTetrisShape;
+		m_dwTetrisDirect = oTetris.DwTetrisDirect;
+		m_dwTetrisColor = oTetris.DwTetrisColor;
+		m_dwPosX = oTetris.DwPosX;
+		m_dwPosY = oTetris.DwPosY;
+	}
 }
 
 [System.Serializable]
@@ -329,9 +338,21 @@ public class TetrisData
 		},
 	};
 
-	void Sync()
+	public void Sync(GameProto.GameNotifyPlayerGameInitTetris oTetris)
 	{
-		// todo
+		m_dwTetrisPool = new uint[s_dwRow, s_dwColumn];
+		m_oCurrentTetris.Init(oTetris.CurrTetris);
+		m_oNextTetris.Init(oTetris.NextTetris);
+		m_bNeedRefresh = true;
+	}
+
+	public void Sync(GameProto.GameNotifyPlayerNextTetris oTetris)
+	{
+		if (m_oNextTetris == null)
+		{
+			m_oNextTetris = new Tetris();
+		}
+		m_oNextTetris.Init(oTetris.NextTetris);
 		m_bNeedRefresh = true;
 	}
 
@@ -400,7 +421,7 @@ public class UserTetrisData : TetrisData
 			}
 
 			int dwCheckX = m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) - 1;
-			if (dwCheckX <= 0)
+			if (dwCheckX < 0)
 			{
 				return true;
 			}
@@ -448,7 +469,7 @@ public class UserTetrisData : TetrisData
 			}
 
 			int dwCheckY = m_oCurrentTetris.m_dwPosY + ((int)dwBlockInfo & 0x0000000F) - 1;
-			if (dwCheckY == 0)
+			if (dwCheckY < 0)
 			{
 				//到底了
 				return true;
@@ -470,11 +491,6 @@ public class UserTetrisData : TetrisData
 		{
 			//向下移动一格
 			m_oCurrentTetris.m_dwPosY -= 1;
-			//发消息
-			GameProto.PlayerRequestMove oRequest = new GameProto.PlayerRequestMove();
-			oRequest.EDirection = GameProto.EMoveDirection.EmdDown;
-			oRequest.FTick = m_fTick;
-			SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestMove");
 		}
 		else
 		{
@@ -495,14 +511,16 @@ public class UserTetrisData : TetrisData
 			if (m_oCurrentTetris.m_dwPosY >= s_dwRow - s_dwUnit - 1)
 			{
 				OnEnd();
-				// todo
 				return;
 			}
 			
 			m_oCurrentTetris = m_oNextTetris;
 			m_oNextTetris = null;
-			//todo发消息
 		}
+		GameProto.PlayerRequestMove oRequest = new GameProto.PlayerRequestMove();
+		oRequest.EDirection = GameProto.EMoveDirection.EmdDown;
+		oRequest.FTick = m_fTick;
+		SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestMove");
 
 		m_bNeedRefresh = true;
 	}
@@ -606,13 +624,14 @@ public class UserTetrisData : TetrisData
 
 	public void OnEnd()
 	{
+		SampleDebuger.LogGreen("player die");
 	}
 
 	float m_fTick = 0;
 	float m_dSuspendTime = 0;
 }
 
-public class TetrisDataManager : Singleton<TetrisData>
+public class TetrisDataManager : Singleton<TetrisDataManager>
 {
 	public TetrisData GetTetrisData(System.UInt64 qwPlayerId)
 	{
@@ -621,6 +640,11 @@ public class TetrisDataManager : Singleton<TetrisData>
 			return null;
 		}
 		return m_mapTetrisDatas[qwPlayerId];
+	}
+
+	public void Init(System.UInt64 qwPlayerId)
+	{
+		m_mapTetrisDatas[qwPlayerId] = m_pUserTetrisData;
 	}
 
 	Dictionary<System.UInt64, TetrisData> m_mapTetrisDatas = new Dictionary<System.UInt64, TetrisData>();

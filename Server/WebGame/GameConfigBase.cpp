@@ -49,7 +49,7 @@ bool CGameCommonConfig::Init()
 		virtual int					GetDBId(void) { return 0; }
 		virtual void				OnQuery(IRedisConnection *poDBConnection)
 		{
-			char szQuery[64] = { 0 };
+			char szQuery[128] = { 0 };
 			sprintf(szQuery, "HMGET %s_%d %s %s %s %s",
 				RedisConstant::szGameConfig, 1, RedisConstant::szGameType,
 				RedisConstant::szPrepareTime, RedisConstant::szGameReadyTime, RedisConstant::szSuspendTime);

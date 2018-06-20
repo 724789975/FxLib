@@ -15,6 +15,7 @@ public class GameLogic : SingletonObject<GameLogic>
 	// Use this for initialization
 	void Start ()
 	{
+		m_oData = TetrisDataManager.Instance().proUserTetrisData;
 	}
 	
 	// Update is called once per frame
@@ -24,6 +25,8 @@ public class GameLogic : SingletonObject<GameLogic>
 		{
 			return;
 		}
+
+		TetrisDataManager.Instance().proUserTetrisData.Update(Time.deltaTime);
 
 		uint[,] dwBlockInfos = m_oData.GetTetrisInfo();
 		if (dwBlockInfos == null)
@@ -37,9 +40,10 @@ public class GameLogic : SingletonObject<GameLogic>
 		{
 			for (int j = 0; j < TetrisData.s_dwColumn; j++)
 			{
-				c.r = (byte)(dwBlockInfos[i, j] & 0xFF000000 >> 24);
-				c.g = (byte)(dwBlockInfos[i, j] & 0x00FF0000 >> 16);
-				c.b = (byte)(dwBlockInfos[i, j] & 0x0000FF00 >> 8);
+				uint dwBlock = dwBlockInfos[i, j];
+				c.r = (byte)((dwBlock & 0xFF000000) >> 24);
+				c.g = (byte)((dwBlock & 0x00FF0000) >> 16);
+				c.b = (byte)((dwBlock & 0x0000FF00) >> 8);
 				m_arrBlockInfos[i, j].color = c;
 			}
 		}
@@ -51,9 +55,9 @@ public class GameLogic : SingletonObject<GameLogic>
 				for (int j = 0; j < TetrisData.s_dwUnit; ++j)
 				{
 					uint dwBlockInfo = TetrisData.s_dwTetrisTable[m_oData.m_oNextTetris.m_dwTetrisShape, m_oData.m_oNextTetris.m_dwTetrisDirect, i, j];
-					c.r = (byte)(dwBlockInfo & 0xFF000000 >> 24);
-					c.g = (byte)(dwBlockInfo & 0x00FF0000 >> 16);
-					c.b = (byte)(dwBlockInfo & 0x0000FF00 >> 8);
+					c.r = (byte)((dwBlockInfo & 0xFF000000) >> 24);
+					c.g = (byte)((dwBlockInfo & 0x00FF0000) >> 16);
+					c.b = (byte)((dwBlockInfo & 0x0000FF00) >> 8);
 					m_arrNextBlocks[i * TetrisData.s_dwUnit + j].color = c;
 				}
 			}

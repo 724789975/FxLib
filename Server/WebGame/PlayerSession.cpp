@@ -4,6 +4,8 @@
 #include "GameScene.h"
 #include "Player.h"
 #include "GameConfigBase.h"
+#include "GameServer.h"
+#include "Player.h"
 //#include "gamedefine.h"
 
 const static unsigned int g_dwPlayerSessionBuffLen = 64 * 1024;
@@ -113,6 +115,83 @@ bool CPlayerSession::OnPlayerRequestGameEnter(CPlayerSession& refSession, google
 	CGameSceneBase::Instance()->FillProtoConfig(oSceneInfo);
 	ProtoUtility::MakeProtoSendBuffer(oSceneInfo, pBuf, dwBufLen);
 	Send(pBuf, dwBufLen);
+
+	return true;
+}
+
+bool CPlayerSession::OnPlayerRequestMove(CPlayerSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::PlayerRequestMove* pMsg = dynamic_cast<GameProto::PlayerRequestMove*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	CPlayerBase* pPlayer = CGameSceneBase::Instance()->GetPlayer(m_qwPlayerId);
+	if (pPlayer == NULL)
+	{
+		LogExe(LogLv_Critical, "can't find player : %llu", m_qwPlayerId);
+		return true;
+	}
+	LogExe(LogLv_Debug, "player tick : %f, server tick : %f, player id : %llu", pMsg->f_tick(), pPlayer->GetTetrisData().GetTick(), m_qwPlayerId);
+
+	switch (pMsg->e_direction())
+	{
+		case GameProto::EMD_Down:
+		{
+			pPlayer->GetTetrisData().DownTetris();
+		}
+		break;
+		case GameProto::EMD_Left:
+		{
+			pPlayer->GetTetrisData().LeftTetris();
+		}
+		break;
+		case GameProto::EMD_Right:
+		{
+			pPlayer->GetTetrisData().RightTetris();
+		}
+		break;
+		default:
+			LogExe(LogLv_Critical, "error move player : %llu", m_qwPlayerId);
+			break;
+	}
+
+	return true;
+}
+
+bool CPlayerSession::PlayerRequestRotation(CPlayerSession& refSession, google::protobuf::Message& refMsg)
+{
+	GameProto::PlayerRequestRotation* pMsg = dynamic_cast<GameProto::PlayerRequestRotation*>(&refMsg);
+	if (pMsg == NULL)
+	{
+		return false;
+	}
+
+	CPlayerBase* pPlayer = CGameSceneBase::Instance()->GetPlayer(m_qwPlayerId);
+	if (pPlayer == NULL)
+	{
+		LogExe(LogLv_Critical, "can't find player : %llu", m_qwPlayerId);
+		return true;
+	}
+	LogExe(LogLv_Debug, "player tick : %f, server tick : %f, player id : %llu", pMsg->f_tick(), pPlayer->GetTetrisData().GetTick(), m_qwPlayerId);
+
+	switch (pMsg->e_direction())
+	{
+		case GameProto::ERD_Left:
+		{
+			pPlayer->GetTetrisData().LeftTetris();
+		}
+		break;
+		case GameProto::ERD_Right:
+		{
+			pPlayer->GetTetrisData().LeftTetris();
+		}
+		break;
+		default:
+			LogExe(LogLv_Critical, "error rotate player : %llu", m_qwPlayerId);
+			break;
+	}
 
 	return true;
 }

@@ -333,7 +333,6 @@ void TetrisBase::DownTetris()
 	{
 		//向下移动一格
 		m_oCurrentTetris.m_dwPosY -= 1;
-		//todo发消息
 	}
 	else
 	{
@@ -354,7 +353,9 @@ void TetrisBase::DownTetris()
 		if (m_oCurrentTetris.m_dwPosY >= ROW_NUM - TETRIS_UNIT - 1)
 		{
 			OnEnd();
-			// todo
+			GameProto::GameNotifyPlayerDead oDead;
+			oDead.set_dw_player_id(m_refPlayer.GetPlayerId());
+			CGameSceneBase::Instance()->NotifyPlayer(oDead);
 			return;
 		}
 
@@ -381,7 +382,10 @@ void TetrisBase::LeftTetris()
 	{
 		m_oCurrentTetris.m_dwPosX -= 1;
 		m_bNeedRefresh = true;
-		//要发消息
+	}
+	else
+	{
+		LogExe(LogLv_Critical, "player move error");
 	}
 }
 
@@ -391,8 +395,53 @@ void TetrisBase::RightTetris()
 	{
 		m_oCurrentTetris.m_dwPosX += 1;
 		m_bNeedRefresh = true;
-		//要发消息
 	}
+	else
+	{
+		LogExe(LogLv_Critical, "player move error");
+	}
+}
+
+void TetrisBase::LeftRotation()
+{
+	unsigned int dwTempDir = (m_oCurrentTetris.m_dwTetrisDirect + 1) % TETRIS_UNIT;
+	for (int i = 0; i < TETRIS_UNIT; ++i)
+	{
+		for (int j = 0; j < TETRIS_UNIT; ++j)
+		{
+			unsigned int dwBlockInfo = g_dwTetrisTable[m_oCurrentTetris.m_dwTetrisShape][dwTempDir][i][j];
+			if (dwBlockInfo == 0)
+			{
+				continue;
+			}
+			if (CheckTetris(m_oCurrentTetris.m_dwPosY + j, m_oCurrentTetris.m_dwPosX + i))
+			{
+				return;
+			}
+		}
+	}
+	m_oCurrentTetris.m_dwTetrisDirect = dwTempDir;
+}
+
+void TetrisBase::RightRotation()
+{
+	unsigned int dwTempDir = (m_oCurrentTetris.m_dwTetrisDirect - 1) % TETRIS_UNIT;
+	for (int i = 0; i < TETRIS_UNIT; ++i)
+	{
+		for (int j = 0; j < TETRIS_UNIT; ++j)
+		{
+			unsigned int dwBlockInfo = g_dwTetrisTable[m_oCurrentTetris.m_dwTetrisShape][dwTempDir][i][j];
+			if (dwBlockInfo == 0)
+			{
+				continue;
+			}
+			if (CheckTetris(m_oCurrentTetris.m_dwPosY + j, m_oCurrentTetris.m_dwPosX + i))
+			{
+				return;
+			}
+		}
+	}
+	m_oCurrentTetris.m_dwTetrisDirect = dwTempDir;
 }
 
 bool TetrisBase::CheckTetris(int dwRow, int dwCol)

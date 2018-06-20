@@ -39,6 +39,10 @@ public:
 	void DownTetris();
 	void LeftTetris();
 	void RightTetris();
+	void LeftRotation();
+	void RightRotation();
+
+	float GetTick() { return m_fTick; }
 
 protected:
 	virtual bool CheckTetris(int dwRow, int dwCol);

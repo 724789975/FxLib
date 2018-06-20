@@ -445,6 +445,11 @@ message GameNotifyPlayerNextTetris
 	Tetris next_tetris = 3;
 }
 
+message GameNotifyPlayerDead
+{
+	uint64 dw_player_id = 1;
+}
+
 //serverinfo(server->server_center, server_center->server)
 message ServerInfo
 {
