@@ -19,6 +19,7 @@ public:
 	virtual unsigned int GetGameType() = 0;
 	virtual unsigned int GetPrepareTime() = 0;
 	virtual unsigned int GetGameReadyTime() = 0;
+	virtual unsigned int GetSuspendTime() = 0;
 
 	virtual void FillProtoConfig(GameProto::GameNotifyPlayerGameConfig& refConfig) = 0;
 };
@@ -32,6 +33,7 @@ public:
 	virtual unsigned int GetGameType();
 	virtual unsigned int GetPrepareTime();
 	virtual unsigned int GetGameReadyTime();
+	virtual unsigned int GetSuspendTime();
 
 	virtual void FillProtoConfig(GameProto::GameNotifyPlayerGameConfig& refConfig);
 protected:

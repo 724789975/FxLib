@@ -38,7 +38,7 @@ namespace protobuf_web_5fgame_2eproto {
 struct TableStruct {
   static const ::google::protobuf::internal::ParseTableField entries[];
   static const ::google::protobuf::internal::AuxillaryParseTableField aux[];
-  static const ::google::protobuf::internal::ParseTable schema[62];
+  static const ::google::protobuf::internal::ParseTable schema[63];
   static const ::google::protobuf::internal::FieldMetadata field_metadata[];
   static const ::google::protobuf::internal::SerializationTable serialization_table[];
   static const ::google::protobuf::uint32 offsets[];
@@ -146,8 +146,10 @@ void InitDefaultsPlayerRequestGameTestImpl();
 void InitDefaultsPlayerRequestGameTest();
 void InitDefaultsPlayerRequestGameEnterImpl();
 void InitDefaultsPlayerRequestGameEnter();
-void InitDefaultsPlayerRequestGameOptionImpl();
-void InitDefaultsPlayerRequestGameOption();
+void InitDefaultsPlayerRequestMoveImpl();
+void InitDefaultsPlayerRequestMove();
+void InitDefaultsPlayerRequestRotationImpl();
+void InitDefaultsPlayerRequestRotation();
 void InitDefaultsGameAckPlayerEnterImpl();
 void InitDefaultsGameAckPlayerEnter();
 void InitDefaultsGameNotifyPlayerGameConfigImpl();
@@ -220,7 +222,8 @@ inline void InitDefaults() {
   InitDefaultsGameManagerAckPlayerInfoResult();
   InitDefaultsPlayerRequestGameTest();
   InitDefaultsPlayerRequestGameEnter();
-  InitDefaultsPlayerRequestGameOption();
+  InitDefaultsPlayerRequestMove();
+  InitDefaultsPlayerRequestRotation();
   InitDefaultsGameAckPlayerEnter();
   InitDefaultsGameNotifyPlayerGameConfig();
   InitDefaultsGameNotifyPlayerGameRoleData();
@@ -354,9 +357,6 @@ extern PlayerRequestGameEnterDefaultTypeInternal _PlayerRequestGameEnter_default
 class PlayerRequestGameManagerInfo;
 class PlayerRequestGameManagerInfoDefaultTypeInternal;
 extern PlayerRequestGameManagerInfoDefaultTypeInternal _PlayerRequestGameManagerInfo_default_instance_;
-class PlayerRequestGameOption;
-class PlayerRequestGameOptionDefaultTypeInternal;
-extern PlayerRequestGameOptionDefaultTypeInternal _PlayerRequestGameOption_default_instance_;
 class PlayerRequestGameTest;
 class PlayerRequestGameTestDefaultTypeInternal;
 extern PlayerRequestGameTestDefaultTypeInternal _PlayerRequestGameTest_default_instance_;
@@ -390,6 +390,12 @@ extern PlayerRequestLoginRefuseEnterTeamDefaultTypeInternal _PlayerRequestLoginR
 class PlayerRequestLoginServerId;
 class PlayerRequestLoginServerIdDefaultTypeInternal;
 extern PlayerRequestLoginServerIdDefaultTypeInternal _PlayerRequestLoginServerId_default_instance_;
+class PlayerRequestMove;
+class PlayerRequestMoveDefaultTypeInternal;
+extern PlayerRequestMoveDefaultTypeInternal _PlayerRequestMove_default_instance_;
+class PlayerRequestRotation;
+class PlayerRequestRotationDefaultTypeInternal;
+extern PlayerRequestRotationDefaultTypeInternal _PlayerRequestRotation_default_instance_;
 class ServerInfo;
 class ServerInfoDefaultTypeInternal;
 extern ServerInfoDefaultTypeInternal _ServerInfo_default_instance_;
@@ -520,6 +526,28 @@ inline bool EMoveDirection_Parse(
     const ::std::string& name, EMoveDirection* value) {
   return ::google::protobuf::internal::ParseNamedEnum<EMoveDirection>(
     EMoveDirection_descriptor(), name, value);
+}
+enum ERotationDirection {
+  ERD_NONE = 0,
+  ERD_Left = 1,
+  ERD_Right = 2,
+  ERotationDirection_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
+  ERotationDirection_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
+};
+bool ERotationDirection_IsValid(int value);
+const ERotationDirection ERotationDirection_MIN = ERD_NONE;
+const ERotationDirection ERotationDirection_MAX = ERD_Right;
+const int ERotationDirection_ARRAYSIZE = ERotationDirection_MAX + 1;
+
+const ::google::protobuf::EnumDescriptor* ERotationDirection_descriptor();
+inline const ::std::string& ERotationDirection_Name(ERotationDirection value) {
+  return ::google::protobuf::internal::NameOfEnum(
+    ERotationDirection_descriptor(), value);
+}
+inline bool ERotationDirection_Parse(
+    const ::std::string& name, ERotationDirection* value) {
+  return ::google::protobuf::internal::ParseNamedEnum<ERotationDirection>(
+    ERotationDirection_descriptor(), name, value);
 }
 // ===================================================================
 
@@ -6083,24 +6111,24 @@ class PlayerRequestGameEnter : public ::google::protobuf::Message /* @@protoc_in
 };
 // -------------------------------------------------------------------
 
-class PlayerRequestGameOption : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.PlayerRequestGameOption) */ {
+class PlayerRequestMove : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.PlayerRequestMove) */ {
  public:
-  PlayerRequestGameOption();
-  virtual ~PlayerRequestGameOption();
+  PlayerRequestMove();
+  virtual ~PlayerRequestMove();
 
-  PlayerRequestGameOption(const PlayerRequestGameOption& from);
+  PlayerRequestMove(const PlayerRequestMove& from);
 
-  inline PlayerRequestGameOption& operator=(const PlayerRequestGameOption& from) {
+  inline PlayerRequestMove& operator=(const PlayerRequestMove& from) {
     CopyFrom(from);
     return *this;
   }
   #if LANG_CXX11
-  PlayerRequestGameOption(PlayerRequestGameOption&& from) noexcept
-    : PlayerRequestGameOption() {
+  PlayerRequestMove(PlayerRequestMove&& from) noexcept
+    : PlayerRequestMove() {
     *this = ::std::move(from);
   }
 
-  inline PlayerRequestGameOption& operator=(PlayerRequestGameOption&& from) noexcept {
+  inline PlayerRequestMove& operator=(PlayerRequestMove&& from) noexcept {
     if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
       if (this != &from) InternalSwap(&from);
     } else {
@@ -6110,30 +6138,30 @@ class PlayerRequestGameOption : public ::google::protobuf::Message /* @@protoc_i
   }
   #endif
   static const ::google::protobuf::Descriptor* descriptor();
-  static const PlayerRequestGameOption& default_instance();
+  static const PlayerRequestMove& default_instance();
 
   static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
-  static inline const PlayerRequestGameOption* internal_default_instance() {
-    return reinterpret_cast<const PlayerRequestGameOption*>(
-               &_PlayerRequestGameOption_default_instance_);
+  static inline const PlayerRequestMove* internal_default_instance() {
+    return reinterpret_cast<const PlayerRequestMove*>(
+               &_PlayerRequestMove_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
     51;
 
-  void Swap(PlayerRequestGameOption* other);
-  friend void swap(PlayerRequestGameOption& a, PlayerRequestGameOption& b) {
+  void Swap(PlayerRequestMove* other);
+  friend void swap(PlayerRequestMove& a, PlayerRequestMove& b) {
     a.Swap(&b);
   }
 
   // implements Message ----------------------------------------------
 
-  inline PlayerRequestGameOption* New() const PROTOBUF_FINAL { return New(NULL); }
+  inline PlayerRequestMove* New() const PROTOBUF_FINAL { return New(NULL); }
 
-  PlayerRequestGameOption* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  PlayerRequestMove* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
   void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
   void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
-  void CopyFrom(const PlayerRequestGameOption& from);
-  void MergeFrom(const PlayerRequestGameOption& from);
+  void CopyFrom(const PlayerRequestMove& from);
+  void MergeFrom(const PlayerRequestMove& from);
   void Clear() PROTOBUF_FINAL;
   bool IsInitialized() const PROTOBUF_FINAL;
 
@@ -6149,7 +6177,7 @@ class PlayerRequestGameOption : public ::google::protobuf::Message /* @@protoc_i
   void SharedCtor();
   void SharedDtor();
   void SetCachedSize(int size) const PROTOBUF_FINAL;
-  void InternalSwap(PlayerRequestGameOption* other);
+  void InternalSwap(PlayerRequestMove* other);
   private:
   inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
     return NULL;
@@ -6177,7 +6205,7 @@ class PlayerRequestGameOption : public ::google::protobuf::Message /* @@protoc_i
   ::GameProto::EMoveDirection e_direction() const;
   void set_e_direction(::GameProto::EMoveDirection value);
 
-  // @@protoc_insertion_point(class_scope:GameProto.PlayerRequestGameOption)
+  // @@protoc_insertion_point(class_scope:GameProto.PlayerRequestMove)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
@@ -6185,7 +6213,113 @@ class PlayerRequestGameOption : public ::google::protobuf::Message /* @@protoc_i
   int e_direction_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
-  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsPlayerRequestGameOptionImpl();
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsPlayerRequestMoveImpl();
+};
+// -------------------------------------------------------------------
+
+class PlayerRequestRotation : public ::google::protobuf::Message /* @@protoc_insertion_point(class_definition:GameProto.PlayerRequestRotation) */ {
+ public:
+  PlayerRequestRotation();
+  virtual ~PlayerRequestRotation();
+
+  PlayerRequestRotation(const PlayerRequestRotation& from);
+
+  inline PlayerRequestRotation& operator=(const PlayerRequestRotation& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  #if LANG_CXX11
+  PlayerRequestRotation(PlayerRequestRotation&& from) noexcept
+    : PlayerRequestRotation() {
+    *this = ::std::move(from);
+  }
+
+  inline PlayerRequestRotation& operator=(PlayerRequestRotation&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+  #endif
+  static const ::google::protobuf::Descriptor* descriptor();
+  static const PlayerRequestRotation& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const PlayerRequestRotation* internal_default_instance() {
+    return reinterpret_cast<const PlayerRequestRotation*>(
+               &_PlayerRequestRotation_default_instance_);
+  }
+  static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
+    52;
+
+  void Swap(PlayerRequestRotation* other);
+  friend void swap(PlayerRequestRotation& a, PlayerRequestRotation& b) {
+    a.Swap(&b);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline PlayerRequestRotation* New() const PROTOBUF_FINAL { return New(NULL); }
+
+  PlayerRequestRotation* New(::google::protobuf::Arena* arena) const PROTOBUF_FINAL;
+  void CopyFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void MergeFrom(const ::google::protobuf::Message& from) PROTOBUF_FINAL;
+  void CopyFrom(const PlayerRequestRotation& from);
+  void MergeFrom(const PlayerRequestRotation& from);
+  void Clear() PROTOBUF_FINAL;
+  bool IsInitialized() const PROTOBUF_FINAL;
+
+  size_t ByteSizeLong() const PROTOBUF_FINAL;
+  bool MergePartialFromCodedStream(
+      ::google::protobuf::io::CodedInputStream* input) PROTOBUF_FINAL;
+  void SerializeWithCachedSizes(
+      ::google::protobuf::io::CodedOutputStream* output) const PROTOBUF_FINAL;
+  ::google::protobuf::uint8* InternalSerializeWithCachedSizesToArray(
+      bool deterministic, ::google::protobuf::uint8* target) const PROTOBUF_FINAL;
+  int GetCachedSize() const PROTOBUF_FINAL { return _cached_size_; }
+  private:
+  void SharedCtor();
+  void SharedDtor();
+  void SetCachedSize(int size) const PROTOBUF_FINAL;
+  void InternalSwap(PlayerRequestRotation* other);
+  private:
+  inline ::google::protobuf::Arena* GetArenaNoVirtual() const {
+    return NULL;
+  }
+  inline void* MaybeArenaPtr() const {
+    return NULL;
+  }
+  public:
+
+  ::google::protobuf::Metadata GetMetadata() const PROTOBUF_FINAL;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  // float f_tick = 1;
+  void clear_f_tick();
+  static const int kFTickFieldNumber = 1;
+  float f_tick() const;
+  void set_f_tick(float value);
+
+  // .GameProto.ERotationDirection e_direction = 2;
+  void clear_e_direction();
+  static const int kEDirectionFieldNumber = 2;
+  ::GameProto::ERotationDirection e_direction() const;
+  void set_e_direction(::GameProto::ERotationDirection value);
+
+  // @@protoc_insertion_point(class_scope:GameProto.PlayerRequestRotation)
+ private:
+
+  ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
+  float f_tick_;
+  int e_direction_;
+  mutable int _cached_size_;
+  friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
+  friend void ::protobuf_web_5fgame_2eproto::InitDefaultsPlayerRequestRotationImpl();
 };
 // -------------------------------------------------------------------
 
@@ -6224,7 +6358,7 @@ class GameAckPlayerEnter : public ::google::protobuf::Message /* @@protoc_insert
                &_GameAckPlayerEnter_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    52;
+    53;
 
   void Swap(GameAckPlayerEnter* other);
   friend void swap(GameAckPlayerEnter& a, GameAckPlayerEnter& b) {
@@ -6330,7 +6464,7 @@ class GameNotifyPlayerGameConfig : public ::google::protobuf::Message /* @@proto
                &_GameNotifyPlayerGameConfig_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    53;
+    54;
 
   void Swap(GameNotifyPlayerGameConfig* other);
   friend void swap(GameNotifyPlayerGameConfig& a, GameNotifyPlayerGameConfig& b) {
@@ -6439,7 +6573,7 @@ class GameNotifyPlayerGameRoleData : public ::google::protobuf::Message /* @@pro
                &_GameNotifyPlayerGameRoleData_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    54;
+    55;
 
   void Swap(GameNotifyPlayerGameRoleData* other);
   friend void swap(GameNotifyPlayerGameRoleData& a, GameNotifyPlayerGameRoleData& b) {
@@ -6548,7 +6682,7 @@ class GameNotifyPlayerGameSceneInfo : public ::google::protobuf::Message /* @@pr
                &_GameNotifyPlayerGameSceneInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    55;
+    56;
 
   void Swap(GameNotifyPlayerGameSceneInfo* other);
   friend void swap(GameNotifyPlayerGameSceneInfo& a, GameNotifyPlayerGameSceneInfo& b) {
@@ -6657,7 +6791,7 @@ class GameNotifyPlayerPrepareTime : public ::google::protobuf::Message /* @@prot
                &_GameNotifyPlayerPrepareTime_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    56;
+    57;
 
   void Swap(GameNotifyPlayerPrepareTime* other);
   friend void swap(GameNotifyPlayerPrepareTime& a, GameNotifyPlayerPrepareTime& b) {
@@ -6756,7 +6890,7 @@ class GameNotifyPlayerGameReadyTime : public ::google::protobuf::Message /* @@pr
                &_GameNotifyPlayerGameReadyTime_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    57;
+    58;
 
   void Swap(GameNotifyPlayerGameReadyTime* other);
   friend void swap(GameNotifyPlayerGameReadyTime& a, GameNotifyPlayerGameReadyTime& b) {
@@ -6855,7 +6989,7 @@ class GameNotifyPlayerGameState : public ::google::protobuf::Message /* @@protoc
                &_GameNotifyPlayerGameState_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    58;
+    59;
 
   void Swap(GameNotifyPlayerGameState* other);
   friend void swap(GameNotifyPlayerGameState& a, GameNotifyPlayerGameState& b) {
@@ -6954,7 +7088,7 @@ class GameNotifyPlayerGameInitTetris : public ::google::protobuf::Message /* @@p
                &_GameNotifyPlayerGameInitTetris_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    59;
+    60;
 
   void Swap(GameNotifyPlayerGameInitTetris* other);
   friend void swap(GameNotifyPlayerGameInitTetris& a, GameNotifyPlayerGameInitTetris& b) {
@@ -7080,7 +7214,7 @@ class GameNotifyPlayerNextTetris : public ::google::protobuf::Message /* @@proto
                &_GameNotifyPlayerNextTetris_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    60;
+    61;
 
   void Swap(GameNotifyPlayerNextTetris* other);
   friend void swap(GameNotifyPlayerNextTetris& a, GameNotifyPlayerNextTetris& b) {
@@ -7196,7 +7330,7 @@ class ServerInfo : public ::google::protobuf::Message /* @@protoc_insertion_poin
                &_ServerInfo_default_instance_);
   }
   static PROTOBUF_CONSTEXPR int const kIndexInFileMessages =
-    61;
+    62;
 
   void Swap(ServerInfo* other);
   friend void swap(ServerInfo& a, ServerInfo& b) {
@@ -9527,34 +9661,66 @@ inline void PlayerRequestGameEnter::set_qw_player_id(::google::protobuf::uint64 
 
 // -------------------------------------------------------------------
 
-// PlayerRequestGameOption
+// PlayerRequestMove
 
 // float f_tick = 1;
-inline void PlayerRequestGameOption::clear_f_tick() {
+inline void PlayerRequestMove::clear_f_tick() {
   f_tick_ = 0;
 }
-inline float PlayerRequestGameOption::f_tick() const {
-  // @@protoc_insertion_point(field_get:GameProto.PlayerRequestGameOption.f_tick)
+inline float PlayerRequestMove::f_tick() const {
+  // @@protoc_insertion_point(field_get:GameProto.PlayerRequestMove.f_tick)
   return f_tick_;
 }
-inline void PlayerRequestGameOption::set_f_tick(float value) {
+inline void PlayerRequestMove::set_f_tick(float value) {
   
   f_tick_ = value;
-  // @@protoc_insertion_point(field_set:GameProto.PlayerRequestGameOption.f_tick)
+  // @@protoc_insertion_point(field_set:GameProto.PlayerRequestMove.f_tick)
 }
 
 // .GameProto.EMoveDirection e_direction = 2;
-inline void PlayerRequestGameOption::clear_e_direction() {
+inline void PlayerRequestMove::clear_e_direction() {
   e_direction_ = 0;
 }
-inline ::GameProto::EMoveDirection PlayerRequestGameOption::e_direction() const {
-  // @@protoc_insertion_point(field_get:GameProto.PlayerRequestGameOption.e_direction)
+inline ::GameProto::EMoveDirection PlayerRequestMove::e_direction() const {
+  // @@protoc_insertion_point(field_get:GameProto.PlayerRequestMove.e_direction)
   return static_cast< ::GameProto::EMoveDirection >(e_direction_);
 }
-inline void PlayerRequestGameOption::set_e_direction(::GameProto::EMoveDirection value) {
+inline void PlayerRequestMove::set_e_direction(::GameProto::EMoveDirection value) {
   
   e_direction_ = value;
-  // @@protoc_insertion_point(field_set:GameProto.PlayerRequestGameOption.e_direction)
+  // @@protoc_insertion_point(field_set:GameProto.PlayerRequestMove.e_direction)
+}
+
+// -------------------------------------------------------------------
+
+// PlayerRequestRotation
+
+// float f_tick = 1;
+inline void PlayerRequestRotation::clear_f_tick() {
+  f_tick_ = 0;
+}
+inline float PlayerRequestRotation::f_tick() const {
+  // @@protoc_insertion_point(field_get:GameProto.PlayerRequestRotation.f_tick)
+  return f_tick_;
+}
+inline void PlayerRequestRotation::set_f_tick(float value) {
+  
+  f_tick_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.PlayerRequestRotation.f_tick)
+}
+
+// .GameProto.ERotationDirection e_direction = 2;
+inline void PlayerRequestRotation::clear_e_direction() {
+  e_direction_ = 0;
+}
+inline ::GameProto::ERotationDirection PlayerRequestRotation::e_direction() const {
+  // @@protoc_insertion_point(field_get:GameProto.PlayerRequestRotation.e_direction)
+  return static_cast< ::GameProto::ERotationDirection >(e_direction_);
+}
+inline void PlayerRequestRotation::set_e_direction(::GameProto::ERotationDirection value) {
+  
+  e_direction_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.PlayerRequestRotation.e_direction)
 }
 
 // -------------------------------------------------------------------
@@ -10263,6 +10429,8 @@ inline void ServerInfo::set_dw_login_port(::google::protobuf::uint32 value) {
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -10290,6 +10458,11 @@ template <> struct is_proto_enum< ::GameProto::EMoveDirection> : ::google::proto
 template <>
 inline const EnumDescriptor* GetEnumDescriptor< ::GameProto::EMoveDirection>() {
   return ::GameProto::EMoveDirection_descriptor();
+}
+template <> struct is_proto_enum< ::GameProto::ERotationDirection> : ::google::protobuf::internal::true_type {};
+template <>
+inline const EnumDescriptor* GetEnumDescriptor< ::GameProto::ERotationDirection>() {
+  return ::GameProto::ERotationDirection_descriptor();
 }
 
 }  // namespace protobuf

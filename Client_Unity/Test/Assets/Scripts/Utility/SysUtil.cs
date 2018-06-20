@@ -140,4 +140,17 @@ public class SysUtil
         }
     }
 
+	public static void SendMessage(SessionObject pSessionObject, Google.Protobuf.IMessage pMsg, string szName)
+	{
+		byte[] pData = new byte[1024];
+		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
+		pStream.WriteString(szName);
+		byte[] pProto = new byte[pMsg.CalculateSize()];
+		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
+		pMsg.WriteTo(oStream);
+		pStream.WriteData(pProto, (uint)pProto.Length);
+
+		pSessionObject.Send(pData, 1024 - pStream.GetLeftLen());
+	}
+
 }

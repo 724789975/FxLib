@@ -5,6 +5,8 @@
 #include "fxmeta.h"
 #include "Player.h"
 #include "GameScene.h"
+#include "GameConfigBase.h"
+#include "PlayerSession.h"
 
 #define COLOR_NUM 8
 static const unsigned int g_dwColors[COLUMN_NUM]
@@ -349,6 +351,13 @@ void TetrisBase::DownTetris()
 			}
 		}
 
+		if (m_oCurrentTetris.m_dwPosY >= ROW_NUM - TETRIS_UNIT - 1)
+		{
+			OnEnd();
+			// todo
+			return;
+		}
+
 		m_oCurrentTetris = m_oNextTetris;
 		m_oNextTetris.m_dwTetrisShape = rand() % SHAPE_COUNT;
 		m_oNextTetris.m_dwPosX = (COLUMN_NUM - TETRIS_UNIT) / 2;
@@ -495,6 +504,7 @@ void TetrisBase::PrintInfo()
 //////////////////////////////////////////////////////////////////////////
 CommonTetris::CommonTetris(CPlayerBase& refPlayer)
 	: TetrisBase(refPlayer)
+	, m_fSuspendTime(0.0f)
 { }
 
 CommonTetris::~CommonTetris() { }
@@ -527,5 +537,21 @@ void CommonTetris::Init()
 void CommonTetris::Update(float fDelta)
 {
 	m_fTick += fDelta;
+	if (m_refPlayer.GetPlayerSession()->IsConnected())
+	{
+		return;
+	}
+	m_fSuspendTime += fDelta;
+	if (m_fSuspendTime >= CGameConfigBase::Instance()->GetSuspendTime())
+	{
+		DownTetris();
+		m_fSuspendTime = 0.0f;
+	}
 }
+
+void CommonTetris::OnEnd()
+{
+
+}
+
 

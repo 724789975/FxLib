@@ -46,6 +46,14 @@ enum EMoveDirection
 	EMD_Right = 3;
 }
 
+//旋转方向
+enum ERotationDirection
+{
+	ERD_NONE = 0;
+	ERD_Left = 1;
+	ERD_Right = 2;
+}
+
 //player->login
 message PlayerRequestLoginServerId
 {
@@ -370,10 +378,16 @@ message PlayerRequestGameEnter
 	uint64 qw_player_id = 1;
 }
 
-message PlayerRequestGameOption
+message PlayerRequestMove
 {
 	float f_tick = 1;
 	EMoveDirection e_direction = 2;
+}
+
+message PlayerRequestRotation
+{
+	float f_tick = 1;
+	ERotationDirection e_direction = 2;
 }
 
 //game->player

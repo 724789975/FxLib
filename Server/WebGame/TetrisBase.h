@@ -46,6 +46,8 @@ protected:
 	virtual bool CheckRightTetris();
 	virtual bool CheckDownTetris();
 
+	virtual void OnEnd() = 0;
+
 	virtual void PrintInfo();
 
 protected:
@@ -70,8 +72,10 @@ public:
 	virtual void Init();
 	virtual void Update(float fDelta);
 
-private:
+	virtual void OnEnd();
 
+private:
+	float m_fSuspendTime;
 };
 
 

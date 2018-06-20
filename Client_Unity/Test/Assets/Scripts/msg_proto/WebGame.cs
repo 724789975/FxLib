@@ -111,44 +111,48 @@ namespace GameProto {
             "X3BsYXllcl9wb3J0GAEgASgNEhYKDmR3X3NlcnZlcl9wb3J0GAIgASgNEhwK",
             "FGR3X3NsYXZlX3NlcnZlcl9wb3J0GAMgASgNIigKFVBsYXllclJlcXVlc3RH",
             "YW1lVGVzdBIPCgdzel90ZXN0GAEgASgJIi4KFlBsYXllclJlcXVlc3RHYW1l",
-            "RW50ZXISFAoMcXdfcGxheWVyX2lkGAEgASgEIlkKF1BsYXllclJlcXVlc3RH",
-            "YW1lT3B0aW9uEg4KBmZfdGljaxgBIAEoAhIuCgtlX2RpcmVjdGlvbhgCIAEo",
-            "DjIZLkdhbWVQcm90by5FTW92ZURpcmVjdGlvbiI9ChJHYW1lQWNrUGxheWVy",
-            "RW50ZXISEQoJZHdfcmVzdWx0GAEgASgNEhQKDGR3X2dhbWVfdHlwZRgCIAEo",
-            "DSJmChpHYW1lTm90aWZ5UGxheWVyR2FtZUNvbmZpZxIUCgxkd19nYW1lX3R5",
-            "cGUYASABKA0SMgoNY29tbW9uX2NvbmZpZxgCIAEoCzIbLkdhbWVQcm90by5H",
-            "YW1lQ29uZmlnQ29tbW9uIm0KHEdhbWVOb3RpZnlQbGF5ZXJHYW1lUm9sZURh",
-            "dGESFAoMZHdfZ2FtZV90eXBlGAEgASgNEjcKEGNvbW1vbl9yb2xlX2RhdGEY",
-            "AiABKAsyHS5HYW1lUHJvdG8uR2FtZUNvbW1vblJvbGVEYXRhInAKHUdhbWVO",
-            "b3RpZnlQbGF5ZXJHYW1lU2NlbmVJbmZvEhQKDGR3X2dhbWVfdHlwZRgBIAEo",
-            "DRI5ChFjb21tb25fc2NlbmVfaW5mbxgCIAEoCzIeLkdhbWVQcm90by5HYW1l",
-            "Q29tbW9uU2NlbmVJbmZvIjMKG0dhbWVOb3RpZnlQbGF5ZXJQcmVwYXJlVGlt",
-            "ZRIUCgxkd19sZWZ0X3RpbWUYASABKA0iNQodR2FtZU5vdGlmeVBsYXllckdh",
-            "bWVSZWFkeVRpbWUSFAoMZHdfbGVmdF90aW1lGAEgASgNIkYKGUdhbWVOb3Rp",
-            "ZnlQbGF5ZXJHYW1lU3RhdGUSKQoFc3RhdGUYASABKA4yGi5HYW1lUHJvdG8u",
-            "RUdhbWVTY2VuZVN0YXRlIpYBCh5HYW1lTm90aWZ5UGxheWVyR2FtZUluaXRU",
-            "ZXRyaXMSFAoMZHdfcGxheWVyX2lkGAEgASgEEg4KBmZfdGljaxgCIAEoAhIm",
-            "CgtjdXJyX3RldHJpcxgDIAEoCzIRLkdhbWVQcm90by5UZXRyaXMSJgoLbmV4",
-            "dF90ZXRyaXMYBCABKAsyES5HYW1lUHJvdG8uVGV0cmlzImoKGkdhbWVOb3Rp",
-            "ZnlQbGF5ZXJOZXh0VGV0cmlzEhQKDGR3X3BsYXllcl9pZBgBIAEoBBIOCgZm",
-            "X3RpY2sYAiABKAISJgoLbmV4dF90ZXRyaXMYAyABKAsyES5HYW1lUHJvdG8u",
-            "VGV0cmlzIooBCgpTZXJ2ZXJJbmZvEhQKDGR3X3NlcnZlcl9pZBgBIAEoDRIU",
-            "Cgxzel9saXN0ZW5faXAYAiABKAkSFAoMZHdfdGVhbV9wb3J0GAMgASgNEiMK",
-            "G2R3X2dhbWVfc2VydmVyX21hbmFnZXJfcG9ydBgEIAEoDRIVCg1kd19sb2dp",
-            "bl9wb3J0GAUgASgNKkkKC0VTZXJ2ZXJUeXBlEgsKB1NUX05PTkUQABIMCghT",
-            "VF9Mb2dpbhABEgsKB1NUX1RlYW0QAhISCg5TVF9HYW1lTWFuYWdlchADKicK",
-            "CUVUZWFtVHlwZRILCgdUVF9OT05FEAASDQoJVFRfTm9ybWFsEAEqjAIKCkVF",
-            "cnJvckNvZGUSCwoHRUNfTk9ORRAAEhQKEEVDX0FscmVhZHlJblRlYW0QARIW",
-            "ChJFQ19NYWtlVGVhbU5vdElkbGUQAhIXChNFQ19DYW5ub3RGaW5kUGxheWVy",
-            "EAMSDwoLRUNfTm9UZWFtSWQQBBIQCgxFQ19Ob3RMZWFkZXIQBRITCg9FQ19U",
-            "ZWFtSGFzU3RhcnQQBhIaChZFQ19Ob0dhbWVNYW5hZ2VyU2VydmVyEAcSEwoP",
-            "RUNfTm9UZWFtU2VydmVyEAgSFAoQRUNfTm9Mb2dpblNlcnZlchAJEhYKEkVD",
-            "X1BsYXllck5vdE9ubGluZRAKEhMKD0VDX0ZhaWxJbnRvVGVhbRALKkkKDkVN",
-            "b3ZlRGlyZWN0aW9uEgwKCEVNRF9OT05FEAASDAoIRU1EX0Rvd24QARIMCghF",
-            "TURfTGVmdBACEg0KCUVNRF9SaWdodBADYgZwcm90bzM="));
+            "RW50ZXISFAoMcXdfcGxheWVyX2lkGAEgASgEIlMKEVBsYXllclJlcXVlc3RN",
+            "b3ZlEg4KBmZfdGljaxgBIAEoAhIuCgtlX2RpcmVjdGlvbhgCIAEoDjIZLkdh",
+            "bWVQcm90by5FTW92ZURpcmVjdGlvbiJbChVQbGF5ZXJSZXF1ZXN0Um90YXRp",
+            "b24SDgoGZl90aWNrGAEgASgCEjIKC2VfZGlyZWN0aW9uGAIgASgOMh0uR2Ft",
+            "ZVByb3RvLkVSb3RhdGlvbkRpcmVjdGlvbiI9ChJHYW1lQWNrUGxheWVyRW50",
+            "ZXISEQoJZHdfcmVzdWx0GAEgASgNEhQKDGR3X2dhbWVfdHlwZRgCIAEoDSJm",
+            "ChpHYW1lTm90aWZ5UGxheWVyR2FtZUNvbmZpZxIUCgxkd19nYW1lX3R5cGUY",
+            "ASABKA0SMgoNY29tbW9uX2NvbmZpZxgCIAEoCzIbLkdhbWVQcm90by5HYW1l",
+            "Q29uZmlnQ29tbW9uIm0KHEdhbWVOb3RpZnlQbGF5ZXJHYW1lUm9sZURhdGES",
+            "FAoMZHdfZ2FtZV90eXBlGAEgASgNEjcKEGNvbW1vbl9yb2xlX2RhdGEYAiAB",
+            "KAsyHS5HYW1lUHJvdG8uR2FtZUNvbW1vblJvbGVEYXRhInAKHUdhbWVOb3Rp",
+            "ZnlQbGF5ZXJHYW1lU2NlbmVJbmZvEhQKDGR3X2dhbWVfdHlwZRgBIAEoDRI5",
+            "ChFjb21tb25fc2NlbmVfaW5mbxgCIAEoCzIeLkdhbWVQcm90by5HYW1lQ29t",
+            "bW9uU2NlbmVJbmZvIjMKG0dhbWVOb3RpZnlQbGF5ZXJQcmVwYXJlVGltZRIU",
+            "Cgxkd19sZWZ0X3RpbWUYASABKA0iNQodR2FtZU5vdGlmeVBsYXllckdhbWVS",
+            "ZWFkeVRpbWUSFAoMZHdfbGVmdF90aW1lGAEgASgNIkYKGUdhbWVOb3RpZnlQ",
+            "bGF5ZXJHYW1lU3RhdGUSKQoFc3RhdGUYASABKA4yGi5HYW1lUHJvdG8uRUdh",
+            "bWVTY2VuZVN0YXRlIpYBCh5HYW1lTm90aWZ5UGxheWVyR2FtZUluaXRUZXRy",
+            "aXMSFAoMZHdfcGxheWVyX2lkGAEgASgEEg4KBmZfdGljaxgCIAEoAhImCgtj",
+            "dXJyX3RldHJpcxgDIAEoCzIRLkdhbWVQcm90by5UZXRyaXMSJgoLbmV4dF90",
+            "ZXRyaXMYBCABKAsyES5HYW1lUHJvdG8uVGV0cmlzImoKGkdhbWVOb3RpZnlQ",
+            "bGF5ZXJOZXh0VGV0cmlzEhQKDGR3X3BsYXllcl9pZBgBIAEoBBIOCgZmX3Rp",
+            "Y2sYAiABKAISJgoLbmV4dF90ZXRyaXMYAyABKAsyES5HYW1lUHJvdG8uVGV0",
+            "cmlzIooBCgpTZXJ2ZXJJbmZvEhQKDGR3X3NlcnZlcl9pZBgBIAEoDRIUCgxz",
+            "el9saXN0ZW5faXAYAiABKAkSFAoMZHdfdGVhbV9wb3J0GAMgASgNEiMKG2R3",
+            "X2dhbWVfc2VydmVyX21hbmFnZXJfcG9ydBgEIAEoDRIVCg1kd19sb2dpbl9w",
+            "b3J0GAUgASgNKkkKC0VTZXJ2ZXJUeXBlEgsKB1NUX05PTkUQABIMCghTVF9M",
+            "b2dpbhABEgsKB1NUX1RlYW0QAhISCg5TVF9HYW1lTWFuYWdlchADKicKCUVU",
+            "ZWFtVHlwZRILCgdUVF9OT05FEAASDQoJVFRfTm9ybWFsEAEqjAIKCkVFcnJv",
+            "ckNvZGUSCwoHRUNfTk9ORRAAEhQKEEVDX0FscmVhZHlJblRlYW0QARIWChJF",
+            "Q19NYWtlVGVhbU5vdElkbGUQAhIXChNFQ19DYW5ub3RGaW5kUGxheWVyEAMS",
+            "DwoLRUNfTm9UZWFtSWQQBBIQCgxFQ19Ob3RMZWFkZXIQBRITCg9FQ19UZWFt",
+            "SGFzU3RhcnQQBhIaChZFQ19Ob0dhbWVNYW5hZ2VyU2VydmVyEAcSEwoPRUNf",
+            "Tm9UZWFtU2VydmVyEAgSFAoQRUNfTm9Mb2dpblNlcnZlchAJEhYKEkVDX1Bs",
+            "YXllck5vdE9ubGluZRAKEhMKD0VDX0ZhaWxJbnRvVGVhbRALKkkKDkVNb3Zl",
+            "RGlyZWN0aW9uEgwKCEVNRF9OT05FEAASDAoIRU1EX0Rvd24QARIMCghFTURf",
+            "TGVmdBACEg0KCUVNRF9SaWdodBADKj8KEkVSb3RhdGlvbkRpcmVjdGlvbhIM",
+            "CghFUkRfTk9ORRAAEgwKCEVSRF9MZWZ0EAESDQoJRVJEX1JpZ2h0EAJiBnBy",
+            "b3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::GameProto.WebDataReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProto.EServerType), typeof(global::GameProto.ETeamType), typeof(global::GameProto.EErrorCode), typeof(global::GameProto.EMoveDirection), }, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProto.EServerType), typeof(global::GameProto.ETeamType), typeof(global::GameProto.EErrorCode), typeof(global::GameProto.EMoveDirection), typeof(global::GameProto.ERotationDirection), }, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLoginServerId), global::GameProto.PlayerRequestLoginServerId.Parser, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLogin), global::GameProto.PlayerRequestLogin.Parser, new[]{ "QwPlayerId", "SzNickName", "SzAvatar", "DwSex", "DwBalance", "SzToken" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestLoginMakeTeam), global::GameProto.PlayerRequestLoginMakeTeam.Parser, null, null, null, null),
@@ -200,7 +204,8 @@ namespace GameProto {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameManagerAckPlayerInfoResult), global::GameProto.GameManagerAckPlayerInfoResult.Parser, new[]{ "DwPlayerPort", "DwServerPort", "DwSlaveServerPort" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestGameTest), global::GameProto.PlayerRequestGameTest.Parser, new[]{ "SzTest" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestGameEnter), global::GameProto.PlayerRequestGameEnter.Parser, new[]{ "QwPlayerId" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestGameOption), global::GameProto.PlayerRequestGameOption.Parser, new[]{ "FTick", "EDirection" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestMove), global::GameProto.PlayerRequestMove.Parser, new[]{ "FTick", "EDirection" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.PlayerRequestRotation), global::GameProto.PlayerRequestRotation.Parser, new[]{ "FTick", "EDirection" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameAckPlayerEnter), global::GameProto.GameAckPlayerEnter.Parser, new[]{ "DwResult", "DwGameType" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameConfig), global::GameProto.GameNotifyPlayerGameConfig.Parser, new[]{ "DwGameType", "CommonConfig" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameRoleData), global::GameProto.GameNotifyPlayerGameRoleData.Parser, new[]{ "DwGameType", "CommonRoleData" }, null, null, null),
@@ -294,6 +299,15 @@ namespace GameProto {
     [pbr::OriginalName("EMD_Down")] EmdDown = 1,
     [pbr::OriginalName("EMD_Left")] EmdLeft = 2,
     [pbr::OriginalName("EMD_Right")] EmdRight = 3,
+  }
+
+  /// <summary>
+  ///旋转方向
+  /// </summary>
+  public enum ERotationDirection {
+    [pbr::OriginalName("ERD_NONE")] ErdNone = 0,
+    [pbr::OriginalName("ERD_Left")] ErdLeft = 1,
+    [pbr::OriginalName("ERD_Right")] ErdRight = 2,
   }
 
   #endregion
@@ -8522,11 +8536,11 @@ namespace GameProto {
 
   }
 
-  public sealed partial class PlayerRequestGameOption : pb::IMessage<PlayerRequestGameOption> {
-    private static readonly pb::MessageParser<PlayerRequestGameOption> _parser = new pb::MessageParser<PlayerRequestGameOption>(() => new PlayerRequestGameOption());
+  public sealed partial class PlayerRequestMove : pb::IMessage<PlayerRequestMove> {
+    private static readonly pb::MessageParser<PlayerRequestMove> _parser = new pb::MessageParser<PlayerRequestMove>(() => new PlayerRequestMove());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public static pb::MessageParser<PlayerRequestGameOption> Parser { get { return _parser; } }
+    public static pb::MessageParser<PlayerRequestMove> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
@@ -8539,22 +8553,22 @@ namespace GameProto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public PlayerRequestGameOption() {
+    public PlayerRequestMove() {
       OnConstruction();
     }
 
     partial void OnConstruction();
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public PlayerRequestGameOption(PlayerRequestGameOption other) : this() {
+    public PlayerRequestMove(PlayerRequestMove other) : this() {
       fTick_ = other.fTick_;
       eDirection_ = other.eDirection_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public PlayerRequestGameOption Clone() {
-      return new PlayerRequestGameOption(this);
+    public PlayerRequestMove Clone() {
+      return new PlayerRequestMove(this);
     }
 
     /// <summary>Field number for the "f_tick" field.</summary>
@@ -8581,11 +8595,11 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public override bool Equals(object other) {
-      return Equals(other as PlayerRequestGameOption);
+      return Equals(other as PlayerRequestMove);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public bool Equals(PlayerRequestGameOption other) {
+    public bool Equals(PlayerRequestMove other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -8644,7 +8658,7 @@ namespace GameProto {
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    public void MergeFrom(PlayerRequestGameOption other) {
+    public void MergeFrom(PlayerRequestMove other) {
       if (other == null) {
         return;
       }
@@ -8679,6 +8693,163 @@ namespace GameProto {
 
   }
 
+  public sealed partial class PlayerRequestRotation : pb::IMessage<PlayerRequestRotation> {
+    private static readonly pb::MessageParser<PlayerRequestRotation> _parser = new pb::MessageParser<PlayerRequestRotation>(() => new PlayerRequestRotation());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pb::MessageParser<PlayerRequestRotation> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[52]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayerRequestRotation() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayerRequestRotation(PlayerRequestRotation other) : this() {
+      fTick_ = other.fTick_;
+      eDirection_ = other.eDirection_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public PlayerRequestRotation Clone() {
+      return new PlayerRequestRotation(this);
+    }
+
+    /// <summary>Field number for the "f_tick" field.</summary>
+    public const int FTickFieldNumber = 1;
+    private float fTick_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public float FTick {
+      get { return fTick_; }
+      set {
+        fTick_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "e_direction" field.</summary>
+    public const int EDirectionFieldNumber = 2;
+    private global::GameProto.ERotationDirection eDirection_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProto.ERotationDirection EDirection {
+      get { return eDirection_; }
+      set {
+        eDirection_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override bool Equals(object other) {
+      return Equals(other as PlayerRequestRotation);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public bool Equals(PlayerRequestRotation other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(FTick, other.FTick)) return false;
+      if (EDirection != other.EDirection) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (FTick != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(FTick);
+      if (EDirection != 0) hash ^= EDirection.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void WriteTo(pb::CodedOutputStream output) {
+      if (FTick != 0F) {
+        output.WriteRawTag(13);
+        output.WriteFloat(FTick);
+      }
+      if (EDirection != 0) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) EDirection);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public int CalculateSize() {
+      int size = 0;
+      if (FTick != 0F) {
+        size += 1 + 4;
+      }
+      if (EDirection != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) EDirection);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(PlayerRequestRotation other) {
+      if (other == null) {
+        return;
+      }
+      if (other.FTick != 0F) {
+        FTick = other.FTick;
+      }
+      if (other.EDirection != 0) {
+        EDirection = other.EDirection;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public void MergeFrom(pb::CodedInputStream input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+        switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 13: {
+            FTick = input.ReadFloat();
+            break;
+          }
+          case 16: {
+            eDirection_ = (global::GameProto.ERotationDirection) input.ReadEnum();
+            break;
+          }
+        }
+      }
+    }
+
+  }
+
   /// <summary>
   ///game->player
   /// </summary>
@@ -8690,7 +8861,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[52]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[53]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8847,7 +9018,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[53]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[54]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9010,7 +9181,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[54]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[55]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9173,7 +9344,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[55]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[56]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9336,7 +9507,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[56]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[57]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9465,7 +9636,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[57]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[58]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9594,7 +9765,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[58]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[59]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9723,7 +9894,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[59]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[60]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -9948,7 +10119,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[60]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[61]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -10142,7 +10313,7 @@ namespace GameProto {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[61]; }
+      get { return global::GameProto.WebGameReflection.Descriptor.MessageTypes[62]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

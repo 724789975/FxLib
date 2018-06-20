@@ -49,15 +49,7 @@ public class GameControler : SingletonObject<GameControler>
 
 		oRequest.QwPlayerId = PlayerData.Instance().proPlayerId;
 
-		byte[] pData = new byte[1024];
-		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
-		pStream.WriteString("GameProto.PlayerRequestGameEnter");
-		byte[] pProto = new byte[oRequest.CalculateSize()];
-		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
-		oRequest.WriteTo(oStream);
-		pStream.WriteData(pProto, (uint)pProto.Length);
-
-		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+		SysUtil.SendMessage(m_pSession, oRequest, "GameProto.PlayerRequestGameEnter");
 	}
 
 	public void OnClose()
@@ -98,15 +90,7 @@ public class GameControler : SingletonObject<GameControler>
 			"sessionobject.cs", 106, "SessionObject::OnRecv", dw1++,
 			ToString(), DateTime.Now.ToLocalTime().ToString());
 
-		byte[] pData = new byte[1024];
-		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
-		pStream.WriteString("GameProto.PlayerRequestGameTest");
-		byte[] pProto = new byte[oTest.CalculateSize()];
-		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
-		oTest.WriteTo(oStream);
-		pStream.WriteData(pProto, (uint)pProto.Length);
-
-		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+		SysUtil.SendMessage(m_pSession, oTest, "GameProto.PlayerRequestGameTest");
 	}
 
 	public void OnGameAckPlayerEnter(byte[] pBuf)
@@ -257,5 +241,6 @@ public class GameControler : SingletonObject<GameControler>
 		}
 	}
 
+	public SessionObject proSession { get{ return m_pSession; } }
 	public SessionObject m_pSession;
 }

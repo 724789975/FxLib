@@ -100,6 +100,11 @@ unsigned int CGameCommonConfig::GetGameReadyTime()
 	return m_oConfig.mutable_base_config()->dw_game_ready_time();
 }
 
+unsigned int CGameCommonConfig::GetSuspendTime()
+{
+	return m_oConfig.mutable_base_config()->f_suspend_time();
+}
+
 void CGameCommonConfig::FillProtoConfig(GameProto::GameNotifyPlayerGameConfig& refConfig)
 {
 	refConfig.set_dw_game_type(m_oConfig.mutable_base_config()->dw_game_type());

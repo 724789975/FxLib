@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using GameProto;
 
 [System.Serializable]
 public class Tetris
@@ -33,7 +32,7 @@ public class TetrisData
 		{
 			switch ((GameProto.EGameType)m_oConfig.DwGameType)
 			{
-				case EGameType.GtCommon:
+				case GameProto.EGameType.GtCommon:
 					{
 						return m_oConfig.CommonConfig.BaseConfig.FSuspendTime;
 					}
@@ -47,11 +46,11 @@ public class TetrisData
 		}
 	}
 
-	public static void InitGameConfig(GameNotifyPlayerGameConfig oConfig)
+	public static void InitGameConfig(GameProto.GameNotifyPlayerGameConfig oConfig)
 	{
 		m_oConfig = oConfig;
 	}
-	static GameNotifyPlayerGameConfig m_oConfig = null;
+	static GameProto.GameNotifyPlayerGameConfig m_oConfig = null;
 
 	// 7种方块的4旋转状态
 	public static readonly uint[,,,] s_dwTetrisTable = new uint[7, 4, 7, 4]
@@ -471,7 +470,11 @@ public class UserTetrisData : TetrisData
 		{
 			//向下移动一格
 			m_oCurrentTetris.m_dwPosY -= 1;
-			//todo发消息
+			//发消息
+			GameProto.PlayerRequestMove oRequest = new GameProto.PlayerRequestMove();
+			oRequest.EDirection = GameProto.EMoveDirection.EmdDown;
+			oRequest.FTick = m_fTick;
+			SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestMove");
 		}
 		else
 		{
@@ -489,6 +492,13 @@ public class UserTetrisData : TetrisData
 				}
 			}
 
+			if (m_oCurrentTetris.m_dwPosY >= s_dwRow - s_dwUnit - 1)
+			{
+				OnEnd();
+				// todo
+				return;
+			}
+			
 			m_oCurrentTetris = m_oNextTetris;
 			m_oNextTetris = null;
 			//todo发消息
@@ -504,6 +514,10 @@ public class UserTetrisData : TetrisData
 			m_oCurrentTetris.m_dwPosX -= 1;
 			m_bNeedRefresh = true;
 			//要发消息
+			GameProto.PlayerRequestMove oRequest = new GameProto.PlayerRequestMove();
+			oRequest.EDirection = GameProto.EMoveDirection.EmdLeft;
+			oRequest.FTick = m_fTick;
+			SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestMove");
 		}
 	}
 
@@ -514,6 +528,10 @@ public class UserTetrisData : TetrisData
 			m_oCurrentTetris.m_dwPosX += 1;
 			m_bNeedRefresh = true;
 			//要发消息
+			GameProto.PlayerRequestMove oRequest = new GameProto.PlayerRequestMove();
+			oRequest.EDirection = GameProto.EMoveDirection.EmdRight;
+			oRequest.FTick = m_fTick;
+			SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestMove");
 		}
 	}
 
@@ -538,6 +556,10 @@ public class UserTetrisData : TetrisData
 		m_oCurrentTetris.m_dwTetrisDirect = dwTempDir;
 		m_bNeedRefresh = true;
 		//要发消息
+		GameProto.PlayerRequestRotation oRequest = new GameProto.PlayerRequestRotation();
+		oRequest.EDirection = GameProto.ERotationDirection.ErdLeft;
+		oRequest.FTick = m_fTick;
+		SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestRotation");
 	}
 
 	public void RightRotation()
@@ -561,11 +583,15 @@ public class UserTetrisData : TetrisData
 		m_oCurrentTetris.m_dwTetrisDirect = dwTempDir;
 		m_bNeedRefresh = true;
 		//要发消息
+		GameProto.PlayerRequestRotation oRequest = new GameProto.PlayerRequestRotation();
+		oRequest.EDirection = GameProto.ERotationDirection.ErdRight;
+		oRequest.FTick = m_fTick;
+		SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestRotation");
 	}
 
 	public void Update(float fDeltaTime)
 	{
-		m_dTick += fDeltaTime;
+		m_fTick += fDeltaTime;
 		m_dSuspendTime += fDeltaTime;
 		if (m_oNextTetris == null)
 		{
@@ -578,7 +604,11 @@ public class UserTetrisData : TetrisData
 		}
 	}
 
-	float m_dTick = 0;
+	public void OnEnd()
+	{
+	}
+
+	float m_fTick = 0;
 	float m_dSuspendTime = 0;
 }
 
