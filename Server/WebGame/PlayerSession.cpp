@@ -17,6 +17,8 @@ CPlayerSession::CPlayerSession()
 {
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestGameTest::descriptor(), &CPlayerSession::OnPlayerRequestGameTest);
 	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestGameEnter::descriptor(), &CPlayerSession::OnPlayerRequestGameEnter);
+	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestMove::descriptor(), &CPlayerSession::OnPlayerRequestMove);
+	m_oProtoDispatch.RegistFunction(GameProto::PlayerRequestRotation::descriptor(), &CPlayerSession::OnPlayerRequestRotation);
 }
 
 CPlayerSession::~CPlayerSession()
@@ -160,7 +162,7 @@ bool CPlayerSession::OnPlayerRequestMove(CPlayerSession& refSession, google::pro
 	return true;
 }
 
-bool CPlayerSession::PlayerRequestRotation(CPlayerSession& refSession, google::protobuf::Message& refMsg)
+bool CPlayerSession::OnPlayerRequestRotation(CPlayerSession& refSession, google::protobuf::Message& refMsg)
 {
 	GameProto::PlayerRequestRotation* pMsg = dynamic_cast<GameProto::PlayerRequestRotation*>(&refMsg);
 	if (pMsg == NULL)

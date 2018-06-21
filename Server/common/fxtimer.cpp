@@ -30,9 +30,11 @@ double GetTimeOfDay()
 class FxTimerHandler: public IFxTimerHandler/*, IFxThread*/
 {
 public:
-	FxTimerHandler() :
-		m_qwSecond(0)
+	FxTimerHandler()
+		: m_qwSecond(0)
+		, m_qwDeltaTime(0)
 	{
+		m_qwSecond = GetTimeOfDay();
 		m_strTime[0] = 0;
 		tm tmLocal, tmGM;
 		time_t t = time(NULL);
@@ -46,6 +48,7 @@ public:
 
 		//设置随机数种子
 		srand(m_qwSecond);
+		srand(0);
 //		m_bStop = false;
 	}
 
@@ -167,6 +170,11 @@ public:
 		return m_dwDayTimeStart;
 	}
 
+	virtual const double GetDeltaTime()
+	{
+		return m_qwDeltaTime;
+	}
+
 private:
 
 	void ProcDelayTimer()
@@ -196,6 +204,7 @@ private:
 		static time_t s_dwTime = 0;
 		s_qwSecond = GetTimeOfDay();
 
+		m_qwDeltaTime = s_qwSecond - m_qwSecond;
 		if((unsigned int)s_qwSecond == (unsigned int)m_qwSecond)
 		{
 			m_qwSecond = s_qwSecond;
@@ -238,6 +247,7 @@ private:
 //	bool m_bStop;
 	double m_qwSecond;
 	char m_strTime[64];
+	double m_qwDeltaTime;
 
 	int m_dwTimeZone;
 	unsigned int m_dwDayTimeStart;

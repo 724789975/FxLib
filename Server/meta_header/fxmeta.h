@@ -115,7 +115,7 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 #define LogExe(eLevel, strFmt, ...)\
 {\
 	{\
-		char strLog[2048] = {0};\
+		char strLog[4096] = {0};\
 		FILE* pFile = GetLogFile();\
 		Assert(pFile);\
 		if (pFile)\
@@ -166,7 +166,7 @@ inline const char* GetSeparator()
 #define ThreadLog(eLevel, pFile, strFmt, ...)\
 {\
 	{\
-		char strLog[2048] = {0};\
+		char strLog[4096] = {0};\
 		if (pFile)\
 		{\
 			if((eLevel < LogLv_Count))\

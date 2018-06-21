@@ -332,7 +332,7 @@ void TetrisBase::DownTetris()
 	if (!CheckDownTetris())
 	{
 		//向下移动一格
-		m_oCurrentTetris.m_dwPosY -= 1;
+		m_oCurrentTetris.m_dwPosY += 1;
 	}
 	else
 	{
@@ -346,11 +346,11 @@ void TetrisBase::DownTetris()
 				{
 					continue;
 				}
-				m_dwTetrisPools[m_oCurrentTetris.m_dwPosY + j][m_oCurrentTetris.m_dwPosX + i] = m_oCurrentTetris.m_dwTetrisColor;
+				m_dwTetrisPools[m_oCurrentTetris.m_dwPosY - TETRIS_UNIT + j + 1][m_oCurrentTetris.m_dwPosX + i] = m_oCurrentTetris.m_dwTetrisColor;
 			}
 		}
 
-		if (m_oCurrentTetris.m_dwPosY >= ROW_NUM - TETRIS_UNIT - 1)
+		if (m_oCurrentTetris.m_dwPosY <= TETRIS_UNIT)
 		{
 			OnEnd();
 			GameProto::GameNotifyPlayerDead oDead;
@@ -362,7 +362,7 @@ void TetrisBase::DownTetris()
 		m_oCurrentTetris = m_oNextTetris;
 		m_oNextTetris.m_dwTetrisShape = rand() % SHAPE_COUNT;
 		m_oNextTetris.m_dwPosX = (COLUMN_NUM - TETRIS_UNIT) / 2;
-		m_oNextTetris.m_dwPosY = ROW_NUM - TETRIS_UNIT;
+		m_oNextTetris.m_dwPosY = TETRIS_UNIT - 1;
 		m_oNextTetris.m_dwTetrisColor = g_dwColors[rand() % COLOR_NUM];
 
 		//发消息
@@ -372,6 +372,8 @@ void TetrisBase::DownTetris()
 		m_oNextTetris.FillTetris(*(oNextTetris.mutable_next_tetris()));
 		CGameSceneBase::Instance()->NotifyPlayer(oNextTetris);
 	}
+
+	PrintInfo();
 
 	m_bNeedRefresh = true;
 }
@@ -444,11 +446,19 @@ void TetrisBase::RightRotation()
 	m_oCurrentTetris.m_dwTetrisDirect = dwTempDir;
 }
 
-bool TetrisBase::CheckTetris(int dwRow, int dwCol)
+bool TetrisBase::CheckTetris(int dwCol, int dwRow)
 {
-	if (dwRow == 0)
+	if (dwRow >= ROW_NUM)
 	{
-		return false;
+		return true;
+	}
+	if (dwCol >= COLUMN_NUM)
+	{
+		return true;
+	}
+	if (dwCol < 0)
+	{
+		return true;
 	}
 	unsigned int dwColor = m_dwTetrisPools[dwRow][dwCol] & 0xFFFFFF00;
 	return dwColor != 0;
@@ -466,7 +476,7 @@ bool TetrisBase::CheckLeftTetris()
 		}
 
 		int dwCheckX = m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) - 1;
-		if (dwCheckX <= 0)
+		if (dwCheckX < 0)
 		{
 			return true;
 		}
@@ -490,7 +500,7 @@ bool TetrisBase::CheckRightTetris()
 		}
 
 		int dwCheckX = m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) + 1;
-		if (dwCheckX >= COLUMN_NUM)
+		if (dwCheckX > COLUMN_NUM)
 		{
 			return true;
 		}
@@ -513,13 +523,8 @@ bool TetrisBase::CheckDownTetris()
 			continue;
 		}
 
-		int dwCheckY = m_oCurrentTetris.m_dwPosY + ((int)dwBlockInfo & 0x0000000F) - 1;
-		if (dwCheckY == 0)
-		{
-			//到底了
-			return true;
-		}
-		if (CheckTetris(dwCheckY, m_oCurrentTetris.m_dwPosX + i))
+		int dwCheckY = m_oCurrentTetris.m_dwPosY - ((int)dwBlockInfo & 0x0000000F) + 1;
+		if (CheckTetris(m_oCurrentTetris.m_dwPosX + i, dwCheckY))
 		{
 			return true;
 		}
@@ -530,7 +535,7 @@ bool TetrisBase::CheckDownTetris()
 void TetrisBase::PrintInfo()
 {
 #if 1
-	char szBuffer[2048] = "";
+	char szBuffer[4096] = "";
 	int nLenStr = 0;
 	nLenStr += sprintf(szBuffer + nLenStr, "\ncurrent shape : %d, dir : %d, color : %x, pos x  : %d, y : %d\n",
 		m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, m_oCurrentTetris.m_dwTetrisColor,
@@ -538,11 +543,28 @@ void TetrisBase::PrintInfo()
 	nLenStr += sprintf(szBuffer + nLenStr, "next shape : %d, dir : %d, color : %x, pos x  : %d, y : %d\n",
 		m_oNextTetris.m_dwTetrisShape, m_oNextTetris.m_dwTetrisDirect, m_oNextTetris.m_dwTetrisColor,
 		m_oNextTetris.m_dwPosX, m_oNextTetris.m_dwPosY);
-	for (int i = 0; i < ROW_NUM; ++i)
+
+	unsigned int dwTetrisPools[ROW_NUM][COLUMN_NUM];
+	memcpy(dwTetrisPools, m_dwTetrisPools, sizeof(dwTetrisPools));
+
+	for (int i = 0; i < TETRIS_UNIT; ++i)
 	{
-		for (int j = 0 ; j < COLUMN_NUM; ++j)
+		for (int j = 0; j < TETRIS_UNIT; ++j)
 		{
-			nLenStr += sprintf(szBuffer + nLenStr, "%x\t", m_dwTetrisPools[i][i]);
+			unsigned int dwBlockInfo = g_dwTetrisTable[m_oCurrentTetris.m_dwTetrisShape][m_oCurrentTetris.m_dwTetrisDirect][i][j];
+			if (dwBlockInfo == 0)
+			{
+				continue;
+			}
+			dwTetrisPools[m_oCurrentTetris.m_dwPosY - TETRIS_UNIT + j][m_oCurrentTetris.m_dwPosX + i] = m_oCurrentTetris.m_dwTetrisColor;
+		}
+	}
+
+	for (int i = 0; i < ROW_NUM ; ++i)
+	{
+		for (int j =  0; j < COLUMN_NUM; ++j)
+		{
+			nLenStr += sprintf(szBuffer + nLenStr, "%10x", dwTetrisPools[i][j]);
 		}
 		nLenStr += sprintf(szBuffer + nLenStr, "%s", "\n");
 	}
@@ -562,12 +584,12 @@ void CommonTetris::Init()
 {
 	m_oCurrentTetris.m_dwTetrisShape = rand() % SHAPE_COUNT;
 	m_oCurrentTetris.m_dwPosX = (COLUMN_NUM - TETRIS_UNIT) / 2;
-	m_oCurrentTetris.m_dwPosY = ROW_NUM - TETRIS_UNIT;
+	m_oCurrentTetris.m_dwPosY = TETRIS_UNIT - 1;
 	m_oCurrentTetris.m_dwTetrisColor = g_dwColors[rand() % COLOR_NUM];
 
 	m_oNextTetris.m_dwTetrisShape = rand() % SHAPE_COUNT;
 	m_oNextTetris.m_dwPosX = (COLUMN_NUM - TETRIS_UNIT) / 2;
-	m_oNextTetris.m_dwPosY = ROW_NUM - TETRIS_UNIT;
+	m_oNextTetris.m_dwPosY = TETRIS_UNIT - 1;
 	m_oNextTetris.m_dwTetrisColor = g_dwColors[rand() % COLOR_NUM];
 
 	memset(m_dwTetrisPools, 0, sizeof(m_dwTetrisPools));

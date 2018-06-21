@@ -36,6 +36,7 @@ public:
 	virtual double GetMilliSecond() = 0;
 	virtual const char* GetTimeStr() = 0;
 	virtual const unsigned int GetTimeSeq() = 0;
+	virtual const double GetDeltaTime() = 0;
 
 	//获取时区
 	virtual const int GetTimeZone() = 0;

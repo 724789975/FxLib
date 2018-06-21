@@ -19,7 +19,9 @@ public:
 	unsigned int  m_dwTetrisColor;
 
 	//坐标位置为左下角
+	//列坐标
 	int m_dwPosX;
+	//行坐标
 	int m_dwPosY;
 
 	void FillTetris(GameProto::Tetris& refInfo);

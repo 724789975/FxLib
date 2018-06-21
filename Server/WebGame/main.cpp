@@ -97,7 +97,7 @@ int main(int argc, char **argv)
 	while (g_bRun)
 	{
 		GetTimeHandler()->Run();
-		CGameSceneBase::Instance()->Run(GetTimeHandler()->GetMilliSecond());
+		CGameSceneBase::Instance()->Run(GetTimeHandler()->GetDeltaTime());
 		pNet->Run(0xffffffff);
 		FxSleep(1);
 	}

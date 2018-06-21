@@ -562,7 +562,7 @@ PlayerSettings:
   webGLUseWasm: 0
   webGLCompressionFormat: 2
   scriptingDefineSymbols:
-    1: HOTFIX_ENABLE;DEVELOP_VERSION
+    1: DEVELOP_VERSION
     13: DEVELOP_VERSION
   platformArchitecture: {}
   scriptingBackend: {}

@@ -244,6 +244,8 @@ public class GameControler : SingletonObject<GameControler>
 				}
 				break;
 		}
+
+		TetrisData.SetGameSceneState(oRet.State);
 	}
 
 	public void OnGameNotifyPlayerGameInitTetris(byte[] pBuf)

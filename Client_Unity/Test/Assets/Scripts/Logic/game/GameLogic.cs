@@ -21,6 +21,10 @@ public class GameLogic : SingletonObject<GameLogic>
 	// Update is called once per frame
 	void Update ()
 	{
+		if (TetrisData.proState != GameProto.EGameSceneState.EssGaming)
+		{
+			return;
+		}
 		if (m_oData == null)
 		{
 			return;
