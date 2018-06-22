@@ -30,6 +30,26 @@ public class GameLogic : SingletonObject<GameLogic>
 			return;
 		}
 
+#if UNITY_STANDALONE_WIN
+		if (Input.GetKeyDown(KeyCode.S))
+		{
+			SampleDebuger.Log("您按下了S键");
+			TetrisDataManager.Instance().proUserTetrisData.DownTetris();
+        }
+
+		if (Input.GetKeyDown(KeyCode.A))
+		{
+			SampleDebuger.Log("您按下了A键");
+			TetrisDataManager.Instance().proUserTetrisData.LeftTetris();
+		}
+
+		if (Input.GetKeyDown(KeyCode.D))
+		{
+			SampleDebuger.Log("您按下了D键");
+			TetrisDataManager.Instance().proUserTetrisData.RightTetris();
+		}
+#endif
+
 		TetrisDataManager.Instance().proUserTetrisData.Update(Time.deltaTime);
 
 		uint[,] dwBlockInfos = m_oData.GetTetrisInfo();

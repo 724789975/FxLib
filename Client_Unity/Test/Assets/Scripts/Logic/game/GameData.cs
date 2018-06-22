@@ -390,24 +390,6 @@ public class TetrisData
 		return dwTetrisPool;
 	}
 
-	//所有的方块 每个元素代表一种颜色
-	public uint[,] m_dwTetrisPool = new uint[s_dwRow, s_dwColumn];
-	//当前方块
-	//uint[,] m_dwCurrBlock = new uint[s_dwUnit, s_dwUnit];
-	////下一个方块
-	//uint[,] m_dwNextBlock = new uint[s_dwUnit, s_dwUnit];
-
-	public bool proNeedRefresh { get { return m_bNeedRefresh; } }
-
-	public Tetris m_oCurrentTetris = new Tetris();
-
-	public Tetris m_oNextTetris = new Tetris();
-
-	protected bool m_bNeedRefresh = false;
-}
-
-public class UserTetrisData : TetrisData
-{
 	/// <summary>
 	/// 检查下面是不是有块
 	/// </summary>
@@ -492,9 +474,6 @@ public class UserTetrisData : TetrisData
 			}
 
 			int dwCheckY = m_oCurrentTetris.m_dwPosY - ((int)dwBlockInfo & 0x0000000F);
-			SampleDebuger.LogRed("pos [" + m_oCurrentTetris.m_dwPosY.ToString() + "," + m_oCurrentTetris.m_dwPosX.ToString() + "], check ["
-				+ dwCheckY.ToString() + "," + (m_oCurrentTetris.m_dwPosX + i).ToString()
-				+ "], [" + m_oCurrentTetris.m_dwTetrisShape.ToString() + "," + m_oCurrentTetris.m_dwTetrisDirect.ToString() + "]");
 			if (CheckTetris(m_oCurrentTetris.m_dwPosX + i, dwCheckY))
 			{
 				return true;
@@ -503,11 +482,8 @@ public class UserTetrisData : TetrisData
 		return false;
 	}
 
-	public void DownTetris()
+	public bool DownTetris()
 	{
-		//方块的位置初始化于中间的方格
-		//坐标是方块的左下角
-		//下降的时候 先要找出当前方块最下面的几个块的坐标
 		if (!CheckDownTetris())
 		{
 			//向下移动一格
@@ -532,49 +508,39 @@ public class UserTetrisData : TetrisData
 			if (m_oCurrentTetris.m_dwPosY <= s_dwUnit)
 			{
 				OnEnd();
-				return;
+				return true;
 			}
-			
+
 			m_oCurrentTetris = m_oNextTetris;
 			m_oNextTetris = null;
 		}
-		GameProto.PlayerRequestMove oRequest = new GameProto.PlayerRequestMove();
-		oRequest.EDirection = GameProto.EMoveDirection.EmdDown;
-		oRequest.FTick = m_fTick;
-		SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestMove");
-
 		m_bNeedRefresh = true;
+		return true;
 	}
 
-	public void LeftTetris()
+	public bool LeftTetris()
 	{
 		if (!CheckLeftTetris())
 		{
 			m_oCurrentTetris.m_dwPosX -= 1;
 			m_bNeedRefresh = true;
-			//要发消息
-			GameProto.PlayerRequestMove oRequest = new GameProto.PlayerRequestMove();
-			oRequest.EDirection = GameProto.EMoveDirection.EmdLeft;
-			oRequest.FTick = m_fTick;
-			SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestMove");
+			return true;
 		}
+		return false;
 	}
 
-	public void RightTetris()
+	public bool RightTetris()
 	{
 		if (!CheckRightTetris())
 		{
 			m_oCurrentTetris.m_dwPosX += 1;
 			m_bNeedRefresh = true;
-			//要发消息
-			GameProto.PlayerRequestMove oRequest = new GameProto.PlayerRequestMove();
-			oRequest.EDirection = GameProto.EMoveDirection.EmdRight;
-			oRequest.FTick = m_fTick;
-			SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestMove");
+			return true;
 		}
+		return false;
 	}
 
-	public void LeftRotation()
+	public bool LeftRotation()
 	{
 		uint dwTempDir = (m_oCurrentTetris.m_dwTetrisDirect + 1) % s_dwUnit;
 		for (int i = 0; i < s_dwUnit; ++i)
@@ -586,22 +552,18 @@ public class UserTetrisData : TetrisData
 				{
 					continue;
 				}
-				if(CheckTetris(m_oCurrentTetris.m_dwPosY + j, m_oCurrentTetris.m_dwPosX + i))
+				if (CheckTetris(m_oCurrentTetris.m_dwPosY + j, m_oCurrentTetris.m_dwPosX + i))
 				{
-					return;
+					return false;
 				}
 			}
 		}
 		m_oCurrentTetris.m_dwTetrisDirect = dwTempDir;
 		m_bNeedRefresh = true;
-		//要发消息
-		GameProto.PlayerRequestRotation oRequest = new GameProto.PlayerRequestRotation();
-		oRequest.EDirection = GameProto.ERotationDirection.ErdLeft;
-		oRequest.FTick = m_fTick;
-		SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestRotation");
+		return true;
 	}
 
-	public void RightRotation()
+	public bool RightRotation()
 	{
 		uint dwTempDir = (m_oCurrentTetris.m_dwTetrisDirect - 1) % s_dwUnit;
 		for (int i = 0; i < s_dwUnit; ++i)
@@ -615,17 +577,108 @@ public class UserTetrisData : TetrisData
 				}
 				if (CheckTetris(m_oCurrentTetris.m_dwPosY + j, m_oCurrentTetris.m_dwPosX + i))
 				{
-					return;
+					return false;
 				}
 			}
 		}
 		m_oCurrentTetris.m_dwTetrisDirect = dwTempDir;
 		m_bNeedRefresh = true;
-		//要发消息
-		GameProto.PlayerRequestRotation oRequest = new GameProto.PlayerRequestRotation();
-		oRequest.EDirection = GameProto.ERotationDirection.ErdRight;
-		oRequest.FTick = m_fTick;
-		SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestRotation");
+		return true;
+	}
+
+	public virtual void OnEnd() { }
+
+	//所有的方块 每个元素代表一种颜色
+	public uint[,] m_dwTetrisPool = new uint[s_dwRow, s_dwColumn];
+	//当前方块
+	//uint[,] m_dwCurrBlock = new uint[s_dwUnit, s_dwUnit];
+	////下一个方块
+	//uint[,] m_dwNextBlock = new uint[s_dwUnit, s_dwUnit];
+
+	public bool proNeedRefresh { get { return m_bNeedRefresh; } }
+
+	public Tetris m_oCurrentTetris = new Tetris();
+
+	public Tetris m_oNextTetris = new Tetris();
+
+	protected bool m_bNeedRefresh = false;
+}
+
+public class UserTetrisData : TetrisData
+{
+	public new void DownTetris()
+	{
+		if (m_oNextTetris == null)
+		{
+			return;
+		}
+		if (base.DownTetris())
+		{
+			GameProto.PlayerRequestMove oRequest = new GameProto.PlayerRequestMove();
+			oRequest.EDirection = GameProto.EMoveDirection.EmdDown;
+			oRequest.FTick = m_fTick;
+			SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestMove");
+		}
+	}
+
+	public new void LeftTetris()
+	{
+		if (m_oNextTetris == null)
+		{
+			return;
+		}
+		if (base.LeftTetris())
+		{
+			GameProto.PlayerRequestMove oRequest = new GameProto.PlayerRequestMove();
+			oRequest.EDirection = GameProto.EMoveDirection.EmdLeft;
+			oRequest.FTick = m_fTick;
+			SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestMove");
+		}
+	}
+
+	public new void RightTetris()
+	{
+		if (m_oNextTetris == null)
+		{
+			return;
+		}
+		if (base.RightTetris())
+		{
+			GameProto.PlayerRequestMove oRequest = new GameProto.PlayerRequestMove();
+			oRequest.EDirection = GameProto.EMoveDirection.EmdRight;
+			oRequest.FTick = m_fTick;
+			SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestMove");
+		}
+	}
+
+	public new void LeftRotation()
+	{
+		if (m_oNextTetris == null)
+		{
+			return;
+		}
+		if (base.LeftRotation())
+		{
+			GameProto.PlayerRequestRotation oRequest = new GameProto.PlayerRequestRotation();
+			oRequest.EDirection = GameProto.ERotationDirection.ErdLeft;
+			oRequest.FTick = m_fTick;
+			SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestRotation");
+		}
+	}
+
+	public new void RightRotation()
+	{
+		if (m_oNextTetris == null)
+		{
+			return;
+		}
+		if (base.RightRotation())
+		{
+			GameProto.PlayerRequestRotation oRequest = new GameProto.PlayerRequestRotation();
+			oRequest.EDirection = GameProto.ERotationDirection.ErdRight;
+			oRequest.FTick = m_fTick;
+			SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestRotation");
+		}
 	}
 
 	public void Update(float fDeltaTime)
@@ -643,7 +696,7 @@ public class UserTetrisData : TetrisData
 		}
 	}
 
-	public void OnEnd()
+	public override void OnEnd()
 	{
 		SampleDebuger.LogGreen("player die");
 	}
