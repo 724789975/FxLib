@@ -346,7 +346,7 @@ void TetrisBase::DownTetris()
 				{
 					continue;
 				}
-				m_dwTetrisPools[m_oCurrentTetris.m_dwPosY - TETRIS_UNIT + j + 1][m_oCurrentTetris.m_dwPosX + i] = m_oCurrentTetris.m_dwTetrisColor;
+				m_dwTetrisPools[m_oCurrentTetris.m_dwPosY - TETRIS_UNIT + i][m_oCurrentTetris.m_dwPosX + j] = m_oCurrentTetris.m_dwTetrisColor;
 			}
 		}
 
@@ -361,8 +361,9 @@ void TetrisBase::DownTetris()
 
 		m_oCurrentTetris = m_oNextTetris;
 		m_oNextTetris.m_dwTetrisShape = rand() % SHAPE_COUNT;
+		m_oNextTetris.m_dwTetrisDirect = rand() % 4;
 		m_oNextTetris.m_dwPosX = (COLUMN_NUM - TETRIS_UNIT) / 2;
-		m_oNextTetris.m_dwPosY = TETRIS_UNIT - 1;
+		m_oNextTetris.m_dwPosY = TETRIS_UNIT;
 		m_oNextTetris.m_dwTetrisColor = g_dwColors[rand() % COLOR_NUM];
 
 		//·¢ÏûÏ¢
@@ -523,7 +524,7 @@ bool TetrisBase::CheckDownTetris()
 			continue;
 		}
 
-		int dwCheckY = m_oCurrentTetris.m_dwPosY - ((int)dwBlockInfo & 0x0000000F) + 1;
+		int dwCheckY = m_oCurrentTetris.m_dwPosY - ((int)dwBlockInfo & 0x0000000F);
 		if (CheckTetris(m_oCurrentTetris.m_dwPosX + i, dwCheckY))
 		{
 			return true;
@@ -556,7 +557,7 @@ void TetrisBase::PrintInfo()
 			{
 				continue;
 			}
-			dwTetrisPools[m_oCurrentTetris.m_dwPosY - TETRIS_UNIT + j][m_oCurrentTetris.m_dwPosX + i] = m_oCurrentTetris.m_dwTetrisColor;
+			dwTetrisPools[m_oCurrentTetris.m_dwPosY - TETRIS_UNIT + i][m_oCurrentTetris.m_dwPosX + j] = m_oCurrentTetris.m_dwTetrisColor;
 		}
 	}
 
@@ -583,13 +584,15 @@ CommonTetris::~CommonTetris() { }
 void CommonTetris::Init()
 {
 	m_oCurrentTetris.m_dwTetrisShape = rand() % SHAPE_COUNT;
+	m_oCurrentTetris.m_dwTetrisDirect = rand() % 4;
 	m_oCurrentTetris.m_dwPosX = (COLUMN_NUM - TETRIS_UNIT) / 2;
 	m_oCurrentTetris.m_dwPosY = TETRIS_UNIT - 1;
 	m_oCurrentTetris.m_dwTetrisColor = g_dwColors[rand() % COLOR_NUM];
 
 	m_oNextTetris.m_dwTetrisShape = rand() % SHAPE_COUNT;
+	m_oNextTetris.m_dwTetrisDirect = rand() % 4;
 	m_oNextTetris.m_dwPosX = (COLUMN_NUM - TETRIS_UNIT) / 2;
-	m_oNextTetris.m_dwPosY = TETRIS_UNIT - 1;
+	m_oNextTetris.m_dwPosY = TETRIS_UNIT;
 	m_oNextTetris.m_dwTetrisColor = g_dwColors[rand() % COLOR_NUM];
 
 	memset(m_dwTetrisPools, 0, sizeof(m_dwTetrisPools));

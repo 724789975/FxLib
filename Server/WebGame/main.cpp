@@ -102,6 +102,8 @@ int main(int argc, char **argv)
 		FxSleep(1);
 	}
 	GameServer::Instance()->Stop();
+	CGameSceneBase::Instance()->GameEnd();
+	GameServer::Instance()->GameEnd();
 	FxSleep(10);
 	pNet->Release();
 STOP:

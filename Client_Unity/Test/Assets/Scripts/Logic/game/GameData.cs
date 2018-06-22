@@ -5,19 +5,19 @@ using UnityEngine;
 [System.Serializable]
 public class Tetris
 {
-	public uint m_dwTetrisShape;
-	public uint m_dwTetrisDirect;
-	public uint m_dwTetrisColor;
+	public uint m_dwTetrisShape = 0;
+	public uint m_dwTetrisDirect = 0;
+	public uint m_dwTetrisColor = 0;
 
 	//坐标位置为左下角
 	/// <summary>
 	/// 列坐标
 	/// </summary>
-	public int m_dwPosX;
+	public int m_dwPosX = 0;
 	/// <summary>
 	/// 行坐标
 	/// </summary>
-	public int m_dwPosY;
+	public int m_dwPosY = 0;
 
 	public void Init(GameProto.Tetris oTetris)
 	{
@@ -383,7 +383,7 @@ public class TetrisData
 				{
 					continue;
 				}
-				dwTetrisPool[m_oCurrentTetris.m_dwPosY - s_dwUnit + j, m_oCurrentTetris.m_dwPosX + i] = m_oCurrentTetris.m_dwTetrisColor;
+				dwTetrisPool[m_oCurrentTetris.m_dwPosY - s_dwUnit + i, m_oCurrentTetris.m_dwPosX + j] = m_oCurrentTetris.m_dwTetrisColor;
 			}
 		}
 		m_bNeedRefresh = false;
@@ -491,9 +491,10 @@ public class UserTetrisData : TetrisData
 				continue;
 			}
 
-			int dwCheckY = m_oCurrentTetris.m_dwPosY - ((int)dwBlockInfo & 0x0000000F) + 1;
+			int dwCheckY = m_oCurrentTetris.m_dwPosY - ((int)dwBlockInfo & 0x0000000F);
 			SampleDebuger.LogRed("pos [" + m_oCurrentTetris.m_dwPosY.ToString() + "," + m_oCurrentTetris.m_dwPosX.ToString() + "], check ["
-				+ dwCheckY.ToString() + "," + (m_oCurrentTetris.m_dwPosX + i).ToString() + "], [" + m_oCurrentTetris.m_dwTetrisShape.ToString() + "," + m_oCurrentTetris.m_dwTetrisDirect.ToString() + "]");
+				+ dwCheckY.ToString() + "," + (m_oCurrentTetris.m_dwPosX + i).ToString()
+				+ "], [" + m_oCurrentTetris.m_dwTetrisShape.ToString() + "," + m_oCurrentTetris.m_dwTetrisDirect.ToString() + "]");
 			if (CheckTetris(m_oCurrentTetris.m_dwPosX + i, dwCheckY))
 			{
 				return true;
@@ -524,7 +525,7 @@ public class UserTetrisData : TetrisData
 					{
 						continue;
 					}
-					m_dwTetrisPool[m_oCurrentTetris.m_dwPosY - s_dwUnit + j + 1, m_oCurrentTetris.m_dwPosX + i] = m_oCurrentTetris.m_dwTetrisColor;
+					m_dwTetrisPool[m_oCurrentTetris.m_dwPosY - s_dwUnit + i, m_oCurrentTetris.m_dwPosX + j] = m_oCurrentTetris.m_dwTetrisColor;
 				}
 			}
 

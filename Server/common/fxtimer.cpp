@@ -1,4 +1,4 @@
-#include <map>
+﻿#include <map>
 #include <set>
 #include <stdlib.h>
 
@@ -48,7 +48,7 @@ public:
 
 		//设置随机数种子
 		srand(m_qwSecond);
-		srand(0);
+		//srand(0);
 //		m_bStop = false;
 	}
 
@@ -220,7 +220,7 @@ private:
 			m_dwDayTimeStart += 86400;
 		}
 
-		tm* tmLocal = localtime(&s_dwTime); //转为本地时间  
+		tm* tmLocal = localtime(&s_dwTime); //转化为本地时间
 		strftime(m_strTime, 64, "%Y-%m-%d %H:%M:%S", tmLocal);
 		//sprintf(m_strTime, "%s",
 		//		CLuaEngine::Instance()->CallStringFunction<unsigned int>(

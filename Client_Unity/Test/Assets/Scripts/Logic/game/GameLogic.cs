@@ -45,9 +45,18 @@ public class GameLogic : SingletonObject<GameLogic>
 			for (int j = 0; j < TetrisData.s_dwColumn; j++)
 			{
 				uint dwBlock = dwBlockInfos[i, j];
-				c.r = (byte)((dwBlock & 0xFF000000) >> 24);
-				c.g = (byte)((dwBlock & 0x00FF0000) >> 16);
-				c.b = (byte)((dwBlock & 0x0000FF00) >> 8);
+				if (dwBlock != 0)
+				{
+					c.r = (byte)((dwBlock & 0xFF000000) >> 24);
+					c.g = (byte)((dwBlock & 0x00FF0000) >> 16);
+					c.b = (byte)((dwBlock & 0x0000FF00) >> 8);
+				}
+				else
+				{
+					c.r = 255;
+					c.g = 255;
+					c.b = 255;
+				}
 				m_arrBlockInfos[i, j].color = c;
 			}
 		}
@@ -59,9 +68,18 @@ public class GameLogic : SingletonObject<GameLogic>
 				for (int j = 0; j < TetrisData.s_dwUnit; ++j)
 				{
 					uint dwBlockInfo = TetrisData.s_dwTetrisTable[m_oData.m_oNextTetris.m_dwTetrisShape, m_oData.m_oNextTetris.m_dwTetrisDirect, i, j];
-					c.r = (byte)((dwBlockInfo & 0xFF000000) >> 24);
-					c.g = (byte)((dwBlockInfo & 0x00FF0000) >> 16);
-					c.b = (byte)((dwBlockInfo & 0x0000FF00) >> 8);
+					if (dwBlockInfo != 0)
+					{
+						c.r = (byte)((m_oData.m_oNextTetris.m_dwTetrisColor & 0xFF000000) >> 24);
+						c.g = (byte)((m_oData.m_oNextTetris.m_dwTetrisColor & 0x00FF0000) >> 16);
+						c.b = (byte)((m_oData.m_oNextTetris.m_dwTetrisColor & 0x0000FF00) >> 8);
+					}
+					else
+					{
+						c.r = 255;
+						c.g = 255;
+						c.b = 255;
+					}
 					m_arrNextBlocks[i * TetrisData.s_dwUnit + j].color = c;
 				}
 			}
