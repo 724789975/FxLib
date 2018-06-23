@@ -363,6 +363,7 @@ public class TetrisData
 			m_oNextTetris = new Tetris();
 		}
 		m_oNextTetris.Init(oTetris.NextTetris);
+		SampleDebuger.LogGreen(string.Format("next tetris [{0},{1}]", oTetris.NextTetris.DwTetrisShape, oTetris.NextTetris.DwTetrisDirect));
 		m_bNeedRefresh = true;
 	}
 
@@ -427,9 +428,9 @@ public class TetrisData
 
 			int dwCheckX = m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) - 1;
 			int dwCheckY = m_oCurrentTetris.m_dwPosY - (int)s_dwUnit + i;
-			//SampleDebuger.LogRed(string.Format("pos [{0},{1}], check pos [{2},{3}], tetris [{4},{5}]",
-			//	m_oCurrentTetris.m_dwPosY.ToString(), m_oCurrentTetris.m_dwPosX.ToString(),
-			//	dwCheckY.ToString(), dwCheckX.ToString(), m_oCurrentTetris.m_dwTetrisShape.ToString(), m_oCurrentTetris.m_dwTetrisDirect.ToString()));
+			SampleDebuger.LogRed(string.Format("pos [{0},{1}], check pos [{2},{3}], tetris [{4},{5}]",
+				m_oCurrentTetris.m_dwPosY.ToString(), m_oCurrentTetris.m_dwPosX.ToString(),
+				dwCheckY.ToString(), dwCheckX.ToString(), m_oCurrentTetris.m_dwTetrisShape.ToString(), m_oCurrentTetris.m_dwTetrisDirect.ToString()));
 			if (CheckTetris(dwCheckX, dwCheckY))
 			{
 				return true;
@@ -451,9 +452,9 @@ public class TetrisData
 
 			int dwCheckX = m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) + 1;
 			int dwCheckY = m_oCurrentTetris.m_dwPosY - (int)s_dwUnit + i;
-			//SampleDebuger.LogRed(string.Format("pos [{0},{1}], check pos [{2},{3}], tetris [{4},{5}]",
-			//	m_oCurrentTetris.m_dwPosY.ToString(), m_oCurrentTetris.m_dwPosX.ToString(),
-			//	dwCheckY.ToString(), dwCheckX.ToString(), m_oCurrentTetris.m_dwTetrisShape.ToString(), m_oCurrentTetris.m_dwTetrisDirect.ToString()));
+			SampleDebuger.LogRed(string.Format("pos [{0},{1}], check pos [{2},{3}], tetris [{4},{5}]",
+				m_oCurrentTetris.m_dwPosY.ToString(), m_oCurrentTetris.m_dwPosX.ToString(),
+				dwCheckY.ToString(), dwCheckX.ToString(), m_oCurrentTetris.m_dwTetrisShape.ToString(), m_oCurrentTetris.m_dwTetrisDirect.ToString()));
 			if (CheckTetris(dwCheckX, dwCheckY))
 			{
 				return true;
@@ -474,7 +475,11 @@ public class TetrisData
 			}
 
 			int dwCheckY = m_oCurrentTetris.m_dwPosY - ((int)dwBlockInfo & 0x0000000F);
-			if (CheckTetris(m_oCurrentTetris.m_dwPosX + i, dwCheckY))
+			int dwCheckX = m_oCurrentTetris.m_dwPosX + i;
+			SampleDebuger.LogRed(string.Format("pos [{0},{1}], check pos [{2},{3}], tetris [{4},{5}]",
+				m_oCurrentTetris.m_dwPosY.ToString(), m_oCurrentTetris.m_dwPosX.ToString(),
+				dwCheckY.ToString(), dwCheckX.ToString(), m_oCurrentTetris.m_dwTetrisShape.ToString(), m_oCurrentTetris.m_dwTetrisDirect.ToString()));
+			if (CheckTetris(dwCheckX, dwCheckY))
 			{
 				return true;
 			}
@@ -491,6 +496,7 @@ public class TetrisData
 		}
 		else
 		{
+			SampleDebuger.LogGreen(string.Format("down [{0},{1}]", m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect));
 			//固定住 那么就不能往下移动了 换下一个方块
 			for (int i = 0; i < s_dwUnit; ++i)
 			{
@@ -590,10 +596,6 @@ public class TetrisData
 
 	//所有的方块 每个元素代表一种颜色
 	public uint[,] m_dwTetrisPool = new uint[s_dwRow, s_dwColumn];
-	//当前方块
-	//uint[,] m_dwCurrBlock = new uint[s_dwUnit, s_dwUnit];
-	////下一个方块
-	//uint[,] m_dwNextBlock = new uint[s_dwUnit, s_dwUnit];
 
 	public bool proNeedRefresh { get { return m_bNeedRefresh; } }
 

@@ -31,7 +31,7 @@ public class GameLogic : SingletonObject<GameLogic>
 		}
 
 #if UNITY_STANDALONE_WIN
-		if (Input.GetKeyDown(KeyCode.S))
+		if (Input.GetKey(KeyCode.S))
 		{
 			SampleDebuger.Log("您按下了S键");
 			TetrisDataManager.Instance().proUserTetrisData.DownTetris();

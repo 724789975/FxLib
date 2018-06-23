@@ -580,7 +580,7 @@ void CommonTetris::Init()
 	m_oCurrentTetris.m_dwTetrisShape = rand() % SHAPE_COUNT;
 	m_oCurrentTetris.m_dwTetrisDirect = rand() % 4;
 	m_oCurrentTetris.m_dwPosX = (COLUMN_NUM - TETRIS_UNIT) / 2;
-	m_oCurrentTetris.m_dwPosY = TETRIS_UNIT - 1;
+	m_oCurrentTetris.m_dwPosY = TETRIS_UNIT;
 	m_oCurrentTetris.m_dwTetrisColor = g_dwColors[rand() % COLOR_NUM];
 
 	m_oNextTetris.m_dwTetrisShape = rand() % SHAPE_COUNT;
