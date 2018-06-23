@@ -82,8 +82,8 @@ public class TetrisData
 				{ 0x0,  0xFFFFFFFF, 0x0,     0x0, },
 				{ 0x0,  0xFFFFFFFF, 0x0,     0x0, },
 				{ 0x0,  0xFFFFFFF0, 0x0,     0x0, },	//下边界
-				{ 0x0,  0xFFFFFFF1, 0x0,     0x0, },	//左边界
-				{ 0x0,  0xFFFFFFF1,         0x0,            0x0, },	//右边界
+				{ 0xFFFFFFF1,  0xFFFFFFF1, 0xFFFFFFF1,     0xFFFFFFF1, },	//左边界
+				{ 0xFFFFFFF1,  0xFFFFFFF1,         0xFFFFFFF1,            0xFFFFFFF1, },	//右边界
 			},
 			{
 				{ 0x0,          0x0,        0x0,            0x0, },
@@ -101,7 +101,7 @@ public class TetrisData
 				{ 0x0,  0xFFFFFFFF, 0x0,     0x0, },
 				{ 0x0,  0xFFFFFFF0, 0x0,     0x0, },	//下边界
 				{ 0x0,  0xFFFFFFF1, 0x0,     0x0, },	//左边界
-				{ 0x0,  0xFFFFFFF1,         0x0,            0x0, },	//右边界
+				{ 0xFFFFFFF1,  0xFFFFFFF1,         0xFFFFFFF1,            0xFFFFFFF1, },	//右边界
 			},
 			{
 				{ 0x0,          0x0,        0x0,            0x0, },
@@ -179,7 +179,7 @@ public class TetrisData
 				{ 0x0,  0x0,            0x0,            0x0, },
 				{ 0x0,  0xFFFFFFF1, 0xFFFFFFF2, 0xFFFFFFF2, },	//下边界
 				{ 0x0,  0xFFFFFFF1,         0xFFFFFFF1,  0x0, },	//左边界
-				{ 0xFFFFFFF3,   0xFFFFFFF1,         0x0,            0x0, },	//右边界
+				{ 0x0,  0xFFFFFFF3,        0xFFFFFFF1,            0x0, },	//右边界
 			},
 			{
 				{ 0x0,  0xFFFFFFFF, 0xFFFFFFFF, 0x0, },
@@ -266,7 +266,7 @@ public class TetrisData
 				{ 0x0,  0x0,            0x0,            0x0, },
 				{ 0x0,  0xFFFFFFF2, 0xFFFFFFF1, 0xFFFFFFF1, },	//下边界
 				{ 0x0,  0xFFFFFFF1,         0xFFFFFFF2,  0x0, },	//左边界
-				{ 0xFFFFFFF2,   0xFFFFFFF3,         0x0,            0x0, },	//右边界
+				{ 0x0,  0xFFFFFFF2,         0xFFFFFFF3,            0x0, },	//右边界
 			},
 		},
 		//S型 { 0x006C, 0x0462, 0x006C, 0x0462 },	第五行代表最下面的块的位置
@@ -278,7 +278,7 @@ public class TetrisData
 				{ 0x0,  0x0,     0x0,           0xFFFFFFFF, },
 				{ 0x0,  0x0,     0xFFFFFFF1, 0xFFFFFFF0, },	//下边界
 				{ 0x0,  0xFFFFFFF2,         0xFFFFFFF2,  0xFFFFFFF3, },	//左边界
-				{ 0xFFFFFFFF,   0xFFFFFFF3,      0xFFFFFFF3,            0x0, },	//右边界
+				{ 0x0,  0xFFFFFFF2,      0xFFFFFFF3,            0xFFFFFFF3, },	//右边界
 			},
 			{
 				{ 0x0,  0x0,            0x0,            0x0, },
@@ -426,11 +426,11 @@ public class TetrisData
 			}
 
 			int dwCheckX = m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) - 1;
-			if (dwCheckX < 0)
-			{
-				return true;
-			}
-			if (CheckTetris(m_oCurrentTetris.m_dwPosY + i, dwCheckX))
+			int dwCheckY = m_oCurrentTetris.m_dwPosY - (int)s_dwUnit + i;
+			//SampleDebuger.LogRed(string.Format("pos [{0},{1}], check pos [{2},{3}], tetris [{4},{5}]",
+			//	m_oCurrentTetris.m_dwPosY.ToString(), m_oCurrentTetris.m_dwPosX.ToString(),
+			//	dwCheckY.ToString(), dwCheckX.ToString(), m_oCurrentTetris.m_dwTetrisShape.ToString(), m_oCurrentTetris.m_dwTetrisDirect.ToString()));
+			if (CheckTetris(dwCheckX, dwCheckY))
 			{
 				return true;
 			}
@@ -450,11 +450,11 @@ public class TetrisData
 			}
 
 			int dwCheckX = m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) + 1;
-			if (dwCheckX > s_dwColumn)
-			{
-				return true;
-			}
-			if (CheckTetris(m_oCurrentTetris.m_dwPosY + i, dwCheckX))
+			int dwCheckY = m_oCurrentTetris.m_dwPosY - (int)s_dwUnit + i;
+			//SampleDebuger.LogRed(string.Format("pos [{0},{1}], check pos [{2},{3}], tetris [{4},{5}]",
+			//	m_oCurrentTetris.m_dwPosY.ToString(), m_oCurrentTetris.m_dwPosX.ToString(),
+			//	dwCheckY.ToString(), dwCheckX.ToString(), m_oCurrentTetris.m_dwTetrisShape.ToString(), m_oCurrentTetris.m_dwTetrisDirect.ToString()));
+			if (CheckTetris(dwCheckX, dwCheckY))
 			{
 				return true;
 			}
@@ -552,7 +552,7 @@ public class TetrisData
 				{
 					continue;
 				}
-				if (CheckTetris(m_oCurrentTetris.m_dwPosY + j, m_oCurrentTetris.m_dwPosX + i))
+				if (CheckTetris(m_oCurrentTetris.m_dwPosX + j, m_oCurrentTetris.m_dwPosY + i))
 				{
 					return false;
 				}
@@ -575,7 +575,7 @@ public class TetrisData
 				{
 					continue;
 				}
-				if (CheckTetris(m_oCurrentTetris.m_dwPosY + j, m_oCurrentTetris.m_dwPosX + i))
+				if (CheckTetris(m_oCurrentTetris.m_dwPosX + j, m_oCurrentTetris.m_dwPosY + i))
 				{
 					return false;
 				}

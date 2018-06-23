@@ -96,7 +96,15 @@ public class SessionObject : MonoBehaviour
 
 	public bool Send(byte[] pBuf, uint dwLen)
 	{
-		return m_pSession.Send(pBuf, dwLen);
+		if (m_pSession != null)
+		{
+			return m_pSession.Send(pBuf, dwLen);
+		}
+		else
+		{
+			SampleDebuger.LogError("session is null");
+			return false;
+		}
 	}
 
 	public void OnConnect()

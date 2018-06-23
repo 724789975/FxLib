@@ -48,6 +48,18 @@ public class GameLogic : SingletonObject<GameLogic>
 			SampleDebuger.Log("您按下了D键");
 			TetrisDataManager.Instance().proUserTetrisData.RightTetris();
 		}
+
+		if (Input.GetKeyDown(KeyCode.H))
+		{
+			SampleDebuger.Log("您按下了H键");
+			TetrisDataManager.Instance().proUserTetrisData.LeftRotation();
+		}
+
+		if (Input.GetKeyDown(KeyCode.J))
+		{
+			SampleDebuger.Log("您按下了J键");
+			TetrisDataManager.Instance().proUserTetrisData.RightRotation();
+		}
 #endif
 
 		TetrisDataManager.Instance().proUserTetrisData.Update(Time.deltaTime);

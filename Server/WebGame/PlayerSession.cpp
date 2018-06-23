@@ -182,12 +182,12 @@ bool CPlayerSession::OnPlayerRequestRotation(CPlayerSession& refSession, google:
 	{
 		case GameProto::ERD_Left:
 		{
-			pPlayer->GetTetrisData().LeftTetris();
+			pPlayer->GetTetrisData().LeftRotation();
 		}
 		break;
 		case GameProto::ERD_Right:
 		{
-			pPlayer->GetTetrisData().LeftTetris();
+			pPlayer->GetTetrisData().RightRotation();
 		}
 		break;
 		default:

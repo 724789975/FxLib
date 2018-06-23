@@ -31,8 +31,8 @@ static const unsigned int g_dwTetrisTable[7][4][7][4]
 			{ 0x0,	0xFFFFFFFF, 0x0,	 0x0, },
 			{ 0x0,	0xFFFFFFFF, 0x0,	 0x0, },
 			{ 0x0,	0xFFFFFFF0, 0x0,	 0x0, },	//下边界
-			{ 0x0,	0xFFFFFFF1, 0x0,	 0x0, },	//左边界
-			{ 0x0,	0xFFFFFFF1,			0x0,			0x0, },	//右边界
+			{ 0xFFFFFFF1,  0xFFFFFFF1, 0xFFFFFFF1,     0xFFFFFFF1, },	//左边界
+			{ 0xFFFFFFF1,  0xFFFFFFF1,         0xFFFFFFF1,            0xFFFFFFF1, },	//右边界
 		},
 		{
 			{ 0x0,			0x0,		0x0,			0x0, },
@@ -49,8 +49,8 @@ static const unsigned int g_dwTetrisTable[7][4][7][4]
 			{ 0x0,	0xFFFFFFFF, 0x0,	 0x0, },
 			{ 0x0,	0xFFFFFFFF, 0x0,	 0x0, },
 			{ 0x0,	0xFFFFFFF0, 0x0,	 0x0, },	//下边界
-			{ 0x0,	0xFFFFFFF1, 0x0,	 0x0, },	//左边界
-			{ 0x0,	0xFFFFFFF1,			0x0,			0x0, },	//右边界
+			{ 0xFFFFFFF1,  0xFFFFFFF1, 0xFFFFFFF1,     0xFFFFFFF1, },	//左边界
+			{ 0xFFFFFFF1,  0xFFFFFFF1,         0xFFFFFFF1,            0xFFFFFFF1, },	//右边界
 		},
 		{
 			{ 0x0,			0x0,		0x0,			0x0, },
@@ -417,7 +417,7 @@ void TetrisBase::LeftRotation()
 			{
 				continue;
 			}
-			if (CheckTetris(m_oCurrentTetris.m_dwPosY + j, m_oCurrentTetris.m_dwPosX + i))
+			if (CheckTetris(m_oCurrentTetris.m_dwPosX + j, m_oCurrentTetris.m_dwPosY + i))
 			{
 				return;
 			}
@@ -438,7 +438,7 @@ void TetrisBase::RightRotation()
 			{
 				continue;
 			}
-			if (CheckTetris(m_oCurrentTetris.m_dwPosY + j, m_oCurrentTetris.m_dwPosX + i))
+			if (CheckTetris(m_oCurrentTetris.m_dwPosX + j, m_oCurrentTetris.m_dwPosY + i))
 			{
 				return;
 			}
@@ -477,11 +477,8 @@ bool TetrisBase::CheckLeftTetris()
 		}
 
 		int dwCheckX = m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) - 1;
-		if (dwCheckX < 0)
-		{
-			return true;
-		}
-		if (CheckTetris(m_oCurrentTetris.m_dwPosY + i, dwCheckX))
+		int dwCheckY = m_oCurrentTetris.m_dwPosY - (int)TETRIS_UNIT + i;
+		if (CheckTetris(dwCheckX, dwCheckY))
 		{
 			return true;
 		}
@@ -501,11 +498,8 @@ bool TetrisBase::CheckRightTetris()
 		}
 
 		int dwCheckX = m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) + 1;
-		if (dwCheckX > COLUMN_NUM)
-		{
-			return true;
-		}
-		if (CheckTetris(m_oCurrentTetris.m_dwPosY + i, dwCheckX))
+		int dwCheckY = m_oCurrentTetris.m_dwPosY - (int)TETRIS_UNIT + i;
+		if (CheckTetris(dwCheckX, dwCheckY))
 		{
 			return true;
 		}
