@@ -445,6 +445,10 @@ public class TetrisData
 		{
 			return true;
 		}
+		if (dwRow < 0)
+		{
+			return true;
+		}
 		if (dwCol >= s_dwColumn)
 		{
 			return true;

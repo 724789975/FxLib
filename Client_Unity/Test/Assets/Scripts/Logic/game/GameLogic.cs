@@ -17,7 +17,52 @@ public class GameLogic : SingletonObject<GameLogic>
 	{
 		m_oData = TetrisDataManager.Instance().proUserTetrisData;
 	}
-	
+
+	public void DownTetris()
+	{
+		if (TetrisData.proState != GameProto.EGameSceneState.EssGaming)
+		{
+			return;
+		}
+		TetrisDataManager.Instance().proUserTetrisData.DownTetris();
+	}
+
+	public void LeftTetris()
+	{
+		if (TetrisData.proState != GameProto.EGameSceneState.EssGaming)
+		{
+			return;
+		}
+		TetrisDataManager.Instance().proUserTetrisData.LeftTetris();
+	}
+
+	public void RightTetris()
+	{
+		if (TetrisData.proState != GameProto.EGameSceneState.EssGaming)
+		{
+			return;
+		}
+		TetrisDataManager.Instance().proUserTetrisData.RightTetris();
+	}
+
+	public void LeftRotation()
+	{
+		if (TetrisData.proState != GameProto.EGameSceneState.EssGaming)
+		{
+			return;
+		}
+		TetrisDataManager.Instance().proUserTetrisData.LeftRotation();
+	}
+
+	public void RightRotation()
+	{
+		if (TetrisData.proState != GameProto.EGameSceneState.EssGaming)
+		{
+			return;
+		}
+		TetrisDataManager.Instance().proUserTetrisData.RightRotation();
+	}
+
 	// Update is called once per frame
 	void Update ()
 	{

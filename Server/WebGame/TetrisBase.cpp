@@ -478,6 +478,10 @@ bool TetrisBase::CheckTetris(int dwCol, int dwRow)
 	{
 		return true;
 	}
+	if (dwRow < 0)
+	{
+		return true;
+	}
 	if (dwCol >= COLUMN_NUM)
 	{
 		return true;
