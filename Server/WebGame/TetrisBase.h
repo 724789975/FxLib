@@ -43,6 +43,7 @@ public:
 	void RightTetris();
 	void LeftRotation();
 	void RightRotation();
+	void EraseTetris(int dwRow);
 
 	float GetTick() { return m_fTick; }
 
@@ -51,6 +52,7 @@ protected:
 	virtual bool CheckLeftTetris();
 	virtual bool CheckRightTetris();
 	virtual bool CheckDownTetris();
+	virtual bool CheckErase(int& refRow);
 
 	virtual void OnEnd() = 0;
 

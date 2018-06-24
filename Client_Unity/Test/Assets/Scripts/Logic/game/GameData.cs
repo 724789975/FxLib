@@ -391,6 +391,48 @@ public class TetrisData
 		return dwTetrisPool;
 	}
 
+	public bool CheckErase(ref int dwRow)
+	{
+		for (int i = 0; i < s_dwRow; ++i)
+		{
+			bool bErase = true;
+			for (int j = 0; j < s_dwColumn; ++j)
+			{
+				if (m_dwTetrisPool[i, j] == 0)
+				{
+					bErase = false;
+					break;
+				}
+			}
+			if (bErase)
+			{
+				dwRow = i;
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	public void EraseTetris(int dwRow)
+	{
+		for (int i = 0; i < s_dwColumn; ++i)
+		{
+			m_dwTetrisPool[dwRow, i] = 0;
+		}
+		for (int i = dwRow; i > 0; --i)
+		{
+			for (int j = 0; j < s_dwColumn; ++j)
+			{
+				m_dwTetrisPool[i, j] = m_dwTetrisPool[i - 1, j];
+			}
+		}
+		for (int i = 0; i < s_dwColumn; ++i)
+		{
+			m_dwTetrisPool[0, i] = 0;
+		}
+	}
+
 	/// <summary>
 	/// 检查下面是不是有块
 	/// </summary>
@@ -515,6 +557,12 @@ public class TetrisData
 			{
 				OnEnd();
 				return true;
+			}
+
+			int dwRow = -1;
+			while (CheckErase(ref dwRow))
+			{
+				EraseTetris(dwRow);
 			}
 
 			m_oCurrentTetris = m_oNextTetris;

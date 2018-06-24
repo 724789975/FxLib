@@ -359,6 +359,12 @@ void TetrisBase::DownTetris()
 			return;
 		}
 
+		int dwRow = -1;
+		while (CheckErase(dwRow))
+		{
+			EraseTetris(dwRow);
+		}
+
 		m_oCurrentTetris = m_oNextTetris;
 		m_oNextTetris.m_dwTetrisShape = rand() % SHAPE_COUNT;
 		m_oNextTetris.m_dwTetrisDirect = rand() % 4;
@@ -447,6 +453,25 @@ void TetrisBase::RightRotation()
 	m_oCurrentTetris.m_dwTetrisDirect = dwTempDir;
 }
 
+void TetrisBase::EraseTetris(int dwRow)
+{
+	for (int i = 0; i < COLUMN_NUM; ++i)
+	{
+		m_dwTetrisPools[dwRow][i] = 0;
+	}
+	for (int i = dwRow; i > 0; --i)
+	{
+		for (int j = 0; j < COLUMN_NUM; ++j)
+		{
+			m_dwTetrisPools[i][j] = m_dwTetrisPools[i - 1][j];
+		}
+	}
+	for (int i = 0; i < COLUMN_NUM; ++i)
+	{
+		m_dwTetrisPools[0][i] = 0;
+	}
+}
+
 bool TetrisBase::CheckTetris(int dwCol, int dwRow)
 {
 	if (dwRow >= ROW_NUM)
@@ -524,6 +549,29 @@ bool TetrisBase::CheckDownTetris()
 			return true;
 		}
 	}
+	return false;
+}
+
+bool TetrisBase::CheckErase(int& refRow)
+{
+	for (int i = 0; i < ROW_NUM; ++i)
+	{
+		bool bErase = true;
+		for (int j = 0; j < COLUMN_NUM; ++j)
+		{
+			if (m_dwTetrisPools[i][j] == 0)
+			{
+				bErase = false;
+				break;
+			}
+		}
+		if (bErase)
+		{
+			refRow = i;
+			return true;
+		}
+	}
+
 	return false;
 }
 
