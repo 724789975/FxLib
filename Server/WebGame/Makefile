@@ -27,7 +27,7 @@ ARFLAGS			= -rc
 #  Commands
 CODE_DIR = ./ ../common
 INCLUDE_DIR =./ ../gflags ../meta_header/ ../protobuf-3.5.1 ../redis-3.2.1/deps/hiredis/
-LIB_FILE = -L../Debug -Lcrypto -lpthread -lNet -lgflags -lprotobuf -lRedisCon -lhiredis
+LIB_FILE = -L../Debug -Lcrypto -lpthread -lNet -lgflags -lprotobuf -lRedisCon -lhiredis -ljsoncpp
 OUTPUT_DIR =../Debug
 OUTPUT = WebGame
 #==========================================================
