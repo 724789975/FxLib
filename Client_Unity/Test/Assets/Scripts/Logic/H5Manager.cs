@@ -53,7 +53,7 @@ public class H5Manager : SingletonObject<H5Manager>
 	{
         if (m_pLoginSession != null)
         {
-            m_pLoginSession.m_pSession.Close();
+            m_pLoginSession.Close();
         }
 
         m_pLoginSession = gameObject.AddComponent<SessionObject>();
@@ -69,7 +69,7 @@ public class H5Manager : SingletonObject<H5Manager>
 	{
 		if (m_pGameSession != null)
 		{
-			m_pGameSession.m_pSession.Close();
+			m_pGameSession.Close();
 		}
 
 		m_pGameSession = gameObject.AddComponent<SessionObject>();
