@@ -66,6 +66,14 @@ public class SessionObject : MonoBehaviour
 		return true;
 	}
 
+	public void Close()
+	{
+		if (m_pSession != null)
+		{
+			m_pSession.Close();
+		}
+	}
+
 	public void OnClose()
 	{
 		foreach (var item in m_pfOnClose)
