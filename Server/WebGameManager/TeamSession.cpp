@@ -51,7 +51,7 @@ bool StartProccess(unsigned long long qwTeamId, unsigned int dwTeamServerId, cha
 	sprintf(szRedisPw, "%s", FLAGS_redis_pw.c_str());
 	char *arg[] = { szExePath, "--game_manager_ip", szServerIp,
 		"--game_manager_port", szServerPort, "--team_id", szTeamId,
-		"--redis_ip", szRedisIp, "--redis_pw", szRedisPort, "--redis_port", szRedisPort,
+		"--redis_ip", szRedisIp, "--redis_pw", szRedisPw, "--redis_port", szRedisPort,
 		"--team_server_id", szTeamServerId, "--roles", szRoles, 0 };
 	LogExe(LogLv_Debug, "%s %s %s %s %s %s %s %s %s %s %s",
 		arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], arg[6], arg[7], arg[8], arg[9], arg[10], arg[11], arg[12], arg[13], arg[14], arg[15], arg[16]);

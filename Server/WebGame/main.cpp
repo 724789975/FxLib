@@ -20,7 +20,7 @@ DEFINE_uint32(team_server_id, 0, "team_server_id");
 DEFINE_uint32(game_type, 1, "game_type");
 DEFINE_string(redis_ip, "127.0.0.1", "redis ip");
 DEFINE_string(redis_pw, "1", "redis password");
-DEFINE_uint32(redis_port, 16379, "game_type");
+DEFINE_uint32(redis_port, 16379, "redis port");
 
 void EndFun(int n)
 {
