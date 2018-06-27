@@ -21,7 +21,7 @@ public:
 	virtual void        Release(void);
 	virtual const char* GetModuleName(void);
 
-	virtual bool		Open(const char* szHost, unsigned int dwPort, std::string szPassword, unsigned int dwRedisId);
+	virtual bool		Open(std::string szHost, unsigned int dwPort, std::string szPassword, unsigned int dwRedisId);
 	virtual void        Close(UINT32 dwDBId);
 	virtual bool		AddQuery(IRedisQuery*poQuery);
 	virtual bool        Run(UINT32 dwCount);

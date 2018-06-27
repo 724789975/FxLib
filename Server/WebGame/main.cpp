@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 
 	GetTimeHandler()->AddDelayTimer(FLAGS_game_time, &oGameEnd);
 
-	if (!FxRedisGetModule()->Open(FLAGS_redis_ip.c_str(), FLAGS_redis_port, FLAGS_redis_pw, 0))
+	if (!FxRedisGetModule()->Open(FLAGS_redis_ip, FLAGS_redis_port, FLAGS_redis_pw, 0))
 	{
 		LogExe(LogLv_Error, "%s", "redis connected failed~~~~");
 		goto STOP;

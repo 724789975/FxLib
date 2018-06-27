@@ -80,7 +80,7 @@ class IRedisModule
 public:
 	virtual						~IRedisModule() {}
 
-	virtual bool				Open(const char* szHost, unsigned int dwPort, std::string szPassword, unsigned int dwRedisId) = 0;
+	virtual bool				Open(std::string szHost, unsigned int dwPort, std::string szPassword, unsigned int dwRedisId) = 0;
 
 	virtual void				Close(unsigned int dwDBId) = 0;
 

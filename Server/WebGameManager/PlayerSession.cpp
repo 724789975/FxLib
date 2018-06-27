@@ -10,8 +10,6 @@
 #include<unistd.h>
 #endif // WIN32
 
-
-
 const static unsigned int g_dwPlayerSessionBuffLen = 64 * 1024;
 static char g_pPlayerSessionBuf[g_dwPlayerSessionBuffLen];
 

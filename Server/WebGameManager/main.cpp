@@ -18,6 +18,9 @@ DEFINE_uint32(server_port, 31001, "server port");
 DEFINE_uint32(player_port, 31002, "player port");
 DEFINE_string(center_ip, "127.0.0.1", "center ip");
 DEFINE_uint32(center_port, 40000, "center port");
+DEFINE_string(redis_ip, "127.0.0.1", "redis ip");
+DEFINE_string(redis_pw, "1", "redis password");
+DEFINE_uint32(redis_port, 16379, "game_type");
 
 void EndFun(int n)
 {

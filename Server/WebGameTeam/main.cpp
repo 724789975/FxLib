@@ -61,7 +61,7 @@ int main(int argc, char **argv)
 		g_bRun = false;
 		goto STOP;
 	}
-	if (!FxRedisGetModule()->Open(FLAGS_redis_ip.c_str(), FLAGS_redis_port, FLAGS_redis_pw, 0))
+	if (!FxRedisGetModule()->Open(FLAGS_redis_ip, FLAGS_redis_port, FLAGS_redis_pw, 0))
 	{
 		LogExe(LogLv_Info, "%s", "redis connected failed~~~~");
 		goto STOP;

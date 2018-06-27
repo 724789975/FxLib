@@ -23,7 +23,7 @@ const char * FxRedisModule::GetModuleName(void)
 	return "FXREDIS";
 }
 
-bool FxRedisModule::Open(const char* szHost, unsigned int dwPort, std::string szPassword, unsigned int dwRedisId)
+bool FxRedisModule::Open(std::string szHost, unsigned int dwPort, std::string szPassword, unsigned int dwRedisId)
 {
 	FxRedisClient *poMySqlClient = FindDBClient(dwRedisId);
 	if(poMySqlClient != NULL)

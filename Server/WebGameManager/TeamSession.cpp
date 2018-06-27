@@ -5,6 +5,12 @@
 #include "GameServer.h"
 #include "msg_proto/web_game.pb.h"
 
+#include "gflags/gflags.h"
+
+DECLARE_string(redis_ip);
+DECLARE_string(redis_pw);
+DECLARE_uint32(redis_port);
+
 const static unsigned int g_dwTeamSessionBuffLen = 64 * 1024;
 static char g_pTeamSessionBuf[g_dwTeamSessionBuffLen];
 
@@ -17,8 +23,8 @@ bool StartProccess(unsigned long long qwTeamId, unsigned int dwTeamServerId, cha
 	shell.lpFile = "WebGame.exe";
 	char szBuffer[512] = { 0 };
 	GetExePath();
-	sprintf(szBuffer, "--game_manager_ip %s --game_manager_port %d --team_id %llu --team_server_id %d --roles %s",
-		"127.0.0.1", GameServer::Instance()->GetServerListenPort(), qwTeamId, dwTeamServerId, szRoles);
+	sprintf(szBuffer, "--game_manager_ip %s --game_manager_port %d --team_id %llu --team_server_id %d --roles %s --redis_ip %s --redis_pw %s --redis_port %d",
+		"127.0.0.1", GameServer::Instance()->GetServerListenPort(), qwTeamId, dwTeamServerId, szRoles, FLAGS_redis_ip.c_str(), FLAGS_redis_pw.c_str(), FLAGS_redis_port);
 
 	LogExe(LogLv_Debug, "%s", szBuffer);
 	shell.lpParameters = szBuffer;
@@ -37,10 +43,18 @@ bool StartProccess(unsigned long long qwTeamId, unsigned int dwTeamServerId, cha
 	sprintf(szTeamId, "%llu", qwTeamId);
 	char szTeamServerId[32] = { 0 };
 	sprintf(szTeamServerId, "%d", dwTeamServerId);
+	char szRedisPort[32] = { 0 };
+	sprintf(szRedisPort, "%d", FLAGS_redis_port);
+	char szRedisIp[32] = { 0 };
+	sprintf(szRedisIp, "%s", FLAGS_redis_ip.c_str());
+	char szRedisPw[32] = { 0 };
+	sprintf(szRedisPw, "%s", FLAGS_redis_pw.c_str());
 	char *arg[] = { szExePath, "--game_manager_ip", szServerIp,
-		"--game_manager_port", szServerPort, "--team_id", szTeamId, "--team_server_id", szTeamServerId, "--roles", szRoles, 0 };
+		"--game_manager_port", szServerPort, "--team_id", szTeamId,
+		"--redis_ip", szRedisIp, "--redis_pw", szRedisPort, "--redis_port", szRedisPort,
+		"--team_server_id", szTeamServerId, "--roles", szRoles, 0 };
 	LogExe(LogLv_Debug, "%s %s %s %s %s %s %s %s %s %s %s",
-		arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], arg[6], arg[7], arg[8], arg[9], arg[10]);
+		arg[0], arg[1], arg[2], arg[3], arg[4], arg[5], arg[6], arg[7], arg[8], arg[9], arg[10], arg[11], arg[12], arg[13], arg[14], arg[15], arg[16]);
 	int pid = vfork();
 	if (pid < 0)
 	{
