@@ -118,6 +118,8 @@ public class GameControler : SingletonObject<GameControler>
 			return;
 		}
 		SampleDebuger.Log("game prepare time left : " + oRet.DwLeftTime.ToString());
+
+		PrepareTime.SetPrepareTime(oRet.DwLeftTime);
 	}
 
 	public void OnGameNotifyPlayerGameReadyTime(byte[] pBuf)
@@ -129,7 +131,9 @@ public class GameControler : SingletonObject<GameControler>
 			return;
 		}
 		SampleDebuger.Log("game ready time left : " + oRet.DwLeftTime.ToString());
-	}
+
+		ReadyTime.SetReadyTime(oRet.DwLeftTime);
+    }
 
 	public void OnGameNotifyPlayerGameConfig(byte[] pBuf)
 	{
@@ -209,6 +213,8 @@ public class GameControler : SingletonObject<GameControler>
 		}
 		SampleDebuger.LogBlue("game state : " + oRet.State.ToString());
 
+		GameData.Instance().SetGameSceneState(oRet.State);
+
 		switch (oRet.State)
 		{
 			case GameProto.EGameSceneState.EssNone:
@@ -225,7 +231,30 @@ public class GameControler : SingletonObject<GameControler>
 				}
 				break;
 			case GameProto.EGameSceneState.EssGameReady:
+				{
+					if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameConstant.g_szGameScene)
+					{
+						break;
+					}
+					AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szGameScene, delegate ()
+					{
+					}
+					);
+				}
+				break;
 			case GameProto.EGameSceneState.EssGaming:
+				{
+					if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameConstant.g_szGameScene)
+					{
+						ReadyTime.SetGameBegin();
+                        break;
+					}
+					AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szGameScene, delegate ()
+					{
+					}
+					);
+				}
+				break;
 			case GameProto.EGameSceneState.EssTransact:
 				{
 					if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameConstant.g_szGameScene)
@@ -295,4 +324,5 @@ public class GameControler : SingletonObject<GameControler>
 
 	public SessionObject proSession { get{ return m_pSession; } }
 	public SessionObject m_pSession;
+	public GameData m_pGameData = GameData.Instance();
 }

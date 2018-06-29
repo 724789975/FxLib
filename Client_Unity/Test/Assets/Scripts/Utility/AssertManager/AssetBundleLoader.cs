@@ -80,15 +80,23 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 
 	public string GetBundleUrl(string fileName)
 	{
-		string url = "";
+		string szUrl = "";
+
 #if UNITY_EDITOR
-		url = Application.dataPath + "/../AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
+		szUrl = Application.dataPath + "/../AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
 		//return Application.streamingAssetsPath + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
+#elif UNITY_WEBGL
+		szUrl = Application.streamingAssetsPath + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
 #else
-		url = Application.streamingAssetsPath + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
+		szUrl = Application.streamingAssetsPath + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
+		string szUpdatePath = Application.persistentDataPath + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
+		if (File.Exists(szUpdatePath))
+		{
+			szUrl = szUpdatePath;
+		}
 #endif
-		SampleDebuger.LogGreen("bundle url : " + url);
-		return url;
+		SampleDebuger.LogGreen("bundle url : " + szUrl);
+		return szUrl;
 	}
 
 	public void DeleteUpdateBundle()

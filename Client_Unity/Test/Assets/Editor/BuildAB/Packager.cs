@@ -121,7 +121,9 @@ public class Packager
     {
 		string resPath = GetABPath();
         if (!Directory.Exists(resPath))
+		{
             Directory.CreateDirectory(resPath);
+		}
 
         if (Packager.bAssetBundle)
 		{

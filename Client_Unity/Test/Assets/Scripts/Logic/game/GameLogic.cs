@@ -75,7 +75,7 @@ public class GameLogic : SingletonObject<GameLogic>
 			return;
 		}
 
-#if UNITY_STANDALONE_WIN
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR
 		if (Input.GetKey(KeyCode.S))
 		{
 			SampleDebuger.Log("您按下了S键");

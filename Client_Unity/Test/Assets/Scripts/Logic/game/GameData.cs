@@ -30,6 +30,14 @@ public class Tetris
 }
 
 [System.Serializable]
+public class GameData : Singleton<GameData>
+{
+	public void SetGameSceneState(GameProto.EGameSceneState eState) { m_eState = eState; }
+	public GameProto.EGameSceneState proGameSceneState { get{ return m_eState; }}
+	public GameProto.EGameSceneState m_eState;
+}
+
+[System.Serializable]
 public class TetrisData
 {
 	public const uint s_dwColumn = 12;

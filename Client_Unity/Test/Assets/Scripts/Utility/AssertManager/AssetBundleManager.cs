@@ -236,12 +236,14 @@ public class AssetBundleManager : MonoBehaviour
         }
         string url = AssetBundleLoader.Instance().GetBundleUrl(assetBundleName);
 		SampleDebuger.Log("ab url: " + url);
-#if UNITY_WEBGL
+#if UNITY_WEBGL && !UNITY_EDITOR
+		WWW request = new WWW(url + "?" + VersionManager.Instance().GetVersionUrl());
+#elif UNITY_WEBGL
 		WWW request = new WWW(url);
 #else
 		AssetBundleCreateRequest request = AssetBundle.LoadFromFileAsync(url);
 #endif
-        m_LoadingRequest.Add(assetBundleName, request);
+		m_LoadingRequest.Add(assetBundleName, request);
     }
 
     // Where we get all the dependencies and load them all.

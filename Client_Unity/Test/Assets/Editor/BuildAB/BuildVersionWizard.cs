@@ -246,7 +246,7 @@ public class BuildWindow : EditorWindow
 			Debug.Log(curSymbol);
 		}
 		GUILayout.Space(20);
-		// =========================== 5. 生成安装包    ===========================
+		// =========================== 4. 拷贝资源    ===========================
 		if (GUILayout.Button("拷贝资源 ", GUILayout.Height(30)))
 		{
 
