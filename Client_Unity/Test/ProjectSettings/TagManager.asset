@@ -13,9 +13,9 @@ TagManager:
   - UI
   - 
   - 
-  - 
-  - 
-  - 
+  - UIEffect
+  - Game
+  - GameEffect
   - 
   - 
   - 
@@ -38,6 +38,18 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: UIEffect
+    uniqueID: 240087411
+    locked: 0
+  - name: UI
+    uniqueID: 2681609241
+    locked: 0
+  - name: GameEffect
+    uniqueID: 953903687
+    locked: 0
+  - name: Game
+    uniqueID: 852375699
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0

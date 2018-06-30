@@ -41,9 +41,12 @@ public class ReadyTime : SingletonObject<ReadyTime>
 	{
 		m_textReady.text = "游戏开始!!!";
 		yield return new WaitForSeconds(0.5f);
+
+		m_goReadyEffect.SetActive(true);
 		Destroy(gameObject);
 	}
 
 	public UnityEngine.UI.Text m_textReady;
+	public GameObject m_goReadyEffect;
 }
 
