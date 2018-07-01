@@ -121,36 +121,37 @@ namespace GameProto {
             "ASABKA0SMgoNY29tbW9uX2NvbmZpZxgCIAEoCzIbLkdhbWVQcm90by5HYW1l",
             "Q29uZmlnQ29tbW9uIm0KHEdhbWVOb3RpZnlQbGF5ZXJHYW1lUm9sZURhdGES",
             "FAoMZHdfZ2FtZV90eXBlGAEgASgNEjcKEGNvbW1vbl9yb2xlX2RhdGEYAiAB",
-            "KAsyHS5HYW1lUHJvdG8uR2FtZUNvbW1vblJvbGVEYXRhInAKHUdhbWVOb3Rp",
-            "ZnlQbGF5ZXJHYW1lU2NlbmVJbmZvEhQKDGR3X2dhbWVfdHlwZRgBIAEoDRI5",
-            "ChFjb21tb25fc2NlbmVfaW5mbxgCIAEoCzIeLkdhbWVQcm90by5HYW1lQ29t",
-            "bW9uU2NlbmVJbmZvIjMKG0dhbWVOb3RpZnlQbGF5ZXJQcmVwYXJlVGltZRIU",
-            "Cgxkd19sZWZ0X3RpbWUYASABKA0iNQodR2FtZU5vdGlmeVBsYXllckdhbWVS",
-            "ZWFkeVRpbWUSFAoMZHdfbGVmdF90aW1lGAEgASgNIkYKGUdhbWVOb3RpZnlQ",
-            "bGF5ZXJHYW1lU3RhdGUSKQoFc3RhdGUYASABKA4yGi5HYW1lUHJvdG8uRUdh",
-            "bWVTY2VuZVN0YXRlIpYBCh5HYW1lTm90aWZ5UGxheWVyR2FtZUluaXRUZXRy",
-            "aXMSFAoMZHdfcGxheWVyX2lkGAEgASgEEg4KBmZfdGljaxgCIAEoAhImCgtj",
-            "dXJyX3RldHJpcxgDIAEoCzIRLkdhbWVQcm90by5UZXRyaXMSJgoLbmV4dF90",
-            "ZXRyaXMYBCABKAsyES5HYW1lUHJvdG8uVGV0cmlzImoKGkdhbWVOb3RpZnlQ",
-            "bGF5ZXJOZXh0VGV0cmlzEhQKDGR3X3BsYXllcl9pZBgBIAEoBBIOCgZmX3Rp",
-            "Y2sYAiABKAISJgoLbmV4dF90ZXRyaXMYAyABKAsyES5HYW1lUHJvdG8uVGV0",
-            "cmlzIiwKFEdhbWVOb3RpZnlQbGF5ZXJEZWFkEhQKDGR3X3BsYXllcl9pZBgB",
-            "IAEoBCKKAQoKU2VydmVySW5mbxIUCgxkd19zZXJ2ZXJfaWQYASABKA0SFAoM",
-            "c3pfbGlzdGVuX2lwGAIgASgJEhQKDGR3X3RlYW1fcG9ydBgDIAEoDRIjChtk",
-            "d19nYW1lX3NlcnZlcl9tYW5hZ2VyX3BvcnQYBCABKA0SFQoNZHdfbG9naW5f",
-            "cG9ydBgFIAEoDSpJCgtFU2VydmVyVHlwZRILCgdTVF9OT05FEAASDAoIU1Rf",
-            "TG9naW4QARILCgdTVF9UZWFtEAISEgoOU1RfR2FtZU1hbmFnZXIQAyonCglF",
-            "VGVhbVR5cGUSCwoHVFRfTk9ORRAAEg0KCVRUX05vcm1hbBABKowCCgpFRXJy",
-            "b3JDb2RlEgsKB0VDX05PTkUQABIUChBFQ19BbHJlYWR5SW5UZWFtEAESFgoS",
-            "RUNfTWFrZVRlYW1Ob3RJZGxlEAISFwoTRUNfQ2Fubm90RmluZFBsYXllchAD",
-            "Eg8KC0VDX05vVGVhbUlkEAQSEAoMRUNfTm90TGVhZGVyEAUSEwoPRUNfVGVh",
-            "bUhhc1N0YXJ0EAYSGgoWRUNfTm9HYW1lTWFuYWdlclNlcnZlchAHEhMKD0VD",
-            "X05vVGVhbVNlcnZlchAIEhQKEEVDX05vTG9naW5TZXJ2ZXIQCRIWChJFQ19Q",
-            "bGF5ZXJOb3RPbmxpbmUQChITCg9FQ19GYWlsSW50b1RlYW0QCypJCg5FTW92",
-            "ZURpcmVjdGlvbhIMCghFTURfTk9ORRAAEgwKCEVNRF9Eb3duEAESDAoIRU1E",
-            "X0xlZnQQAhINCglFTURfUmlnaHQQAyo/ChJFUm90YXRpb25EaXJlY3Rpb24S",
-            "DAoIRVJEX05PTkUQABIMCghFUkRfTGVmdBABEg0KCUVSRF9SaWdodBACYgZw",
-            "cm90bzM="));
+            "KAsyHS5HYW1lUHJvdG8uR2FtZUNvbW1vblJvbGVEYXRhIpsBCh1HYW1lTm90",
+            "aWZ5UGxheWVyR2FtZVNjZW5lSW5mbxIUCgxkd19nYW1lX3R5cGUYASABKA0S",
+            "KQoFc3RhdGUYAiABKA4yGi5HYW1lUHJvdG8uRUdhbWVTY2VuZVN0YXRlEjkK",
+            "EWNvbW1vbl9zY2VuZV9pbmZvGAMgASgLMh4uR2FtZVByb3RvLkdhbWVDb21t",
+            "b25TY2VuZUluZm8iMwobR2FtZU5vdGlmeVBsYXllclByZXBhcmVUaW1lEhQK",
+            "DGR3X2xlZnRfdGltZRgBIAEoDSI1Ch1HYW1lTm90aWZ5UGxheWVyR2FtZVJl",
+            "YWR5VGltZRIUCgxkd19sZWZ0X3RpbWUYASABKA0iRgoZR2FtZU5vdGlmeVBs",
+            "YXllckdhbWVTdGF0ZRIpCgVzdGF0ZRgBIAEoDjIaLkdhbWVQcm90by5FR2Ft",
+            "ZVNjZW5lU3RhdGUilgEKHkdhbWVOb3RpZnlQbGF5ZXJHYW1lSW5pdFRldHJp",
+            "cxIUCgxkd19wbGF5ZXJfaWQYASABKAQSDgoGZl90aWNrGAIgASgCEiYKC2N1",
+            "cnJfdGV0cmlzGAMgASgLMhEuR2FtZVByb3RvLlRldHJpcxImCgtuZXh0X3Rl",
+            "dHJpcxgEIAEoCzIRLkdhbWVQcm90by5UZXRyaXMiagoaR2FtZU5vdGlmeVBs",
+            "YXllck5leHRUZXRyaXMSFAoMZHdfcGxheWVyX2lkGAEgASgEEg4KBmZfdGlj",
+            "axgCIAEoAhImCgtuZXh0X3RldHJpcxgDIAEoCzIRLkdhbWVQcm90by5UZXRy",
+            "aXMiLAoUR2FtZU5vdGlmeVBsYXllckRlYWQSFAoMZHdfcGxheWVyX2lkGAEg",
+            "ASgEIooBCgpTZXJ2ZXJJbmZvEhQKDGR3X3NlcnZlcl9pZBgBIAEoDRIUCgxz",
+            "el9saXN0ZW5faXAYAiABKAkSFAoMZHdfdGVhbV9wb3J0GAMgASgNEiMKG2R3",
+            "X2dhbWVfc2VydmVyX21hbmFnZXJfcG9ydBgEIAEoDRIVCg1kd19sb2dpbl9w",
+            "b3J0GAUgASgNKkkKC0VTZXJ2ZXJUeXBlEgsKB1NUX05PTkUQABIMCghTVF9M",
+            "b2dpbhABEgsKB1NUX1RlYW0QAhISCg5TVF9HYW1lTWFuYWdlchADKicKCUVU",
+            "ZWFtVHlwZRILCgdUVF9OT05FEAASDQoJVFRfTm9ybWFsEAEqjAIKCkVFcnJv",
+            "ckNvZGUSCwoHRUNfTk9ORRAAEhQKEEVDX0FscmVhZHlJblRlYW0QARIWChJF",
+            "Q19NYWtlVGVhbU5vdElkbGUQAhIXChNFQ19DYW5ub3RGaW5kUGxheWVyEAMS",
+            "DwoLRUNfTm9UZWFtSWQQBBIQCgxFQ19Ob3RMZWFkZXIQBRITCg9FQ19UZWFt",
+            "SGFzU3RhcnQQBhIaChZFQ19Ob0dhbWVNYW5hZ2VyU2VydmVyEAcSEwoPRUNf",
+            "Tm9UZWFtU2VydmVyEAgSFAoQRUNfTm9Mb2dpblNlcnZlchAJEhYKEkVDX1Bs",
+            "YXllck5vdE9ubGluZRAKEhMKD0VDX0ZhaWxJbnRvVGVhbRALKkkKDkVNb3Zl",
+            "RGlyZWN0aW9uEgwKCEVNRF9OT05FEAASDAoIRU1EX0Rvd24QARIMCghFTURf",
+            "TGVmdBACEg0KCUVNRF9SaWdodBADKj8KEkVSb3RhdGlvbkRpcmVjdGlvbhIM",
+            "CghFUkRfTk9ORRAAEgwKCEVSRF9MZWZ0EAESDQoJRVJEX1JpZ2h0EAJiBnBy",
+            "b3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::GameProto.WebDataReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::GameProto.EServerType), typeof(global::GameProto.ETeamType), typeof(global::GameProto.EErrorCode), typeof(global::GameProto.EMoveDirection), typeof(global::GameProto.ERotationDirection), }, new pbr::GeneratedClrTypeInfo[] {
@@ -210,7 +211,7 @@ namespace GameProto {
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameAckPlayerEnter), global::GameProto.GameAckPlayerEnter.Parser, new[]{ "DwResult", "DwGameType" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameConfig), global::GameProto.GameNotifyPlayerGameConfig.Parser, new[]{ "DwGameType", "CommonConfig" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameRoleData), global::GameProto.GameNotifyPlayerGameRoleData.Parser, new[]{ "DwGameType", "CommonRoleData" }, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameSceneInfo), global::GameProto.GameNotifyPlayerGameSceneInfo.Parser, new[]{ "DwGameType", "CommonSceneInfo" }, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameSceneInfo), global::GameProto.GameNotifyPlayerGameSceneInfo.Parser, new[]{ "DwGameType", "State", "CommonSceneInfo" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerPrepareTime), global::GameProto.GameNotifyPlayerPrepareTime.Parser, new[]{ "DwLeftTime" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameReadyTime), global::GameProto.GameNotifyPlayerGameReadyTime.Parser, new[]{ "DwLeftTime" }, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::GameProto.GameNotifyPlayerGameState), global::GameProto.GameNotifyPlayerGameState.Parser, new[]{ "State" }, null, null, null),
@@ -9364,6 +9365,7 @@ namespace GameProto {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public GameNotifyPlayerGameSceneInfo(GameNotifyPlayerGameSceneInfo other) : this() {
       dwGameType_ = other.dwGameType_;
+      state_ = other.state_;
       CommonSceneInfo = other.commonSceneInfo_ != null ? other.CommonSceneInfo.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -9384,8 +9386,19 @@ namespace GameProto {
       }
     }
 
+    /// <summary>Field number for the "state" field.</summary>
+    public const int StateFieldNumber = 2;
+    private global::GameProto.EGameSceneState state_ = 0;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    public global::GameProto.EGameSceneState State {
+      get { return state_; }
+      set {
+        state_ = value;
+      }
+    }
+
     /// <summary>Field number for the "common_scene_info" field.</summary>
-    public const int CommonSceneInfoFieldNumber = 2;
+    public const int CommonSceneInfoFieldNumber = 3;
     private global::GameProto.GameCommonSceneInfo commonSceneInfo_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     public global::GameProto.GameCommonSceneInfo CommonSceneInfo {
@@ -9409,6 +9422,7 @@ namespace GameProto {
         return true;
       }
       if (DwGameType != other.DwGameType) return false;
+      if (State != other.State) return false;
       if (!object.Equals(CommonSceneInfo, other.CommonSceneInfo)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -9417,6 +9431,7 @@ namespace GameProto {
     public override int GetHashCode() {
       int hash = 1;
       if (DwGameType != 0) hash ^= DwGameType.GetHashCode();
+      if (State != 0) hash ^= State.GetHashCode();
       if (commonSceneInfo_ != null) hash ^= CommonSceneInfo.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -9435,8 +9450,12 @@ namespace GameProto {
         output.WriteRawTag(8);
         output.WriteUInt32(DwGameType);
       }
+      if (State != 0) {
+        output.WriteRawTag(16);
+        output.WriteEnum((int) State);
+      }
       if (commonSceneInfo_ != null) {
-        output.WriteRawTag(18);
+        output.WriteRawTag(26);
         output.WriteMessage(CommonSceneInfo);
       }
       if (_unknownFields != null) {
@@ -9449,6 +9468,9 @@ namespace GameProto {
       int size = 0;
       if (DwGameType != 0) {
         size += 1 + pb::CodedOutputStream.ComputeUInt32Size(DwGameType);
+      }
+      if (State != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) State);
       }
       if (commonSceneInfo_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(CommonSceneInfo);
@@ -9466,6 +9488,9 @@ namespace GameProto {
       }
       if (other.DwGameType != 0) {
         DwGameType = other.DwGameType;
+      }
+      if (other.State != 0) {
+        State = other.State;
       }
       if (other.commonSceneInfo_ != null) {
         if (commonSceneInfo_ == null) {
@@ -9488,7 +9513,11 @@ namespace GameProto {
             DwGameType = input.ReadUInt32();
             break;
           }
-          case 18: {
+          case 16: {
+            state_ = (global::GameProto.EGameSceneState) input.ReadEnum();
+            break;
+          }
+          case 26: {
             if (commonSceneInfo_ == null) {
               commonSceneInfo_ = new global::GameProto.GameCommonSceneInfo();
             }

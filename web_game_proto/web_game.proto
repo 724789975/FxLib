@@ -412,7 +412,8 @@ message GameNotifyPlayerGameRoleData
 message GameNotifyPlayerGameSceneInfo
 {
 	uint32 dw_game_type = 1;
-	GameCommonSceneInfo common_scene_info = 2;
+	EGameSceneState state = 2;
+	GameCommonSceneInfo common_scene_info = 3;
 }
 
 message GameNotifyPlayerPrepareTime

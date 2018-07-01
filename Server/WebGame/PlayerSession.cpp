@@ -114,6 +114,8 @@ bool CPlayerSession::OnPlayerRequestGameEnter(CPlayerSession& refSession, google
 	Send(pBuf, dwBufLen);
 
 	GameProto::GameNotifyPlayerGameSceneInfo oSceneInfo;
+	oSceneInfo.set_dw_game_type(CGameConfigBase::Instance()->GetGameType());
+	oSceneInfo.set_state(CGameSceneBase::Instance()->GetSceneState());
 	CGameSceneBase::Instance()->FillProtoConfig(oSceneInfo);
 	ProtoUtility::MakeProtoSendBuffer(oSceneInfo, pBuf, dwBufLen);
 	Send(pBuf, dwBufLen);

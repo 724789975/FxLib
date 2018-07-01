@@ -6735,10 +6735,10 @@ class GameNotifyPlayerGameSceneInfo : public ::google::protobuf::Message /* @@pr
 
   // accessors -------------------------------------------------------
 
-  // .GameProto.GameCommonSceneInfo common_scene_info = 2;
+  // .GameProto.GameCommonSceneInfo common_scene_info = 3;
   bool has_common_scene_info() const;
   void clear_common_scene_info();
-  static const int kCommonSceneInfoFieldNumber = 2;
+  static const int kCommonSceneInfoFieldNumber = 3;
   const ::GameProto::GameCommonSceneInfo& common_scene_info() const;
   ::GameProto::GameCommonSceneInfo* release_common_scene_info();
   ::GameProto::GameCommonSceneInfo* mutable_common_scene_info();
@@ -6750,12 +6750,19 @@ class GameNotifyPlayerGameSceneInfo : public ::google::protobuf::Message /* @@pr
   ::google::protobuf::uint32 dw_game_type() const;
   void set_dw_game_type(::google::protobuf::uint32 value);
 
+  // .GameProto.EGameSceneState state = 2;
+  void clear_state();
+  static const int kStateFieldNumber = 2;
+  ::GameProto::EGameSceneState state() const;
+  void set_state(::GameProto::EGameSceneState value);
+
   // @@protoc_insertion_point(class_scope:GameProto.GameNotifyPlayerGameSceneInfo)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::GameProto::GameCommonSceneInfo* common_scene_info_;
   ::google::protobuf::uint32 dw_game_type_;
+  int state_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
   friend void ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayerGameSceneInfoImpl();
@@ -10002,7 +10009,21 @@ inline void GameNotifyPlayerGameSceneInfo::set_dw_game_type(::google::protobuf::
   // @@protoc_insertion_point(field_set:GameProto.GameNotifyPlayerGameSceneInfo.dw_game_type)
 }
 
-// .GameProto.GameCommonSceneInfo common_scene_info = 2;
+// .GameProto.EGameSceneState state = 2;
+inline void GameNotifyPlayerGameSceneInfo::clear_state() {
+  state_ = 0;
+}
+inline ::GameProto::EGameSceneState GameNotifyPlayerGameSceneInfo::state() const {
+  // @@protoc_insertion_point(field_get:GameProto.GameNotifyPlayerGameSceneInfo.state)
+  return static_cast< ::GameProto::EGameSceneState >(state_);
+}
+inline void GameNotifyPlayerGameSceneInfo::set_state(::GameProto::EGameSceneState value) {
+  
+  state_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.GameNotifyPlayerGameSceneInfo.state)
+}
+
+// .GameProto.GameCommonSceneInfo common_scene_info = 3;
 inline bool GameNotifyPlayerGameSceneInfo::has_common_scene_info() const {
   return this != internal_default_instance() && common_scene_info_ != NULL;
 }

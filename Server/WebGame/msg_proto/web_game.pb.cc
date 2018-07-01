@@ -2103,6 +2103,7 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   ~0u,  // no _oneof_case_
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayerGameSceneInfo, dw_game_type_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayerGameSceneInfo, state_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayerGameSceneInfo, common_scene_info_),
   ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayerPrepareTime, _internal_metadata_),
@@ -2214,13 +2215,13 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROT
   { 384, -1, sizeof(::GameProto::GameNotifyPlayerGameConfig)},
   { 391, -1, sizeof(::GameProto::GameNotifyPlayerGameRoleData)},
   { 398, -1, sizeof(::GameProto::GameNotifyPlayerGameSceneInfo)},
-  { 405, -1, sizeof(::GameProto::GameNotifyPlayerPrepareTime)},
-  { 411, -1, sizeof(::GameProto::GameNotifyPlayerGameReadyTime)},
-  { 417, -1, sizeof(::GameProto::GameNotifyPlayerGameState)},
-  { 423, -1, sizeof(::GameProto::GameNotifyPlayerGameInitTetris)},
-  { 432, -1, sizeof(::GameProto::GameNotifyPlayerNextTetris)},
-  { 440, -1, sizeof(::GameProto::GameNotifyPlayerDead)},
-  { 446, -1, sizeof(::GameProto::ServerInfo)},
+  { 406, -1, sizeof(::GameProto::GameNotifyPlayerPrepareTime)},
+  { 412, -1, sizeof(::GameProto::GameNotifyPlayerGameReadyTime)},
+  { 418, -1, sizeof(::GameProto::GameNotifyPlayerGameState)},
+  { 424, -1, sizeof(::GameProto::GameNotifyPlayerGameInitTetris)},
+  { 433, -1, sizeof(::GameProto::GameNotifyPlayerNextTetris)},
+  { 441, -1, sizeof(::GameProto::GameNotifyPlayerDead)},
+  { 447, -1, sizeof(::GameProto::ServerInfo)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -2421,42 +2422,43 @@ void AddDescriptorsImpl() {
       "ommon_config\030\002 \001(\0132\033.GameProto.GameConfi"
       "gCommon\"m\n\034GameNotifyPlayerGameRoleData\022"
       "\024\n\014dw_game_type\030\001 \001(\r\0227\n\020common_role_dat"
-      "a\030\002 \001(\0132\035.GameProto.GameCommonRoleData\"p"
-      "\n\035GameNotifyPlayerGameSceneInfo\022\024\n\014dw_ga"
-      "me_type\030\001 \001(\r\0229\n\021common_scene_info\030\002 \001(\013"
-      "2\036.GameProto.GameCommonSceneInfo\"3\n\033Game"
-      "NotifyPlayerPrepareTime\022\024\n\014dw_left_time\030"
-      "\001 \001(\r\"5\n\035GameNotifyPlayerGameReadyTime\022\024"
-      "\n\014dw_left_time\030\001 \001(\r\"F\n\031GameNotifyPlayer"
-      "GameState\022)\n\005state\030\001 \001(\0162\032.GameProto.EGa"
-      "meSceneState\"\226\001\n\036GameNotifyPlayerGameIni"
-      "tTetris\022\024\n\014dw_player_id\030\001 \001(\004\022\016\n\006f_tick\030"
-      "\002 \001(\002\022&\n\013curr_tetris\030\003 \001(\0132\021.GameProto.T"
-      "etris\022&\n\013next_tetris\030\004 \001(\0132\021.GameProto.T"
-      "etris\"j\n\032GameNotifyPlayerNextTetris\022\024\n\014d"
-      "w_player_id\030\001 \001(\004\022\016\n\006f_tick\030\002 \001(\002\022&\n\013nex"
-      "t_tetris\030\003 \001(\0132\021.GameProto.Tetris\",\n\024Gam"
-      "eNotifyPlayerDead\022\024\n\014dw_player_id\030\001 \001(\004\""
-      "\212\001\n\nServerInfo\022\024\n\014dw_server_id\030\001 \001(\r\022\024\n\014"
-      "sz_listen_ip\030\002 \001(\t\022\024\n\014dw_team_port\030\003 \001(\r"
-      "\022#\n\033dw_game_server_manager_port\030\004 \001(\r\022\025\n"
-      "\rdw_login_port\030\005 \001(\r*I\n\013EServerType\022\013\n\007S"
-      "T_NONE\020\000\022\014\n\010ST_Login\020\001\022\013\n\007ST_Team\020\002\022\022\n\016S"
-      "T_GameManager\020\003*\'\n\tETeamType\022\013\n\007TT_NONE\020"
-      "\000\022\r\n\tTT_Normal\020\001*\214\002\n\nEErrorCode\022\013\n\007EC_NO"
-      "NE\020\000\022\024\n\020EC_AlreadyInTeam\020\001\022\026\n\022EC_MakeTea"
-      "mNotIdle\020\002\022\027\n\023EC_CannotFindPlayer\020\003\022\017\n\013E"
-      "C_NoTeamId\020\004\022\020\n\014EC_NotLeader\020\005\022\023\n\017EC_Tea"
-      "mHasStart\020\006\022\032\n\026EC_NoGameManagerServer\020\007\022"
-      "\023\n\017EC_NoTeamServer\020\010\022\024\n\020EC_NoLoginServer"
-      "\020\t\022\026\n\022EC_PlayerNotOnline\020\n\022\023\n\017EC_FailInt"
-      "oTeam\020\013*I\n\016EMoveDirection\022\014\n\010EMD_NONE\020\000\022"
-      "\014\n\010EMD_Down\020\001\022\014\n\010EMD_Left\020\002\022\r\n\tEMD_Right"
-      "\020\003*\?\n\022ERotationDirection\022\014\n\010ERD_NONE\020\000\022\014"
-      "\n\010ERD_Left\020\001\022\r\n\tERD_Right\020\002b\006proto3"
+      "a\030\002 \001(\0132\035.GameProto.GameCommonRoleData\"\233"
+      "\001\n\035GameNotifyPlayerGameSceneInfo\022\024\n\014dw_g"
+      "ame_type\030\001 \001(\r\022)\n\005state\030\002 \001(\0162\032.GameProt"
+      "o.EGameSceneState\0229\n\021common_scene_info\030\003"
+      " \001(\0132\036.GameProto.GameCommonSceneInfo\"3\n\033"
+      "GameNotifyPlayerPrepareTime\022\024\n\014dw_left_t"
+      "ime\030\001 \001(\r\"5\n\035GameNotifyPlayerGameReadyTi"
+      "me\022\024\n\014dw_left_time\030\001 \001(\r\"F\n\031GameNotifyPl"
+      "ayerGameState\022)\n\005state\030\001 \001(\0162\032.GameProto"
+      ".EGameSceneState\"\226\001\n\036GameNotifyPlayerGam"
+      "eInitTetris\022\024\n\014dw_player_id\030\001 \001(\004\022\016\n\006f_t"
+      "ick\030\002 \001(\002\022&\n\013curr_tetris\030\003 \001(\0132\021.GamePro"
+      "to.Tetris\022&\n\013next_tetris\030\004 \001(\0132\021.GamePro"
+      "to.Tetris\"j\n\032GameNotifyPlayerNextTetris\022"
+      "\024\n\014dw_player_id\030\001 \001(\004\022\016\n\006f_tick\030\002 \001(\002\022&\n"
+      "\013next_tetris\030\003 \001(\0132\021.GameProto.Tetris\",\n"
+      "\024GameNotifyPlayerDead\022\024\n\014dw_player_id\030\001 "
+      "\001(\004\"\212\001\n\nServerInfo\022\024\n\014dw_server_id\030\001 \001(\r"
+      "\022\024\n\014sz_listen_ip\030\002 \001(\t\022\024\n\014dw_team_port\030\003"
+      " \001(\r\022#\n\033dw_game_server_manager_port\030\004 \001("
+      "\r\022\025\n\rdw_login_port\030\005 \001(\r*I\n\013EServerType\022"
+      "\013\n\007ST_NONE\020\000\022\014\n\010ST_Login\020\001\022\013\n\007ST_Team\020\002\022"
+      "\022\n\016ST_GameManager\020\003*\'\n\tETeamType\022\013\n\007TT_N"
+      "ONE\020\000\022\r\n\tTT_Normal\020\001*\214\002\n\nEErrorCode\022\013\n\007E"
+      "C_NONE\020\000\022\024\n\020EC_AlreadyInTeam\020\001\022\026\n\022EC_Mak"
+      "eTeamNotIdle\020\002\022\027\n\023EC_CannotFindPlayer\020\003\022"
+      "\017\n\013EC_NoTeamId\020\004\022\020\n\014EC_NotLeader\020\005\022\023\n\017EC"
+      "_TeamHasStart\020\006\022\032\n\026EC_NoGameManagerServe"
+      "r\020\007\022\023\n\017EC_NoTeamServer\020\010\022\024\n\020EC_NoLoginSe"
+      "rver\020\t\022\026\n\022EC_PlayerNotOnline\020\n\022\023\n\017EC_Fai"
+      "lIntoTeam\020\013*I\n\016EMoveDirection\022\014\n\010EMD_NON"
+      "E\020\000\022\014\n\010EMD_Down\020\001\022\014\n\010EMD_Left\020\002\022\r\n\tEMD_R"
+      "ight\020\003*\?\n\022ERotationDirection\022\014\n\010ERD_NONE"
+      "\020\000\022\014\n\010ERD_Left\020\001\022\r\n\tERD_Right\020\002b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 5675);
+      descriptor, 5719);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "web_game.proto", &protobuf_RegisterTypes);
   ::protobuf_web_5fdata_2eproto::AddDescriptors();
@@ -18619,6 +18621,7 @@ void GameNotifyPlayerGameSceneInfo::clear_common_scene_info() {
 }
 #if !defined(_MSC_VER) || _MSC_VER >= 1900
 const int GameNotifyPlayerGameSceneInfo::kDwGameTypeFieldNumber;
+const int GameNotifyPlayerGameSceneInfo::kStateFieldNumber;
 const int GameNotifyPlayerGameSceneInfo::kCommonSceneInfoFieldNumber;
 #endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
 
@@ -18640,14 +18643,16 @@ GameNotifyPlayerGameSceneInfo::GameNotifyPlayerGameSceneInfo(const GameNotifyPla
   } else {
     common_scene_info_ = NULL;
   }
-  dw_game_type_ = from.dw_game_type_;
+  ::memcpy(&dw_game_type_, &from.dw_game_type_,
+    static_cast<size_t>(reinterpret_cast<char*>(&state_) -
+    reinterpret_cast<char*>(&dw_game_type_)) + sizeof(state_));
   // @@protoc_insertion_point(copy_constructor:GameProto.GameNotifyPlayerGameSceneInfo)
 }
 
 void GameNotifyPlayerGameSceneInfo::SharedCtor() {
   ::memset(&common_scene_info_, 0, static_cast<size_t>(
-      reinterpret_cast<char*>(&dw_game_type_) -
-      reinterpret_cast<char*>(&common_scene_info_)) + sizeof(dw_game_type_));
+      reinterpret_cast<char*>(&state_) -
+      reinterpret_cast<char*>(&common_scene_info_)) + sizeof(state_));
   _cached_size_ = 0;
 }
 
@@ -18693,7 +18698,9 @@ void GameNotifyPlayerGameSceneInfo::Clear() {
     delete common_scene_info_;
   }
   common_scene_info_ = NULL;
-  dw_game_type_ = 0u;
+  ::memset(&dw_game_type_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&state_) -
+      reinterpret_cast<char*>(&dw_game_type_)) + sizeof(state_));
   _internal_metadata_.Clear();
 }
 
@@ -18721,10 +18728,25 @@ bool GameNotifyPlayerGameSceneInfo::MergePartialFromCodedStream(
         break;
       }
 
-      // .GameProto.GameCommonSceneInfo common_scene_info = 2;
+      // .GameProto.EGameSceneState state = 2;
       case 2: {
         if (static_cast< ::google::protobuf::uint8>(tag) ==
-            static_cast< ::google::protobuf::uint8>(18u /* 18 & 0xFF */)) {
+            static_cast< ::google::protobuf::uint8>(16u /* 16 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_state(static_cast< ::GameProto::EGameSceneState >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .GameProto.GameCommonSceneInfo common_scene_info = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(26u /* 26 & 0xFF */)) {
           DO_(::google::protobuf::internal::WireFormatLite::ReadMessage(
                input, mutable_common_scene_info()));
         } else {
@@ -18764,10 +18786,16 @@ void GameNotifyPlayerGameSceneInfo::SerializeWithCachedSizes(
     ::google::protobuf::internal::WireFormatLite::WriteUInt32(1, this->dw_game_type(), output);
   }
 
-  // .GameProto.GameCommonSceneInfo common_scene_info = 2;
+  // .GameProto.EGameSceneState state = 2;
+  if (this->state() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      2, this->state(), output);
+  }
+
+  // .GameProto.GameCommonSceneInfo common_scene_info = 3;
   if (this->has_common_scene_info()) {
     ::google::protobuf::internal::WireFormatLite::WriteMessageMaybeToArray(
-      2, *this->common_scene_info_, output);
+      3, *this->common_scene_info_, output);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -18789,11 +18817,17 @@ void GameNotifyPlayerGameSceneInfo::SerializeWithCachedSizes(
     target = ::google::protobuf::internal::WireFormatLite::WriteUInt32ToArray(1, this->dw_game_type(), target);
   }
 
-  // .GameProto.GameCommonSceneInfo common_scene_info = 2;
+  // .GameProto.EGameSceneState state = 2;
+  if (this->state() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      2, this->state(), target);
+  }
+
+  // .GameProto.GameCommonSceneInfo common_scene_info = 3;
   if (this->has_common_scene_info()) {
     target = ::google::protobuf::internal::WireFormatLite::
       InternalWriteMessageToArray(
-        2, *this->common_scene_info_, deterministic, target);
+        3, *this->common_scene_info_, deterministic, target);
   }
 
   if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
@@ -18813,7 +18847,7 @@ size_t GameNotifyPlayerGameSceneInfo::ByteSizeLong() const {
       ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
         (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
   }
-  // .GameProto.GameCommonSceneInfo common_scene_info = 2;
+  // .GameProto.GameCommonSceneInfo common_scene_info = 3;
   if (this->has_common_scene_info()) {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::MessageSize(
@@ -18825,6 +18859,12 @@ size_t GameNotifyPlayerGameSceneInfo::ByteSizeLong() const {
     total_size += 1 +
       ::google::protobuf::internal::WireFormatLite::UInt32Size(
         this->dw_game_type());
+  }
+
+  // .GameProto.EGameSceneState state = 2;
+  if (this->state() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->state());
   }
 
   int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
@@ -18862,6 +18902,9 @@ void GameNotifyPlayerGameSceneInfo::MergeFrom(const GameNotifyPlayerGameSceneInf
   if (from.dw_game_type() != 0) {
     set_dw_game_type(from.dw_game_type());
   }
+  if (from.state() != 0) {
+    set_state(from.state());
+  }
 }
 
 void GameNotifyPlayerGameSceneInfo::CopyFrom(const ::google::protobuf::Message& from) {
@@ -18890,6 +18933,7 @@ void GameNotifyPlayerGameSceneInfo::InternalSwap(GameNotifyPlayerGameSceneInfo* 
   using std::swap;
   swap(common_scene_info_, other->common_scene_info_);
   swap(dw_game_type_, other->dw_game_type_);
+  swap(state_, other->state_);
   _internal_metadata_.Swap(&other->_internal_metadata_);
   swap(_cached_size_, other->_cached_size_);
 }

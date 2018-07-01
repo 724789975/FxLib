@@ -153,4 +153,34 @@ public class SysUtil
 		pSessionObject.Send(pData, 1024 - pStream.GetLeftLen());
 	}
 
+	public static string GetScesneNameBySceneState(GameProto.EGameSceneState eState)
+	{
+		string szName = "";
+		switch (eState)
+		{
+			case GameProto.EGameSceneState.EssPrepare:
+				{
+					szName = GameConstant.g_szGamePrepareScene;
+				}
+				break;
+			case GameProto.EGameSceneState.EssGaming:
+				{
+					szName = GameConstant.g_szGameScene;
+				}
+				break;
+			case GameProto.EGameSceneState.EssGameReady:
+				{
+					szName = GameConstant.g_szGameScene;
+				}
+				break;
+			case GameProto.EGameSceneState.EssTransact:
+				{
+					szName = GameConstant.g_szGameScene;
+				}
+				break;
+		}
+
+		return szName;
+	}
+
 }

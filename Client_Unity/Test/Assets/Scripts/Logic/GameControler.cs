@@ -166,40 +166,14 @@ public class GameControler : SingletonObject<GameControler>
 			return;
 		}
 
-		switch (oRet.CommonSceneInfo.SceneInfo.State)
+		SampleDebuger.LogBlue("game scene state : " + oRet.State.ToString());
+
+		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != SysUtil.GetScesneNameBySceneState(oRet.State))
 		{
-			case GameProto.EGameSceneState.EssNone:
-			case GameProto.EGameSceneState.EssPrepare:
-				{
-					if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameConstant.g_szGamePrepareScene)
-					{
-						break;
-					}
-					AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szGamePrepareScene, delegate ()
-						{
-						}
-					);
-				}
-				break;
-			case GameProto.EGameSceneState.EssGameReady:
-			case GameProto.EGameSceneState.EssGaming:
-			case GameProto.EGameSceneState.EssTransact:
-				{
-					if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameConstant.g_szGameScene)
-					{
-						break;
-					}
-					AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szGameScene, delegate ()
-						{
-						}
-					);
-				}
-				break;
-			default:
-				{
-					SampleDebuger.LogError("error game state : " + ((uint)(oRet.CommonSceneInfo.SceneInfo.State)).ToString());
-				}
-				break;
+			AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szGamePrepareScene, delegate ()
+			{
+			}
+			);
 		}
 	}
 
@@ -215,56 +189,30 @@ public class GameControler : SingletonObject<GameControler>
 
 		GameData.Instance().SetGameSceneState(oRet.State);
 
+		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != SysUtil.GetScesneNameBySceneState(oRet.State))
+		{
+			AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szGamePrepareScene, delegate ()
+				{
+				}
+			);
+		}
+
 		switch (oRet.State)
 		{
 			case GameProto.EGameSceneState.EssNone:
-			case GameProto.EGameSceneState.EssPrepare:
-				{
-					if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameConstant.g_szGamePrepareScene)
-					{
-						break;
-					}
-					AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szGamePrepareScene, delegate ()
-						{
-						}
-					);
-				}
 				break;
+			case GameProto.EGameSceneState.EssPrepare:
 			case GameProto.EGameSceneState.EssGameReady:
 				{
-					if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameConstant.g_szGameScene)
-					{
-						break;
-					}
-					AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szGameScene, delegate ()
-					{
-					}
-					);
 				}
 				break;
 			case GameProto.EGameSceneState.EssGaming:
 				{
-					if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameConstant.g_szGameScene)
-					{
 						ReadyTime.SetGameBegin();
-                        break;
-					}
-					AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szGameScene, delegate ()
-					{
-					}
-					);
 				}
 				break;
 			case GameProto.EGameSceneState.EssTransact:
 				{
-					if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == GameConstant.g_szGameScene)
-					{
-						break;
-					}
-					AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szGameScene, delegate ()
-						{
-						}
-					);
 				}
 				break;
 			default:
