@@ -170,9 +170,10 @@ public class GameControler : SingletonObject<GameControler>
 
 		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != SysUtil.GetScesneNameBySceneState(oRet.State))
 		{
-			AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szGamePrepareScene, delegate ()
-			{
-			}
+			AssetBundleLoader.Instance().LoadLevelAsset(SysUtil.GetScesneNameBySceneState(oRet.State), delegate ()
+				{
+					SampleDebuger.LogBlue("scene info load level : " + SysUtil.GetScesneNameBySceneState(oRet.State));
+				}
 			);
 		}
 	}
@@ -191,8 +192,9 @@ public class GameControler : SingletonObject<GameControler>
 
 		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != SysUtil.GetScesneNameBySceneState(oRet.State))
 		{
-			AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szGamePrepareScene, delegate ()
+			AssetBundleLoader.Instance().LoadLevelAsset(SysUtil.GetScesneNameBySceneState(oRet.State), delegate ()
 				{
+					SampleDebuger.LogBlue("game state load level : " + SysUtil.GetScesneNameBySceneState(oRet.State));
 				}
 			);
 		}
