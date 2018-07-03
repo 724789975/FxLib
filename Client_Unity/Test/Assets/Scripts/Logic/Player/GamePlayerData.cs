@@ -8,6 +8,15 @@ public class GamePlayerData : MonoBehaviour
 	// Use this for initialization
 	void Start()
 	{
+		GameProto.RoleData pData = GameData.Instance().GetRoleData(GameData.Instance().GetSlotPlayer(m_dwSlotId));
+		if (pData == null)
+		{
+			return;
+		}
+		SetPlayerId(pData.QwPlayerId);
+		SetName(pData.SzNickName);
+		SetHeadImage(pData.SzAvatar);
+		SetSex(pData.DwSex);
 	}
 
 	// Update is called once per frame

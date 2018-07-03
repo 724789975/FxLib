@@ -49,6 +49,8 @@ public class GameControler : SingletonObject<GameControler>
 	public void OnConnect()
 	{
 		SampleDebuger.Log("game connected");
+		GameData.Instance().Reset();
+
 		GameProto.PlayerRequestGameEnter oRequest = new GameProto.PlayerRequestGameEnter();
 
 		oRequest.QwPlayerId = PlayerData.Instance().proPlayerId;
@@ -175,12 +177,11 @@ public class GameControler : SingletonObject<GameControler>
 			{
 				SampleDebuger.LogBlue(string.Format("game scene info : [{0}, {1}, {2}, {3}]",
 					oRet.Players[i].QwPlayerId.ToString(), oRet.Players[i].SzNickName, oRet.Players[i].SzAvatar, oRet.Players[i].DwSex.ToString()));
+
+				GameData.Instance().SetSlotId((uint)i, oRet.Players[i].QwPlayerId);
+				GameData.Instance().SetRoleDate(oRet.Players[i].QwPlayerId, oRet.Players[i]);
+
 				TetrisDataManager.Instance().SetPlayer(oRet.Players[i].QwPlayerId);
-				GamePlayerData pGamePlayer = GamePlayerManager.Instance().GetPlayerBySlot(i);
-                pGamePlayer.SetPlayerId(oRet.Players[i].QwPlayerId);
-				pGamePlayer.SetName(oRet.Players[i].SzNickName);
-				pGamePlayer.SetHeadImage(oRet.Players[i].SzAvatar);
-				pGamePlayer.SetSex(oRet.Players[i].DwSex);
 			}
 		}
 

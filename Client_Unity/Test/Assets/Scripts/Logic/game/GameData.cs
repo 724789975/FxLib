@@ -1,4 +1,4 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -32,9 +32,47 @@ public class Tetris
 [System.Serializable]
 public class GameData : Singleton<GameData>
 {
+	public void Reset()
+	{
+		m_eState = GameProto.EGameSceneState.EssNone;
+		m_mapSlots.Clear();
+		m_mapPlayers.Clear();
+	}
+
+	public void SetSlotId(UInt32 dwSlotId, UInt64 qwPlayerId)
+	{
+		m_mapSlots[dwSlotId] = qwPlayerId;
+	}
+
+	public UInt64 GetSlotPlayer(UInt32 dwSlotId)
+	{
+		if (m_mapSlots.ContainsKey(dwSlotId))
+		{
+			return m_mapSlots[dwSlotId];
+		}
+		return 0;
+	}
+
+	public void SetRoleDate(UInt64 qwPlayerId, GameProto.RoleData pRoleData)
+	{
+		m_mapPlayers[qwPlayerId] = pRoleData;
+	}
+
+	public GameProto.RoleData GetRoleData(UInt64 qwPlayerId)
+	{
+		if (m_mapPlayers.ContainsKey(qwPlayerId))
+		{
+			return m_mapPlayers[qwPlayerId];
+		}
+		return null;
+	}
+
 	public void SetGameSceneState(GameProto.EGameSceneState eState) { m_eState = eState; }
 	public GameProto.EGameSceneState proGameSceneState { get{ return m_eState; }}
 	public GameProto.EGameSceneState m_eState;
+
+	Dictionary<UInt32, UInt64> m_mapSlots = new Dictionary<UInt32, UInt64>();
+	Dictionary<UInt64, GameProto.RoleData> m_mapPlayers = new Dictionary<UInt64, GameProto.RoleData>();
 }
 
 [System.Serializable]
