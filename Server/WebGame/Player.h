@@ -18,7 +18,7 @@ public:
 	void SetPlayerSession(CPlayerSession* pPlayerSession) { m_pPlayerSession = pPlayerSession; }
 	CPlayerSession* GetPlayerSession() { return m_pPlayerSession; }
 
-	void SetPlayerId(UINT64 qwPlayerId) { m_qwPlayerId = qwPlayerId; }
+	void SetPlayerId(UINT64 qwPlayerId) { m_qwPlayerId = qwPlayerId; GetPlayerData(); }
 	UINT64 GetPlayerId() { return m_qwPlayerId; }
 
 	virtual TetrisBase& GetTetrisData() = 0;
@@ -27,6 +27,7 @@ public:
 	virtual void FillPlayerData(GameProto::RoleData& refRoleData) = 0;
 	
 protected:
+	virtual void GetPlayerData() = 0;
 	CPlayerSession* m_pPlayerSession;
 	UINT64 m_qwPlayerId;
 };
@@ -43,6 +44,9 @@ public:
 
 	virtual void FillPlayerData(GameProto::GameNotifyPlayerGameRoleData& refRoleData);
 	virtual void FillPlayerData(GameProto::RoleData& refRoleData);
+
+protected:
+	virtual void GetPlayerData();
 
 private:
 	GameProto::GameCommonRoleData m_oGameRoleData;

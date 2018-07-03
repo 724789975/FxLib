@@ -37,6 +37,10 @@ namespace RedisConstant
 	static const char* szSuspendTime = "suspend_time";
 	static const char* szGameIp = "game_ip";
 	static const char* szGamePort = "game_port";
+	static const char* szRole = "role";
+	static const char* szName = "name";
+	static const char* szHeadImage = "head_img";
+	static const char* szSex = "sex";
 }
 
 
