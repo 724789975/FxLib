@@ -330,9 +330,9 @@ void CGameSceneCommon::FillProtoScene(GameProto::GameNotifyPlayerGameSceneInfo& 
 	for (int i = 0; i < MAXCLIENTNUM; ++i)
 	{
 		GameProto::RoleData* pData = refInfo.add_players();
-		if (m_qwRoles[i])
+		if (m_qwRoles[i] != 0)
 		{
-			m_mapPlayers[i].FillPlayerData(*pData);
+			m_mapPlayers[m_qwRoles[i]].FillPlayerData(*pData);
 		}
 	}
 }
