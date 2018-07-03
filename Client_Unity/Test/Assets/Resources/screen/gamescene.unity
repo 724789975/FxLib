@@ -13867,21 +13867,6 @@ Prefab:
       propertyPath: m_Name
       value: GamePlayer1
       objectReference: {fileID: 0}
-    - target: {fileID: 224403316887048208, guid: 0b137790909f51d40a19d7d08e8352c2,
-        type: 2}
-      propertyPath: m_LocalScale.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224403316887048208, guid: 0b137790909f51d40a19d7d08e8352c2,
-        type: 2}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 224403316887048208, guid: 0b137790909f51d40a19d7d08e8352c2,
-        type: 2}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0b137790909f51d40a19d7d08e8352c2, type: 2}
   m_IsPrefabParent: 0
