@@ -7473,6 +7473,11 @@ Prefab:
       propertyPath: m_UVRect.y
       value: 0.4
       objectReference: {fileID: 0}
+    - target: {fileID: 114615980763544690, guid: 0b137790909f51d40a19d7d08e8352c2,
+        type: 2}
+      propertyPath: m_dwSlotId
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0b137790909f51d40a19d7d08e8352c2, type: 2}
   m_IsPrefabParent: 0
@@ -9830,6 +9835,11 @@ Prefab:
       propertyPath: m_UVRect.y
       value: 0.4
       objectReference: {fileID: 0}
+    - target: {fileID: 114615980763544690, guid: 0b137790909f51d40a19d7d08e8352c2,
+        type: 2}
+      propertyPath: m_dwSlotId
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0b137790909f51d40a19d7d08e8352c2, type: 2}
   m_IsPrefabParent: 0
@@ -11735,6 +11745,11 @@ Prefab:
       propertyPath: m_Text
       value: 2P
       objectReference: {fileID: 0}
+    - target: {fileID: 114615980763544690, guid: 0b137790909f51d40a19d7d08e8352c2,
+        type: 2}
+      propertyPath: m_dwSlotId
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0b137790909f51d40a19d7d08e8352c2, type: 2}
   m_IsPrefabParent: 0
@@ -12093,6 +12108,11 @@ Prefab:
         type: 2}
       propertyPath: m_UVRect.y
       value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114615980763544690, guid: 0b137790909f51d40a19d7d08e8352c2,
+        type: 2}
+      propertyPath: m_dwSlotId
+      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0b137790909f51d40a19d7d08e8352c2, type: 2}
@@ -12731,6 +12751,11 @@ Prefab:
         type: 2}
       propertyPath: m_Text
       value: 4P
+      objectReference: {fileID: 0}
+    - target: {fileID: 114615980763544690, guid: 0b137790909f51d40a19d7d08e8352c2,
+        type: 2}
+      propertyPath: m_dwSlotId
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0b137790909f51d40a19d7d08e8352c2, type: 2}
@@ -17769,6 +17794,11 @@ Prefab:
       propertyPath: m_UVRect.y
       value: 0.4
       objectReference: {fileID: 0}
+    - target: {fileID: 114615980763544690, guid: 0b137790909f51d40a19d7d08e8352c2,
+        type: 2}
+      propertyPath: m_dwSlotId
+      value: 5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0b137790909f51d40a19d7d08e8352c2, type: 2}
   m_IsPrefabParent: 0
@@ -19362,6 +19392,11 @@ Prefab:
         type: 2}
       propertyPath: m_Text
       value: 3P
+      objectReference: {fileID: 0}
+    - target: {fileID: 114615980763544690, guid: 0b137790909f51d40a19d7d08e8352c2,
+        type: 2}
+      propertyPath: m_dwSlotId
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0b137790909f51d40a19d7d08e8352c2, type: 2}

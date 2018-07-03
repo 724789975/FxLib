@@ -17,7 +17,7 @@ public class GamePlayerData : MonoBehaviour
 
 	public void ShowPlayer()
 	{
-		GameLogic.Instance().SetTetrisData(TetrisDataManager.Instance().GetTetrisData(m_qwPlayerId), m_qwPlayerId);
+		GameLogic.Instance().SetTetrisData(TetrisDataManager.Instance().GetTetrisData(proPlayerId), proPlayerId);
     }
 
 	public void SetPlayerId(UInt64 qwUserId) { m_qwPlayerId = qwUserId; }

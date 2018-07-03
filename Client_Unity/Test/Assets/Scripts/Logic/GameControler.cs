@@ -171,7 +171,7 @@ public class GameControler : SingletonObject<GameControler>
 
 		for (int i = 0; i < oRet.Players.Count; i++)
 		{
-			if (oRet.Players[i].QwPlayerId > 0)
+			if (oRet.Players[i].QwPlayerId != 0)
 			{
 				TetrisDataManager.Instance().SetPlayer(oRet.Players[i].QwPlayerId);
 				GamePlayerData pGamePlayer = GamePlayerManager.Instance().GetPlayerBySlot(i);

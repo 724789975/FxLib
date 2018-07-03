@@ -6,6 +6,7 @@ public class GameLogic : SingletonObject<GameLogic>
 {
 	void Awake()
 	{
+		CreateInstance(this);
 		for (int i = 0; i < TetrisData.s_dwColumn * TetrisData.s_dwRow; ++i)
 		{
 			m_arrBlockInfos[i / TetrisData.s_dwColumn, i % TetrisData.s_dwColumn] = m_arrBlocks[i];
