@@ -173,6 +173,8 @@ public class GameControler : SingletonObject<GameControler>
 		{
 			if (oRet.Players[i].QwPlayerId != 0)
 			{
+				SampleDebuger.LogBlue(string.Format("game scene info : [{0}, {1}, {2}, {3}]",
+					oRet.Players[i].QwPlayerId.ToString(), oRet.Players[i].SzNickName, oRet.Players[i].SzAvatar, oRet.Players[i].DwSex.ToString()));
 				TetrisDataManager.Instance().SetPlayer(oRet.Players[i].QwPlayerId);
 				GamePlayerData pGamePlayer = GamePlayerManager.Instance().GetPlayerBySlot(i);
                 pGamePlayer.SetPlayerId(oRet.Players[i].QwPlayerId);
