@@ -15,7 +15,7 @@ public:
 		sprintf(szQuery, "HMGET %llu_%s %s %s %s",
 			m_qwPlayerId, RedisConstant::szRole, RedisConstant::szName,
 			RedisConstant::szHeadImage, RedisConstant::szSex);
-		poDBConnection->Query(szQuery, m_pReader);
+		poDBConnection->Query(szQuery, &m_pReader);
 	}
 	virtual void OnResult(void)
 	{
