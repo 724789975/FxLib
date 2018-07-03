@@ -472,6 +472,22 @@ void TetrisBase::EraseTetris(int dwRow)
 	}
 }
 
+void TetrisBase::FillTetrisData(GameProto::GameNotifyPlayerGameTetrisData& refData)
+{
+	refData.set_dw_player_id(m_refPlayer.GetPlayerId());
+	refData.set_f_tick(m_fTick);
+	m_oCurrentTetris.FillTetris(*(refData.mutable_curr_tetris()));
+	m_oNextTetris.FillTetris(*(refData.mutable_next_tetris()));
+
+	for (int i = 0; i < ROW_NUM; ++i)
+	{
+		for (int j = 0; j < COLUMN_NUM; ++j)
+		{
+			refData.add_dw_data(m_dwTetrisPools[i][j]);
+		}
+	}
+}
+
 bool TetrisBase::CheckTetris(int dwCol, int dwRow)
 {
 	if (dwRow >= ROW_NUM)

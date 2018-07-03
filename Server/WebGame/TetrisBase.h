@@ -2,6 +2,7 @@
 #define  __TetrisBase_H__
 
 #include "msg_proto/web_data.pb.h"
+#include "msg_proto/web_game.pb.h"
 
 #define COLUMN_NUM 12
 #define ROW_NUM 22
@@ -46,6 +47,8 @@ public:
 	void EraseTetris(int dwRow);
 
 	float GetTick() { return m_fTick; }
+
+	void FillTetrisData(GameProto::GameNotifyPlayerGameTetrisData& refData);
 
 protected:
 	virtual bool CheckTetris(int dwRow, int dwCol);

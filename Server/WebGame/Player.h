@@ -24,6 +24,7 @@ public:
 	virtual TetrisBase& GetTetrisData() = 0;
 
 	virtual void FillPlayerData(GameProto::GameNotifyPlayerGameRoleData& refRoleData) = 0;
+	virtual void FillPlayerData(GameProto::RoleData& refRoleData) = 0;
 	
 protected:
 	CPlayerSession* m_pPlayerSession;
@@ -41,6 +42,7 @@ public:
 	virtual TetrisBase& GetTetrisData() { return m_oTetrisData; }
 
 	virtual void FillPlayerData(GameProto::GameNotifyPlayerGameRoleData& refRoleData);
+	virtual void FillPlayerData(GameProto::RoleData& refRoleData);
 
 private:
 	GameProto::GameCommonRoleData m_oGameRoleData;

@@ -6,7 +6,7 @@
 #include "google/protobuf/message.h"
 
 #define IDLENTH 64
-#define MAXCLIENTNUM 16
+#define MAXCLIENTNUM 8
 #define MAXSLAVESERVERNUM 20
 
 namespace ProtoUtility

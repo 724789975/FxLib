@@ -163,9 +163,17 @@ public class GameLogic : SingletonObject<GameLogic>
 		}
 	}
 
-	void SetTetrisData(TetrisData oData)
+	public void SetTetrisData(TetrisData oData, System.UInt64 qwPlayerId)
 	{
 		m_oData = oData;
+		if (qwPlayerId == PlayerData.Instance().proPlayerId)
+		{
+			m_goOperator.SetActive(true);
+		}
+		else
+		{
+			m_goOperator.SetActive(false);
+		}
 	}
 	
 	public UnityEngine.UI.Image[] m_arrBlocks = new UnityEngine.UI.Image[TetrisData.s_dwRow * TetrisData.s_dwColumn];
@@ -175,5 +183,7 @@ public class GameLogic : SingletonObject<GameLogic>
 	UnityEngine.UI.Image[,] m_arrBlockInfos = new UnityEngine.UI.Image[TetrisData.s_dwRow, TetrisData.s_dwColumn];
 
 	public TetrisData m_oData = null;
+
+	public GameObject m_goOperator;
 }
 

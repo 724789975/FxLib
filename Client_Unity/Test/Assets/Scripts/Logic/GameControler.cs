@@ -35,6 +35,7 @@ public class GameControler : SingletonObject<GameControler>
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameSceneInfo", OnGameNotifyPlayerGameSceneInfo);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameState", OnGameNotifyPlayerGameState);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameInitTetris", OnGameNotifyPlayerGameInitTetris);
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameTetrisData", OnGameNotifyPlayerGameTetrisData);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerNextTetris", OnGameNotifyPlayerNextTetris);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerDead", OnGameNotifyPlayerDead);
     }
@@ -106,7 +107,7 @@ public class GameControler : SingletonObject<GameControler>
 		}
 		SampleDebuger.Log("game enter : " + oRet.DwResult.ToString());
 
-		TetrisDataManager.Instance().Init(PlayerData.Instance().proPlayerId);
+		TetrisDataManager.Instance().SetOwner(PlayerData.Instance().proPlayerId);
 	}
 
 	public void OnGameNotifyPlayerPrepareTime(byte[] pBuf)
@@ -167,6 +168,19 @@ public class GameControler : SingletonObject<GameControler>
 		}
 
 		SampleDebuger.LogBlue("game scene state : " + oRet.State.ToString());
+
+		for (int i = 0; i < oRet.Players.Count; i++)
+		{
+			if (oRet.Players[i].QwPlayerId > 0)
+			{
+				TetrisDataManager.Instance().SetPlayer(oRet.Players[i].QwPlayerId);
+				GamePlayerData pGamePlayer = GamePlayerManager.Instance().GetPlayerBySlot(i);
+                pGamePlayer.SetPlayerId(oRet.Players[i].QwPlayerId);
+				pGamePlayer.SetName(oRet.Players[i].SzNickName);
+				pGamePlayer.SetHeadImage(oRet.Players[i].SzAvatar);
+				pGamePlayer.SetSex(oRet.Players[i].DwSex);
+			}
+		}
 
 		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != SysUtil.GetScesneNameBySceneState(oRet.State))
 		{
@@ -230,6 +244,23 @@ public class GameControler : SingletonObject<GameControler>
 	public void OnGameNotifyPlayerGameInitTetris(byte[] pBuf)
 	{
 		GameProto.GameNotifyPlayerGameInitTetris oRet = GameProto.GameNotifyPlayerGameInitTetris.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.LogYellow("GameNotifyPlayerGameInitTetris error parse");
+			return;
+		}
+		TetrisData pTetrisData = TetrisDataManager.Instance().GetTetrisData(oRet.DwPlayerId);
+		if (pTetrisData == null)
+		{
+			SampleDebuger.LogYellow("can't find tetris data player id : " + oRet.DwPlayerId.ToString());
+			return;
+		}
+		pTetrisData.Sync(oRet);
+	}
+
+	public void OnGameNotifyPlayerGameTetrisData(byte[] pBuf)
+	{
+		GameProto.GameNotifyPlayerGameTetrisData oRet = GameProto.GameNotifyPlayerGameTetrisData.Parser.ParseFrom(pBuf);
 		if (oRet == null)
 		{
 			SampleDebuger.LogYellow("GameNotifyPlayerGameInitTetris error parse");

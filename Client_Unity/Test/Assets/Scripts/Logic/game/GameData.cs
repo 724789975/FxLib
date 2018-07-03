@@ -364,6 +364,21 @@ public class TetrisData
 		m_bNeedRefresh = true;
 	}
 
+	public void Sync(GameProto.GameNotifyPlayerGameTetrisData oTetris)
+	{
+		m_dwTetrisPool = new uint[s_dwRow, s_dwColumn];
+		for (int i = 0; i < s_dwRow; i++)
+		{
+			for (int j = 0; j < s_dwColumn; j++)
+			{
+				m_dwTetrisPool[i, j] = oTetris.DwData[i * (int)s_dwColumn + j];
+			}
+		}
+		m_oCurrentTetris.Init(oTetris.CurrTetris);
+		m_oNextTetris.Init(oTetris.NextTetris);
+		m_bNeedRefresh = true;
+	}
+
 	public void Sync(GameProto.GameNotifyPlayerNextTetris oTetris)
 	{
 		if (m_oNextTetris == null)
@@ -778,9 +793,18 @@ public class TetrisDataManager : Singleton<TetrisDataManager>
 		return m_mapTetrisDatas[qwPlayerId];
 	}
 
-	public void Init(System.UInt64 qwPlayerId)
+	public void SetOwner(System.UInt64 qwPlayerId)
 	{
 		m_mapTetrisDatas[qwPlayerId] = m_pUserTetrisData;
+	}
+
+	public void SetPlayer(System.UInt64 qwPlayerId)
+	{
+		if (m_mapTetrisDatas.ContainsKey(qwPlayerId))
+		{
+			return;
+		}
+		m_mapTetrisDatas[qwPlayerId] = new TetrisData();
 	}
 
 	Dictionary<System.UInt64, TetrisData> m_mapTetrisDatas = new Dictionary<System.UInt64, TetrisData>();

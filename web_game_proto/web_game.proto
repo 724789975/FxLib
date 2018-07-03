@@ -413,7 +413,8 @@ message GameNotifyPlayerGameSceneInfo
 {
 	uint32 dw_game_type = 1;
 	EGameSceneState state = 2;
-	GameCommonSceneInfo common_scene_info = 3;
+	repeated RoleData players = 3;
+	GameCommonSceneInfo common_scene_info = 10;
 }
 
 message GameNotifyPlayerPrepareTime
@@ -437,6 +438,15 @@ message GameNotifyPlayerGameInitTetris
 	float f_tick = 2;
 	Tetris curr_tetris = 3;
 	Tetris next_tetris = 4;
+}
+
+message GameNotifyPlayerGameTetrisData
+{
+	uint64 dw_player_id = 1;
+	float f_tick = 2;
+	repeated uint32 dw_data = 3;
+	Tetris curr_tetris = 4;
+	Tetris next_tetris = 5;
 }
 
 message GameNotifyPlayerNextTetris

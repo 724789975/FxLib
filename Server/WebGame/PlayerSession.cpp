@@ -116,9 +116,26 @@ bool CPlayerSession::OnPlayerRequestGameEnter(CPlayerSession& refSession, google
 	GameProto::GameNotifyPlayerGameSceneInfo oSceneInfo;
 	oSceneInfo.set_dw_game_type(CGameConfigBase::Instance()->GetGameType());
 	oSceneInfo.set_state(CGameSceneBase::Instance()->GetSceneState());
-	CGameSceneBase::Instance()->FillProtoConfig(oSceneInfo);
+	CGameSceneBase::Instance()->FillProtoScene(oSceneInfo);
 	ProtoUtility::MakeProtoSendBuffer(oSceneInfo, pBuf, dwBufLen);
 	Send(pBuf, dwBufLen);
+
+	//游戏已经开始
+	GameProto::GameNotifyPlayerGameTetrisData oData;
+	if (CGameSceneBase::Instance()->GetSceneState() == GameProto::ESS_Gaming)
+	{
+		for (int i = 0; i < MAXCLIENTNUM; i++)
+		{
+			UINT64 qwPlayerId = CGameSceneBase::Instance()->GetPlayers()[i];
+			if (!qwPlayerId)
+			{
+				continue;
+			}
+			CGameSceneBase::Instance()->GetPlayer(qwPlayerId)->GetTetrisData().FillTetrisData(oData);
+			ProtoUtility::MakeProtoSendBuffer(oData, pBuf, dwBufLen);
+			Send(pBuf, dwBufLen);
+		}
+	}
 
 	return true;
 }

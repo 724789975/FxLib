@@ -83,6 +83,10 @@ bool CGameSceneBase::Init(unsigned int dwGameType, std::string szRoles, UINT64 q
 	{
 		return false;
 	}
+	if (jRoles.size() > MAXCLIENTNUM)
+	{
+		Assert(0);
+	}
 	for (int i = 0; i < jRoles.size(); ++i)
 	{
 		Instance()->m_qwRoles[i] = jRoles[i].asInt64();
@@ -218,6 +222,30 @@ void CGameSceneBase::NotifyPlayer(google::protobuf::Message& refMsg)
 	}
 }
 
+void CGameSceneBase::NotifyPlayerExcept(google::protobuf::Message& refMsg, UINT64 qwPlayerId)
+{
+	for (int i = 0; i < MAXCLIENTNUM; ++i)
+	{
+		if (m_qwRoles[i] == qwPlayerId)
+		{
+			continue;
+		}
+		CPlayerBase* pPlayerBase = GetPlayer(m_qwRoles[i]);
+		if (!pPlayerBase)
+		{
+			continue;
+		}
+		if (!pPlayerBase->GetPlayerSession())
+		{
+			continue;
+		}
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(refMsg, pBuf, dwBufLen);
+		pPlayerBase->GetPlayerSession()->Send(pBuf, dwBufLen);
+	}
+}
+
 void CGameSceneBase::ChangeState(GameProto::EGameSceneState eGameSceneState)
 {
 	LogExe(LogLv_Info, "game change state : %d", (int)eGameSceneState);
@@ -294,10 +322,19 @@ GameProto::EGameSceneState CGameSceneCommon::GetSceneState()
 	return m_oSceneInfo.mutable_scene_info()->state();
 }
 
-void CGameSceneCommon::FillProtoConfig(GameProto::GameNotifyPlayerGameSceneInfo& refInfo)
+void CGameSceneCommon::FillProtoScene(GameProto::GameNotifyPlayerGameSceneInfo& refInfo)
 {
 	refInfo.set_dw_game_type(m_dwGameType);
 	*(refInfo.mutable_common_scene_info()) = m_oSceneInfo;
+
+	for (int i = 0; i < MAXCLIENTNUM; ++i)
+	{
+		GameProto::RoleData* pData = refInfo.add_players();
+		if (m_qwRoles[i])
+		{
+			m_mapPlayers[i].FillPlayerData(*pData);
+		}
+	}
 }
 
 void CGameSceneCommon::SetSceneState(GameProto::EGameSceneState eGameSceneState)

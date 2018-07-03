@@ -15,6 +15,11 @@ public class GamePlayerData : MonoBehaviour
 	{
 	}
 
+	public void ShowPlayer()
+	{
+		GameLogic.Instance().SetTetrisData(TetrisDataManager.Instance().GetTetrisData(m_qwPlayerId), m_qwPlayerId);
+    }
+
 	public void SetPlayerId(UInt64 qwUserId) { m_qwPlayerId = qwUserId; }
 	public void SetName(string szName) { m_szName = szName; }
 	public void SetHeadImage(string szHeadImage) { m_szHeadImage = szHeadImage; }

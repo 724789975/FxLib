@@ -30,12 +30,15 @@ public:
 	virtual void GameEnd();
 
 	void NotifyPlayer(google::protobuf::Message& refMsg);
+	void NotifyPlayerExcept(google::protobuf::Message& refMsg, UINT64 qwPlayerId);
 
 	void ChangeState(GameProto::EGameSceneState eGameSceneState);
 
-	virtual void FillProtoConfig(GameProto::GameNotifyPlayerGameSceneInfo& refInfo) = 0;
+	virtual void FillProtoScene(GameProto::GameNotifyPlayerGameSceneInfo& refInfo) = 0;
 
 	virtual GameProto::EGameSceneState GetSceneState() = 0;
+
+	UINT64* GetPlayers() { return m_qwRoles; }
 
 protected:
 
@@ -64,7 +67,7 @@ public:
 	virtual void Gaming(double fTime);
 
 	virtual GameProto::EGameSceneState GetSceneState();
-	virtual void FillProtoConfig(GameProto::GameNotifyPlayerGameSceneInfo& refInfo);
+	virtual void FillProtoScene(GameProto::GameNotifyPlayerGameSceneInfo& refInfo);
 protected:
 	virtual void SetSceneState(GameProto::EGameSceneState eGameSceneState);
 private:

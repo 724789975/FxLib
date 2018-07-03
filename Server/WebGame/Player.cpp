@@ -36,3 +36,8 @@ void CCommonPlayer::FillPlayerData(GameProto::GameNotifyPlayerGameRoleData& refR
 {
 	*(refRoleData.mutable_common_role_data()) = m_oGameRoleData;
 }
+
+void CCommonPlayer::FillPlayerData(GameProto::RoleData& refRoleData)
+{
+	refRoleData.CopyFrom(*m_oGameRoleData.mutable_role_data());
+}
