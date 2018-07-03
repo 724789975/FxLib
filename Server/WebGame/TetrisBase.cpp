@@ -673,9 +673,12 @@ void CommonTetris::Init()
 void CommonTetris::Update(float fDelta)
 {
 	m_fTick += fDelta;
-	if (m_refPlayer.GetPlayerSession()->IsConnected())
+	if (m_refPlayer.GetPlayerSession())
 	{
-		return;
+		if (m_refPlayer.GetPlayerSession()->IsConnected())
+		{
+			return;
+		}
 	}
 	m_fSuspendTime += fDelta;
 	if (m_fSuspendTime >= CGameConfigBase::Instance()->GetSuspendTime())
