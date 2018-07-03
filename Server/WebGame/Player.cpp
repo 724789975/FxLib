@@ -11,11 +11,12 @@ public:
 	virtual int					GetDBId(void) { return 0; }
 	virtual void				OnQuery(IRedisConnection *poDBConnection)
 	{
-		char szQuery[64] = { 0 };
+		char szQuery[128] = { 0 };
 		sprintf(szQuery, "HMGET %llu_%s %s %s %s",
 			m_qwPlayerId, RedisConstant::szRole, RedisConstant::szName,
 			RedisConstant::szHeadImage, RedisConstant::szSex);
 		poDBConnection->Query(szQuery, &m_pReader);
+		LogExe(LogLv_Debug3, "redis query : %s", szQuery);
 	}
 	virtual void OnResult(void)
 	{
@@ -72,6 +73,7 @@ void CCommonPlayer::FillPlayerData(GameProto::GameNotifyPlayerGameRoleData& refR
 void CCommonPlayer::FillPlayerData(GameProto::RoleData& refRoleData)
 {
 	refRoleData.CopyFrom(*m_oGameRoleData.mutable_role_data());
+	LogExe(LogLv_Debug3, "role data : %s", refRoleData.DebugString().c_str());
 }
 
 void CCommonPlayer::GetPlayerData()
@@ -83,4 +85,6 @@ void CCommonPlayer::GetPlayerData()
 	m_oGameRoleData.mutable_role_data()->set_sz_nick_name(oQuery.m_szName);
 	m_oGameRoleData.mutable_role_data()->set_sz_avatar(oQuery.m_szHeadImg);
 	m_oGameRoleData.mutable_role_data()->set_dw_sex(oQuery.m_dwSex);
+
+	LogExe(LogLv_Debug3, "role data : %s", m_oGameRoleData.DebugString().c_str());
 }

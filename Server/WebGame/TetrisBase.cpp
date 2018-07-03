@@ -600,8 +600,9 @@ void TetrisBase::PrintInfo()
 #if 1
 	char szBuffer[4096] = "";
 	int nLenStr = 0;
-	nLenStr += sprintf(szBuffer + nLenStr, "\ncurrent shape : %d, dir : %d, color : %x, pos x  : %d, y : %d\n",
-		m_oCurrentTetris.m_dwTetrisShape, m_oCurrentTetris.m_dwTetrisDirect, m_oCurrentTetris.m_dwTetrisColor,
+	nLenStr += sprintf(szBuffer + nLenStr, "\nplayer : %llu,\ncurrent shape : %d, dir : %d, color : %x, pos x  : %d, y : %d\n",
+		m_refPlayer.GetPlayerId(), m_oCurrentTetris.m_dwTetrisShape,
+		m_oCurrentTetris.m_dwTetrisDirect, m_oCurrentTetris.m_dwTetrisColor,
 		m_oCurrentTetris.m_dwPosX, m_oCurrentTetris.m_dwPosY);
 	nLenStr += sprintf(szBuffer + nLenStr, "next shape : %d, dir : %d, color : %x, pos x  : %d, y : %d\n",
 		m_oNextTetris.m_dwTetrisShape, m_oNextTetris.m_dwTetrisDirect, m_oNextTetris.m_dwTetrisColor,
