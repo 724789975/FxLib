@@ -367,6 +367,12 @@ void TetrisBase::DownTetris()
 			EraseTetris(dwRow);
 		}
 
+		GameProto::GameNotifyPlayeMove oMove;
+		oMove.set_dw_player_id(m_refPlayer.GetPlayerId());
+		oMove.set_f_tick(m_fTick);
+		oMove.set_e_direction(GameProto::EMD_Down);
+		CGameSceneBase::Instance()->NotifyPlayerExcept(oMove, m_refPlayer.GetPlayerId());
+
 		m_oCurrentTetris = m_oNextTetris;
 		m_oNextTetris.m_dwTetrisShape = rand() % SHAPE_COUNT;
 		m_oNextTetris.m_dwTetrisDirect = rand() % 4;
@@ -374,18 +380,13 @@ void TetrisBase::DownTetris()
 		m_oNextTetris.m_dwPosY = TETRIS_UNIT;
 		m_oNextTetris.m_dwTetrisColor = g_dwColors[rand() % COLOR_NUM];
 
-		GameProto::GameNotifyPlayeMove oMove;
-		oMove.set_dw_player_id(m_refPlayer.GetPlayerId());
-		oMove.set_f_tick(m_fTick);
-		oMove.set_e_direction(GameProto::EMD_Down);
-		CGameSceneBase::Instance()->NotifyPlayerExcept(oMove, m_refPlayer.GetPlayerId());
-
 		//·¢ÏûÏ¢
 		GameProto::GameNotifyPlayerNextTetris oNextTetris;
 		oNextTetris.set_dw_player_id(m_refPlayer.GetPlayerId());
 		oNextTetris.set_f_tick(m_fTick);
 		m_oNextTetris.FillTetris(*(oNextTetris.mutable_next_tetris()));
 		CGameSceneBase::Instance()->NotifyPlayer(oNextTetris);
+		LogExe(LogLv_Debug3, "%s", oNextTetris.DebugString());
 	}
 
 	PrintInfo();

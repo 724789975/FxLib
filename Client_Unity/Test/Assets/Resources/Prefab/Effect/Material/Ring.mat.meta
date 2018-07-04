@@ -1,8 +1,10 @@
 fileFormatVersion: 2
-guid: 19c377509ed90ab4a86fc8895ee4a364
+guid: 498596db11f1fa944b26e2e2701664b6
+timeCreated: 1530686184
+licenseType: Pro
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 0
   userData: 
-  assetBundleName: assets/resources/prefab/effect/material/ring
+  assetBundleName: 
   assetBundleVariant: 

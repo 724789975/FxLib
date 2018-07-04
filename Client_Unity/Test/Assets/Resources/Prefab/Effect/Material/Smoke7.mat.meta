@@ -1,8 +1,10 @@
 fileFormatVersion: 2
-guid: 6c6f9642fb8ed364188354e1a70ecad5
+guid: 6e57b164f3bd8434f835ab8f7ef8edad
+timeCreated: 1530686203
+licenseType: Pro
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 0
   userData: 
-  assetBundleName: assets/resources/prefab/effect/material/smoke7
+  assetBundleName: 
   assetBundleVariant: 

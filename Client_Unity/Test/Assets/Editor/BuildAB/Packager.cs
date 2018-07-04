@@ -252,7 +252,7 @@ public class Packager
             AssetImporter import = AssetImporter.GetAtPath(assetPath);
             if (import != null)
             {
-                if (ext.Equals(".prefab") || ext.Equals(".png") || ext.Equals(".mat") || ext.Equals(".unity"))
+                if (ext.Equals(".prefab") || ext.Equals(".png") || ext.Equals(".mat") || ext.Equals(".anim"))
                 {
                     if (!ext.Equals(".png"))
                     {

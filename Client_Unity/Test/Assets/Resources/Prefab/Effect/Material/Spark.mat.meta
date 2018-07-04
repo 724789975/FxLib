@@ -1,8 +1,10 @@
 fileFormatVersion: 2
-guid: 5a91fd224978ec3499b8c1809967ba55
+guid: 7f88d6e1e1e6feb498fb56de458f4a2f
+timeCreated: 1530686212
+licenseType: Pro
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 0
   userData: 
-  assetBundleName: assets/resources/prefab/effect/material/spark
+  assetBundleName: 
   assetBundleVariant: 

@@ -1,8 +1,10 @@
 fileFormatVersion: 2
-guid: d8dec1d0c28ae5d428e25c2a6d349f94
+guid: c345d9b6af9dc3d4e9787f759aeb6e06
+timeCreated: 1530686166
+licenseType: Pro
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 0
   userData: 
-  assetBundleName: assets/resources/prefab/effect/material/lightning
+  assetBundleName: 
   assetBundleVariant: 

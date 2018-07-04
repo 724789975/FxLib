@@ -1,8 +1,10 @@
 fileFormatVersion: 2
-guid: eb3f5a657fb800c43ae6e4166ad27431
+guid: d74d9e3aeffce224a96d0ecbe29c0762
+timeCreated: 1530685673
+licenseType: Pro
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 0
   userData: 
-  assetBundleName: assets/resources/prefab/effect/material/flash(additive)
+  assetBundleName: 
   assetBundleVariant: 

@@ -36,8 +36,8 @@ public class GameControler : SingletonObject<GameControler>
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameState", OnGameNotifyPlayerGameState);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameInitTetris", OnGameNotifyPlayerGameInitTetris);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameTetrisData", OnGameNotifyPlayerGameTetrisData);
-		m_pSession.RegistMessage("GameProto.GameNotifyPlayeMove", OnGameNotifyPlayerNextTetris);
-		m_pSession.RegistMessage("GameProto.GameNotifyPlayeRotation", OnGameNotifyPlayerNextTetris);
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayeMove", OnGameNotifyPlayeMove);
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayeRotation", OnGameNotifyPlayeRotation);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerNextTetris", OnGameNotifyPlayerNextTetris);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerDead", OnGameNotifyPlayerDead);
     }
