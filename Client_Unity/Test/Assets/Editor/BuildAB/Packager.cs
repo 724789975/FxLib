@@ -252,9 +252,13 @@ public class Packager
             AssetImporter import = AssetImporter.GetAtPath(assetPath);
             if (import != null)
             {
+#if UNITY_WEBGL
                 if (ext.Equals(".prefab") || ext.Equals(".png") || ext.Equals(".mat") || ext.Equals(".anim"))
-                {
-                    if (!ext.Equals(".png"))
+#else
+                if (ext.Equals(".prefab") || ext.Equals(".png") || ext.Equals(".mat") || ext.Equals(".unity") || ext.Equals(".anim"))
+#endif
+				{
+					if (!ext.Equals(".png"))
                     {
                         assetPath = assetPath.Replace(ext, "");
                     }

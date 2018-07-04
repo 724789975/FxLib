@@ -386,7 +386,7 @@ void TetrisBase::DownTetris()
 		oNextTetris.set_f_tick(m_fTick);
 		m_oNextTetris.FillTetris(*(oNextTetris.mutable_next_tetris()));
 		CGameSceneBase::Instance()->NotifyPlayer(oNextTetris);
-		LogExe(LogLv_Debug3, "%s", oNextTetris.DebugString());
+		LogExe(LogLv_Debug3, "%s", oNextTetris.DebugString().c_str());
 	}
 
 	PrintInfo();

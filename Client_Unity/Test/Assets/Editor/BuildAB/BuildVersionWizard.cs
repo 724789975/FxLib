@@ -365,6 +365,10 @@ public class BuildUtil
 
 	static public void buildWebGL()
 	{
+		if (!Directory.Exists(Packager.GetABPath() + "/Assets/Resources/screen/"))
+        {
+			Directory.CreateDirectory(Packager.GetABPath() + "/Assets/Resources/screen/");
+        }
 		AssetDatabase.Refresh();
 		string sourcePath = Application.dataPath + "/Resources";
 		DirectoryInfo folder = new DirectoryInfo(sourcePath + "/screen");
