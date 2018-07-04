@@ -300,6 +300,8 @@ public class GameControler : SingletonObject<GameControler>
 		{
 			SampleDebuger.LogYellow("error rotation : " + oRet.EDirection.ToString());
 		}
+
+		SampleDebuger.LogBlue(string.Format("player : {0} move dir {1}", oRet.DwPlayerId.ToString(), oRet.EDirection.ToString()));
 	}
 
 	public void OnGameNotifyPlayeRotation(byte[] pBuf)
@@ -322,6 +324,7 @@ public class GameControler : SingletonObject<GameControler>
 		{
 			SampleDebuger.LogYellow("error rotation : " + oRet.EDirection.ToString());
 		}
+		SampleDebuger.LogBlue(string.Format("player : {0} rot dir {1}", oRet.DwPlayerId.ToString(), oRet.EDirection.ToString()));
 	}
 
 	public void OnGameNotifyPlayerNextTetris(byte[] pBuf)

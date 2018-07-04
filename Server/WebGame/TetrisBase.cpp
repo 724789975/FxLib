@@ -335,6 +335,11 @@ void TetrisBase::DownTetris()
 	{
 		//向下移动一格
 		m_oCurrentTetris.m_dwPosY += 1;
+		GameProto::GameNotifyPlayeMove oMove;
+		oMove.set_dw_player_id(m_refPlayer.GetPlayerId());
+		oMove.set_f_tick(m_fTick);
+		oMove.set_e_direction(GameProto::EMD_Down);
+		CGameSceneBase::Instance()->NotifyPlayerExcept(oMove, m_refPlayer.GetPlayerId());
 	}
 	else
 	{

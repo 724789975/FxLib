@@ -594,7 +594,7 @@ public class TetrisData
 		return false;
 	}
 
-	public bool DownTetris()
+	public virtual bool DownTetris()
 	{
 		if (!CheckDownTetris())
 		{
@@ -637,7 +637,7 @@ public class TetrisData
 		return true;
 	}
 
-	public bool LeftTetris()
+	public virtual bool LeftTetris()
 	{
 		if (!CheckLeftTetris())
 		{
@@ -648,7 +648,7 @@ public class TetrisData
 		return false;
 	}
 
-	public bool RightTetris()
+	public virtual bool RightTetris()
 	{
 		if (!CheckRightTetris())
 		{
@@ -659,7 +659,7 @@ public class TetrisData
 		return false;
 	}
 
-	public bool LeftRotation()
+	public virtual bool LeftRotation()
 	{
 		uint dwTempDir = (m_oCurrentTetris.m_dwTetrisDirect - 1) % s_dwUnit;
 		for (int i = 0; i < s_dwUnit; ++i)
@@ -682,7 +682,7 @@ public class TetrisData
 		return true;
 	}
 
-	public bool RightRotation()
+	public virtual bool RightRotation()
 	{
 		uint dwTempDir = (m_oCurrentTetris.m_dwTetrisDirect + 1) % s_dwUnit;
 		for (int i = 0; i < s_dwUnit; ++i)
@@ -742,11 +742,11 @@ public class TetrisData
 
 public class UserTetrisData : TetrisData
 {
-	public new void DownTetris()
+	public override bool DownTetris()
 	{
 		if (m_oNextTetris == null)
 		{
-			return;
+			return false;
 		}
 		if (base.DownTetris())
 		{
@@ -754,14 +754,16 @@ public class UserTetrisData : TetrisData
 			oRequest.EDirection = GameProto.EMoveDirection.EmdDown;
 			oRequest.FTick = m_fTick;
 			SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestMove");
+			return true;
 		}
+		return false;
 	}
 
-	public new void LeftTetris()
+	public override bool LeftTetris()
 	{
 		if (m_oNextTetris == null)
 		{
-			return;
+			return false;
 		}
 		if (base.LeftTetris())
 		{
@@ -769,14 +771,16 @@ public class UserTetrisData : TetrisData
 			oRequest.EDirection = GameProto.EMoveDirection.EmdLeft;
 			oRequest.FTick = m_fTick;
 			SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestMove");
+			return true;
 		}
+		return false;
 	}
 
-	public new void RightTetris()
+	public override bool RightTetris()
 	{
 		if (m_oNextTetris == null)
 		{
-			return;
+			return false;
 		}
 		if (base.RightTetris())
 		{
@@ -784,14 +788,16 @@ public class UserTetrisData : TetrisData
 			oRequest.EDirection = GameProto.EMoveDirection.EmdRight;
 			oRequest.FTick = m_fTick;
 			SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestMove");
+			return true;
 		}
+		return false;
 	}
 
-	public new void LeftRotation()
+	public override bool LeftRotation()
 	{
 		if (m_oNextTetris == null)
 		{
-			return;
+			return false;
 		}
 		if (base.LeftRotation())
 		{
@@ -799,14 +805,16 @@ public class UserTetrisData : TetrisData
 			oRequest.EDirection = GameProto.ERotationDirection.ErdLeft;
 			oRequest.FTick = m_fTick;
 			SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestRotation");
+			return true;
 		}
+		return false;
 	}
 
-	public new void RightRotation()
+	public override bool RightRotation()
 	{
 		if (m_oNextTetris == null)
 		{
-			return;
+			return false;
 		}
 		if (base.RightRotation())
 		{
@@ -814,7 +822,9 @@ public class UserTetrisData : TetrisData
 			oRequest.EDirection = GameProto.ERotationDirection.ErdRight;
 			oRequest.FTick = m_fTick;
 			SysUtil.SendMessage(GameControler.Instance().proSession, oRequest, "GameProto.PlayerRequestRotation");
+			return true;
 		}
+		return false;
 	}
 
 	public void Update(float fDeltaTime)
