@@ -365,30 +365,32 @@ public class BuildUtil
 
 	static public void buildWebGL()
 	{
-		if (!Directory.Exists(Packager.GetABPath() + "/Assets/Resources/screen/"))
-        {
-			Directory.CreateDirectory(Packager.GetABPath() + "/Assets/Resources/screen/");
-        }
-		AssetDatabase.Refresh();
-		string sourcePath = Application.dataPath + "/Resources";
-		DirectoryInfo folder = new DirectoryInfo(sourcePath + "/screen");
-		FileSystemInfo[] files = folder.GetFileSystemInfos();
-		int length = files.Length;
-		for (int i = 0; i < length; i++)
-		{
-			if(!files[i].Name.Contains(".meta"))
-			{
-				string[] levels = new string[1];
-				levels[0] = files[i].FullName;
-				string szOut = Packager.GetABPath() + "/Assets/Resources/screen/" + files[i].Name;
-				szOut = szOut.Replace(files[i].Extension, "");
-				BuildPipeline.BuildPlayer(levels, szOut.ToLower(), BuildTarget.WebGL, BuildOptions.BuildAdditionalStreamedScenes | BuildOptions.AllowDebugging | BuildOptions.UncompressedAssetBundle | BuildOptions.BuildScriptsOnly);
-			}
-		}
+		//if (!Directory.Exists(Packager.GetABPath() + "/Assets/Resources/screen/"))
+        //{
+		//	Directory.CreateDirectory(Packager.GetABPath() + "/Assets/Resources/screen/");
+        //}
+
+		//AssetDatabase.Refresh();
+		//string sourcePath = Application.dataPath + "/Resources";
+		//DirectoryInfo folder = new DirectoryInfo(sourcePath + "/screen");
+		//FileSystemInfo[] files = folder.GetFileSystemInfos();
+		//int length = files.Length;
+		//for (int i = 0; i < length; i++)
+		//{
+		//	if(!files[i].Name.Contains(".meta"))
+		//	{
+		//		string[] levels = new string[1];
+		//		levels[0] = files[i].FullName;
+		//		string szOut = Packager.GetABPath() + "/Assets/Resources/screen/" + files[i].Name;
+		//		szOut = szOut.Replace(files[i].Extension, "");
+		//		BuildPipeline.BuildPlayer(levels, szOut.ToLower(), BuildTarget.WebGL, BuildOptions.BuildAdditionalStreamedScenes | BuildOptions.AllowDebugging | BuildOptions.UncompressedAssetBundle | BuildOptions.BuildScriptsOnly);
+		//	}
+		//}
 		BuildTarget type = BuildTarget.WebGL;
 		//copyWWise(type);
 		copyABRes(type);
 		//createVersion();
+		AssetDatabase.Refresh();
 		BuildPipeline.BuildPlayer(levels, Application.dataPath + "/../view", BuildTarget.WebGL, BuildOptions.ShowBuiltPlayer | BuildOptions.AllowDebugging | BuildOptions.BuildScriptsOnly);
 	}
 
