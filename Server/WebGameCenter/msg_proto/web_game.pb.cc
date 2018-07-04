@@ -340,6 +340,16 @@ class GameNotifyPlayerDeadDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<GameNotifyPlayerDead>
       _instance;
 } _GameNotifyPlayerDead_default_instance_;
+class GameNotifyPlayeMoveDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<GameNotifyPlayeMove>
+      _instance;
+} _GameNotifyPlayeMove_default_instance_;
+class GameNotifyPlayeRotationDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<GameNotifyPlayeRotation>
+      _instance;
+} _GameNotifyPlayeRotation_default_instance_;
 class ServerInfoDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<ServerInfo>
@@ -1702,6 +1712,48 @@ void InitDefaultsGameNotifyPlayerDead() {
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsGameNotifyPlayerDeadImpl);
 }
 
+void InitDefaultsGameNotifyPlayeMoveImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::GameProto::_GameNotifyPlayeMove_default_instance_;
+    new (ptr) ::GameProto::GameNotifyPlayeMove();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::GameProto::GameNotifyPlayeMove::InitAsDefaultInstance();
+}
+
+void InitDefaultsGameNotifyPlayeMove() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsGameNotifyPlayeMoveImpl);
+}
+
+void InitDefaultsGameNotifyPlayeRotationImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::GameProto::_GameNotifyPlayeRotation_default_instance_;
+    new (ptr) ::GameProto::GameNotifyPlayeRotation();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::GameProto::GameNotifyPlayeRotation::InitAsDefaultInstance();
+}
+
+void InitDefaultsGameNotifyPlayeRotation() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsGameNotifyPlayeRotationImpl);
+}
+
 void InitDefaultsServerInfoImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -1723,7 +1775,7 @@ void InitDefaultsServerInfo() {
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsServerInfoImpl);
 }
 
-::google::protobuf::Metadata file_level_metadata[65];
+::google::protobuf::Metadata file_level_metadata[67];
 const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors[5];
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
@@ -2186,6 +2238,22 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   ~0u,  // no _weak_field_map_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayerDead, dw_player_id_),
   ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayeMove, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayeMove, dw_player_id_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayeMove, f_tick_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayeMove, e_direction_),
+  ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayeRotation, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayeRotation, dw_player_id_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayeRotation, f_tick_),
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayeRotation, e_direction_),
+  ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::ServerInfo, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -2261,7 +2329,9 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROT
   { 434, -1, sizeof(::GameProto::GameNotifyPlayerGameTetrisData)},
   { 444, -1, sizeof(::GameProto::GameNotifyPlayerNextTetris)},
   { 452, -1, sizeof(::GameProto::GameNotifyPlayerDead)},
-  { 458, -1, sizeof(::GameProto::ServerInfo)},
+  { 458, -1, sizeof(::GameProto::GameNotifyPlayeMove)},
+  { 466, -1, sizeof(::GameProto::GameNotifyPlayeRotation)},
+  { 474, -1, sizeof(::GameProto::ServerInfo)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -2329,6 +2399,8 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_GameNotifyPlayerGameTetrisData_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_GameNotifyPlayerNextTetris_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_GameNotifyPlayerDead_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_GameNotifyPlayeMove_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_GameNotifyPlayeRotation_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_ServerInfo_default_instance_),
 };
 
@@ -2348,7 +2420,7 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_PROTOBUF_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 65);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 67);
 }
 
 void AddDescriptorsImpl() {
@@ -2485,27 +2557,32 @@ void AddDescriptorsImpl() {
       "tTetris\022\024\n\014dw_player_id\030\001 \001(\004\022\016\n\006f_tick\030"
       "\002 \001(\002\022&\n\013next_tetris\030\003 \001(\0132\021.GameProto.T"
       "etris\",\n\024GameNotifyPlayerDead\022\024\n\014dw_play"
-      "er_id\030\001 \001(\004\"\212\001\n\nServerInfo\022\024\n\014dw_server_"
-      "id\030\001 \001(\r\022\024\n\014sz_listen_ip\030\002 \001(\t\022\024\n\014dw_tea"
-      "m_port\030\003 \001(\r\022#\n\033dw_game_server_manager_p"
-      "ort\030\004 \001(\r\022\025\n\rdw_login_port\030\005 \001(\r*I\n\013ESer"
-      "verType\022\013\n\007ST_NONE\020\000\022\014\n\010ST_Login\020\001\022\013\n\007ST"
-      "_Team\020\002\022\022\n\016ST_GameManager\020\003*\'\n\tETeamType"
-      "\022\013\n\007TT_NONE\020\000\022\r\n\tTT_Normal\020\001*\214\002\n\nEErrorC"
-      "ode\022\013\n\007EC_NONE\020\000\022\024\n\020EC_AlreadyInTeam\020\001\022\026"
-      "\n\022EC_MakeTeamNotIdle\020\002\022\027\n\023EC_CannotFindP"
-      "layer\020\003\022\017\n\013EC_NoTeamId\020\004\022\020\n\014EC_NotLeader"
-      "\020\005\022\023\n\017EC_TeamHasStart\020\006\022\032\n\026EC_NoGameMana"
-      "gerServer\020\007\022\023\n\017EC_NoTeamServer\020\010\022\024\n\020EC_N"
-      "oLoginServer\020\t\022\026\n\022EC_PlayerNotOnline\020\n\022\023"
-      "\n\017EC_FailIntoTeam\020\013*I\n\016EMoveDirection\022\014\n"
-      "\010EMD_NONE\020\000\022\014\n\010EMD_Down\020\001\022\014\n\010EMD_Left\020\002\022"
-      "\r\n\tEMD_Right\020\003*\?\n\022ERotationDirection\022\014\n\010"
-      "ERD_NONE\020\000\022\014\n\010ERD_Left\020\001\022\r\n\tERD_Right\020\002b"
-      "\006proto3"
+      "er_id\030\001 \001(\004\"k\n\023GameNotifyPlayeMove\022\024\n\014dw"
+      "_player_id\030\001 \001(\004\022\016\n\006f_tick\030\002 \001(\002\022.\n\013e_di"
+      "rection\030\003 \001(\0162\031.GameProto.EMoveDirection"
+      "\"s\n\027GameNotifyPlayeRotation\022\024\n\014dw_player"
+      "_id\030\001 \001(\004\022\016\n\006f_tick\030\002 \001(\002\0222\n\013e_direction"
+      "\030\003 \001(\0162\035.GameProto.ERotationDirection\"\212\001"
+      "\n\nServerInfo\022\024\n\014dw_server_id\030\001 \001(\r\022\024\n\014sz"
+      "_listen_ip\030\002 \001(\t\022\024\n\014dw_team_port\030\003 \001(\r\022#"
+      "\n\033dw_game_server_manager_port\030\004 \001(\r\022\025\n\rd"
+      "w_login_port\030\005 \001(\r*I\n\013EServerType\022\013\n\007ST_"
+      "NONE\020\000\022\014\n\010ST_Login\020\001\022\013\n\007ST_Team\020\002\022\022\n\016ST_"
+      "GameManager\020\003*\'\n\tETeamType\022\013\n\007TT_NONE\020\000\022"
+      "\r\n\tTT_Normal\020\001*\214\002\n\nEErrorCode\022\013\n\007EC_NONE"
+      "\020\000\022\024\n\020EC_AlreadyInTeam\020\001\022\026\n\022EC_MakeTeamN"
+      "otIdle\020\002\022\027\n\023EC_CannotFindPlayer\020\003\022\017\n\013EC_"
+      "NoTeamId\020\004\022\020\n\014EC_NotLeader\020\005\022\023\n\017EC_TeamH"
+      "asStart\020\006\022\032\n\026EC_NoGameManagerServer\020\007\022\023\n"
+      "\017EC_NoTeamServer\020\010\022\024\n\020EC_NoLoginServer\020\t"
+      "\022\026\n\022EC_PlayerNotOnline\020\n\022\023\n\017EC_FailIntoT"
+      "eam\020\013*I\n\016EMoveDirection\022\014\n\010EMD_NONE\020\000\022\014\n"
+      "\010EMD_Down\020\001\022\014\n\010EMD_Left\020\002\022\r\n\tEMD_Right\020\003"
+      "*\?\n\022ERotationDirection\022\014\n\010ERD_NONE\020\000\022\014\n\010"
+      "ERD_Left\020\001\022\r\n\tERD_Right\020\002b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 5927);
+      descriptor, 6153);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "web_game.proto", &protobuf_RegisterTypes);
   ::protobuf_web_5fdata_2eproto::AddDescriptors();
@@ -21158,6 +21235,638 @@ void GameNotifyPlayerDead::InternalSwap(GameNotifyPlayerDead* other) {
 }
 
 ::google::protobuf::Metadata GameNotifyPlayerDead::GetMetadata() const {
+  protobuf_web_5fgame_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_web_5fgame_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
+void GameNotifyPlayeMove::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int GameNotifyPlayeMove::kDwPlayerIdFieldNumber;
+const int GameNotifyPlayeMove::kFTickFieldNumber;
+const int GameNotifyPlayeMove::kEDirectionFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+GameNotifyPlayeMove::GameNotifyPlayeMove()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayeMove();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:GameProto.GameNotifyPlayeMove)
+}
+GameNotifyPlayeMove::GameNotifyPlayeMove(const GameNotifyPlayeMove& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&dw_player_id_, &from.dw_player_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&e_direction_) -
+    reinterpret_cast<char*>(&dw_player_id_)) + sizeof(e_direction_));
+  // @@protoc_insertion_point(copy_constructor:GameProto.GameNotifyPlayeMove)
+}
+
+void GameNotifyPlayeMove::SharedCtor() {
+  ::memset(&dw_player_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&e_direction_) -
+      reinterpret_cast<char*>(&dw_player_id_)) + sizeof(e_direction_));
+  _cached_size_ = 0;
+}
+
+GameNotifyPlayeMove::~GameNotifyPlayeMove() {
+  // @@protoc_insertion_point(destructor:GameProto.GameNotifyPlayeMove)
+  SharedDtor();
+}
+
+void GameNotifyPlayeMove::SharedDtor() {
+}
+
+void GameNotifyPlayeMove::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* GameNotifyPlayeMove::descriptor() {
+  ::protobuf_web_5fgame_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_web_5fgame_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const GameNotifyPlayeMove& GameNotifyPlayeMove::default_instance() {
+  ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayeMove();
+  return *internal_default_instance();
+}
+
+GameNotifyPlayeMove* GameNotifyPlayeMove::New(::google::protobuf::Arena* arena) const {
+  GameNotifyPlayeMove* n = new GameNotifyPlayeMove;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void GameNotifyPlayeMove::Clear() {
+// @@protoc_insertion_point(message_clear_start:GameProto.GameNotifyPlayeMove)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&dw_player_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&e_direction_) -
+      reinterpret_cast<char*>(&dw_player_id_)) + sizeof(e_direction_));
+  _internal_metadata_.Clear();
+}
+
+bool GameNotifyPlayeMove::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:GameProto.GameNotifyPlayeMove)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // uint64 dw_player_id = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &dw_player_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float f_tick = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(21u /* 21 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &f_tick_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .GameProto.EMoveDirection e_direction = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_e_direction(static_cast< ::GameProto::EMoveDirection >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:GameProto.GameNotifyPlayeMove)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:GameProto.GameNotifyPlayeMove)
+  return false;
+#undef DO_
+}
+
+void GameNotifyPlayeMove::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:GameProto.GameNotifyPlayeMove)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint64 dw_player_id = 1;
+  if (this->dw_player_id() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(1, this->dw_player_id(), output);
+  }
+
+  // float f_tick = 2;
+  if (this->f_tick() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->f_tick(), output);
+  }
+
+  // .GameProto.EMoveDirection e_direction = 3;
+  if (this->e_direction() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      3, this->e_direction(), output);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
+  }
+  // @@protoc_insertion_point(serialize_end:GameProto.GameNotifyPlayeMove)
+}
+
+::google::protobuf::uint8* GameNotifyPlayeMove::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:GameProto.GameNotifyPlayeMove)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint64 dw_player_id = 1;
+  if (this->dw_player_id() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(1, this->dw_player_id(), target);
+  }
+
+  // float f_tick = 2;
+  if (this->f_tick() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->f_tick(), target);
+  }
+
+  // .GameProto.EMoveDirection e_direction = 3;
+  if (this->e_direction() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      3, this->e_direction(), target);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:GameProto.GameNotifyPlayeMove)
+  return target;
+}
+
+size_t GameNotifyPlayeMove::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:GameProto.GameNotifyPlayeMove)
+  size_t total_size = 0;
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
+  }
+  // uint64 dw_player_id = 1;
+  if (this->dw_player_id() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->dw_player_id());
+  }
+
+  // float f_tick = 2;
+  if (this->f_tick() != 0) {
+    total_size += 1 + 4;
+  }
+
+  // .GameProto.EMoveDirection e_direction = 3;
+  if (this->e_direction() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->e_direction());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void GameNotifyPlayeMove::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:GameProto.GameNotifyPlayeMove)
+  GOOGLE_DCHECK_NE(&from, this);
+  const GameNotifyPlayeMove* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const GameNotifyPlayeMove>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:GameProto.GameNotifyPlayeMove)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:GameProto.GameNotifyPlayeMove)
+    MergeFrom(*source);
+  }
+}
+
+void GameNotifyPlayeMove::MergeFrom(const GameNotifyPlayeMove& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:GameProto.GameNotifyPlayeMove)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.dw_player_id() != 0) {
+    set_dw_player_id(from.dw_player_id());
+  }
+  if (from.f_tick() != 0) {
+    set_f_tick(from.f_tick());
+  }
+  if (from.e_direction() != 0) {
+    set_e_direction(from.e_direction());
+  }
+}
+
+void GameNotifyPlayeMove::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:GameProto.GameNotifyPlayeMove)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void GameNotifyPlayeMove::CopyFrom(const GameNotifyPlayeMove& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:GameProto.GameNotifyPlayeMove)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool GameNotifyPlayeMove::IsInitialized() const {
+  return true;
+}
+
+void GameNotifyPlayeMove::Swap(GameNotifyPlayeMove* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void GameNotifyPlayeMove::InternalSwap(GameNotifyPlayeMove* other) {
+  using std::swap;
+  swap(dw_player_id_, other->dw_player_id_);
+  swap(f_tick_, other->f_tick_);
+  swap(e_direction_, other->e_direction_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata GameNotifyPlayeMove::GetMetadata() const {
+  protobuf_web_5fgame_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_web_5fgame_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
+void GameNotifyPlayeRotation::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+const int GameNotifyPlayeRotation::kDwPlayerIdFieldNumber;
+const int GameNotifyPlayeRotation::kFTickFieldNumber;
+const int GameNotifyPlayeRotation::kEDirectionFieldNumber;
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+GameNotifyPlayeRotation::GameNotifyPlayeRotation()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayeRotation();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:GameProto.GameNotifyPlayeRotation)
+}
+GameNotifyPlayeRotation::GameNotifyPlayeRotation(const GameNotifyPlayeRotation& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::memcpy(&dw_player_id_, &from.dw_player_id_,
+    static_cast<size_t>(reinterpret_cast<char*>(&e_direction_) -
+    reinterpret_cast<char*>(&dw_player_id_)) + sizeof(e_direction_));
+  // @@protoc_insertion_point(copy_constructor:GameProto.GameNotifyPlayeRotation)
+}
+
+void GameNotifyPlayeRotation::SharedCtor() {
+  ::memset(&dw_player_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&e_direction_) -
+      reinterpret_cast<char*>(&dw_player_id_)) + sizeof(e_direction_));
+  _cached_size_ = 0;
+}
+
+GameNotifyPlayeRotation::~GameNotifyPlayeRotation() {
+  // @@protoc_insertion_point(destructor:GameProto.GameNotifyPlayeRotation)
+  SharedDtor();
+}
+
+void GameNotifyPlayeRotation::SharedDtor() {
+}
+
+void GameNotifyPlayeRotation::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* GameNotifyPlayeRotation::descriptor() {
+  ::protobuf_web_5fgame_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_web_5fgame_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const GameNotifyPlayeRotation& GameNotifyPlayeRotation::default_instance() {
+  ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayeRotation();
+  return *internal_default_instance();
+}
+
+GameNotifyPlayeRotation* GameNotifyPlayeRotation::New(::google::protobuf::Arena* arena) const {
+  GameNotifyPlayeRotation* n = new GameNotifyPlayeRotation;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void GameNotifyPlayeRotation::Clear() {
+// @@protoc_insertion_point(message_clear_start:GameProto.GameNotifyPlayeRotation)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  ::memset(&dw_player_id_, 0, static_cast<size_t>(
+      reinterpret_cast<char*>(&e_direction_) -
+      reinterpret_cast<char*>(&dw_player_id_)) + sizeof(e_direction_));
+  _internal_metadata_.Clear();
+}
+
+bool GameNotifyPlayeRotation::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:GameProto.GameNotifyPlayeRotation)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+    switch (::google::protobuf::internal::WireFormatLite::GetTagFieldNumber(tag)) {
+      // uint64 dw_player_id = 1;
+      case 1: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(8u /* 8 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   ::google::protobuf::uint64, ::google::protobuf::internal::WireFormatLite::TYPE_UINT64>(
+                 input, &dw_player_id_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // float f_tick = 2;
+      case 2: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(21u /* 21 & 0xFF */)) {
+
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   float, ::google::protobuf::internal::WireFormatLite::TYPE_FLOAT>(
+                 input, &f_tick_)));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      // .GameProto.ERotationDirection e_direction = 3;
+      case 3: {
+        if (static_cast< ::google::protobuf::uint8>(tag) ==
+            static_cast< ::google::protobuf::uint8>(24u /* 24 & 0xFF */)) {
+          int value;
+          DO_((::google::protobuf::internal::WireFormatLite::ReadPrimitive<
+                   int, ::google::protobuf::internal::WireFormatLite::TYPE_ENUM>(
+                 input, &value)));
+          set_e_direction(static_cast< ::GameProto::ERotationDirection >(value));
+        } else {
+          goto handle_unusual;
+        }
+        break;
+      }
+
+      default: {
+      handle_unusual:
+        if (tag == 0) {
+          goto success;
+        }
+        DO_(::google::protobuf::internal::WireFormat::SkipField(
+              input, tag, _internal_metadata_.mutable_unknown_fields()));
+        break;
+      }
+    }
+  }
+success:
+  // @@protoc_insertion_point(parse_success:GameProto.GameNotifyPlayeRotation)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:GameProto.GameNotifyPlayeRotation)
+  return false;
+#undef DO_
+}
+
+void GameNotifyPlayeRotation::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:GameProto.GameNotifyPlayeRotation)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint64 dw_player_id = 1;
+  if (this->dw_player_id() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteUInt64(1, this->dw_player_id(), output);
+  }
+
+  // float f_tick = 2;
+  if (this->f_tick() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteFloat(2, this->f_tick(), output);
+  }
+
+  // .GameProto.ERotationDirection e_direction = 3;
+  if (this->e_direction() != 0) {
+    ::google::protobuf::internal::WireFormatLite::WriteEnum(
+      3, this->e_direction(), output);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
+  }
+  // @@protoc_insertion_point(serialize_end:GameProto.GameNotifyPlayeRotation)
+}
+
+::google::protobuf::uint8* GameNotifyPlayeRotation::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:GameProto.GameNotifyPlayeRotation)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  // uint64 dw_player_id = 1;
+  if (this->dw_player_id() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteUInt64ToArray(1, this->dw_player_id(), target);
+  }
+
+  // float f_tick = 2;
+  if (this->f_tick() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteFloatToArray(2, this->f_tick(), target);
+  }
+
+  // .GameProto.ERotationDirection e_direction = 3;
+  if (this->e_direction() != 0) {
+    target = ::google::protobuf::internal::WireFormatLite::WriteEnumToArray(
+      3, this->e_direction(), target);
+  }
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:GameProto.GameNotifyPlayeRotation)
+  return target;
+}
+
+size_t GameNotifyPlayeRotation::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:GameProto.GameNotifyPlayeRotation)
+  size_t total_size = 0;
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
+  }
+  // uint64 dw_player_id = 1;
+  if (this->dw_player_id() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::UInt64Size(
+        this->dw_player_id());
+  }
+
+  // float f_tick = 2;
+  if (this->f_tick() != 0) {
+    total_size += 1 + 4;
+  }
+
+  // .GameProto.ERotationDirection e_direction = 3;
+  if (this->e_direction() != 0) {
+    total_size += 1 +
+      ::google::protobuf::internal::WireFormatLite::EnumSize(this->e_direction());
+  }
+
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void GameNotifyPlayeRotation::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:GameProto.GameNotifyPlayeRotation)
+  GOOGLE_DCHECK_NE(&from, this);
+  const GameNotifyPlayeRotation* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const GameNotifyPlayeRotation>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:GameProto.GameNotifyPlayeRotation)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:GameProto.GameNotifyPlayeRotation)
+    MergeFrom(*source);
+  }
+}
+
+void GameNotifyPlayeRotation::MergeFrom(const GameNotifyPlayeRotation& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:GameProto.GameNotifyPlayeRotation)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if (from.dw_player_id() != 0) {
+    set_dw_player_id(from.dw_player_id());
+  }
+  if (from.f_tick() != 0) {
+    set_f_tick(from.f_tick());
+  }
+  if (from.e_direction() != 0) {
+    set_e_direction(from.e_direction());
+  }
+}
+
+void GameNotifyPlayeRotation::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:GameProto.GameNotifyPlayeRotation)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void GameNotifyPlayeRotation::CopyFrom(const GameNotifyPlayeRotation& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:GameProto.GameNotifyPlayeRotation)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool GameNotifyPlayeRotation::IsInitialized() const {
+  return true;
+}
+
+void GameNotifyPlayeRotation::Swap(GameNotifyPlayeRotation* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void GameNotifyPlayeRotation::InternalSwap(GameNotifyPlayeRotation* other) {
+  using std::swap;
+  swap(dw_player_id_, other->dw_player_id_);
+  swap(f_tick_, other->f_tick_);
+  swap(e_direction_, other->e_direction_);
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata GameNotifyPlayeRotation::GetMetadata() const {
   protobuf_web_5fgame_2eproto::protobuf_AssignDescriptorsOnce();
   return ::protobuf_web_5fgame_2eproto::file_level_metadata[kIndexInFileMessages];
 }

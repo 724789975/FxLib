@@ -25,7 +25,7 @@ public class GameLogic : SingletonObject<GameLogic>
 		{
 			return;
 		}
-		TetrisDataManager.Instance().proUserTetrisData.DownTetris();
+		TetrisDataManager.Instance().proUserTetrisData.TetrisOperator(GameProto.EMoveDirection.EmdDown);
 	}
 
 	public void LeftTetris()
@@ -34,7 +34,7 @@ public class GameLogic : SingletonObject<GameLogic>
 		{
 			return;
 		}
-		TetrisDataManager.Instance().proUserTetrisData.LeftTetris();
+		TetrisDataManager.Instance().proUserTetrisData.TetrisOperator(GameProto.EMoveDirection.EmdLeft);
 	}
 
 	public void RightTetris()
@@ -43,7 +43,7 @@ public class GameLogic : SingletonObject<GameLogic>
 		{
 			return;
 		}
-		TetrisDataManager.Instance().proUserTetrisData.RightTetris();
+		TetrisDataManager.Instance().proUserTetrisData.TetrisOperator(GameProto.EMoveDirection.EmdRight);
 	}
 
 	public void LeftRotation()
@@ -52,7 +52,7 @@ public class GameLogic : SingletonObject<GameLogic>
 		{
 			return;
 		}
-		TetrisDataManager.Instance().proUserTetrisData.LeftRotation();
+		TetrisDataManager.Instance().proUserTetrisData.TetrisOperator(GameProto.ERotationDirection.ErdLeft);
 	}
 
 	public void RightRotation()
@@ -61,7 +61,7 @@ public class GameLogic : SingletonObject<GameLogic>
 		{
 			return;
 		}
-		TetrisDataManager.Instance().proUserTetrisData.RightRotation();
+		TetrisDataManager.Instance().proUserTetrisData.TetrisOperator(GameProto.ERotationDirection.ErdRight);
 	}
 
 	// Update is called once per frame
@@ -80,31 +80,31 @@ public class GameLogic : SingletonObject<GameLogic>
 		if (Input.GetKey(KeyCode.S))
 		{
 			SampleDebuger.Log("您按下了S键");
-			TetrisDataManager.Instance().proUserTetrisData.DownTetris();
+			DownTetris();
         }
 
 		if (Input.GetKeyDown(KeyCode.A))
 		{
 			SampleDebuger.Log("您按下了A键");
-			TetrisDataManager.Instance().proUserTetrisData.LeftTetris();
+			LeftTetris();
 		}
 
 		if (Input.GetKeyDown(KeyCode.D))
 		{
 			SampleDebuger.Log("您按下了D键");
-			TetrisDataManager.Instance().proUserTetrisData.RightTetris();
+			RightTetris();
 		}
 
 		if (Input.GetKeyDown(KeyCode.H))
 		{
 			SampleDebuger.Log("您按下了H键");
-			TetrisDataManager.Instance().proUserTetrisData.LeftRotation();
+			LeftRotation();
 		}
 
 		if (Input.GetKeyDown(KeyCode.J))
 		{
 			SampleDebuger.Log("您按下了J键");
-			TetrisDataManager.Instance().proUserTetrisData.RightRotation();
+			RightRotation();
 		}
 #endif
 

@@ -461,6 +461,20 @@ message GameNotifyPlayerDead
 	uint64 dw_player_id = 1;
 }
 
+message GameNotifyPlayeMove
+{
+	uint64 dw_player_id = 1;
+	float f_tick = 2;
+	EMoveDirection e_direction = 3;
+}
+
+message GameNotifyPlayeRotation
+{
+	uint64 dw_player_id = 1;
+	float f_tick = 2;
+	ERotationDirection e_direction = 3;
+}
+
 //serverinfo(server->server_center, server_center->server)
 message ServerInfo
 {

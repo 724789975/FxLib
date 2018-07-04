@@ -36,6 +36,8 @@ public class GameControler : SingletonObject<GameControler>
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameState", OnGameNotifyPlayerGameState);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameInitTetris", OnGameNotifyPlayerGameInitTetris);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerGameTetrisData", OnGameNotifyPlayerGameTetrisData);
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayeMove", OnGameNotifyPlayerNextTetris);
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayeRotation", OnGameNotifyPlayerNextTetris);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerNextTetris", OnGameNotifyPlayerNextTetris);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerDead", OnGameNotifyPlayerDead);
     }
@@ -276,6 +278,50 @@ public class GameControler : SingletonObject<GameControler>
 			return;
 		}
 		pTetrisData.Sync(oRet);
+	}
+
+	public void OnGameNotifyPlayeMove(byte[] pBuf)
+	{
+		GameProto.GameNotifyPlayeMove oRet = GameProto.GameNotifyPlayeMove.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.LogYellow("GameNotifyPlayeMove error parse");
+			return;
+		}
+
+		TetrisData pTetrisData = TetrisDataManager.Instance().GetTetrisData(oRet.DwPlayerId);
+		if (pTetrisData == null)
+		{
+			SampleDebuger.LogYellow("can't find tetris data player id : " + oRet.DwPlayerId.ToString());
+			return;
+		}
+
+		if (!pTetrisData.TetrisOperator(oRet.EDirection))
+		{
+			SampleDebuger.LogYellow("error rotation : " + oRet.EDirection.ToString());
+		}
+	}
+
+	public void OnGameNotifyPlayeRotation(byte[] pBuf)
+	{
+		GameProto.GameNotifyPlayeRotation oRet = GameProto.GameNotifyPlayeRotation.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.LogYellow("GameNotifyPlayeRotation error parse");
+			return;
+		}
+
+		TetrisData pTetrisData = TetrisDataManager.Instance().GetTetrisData(oRet.DwPlayerId);
+		if (pTetrisData == null)
+		{
+			SampleDebuger.LogYellow("can't find tetris data player id : " + oRet.DwPlayerId.ToString());
+			return;
+		}
+
+		if (!pTetrisData.TetrisOperator(oRet.EDirection))
+		{
+			SampleDebuger.LogYellow("error rotation : " + oRet.EDirection.ToString());
+		}
 	}
 
 	public void OnGameNotifyPlayerNextTetris(byte[] pBuf)

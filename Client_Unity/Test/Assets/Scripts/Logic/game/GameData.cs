@@ -535,9 +535,9 @@ public class TetrisData
 
 			int dwCheckX = m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) - 1;
 			int dwCheckY = m_oCurrentTetris.m_dwPosY - (int)s_dwUnit + i;
-			SampleDebuger.LogRed(string.Format("pos [{0},{1}], check pos [{2},{3}], tetris [{4},{5}]",
-				m_oCurrentTetris.m_dwPosY.ToString(), m_oCurrentTetris.m_dwPosX.ToString(),
-				dwCheckY.ToString(), dwCheckX.ToString(), m_oCurrentTetris.m_dwTetrisShape.ToString(), m_oCurrentTetris.m_dwTetrisDirect.ToString()));
+			//SampleDebuger.LogRed(string.Format("pos [{0},{1}], check pos [{2},{3}], tetris [{4},{5}]",
+			//	m_oCurrentTetris.m_dwPosY.ToString(), m_oCurrentTetris.m_dwPosX.ToString(),
+			//	dwCheckY.ToString(), dwCheckX.ToString(), m_oCurrentTetris.m_dwTetrisShape.ToString(), m_oCurrentTetris.m_dwTetrisDirect.ToString()));
 			if (CheckTetris(dwCheckX, dwCheckY))
 			{
 				return true;
@@ -559,9 +559,9 @@ public class TetrisData
 
 			int dwCheckX = m_oCurrentTetris.m_dwPosX + ((int)dwBlockInfo & 0x0000000F) + 1;
 			int dwCheckY = m_oCurrentTetris.m_dwPosY - (int)s_dwUnit + i;
-			SampleDebuger.LogRed(string.Format("pos [{0},{1}], check pos [{2},{3}], tetris [{4},{5}]",
-				m_oCurrentTetris.m_dwPosY.ToString(), m_oCurrentTetris.m_dwPosX.ToString(),
-				dwCheckY.ToString(), dwCheckX.ToString(), m_oCurrentTetris.m_dwTetrisShape.ToString(), m_oCurrentTetris.m_dwTetrisDirect.ToString()));
+			//SampleDebuger.LogRed(string.Format("pos [{0},{1}], check pos [{2},{3}], tetris [{4},{5}]",
+			//	m_oCurrentTetris.m_dwPosY.ToString(), m_oCurrentTetris.m_dwPosX.ToString(),
+			//	dwCheckY.ToString(), dwCheckX.ToString(), m_oCurrentTetris.m_dwTetrisShape.ToString(), m_oCurrentTetris.m_dwTetrisDirect.ToString()));
 			if (CheckTetris(dwCheckX, dwCheckY))
 			{
 				return true;
@@ -583,9 +583,9 @@ public class TetrisData
 
 			int dwCheckY = m_oCurrentTetris.m_dwPosY - ((int)dwBlockInfo & 0x0000000F);
 			int dwCheckX = m_oCurrentTetris.m_dwPosX + i;
-			SampleDebuger.LogRed(string.Format("pos [{0},{1}], check pos [{2},{3}], tetris [{4},{5}]",
-				m_oCurrentTetris.m_dwPosY.ToString(), m_oCurrentTetris.m_dwPosX.ToString(),
-				dwCheckY.ToString(), dwCheckX.ToString(), m_oCurrentTetris.m_dwTetrisShape.ToString(), m_oCurrentTetris.m_dwTetrisDirect.ToString()));
+			//SampleDebuger.LogRed(string.Format("pos [{0},{1}], check pos [{2},{3}], tetris [{4},{5}]",
+			//	m_oCurrentTetris.m_dwPosY.ToString(), m_oCurrentTetris.m_dwPosX.ToString(),
+			//	dwCheckY.ToString(), dwCheckX.ToString(), m_oCurrentTetris.m_dwTetrisShape.ToString(), m_oCurrentTetris.m_dwTetrisDirect.ToString()));
 			if (CheckTetris(dwCheckX, dwCheckY))
 			{
 				return true;
@@ -661,7 +661,7 @@ public class TetrisData
 
 	public bool LeftRotation()
 	{
-		uint dwTempDir = (m_oCurrentTetris.m_dwTetrisDirect + 1) % s_dwUnit;
+		uint dwTempDir = (m_oCurrentTetris.m_dwTetrisDirect - 1) % s_dwUnit;
 		for (int i = 0; i < s_dwUnit; ++i)
 		{
 			for (int j = 0; j < s_dwUnit; ++j)
@@ -684,7 +684,7 @@ public class TetrisData
 
 	public bool RightRotation()
 	{
-		uint dwTempDir = (m_oCurrentTetris.m_dwTetrisDirect - 1) % s_dwUnit;
+		uint dwTempDir = (m_oCurrentTetris.m_dwTetrisDirect + 1) % s_dwUnit;
 		for (int i = 0; i < s_dwUnit; ++i)
 		{
 			for (int j = 0; j < s_dwUnit; ++j)
@@ -703,6 +703,27 @@ public class TetrisData
 		m_oCurrentTetris.m_dwTetrisDirect = dwTempDir;
 		m_bNeedRefresh = true;
 		return true;
+	}
+
+	public bool TetrisOperator(GameProto.EMoveDirection eMove)
+	{
+		switch (eMove)
+		{
+			case GameProto.EMoveDirection.EmdDown: DownTetris(); return true;
+			case GameProto.EMoveDirection.EmdLeft: LeftTetris(); return true;
+			case GameProto.EMoveDirection.EmdRight: RightTetris(); return true;
+		}
+		return false;
+	}
+
+	public bool TetrisOperator(GameProto.ERotationDirection eRot)
+	{
+		switch (eRot)
+		{
+			case GameProto.ERotationDirection.ErdLeft: LeftRotation(); return true;
+			case GameProto.ERotationDirection.ErdRight: RightRotation(); return true;
+		}
+		return false;
 	}
 
 	public virtual void OnEnd() { }

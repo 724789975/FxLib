@@ -8,6 +8,8 @@
 #include "GameConfigBase.h"
 #include "PlayerSession.h"
 
+#include "msg_proto/web_game.pb.h"
+
 #define COLOR_NUM 8
 static const unsigned int g_dwColors[COLUMN_NUM]
 {
@@ -372,6 +374,12 @@ void TetrisBase::DownTetris()
 		m_oNextTetris.m_dwPosY = TETRIS_UNIT;
 		m_oNextTetris.m_dwTetrisColor = g_dwColors[rand() % COLOR_NUM];
 
+		GameProto::GameNotifyPlayeMove oMove;
+		oMove.set_dw_player_id(m_refPlayer.GetPlayerId());
+		oMove.set_f_tick(m_fTick);
+		oMove.set_e_direction(GameProto::EMD_Down);
+		CGameSceneBase::Instance()->NotifyPlayerExcept(oMove, m_refPlayer.GetPlayerId());
+
 		//·¢ÏûÏ¢
 		GameProto::GameNotifyPlayerNextTetris oNextTetris;
 		oNextTetris.set_dw_player_id(m_refPlayer.GetPlayerId());
@@ -391,6 +399,12 @@ void TetrisBase::LeftTetris()
 	{
 		m_oCurrentTetris.m_dwPosX -= 1;
 		m_bNeedRefresh = true;
+
+		GameProto::GameNotifyPlayeMove oMove;
+		oMove.set_dw_player_id(m_refPlayer.GetPlayerId());
+		oMove.set_f_tick(m_fTick);
+		oMove.set_e_direction(GameProto::EMD_Left);
+		CGameSceneBase::Instance()->NotifyPlayerExcept(oMove, m_refPlayer.GetPlayerId());
 	}
 	else
 	{
@@ -404,6 +418,12 @@ void TetrisBase::RightTetris()
 	{
 		m_oCurrentTetris.m_dwPosX += 1;
 		m_bNeedRefresh = true;
+
+		GameProto::GameNotifyPlayeMove oMove;
+		oMove.set_dw_player_id(m_refPlayer.GetPlayerId());
+		oMove.set_f_tick(m_fTick);
+		oMove.set_e_direction(GameProto::EMD_Right);
+		CGameSceneBase::Instance()->NotifyPlayerExcept(oMove, m_refPlayer.GetPlayerId());
 	}
 	else
 	{
@@ -412,27 +432,6 @@ void TetrisBase::RightTetris()
 }
 
 void TetrisBase::LeftRotation()
-{
-	unsigned int dwTempDir = (m_oCurrentTetris.m_dwTetrisDirect + 1) % TETRIS_UNIT;
-	for (int i = 0; i < TETRIS_UNIT; ++i)
-	{
-		for (int j = 0; j < TETRIS_UNIT; ++j)
-		{
-			unsigned int dwBlockInfo = g_dwTetrisTable[m_oCurrentTetris.m_dwTetrisShape][dwTempDir][i][j];
-			if (dwBlockInfo == 0)
-			{
-				continue;
-			}
-			if (CheckTetris(m_oCurrentTetris.m_dwPosX + j, m_oCurrentTetris.m_dwPosY + i))
-			{
-				return;
-			}
-		}
-	}
-	m_oCurrentTetris.m_dwTetrisDirect = dwTempDir;
-}
-
-void TetrisBase::RightRotation()
 {
 	unsigned int dwTempDir = (m_oCurrentTetris.m_dwTetrisDirect - 1) % TETRIS_UNIT;
 	for (int i = 0; i < TETRIS_UNIT; ++i)
@@ -451,6 +450,39 @@ void TetrisBase::RightRotation()
 		}
 	}
 	m_oCurrentTetris.m_dwTetrisDirect = dwTempDir;
+
+	GameProto::GameNotifyPlayeRotation oRot;
+	oRot.set_dw_player_id(m_refPlayer.GetPlayerId());
+	oRot.set_f_tick(m_fTick);
+	oRot.set_e_direction(GameProto::ERD_Left);
+	CGameSceneBase::Instance()->NotifyPlayerExcept(oRot, m_refPlayer.GetPlayerId());
+}
+
+void TetrisBase::RightRotation()
+{
+	unsigned int dwTempDir = (m_oCurrentTetris.m_dwTetrisDirect + 1) % TETRIS_UNIT;
+	for (int i = 0; i < TETRIS_UNIT; ++i)
+	{
+		for (int j = 0; j < TETRIS_UNIT; ++j)
+		{
+			unsigned int dwBlockInfo = g_dwTetrisTable[m_oCurrentTetris.m_dwTetrisShape][dwTempDir][i][j];
+			if (dwBlockInfo == 0)
+			{
+				continue;
+			}
+			if (CheckTetris(m_oCurrentTetris.m_dwPosX + j, m_oCurrentTetris.m_dwPosY + i))
+			{
+				return;
+			}
+		}
+	}
+	m_oCurrentTetris.m_dwTetrisDirect = dwTempDir;
+
+	GameProto::GameNotifyPlayeRotation oRot;
+	oRot.set_dw_player_id(m_refPlayer.GetPlayerId());
+	oRot.set_f_tick(m_fTick);
+	oRot.set_e_direction(GameProto::ERD_Right);
+	CGameSceneBase::Instance()->NotifyPlayerExcept(oRot, m_refPlayer.GetPlayerId());
 }
 
 void TetrisBase::EraseTetris(int dwRow)
