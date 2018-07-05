@@ -7517,13 +7517,19 @@ Prefab:
     - target: {fileID: 114396731081083724, guid: 0b137790909f51d40a19d7d08e8352c2,
         type: 2}
       propertyPath: m_UVRect.y
-      value: 0.4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114615980763544690, guid: 0b137790909f51d40a19d7d08e8352c2,
         type: 2}
       propertyPath: m_dwSlotId
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114900275265414224, guid: 0b137790909f51d40a19d7d08e8352c2,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300020, guid: 5b83f61867ae80945935074f812f8ec0,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0b137790909f51d40a19d7d08e8352c2, type: 2}
   m_IsPrefabParent: 0
@@ -9841,26 +9847,6 @@ Prefab:
       propertyPath: m_Name
       value: GamePlayer8
       objectReference: {fileID: 0}
-    - target: {fileID: 224403316887048208, guid: 0b137790909f51d40a19d7d08e8352c2,
-        type: 2}
-      propertyPath: m_LocalScale.x
-      value: 0.99998903
-      objectReference: {fileID: 0}
-    - target: {fileID: 224403316887048208, guid: 0b137790909f51d40a19d7d08e8352c2,
-        type: 2}
-      propertyPath: m_LocalScale.y
-      value: 0.99998903
-      objectReference: {fileID: 0}
-    - target: {fileID: 224403316887048208, guid: 0b137790909f51d40a19d7d08e8352c2,
-        type: 2}
-      propertyPath: m_LocalScale.z
-      value: 0.99998903
-      objectReference: {fileID: 0}
-    - target: {fileID: 114594154466951436, guid: 0b137790909f51d40a19d7d08e8352c2,
-        type: 2}
-      propertyPath: m_Text
-      value: 8P
-      objectReference: {fileID: 0}
     - target: {fileID: 114430249017007534, guid: 0b137790909f51d40a19d7d08e8352c2,
         type: 2}
       propertyPath: m_Color.r
@@ -9868,18 +9854,13 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 114430249017007534, guid: 0b137790909f51d40a19d7d08e8352c2,
         type: 2}
-      propertyPath: m_Color.b
-      value: 1
+      propertyPath: m_Color.g
+      value: 0.003921569
       objectReference: {fileID: 0}
     - target: {fileID: 114430249017007534, guid: 0b137790909f51d40a19d7d08e8352c2,
         type: 2}
-      propertyPath: m_Color.g
-      value: 0.006896496
-      objectReference: {fileID: 0}
-    - target: {fileID: 114396731081083724, guid: 0b137790909f51d40a19d7d08e8352c2,
-        type: 2}
-      propertyPath: m_UVRect.y
-      value: 0.4
+      propertyPath: m_Color.b
+      value: 0.9607844
       objectReference: {fileID: 0}
     - target: {fileID: 114615980763544690, guid: 0b137790909f51d40a19d7d08e8352c2,
         type: 2}
@@ -11750,6 +11731,12 @@ Prefab:
       propertyPath: m_dwSlotId
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114900275265414224, guid: 0b137790909f51d40a19d7d08e8352c2,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300008, guid: 5b83f61867ae80945935074f812f8ec0,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0b137790909f51d40a19d7d08e8352c2, type: 2}
   m_IsPrefabParent: 0
@@ -12107,13 +12094,19 @@ Prefab:
     - target: {fileID: 114396731081083724, guid: 0b137790909f51d40a19d7d08e8352c2,
         type: 2}
       propertyPath: m_UVRect.y
-      value: 0.4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114615980763544690, guid: 0b137790909f51d40a19d7d08e8352c2,
         type: 2}
       propertyPath: m_dwSlotId
       value: 6
       objectReference: {fileID: 0}
+    - target: {fileID: 114900275265414224, guid: 0b137790909f51d40a19d7d08e8352c2,
+        type: 2}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300024, guid: 5b83f61867ae80945935074f812f8ec0,
+        type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 0b137790909f51d40a19d7d08e8352c2, type: 2}
   m_IsPrefabParent: 0
@@ -17708,7 +17701,7 @@ Prefab:
     - target: {fileID: 114396731081083724, guid: 0b137790909f51d40a19d7d08e8352c2,
         type: 2}
       propertyPath: m_UVRect.y
-      value: 0.4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 114615980763544690, guid: 0b137790909f51d40a19d7d08e8352c2,
         type: 2}

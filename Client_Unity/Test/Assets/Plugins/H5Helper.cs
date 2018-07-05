@@ -17,32 +17,46 @@ public class H5Helper : MonoBehaviour
 #endif
 	}
 
-    public static IEnumerator SendGet(string _url, System.Action<string> cbf)
-    {
-        WWW getData = new WWW(_url);
-        yield return getData;
-        if (getData.error != null)
-        {
+	public static IEnumerator SendGet(string _url, System.Action<string> cbf)
+	{
+		WWW getData = new WWW(_url);
+		yield return getData;
+		if (getData.error != null)
+		{
 			SampleDebuger.Log(getData.error);
-        }
-        else
-        {
-            cbf(getData.text);
-        }
-    }
+		}
+		else
+		{
+			cbf(getData.text);
+		}
+	}
 
-    public static IEnumerator SendPost(string _url, WWWForm _wForm, System.Action<string> cbf)
-    {
-        WWW postData = new WWW(_url, _wForm);
-        yield return postData;
-        if (postData.error != null)
-        {
+	public static IEnumerator SendPost(string _url, WWWForm _wForm, System.Action<string> cbf)
+	{
+		WWW postData = new WWW(_url, _wForm);
+		yield return postData;
+		if (postData.error != null)
+		{
 			SampleDebuger.Log(postData.error);
-        }
-        else
-        {
-            cbf(postData.text);
-        }
-    }
+		}
+		else
+		{
+			cbf(postData.text);
+		}
+	}
+
+	public static IEnumerator SendGet(string _url, System.Action<Texture2D> cbf)
+	{
+		WWW imageData = new WWW(_url);
+		yield return imageData;
+		if (imageData.error != null)
+		{
+			SampleDebuger.Log(imageData.error);
+		}
+		else
+		{
+			cbf(imageData.texture);
+		}
+	}
 
 }

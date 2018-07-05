@@ -31,8 +31,17 @@ public class GamePlayerData : MonoBehaviour
 
 	public void SetPlayerId(UInt64 qwUserId) { m_qwPlayerId = qwUserId; }
 	public void SetName(string szName) { m_szName = szName; }
-	public void SetHeadImage(string szHeadImage) { m_szHeadImage = szHeadImage; }
 	public void SetSex(uint dwSex) { m_dwSex = dwSex; }
+
+	public void SetHeadImage(string szHeadImage)
+	{
+		m_szHeadImage = szHeadImage;
+		StartCoroutine(H5Helper.SendGet(m_szHeadImage, delegate (Texture2D tex)
+			{
+				m_imageHead.texture = tex;
+			})
+		);
+	}
 
 	public UInt64 proPlayerId { get { return m_qwPlayerId; } }
 	public string proName { get { return m_szName; } }
@@ -47,6 +56,6 @@ public class GamePlayerData : MonoBehaviour
 	public string m_szName = "";
 
 	public UnityEngine.UI.RawImage m_imageHead;
-	public UnityEngine.UI.RawImage m_imageHeadFrame;
+	public UnityEngine.UI.Image m_imageHeadFrame;
 	public UnityEngine.UI.Text m_textName;
 }

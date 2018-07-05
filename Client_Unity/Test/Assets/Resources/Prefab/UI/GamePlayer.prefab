@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 224246620365675638}
   - component: {fileID: 222533262492984692}
-  - component: {fileID: 114929803074469712}
+  - component: {fileID: 114900275265414224}
   m_Layer: 5
   m_Name: FrameImage
   m_TagString: Untagged
@@ -152,13 +152,13 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 2800000, guid: 5b83f61867ae80945935074f812f8ec0, type: 3}
+  m_Texture: {fileID: 2800000, guid: cf998ee5494a97041afa54673e171b66, type: 3}
   m_UVRect:
     serializedVersion: 2
-    x: 0.245
-    y: 0.05
-    width: 0.18
-    height: 0.2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
 --- !u!114 &114430249017007534
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9411765, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.7647059, g: 0, b: 0, a: 1}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
@@ -236,9 +236,9 @@ MonoBehaviour:
   m_szHeadImage: 
   m_szName: 
   m_imageHead: {fileID: 114396731081083724}
-  m_imageHeadFrame: {fileID: 114929803074469712}
+  m_imageHeadFrame: {fileID: 114900275265414224}
   m_textName: {fileID: 114594154466951436}
---- !u!114 &114929803074469712
+--- !u!114 &114900275265414224
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -246,7 +246,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1479315357724738}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: -98529514, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
@@ -257,13 +257,14 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Texture: {fileID: 2800000, guid: 5b83f61867ae80945935074f812f8ec0, type: 3}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0.02
-    y: 0.02
-    width: 0.2
-    height: 0.23
+  m_Sprite: {fileID: 21300006, guid: 5b83f61867ae80945935074f812f8ec0, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
 --- !u!222 &222125028981082454
 CanvasRenderer:
   m_ObjectHideFlags: 1
@@ -314,7 +315,7 @@ RectTransform:
   m_GameObject: {fileID: 1859760226597940}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.99998903, y: 0.99998903, z: 0.99998903}
   m_Children:
   - {fileID: 224406674526234702}
   - {fileID: 224246620365675638}
