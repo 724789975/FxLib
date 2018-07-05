@@ -44,4 +44,8 @@ public class GameConstant
 	public static string g_szLobbyScene = "lobby";
 	public static string g_szVersionUpdateScene = "version_update";
 	public static string g_szSceneBundlePath = "assets/resources/screen/";
+
+	public static string g_szName = "name";
+	public static string g_szPlatform = "platform";
+	public static string g_szOpenId = "open_id";
 }
