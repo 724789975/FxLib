@@ -36,6 +36,8 @@ public class UIProgressBar : UiSingleton<UIProgressBar>
 
 	AssetBundleLoadOperation m_pAssetBundleLoadOperation = null;
 
-	public UnityEngine.UI.Slider m_sliderProgressBar;
-	public UnityEngine.UI.Text m_textLoading;
+	[SerializeField]
+	public UnityEngine.UI.Slider m_sliderProgressBar = null;
+	[SerializeField]
+	public UnityEngine.UI.Text m_textLoading = null;
 }

@@ -21,5 +21,6 @@ public class VersionUpdateInit : MonoBehaviour
 		LuaEngine.Instance().Load();
 	}
 
-	public EnvCheckInit m_pEnvCheckInit;
+	[SerializeField]
+	EnvCheckInit m_pEnvCheckInit = null;
 }

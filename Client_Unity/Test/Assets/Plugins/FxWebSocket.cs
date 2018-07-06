@@ -287,6 +287,7 @@ namespace FxNet
 #else
 namespace FxNet
 {
+	[Serializable]
 	public class FxWebSocket : IFxClientSocket
 	{
 		public override bool Init(ISession pSession)
@@ -444,9 +445,12 @@ namespace FxNet
 
 		bool m_bIsConnected;
 
+		[SerializeField]
 		string m_szError;
 
+		[SerializeField]
 		DataBuffer m_pSessionBuffer;
+		[SerializeField]
 		protected WebSocketSharp.WebSocket m_hSocket;
 	}
 }

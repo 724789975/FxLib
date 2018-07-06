@@ -29,11 +29,18 @@ public class LobbyUI : SingletonObject<LobbyUI>
 	{
 	}
 
-	public UnityEngine.UI.Button m_buttonMakeTeam;
-	public UnityEngine.UI.Button m_buttonTeamStart;
-	public UnityEngine.UI.Button m_buttonOnlinePlayers;
-	public UnityEngine.UI.Button m_buttonLeave;
-	public UnityEngine.UI.RawImage m_imgHead;
-	public UnityEngine.UI.Image m_imgFrame;
-	public UnityEngine.UI.Text m_textName;
+	[SerializeField]
+	UnityEngine.UI.Button m_buttonMakeTeam = null;
+	[SerializeField]
+	UnityEngine.UI.Button m_buttonTeamStart = null;
+	[SerializeField]
+	UnityEngine.UI.Button m_buttonOnlinePlayers = null;
+	[SerializeField]
+	UnityEngine.UI.Button m_buttonLeave = null;
+	[SerializeField]
+	UnityEngine.UI.RawImage m_imgHead = null;
+	[SerializeField]
+	UnityEngine.UI.Image m_imgFrame = null;
+	[SerializeField]
+	UnityEngine.UI.Text m_textName = null;
 }

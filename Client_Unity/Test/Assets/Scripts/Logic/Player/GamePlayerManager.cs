@@ -16,6 +16,7 @@ public class GamePlayerManager : SingletonObject<GamePlayerManager>
 
 	public GamePlayerData GetPlayerBySlot(int dwSlotId) { return m_arrPlayerDatas[dwSlotId]; }
 
-	public GamePlayerData[] m_arrPlayerDatas;
+	[SerializeField]
+	GamePlayerData[] m_arrPlayerDatas = null;
 }
 

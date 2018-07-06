@@ -2,6 +2,7 @@
 using System.Text;
 using FxNet;
 
+[Serializable]
 class WebSocketSession : ISession
 {
 	public WebSocketSession(SessionObject oGameObject)
@@ -89,6 +90,8 @@ class WebSocketSession : ISession
 		return false;
 	}
 
+	[UnityEngine.SerializeField]
 	SessionObject m_oGameObject;
+	[UnityEngine.SerializeField]
 	FxWebSocket m_pSocket;
 }

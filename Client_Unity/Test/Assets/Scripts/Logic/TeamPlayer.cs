@@ -43,7 +43,10 @@ public class TeamPlayer : MonoBehaviour {
 		//m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
 	}
 
-	public ulong m_qwPlayerId;
-	public UnityEngine.UI.Text m_txtPlayerId;
-	public UnityEngine.UI.Button m_pButton;
+	[SerializeField]
+	ulong m_qwPlayerId;
+	[SerializeField]
+	UnityEngine.UI.Text m_txtPlayerId = null;
+	[SerializeField]
+	UnityEngine.UI.Button m_pButton = null;
 }

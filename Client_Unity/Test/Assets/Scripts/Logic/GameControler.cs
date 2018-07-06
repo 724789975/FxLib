@@ -22,9 +22,9 @@ public class GameControler : SingletonObject<GameControler>
 	public void OnGameSessionReset(SessionObject obj)
 	{
 		m_pSession = obj;
-		m_pSession.m_pfOnConnect.Add(OnConnect);
-		m_pSession.m_pfOnError.Add(OnError);
-		m_pSession.m_pfOnClose.Add(OnClose);
+		m_pSession.pro_cbOnConnect.Add(OnConnect);
+		m_pSession.pro_cbfOnError.Add(OnError);
+		m_pSession.pro_cbOnClose.Add(OnClose);
 
 		m_pSession.RegistMessage("GameProto.PlayerRequestGameTest", OnPlayerRequestGameTest);
 		m_pSession.RegistMessage("GameProto.GameAckPlayerEnter", OnGameAckPlayerEnter);
@@ -73,9 +73,9 @@ public class GameControler : SingletonObject<GameControler>
 	{
 		if (m_pSession != null)
 		{
-			m_pSession.m_pfOnConnect.Remove(OnConnect);
-			m_pSession.m_pfOnError.Remove(OnError);
-			m_pSession.m_pfOnClose.Remove(OnClose);
+			m_pSession.pro_cbOnConnect.Remove(OnConnect);
+			m_pSession.pro_cbfOnError.Remove(OnError);
+			m_pSession.pro_cbOnClose.Remove(OnClose);
 
 			m_pSession.UnRegistMessage("GameProto.PlayerRequestGameTest");
 		}
@@ -356,6 +356,8 @@ public class GameControler : SingletonObject<GameControler>
 	}
 
 	public SessionObject proSession { get{ return m_pSession; } }
-	public SessionObject m_pSession;
-	public GameData m_pGameData = GameData.Instance();
+	[SerializeField]
+	SessionObject m_pSession = null;
+	[SerializeField]
+	GameData m_pGameData = GameData.Instance();
 }

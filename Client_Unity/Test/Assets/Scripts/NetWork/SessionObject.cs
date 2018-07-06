@@ -58,7 +58,6 @@ public class SessionObject : MonoBehaviour
 					return false;
 					//throw new ArgumentException("error session type : " + m_eSessionType.ToString());
 				}
-				break;
 		}
 
 		m_pSession.Init(m_szIP, m_wPort);
@@ -76,7 +75,7 @@ public class SessionObject : MonoBehaviour
 
 	public void OnClose()
 	{
-		foreach (var item in m_pfOnClose)
+		foreach (var item in pro_cbOnClose)
 		{
 			item();
 		}
@@ -94,7 +93,7 @@ public class SessionObject : MonoBehaviour
 
 	public void OnError(uint dwErrorNo)
 	{
-		foreach (var item in m_pfOnError)
+		foreach (var item in pro_cbfOnError)
 		{
 			item(dwErrorNo);
 		}
@@ -117,7 +116,7 @@ public class SessionObject : MonoBehaviour
 
 	public void OnConnect()
 	{
-		foreach (var item in m_pfOnConnect)
+		foreach (var item in pro_cbOnConnect)
 		{
 			item();
 		}
@@ -165,17 +164,25 @@ public class SessionObject : MonoBehaviour
 
     FxNet.IFxClientSocket GetClientSocket() { return m_pClientSocket; }
 
-	public FxNet.ISession m_pSession = null;
-	public SessionType m_eSessionType = SessionType.SessionType_TCP;
-	public string m_szIP;
-	public UInt16 m_wPort = 0;
+	[SerializeField]
+	FxNet.ISession m_pSession = null;
+	[SerializeField]
+	SessionType m_eSessionType = SessionType.SessionType_TCP;
+	[SerializeField]
+	string m_szIP;
+	[SerializeField]
+	UInt16 m_wPort = 0;
+	[SerializeField]
 	FxNet.IFxClientSocket m_pClientSocket;
 
-	public HashSet<Action> m_pfOnConnect = new HashSet<Action>();
-	public HashSet<Action> m_pfOnClose = new HashSet<Action>();
-	public HashSet<Action<uint>> m_pfOnError = new HashSet<Action<uint>>();
+	public HashSet<Action> pro_cbOnConnect { get { return m_pfOnConnect; } }
+	HashSet<Action> m_pfOnConnect = new HashSet<Action>();
+	public HashSet<Action> pro_cbOnClose { get { return m_pfOnClose; } }
+	HashSet<Action> m_pfOnClose = new HashSet<Action>();
+	public HashSet<Action<uint>> pro_cbfOnError { get { return m_pfOnError; } }
+	HashSet<Action<uint>> m_pfOnError = new HashSet<Action<uint>>();
 
-	public Dictionary<string, Action<byte[]>> m_mapCallBack = new Dictionary<string, Action<byte[]>>();
+	Dictionary<string, Action<byte[]>> m_mapCallBack = new Dictionary<string, Action<byte[]>>();
 
 #if UNITY_WEBGL && !UNITY_EDITOR
 	float m_fLastUpdate = 0.0f;

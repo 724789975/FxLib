@@ -37,6 +37,8 @@ public class LoginServerList : UiSingleton<LoginServerList>
 
     }
 
-	public Object m_pObj;
-	public Transform m_pContentTransform;
+	[SerializeField]
+	Object m_pObj = null;
+	[SerializeField]
+	Transform m_pContentTransform = null;
 }

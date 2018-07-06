@@ -31,16 +31,26 @@ public class PlayerData : Singleton<PlayerData>
 
 	public UInt64 proPlayerId { get { return m_qwPlayerId; } }
 
-	public string m_szPlatform = "";
-	public string m_szName = "";
-	public string m_szHeadImage = "";
-	public uint m_dwSex = 0;
-	public string m_szAccessToken = "";
-	public uint m_dwExpiresDate = 0;
-	public string m_szOpenId = "";
+	[UnityEngine.SerializeField]
+	string m_szPlatform = "";
+	[UnityEngine.SerializeField]
+	string m_szName = "";
+	[UnityEngine.SerializeField]
+	string m_szHeadImage = "";
+	[UnityEngine.SerializeField]
+	uint m_dwSex = 0;
+	[UnityEngine.SerializeField]
+	string m_szAccessToken = "";
+	[UnityEngine.SerializeField]
+	uint m_dwExpiresDate = 0;
+	[UnityEngine.SerializeField]
+	string m_szOpenId = "";
 
-	public string m_szGameIp = "";
-	public ushort m_wGamePort = 0;
+	[UnityEngine.SerializeField]
+	string m_szGameIp = "";
+	[UnityEngine.SerializeField]
+	ushort m_wGamePort = 0;
 
-	public UInt64 m_qwPlayerId = 0;
+	[UnityEngine.SerializeField]
+	UInt64 m_qwPlayerId = 0;
 }

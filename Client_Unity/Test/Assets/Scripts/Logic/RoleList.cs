@@ -35,7 +35,10 @@ public class RoleList : UiSingleton<RoleList>
 		Destroy(gameObject);
 	}
 
-	public GameObject m_pPlayerObj;
-	public Transform m_pContentTransform;
-	public UnityEngine.UI.Button m_buttonClose;
+	[SerializeField]
+	GameObject m_pPlayerObj = null;
+	[SerializeField]
+	Transform m_pContentTransform = null;
+	[SerializeField]
+	UnityEngine.UI.Button m_buttonClose = null;
 }

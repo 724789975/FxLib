@@ -93,16 +93,26 @@ public class GameInstance: SingletonObject<GameInstance>
 	}
 
 	[Header("Server Config")]
-	public string m_szServerUrl;
-	public string m_szServerInfoUri;
+	[SerializeField]
+	string m_szServerUrl = "";
+	[SerializeField]
+	string m_szServerInfoUri = "";
 
-	public ushort m_wLoginPort;
-	public string m_szLoginIp;
+	[SerializeField]
+	ushort m_wLoginPort;
+	[SerializeField]
+	string m_szLoginIp;
 
-	public string m_szUrlHost;
-	public string m_szGetRoleUri;
-	public string m_szVersion;
-	public string m_szVersionContent;
-	public string m_szMarkPath;
-	public string m_szPlatformContentPath;
+	[SerializeField]
+	string m_szUrlHost;
+	[SerializeField]
+	string m_szGetRoleUri = "";
+	[SerializeField]
+	string m_szVersion = "";
+	[SerializeField]
+	string m_szVersionContent = "";
+	[SerializeField]
+	string m_szMarkPath = "";
+	[SerializeField]
+	string m_szPlatformContentPath = "";
 }

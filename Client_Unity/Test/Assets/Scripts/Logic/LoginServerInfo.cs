@@ -34,7 +34,10 @@ public class LoginServerInfo : MonoBehaviour
 		m_txtServerInfo.text = oServerInfo.id.ToString() + ":" + oServerInfo.login_ip + ":" + oServerInfo.login_port.ToString() + ":" + oServerInfo.url_host;
 	}
 
-	public ServerInfo m_pServerInfo = null;
-	public UnityEngine.UI.Text m_txtServerInfo;
-	public UnityEngine.UI.Button m_pButton;
+	[SerializeField]
+	ServerInfo m_pServerInfo = null;
+	[SerializeField]
+	UnityEngine.UI.Text m_txtServerInfo = null;
+	[SerializeField]
+	UnityEngine.UI.Button m_pButton = null;
 }

@@ -134,9 +134,13 @@ public class H5Manager : SingletonObject<H5Manager>
 	public HashSet<Action<SessionObject> > GetLoginSessionResetCallBack() { return m_setLoginSessionResetCallBack; }
 	public HashSet<Action<SessionObject> > GetGameSessionResetCallBack() { return m_setGameSessionResetCallBack; }
 
-    public HashSet<Action<SessionObject> > m_setLoginSessionResetCallBack = new HashSet<Action<SessionObject>>();
-    public SessionObject m_pLoginSession = null;
+	[SerializeField]
+	HashSet<Action<SessionObject> > m_setLoginSessionResetCallBack = new HashSet<Action<SessionObject>>();
+	[SerializeField]
+	SessionObject m_pLoginSession = null;
 
-	public HashSet<Action<SessionObject> > m_setGameSessionResetCallBack = new HashSet<Action<SessionObject> >();
-	public SessionObject m_pGameSession = null;
+	[SerializeField]
+	HashSet<Action<SessionObject> > m_setGameSessionResetCallBack = new HashSet<Action<SessionObject> >();
+	[SerializeField]
+	SessionObject m_pGameSession = null;
 }

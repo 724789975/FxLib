@@ -40,9 +40,9 @@ public class LoginControler : SingletonObject<LoginControler>
 	public void OnLoginSessionReset(SessionObject obj)
 	{
 		m_pSession = obj;
-		m_pSession.m_pfOnConnect.Add(OnConnect);
-		m_pSession.m_pfOnError.Add(OnError);
-		m_pSession.m_pfOnClose.Add(OnClose);
+		m_pSession.pro_cbOnConnect.Add(OnConnect);
+		m_pSession.pro_cbfOnError.Add(OnError);
+		m_pSession.pro_cbOnClose.Add(OnClose);
 
 		m_pSession.RegistMessage("GameProto.LoginAckPlayerServerId", OnLoginAckPlayerServerId);
 		m_pSession.RegistMessage("GameProto.LoginAckPlayerLoginResult", OnLoginAckPlayerLoginResult);
@@ -413,9 +413,9 @@ public class LoginControler : SingletonObject<LoginControler>
 	{
 		if (m_pSession != null)
 		{
-			m_pSession.m_pfOnConnect.Remove(OnConnect);
-			m_pSession.m_pfOnError.Remove(OnError);
-			m_pSession.m_pfOnClose.Remove(OnClose);
+			m_pSession.pro_cbOnConnect.Remove(OnConnect);
+			m_pSession.pro_cbfOnError.Remove(OnError);
+			m_pSession.pro_cbOnClose.Remove(OnClose);
 
 			m_pSession.UnRegistMessage("GameProto.LoginAckPlayerServerId");
 			m_pSession.UnRegistMessage("GameProto.LoginAckPlayerLoginResult");
@@ -426,5 +426,6 @@ public class LoginControler : SingletonObject<LoginControler>
 	}
 
 	//public GameObject m_oRoleList;
-	public SessionObject m_pSession;
+	[SerializeField]
+	SessionObject m_pSession = null;
 }

@@ -52,13 +52,22 @@ public class ConfirmPanel : MonoBehaviour
 		}
 	}
 
-	public UnityEngine.UI.Button m_buttonConfirm;
-	public UnityEngine.UI.Text m_textConfirm;
-	public UnityEngine.UI.Button m_buttonCancle;
-	public UnityEngine.UI.Text m_textCancle;
-	public UnityEngine.UI.Text m_textContent;
+	[SerializeField]
+	UnityEngine.UI.Button m_buttonConfirm = null;
+	[SerializeField]
+	UnityEngine.UI.Text m_textConfirm = null;
+	[SerializeField]
+	UnityEngine.UI.Button m_buttonCancle = null;
+	[SerializeField]
+	UnityEngine.UI.Text m_textCancle = null;
+	[SerializeField]
+	UnityEngine.UI.Text m_textContent = null;
+	[SerializeField]
 	System.Action<object> m_pfConfirmFunc;
-    object m_pParam1;
+	[SerializeField]
+	object m_pParam1;
+	[SerializeField]
 	System.Action<object> m_pfCancleFunc;
-    object m_pParam2;
+	[SerializeField]
+	object m_pParam2;
 }

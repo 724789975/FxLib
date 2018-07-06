@@ -48,14 +48,22 @@ public class GamePlayerData : MonoBehaviour
 	public string proHeadImage { get { return m_szHeadImage; } }
 	public uint proSex { get { return m_dwSex; } }
 
-	public UInt32 m_dwSlotId = 0xFFFFFFFF;
-	public UInt64 m_qwPlayerId = 0;
-	public UInt32 m_dwSex = 0;
+	[SerializeField]
+	UInt32 m_dwSlotId = 0xFFFFFFFF;
+	[SerializeField]
+	UInt64 m_qwPlayerId = 0;
+	[SerializeField]
+	UInt32 m_dwSex = 0;
 
-	public string m_szHeadImage = "";
-	public string m_szName = "";
+	[SerializeField]
+	string m_szHeadImage = "";
+	[SerializeField]
+	string m_szName = "";
 
-	public UnityEngine.UI.RawImage m_imageHead;
-	public UnityEngine.UI.Image m_imageHeadFrame;
-	public UnityEngine.UI.Text m_textName;
+	[SerializeField]
+	UnityEngine.UI.RawImage m_imageHead = null;
+	[SerializeField]
+	UnityEngine.UI.RawImage m_imageHeadFrame = null;
+	[SerializeField]
+	UnityEngine.UI.Text m_textName = null;
 }

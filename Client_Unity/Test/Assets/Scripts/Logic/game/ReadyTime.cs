@@ -46,7 +46,9 @@ public class ReadyTime : SingletonObject<ReadyTime>
 		Destroy(gameObject);
 	}
 
-	public UnityEngine.UI.Text m_textReady;
-	public GameObject m_goReadyEffect;
+	[SerializeField]
+	UnityEngine.UI.Text m_textReady = null;
+	[SerializeField]
+	GameObject m_goReadyEffect = null;
 }
 

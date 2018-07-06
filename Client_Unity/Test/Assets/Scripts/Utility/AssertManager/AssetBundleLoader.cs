@@ -34,8 +34,6 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 		}
 		yield return new WaitForSeconds(0.5f);
 
-
-
 #if UNITY_WEBGL
 		WWW www = new WWW(Globals.wwwStreamingPath + "/version.txt");
 		yield return www;
@@ -84,9 +82,19 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 
 #if UNITY_EDITOR
 		szUrl = Application.dataPath + "/../AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
+		//szUrl = m_szAssetUrl + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
 		//return Application.streamingAssetsPath + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
 #elif UNITY_WEBGL
-		szUrl = Application.streamingAssetsPath + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
+		string szPrefix = "";
+		if (m_szAssetUrl.Length != 0)
+		{
+			szPrefix = m_szAssetUrl;
+		}
+		else
+		{
+			szPrefix = Application.streamingAssetsPath;
+		}
+        szUrl = szPrefix + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName + "?" + VersionManager.Instance().GetVersionUrl();
 #else
 		szUrl = Application.streamingAssetsPath + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
 		string szUpdatePath = Application.persistentDataPath + "/AssetBundles/" + SysUtil.GetPlatformName() + "/" + fileName;
@@ -199,4 +207,10 @@ public class AssetBundleLoader : SingletonObject<AssetBundleLoader>
 	void OnDestory()
 	{
 	}
+
+#if UNITY_WEBGL
+	[Tooltip("通过这个url重定义streamingAssetsPath 如果不填 代表是使用系统自带的 只在webgl浏览器下起作用 编辑器无效")]
+	[SerializeField]
+	string m_szAssetUrl = "";
+#endif
 }

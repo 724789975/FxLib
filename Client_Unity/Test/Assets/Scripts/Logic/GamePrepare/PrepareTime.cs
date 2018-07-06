@@ -28,6 +28,7 @@ public class PrepareTime : SingletonObject<PrepareTime>
 		Instance().m_textPrepare.text = string.Format("准备时间剩余 {0} 秒...", dwTime.ToString());
     }
 
-	public UnityEngine.UI.Text m_textPrepare;
+	[SerializeField]
+	UnityEngine.UI.Text m_textPrepare = null;
 }
 
