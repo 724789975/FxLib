@@ -1933,6 +1933,21 @@ Prefab:
       propertyPath: m_Pivot.y
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 114131365341206274, guid: 393e3bb3c13fdb649a79830c1327d8f5,
+        type: 2}
+      propertyPath: m_Color.g
+      value: 0.47058824
+      objectReference: {fileID: 0}
+    - target: {fileID: 114131365341206274, guid: 393e3bb3c13fdb649a79830c1327d8f5,
+        type: 2}
+      propertyPath: m_Color.b
+      value: 0.5882353
+      objectReference: {fileID: 0}
+    - target: {fileID: 114131365341206274, guid: 393e3bb3c13fdb649a79830c1327d8f5,
+        type: 2}
+      propertyPath: m_Color.r
+      value: 0.39215687
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 114893676614443952, guid: 393e3bb3c13fdb649a79830c1327d8f5, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 393e3bb3c13fdb649a79830c1327d8f5, type: 2}
