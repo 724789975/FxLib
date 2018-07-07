@@ -1,0 +1,4 @@
+sceneSetups:
+- path: "//vmware-host/Shared Folders/\u684C\u9762/FxLib/Client_Unity/Test/Assets/Scene/launcher.unity"
+  isLoaded: 1
+  isActive: 1
