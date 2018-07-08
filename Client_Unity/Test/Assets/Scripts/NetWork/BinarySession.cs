@@ -2,6 +2,7 @@
 using System.Text;
 using FxNet;
 
+[Serializable]
 public class BinarySession : ISession
 {
 	public BinarySession(SessionObject oGameObject)
@@ -91,6 +92,8 @@ public class BinarySession : ISession
 		return false;
 	}
 
+	[UnityEngine.SerializeField]
 	SessionObject m_oGameObject;
+	[UnityEngine.SerializeField]
 	protected IFxClientSocket m_pSocket;
 }
