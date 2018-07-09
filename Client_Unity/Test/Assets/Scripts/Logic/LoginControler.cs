@@ -336,6 +336,14 @@ public class LoginControler : SingletonObject<LoginControler>
 		}
 
 		SampleDebuger.Log("OnLoginAckPlayerLeaveTeam result : " + oRet.DwResult.ToString());
+
+		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != GameConstant.g_szLobbyScene)
+		{
+			AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szLobbyScene, delegate ()
+				{
+				}
+			);
+		}
 	}
 
 	public void OnRoleData(string szData)
