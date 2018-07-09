@@ -42,6 +42,7 @@ public class GameConstant
 	public static string g_szGamePrepareScene = "game_prepare";
 	public static string g_szGameScene = "gamescene";
 	public static string g_szLobbyScene = "lobby";
+	public static string g_szLobbyTeamScene = "lobby_team";
 	public static string g_szVersionUpdateScene = "version_update";
 	public static string g_szSceneBundlePath = "assets/resources/screen/";
 

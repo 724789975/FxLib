@@ -181,7 +181,7 @@ public class LoginControler : SingletonObject<LoginControler>
 
 		SampleDebuger.Log("login ret : " + oRet.DwResult.ToString());
 
-		AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szLobbyScene, delegate()
+		AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szLobbyTeamScene, delegate()
 			{
 				if (!string.IsNullOrEmpty(PlayerData.Instance().proGameIp))
 				{
@@ -201,6 +201,14 @@ public class LoginControler : SingletonObject<LoginControler>
 		}
 
 		SampleDebuger.Log("make team ret : " + oRet.DwResult.ToString() + " slot : " + oRet.DwSlotId.ToString() + " team_id : " + oRet.QwTeamId.ToString());
+
+		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != GameConstant.g_szLobbyTeamScene)
+		{
+			AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szLobbyTeamScene, delegate ()
+				{
+				}
+			);
+		}
 	}
 	public void OnLoginAckPlayerGameStart(byte[] pBuf)
 	{
