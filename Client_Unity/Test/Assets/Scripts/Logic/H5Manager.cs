@@ -35,6 +35,11 @@ public class H5Manager : SingletonObject<H5Manager>
 		PlayerData.Instance().SetPlatform(nvcParam.Get("platform"));
 		PlayerData.Instance().SetName(nvcParam.Get("name"));
 		PlayerData.Instance().SetHeadImage(nvcParam.Get("head_img"));
+		StartCoroutine(H5Helper.SendGet(PlayerData.Instance().proHeadImage, delegate (Texture2D tex)
+			{
+				PlayerData.Instance().SetHeadTex(tex);
+			})
+		);
 		PlayerData.Instance().SetAccessToken(nvcParam.Get("access_token"));
 		PlayerData.Instance().SetOpenId(nvcParam.Get("openid"));
 

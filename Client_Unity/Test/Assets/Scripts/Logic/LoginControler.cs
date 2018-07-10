@@ -359,7 +359,18 @@ public class LoginControler : SingletonObject<LoginControler>
 		oTest.DwSex = oData.data.sex;
 		oTest.DwBalance = oData.data.balance;
 
+		StartCoroutine(H5Helper.SendGet(oData.data.avatar, delegate (Texture2D tex)
+			{
+				PlayerData.Instance().SetHeadTex(tex);
+			})
+		);
+
 		PlayerData.Instance().SetPlayerId(oData.data.id);
+		PlayerData.Instance().SetName(oData.data.nick_name);
+		PlayerData.Instance().SetHeadImage(oData.data.avatar);
+		PlayerData.Instance().SetSex(oData.data.sex);
+		PlayerData.Instance().SetBalance(oData.data.balance);
+		PlayerData.Instance().SetToken(oData.token);
 
 		byte[] pData = new byte[2048];
 		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 2048);
