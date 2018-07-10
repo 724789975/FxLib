@@ -202,6 +202,10 @@ public class LoginControler : SingletonObject<LoginControler>
 
 		SampleDebuger.Log("make team ret : " + oRet.DwResult.ToString() + " slot : " + oRet.DwSlotId.ToString() + " team_id : " + oRet.QwTeamId.ToString());
 
+		if (oRet.DwResult != 0)
+		{
+			return;
+		}
 		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != GameConstant.g_szLobbyTeamScene)
 		{
 			AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szLobbyTeamScene, delegate ()
@@ -336,7 +340,10 @@ public class LoginControler : SingletonObject<LoginControler>
 		}
 
 		SampleDebuger.Log("OnLoginAckPlayerLeaveTeam result : " + oRet.DwResult.ToString());
-
+		if (oRet.DwResult != 0)
+		{
+			return;
+		}
 		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != GameConstant.g_szLobbyScene)
 		{
 			AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szLobbyScene, delegate ()

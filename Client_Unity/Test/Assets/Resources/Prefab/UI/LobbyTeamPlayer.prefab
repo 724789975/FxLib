@@ -215,9 +215,9 @@ MonoBehaviour:
   m_dwSlotId: 0
   m_qwPlayerId: 0
   m_imgHead: {fileID: 114002317020377852}
-  m_buttonKick: {fileID: 0}
-  m_textName: {fileID: 0}
-  m_buttonInvite: {fileID: 0}
+  m_buttonKick: {fileID: 114626022207241160}
+  m_textName: {fileID: 114441185950051104}
+  m_buttonInvite: {fileID: 114783615507875582}
 --- !u!114 &114441185950051104
 MonoBehaviour:
   m_ObjectHideFlags: 1

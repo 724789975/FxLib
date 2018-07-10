@@ -7,6 +7,7 @@ public class LobbyTeamPlayer : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+		m_buttonInvite.onClick.AddListener(delegate () { LoginControler.Instance().OnlinePlayers(); });
 	}
 	
 	// Update is called once per frame
@@ -28,18 +29,27 @@ public class LobbyTeamPlayer : MonoBehaviour
 		);
 	}
 
-	[UnityEngine.SerializeField]
+	public void Init()
+	{
+		m_qwPlayerId = 0;
+		m_textName.text = "Invite";
+		m_buttonInvite.gameObject.SetActive(true);
+		m_buttonKick.gameObject.SetActive(false);
+		m_imgHead.gameObject.SetActive(false);
+	}
+
+	[SerializeField]
 	uint m_dwSlotId;
-	[UnityEngine.SerializeField]
+	[SerializeField]
 	System.UInt64 m_qwPlayerId;
 
-	[UnityEngine.SerializeField]
+	[SerializeField]
 	UnityEngine.UI.RawImage m_imgHead = null;
-	[UnityEngine.SerializeField]
+	[SerializeField]
 	UnityEngine.UI.Button m_buttonKick = null;
-	[UnityEngine.SerializeField]
+	[SerializeField]
 	UnityEngine.UI.Text m_textName = null;
-	[UnityEngine.SerializeField]
+	[SerializeField]
 	UnityEngine.UI.Button m_buttonInvite = null;
 }
 
