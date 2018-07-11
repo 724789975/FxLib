@@ -121,6 +121,24 @@ void CTeam::NotifyPlayer()
 	}
 }
 
+GameProto::EErrorCode CTeam::ChangeSlot(UINT64 qwPlayerId, UINT32 dwSlotId)
+{
+	if (m_mapPlayers.find(qwPlayerId) == m_mapPlayers.end())
+	{
+		return GameProto::EC_CannotFindPlayer;
+	}
+	if (m_pPlayerSlots[dwSlotId])
+	{
+		return GameProto::EC_TeamSlotHasPlayer;
+	}
+	//»»¿Ó¿ªÊ¼
+	m_pPlayerSlots[dwSlotId] = qwPlayerId;
+	m_pPlayerSlots[m_mapPlayers[qwPlayerId].dw_slot_id()] = 0;
+	m_mapPlayers[qwPlayerId].set_dw_slot_id(dwSlotId);
+	//»»¿Ó½áÊø
+	return GameProto::EC_NONE;
+}
+
 GameProto::TeamRoleData* CTeam::GetTeamRoleData(UINT64 qwPlayerId)
 {
 	if (m_mapPlayers.find(qwPlayerId) == m_mapPlayers.end())

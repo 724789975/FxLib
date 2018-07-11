@@ -100,6 +100,9 @@ bool CLoginSession::OnLoginRequestTeamMakeTeam(CLoginSession& refSession, google
 	LogExe(LogLv_Debug, "player : %llu maketeam id : %llu",
 		oTeamAckLoginMakeTeam.qw_player_id(), oTeamAckLoginMakeTeam.qw_team_id());
 
+	//notify
+	refTeam.NotifyPlayer();
+
 	char* pBuf = NULL;
 	unsigned int dwBufLen = 0;
 	ProtoUtility::MakeProtoSendBuffer(oTeamAckLoginMakeTeam, pBuf, dwBufLen);
@@ -124,6 +127,24 @@ bool CLoginSession::OnLoginRequestTeamChangeSlot(CLoginSession& refSession, goog
 	{
 		return false;
 	}
+
+	CTeam* pTeam = GameServer::Instance()->GetTeamManager().GetTeam(pMsg->qw_team_id());
+	GameProto::TeamAckLoginChangeSlot oChangeSlot;
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	oChangeSlot.set_qw_player_id(pMsg->qw_player_id());
+	if (pTeam == NULL)
+	{
+		oChangeSlot.set_dw_result(GameProto::EC_NoTeamId);
+		LogExe(LogLv_Critical, "player : %llu want leave team : %llu no team id", pMsg->qw_player_id(), pMsg->qw_team_id());
+
+		ProtoUtility::MakeProtoSendBuffer(oChangeSlot, pBuf, dwBufLen);
+		Send(pBuf, dwBufLen);
+		return true;
+	}
+	oChangeSlot.set_dw_result(pTeam->ChangeSlot(pMsg->qw_player_id(), pMsg->dw_slot_id()));
+	ProtoUtility::MakeProtoSendBuffer(oChangeSlot, pBuf, dwBufLen);
+	Send(pBuf, dwBufLen);
 	return true;
 }
 

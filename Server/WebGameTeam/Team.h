@@ -1,6 +1,7 @@
 #ifndef __Team_H__
 #define __Team_H__
 #include "msg_proto/web_data.pb.h"
+#include "msg_proto/web_game.pb.h"
 #include "gamedefine.h"
 #include <map>
 #include "fxmeta.h"
@@ -35,6 +36,8 @@ public:
 	UINT32 GetTeamId(UINT32 dwTeamId) { return dwTeamId; }
 
 	void SetState(ETeamState eState) { m_eState = eState; }
+
+	GameProto::EErrorCode ChangeSlot(UINT64 qwPlayerId, UINT32 dwSlotId);
 
 	GameProto::TeamRoleData* GetTeamRoleData(UINT64 qwPlayerId);
 	std::map<UINT64, GameProto::TeamRoleData>& GetTeamRoles() { return m_mapPlayers; }

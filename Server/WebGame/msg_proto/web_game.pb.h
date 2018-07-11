@@ -502,20 +502,21 @@ enum EErrorCode {
   EC_AlreadyInTeam = 1,
   EC_MakeTeamNotIdle = 2,
   EC_CannotFindPlayer = 3,
-  EC_NoTeamId = 4,
-  EC_NotLeader = 5,
-  EC_TeamHasStart = 6,
   EC_NoGameManagerServer = 7,
   EC_NoTeamServer = 8,
   EC_NoLoginServer = 9,
   EC_PlayerNotOnline = 10,
   EC_FailIntoTeam = 11,
+  EC_NoTeamId = 20,
+  EC_NotLeader = 21,
+  EC_TeamHasStart = 22,
+  EC_TeamSlotHasPlayer = 23,
   EErrorCode_INT_MIN_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32min,
   EErrorCode_INT_MAX_SENTINEL_DO_NOT_USE_ = ::google::protobuf::kint32max
 };
 bool EErrorCode_IsValid(int value);
 const EErrorCode EErrorCode_MIN = EC_NONE;
-const EErrorCode EErrorCode_MAX = EC_FailIntoTeam;
+const EErrorCode EErrorCode_MAX = EC_TeamSlotHasPlayer;
 const int EErrorCode_ARRAYSIZE = EErrorCode_MAX + 1;
 
 const ::google::protobuf::EnumDescriptor* EErrorCode_descriptor();
@@ -1005,11 +1006,18 @@ class PlayerRequestLoginInviteTeam : public ::google::protobuf::Message /* @@pro
   ::google::protobuf::uint64 qw_player_id() const;
   void set_qw_player_id(::google::protobuf::uint64 value);
 
+  // uint32 dw_slot_id = 2;
+  void clear_dw_slot_id();
+  static const int kDwSlotIdFieldNumber = 2;
+  ::google::protobuf::uint32 dw_slot_id() const;
+  void set_dw_slot_id(::google::protobuf::uint32 value);
+
   // @@protoc_insertion_point(class_scope:GameProto.PlayerRequestLoginInviteTeam)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::uint64 qw_player_id_;
+  ::google::protobuf::uint32 dw_slot_id_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
   friend void ::protobuf_web_5fgame_2eproto::InitDefaultsPlayerRequestLoginInviteTeamImpl();
@@ -3860,15 +3868,21 @@ class LoginRequestTeamChangeSlot : public ::google::protobuf::Message /* @@proto
 
   // accessors -------------------------------------------------------
 
-  // uint32 dw_result = 1;
-  void clear_dw_result();
-  static const int kDwResultFieldNumber = 1;
-  ::google::protobuf::uint32 dw_result() const;
-  void set_dw_result(::google::protobuf::uint32 value);
+  // uint64 qw_player_id = 2;
+  void clear_qw_player_id();
+  static const int kQwPlayerIdFieldNumber = 2;
+  ::google::protobuf::uint64 qw_player_id() const;
+  void set_qw_player_id(::google::protobuf::uint64 value);
 
-  // uint32 dw_slot_id = 2;
+  // uint64 qw_team_id = 3;
+  void clear_qw_team_id();
+  static const int kQwTeamIdFieldNumber = 3;
+  ::google::protobuf::uint64 qw_team_id() const;
+  void set_qw_team_id(::google::protobuf::uint64 value);
+
+  // uint32 dw_slot_id = 1;
   void clear_dw_slot_id();
-  static const int kDwSlotIdFieldNumber = 2;
+  static const int kDwSlotIdFieldNumber = 1;
   ::google::protobuf::uint32 dw_slot_id() const;
   void set_dw_slot_id(::google::protobuf::uint32 value);
 
@@ -3876,7 +3890,8 @@ class LoginRequestTeamChangeSlot : public ::google::protobuf::Message /* @@proto
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
-  ::google::protobuf::uint32 dw_result_;
+  ::google::protobuf::uint64 qw_player_id_;
+  ::google::protobuf::uint64 qw_team_id_;
   ::google::protobuf::uint32 dw_slot_id_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
@@ -4750,12 +4765,19 @@ class TeamAckLoginChangeSlot : public ::google::protobuf::Message /* @@protoc_in
   ::google::protobuf::uint32 dw_slot() const;
   void set_dw_slot(::google::protobuf::uint32 value);
 
+  // uint64 qw_player_id = 3;
+  void clear_qw_player_id();
+  static const int kQwPlayerIdFieldNumber = 3;
+  ::google::protobuf::uint64 qw_player_id() const;
+  void set_qw_player_id(::google::protobuf::uint64 value);
+
   // @@protoc_insertion_point(class_scope:GameProto.TeamAckLoginChangeSlot)
  private:
 
   ::google::protobuf::internal::InternalMetadataWithArena _internal_metadata_;
   ::google::protobuf::uint32 dw_result_;
   ::google::protobuf::uint32 dw_slot_;
+  ::google::protobuf::uint64 qw_player_id_;
   mutable int _cached_size_;
   friend struct ::protobuf_web_5fgame_2eproto::TableStruct;
   friend void ::protobuf_web_5fgame_2eproto::InitDefaultsTeamAckLoginChangeSlotImpl();
@@ -8175,6 +8197,20 @@ inline void PlayerRequestLoginInviteTeam::set_qw_player_id(::google::protobuf::u
   // @@protoc_insertion_point(field_set:GameProto.PlayerRequestLoginInviteTeam.qw_player_id)
 }
 
+// uint32 dw_slot_id = 2;
+inline void PlayerRequestLoginInviteTeam::clear_dw_slot_id() {
+  dw_slot_id_ = 0u;
+}
+inline ::google::protobuf::uint32 PlayerRequestLoginInviteTeam::dw_slot_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.PlayerRequestLoginInviteTeam.dw_slot_id)
+  return dw_slot_id_;
+}
+inline void PlayerRequestLoginInviteTeam::set_dw_slot_id(::google::protobuf::uint32 value) {
+  
+  dw_slot_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.PlayerRequestLoginInviteTeam.dw_slot_id)
+}
+
 // -------------------------------------------------------------------
 
 // PlayerRequestLoginChangeSlot
@@ -9142,21 +9178,7 @@ inline void LoginRequestTeamInviteTeam::set_dw_slot_id(::google::protobuf::uint3
 
 // LoginRequestTeamChangeSlot
 
-// uint32 dw_result = 1;
-inline void LoginRequestTeamChangeSlot::clear_dw_result() {
-  dw_result_ = 0u;
-}
-inline ::google::protobuf::uint32 LoginRequestTeamChangeSlot::dw_result() const {
-  // @@protoc_insertion_point(field_get:GameProto.LoginRequestTeamChangeSlot.dw_result)
-  return dw_result_;
-}
-inline void LoginRequestTeamChangeSlot::set_dw_result(::google::protobuf::uint32 value) {
-  
-  dw_result_ = value;
-  // @@protoc_insertion_point(field_set:GameProto.LoginRequestTeamChangeSlot.dw_result)
-}
-
-// uint32 dw_slot_id = 2;
+// uint32 dw_slot_id = 1;
 inline void LoginRequestTeamChangeSlot::clear_dw_slot_id() {
   dw_slot_id_ = 0u;
 }
@@ -9168,6 +9190,34 @@ inline void LoginRequestTeamChangeSlot::set_dw_slot_id(::google::protobuf::uint3
   
   dw_slot_id_ = value;
   // @@protoc_insertion_point(field_set:GameProto.LoginRequestTeamChangeSlot.dw_slot_id)
+}
+
+// uint64 qw_player_id = 2;
+inline void LoginRequestTeamChangeSlot::clear_qw_player_id() {
+  qw_player_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 LoginRequestTeamChangeSlot::qw_player_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.LoginRequestTeamChangeSlot.qw_player_id)
+  return qw_player_id_;
+}
+inline void LoginRequestTeamChangeSlot::set_qw_player_id(::google::protobuf::uint64 value) {
+  
+  qw_player_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.LoginRequestTeamChangeSlot.qw_player_id)
+}
+
+// uint64 qw_team_id = 3;
+inline void LoginRequestTeamChangeSlot::clear_qw_team_id() {
+  qw_team_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 LoginRequestTeamChangeSlot::qw_team_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.LoginRequestTeamChangeSlot.qw_team_id)
+  return qw_team_id_;
+}
+inline void LoginRequestTeamChangeSlot::set_qw_team_id(::google::protobuf::uint64 value) {
+  
+  qw_team_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.LoginRequestTeamChangeSlot.qw_team_id)
 }
 
 // -------------------------------------------------------------------
@@ -9509,6 +9559,20 @@ inline void TeamAckLoginChangeSlot::set_dw_slot(::google::protobuf::uint32 value
   
   dw_slot_ = value;
   // @@protoc_insertion_point(field_set:GameProto.TeamAckLoginChangeSlot.dw_slot)
+}
+
+// uint64 qw_player_id = 3;
+inline void TeamAckLoginChangeSlot::clear_qw_player_id() {
+  qw_player_id_ = GOOGLE_ULONGLONG(0);
+}
+inline ::google::protobuf::uint64 TeamAckLoginChangeSlot::qw_player_id() const {
+  // @@protoc_insertion_point(field_get:GameProto.TeamAckLoginChangeSlot.qw_player_id)
+  return qw_player_id_;
+}
+inline void TeamAckLoginChangeSlot::set_qw_player_id(::google::protobuf::uint64 value) {
+  
+  qw_player_id_ = value;
+  // @@protoc_insertion_point(field_set:GameProto.TeamAckLoginChangeSlot.qw_player_id)
 }
 
 // -------------------------------------------------------------------

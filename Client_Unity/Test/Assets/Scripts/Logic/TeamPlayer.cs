@@ -14,7 +14,7 @@ public class TeamPlayer : MonoBehaviour {
 	{
 	}
 
-	public void SetPlayerId(ulong qwPlayerId)
+	public void SetPlayerId(System.UInt64 qwPlayerId)
 	{
 		m_qwPlayerId = qwPlayerId;
 
@@ -43,8 +43,10 @@ public class TeamPlayer : MonoBehaviour {
 		//m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
 	}
 
+	public System.UInt64 proPlayerId { get { return m_qwPlayerId; } }
+
 	[SerializeField]
-	ulong m_qwPlayerId;
+	System.UInt64 m_qwPlayerId;
 	[SerializeField]
 	UnityEngine.UI.Text m_txtPlayerId = null;
 	[SerializeField]

@@ -4,16 +4,14 @@ using UnityEngine;
 
 public class TeamPlayerManager : SingletonObject<TeamPlayerManager>
 {
+	void Awake()
+	{
+		CreateInstance(this);
+	}
 	// Use this for initialization
 	void Start ()
 	{
-		GameProto.RoleData oData = new GameProto.RoleData();
-		oData.DwSex = PlayerData.Instance().proSex;
-		oData.QwPlayerId = PlayerData.Instance().proPlayerId;
-		oData.SzAvatar = PlayerData.Instance().proHeadImage;
-		oData.SzNickName = PlayerData.Instance().proName;
-
-		GetPlayerBySlot(0).Init(oData);
+		SyncTeamInfo(TeamData.Instance().proTeamRoleData);
 	}
 	
 	// Update is called once per frame
@@ -21,8 +19,33 @@ public class TeamPlayerManager : SingletonObject<TeamPlayerManager>
 	{
 	}
 
-	public void SyncTeamInfo(GameProto.LoginNotifyPlayerTeamInfo oInfo)
+	public static void SyncTeamInfo(GameProto.LoginNotifyPlayerTeamInfo oInfo)
 	{
+		if (Instance() == null)
+		{
+			return;
+		}
+		for (int i = 0; i < Instance().m_arrRedPlayers.Length; ++i)
+		{
+			Instance().m_arrRedPlayers[i].Init();
+		}
+		for (int i = 0; i < Instance().m_arrBluePlayers.Length; ++i)
+		{
+			Instance().m_arrBluePlayers[i].Init();
+		}
+		for (int i = 0; i < oInfo.TeamRoleData.Count; i++)
+		{
+			LobbyTeamPlayer pPlayer = Instance().GetPlayerBySlot(oInfo.TeamRoleData[i].DwSlotId);
+			pPlayer.Init(oInfo.TeamRoleData[i].RoleData);
+		}
+	}
+
+	void SyncTeamInfo(Google.Protobuf.Collections.RepeatedField<GameProto.TeamRoleData> oInfo)
+	{
+		if (oInfo == null)
+		{
+			return;
+		}
 		for (int i = 0; i < m_arrRedPlayers.Length; ++i)
 		{
 			m_arrRedPlayers[i].Init();
@@ -31,10 +54,10 @@ public class TeamPlayerManager : SingletonObject<TeamPlayerManager>
 		{
 			m_arrBluePlayers[i].Init();
 		}
-		for (int i = 0; i < oInfo.TeamRoleData.Count; i++)
+		for (int i = 0; i < oInfo.Count; i++)
 		{
-			LobbyTeamPlayer pPlayer = GetPlayerBySlot(oInfo.TeamRoleData[i].DwSlotId);
-			pPlayer.Init(oInfo.TeamRoleData[i].RoleData);
+			LobbyTeamPlayer pPlayer = Instance().GetPlayerBySlot(oInfo[i].DwSlotId);
+			pPlayer.Init(oInfo[i].RoleData);
 		}
 	}
 

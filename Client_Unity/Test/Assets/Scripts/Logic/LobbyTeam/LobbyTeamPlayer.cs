@@ -7,7 +7,7 @@ public class LobbyTeamPlayer : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
-		m_buttonInvite.onClick.AddListener(delegate () { LoginControler.Instance().OnlinePlayers(); });
+		m_buttonInvite.onClick.AddListener(delegate () { SlotClick(); });
 	}
 	
 	// Update is called once per frame
@@ -17,8 +17,25 @@ public class LobbyTeamPlayer : MonoBehaviour
 
 	public void Init(GameProto.RoleData oData)
 	{
+		LobbyTeamPlayer pLeader = TeamPlayerManager.Instance().GetPlayerBySlot(0);
+		if (pLeader.m_qwPlayerId != PlayerData.Instance().proPlayerId)
+		{
+			m_buttonKick.gameObject.SetActive(false);
+		}
+		else
+		{
+			if (m_dwSlotId != 0)
+			{
+				m_buttonKick.gameObject.SetActive(false);
+				//todo 先不踢玩家 如果要加这个功能 后面再处理
+				m_buttonKick.gameObject.SetActive(true);
+			}
+			else
+			{
+				m_buttonKick.gameObject.SetActive(false);
+			}
+		}
 		m_qwPlayerId = oData.QwPlayerId;
-		m_buttonKick.gameObject.SetActive(true);
 		m_textName.text = oData.SzNickName;
 		m_buttonInvite.gameObject.SetActive(false);
 		StartCoroutine(H5Helper.SendGet(oData.SzAvatar, delegate (Texture2D tex)
@@ -38,8 +55,27 @@ public class LobbyTeamPlayer : MonoBehaviour
 		m_imgHead.gameObject.SetActive(false);
 	}
 
+	void SlotClick()
+	{
+		if (m_qwPlayerId != 0)
+		{
+			return;
+		}
+		LobbyTeamPlayer pLeader = TeamPlayerManager.Instance().GetPlayerBySlot(0);
+		if (pLeader.m_qwPlayerId != PlayerData.Instance().proPlayerId)
+		{
+			//其他人点就是换位置 后面可以加个其他模式
+			LoginControler.Instance().ChangeSlot(m_dwSlotId);
+		}
+		else
+		{
+			//队长点 就是拉人
+			LoginControler.Instance().OnlinePlayers();
+		}
+	}
+
 	[SerializeField]
-	uint m_dwSlotId;
+	uint m_dwSlotId = 0;
 	[SerializeField]
 	System.UInt64 m_qwPlayerId;
 

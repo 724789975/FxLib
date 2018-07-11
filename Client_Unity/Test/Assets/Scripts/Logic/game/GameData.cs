@@ -76,6 +76,15 @@ public class GameData : Singleton<GameData>
 }
 
 [System.Serializable]
+public class TeamData : Singleton<TeamData>
+{
+	public void Reset() { m_pTeamRoleData = null; }
+	public void SetTeamRoleData(Google.Protobuf.Collections.RepeatedField<GameProto.TeamRoleData> oData) { m_pTeamRoleData = oData; }
+	public Google.Protobuf.Collections.RepeatedField<GameProto.TeamRoleData> proTeamRoleData { get { return m_pTeamRoleData; } }
+	Google.Protobuf.Collections.RepeatedField<GameProto.TeamRoleData> m_pTeamRoleData;
+}
+
+[System.Serializable]
 public class TetrisData
 {
 	public const uint s_dwColumn = 12;

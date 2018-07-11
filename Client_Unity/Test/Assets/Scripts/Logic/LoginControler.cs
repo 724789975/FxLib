@@ -95,57 +95,34 @@ public class LoginControler : SingletonObject<LoginControler>
 	public void MakeTeam()
 	{
 		GameProto.PlayerRequestLoginMakeTeam oTeam = new GameProto.PlayerRequestLoginMakeTeam();
-		byte[] pData = new byte[1024];
-		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
-		pStream.WriteString("GameProto.PlayerRequestLoginMakeTeam");
-		byte[] pProto = new byte[oTeam.CalculateSize()];
-		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
-		oTeam.WriteTo(oStream);
-		pStream.WriteData(pProto, (uint)pProto.Length);
-
-		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+		SysUtil.SendMessage(m_pSession, oTeam, "GameProto.PlayerRequestLoginMakeTeam");
 	}
 
 	public void LeaveTeam()
 	{
 		GameProto.PlayerRequestLoginLeaveTeam oTeam = new GameProto.PlayerRequestLoginLeaveTeam();
-		byte[] pData = new byte[1024];
-		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
-		pStream.WriteString("GameProto.PlayerRequestLoginLeaveTeam");
-		byte[] pProto = new byte[oTeam.CalculateSize()];
-		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
-		oTeam.WriteTo(oStream);
-		pStream.WriteData(pProto, (uint)pProto.Length);
-
-		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+		SysUtil.SendMessage(m_pSession, oTeam, "GameProto.PlayerRequestLoginLeaveTeam");
 	}
 	
 	public void TeamStart()
 	{
 		GameProto.PlayerRequestLoginGameStart oTeam = new GameProto.PlayerRequestLoginGameStart();
-		byte[] pData = new byte[1024];
-		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
-		pStream.WriteString("GameProto.PlayerRequestLoginGameStart");
-		byte[] pProto = new byte[oTeam.CalculateSize()];
-		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
-		oTeam.WriteTo(oStream);
-		pStream.WriteData(pProto, (uint)pProto.Length);
 
-		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+		SysUtil.SendMessage(m_pSession, oTeam, "GameProto.PlayerRequestLoginGameStart");
+	}
+
+	public void ChangeSlot(UInt32 dwSlotId)
+	{
+		GameProto.PlayerRequestLoginChangeSlot oChangeSlot = new GameProto.PlayerRequestLoginChangeSlot();
+		oChangeSlot.DwSlotId = dwSlotId;
+
+		SysUtil.SendMessage(m_pSession, oChangeSlot, "GameProto.PlayerRequestLoginChangeSlot");
 	}
 
 	public void OnlinePlayers()
 	{
 		GameProto.PlayerRequestLoginOnLinePlayer oTeam = new GameProto.PlayerRequestLoginOnLinePlayer();
-		byte[] pData = new byte[1024];
-		FxNet.NetStream pStream = new FxNet.NetStream(FxNet.NetStream.ENetStreamType.ENetStreamType_Write, pData, 1024);
-		pStream.WriteString("GameProto.PlayerRequestLoginOnLinePlayer");
-		byte[] pProto = new byte[oTeam.CalculateSize()];
-		Google.Protobuf.CodedOutputStream oStream = new Google.Protobuf.CodedOutputStream(pProto);
-		oTeam.WriteTo(oStream);
-		pStream.WriteData(pProto, (uint)pProto.Length);
-
-		m_pSession.Send(pData, 1024 - pStream.GetLeftLen());
+		SysUtil.SendMessage(m_pSession, oTeam, "GameProto.PlayerRequestLoginOnLinePlayer");
 	}
 
 	public void OnLoginAckPlayerServerId(byte[] pBuf)
@@ -304,6 +281,19 @@ public class LoginControler : SingletonObject<LoginControler>
 		}
 
 		SampleDebuger.Log(szContent);
+		TeamData.Instance().SetTeamRoleData(oRet.TeamRoleData);
+
+		if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != GameConstant.g_szLobbyTeamScene)
+		{
+			AssetBundleLoader.Instance().LoadLevelAsset(GameConstant.g_szLobbyTeamScene, delegate ()
+			{
+			}
+			);
+		}
+		else
+		{
+			TeamPlayerManager.SyncTeamInfo(oRet);
+		}
 	}
 
 	public void OnLoginAckPlayerEnterTeam(byte[] pBuf)

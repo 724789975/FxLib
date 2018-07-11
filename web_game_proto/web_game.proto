@@ -27,14 +27,15 @@ enum EErrorCode
 	EC_AlreadyInTeam = 1;		//已经在队伍中了
 	EC_MakeTeamNotIdle = 2;		//创建队伍时 角色状态不是idle
 	EC_CannotFindPlayer = 3;	//查无此人
-	EC_NoTeamId = 4;			//没有这个队伍
-	EC_NotLeader = 5;			//没有队长
-	EC_TeamHasStart = 6;		//队伍已经申请开始游戏
 	EC_NoGameManagerServer = 7;	//没有游戏管理服务器
 	EC_NoTeamServer = 8;		//没有组队服务器
 	EC_NoLoginServer = 9;		//没有登录服务器
 	EC_PlayerNotOnline = 10;	//玩家不在线
 	EC_FailIntoTeam = 11;		//加入队伍失败
+	EC_NoTeamId = 20;			//没有这个队伍
+	EC_NotLeader = 21;			//没有队长
+	EC_TeamHasStart = 22;		//队伍已经申请开始游戏
+	EC_TeamSlotHasPlayer = 23;	//此坑有人
 }
 
 //移动方向
@@ -76,6 +77,7 @@ message PlayerRequestLoginMakeTeam
 message PlayerRequestLoginInviteTeam
 {
 	uint64 qw_player_id = 1;
+	uint32 dw_slot_id = 2;
 }
 
 message PlayerRequestLoginChangeSlot
@@ -233,8 +235,9 @@ message LoginRequestTeamInviteTeam
 
 message LoginRequestTeamChangeSlot
 {
-	uint32 dw_result = 1;
-	uint32 dw_slot_id = 2;
+	uint32 dw_slot_id = 1;
+	uint64 qw_player_id = 2;
+	uint64 qw_team_id = 3;
 }
 
 message LoginRequestTeamKickPlayer
@@ -287,6 +290,7 @@ message TeamAckLoginChangeSlot
 {
 	uint32 dw_result = 1;
 	uint32 dw_slot = 2;
+	uint64 qw_player_id = 3;
 }
 
 message TeamAckLoginKickPlayer

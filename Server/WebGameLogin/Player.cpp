@@ -255,14 +255,30 @@ bool Player::OnPlayerRequestLoginInviteTeam(CPlayerSession& refSession, GameProt
 
 bool Player::OnPlayerRequestLoginChangeSlot(CPlayerSession& refSession, GameProto::PlayerRequestLoginChangeSlot& refMsg)
 {
+	CBinaryTeamSession* pTeamSession = GameServer::Instance()->GetTeamSessionManager().GetTeamSession(m_dwTeamServerId);
+	if (pTeamSession == NULL)
+	{
+		LogExe(LogLv_Critical, "find team server error id : %d, team id : %llu", m_dwTeamServerId, m_qwTeamId);
+		return true;
+	}
+	GameProto::LoginRequestTeamChangeSlot oRequest;
+	oRequest.set_qw_player_id(m_qwPyayerId);
+	oRequest.set_qw_team_id(m_qwTeamId);
+	oRequest.set_dw_slot_id(refMsg.dw_slot_id());
+	char* pBuf = NULL;
+	unsigned int dwBufLen = 0;
+	ProtoUtility::MakeProtoSendBuffer(oRequest, pBuf, dwBufLen);
+	LogExe(LogLv_Debug, "%s, team id : %llu, player id : %llu, team server id :%d",
+		oRequest.GetTypeName().c_str(), m_qwTeamId, m_qwPyayerId, m_dwTeamServerId);
+	pTeamSession->Send(pBuf, dwBufLen);
+	return true;
 	return true;
 }
 
 bool Player::OnPlayerRequestLoginGameStart(CPlayerSession& refSession, GameProto::PlayerRequestLoginGameStart& refMsg)
 {
-	std::map<unsigned int, CBinaryTeamSession*>& refSessions = GameServer::Instance()->GetTeamSessionManager().GetTeamSessions();
-	std::map<unsigned int, CBinaryTeamSession*>::iterator it = refSessions.find(m_dwTeamServerId);
-	if (it == refSessions.end())
+	CBinaryTeamSession* pTeamSession = GameServer::Instance()->GetTeamSessionManager().GetTeamSession(m_dwTeamServerId);
+	if (pTeamSession == NULL)
 	{
 		LogExe(LogLv_Critical, "find team server error id : %d, team id : %llu", m_dwTeamServerId, m_qwTeamId);
 		return true;
@@ -276,7 +292,7 @@ bool Player::OnPlayerRequestLoginGameStart(CPlayerSession& refSession, GameProto
 	ProtoUtility::MakeProtoSendBuffer(oRequest, pBuf, dwBufLen);
 	LogExe(LogLv_Debug, "%s, team id : %llu, player id : %llu, team server id :%d",
 		oRequest.GetTypeName().c_str(), m_qwTeamId, m_qwPyayerId, m_dwTeamServerId);
-	(it->second)->Send(pBuf, dwBufLen);
+	pTeamSession->Send(pBuf, dwBufLen);
 	return true;
 }
 
