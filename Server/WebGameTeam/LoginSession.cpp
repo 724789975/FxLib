@@ -142,9 +142,11 @@ bool CLoginSession::OnLoginRequestTeamChangeSlot(CLoginSession& refSession, goog
 		Send(pBuf, dwBufLen);
 		return true;
 	}
+
 	oChangeSlot.set_dw_result(pTeam->ChangeSlot(pMsg->qw_player_id(), pMsg->dw_slot_id()));
 	ProtoUtility::MakeProtoSendBuffer(oChangeSlot, pBuf, dwBufLen);
 	Send(pBuf, dwBufLen);
+	pTeam->NotifyPlayer();
 	return true;
 }
 

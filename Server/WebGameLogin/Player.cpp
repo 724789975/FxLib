@@ -272,7 +272,6 @@ bool Player::OnPlayerRequestLoginChangeSlot(CPlayerSession& refSession, GameProt
 		oRequest.GetTypeName().c_str(), m_qwTeamId, m_qwPyayerId, m_dwTeamServerId);
 	pTeamSession->Send(pBuf, dwBufLen);
 	return true;
-	return true;
 }
 
 bool Player::OnPlayerRequestLoginGameStart(CPlayerSession& refSession, GameProto::PlayerRequestLoginGameStart& refMsg)

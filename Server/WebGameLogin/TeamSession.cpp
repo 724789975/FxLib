@@ -55,8 +55,8 @@ void CTeamSession::OnRecv(const char* pBuf, UINT32 dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	std::string szProtocolName;
-	LogExe(LogLv_Debug, "server id : %d, protocol name : %s", m_dwServerId, szProtocolName.c_str());
 	oStream.ReadString(szProtocolName);
+	LogExe(LogLv_Debug, "server id : %d, protocol name : %s", m_dwServerId, szProtocolName.c_str());
 	unsigned int dwProtoLen = oStream.GetDataLength();
 	char* pData = oStream.ReadData(dwProtoLen);
 	if (!m_oProtoDispatch.Dispatch(szProtocolName.c_str(),
@@ -158,6 +158,23 @@ bool CTeamSession::OnTeamAckLoginChangeSlot(CTeamSession& refSession, google::pr
 	{
 		return false;
 	}
+	if (pMsg->dw_result() != 0)
+	{
+		LogExe(LogLv_Critical, "kick player : %llu result : %d", pMsg->qw_player_id(), pMsg->dw_result());
+		return true;
+	}
+	LogExe(LogLv_Debug, "%s", pMsg->DebugString().c_str());
+	Player* pPlayer = GameServer::Instance()->GetPlayerManager().GetPlayer(pMsg->qw_player_id());
+	if (pPlayer)
+	{
+		GameProto::LoginAckPlayerChangeSlot oResult;
+		oResult.set_dw_result(pMsg->dw_result());
+		char* pBuf = NULL;
+		unsigned int dwBufLen = 0;
+		ProtoUtility::MakeProtoSendBuffer(oResult, pBuf, dwBufLen);
+		pPlayer->GetSession()->Send(pBuf, dwBufLen);
+	}
+
 	return true;
 }
 
