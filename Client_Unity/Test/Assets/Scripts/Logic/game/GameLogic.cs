@@ -117,7 +117,7 @@ public class GameLogic : SingletonObject<GameLogic>
 		}
 
 		//刷新显示的方块
-		Color32 c = new Color32(255, 255, 255, 100);
+		Color32 c = new Color32(255, 255, 255, 35);
 		for (int i = 0; i < TetrisData.s_dwRow; i++)
 		{
 			for (int j = 0; j < TetrisData.s_dwColumn; j++)
@@ -128,12 +128,14 @@ public class GameLogic : SingletonObject<GameLogic>
 					c.r = (byte)((dwBlock & 0xFF000000) >> 24);
 					c.g = (byte)((dwBlock & 0x00FF0000) >> 16);
 					c.b = (byte)((dwBlock & 0x0000FF00) >> 8);
+					c.a = 100;
 				}
 				else
 				{
 					c.r = 255;
 					c.g = 255;
 					c.b = 255;
+					c.a = 35;
 				}
 				m_arrBlockInfos[i, j].color = c;
 			}
@@ -151,12 +153,14 @@ public class GameLogic : SingletonObject<GameLogic>
 						c.r = (byte)((m_oData.m_oNextTetris.m_dwTetrisColor & 0xFF000000) >> 24);
 						c.g = (byte)((m_oData.m_oNextTetris.m_dwTetrisColor & 0x00FF0000) >> 16);
 						c.b = (byte)((m_oData.m_oNextTetris.m_dwTetrisColor & 0x0000FF00) >> 8);
+						c.a = 100;
 					}
 					else
 					{
 						c.r = 255;
 						c.g = 255;
 						c.b = 255;
+						c.a = 35;
 					}
 					m_arrNextBlocks[i * TetrisData.s_dwUnit + j].color = c;
 				}

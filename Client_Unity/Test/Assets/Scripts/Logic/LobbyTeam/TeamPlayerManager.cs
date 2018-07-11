@@ -40,7 +40,7 @@ public class TeamPlayerManager : SingletonObject<TeamPlayerManager>
 		}
 	}
 
-	void SyncTeamInfo(Google.Protobuf.Collections.RepeatedField<GameProto.TeamRoleData> oInfo)
+	public void SyncTeamInfo(Google.Protobuf.Collections.RepeatedField<GameProto.TeamRoleData> oInfo)
 	{
 		if (oInfo == null)
 		{
@@ -63,7 +63,7 @@ public class TeamPlayerManager : SingletonObject<TeamPlayerManager>
 
 	public LobbyTeamPlayer GetPlayerBySlot(uint dwSlotId)
 	{
-		if (dwSlotId > m_arrRedPlayers.Length)
+		if (dwSlotId >= m_arrRedPlayers.Length)
 		{
 			return m_arrBluePlayers[dwSlotId - m_arrRedPlayers.Length];
 		}

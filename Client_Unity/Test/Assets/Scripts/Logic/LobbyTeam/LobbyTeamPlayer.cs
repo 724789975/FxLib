@@ -17,6 +17,7 @@ public class LobbyTeamPlayer : MonoBehaviour
 
 	public void Init(GameProto.RoleData oData)
 	{
+		m_imgHead.gameObject.SetActive(true);
 		LobbyTeamPlayer pLeader = TeamPlayerManager.Instance().GetPlayerBySlot(0);
 		if (pLeader.m_qwPlayerId != PlayerData.Instance().proPlayerId)
 		{
@@ -41,7 +42,6 @@ public class LobbyTeamPlayer : MonoBehaviour
 		StartCoroutine(H5Helper.SendGet(oData.SzAvatar, delegate (Texture2D tex)
 			{
 				m_imgHead.texture = tex;
-				m_imgHead.gameObject.SetActive(true);
 			})
 		);
 	}

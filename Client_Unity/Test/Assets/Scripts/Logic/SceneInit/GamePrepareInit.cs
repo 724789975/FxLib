@@ -7,6 +7,7 @@ public class GamePrepareInit : MonoBehaviour
 	// Use this for initialization
 	void Start ()
 	{
+		TeamPlayerManager.Instance().SyncTeamInfo(TeamData.Instance().proTeamRoleData);
 		TeamData.Instance().Reset();
 	}
 	
