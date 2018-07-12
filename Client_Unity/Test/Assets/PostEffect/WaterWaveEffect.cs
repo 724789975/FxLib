@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
  
-public class WaterWaveEffect : PostEffectBase {
- 
-    
+public class WaterWaveEffect : PostEffectBase
+{
     //距离系数
     public float distanceFactor = 60.0f;
     //时间系数
@@ -17,9 +16,22 @@ public class WaterWaveEffect : PostEffectBase {
  
     private float waveStartTime;
     private Vector4 startPos = new Vector4(0.5f, 0.5f, 0, 0);
- 
- 
-    void OnRenderImage (RenderTexture source, RenderTexture destination)
+
+	void Start()
+	{
+		if (shader == null)
+		{
+			enabled = false;
+			return;
+		}
+		if (shader.isSupported == false)
+		{
+			enabled = false;
+			return;
+		}
+	}
+
+	void OnRenderImage (RenderTexture source, RenderTexture destination)
     {
         //计算波纹移动的距离，根据enable到目前的时间*速度求解
         float curWaveDistance = (Time.time - waveStartTime) * waveSpeed;
