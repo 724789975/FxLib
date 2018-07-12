@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
  
-public class WaterWaveEffect : PostEffectBase
+public class WaterWaveEffect : PostEffectBase<WaterWaveEffect>
 {
     //距离系数
     public float distanceFactor = 60.0f;
@@ -14,8 +14,17 @@ public class WaterWaveEffect : PostEffectBase
     //波纹扩散的速度
     public float waveSpeed = 0.3f;
  
-    private float waveStartTime;
+	[SerializeField]
+    private float waveStartTime = 0;
+	[SerializeField]
     private Vector4 startPos = new Vector4(0.5f, 0.5f, 0, 0);
+
+	public bool bPlayAtStart = false;
+
+	void Awake()
+	{
+		CreateInstance(this);
+	}
 
 	void Start()
 	{
@@ -28,6 +37,10 @@ public class WaterWaveEffect : PostEffectBase
 		{
 			enabled = false;
 			return;
+		}
+		if (bPlayAtStart)
+		{
+			waveStartTime = Time.time;
 		}
 	}
 
@@ -47,14 +60,13 @@ public class WaterWaveEffect : PostEffectBase
  
     void Update()
     {
-        if (Input.GetMouseButton(0))
-        {
-            Vector2 mousePos = Input.mousePosition;
-            //将mousePos转化为（0，1）区间
-            startPos = new Vector4(mousePos.x / Screen.width, mousePos.y / Screen.height, 0, 0);
-            waveStartTime = Time.time;
-        }
- 
-    }
+		//if (Input.GetMouseButton(0))
+		//{
+		//	Vector2 mousePos = Input.mousePosition;
+		//	//将mousePos转化为（0，1）区间
+		//	startPos = new Vector4(mousePos.x / Screen.width, mousePos.y / Screen.height, 0, 0);
+		//	waveStartTime = Time.time;
+		//}
+	}
 }
 

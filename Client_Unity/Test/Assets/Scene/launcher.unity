@@ -1077,6 +1077,9 @@ MonoBehaviour:
   totalFactor: 1
   waveWidth: 0.3
   waveSpeed: 0.3
+  waveStartTime: 0
+  startPos: {x: 0.3, y: 0.8, z: 0, w: 0}
+  bPlayAtStart: 1
 --- !u!1 &1237297127
 GameObject:
   m_ObjectHideFlags: 0
