@@ -8,8 +8,9 @@ Shader "mask" {
     }
     SubShader {
         Tags {
-            "Queue"="AlphaTest"
-            "RenderType"="TransparentCutout"
+            "IgnoreProjector"="True"
+            "Queue"="Transparent"
+            "RenderType"="Transparent"
             "CanUseSpriteAtlas"="True"
             "PreviewType"="Plane"
         }
@@ -20,7 +21,7 @@ Shader "mask" {
             }
             Blend SrcAlpha OneMinusSrcAlpha
             Cull Off
-            
+            ZWrite Off
             
             CGPROGRAM
             #pragma vertex vert
@@ -28,9 +29,9 @@ Shader "mask" {
             #define UNITY_PASS_FORWARDBASE
             #pragma multi_compile _ PIXELSNAP_ON
             #include "UnityCG.cginc"
-            #pragma multi_compile_fwdbase_fullshadows
-            #pragma only_renderers d3d9 d3d11 glcore gles 
-            #pragma target 3.0
+            #pragma multi_compile_fwdbase
+            #pragma only_renderers d3d9 d3d11 glcore gles gles3 metal d3d11_9x xboxone ps4 psp2 n3ds wiiu 
+            #pragma target 2.0
             uniform sampler2D _MainTex; uniform float4 _MainTex_ST;
             uniform float4 _Color;
             uniform sampler2D _mask; uniform float4 _mask_ST;
@@ -45,7 +46,7 @@ Shader "mask" {
             VertexOutput vert (VertexInput v) {
                 VertexOutput o = (VertexOutput)0;
                 o.uv0 = v.texcoord0;
-                o.pos = UnityObjectToClipPos( v.vertex );
+                o.pos = mul(UNITY_MATRIX_VP, v.vertex );
                 #ifdef PIXELSNAP_ON
                     o.pos = UnityPixelSnap(o.pos);
                 #endif
@@ -54,16 +55,16 @@ Shader "mask" {
             float4 frag(VertexOutput i, float facing : VFACE) : COLOR {
                 float isFrontFace = ( facing >= 0 ? 1 : 0 );
                 float faceSign = ( facing >= 0 ? 1 : -1 );
-                float4 _MainTex_var = tex2D(_MainTex,TRANSFORM_TEX(i.uv0, _MainTex));
-                float4 _mask_var = tex2D(_mask,TRANSFORM_TEX(i.uv0, _mask));
-                clip((_MainTex_var.a*_Color.a*_mask_var.a) - 0.5);
 ////// Lighting:
 ////// Emissive:
+                float4 _MainTex_var = tex2D(_MainTex,TRANSFORM_TEX(i.uv0, _MainTex));
                 float3 emissive = (_MainTex_var.rgb*_Color.rgb);
                 float3 finalColor = emissive;
-                return fixed4(finalColor,1);
+                float4 _mask_var = tex2D(_mask,TRANSFORM_TEX(i.uv0, _mask));
+                return fixed4(finalColor,(_MainTex_var.a*_Color.a*_mask_var.a));
             }
             ENDCG
         }
     }
+    CustomEditor "ShaderForgeMaterialInspector"
 }
