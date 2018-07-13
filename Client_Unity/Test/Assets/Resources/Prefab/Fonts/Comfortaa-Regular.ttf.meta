@@ -13,11 +13,13 @@ TrueTypeFontImporter:
   fontName: Comfortaa
   fontNames:
   - Comfortaa
-  fallbackFontReferences: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 459dcc0ab92810c4e9443a4bf561481e, type: 3}
+  - {fileID: 12800000, guid: c1b1a99c7d448164a8fffac2c678d474, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1
   useLegacyBoundsCalculation: 0
   userData: 
-  assetBundleName: 
+  assetBundleName: assets/resources/prefab/fonts/comfortaa-regular
   assetBundleVariant: 

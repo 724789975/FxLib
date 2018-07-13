@@ -11,7 +11,6 @@ public class TeamPlayerManager : SingletonObject<TeamPlayerManager>
 	// Use this for initialization
 	void Start ()
 	{
-		SyncTeamInfo(TeamData.Instance().proTeamRoleData);
 	}
 	
 	// Update is called once per frame
@@ -53,6 +52,27 @@ public class TeamPlayerManager : SingletonObject<TeamPlayerManager>
 		for (int i = 0; i < m_arrBluePlayers.Length; ++i)
 		{
 			m_arrBluePlayers[i].Init();
+		}
+		for (int i = 0; i < oInfo.Count; i++)
+		{
+			LobbyTeamPlayer pPlayer = Instance().GetPlayerBySlot(oInfo[i].DwSlotId);
+			pPlayer.Init(oInfo[i].RoleData);
+		}
+	}
+
+	public void PrepareSyncTeamInfo(Google.Protobuf.Collections.RepeatedField<GameProto.TeamRoleData> oInfo)
+	{
+		if (oInfo == null)
+		{
+			return;
+		}
+		for (int i = 0; i < m_arrRedPlayers.Length; ++i)
+		{
+			m_arrRedPlayers[i].Init(null);
+		}
+		for (int i = 0; i < m_arrBluePlayers.Length; ++i)
+		{
+			m_arrBluePlayers[i].Init(null);
 		}
 		for (int i = 0; i < oInfo.Count; i++)
 		{

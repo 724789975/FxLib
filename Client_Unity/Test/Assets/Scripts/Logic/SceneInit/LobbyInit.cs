@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GamePrepareInit : MonoBehaviour
+public class LobbyInit : MonoBehaviour
 {
 	// Use this for initialization
 	void Start ()
 	{
-		TeamPlayerManager.Instance().PrepareSyncTeamInfo(TeamData.Instance().proTeamRoleData);
-		TeamData.Instance().Reset();
 	}
 	
 	// Update is called once per frame

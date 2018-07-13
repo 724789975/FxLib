@@ -55,6 +55,33 @@ public class LobbyTeamPlayer : MonoBehaviour
 		m_imgHead.gameObject.SetActive(false);
 	}
 
+	public void PrepareInit(GameProto.RoleData oData)
+	{
+		if (oData == null)
+		{
+
+			m_qwPlayerId = 0;
+			m_textName.gameObject.SetActive(false);
+			m_buttonInvite.gameObject.SetActive(false);
+			m_buttonKick.gameObject.SetActive(false);
+			m_imgHead.gameObject.SetActive(false);
+		}
+		else
+		{
+			m_imgHead.gameObject.SetActive(true);
+			m_buttonKick.gameObject.SetActive(false);
+			m_buttonKick.gameObject.SetActive(false);
+			m_qwPlayerId = oData.QwPlayerId;
+			m_textName.text = oData.SzNickName;
+			m_buttonInvite.gameObject.SetActive(false);
+			StartCoroutine(H5Helper.SendGet(oData.SzAvatar, delegate (Texture2D tex)
+				{
+					m_imgHead.texture = tex;
+				})
+			);
+		}
+	}
+
 	void SlotClick()
 	{
 		if (m_qwPlayerId != 0)

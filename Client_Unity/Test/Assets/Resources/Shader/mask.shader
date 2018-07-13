@@ -66,5 +66,4 @@ Shader "mask" {
             ENDCG
         }
     }
-    FallBack "Diffuse"
 }
