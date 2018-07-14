@@ -68,16 +68,16 @@ public class TeamPlayerManager : SingletonObject<TeamPlayerManager>
 		}
 		for (int i = 0; i < m_arrRedPlayers.Length; ++i)
 		{
-			m_arrRedPlayers[i].Init(null);
+			m_arrRedPlayers[i].PrepareInit(null);
 		}
 		for (int i = 0; i < m_arrBluePlayers.Length; ++i)
 		{
-			m_arrBluePlayers[i].Init(null);
+			m_arrBluePlayers[i].PrepareInit(null);
 		}
 		for (int i = 0; i < oInfo.Count; i++)
 		{
 			LobbyTeamPlayer pPlayer = Instance().GetPlayerBySlot(oInfo[i].DwSlotId);
-			pPlayer.Init(oInfo[i].RoleData);
+			pPlayer.PrepareInit(oInfo[i].RoleData);
 		}
 	}
 

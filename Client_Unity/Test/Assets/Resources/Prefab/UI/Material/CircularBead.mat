@@ -65,6 +65,7 @@ Material:
     m_Floats:
     - PixelSnap: 1
     - _BumpScale: 1
+    - _ColorMask: 15
     - _Cutoff: 0.703
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
@@ -79,7 +80,13 @@ Material:
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _Stencil: 0
+    - _StencilComp: 8
+    - _StencilOp: 0
+    - _StencilReadMask: 255
+    - _StencilWriteMask: 255
     - _UVSec: 0
+    - _UseUIAlphaClip: 0
     - _ZWrite: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 0.784}

@@ -46,15 +46,16 @@ Shader "mask" {
             VertexOutput vert (VertexInput v) {
                 VertexOutput o = (VertexOutput)0;
                 o.uv0 = v.texcoord0;
-                o.pos = mul(UNITY_MATRIX_VP, v.vertex );
+                //o.pos = mul(UNITY_MATRIX_VP, v.vertex );
+				o.pos = UnityObjectToClipPos(v.vertex);
                 #ifdef PIXELSNAP_ON
                     o.pos = UnityPixelSnap(o.pos);
                 #endif
                 return o;
             }
             float4 frag(VertexOutput i, float facing : VFACE) : COLOR {
-                float isFrontFace = ( facing >= 0 ? 1 : 0 );
-                float faceSign = ( facing >= 0 ? 1 : -1 );
+                //float isFrontFace = ( facing >= 0 ? 1 : 0 );
+                //float faceSign = ( facing >= 0 ? 1 : -1 );
 ////// Lighting:
 ////// Emissive:
                 float4 _MainTex_var = tex2D(_MainTex,TRANSFORM_TEX(i.uv0, _MainTex));
@@ -66,5 +67,5 @@ Shader "mask" {
             ENDCG
         }
     }
-    CustomEditor "ShaderForgeMaterialInspector"
+    //CustomEditor "ShaderForgeMaterialInspector"
 }

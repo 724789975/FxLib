@@ -70,7 +70,6 @@ public class LobbyTeamPlayer : MonoBehaviour
 		{
 			m_imgHead.gameObject.SetActive(true);
 			m_buttonKick.gameObject.SetActive(false);
-			m_buttonKick.gameObject.SetActive(false);
 			m_qwPlayerId = oData.QwPlayerId;
 			m_textName.text = oData.SzNickName;
 			m_buttonInvite.gameObject.SetActive(false);
