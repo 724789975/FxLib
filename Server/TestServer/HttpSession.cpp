@@ -33,8 +33,25 @@ void CHttpSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	if (it == m_mapCallBacks.end())
 	{
 		LogExe(LogLv_Error, "can't find api : %s", oInfo.request_uri);
-		std::string szBuf = "{\"error\":\"没找到对应api\"}";
-		Send(szBuf.c_str(), szBuf.size());
+		std::string szContent = "<!DOCTYPE html>"
+			"<html>\r\n"
+			"<head>\r\n"
+			"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n"
+			"<title>Test</title>\r\n"
+			"<body>\r\n"
+			"404 NOT FOUND\r\n"
+			"</body>\r\n"
+			"</html>\r\n";
+
+		char szBuf[1024 * 16] = { 0 };
+		sprintf(szBuf, "HTTP/1.1 404 ERROR\r\n"
+			"Server: Test\r\n"
+			"Content-Type: text/html\r\n"
+			"Access-Control-Allow-Origin: *\r\n"
+			"Content-Length: %d\r\n"
+			"\r\n"
+			"%s", szContent.size(), szContent.c_str());
+		Send(szBuf, strlen(szBuf));
 		return;
 	}
 	it->second(oInfo, *this);
@@ -74,11 +91,15 @@ void CHttpSessionFactory::Release(CHttpSession* pSession)
 
 void HttpCallBackTest(HttpRequestInfo& oHttpRequestInfo, CHttpSession& refHttpSession)
 {
-	std::string szBuf = "<!DOCTYPE html PUBLIC \" -//W3C//DTD XHTML 1.0 Stict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">\r\n"
-		"<html xmlns = \"http://www.w3.org/1999/xhtml\" lang = \"zh-CN\">\r\n"
+	std::string szBuf = "HTTP/1.1 200 OK\r\n"
+		"Server: Test\r\n"
+		"Content-Type: text/html\r\n"
+		"Access-Control-Allow-Origin: *\r\n"
+		"\r\n"
+		"<!DOCTYPE html>"
 		"<html>\r\n"
 		"<head>\r\n"
-		"<meta http-equiv=\"Content - Type\" content=\"text / html; charset = \"UTF-8\">\r\n"
+		"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n"
 		"<title>Test</title>\r\n"
 		"<body>\r\n"
 		"</body>\r\n"

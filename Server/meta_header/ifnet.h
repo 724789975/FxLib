@@ -658,10 +658,13 @@ namespace HttpHelp
 			return -1;
 		}
 		ri->query_string = strchr(ri->request_uri, '?');
-		if (ri->query_string[0] == '?')
+		if (ri->query_string)
 		{
-			const_cast<char*>(ri->query_string)[0] = 0;
-			ri->query_string += 1;
+			if (ri->query_string[0] == '?')
+			{
+				const_cast<char*>(ri->query_string)[0] = 0;
+				ri->query_string += 1;
+			}
 		}
 
 		/* Next would be the HTTP version */
