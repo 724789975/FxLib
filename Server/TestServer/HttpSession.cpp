@@ -1,5 +1,15 @@
 #include "HttpSession.h"
 
+const static char* g_szResponse =
+	"HTTP/1.1 %d %s\r\n"
+	"Server: Test\r\n"
+	"Content-Type: text/html\r\n"
+	"Access-Control-Allow-Origin: *\r\n"
+	"Date: %s\r\n"
+	"Content-Length: %d\r\n"
+	"\r\n"
+	"%s";
+
 CHttpSession::CHttpSession()
 {
 }
@@ -44,13 +54,7 @@ void CHttpSession::OnRecv(const char* pBuf, UINT32 dwLen)
 			"</html>\r\n";
 
 		char szBuf[1024 * 16] = { 0 };
-		sprintf(szBuf, "HTTP/1.1 404 ERROR\r\n"
-			"Server: Test\r\n"
-			"Content-Type: text/html\r\n"
-			"Access-Control-Allow-Origin: *\r\n"
-			"Content-Length: %d\r\n"
-			"\r\n"
-			"%s", szContent.size(), szContent.c_str());
+		sprintf(szBuf, g_szResponse, 404, HttpHelp::mg_get_response_code_text(404), GetTimeHandler()->GetTimeStr(), szContent.size(), szContent.c_str());
 		Send(szBuf, strlen(szBuf));
 		return;
 	}
@@ -91,21 +95,21 @@ void CHttpSessionFactory::Release(CHttpSession* pSession)
 
 void HttpCallBackTest(HttpRequestInfo& oHttpRequestInfo, CHttpSession& refHttpSession)
 {
-	std::string szBuf = "HTTP/1.1 200 OK\r\n"
-		"Server: Test\r\n"
-		"Content-Type: text/html\r\n"
-		"Access-Control-Allow-Origin: *\r\n"
-		"\r\n"
+	char szBuf[1024 * 16] = { 0 };
+	std::string szContent =
 		"<!DOCTYPE html>"
 		"<html>\r\n"
 		"<head>\r\n"
 		"<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\r\n"
 		"<title>Test</title>\r\n"
 		"<body>\r\n"
+		"test</br>\r\n"
 		"</body>\r\n"
 		"</html>\r\n";
 
-	if (!refHttpSession.Send(szBuf.c_str(), szBuf.size()))
+	sprintf(szBuf, g_szResponse, 404, HttpHelp::mg_get_response_code_text(404), GetTimeHandler()->GetTimeStr(), szContent.size(), szContent.c_str());
+
+	if (!refHttpSession.Send(szBuf, strlen(szBuf)))
 	{
 		refHttpSession.Close();
 	}
