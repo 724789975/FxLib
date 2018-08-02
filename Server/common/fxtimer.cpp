@@ -5,6 +5,7 @@
 #include "fxtimer.h"
 #include "fxmeta.h"
 #include "lock.h"
+#include "limiter_queue.h"
 #ifdef WIN32
 #include <time.h>
 #else
@@ -27,8 +28,18 @@ double GetTimeOfDay()
 	return s_qwTime;
 }
 
-class FxTimerHandler: public IFxTimerHandler/*, IFxThread*/
+class FxTimerHandler: public IFxTimerHandler, TLimiterQueue<double>/*, IFxThread*/
 {
+private:
+	virtual bool CheckEvent(double c)
+	{
+		if (c <= m_qwSecond)
+		{
+			return true;
+		}
+		return false;
+	}
+
 public:
 	FxTimerHandler()
 		: m_qwSecond(0)
@@ -47,7 +58,7 @@ public:
 		m_dwDayTimeStart = (unsigned int)(t - (t - m_dwTimeZone * 3600) % 86400);
 
 		//设置随机数种子
-		srand(m_qwSecond);
+		srand((unsigned int)m_qwSecond);
 		//srand(0);
 //		m_bStop = false;
 	}
@@ -175,6 +186,43 @@ public:
 		return m_qwDeltaTime;
 	}
 
+	// 添加事件 (多长事件后执行, 事件指针)
+	virtual bool AddTimer(double dSecond, CEventBase* pEvent)
+	{
+		return PushEvent(GetSecond() + dSecond, pEvent) != NULL;
+	}
+
+	// 添加事件 (每多少秒执行, 事件指针) 被60整除
+	virtual bool AddSecontTimer(unsigned int dwSecond, CEventBase* pEvent)
+	{
+		return PushEvent(GetSecond() - (GetSecond() % dwSecond) + dwSecond, pEvent) != NULL;
+	}
+
+	// 添加事件 (每多少分执行, 事件指针) 被60整除
+	virtual bool AddMinuteTimer(unsigned int dwMinute, CEventBase* pEvent)
+	{
+		return PushEvent(GetSecond() - GetSecond() % (dwMinute * 60) + dwMinute * 60, pEvent) != NULL;
+	}
+
+	// 添加事件 (每多少小时执行, 事件指针) 被24整除
+	virtual bool AddHourTimer(unsigned int dwHour, CEventBase* pEvent)
+	{
+		unsigned int dwH1 = (GetSecond() - m_dwDayTimeStart) / 3600;
+		return PushEvent(m_dwDayTimeStart + (dwH1 - dwH1 % dwHour + dwHour) * 3600, pEvent) != NULL;
+	}
+
+	// 添加事件 (每天几点执行, 事件指针)
+	virtual bool AddDayHourTimer(unsigned int dwHour, CEventBase* pEvent)
+	{
+		unsigned int dwTime = m_dwDayTimeStart + dwHour * 3600;
+		if (dwTime <= GetSecond())
+		{
+			dwTime += 86400;
+		}
+
+		return PushEvent(dwTime, pEvent) != NULL;
+	}
+
 private:
 
 	void ProcDelayTimer()
@@ -205,6 +253,12 @@ private:
 		s_qwSecond = GetTimeOfDay();
 
 		m_qwDeltaTime = s_qwSecond - m_qwSecond;
+		if (m_qwDeltaTime >= 0.1f)
+		{
+			LogExe(LogLv_Critical, "FPS : %d", (int)(1 / m_qwDeltaTime));
+		}
+
+		Proc(1 / m_qwDeltaTime);
 		if((unsigned int)s_qwSecond == (unsigned int)m_qwSecond)
 		{
 			m_qwSecond = s_qwSecond;

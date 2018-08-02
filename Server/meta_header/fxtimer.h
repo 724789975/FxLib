@@ -1,6 +1,8 @@
 #ifndef FXTIMER_H_
 #define FXTIMER_H_
 
+#include "limiter_queue.h"
+
 class IFxTimer
 {
 public:
@@ -37,6 +39,17 @@ public:
 	virtual const char* GetTimeStr() = 0;
 	virtual const unsigned int GetTimeSeq() = 0;
 	virtual const double GetDeltaTime() = 0;
+
+	// 添加事件 (多长事件后执行, 事件指针)
+	virtual bool AddTimer(double dSecond, CEventBase* pEvent) = 0;
+	// 添加事件 (每多少秒执行, 事件指针) 被60整除
+	virtual bool AddSecontTimer(unsigned int dwSecond, CEventBase* pEvent) = 0;
+	// 添加事件 (每多少分执行, 事件指针) 被60整除
+	virtual bool AddMinuteTimer(unsigned int dwMinute, CEventBase* pEvent) = 0;
+	// 添加事件 (每多少小时执行, 事件指针) 被24整除
+	virtual bool AddHourTimer(unsigned int dwHour, CEventBase* pEvent) = 0;
+	// 添加事件 (每天几点执行, 事件指针)
+	virtual bool AddDayHourTimer(unsigned int dwHour, CEventBase* pEvent) = 0;
 
 	//获取时区
 	virtual const int GetTimeZone() = 0;
