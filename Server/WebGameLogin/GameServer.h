@@ -13,7 +13,9 @@
 #include "TeamSession.h"
 #include "GameManagerSession.h"
 
-class GameServer : public TSingleton<GameServer>
+#include "GameServerBase.h"
+
+class GameServer : public TSingleton<GameServer>, public CGameServerBase
 {
 public:
 	GameServer();

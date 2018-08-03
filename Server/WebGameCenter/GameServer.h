@@ -7,7 +7,9 @@
 #include "singleton.h"
 #include "ServerSession.h"
 
-class GameServer : public TSingleton<GameServer>
+#include "GameServerBase.h"
+
+class GameServer : public TSingleton<GameServer>, public CGameServerBase
 {
 public:
 	GameServer();

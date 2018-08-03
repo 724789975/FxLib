@@ -9,7 +9,9 @@
 #include "SlaveServerSession.h"
 #include "PlayerSession.h"
 
-class GameServer : public TSingleton<GameServer>
+#include "GameServerBase.h"
+
+class GameServer : public TSingleton<GameServer>, public CGameServerBase
 {
 public:
 	GameServer();

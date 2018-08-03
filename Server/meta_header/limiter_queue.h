@@ -1,11 +1,11 @@
-/**
+ï»¿/**
 * \file	limiter_queue.h
-* \author  	µËÏş²¨ 724789975@qq.com
-* \date 	2018Äê8ÔÂ02ÈÕ 23Ê±04·Ö26Ãë CST
-* \brief 	Ò»¸öÏŞÁ÷¶ÓÁĞ
+* \author  	é‚“æ™“æ³¢ 724789975@qq.com
+* \date 	2018å¹´8æœˆ02æ—¥ 23æ—¶04åˆ†26ç§’ CST
+* \brief 	ä¸€ä¸ªé™æµé˜Ÿåˆ—
 *
-* Ö÷ÒªÊÇÓÃÓÚ¶ÓÁĞÏŞÁ÷ ·ÀÖ¹¶ÓÁĞÖĞĞèÒªÖ´ĞĞµÄ»Øµ÷Ì«¶à Ôì³É×èÈû
-* Ô­ÀíÊÇÃ¿Ö¡Ö´ĞĞ¹Ì¶¨ÊıÁ¿µÄÊÂ¼ş »òÕß ¸ù¾İÉÏÒ»Ö¡µÄÖ´ĞĞÊ±¼ä µ÷Õû±¾Ö¡µÄÊÂ¼şÖ´ĞĞÊıÁ¿
+* ä¸»è¦æ˜¯ç”¨äºé˜Ÿåˆ—é™æµ é˜²æ­¢é˜Ÿåˆ—ä¸­éœ€è¦æ‰§è¡Œçš„å›è°ƒå¤ªå¤š é€ æˆé˜»å¡
+* åŸç†æ˜¯æ¯å¸§æ‰§è¡Œå›ºå®šæ•°é‡çš„äº‹ä»¶ æˆ–è€… æ ¹æ®ä¸Šä¸€å¸§çš„æ‰§è¡Œæ—¶é—´ è°ƒæ•´æœ¬å¸§çš„äº‹ä»¶æ‰§è¡Œæ•°é‡
 *
 */
 #ifndef __LimiterQueue_H__
@@ -31,7 +31,7 @@ public:
 		m_ppCallBack = ppCallBack;
 	}
 
-	//Õâ¸öÊÇ¼ÇÂ¼ÊÂ¼şÔÚ¶ÓÁĞÖĞµÄÎ»ÖÃ Èç¹ûÏú»ÙµôµÄ»° Ö±½Ó°Ñ¶ÓÁĞÖĞµÄÖ¸Õë¸³¿Õ¾Í¿ÉÒÔÁË
+	//è¿™ä¸ªæ˜¯è®°å½•äº‹ä»¶åœ¨é˜Ÿåˆ—ä¸­çš„ä½ç½® å¦‚æœé”€æ¯æ‰çš„è¯ ç›´æ¥æŠŠé˜Ÿåˆ—ä¸­çš„æŒ‡é’ˆèµ‹ç©ºå°±å¯ä»¥äº†
 	CEventBase** m_ppCallBack;
 };
 
@@ -51,7 +51,7 @@ private:
 };
 
 
-// NUM ×îĞ¡ÖµÎª1
+// NUM æœ€å°å€¼ä¸º1
 template<class T, unsigned int NUM>
 class CEventCaller : public CEventCaller<T, NUM - 1>
 {
@@ -96,7 +96,7 @@ protected:
 	CEventCallBack<T> m_oCallBack;
 };
 
-////Ò»¸öÏŞÁ÷¶ÓÁĞ <Ö´ĞĞÊ±µÄÅĞ¶ÏÌõ¼ş(Ò²ÊÇmapµÄkey), keyµÄÅÅÁĞ¹æÔò, ×î´óÔËĞĞÊ±¼ä(ºÁÃë)> ÕâÖÖĞèÒªÅÅÁĞ¹æÔòµÄ ÔİÊ±ÏÈ²»ÊµÏÖÁË
+////ä¸€ä¸ªé™æµé˜Ÿåˆ— <æ‰§è¡Œæ—¶çš„åˆ¤æ–­æ¡ä»¶(ä¹Ÿæ˜¯mapçš„key), keyçš„æ’åˆ—è§„åˆ™, æœ€å¤§è¿è¡Œæ—¶é—´(æ¯«ç§’)> è¿™ç§éœ€è¦æ’åˆ—è§„åˆ™çš„ æš‚æ—¶å…ˆä¸å®ç°äº†
 //template<typename C, typename CO, int dwMaxRunTime>
 //class TLimiterQueue
 //{
@@ -120,7 +120,7 @@ protected:
 //	std::multimap<C, CCallBackBase*, CO> m_mmapEvents;
 //};
 
-//²»ÊÊÓÃÓÚ¶àÏß³Ì
+//ä¸é€‚ç”¨äºå¤šçº¿ç¨‹
 template<typename C, int dwMaxNum = 0>
 class TLimiterQueue
 {
@@ -137,7 +137,7 @@ public:
 
 	CEventBase** PushEvent(C c, CEventBase* pCallBack)
 	{
-		std::multimap<C, CEventBase*>::iterator it = m_mmapEvents.insert(c, pCallBack);
+		std::multimap<typename C, CEventBase*>::iterator it = m_mmapEvents.insert(std::make_pair(c, pCallBack));
 		pCallBack->SetPP(&(it->second));
 		return &(it->second);
 	}
@@ -166,10 +166,10 @@ public:
 	}
 
 private:
-	std::multimap<C, CEventBase*> m_mmapEvents;
+	std::multimap<typename C, CEventBase*> m_mmapEvents;
 };
 
-//²»ÊÊÓÃÓÚ¶àÏß³Ì
+//ä¸é€‚ç”¨äºå¤šçº¿ç¨‹
 template<typename C>
 class TLimiterQueue<C, 0>
 {
@@ -186,7 +186,7 @@ public:
 
 	CEventBase** PushEvent(C c, CEventBase* pCallBack)
 	{
-		std::multimap<C, CEventBase*>::iterator it = m_mmapEvents.insert(std::make_pair(c, pCallBack));
+		std::multimap<typename C, CEventBase*>::iterator it = m_mmapEvents.insert(std::make_pair(c, pCallBack));
 		pCallBack->SetPP(&(it->second));
 		return &(it->second);
 	}
@@ -215,7 +215,7 @@ public:
 	}
 
 private:
-	std::multimap<C, CEventBase*> m_mmapEvents;
+	std::multimap<typename C, CEventBase*> m_mmapEvents;
 };
 
 #endif // !__LimiterQueue_H__
