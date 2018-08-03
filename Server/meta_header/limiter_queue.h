@@ -137,9 +137,9 @@ public:
 
 	CEventBase** PushEvent(C c, CEventBase* pCallBack)
 	{
-		std::multimap<typename C, CEventBase*>::iterator it = m_mmapEvents.insert(std::make_pair(c, pCallBack));
-		pCallBack->SetPP(&(it->second));
-		return &(it->second);
+		std::pair<typename std::multimap<C, CEventBase* >::iterator, bool> ret = m_mmapEvents.insert(std::make_pair(c, pCallBack));
+		pCallBack->SetPP(&(ret->first->second));
+		return &(ret->first->second);
 	}
 	
 	void Proc(double qwTick)
@@ -166,7 +166,7 @@ public:
 	}
 
 private:
-	std::multimap<typename C, CEventBase*> m_mmapEvents;
+	std::multimap<C, CEventBase*> m_mmapEvents;
 };
 
 //不适用于多线程
@@ -186,9 +186,9 @@ public:
 
 	CEventBase** PushEvent(C c, CEventBase* pCallBack)
 	{
-		std::multimap<typename C, CEventBase*>::iterator it = m_mmapEvents.insert(std::make_pair(c, pCallBack));
-		pCallBack->SetPP(&(it->second));
-		return &(it->second);
+		std::pair<typename std::multimap<C, CEventBase* >::iterator, bool> ret = m_mmapEvents.insert(std::make_pair(c, pCallBack));
+		pCallBack->SetPP(&(ret->first->second));
+		return &(ret->first->second);
 	}
 
 	void Proc(int dwMaxNum, double qwTick)
@@ -215,7 +215,7 @@ public:
 	}
 
 private:
-	std::multimap<typename C, CEventBase*> m_mmapEvents;
+	std::multimap<C, CEventBase*> m_mmapEvents;
 };
 
 #endif // !__LimiterQueue_H__
