@@ -137,9 +137,9 @@ public:
 
 	CEventBase** PushEvent(C c, CEventBase* pCallBack)
 	{
-		std::pair<typename std::multimap<C, CEventBase* >::iterator, bool> ret = m_mmapEvents.insert(std::make_pair(c, pCallBack));
-		pCallBack->SetPP(&(ret->first->second));
-		return &(ret->first->second);
+		typename std::multimap<C, CEventBase* >::iterator it = m_mmapEvents.insert(std::make_pair(c, pCallBack));
+		pCallBack->SetPP(&(it->second));
+		return &(it->second);
 	}
 	
 	void Proc(double qwTick)
@@ -186,9 +186,9 @@ public:
 
 	CEventBase** PushEvent(C c, CEventBase* pCallBack)
 	{
-		std::pair<typename std::multimap<C, CEventBase* >::iterator, bool> ret = m_mmapEvents.insert(std::make_pair(c, pCallBack));
-		pCallBack->SetPP(&(ret->first->second));
-		return &(ret->first->second);
+		typename std::multimap<C, CEventBase* >::iterator it = m_mmapEvents.insert(std::make_pair(c, pCallBack));
+		pCallBack->SetPP(&(it->second));
+		return &(it->second);
 	}
 
 	void Proc(int dwMaxNum, double qwTick)
