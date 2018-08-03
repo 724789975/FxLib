@@ -1,5 +1,8 @@
 #include "GameServerBase.h"
 
+#include "fxmeta.h"
+#include <stdio.h>
+
 #ifdef WIN32
 #include <Windows.h>
 #include <psapi.h>
@@ -28,7 +31,7 @@ void CGameServerBase::GetLoadPressure(unsigned short& wCPU, unsigned short& wMEM
 #ifndef _WIN32
 	char cmd[128];
 	int pid = getpid();
-	_snprintf(cmd, 128, "ps -o %%cpu,rss,%%mem,pid,tid -mp %d", pid);
+	snprintf(cmd, 128, "ps -o %%cpu,rss,%%mem,pid,tid -mp %d", pid);
 	FILE* file;
 	file = popen(cmd, "r");
 	if (file == NULL)
