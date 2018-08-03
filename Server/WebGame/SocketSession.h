@@ -170,7 +170,7 @@ private:
 	WebSocketDataHeader m_oWebSocketDataHeader;
 };
 
-class CChatManagerSession : public TSingleton<CChatManagerSession>, public CBinarySocketSession, public IFxTimer
+class CChatManagerSession : public TSingleton<CChatManagerSession>, public CBinarySocketSession, public CEventCaller<CChatManagerSession, 1>
 {
 public:
 	virtual void		OnConnect(void);

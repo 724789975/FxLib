@@ -91,7 +91,7 @@ void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	oGameStream.WriteInt(40002);
 	oGameStream.WriteString(szPlayerId);
 	mapSocket[szPlayerId] = this;
-	CChatManagerSession::Instance()->Send(szPlayerInfo, 1024 - oGameStream.GetDataLength());
+	//CChatManagerSession::Instance()->Send(szPlayerInfo, 1024 - oGameStream.GetDataLength());
 
 	//if (!Send(pBuf, dwLen))
 	//{
@@ -378,56 +378,3 @@ void CWebSocketSession::Release(void)
 	CWebSocketSessionFactory::Instance()->Release(this);
 }
 
-void CChatManagerSession::OnConnect(void)
-{
-	char szPlayerInfo[1024];
-	CNetStream oGameStream(ENetStreamType_Write, szPlayerInfo, 1024);
-	oGameStream.WriteInt(40001);
-	oGameStream.WriteString("test");
-	Send(szPlayerInfo, 1024 - oGameStream.GetDataLength());
-}
-
-void CChatManagerSession::OnRecv(const char* pBuf, UINT32 dwLen)
-{
-	CNetStream oStream(pBuf, dwLen);
-	UINT32 dwProtocol = 0;
-	oStream.ReadInt(dwProtocol);
-	if (dwProtocol != 45002)
-	{
-		return;
-	}
-	std::string szPlayerId;
-	oStream.ReadString(szPlayerId);
-	std::string szIp;
-	oStream.ReadString(szIp);
-	std::string szSign;
-	oStream.ReadString(szSign);
-	UINT32 dwPort = 0;
-	oStream.ReadInt(dwPort);
-	UINT32 dwWebPort = 0;
-	oStream.ReadInt(dwWebPort);
-
-	if (mapSocket.find(szPlayerId) == mapSocket.end())
-	{
-		LogExe(LogLv_Critical, "error");
-		return;
-	}
-
-	mapSocket[szPlayerId]->Send(pBuf, dwLen);
-}
-
-void CChatManagerSession::Release(void)
-{
-	CSocketSession::Release();
-}
-
-void CChatManagerSession::OnClose()
-{
-	GetTimeHandler()->AddDelayTimer(2, this);
-}
-
-bool CChatManagerSession::OnTimer(double fSecond)
-{
-	FxNetGetModule()->TcpConnect(this, inet_addr("127.0.0.1"), 13001, true);
-	return true;
-}

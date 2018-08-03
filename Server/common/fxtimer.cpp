@@ -74,81 +74,11 @@ public:
 
 	virtual bool Init()
 	{
-		m_mapTimers.clear();
 		return true;
 	}
 
 	virtual void Uninit()
 	{
-	}
-
-	virtual bool AddDelayTimer(double dSecond, IFxTimer* pFxTimer)
-	{
-		double dInvokeTime = m_qwSecond + dSecond;
-		if (m_mapDelayTimers[dInvokeTime].find(pFxTimer)
-				!= m_mapDelayTimers[dInvokeTime].end())
-		{
-			return false;
-		}
-		m_mapDelayTimers[dInvokeTime].insert(pFxTimer);
-		return true;
-	}
-
-	virtual bool DelDelayTimer(IFxTimer* pFxTimer)
-	{
-		bool bDel = false;
-		for (std::map<double, std::set<IFxTimer*> >::iterator it =
-				m_mapDelayTimers.begin(); it != m_mapDelayTimers.end(); ++it)
-		{
-			for (std::set<IFxTimer*>::iterator itTimer = it->second.begin();
-					itTimer != it->second.end();)
-			{
-				if (*itTimer == pFxTimer)
-				{
-					it->second.erase(itTimer++);
-					bDel = true;
-				}
-				else
-				{
-					++itTimer;
-				}
-			}
-		}
-		return bDel;
-	}
-
-	virtual bool AddEveryFewMinuteTimer(unsigned int dwSecond,
-			IFxTimer* pFxTimer)
-	{
-		if (m_mapTimers[dwSecond].find(pFxTimer) != m_mapTimers[dwSecond].end())
-		{
-			return false;
-		}
-		m_mapTimers[dwSecond].insert(pFxTimer);
-		return true;
-	}
-
-	virtual bool DelEveryFewMinuteTimer(IFxTimer* pFxTimer)
-	{
-		bool bDel = false;
-		for (std::map<unsigned int, std::set<IFxTimer*> >::iterator it =
-				m_mapTimers.begin(); it != m_mapTimers.end(); ++it)
-		{
-			for (std::set<IFxTimer*>::iterator itTimer = it->second.begin();
-					itTimer != it->second.end();)
-			{
-				if (*itTimer == pFxTimer)
-				{
-					it->second.erase(itTimer++);
-					bDel = true;
-				}
-				else
-				{
-					++itTimer;
-				}
-			}
-		}
-		return bDel;
 	}
 
 	virtual unsigned int GetSecond()
@@ -189,7 +119,7 @@ public:
 	// 添加事件 (多长事件后执行, 事件指针)
 	virtual bool AddTimer(double dSecond, CEventBase* pEvent)
 	{
-		return PushEvent(GetSecond() + dSecond, pEvent) != NULL;
+		return PushEvent(GetMilliSecond() + dSecond, pEvent) != NULL;
 	}
 
 	// 添加事件 (每多少秒执行, 事件指针) 被60整除
@@ -225,27 +155,6 @@ public:
 
 private:
 
-	void ProcDelayTimer()
-	{
-		for (std::map<double, std::set<IFxTimer*> >::iterator it =
-			m_mapDelayTimers.begin(); it != m_mapDelayTimers.end();)
-		{
-			if (it->first <= m_qwSecond)
-			{
-				for (std::set<IFxTimer*>::iterator itTimer = it->second.begin();
-					itTimer != it->second.end(); ++itTimer)
-				{
-					(*itTimer)->OnTimer(m_qwSecond);
-				}
-				m_mapDelayTimers.erase(it++);
-			}
-			else
-			{
-				break;
-			}
-		}
-	}
-
 	void __Refresh()
 	{
 		static double s_qwSecond = 0;
@@ -258,12 +167,11 @@ private:
 			LogExe(LogLv_Critical, "FPS : %d", (int)(1 / m_qwDeltaTime));
 		}
 
-		Proc(1 / m_qwDeltaTime);
+		Proc((int)(1 / m_qwDeltaTime), s_qwSecond);
 		if((unsigned int)s_qwSecond == (unsigned int)m_qwSecond)
 		{
 			m_qwSecond = s_qwSecond;
 
-			ProcDelayTimer();
 			return;
 		}
 		m_qwSecond = s_qwSecond;
@@ -276,40 +184,15 @@ private:
 
 		tm* tmLocal = localtime(&s_dwTime); //转化为本地时间
 		strftime(m_strTime, 64, "%Y-%m-%d %H:%M:%S", tmLocal);
-		//sprintf(m_strTime, "%s",
-		//		CLuaEngine::Instance()->CallStringFunction<unsigned int>(
-		//				"GetTimeStr", m_qwSecond));
-
-		ProcDelayTimer();
-
-		for (std::map<unsigned int, std::set<IFxTimer*> >::iterator it =
-				m_mapTimers.begin(); it != m_mapTimers.end(); ++it)
-		{
-			if ((unsigned int)m_qwSecond % it->first == 0)
-			{
-				for (std::set<IFxTimer*>::iterator itTimer = it->second.begin();
-						itTimer != it->second.end(); ++itTimer)
-				{
-					(*itTimer)->OnTimer(m_qwSecond);
-				}
-			}
-		}
-
 	}
 
 private:
-//	bool m_bStop;
 	double m_qwSecond;
 	char m_strTime[64];
 	double m_qwDeltaTime;
 
 	int m_dwTimeZone;
 	unsigned int m_dwDayTimeStart;
-
-	FxCriticalLock m_oLock;
-
-	std::map<unsigned int, std::set<IFxTimer*> > m_mapTimers;
-	std::map<double, std::set<IFxTimer*> > m_mapDelayTimers;
 };
 
 IFxTimerHandler* GetTimeHandler()

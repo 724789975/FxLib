@@ -3,14 +3,16 @@
 
 #include "fxtimer.h"
 
-class GameEnd : public IFxTimer
+class GameEnd : public CEventCaller<GameEnd, 1>
 {
-	virtual bool OnTimer(double fSecond);
+public:
+	bool OnTimer(double fSecond);
 };
 
-class GameStart : public IFxTimer
+class GameStart : public CEventCaller<GameEnd, 1>
 {
-	virtual bool OnTimer(double fSecond);
+public:
+	bool OnTimer(double fSecond);
 };
 
 

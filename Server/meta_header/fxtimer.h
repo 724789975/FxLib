@@ -30,10 +30,10 @@ public:
 	virtual bool Init() = 0;
 	virtual void Uninit() = 0;
 	virtual void Run() = 0;
-	virtual bool AddDelayTimer(double dSecond, IFxTimer* pFxTimer) = 0;
-	virtual bool DelDelayTimer(IFxTimer* pFxTimer) = 0;
-	virtual bool AddEveryFewMinuteTimer(unsigned int dwSecond, IFxTimer* pFxTimer) = 0;
-	virtual bool DelEveryFewMinuteTimer(IFxTimer* pFxTimer) = 0;
+	//virtual bool AddDelayTimer(double dSecond, IFxTimer* pFxTimer) = 0;
+	//virtual bool DelDelayTimer(IFxTimer* pFxTimer) = 0;
+	//virtual bool AddEveryFewMinuteTimer(unsigned int dwSecond, IFxTimer* pFxTimer) = 0;
+	//virtual bool DelEveryFewMinuteTimer(IFxTimer* pFxTimer) = 0;
 	virtual unsigned int GetSecond() = 0;
 	virtual double GetMilliSecond() = 0;
 	virtual const char* GetTimeStr() = 0;

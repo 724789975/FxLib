@@ -24,7 +24,7 @@ public:
 			*m_ppCallBack = NULL;
 		}
 	}
-	virtual bool Tick() = 0;
+	virtual bool Tick(double qwTick) = 0;
 
 	void SetPP(CEventBase** ppCallBack)
 	{
@@ -38,13 +38,13 @@ public:
 template<typename T>
 class CEventCallBack : public CEventBase
 {
-	typedef void (T::*TICKFUNC)();
+	typedef bool (T::*TICKFUNC)(double);
 public:
 	CEventCallBack(){}
 	CEventCallBack(T* obj, TICKFUNC fun) :m_pObj(obj), m_pFun(fun) { }
 	void Init(T* obj, TICKFUNC fun) { m_pObj = obj; m_pFun = fun; }
 	virtual ~CEventCallBack() { };
-	bool Tick() { (m_pObj->*m_pFun)(); return true; };
+	bool Tick(double qwTick) { return (m_pObj->*m_pFun)(qwTick); };
 private:
 	T*          m_pObj;
 	TICKFUNC    m_pFun;
@@ -56,7 +56,7 @@ template<class T, unsigned int NUM>
 class CEventCaller : public CEventCaller<T, NUM - 1>
 {
 public:
-	typedef void (T::*TICKFUNC)();
+	typedef bool (T::*TICKFUNC)(double);
 public:
 	~CEventCaller() { }
 
@@ -78,7 +78,7 @@ template<typename T>
 class CEventCaller<T, 1>
 {
 public:
-	typedef void (T::*TICKFUNC)();
+	typedef bool (T::*TICKFUNC)(double);
 public:
 	~CEventCaller() { }
 
@@ -142,7 +142,7 @@ public:
 		return &(it->second);
 	}
 	
-	void Proc()
+	void Proc(double qwTick)
 	{
 		for (int i = 0; i < dwMaxNum; i++)
 		{
@@ -160,7 +160,7 @@ public:
 			if (pCB)
 			{
 				m_mmapEvents.erase(m_mmapEvents.begin());
-				pCB->Tick();
+				pCB->Tick(qwTick);
 			}
 		}
 	}
@@ -191,7 +191,7 @@ public:
 		return &(it->second);
 	}
 
-	void Proc(int dwMaxNum)
+	void Proc(int dwMaxNum, double qwTick)
 	{
 		for (int i = 0; i < dwMaxNum; i++)
 		{
@@ -209,7 +209,7 @@ public:
 			if (pCB)
 			{
 				m_mmapEvents.erase(m_mmapEvents.begin());
-				pCB->Tick();
+				pCB->Tick(qwTick);
 			}
 		}
 	}

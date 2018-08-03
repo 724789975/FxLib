@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 
 	//----------------------order can't change end-----------------------//
 
-	GetTimeHandler()->AddDelayTimer(FLAGS_game_time, &oGameEnd);
+	GetTimeHandler()->AddTimer(FLAGS_game_time, &(oGameEnd.MakeEvent(&oGameEnd, &GameEnd::OnTimer)));
 
 	if (!FxRedisGetModule()->Open(FLAGS_redis_ip, FLAGS_redis_port, FLAGS_redis_pw, 0))
 	{

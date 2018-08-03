@@ -38,50 +38,65 @@ public:
 	{
 	}
 
-	void F1()
+	bool F1(double fSecond)
 	{
 		LogExe(LogLv_Debug3, "%s", "");
 		GetTimeHandler()->AddSecontTimer(12, &CEventCaller<Test, 1>::GetEvent());
+		return true;
 	}
-	void F2()
+	bool F2(double fSecond)
 	{
+		static int dwT = 10;
 		LogExe(LogLv_Debug3, "%s", "");
 		GetTimeHandler()->AddSecontTimer(15, &CEventCaller<Test, 2>::GetEvent());
+		--dwT;
+		if (dwT <= 0)
+		{
+			delete this;
+		}
+		return true;
 	}
-	void F3()
+	bool F3(double fSecond)
 	{
 		LogExe(LogLv_Debug3, "%s", "");
 		GetTimeHandler()->AddDayHourTimer(5, &CEventCaller<Test, 3>::GetEvent());
+		return true;
 	}
-	void F4()
+	bool F4(double fSecond)
 	{
 		LogExe(LogLv_Debug3, "%s", "");
 		GetTimeHandler()->AddDayHourTimer(4, &CEventCaller<Test, 4>::GetEvent());
+		return true;
 	}
-	void F5()
+	bool F5(double fSecond)
 	{
 		LogExe(LogLv_Debug3, "%s", "");
 		GetTimeHandler()->AddHourTimer(2, &CEventCaller<Test, 5>::GetEvent());
+		return true;
 	}
-	void F6()
+	bool F6(double fSecond)
 	{
 		LogExe(LogLv_Debug3, "%s", "");
 		GetTimeHandler()->AddMinuteTimer(15, &CEventCaller<Test, 6>::GetEvent());
+		return true;
 	}
-	void F7()
+	bool F7(double fSecond)
 	{
 		LogExe(LogLv_Debug3, "%s", "");
 		GetTimeHandler()->AddMinuteTimer(12, &CEventCaller<Test, 7>::GetEvent());
+		return true;
 	}
-	void F8()
+	bool F8(double fSecond)
 	{
 		LogExe(LogLv_Debug3, "%s", "");
 		GetTimeHandler()->AddTimer(15, &CEventCaller<Test, 8>::GetEvent());
+		return true;
 	}
-	void F9()
+	bool F9(double fSecond)
 	{
 		LogExe(LogLv_Debug3, "%s", "");
 		GetTimeHandler()->AddTimer(10, &CEventCaller<Test, 9>::GetEvent());
+		return true;
 	}
 
 private:
@@ -109,16 +124,16 @@ int main(int argc, char **argv)
 	GetTimeHandler()->Run();
 
 
-	Test t1;
-	GetTimeHandler()->AddTimer(10, &t1.CEventCaller<Test, 9>::MakeEvent(&t1, &Test::F9));
-	GetTimeHandler()->AddTimer(9, &t1.CEventCaller<Test, 8>::MakeEvent(&t1, &Test::F8));
-	GetTimeHandler()->AddTimer(8, &t1.CEventCaller<Test, 7>::MakeEvent(&t1, &Test::F7));
-	GetTimeHandler()->AddTimer(7, &t1.CEventCaller<Test, 6>::MakeEvent(&t1, &Test::F6));
-	GetTimeHandler()->AddTimer(6, &t1.CEventCaller<Test, 5>::MakeEvent(&t1, &Test::F5));
-	GetTimeHandler()->AddTimer(5, &t1.CEventCaller<Test, 4>::MakeEvent(&t1, &Test::F4));
-	GetTimeHandler()->AddTimer(4, &t1.CEventCaller<Test, 3>::MakeEvent(&t1, &Test::F3));
-	GetTimeHandler()->AddTimer(3, &t1.CEventCaller<Test, 2>::MakeEvent(&t1, &Test::F2));
-	GetTimeHandler()->AddTimer(2, &t1.CEventCaller<Test, 1>::MakeEvent(&t1, &Test::F1));
+	Test* t1 = new Test;
+	GetTimeHandler()->AddTimer(10, &t1->CEventCaller<Test, 9>::MakeEvent(t1, &Test::F9));
+	GetTimeHandler()->AddTimer(9, &t1->CEventCaller<Test, 8>::MakeEvent(t1, &Test::F8));
+	GetTimeHandler()->AddTimer(8, &t1->CEventCaller<Test, 7>::MakeEvent(t1, &Test::F7));
+	GetTimeHandler()->AddTimer(7, &t1->CEventCaller<Test, 6>::MakeEvent(t1, &Test::F6));
+	GetTimeHandler()->AddTimer(6, &t1->CEventCaller<Test, 5>::MakeEvent(t1, &Test::F5));
+	GetTimeHandler()->AddTimer(5, &t1->CEventCaller<Test, 4>::MakeEvent(t1, &Test::F4));
+	GetTimeHandler()->AddTimer(4, &t1->CEventCaller<Test, 3>::MakeEvent(t1, &Test::F3));
+	GetTimeHandler()->AddTimer(3, &t1->CEventCaller<Test, 2>::MakeEvent(t1, &Test::F2));
+	GetTimeHandler()->AddTimer(2, &t1->CEventCaller<Test, 1>::MakeEvent(t1, &Test::F1));
 	while (true)
 	{
 		GetTimeHandler()->Run();
