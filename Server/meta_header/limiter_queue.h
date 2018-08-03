@@ -137,7 +137,7 @@ public:
 
 	CEventBase** PushEvent(C c, CEventBase* pCallBack)
 	{
-		std::multimap<C, CEventBase*, CO>::iterator it = m_mmapEvents.insert(c, pCallBack);
+		std::multimap<C, CEventBase*>::iterator it = m_mmapEvents.insert(c, pCallBack);
 		pCallBack->SetPP(&(it->second));
 		return &(it->second);
 	}
