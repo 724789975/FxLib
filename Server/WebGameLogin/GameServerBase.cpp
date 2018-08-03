@@ -2,8 +2,12 @@
 
 #ifdef WIN32
 #include <Windows.h>
-#include <Psapi.h>
-#endif
+#include <psapi.h>
+#else
+#include <sys/types.h>
+#include <unistd.h>
+#endif // WIN32
+
 
 
 
