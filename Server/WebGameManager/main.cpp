@@ -34,6 +34,17 @@ void EndFun(int n)
 	}
 }
 
+#ifndef WIN32
+void SigChld(int signo)
+{
+	pid_t pid;
+	int stat;
+	pid = wait(&stat);
+	printf("child %d exit\n", pid);
+	return;
+}
+#endif // !WIN32
+
 int main(int argc, char **argv)
 {
 	//----------------------order can't change begin-----------------------//
@@ -41,6 +52,9 @@ int main(int argc, char **argv)
 	gflags::ParseCommandLineFlags(&argc, &argv, false);
 	signal(SIGINT, EndFun);
 	signal(SIGTERM, EndFun);
+#ifndef WIN32
+	signal(SIGCHLD, &SigChld);
+#endif // !WIN32
 
 	// must define before goto
 	IFxNet* pNet = NULL;

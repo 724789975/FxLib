@@ -350,6 +350,11 @@ class GameNotifyPlayeRotationDefaultTypeInternal {
   ::google::protobuf::internal::ExplicitlyConstructed<GameNotifyPlayeRotation>
       _instance;
 } _GameNotifyPlayeRotation_default_instance_;
+class GameNotifyPlayeGameEndDefaultTypeInternal {
+ public:
+  ::google::protobuf::internal::ExplicitlyConstructed<GameNotifyPlayeGameEnd>
+      _instance;
+} _GameNotifyPlayeGameEnd_default_instance_;
 class ServerInfoDefaultTypeInternal {
  public:
   ::google::protobuf::internal::ExplicitlyConstructed<ServerInfo>
@@ -1754,6 +1759,27 @@ void InitDefaultsGameNotifyPlayeRotation() {
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsGameNotifyPlayeRotationImpl);
 }
 
+void InitDefaultsGameNotifyPlayeGameEndImpl() {
+  GOOGLE_PROTOBUF_VERIFY_VERSION;
+
+#ifdef GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  ::google::protobuf::internal::InitProtobufDefaultsForceUnique();
+#else
+  ::google::protobuf::internal::InitProtobufDefaults();
+#endif  // GOOGLE_PROTOBUF_ENFORCE_UNIQUENESS
+  {
+    void* ptr = &::GameProto::_GameNotifyPlayeGameEnd_default_instance_;
+    new (ptr) ::GameProto::GameNotifyPlayeGameEnd();
+    ::google::protobuf::internal::OnShutdownDestroyMessage(ptr);
+  }
+  ::GameProto::GameNotifyPlayeGameEnd::InitAsDefaultInstance();
+}
+
+void InitDefaultsGameNotifyPlayeGameEnd() {
+  static GOOGLE_PROTOBUF_DECLARE_ONCE(once);
+  ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsGameNotifyPlayeGameEndImpl);
+}
+
 void InitDefaultsServerInfoImpl() {
   GOOGLE_PROTOBUF_VERIFY_VERSION;
 
@@ -1775,7 +1801,7 @@ void InitDefaultsServerInfo() {
   ::google::protobuf::GoogleOnceInit(&once, &InitDefaultsServerInfoImpl);
 }
 
-::google::protobuf::Metadata file_level_metadata[67];
+::google::protobuf::Metadata file_level_metadata[68];
 const ::google::protobuf::EnumDescriptor* file_level_enum_descriptors[5];
 
 const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUTE_SECTION_VARIABLE(protodesc_cold) = {
@@ -2257,6 +2283,11 @@ const ::google::protobuf::uint32 TableStruct::offsets[] GOOGLE_PROTOBUF_ATTRIBUT
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayeRotation, f_tick_),
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayeRotation, e_direction_),
   ~0u,  // no _has_bits_
+  GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::GameNotifyPlayeGameEnd, _internal_metadata_),
+  ~0u,  // no _extensions_
+  ~0u,  // no _oneof_case_
+  ~0u,  // no _weak_field_map_
+  ~0u,  // no _has_bits_
   GOOGLE_PROTOBUF_GENERATED_MESSAGE_FIELD_OFFSET(::GameProto::ServerInfo, _internal_metadata_),
   ~0u,  // no _extensions_
   ~0u,  // no _oneof_case_
@@ -2334,7 +2365,8 @@ static const ::google::protobuf::internal::MigrationSchema schemas[] GOOGLE_PROT
   { 455, -1, sizeof(::GameProto::GameNotifyPlayerDead)},
   { 461, -1, sizeof(::GameProto::GameNotifyPlayeMove)},
   { 469, -1, sizeof(::GameProto::GameNotifyPlayeRotation)},
-  { 477, -1, sizeof(::GameProto::ServerInfo)},
+  { 477, -1, sizeof(::GameProto::GameNotifyPlayeGameEnd)},
+  { 482, -1, sizeof(::GameProto::ServerInfo)},
 };
 
 static ::google::protobuf::Message const * const file_default_instances[] = {
@@ -2404,6 +2436,7 @@ static ::google::protobuf::Message const * const file_default_instances[] = {
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_GameNotifyPlayerDead_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_GameNotifyPlayeMove_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_GameNotifyPlayeRotation_default_instance_),
+  reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_GameNotifyPlayeGameEnd_default_instance_),
   reinterpret_cast<const ::google::protobuf::Message*>(&::GameProto::_ServerInfo_default_instance_),
 };
 
@@ -2423,7 +2456,7 @@ void protobuf_AssignDescriptorsOnce() {
 void protobuf_RegisterTypes(const ::std::string&) GOOGLE_PROTOBUF_ATTRIBUTE_COLD;
 void protobuf_RegisterTypes(const ::std::string&) {
   protobuf_AssignDescriptorsOnce();
-  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 67);
+  ::google::protobuf::internal::RegisterAllTypes(file_level_metadata, 68);
 }
 
 void AddDescriptorsImpl() {
@@ -2567,28 +2600,28 @@ void AddDescriptorsImpl() {
       ".GameProto.EMoveDirection\"s\n\027GameNotifyP"
       "layeRotation\022\024\n\014dw_player_id\030\001 \001(\004\022\016\n\006f_"
       "tick\030\002 \001(\002\0222\n\013e_direction\030\003 \001(\0162\035.GamePr"
-      "oto.ERotationDirection\"\212\001\n\nServerInfo\022\024\n"
-      "\014dw_server_id\030\001 \001(\r\022\024\n\014sz_listen_ip\030\002 \001("
-      "\t\022\024\n\014dw_team_port\030\003 \001(\r\022#\n\033dw_game_serve"
-      "r_manager_port\030\004 \001(\r\022\025\n\rdw_login_port\030\005 "
-      "\001(\r*I\n\013EServerType\022\013\n\007ST_NONE\020\000\022\014\n\010ST_Lo"
-      "gin\020\001\022\013\n\007ST_Team\020\002\022\022\n\016ST_GameManager\020\003*\'"
-      "\n\tETeamType\022\013\n\007TT_NONE\020\000\022\r\n\tTT_Normal\020\001*"
-      "\246\002\n\nEErrorCode\022\013\n\007EC_NONE\020\000\022\024\n\020EC_Alread"
-      "yInTeam\020\001\022\026\n\022EC_MakeTeamNotIdle\020\002\022\027\n\023EC_"
-      "CannotFindPlayer\020\003\022\032\n\026EC_NoGameManagerSe"
-      "rver\020\007\022\023\n\017EC_NoTeamServer\020\010\022\024\n\020EC_NoLogi"
-      "nServer\020\t\022\026\n\022EC_PlayerNotOnline\020\n\022\023\n\017EC_"
-      "FailIntoTeam\020\013\022\017\n\013EC_NoTeamId\020\024\022\020\n\014EC_No"
-      "tLeader\020\025\022\023\n\017EC_TeamHasStart\020\026\022\030\n\024EC_Tea"
-      "mSlotHasPlayer\020\027*I\n\016EMoveDirection\022\014\n\010EM"
-      "D_NONE\020\000\022\014\n\010EMD_Down\020\001\022\014\n\010EMD_Left\020\002\022\r\n\t"
-      "EMD_Right\020\003*\?\n\022ERotationDirection\022\014\n\010ERD"
-      "_NONE\020\000\022\014\n\010ERD_Left\020\001\022\r\n\tERD_Right\020\002b\006pr"
-      "oto3"
+      "oto.ERotationDirection\"\030\n\026GameNotifyPlay"
+      "eGameEnd\"\212\001\n\nServerInfo\022\024\n\014dw_server_id\030"
+      "\001 \001(\r\022\024\n\014sz_listen_ip\030\002 \001(\t\022\024\n\014dw_team_p"
+      "ort\030\003 \001(\r\022#\n\033dw_game_server_manager_port"
+      "\030\004 \001(\r\022\025\n\rdw_login_port\030\005 \001(\r*I\n\013EServer"
+      "Type\022\013\n\007ST_NONE\020\000\022\014\n\010ST_Login\020\001\022\013\n\007ST_Te"
+      "am\020\002\022\022\n\016ST_GameManager\020\003*\'\n\tETeamType\022\013\n"
+      "\007TT_NONE\020\000\022\r\n\tTT_Normal\020\001*\246\002\n\nEErrorCode"
+      "\022\013\n\007EC_NONE\020\000\022\024\n\020EC_AlreadyInTeam\020\001\022\026\n\022E"
+      "C_MakeTeamNotIdle\020\002\022\027\n\023EC_CannotFindPlay"
+      "er\020\003\022\032\n\026EC_NoGameManagerServer\020\007\022\023\n\017EC_N"
+      "oTeamServer\020\010\022\024\n\020EC_NoLoginServer\020\t\022\026\n\022E"
+      "C_PlayerNotOnline\020\n\022\023\n\017EC_FailIntoTeam\020\013"
+      "\022\017\n\013EC_NoTeamId\020\024\022\020\n\014EC_NotLeader\020\025\022\023\n\017E"
+      "C_TeamHasStart\020\026\022\030\n\024EC_TeamSlotHasPlayer"
+      "\020\027*I\n\016EMoveDirection\022\014\n\010EMD_NONE\020\000\022\014\n\010EM"
+      "D_Down\020\001\022\014\n\010EMD_Left\020\002\022\r\n\tEMD_Right\020\003*\?\n"
+      "\022ERotationDirection\022\014\n\010ERD_NONE\020\000\022\014\n\010ERD"
+      "_Left\020\001\022\r\n\tERD_Right\020\002b\006proto3"
   };
   ::google::protobuf::DescriptorPool::InternalAddGeneratedFile(
-      descriptor, 6244);
+      descriptor, 6270);
   ::google::protobuf::MessageFactory::InternalRegisterGeneratedFile(
     "web_game.proto", &protobuf_RegisterTypes);
   ::protobuf_web_5fdata_2eproto::AddDescriptors();
@@ -21988,6 +22021,200 @@ void GameNotifyPlayeRotation::InternalSwap(GameNotifyPlayeRotation* other) {
 }
 
 ::google::protobuf::Metadata GameNotifyPlayeRotation::GetMetadata() const {
+  protobuf_web_5fgame_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_web_5fgame_2eproto::file_level_metadata[kIndexInFileMessages];
+}
+
+
+// ===================================================================
+
+void GameNotifyPlayeGameEnd::InitAsDefaultInstance() {
+}
+#if !defined(_MSC_VER) || _MSC_VER >= 1900
+#endif  // !defined(_MSC_VER) || _MSC_VER >= 1900
+
+GameNotifyPlayeGameEnd::GameNotifyPlayeGameEnd()
+  : ::google::protobuf::Message(), _internal_metadata_(NULL) {
+  if (GOOGLE_PREDICT_TRUE(this != internal_default_instance())) {
+    ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayeGameEnd();
+  }
+  SharedCtor();
+  // @@protoc_insertion_point(constructor:GameProto.GameNotifyPlayeGameEnd)
+}
+GameNotifyPlayeGameEnd::GameNotifyPlayeGameEnd(const GameNotifyPlayeGameEnd& from)
+  : ::google::protobuf::Message(),
+      _internal_metadata_(NULL),
+      _cached_size_(0) {
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  // @@protoc_insertion_point(copy_constructor:GameProto.GameNotifyPlayeGameEnd)
+}
+
+void GameNotifyPlayeGameEnd::SharedCtor() {
+  _cached_size_ = 0;
+}
+
+GameNotifyPlayeGameEnd::~GameNotifyPlayeGameEnd() {
+  // @@protoc_insertion_point(destructor:GameProto.GameNotifyPlayeGameEnd)
+  SharedDtor();
+}
+
+void GameNotifyPlayeGameEnd::SharedDtor() {
+}
+
+void GameNotifyPlayeGameEnd::SetCachedSize(int size) const {
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+}
+const ::google::protobuf::Descriptor* GameNotifyPlayeGameEnd::descriptor() {
+  ::protobuf_web_5fgame_2eproto::protobuf_AssignDescriptorsOnce();
+  return ::protobuf_web_5fgame_2eproto::file_level_metadata[kIndexInFileMessages].descriptor;
+}
+
+const GameNotifyPlayeGameEnd& GameNotifyPlayeGameEnd::default_instance() {
+  ::protobuf_web_5fgame_2eproto::InitDefaultsGameNotifyPlayeGameEnd();
+  return *internal_default_instance();
+}
+
+GameNotifyPlayeGameEnd* GameNotifyPlayeGameEnd::New(::google::protobuf::Arena* arena) const {
+  GameNotifyPlayeGameEnd* n = new GameNotifyPlayeGameEnd;
+  if (arena != NULL) {
+    arena->Own(n);
+  }
+  return n;
+}
+
+void GameNotifyPlayeGameEnd::Clear() {
+// @@protoc_insertion_point(message_clear_start:GameProto.GameNotifyPlayeGameEnd)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  // Prevent compiler warnings about cached_has_bits being unused
+  (void) cached_has_bits;
+
+  _internal_metadata_.Clear();
+}
+
+bool GameNotifyPlayeGameEnd::MergePartialFromCodedStream(
+    ::google::protobuf::io::CodedInputStream* input) {
+#define DO_(EXPRESSION) if (!GOOGLE_PREDICT_TRUE(EXPRESSION)) goto failure
+  ::google::protobuf::uint32 tag;
+  // @@protoc_insertion_point(parse_start:GameProto.GameNotifyPlayeGameEnd)
+  for (;;) {
+    ::std::pair< ::google::protobuf::uint32, bool> p = input->ReadTagWithCutoffNoLastTag(127u);
+    tag = p.first;
+    if (!p.second) goto handle_unusual;
+  handle_unusual:
+    if (tag == 0) {
+      goto success;
+    }
+    DO_(::google::protobuf::internal::WireFormat::SkipField(
+          input, tag, _internal_metadata_.mutable_unknown_fields()));
+  }
+success:
+  // @@protoc_insertion_point(parse_success:GameProto.GameNotifyPlayeGameEnd)
+  return true;
+failure:
+  // @@protoc_insertion_point(parse_failure:GameProto.GameNotifyPlayeGameEnd)
+  return false;
+#undef DO_
+}
+
+void GameNotifyPlayeGameEnd::SerializeWithCachedSizes(
+    ::google::protobuf::io::CodedOutputStream* output) const {
+  // @@protoc_insertion_point(serialize_start:GameProto.GameNotifyPlayeGameEnd)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    ::google::protobuf::internal::WireFormat::SerializeUnknownFields(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), output);
+  }
+  // @@protoc_insertion_point(serialize_end:GameProto.GameNotifyPlayeGameEnd)
+}
+
+::google::protobuf::uint8* GameNotifyPlayeGameEnd::InternalSerializeWithCachedSizesToArray(
+    bool deterministic, ::google::protobuf::uint8* target) const {
+  (void)deterministic; // Unused
+  // @@protoc_insertion_point(serialize_to_array_start:GameProto.GameNotifyPlayeGameEnd)
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    target = ::google::protobuf::internal::WireFormat::SerializeUnknownFieldsToArray(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()), target);
+  }
+  // @@protoc_insertion_point(serialize_to_array_end:GameProto.GameNotifyPlayeGameEnd)
+  return target;
+}
+
+size_t GameNotifyPlayeGameEnd::ByteSizeLong() const {
+// @@protoc_insertion_point(message_byte_size_start:GameProto.GameNotifyPlayeGameEnd)
+  size_t total_size = 0;
+
+  if ((_internal_metadata_.have_unknown_fields() &&  ::google::protobuf::internal::GetProto3PreserveUnknownsDefault())) {
+    total_size +=
+      ::google::protobuf::internal::WireFormat::ComputeUnknownFieldsSize(
+        (::google::protobuf::internal::GetProto3PreserveUnknownsDefault()   ? _internal_metadata_.unknown_fields()   : _internal_metadata_.default_instance()));
+  }
+  int cached_size = ::google::protobuf::internal::ToCachedSize(total_size);
+  GOOGLE_SAFE_CONCURRENT_WRITES_BEGIN();
+  _cached_size_ = cached_size;
+  GOOGLE_SAFE_CONCURRENT_WRITES_END();
+  return total_size;
+}
+
+void GameNotifyPlayeGameEnd::MergeFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_merge_from_start:GameProto.GameNotifyPlayeGameEnd)
+  GOOGLE_DCHECK_NE(&from, this);
+  const GameNotifyPlayeGameEnd* source =
+      ::google::protobuf::internal::DynamicCastToGenerated<const GameNotifyPlayeGameEnd>(
+          &from);
+  if (source == NULL) {
+  // @@protoc_insertion_point(generalized_merge_from_cast_fail:GameProto.GameNotifyPlayeGameEnd)
+    ::google::protobuf::internal::ReflectionOps::Merge(from, this);
+  } else {
+  // @@protoc_insertion_point(generalized_merge_from_cast_success:GameProto.GameNotifyPlayeGameEnd)
+    MergeFrom(*source);
+  }
+}
+
+void GameNotifyPlayeGameEnd::MergeFrom(const GameNotifyPlayeGameEnd& from) {
+// @@protoc_insertion_point(class_specific_merge_from_start:GameProto.GameNotifyPlayeGameEnd)
+  GOOGLE_DCHECK_NE(&from, this);
+  _internal_metadata_.MergeFrom(from._internal_metadata_);
+  ::google::protobuf::uint32 cached_has_bits = 0;
+  (void) cached_has_bits;
+
+}
+
+void GameNotifyPlayeGameEnd::CopyFrom(const ::google::protobuf::Message& from) {
+// @@protoc_insertion_point(generalized_copy_from_start:GameProto.GameNotifyPlayeGameEnd)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+void GameNotifyPlayeGameEnd::CopyFrom(const GameNotifyPlayeGameEnd& from) {
+// @@protoc_insertion_point(class_specific_copy_from_start:GameProto.GameNotifyPlayeGameEnd)
+  if (&from == this) return;
+  Clear();
+  MergeFrom(from);
+}
+
+bool GameNotifyPlayeGameEnd::IsInitialized() const {
+  return true;
+}
+
+void GameNotifyPlayeGameEnd::Swap(GameNotifyPlayeGameEnd* other) {
+  if (other == this) return;
+  InternalSwap(other);
+}
+void GameNotifyPlayeGameEnd::InternalSwap(GameNotifyPlayeGameEnd* other) {
+  using std::swap;
+  _internal_metadata_.Swap(&other->_internal_metadata_);
+  swap(_cached_size_, other->_cached_size_);
+}
+
+::google::protobuf::Metadata GameNotifyPlayeGameEnd::GetMetadata() const {
   protobuf_web_5fgame_2eproto::protobuf_AssignDescriptorsOnce();
   return ::protobuf_web_5fgame_2eproto::file_level_metadata[kIndexInFileMessages];
 }

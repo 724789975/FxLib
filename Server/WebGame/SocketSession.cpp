@@ -423,7 +423,7 @@ void CChatManagerSession::Release(void)
 
 void CChatManagerSession::OnClose()
 {
-	GetTimeHandler()->AddDelayTimer(2, this);
+	GetTimeHandler()->AddTimer(2, (&CEventCaller<CChatManagerSession, 1>::MakeEvent(this, &CChatManagerSession::OnTimer) ) );
 }
 
 bool CChatManagerSession::OnTimer(double fSecond)

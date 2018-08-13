@@ -479,6 +479,10 @@ message GameNotifyPlayeRotation
 	ERotationDirection e_direction = 3;
 }
 
+message GameNotifyPlayeGameEnd
+{
+}
+
 //serverinfo(server->server_center, server_center->server)
 message ServerInfo
 {

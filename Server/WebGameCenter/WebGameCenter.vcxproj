@@ -166,6 +166,7 @@
     <ClCompile Include="..\common\log_thread.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
     <ClCompile Include="GameServer.cpp" />
+    <ClCompile Include="GameServerBase.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="msg_proto\web_data.pb.cc" />
     <ClCompile Include="msg_proto\web_game.pb.cc" />
@@ -176,6 +177,7 @@
   <ItemGroup>
     <ClInclude Include="gamedefine.h" />
     <ClInclude Include="GameServer.h" />
+    <ClInclude Include="GameServerBase.h" />
     <ClInclude Include="msg_proto\web_data.pb.h" />
     <ClInclude Include="msg_proto\web_game.pb.h" />
     <ClInclude Include="ServerSession.h" />

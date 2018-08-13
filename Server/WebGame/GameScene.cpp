@@ -192,6 +192,8 @@ void CGameSceneBase::OnTransact()
 void CGameSceneBase::GameEnd()
 {
 	LogExe(LogLv_Debug, "%s", "game end~~~~~");
+	GameProto::GameNotifyPlayeGameEnd oNotify;
+	NotifyPlayer(oNotify);
 	for (int i = 0; i < MAXCLIENTNUM; ++i)
 	{
 		if (m_qwRoles[i])

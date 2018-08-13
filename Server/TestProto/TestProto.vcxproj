@@ -95,7 +95,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>$(TargetDIr)libprotobufd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>$(TargetDIr)libprotobufd.lib;dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -149,6 +149,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\common\fxmeta.cpp" />
+    <ClCompile Include="..\common\fxtimer.cpp" />
+    <ClCompile Include="..\common\log_thread.cpp" />
+    <ClCompile Include="..\common\thread.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="proto_dispatcher.cpp" />
     <ClCompile Include="test.pb.cc" />
