@@ -40,6 +40,7 @@ public class GameControler : SingletonObject<GameControler>
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayeRotation", OnGameNotifyPlayeRotation);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerNextTetris", OnGameNotifyPlayerNextTetris);
 		m_pSession.RegistMessage("GameProto.GameNotifyPlayerDead", OnGameNotifyPlayerDead);
+		m_pSession.RegistMessage("GameProto.GameNotifyPlayeGameEnd", OnGameNotifyPlayeGameEnd);
     }
 
 	// Update is called once per frame
@@ -353,6 +354,17 @@ public class GameControler : SingletonObject<GameControler>
 			return;
 		}
 		SampleDebuger.LogGreen("player : " + oRet.DwPlayerId.ToString() + " dead");
+	}
+
+	public void OnGameNotifyPlayeGameEnd(byte[] pBuf)
+	{
+		GameProto.GameNotifyPlayeGameEnd oRet = GameProto.GameNotifyPlayeGameEnd.Parser.ParseFrom(pBuf);
+		if (oRet == null)
+		{
+			SampleDebuger.LogYellow("OnGameNotifyPlayeGameEnd error parse");
+			return;
+		}
+		SampleDebuger.LogGreen("game end!!!!!!!!!");
 	}
 
 	public SessionObject proSession { get{ return m_pSession; } }
