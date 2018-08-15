@@ -1,4 +1,0 @@
-sceneSetups:
-- path: Assets/Mobile_MainMenu.unity
-  isLoaded: 1
-  isActive: 1
