@@ -3003,13 +3003,13 @@ SOCKET FxTCPConnectSock::Connect()
 
 	//请求连接时 Windows跟linux是有区别的//
 #ifdef WIN32
-	LPFN_CONNECTEX m_lpfnConnectEx = NULL;
+	LPFN_CONNECTEX lpfnConnectEx = NULL;
 	DWORD dwBytes = 0;
 	GUID GuidConnectEx = WSAID_CONNECTEX;
 
 	if (SOCKET_ERROR == WSAIoctl(GetSock(), SIO_GET_EXTENSION_FUNCTION_POINTER,
 		&GuidConnectEx, sizeof(GuidConnectEx),
-		&m_lpfnConnectEx, sizeof(m_lpfnConnectEx), &dwBytes, 0, 0))
+		&lpfnConnectEx, sizeof(lpfnConnectEx), &dwBytes, 0, 0))
 	{
 		PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
 		closesocket(GetSock());
@@ -3020,7 +3020,7 @@ SOCKET FxTCPConnectSock::Connect()
 	// 这个时候 还没有连上 所以 将这个改成IOCP_CONNECT 等连完以后再改回来
 	m_stRecvIoData.nOp = IOCP_CONNECT;
 
-	int bResult = m_lpfnConnectEx(GetSock(),
+	int bResult = lpfnConnectEx(GetSock(),
 		(sockaddr *)&stAddr,  // [in] 对方地址
 		sizeof(stAddr),               // [in] 对方地址长度
 		NULL,       // [in] 连接后要发送的内容，这里不用

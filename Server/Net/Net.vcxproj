@@ -79,6 +79,11 @@
       </SDLCheck>
       <AdditionalIncludeDirectories>../meta_header;../lua;../tolua;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <EnableParallelCodeGeneration>
+      </EnableParallelCodeGeneration>
+      <GenerateXMLDocumentationFiles>false</GenerateXMLDocumentationFiles>
+      <BrowseInformation>false</BrowseInformation>
+      <CompileAs>Default</CompileAs>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
