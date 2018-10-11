@@ -2,6 +2,8 @@
 #include "proto_dispatcher.h"
 #include "callback_dispatch.h"
 
+#include "exception_dump.h"
+
 #include <iostream>
 #include "fxtimer.h"
 #include "fxmeta.h"
@@ -104,10 +106,20 @@ private:
 };
 
 
+void DumpTest()
+{
+	int * p = NULL;
+	*p = 12;
 
+	int a1 = 1;
+	int a2 = 1;
+
+	float a = 1 / (a1 - a2);
+}
 
 int main(int argc, char **argv)
 {
+	Exception_Dump::RegExceptionHandler();
 	AAA ta;
 	CallBackDispatcher::ProtoCallBackDispatch<AAA, BBB> ta3(ta);
 	//ta3.GetFunction(NULL);
@@ -122,7 +134,15 @@ int main(int argc, char **argv)
 
 	GetTimeHandler()->Init();
 	GetTimeHandler()->Run();
-
+	try
+	{
+		DumpTest();
+	}
+	catch (const std::exception& e)
+	{
+		LogExe(LogLv_Error, "%s", e.what());
+	}
+	catch (...) {}
 
 	Test* t1 = new Test;
 	GetTimeHandler()->AddTimer(10, &t1->CEventCaller<Test, 9>::MakeEvent(t1, &Test::F9));
