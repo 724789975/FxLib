@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include <time.h>
+#include <string.h>
 
 #ifdef WIN32
 #include <windows.h>
