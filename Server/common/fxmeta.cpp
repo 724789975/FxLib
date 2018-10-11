@@ -168,7 +168,7 @@ FILE* GetLogFile()
 			pFile = NULL;
 		}
 		pFile = fopen(strLogPath, "a+");
-		setvbuf(pFile, (char *)NULL, _IOLBF, 0);
+		setvbuf(pFile, (char *)NULL, _IOLBF, 1024);
 	}
 	return pFile;
 }
@@ -213,7 +213,7 @@ void PrintTrace(char* strTrace)
 		symbol->MaxNameLen = 255;
 		symbol->SizeOfStruct = sizeof(SYMBOL_INFO);
 
-		for (i = 0; i < frames; i++)
+		for (i = 1; i < frames; i++)
 		{
 			SymFromAddr(process, (DWORD64)(stack[i]), 0, symbol);
 

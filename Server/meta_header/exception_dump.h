@@ -3,9 +3,9 @@
 
 namespace Exception_Dump
 {
-	static void HandleExceptionSegFault();
-	static void HandleExceptionFpError();
-	static void RegExceptionHandler();
+	void HandleExceptionSegFault();
+	void HandleExceptionFpError();
+	void RegExceptionHandler();
 };
 
 #endif // !__Exception_Dump_H__

@@ -2,6 +2,8 @@
 #include "fxcurl.h"
 #include "fxmeta.h"
 
+#include "exception_dump.h"
+
 #include <signal.h>
 
 #include <string>
@@ -29,7 +31,7 @@ public:
 
 	virtual void        OnRequest()
 	{
-		std::string url = "http://www.baidu.com";
+		std::string url = "http://192.168.101.97:8090";
 		std::string useragent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:13.0) Gecko/20100101 Firefox/13.0.1";
 		m_pCurl = curl_easy_init();
 		if (m_pCurl)
@@ -66,8 +68,20 @@ private:
 
 };
 
+void DumpTest()
+{
+	int * p = NULL;
+	*p = 12;
+
+	int a1 = 1;
+	int a2 = 1;
+
+	float a = 1 / (a1 - a2);
+}
+
 int main()
 {
+	Exception_Dump::RegExceptionHandler();
 	IUrlRequestModule* pModule = FxUrlRequestGetModule();
 	pModule->Init();
 
@@ -79,6 +93,16 @@ int main()
 
 	TestRequest* pTest = new TestRequest;
 	pModule->AddRequest(pTest);
+
+	try
+	{
+		DumpTest();
+	}
+	catch (const std::exception& e)
+	{
+		LogExe(LogLv_Error, "%s", e.what());
+	}
+	catch(...) { }
 
 	while (true)
 	{
