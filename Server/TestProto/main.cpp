@@ -119,6 +119,7 @@ void DumpTest()
 
 int main(int argc, char **argv)
 {
+	GetTimeHandler()->Init();
 	ExceptionDump::RegExceptionHandler();
 	AAA ta;
 	CallBackDispatcher::ProtoCallBackDispatch<AAA, BBB> ta3(ta);
@@ -132,7 +133,6 @@ int main(int argc, char **argv)
 	ttt.set_id(123);
 	ttt.set_str("asdf");
 
-	GetTimeHandler()->Init();
 	GetTimeHandler()->Run();
 	try
 	{
