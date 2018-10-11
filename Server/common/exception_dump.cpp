@@ -10,7 +10,7 @@
 #endif // WIN32
 
 
-namespace Exception_Dump
+namespace ExceptionDump
 {
 #ifndef WIN32
 	void MakeDump()
@@ -21,7 +21,7 @@ namespace Exception_Dump
 			g_dwLastExceptionTime = GetTimeHandler()->GetSecond();
 
 			char szCmd[256] = { 0 };
-			snprintf(szCmd, sizeof(szCmd) - 1, "gcore -o core.%s_%d_%u %u", GetExeName(), g_dwLastExceptionTime, getpid(), getpid());
+			snprintf(szCmd, sizeof(szCmd) - 1, "gcore -o core_%s_%d %u", GetExeName(), g_dwLastExceptionTime, getpid());
 
 			system(szCmd);
 		}

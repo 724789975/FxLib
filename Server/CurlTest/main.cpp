@@ -81,7 +81,7 @@ void DumpTest()
 
 int main()
 {
-	Exception_Dump::RegExceptionHandler();
+	ExceptionDump::RegExceptionHandler();
 	IUrlRequestModule* pModule = FxUrlRequestGetModule();
 	pModule->Init();
 

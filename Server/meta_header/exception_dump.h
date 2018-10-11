@@ -1,7 +1,7 @@
 #ifndef __Exception_Dump_H__
 #define __Exception_Dump_H__
 
-namespace Exception_Dump
+namespace ExceptionDump
 {
 	void HandleExceptionSegFault();
 	void HandleExceptionFpError();

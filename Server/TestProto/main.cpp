@@ -119,7 +119,7 @@ void DumpTest()
 
 int main(int argc, char **argv)
 {
-	Exception_Dump::RegExceptionHandler();
+	ExceptionDump::RegExceptionHandler();
 	AAA ta;
 	CallBackDispatcher::ProtoCallBackDispatch<AAA, BBB> ta3(ta);
 	//ta3.GetFunction(NULL);
