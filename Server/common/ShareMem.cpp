@@ -13,9 +13,9 @@
 #include <assert.h>
 
 CShareMem::CShareMem(std::string szName, unsigned long long qwSize)
-	: m_szShmName(szName)
+	: m_pData(NULL)
+	, m_szShmName(szName)
 	, m_qwSize(qwSize)
-	, m_pData(NULL)
 #ifdef WIN32
 	, m_hShmId(INVALID_HANDLE_VALUE)
 #else
@@ -56,7 +56,7 @@ void CShareMem::DeleteShareMem()
 	}
 #else
 	assert(shmdt((void*)m_pData) == 0);
-	struct shmid_ds shmbuffer;
+	struct shmid_ds shmbuffer = { 0 };
 	assert(shmctl(m_hShmId, IPC_RMID, &shmbuffer) == 0);
 #endif
 
@@ -130,7 +130,7 @@ bool CShareMem::Open()
 	//{
 	//	return false;
 	//}
-	key_t keyShmKey = ftok(m_szShmName, 'a');
+	key_t keyShmKey = ftok(m_szShmName.c_str(), 'a');
 	if (keyShmKey == -1)
 	{
 		return false;
@@ -184,7 +184,7 @@ bool CShareMem::Create()
 	//{
 	//	return false;
 	//}
-	key_t keyShmKey = ftok(m_szShmName, 'a');
+	key_t keyShmKey = ftok(m_szShmName.c_str(), 'a');
 	if (keyShmKey == -1)
 	{
 		return false;
@@ -203,6 +203,7 @@ bool CShareMem::Create()
 		return false;
 	}
 #endif // WIN32
+	return true;
 }
 
 #ifdef WIN32

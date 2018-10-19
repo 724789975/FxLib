@@ -229,7 +229,7 @@ void PrintTrace(char* strTrace)
 
 	sz = backtrace(bt, 20);
 	strings = backtrace_symbols(bt, sz);
-	for(int i = 0; i < sz; ++i)
+	for(int i = 1; i < sz; ++i)
 	{
 		nLen += sprintf(strTrace + nLen, "%s\n", strings[i]);
 	}
