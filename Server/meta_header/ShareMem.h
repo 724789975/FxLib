@@ -15,21 +15,19 @@ class CShareMem
 public:
 	CShareMem(std::string szName, unsigned long long qwSize);
 	~CShareMem();
-	void* m_pData;
-	bool m_bAlreadyThere;
 
 public:
 
 	void DeleteShareMem();
 
-	bool IsAlreadyThere()
-	{
-		return m_bAlreadyThere;
-	}
-
 	// bCreated 是否创建了新的共享内存
 	bool Init(bool& bCreated);
 
+	template<typename T>
+	T* GetMemory()
+	{
+		return reinterpret_cast<T*>(m_pData);
+	}
 private:
 	bool IsExist();
 	bool Open();
@@ -49,6 +47,7 @@ private:
 #endif // WIN32
 		m_hShmId;
 
+	void* m_pData;
 };
 
 #endif // !__ShareMem_H__

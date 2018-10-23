@@ -2,7 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="proto_dispatcher.cpp" />
     <ClCompile Include="test.pb.cc" />
     <ClCompile Include="..\common\fxmeta.cpp">
       <Filter>common</Filter>
@@ -14,6 +13,18 @@
       <Filter>common</Filter>
     </ClCompile>
     <ClCompile Include="..\common\thread.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\exception_dump.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\segvcatch.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="proto_dispatcher.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\ShareMem.cpp">
       <Filter>common</Filter>
     </ClCompile>
   </ItemGroup>

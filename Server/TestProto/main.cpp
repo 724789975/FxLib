@@ -8,6 +8,9 @@
 #include "fxtimer.h"
 #include "fxmeta.h"
 
+#include "ShareMem.h"
+#include "fix_string.h"
+
 class BBB
 {
 public:
@@ -143,6 +146,12 @@ int main(int argc, char **argv)
 		LogExe(LogLv_Error, "%s", e.what());
 	}
 	catch (...) {}
+
+	CShareMem oMem("test", 1024);
+	bool bCreated;
+	oMem.Init(bCreated);
+	FixString<1024>* pFixString = oMem.GetMemory<FixString<1024> >();
+	*pFixString = "test_123";
 
 	Test* t1 = new Test;
 	GetTimeHandler()->AddTimer(10, &t1->CEventCaller<Test, 9>::MakeEvent(t1, &Test::F9));
