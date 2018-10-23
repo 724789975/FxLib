@@ -8,6 +8,7 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/errno.h>
+#include <fcntl.h>
 #endif
 
 #include <assert.h>
@@ -129,7 +130,7 @@ bool CShareMem::Open()
 	//{
 	//	return false;
 	//}
-	key_t keyShmKey = ftok(m_szShmName.c_str(), 'a');
+	key_t keyShmKey = ftok((m_szShmName + ".shm").c_str(), 'a');
 	if (keyShmKey == -1)
 	{
 		return false;
@@ -178,18 +179,18 @@ bool CShareMem::Create()
 		return false;
 	}
 #else
-	//int fHandle = open((m_szShmName + ".shm").c_str(), O_RDWR, 0777);
-	//if (fHandle == -1)
-	//{
-	//	return false;
-	//}
-	key_t keyShmKey = ftok(m_szShmName.c_str(), 'a');
+	int fHandle = open((m_szShmName + ".shm").c_str(), O_RDWR | O_CREAT, 0777);
+	if (fHandle == -1)
+	{
+		return false;
+	}
+	key_t keyShmKey = ftok((m_szShmName + ".shm").c_str(), 'a');
 	if (keyShmKey == -1)
 	{
 		return false;
 	}
 
-	m_hShmId = shmget(keyShmKey, 0, SHM_R | SHM_W | IPC_CREAT);
+	m_hShmId = shmget(keyShmKey, m_qwSize, SHM_R | SHM_W | IPC_CREAT);
 	if (m_hShmId == -1)
 	{
 		return false;
