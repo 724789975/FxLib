@@ -1,4 +1,4 @@
-#include "ShareMem.h"
+#include "share_memory.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -106,7 +106,7 @@ bool CShareMem::Open()
 	ResizeFile(hFile);
 
 	m_hShmId = CreateFileMapping(hFile, NULL, PAGE_READWRITE, 0,
-		m_qwSize, m_szShmName.c_str());
+		(DWORD)m_qwSize, m_szShmName.c_str());
 	if (m_hShmId == INVALID_HANDLE_VALUE)
 	{
 		return false;
@@ -166,7 +166,7 @@ bool CShareMem::Create()
 	ResizeFile(hFile);
 
 	m_hShmId = CreateFileMapping(hFile, NULL, PAGE_READWRITE, 0,
-		m_qwSize, m_szShmName.c_str());
+		(DWORD)m_qwSize, m_szShmName.c_str());
 	if (m_hShmId == INVALID_HANDLE_VALUE)
 	{
 		return false;
@@ -212,7 +212,7 @@ bool CShareMem::ResizeFile(HANDLE hFile)
 	LARGE_INTEGER qwFileSize;
 	GetFileSizeEx(hFile, &qwFileSize);
 
-	if (qwFileSize.QuadPart < m_qwSize)
+	if (qwFileSize.QuadPart < (long long)m_qwSize)
 	{
 		HANDLE hTemp = hFile;
 		SetFilePointerEx(hTemp, qwFileSize, 0, FILE_BEGIN);
@@ -220,7 +220,7 @@ bool CShareMem::ResizeFile(HANDLE hFile)
 		for (long long i = m_qwSize - qwFileSize.QuadPart; i > 0; i -= 4096)
 		{
 			OVERLAPPED qwOut;
-			WriteFileEx(hTemp, pBuff, i > 4096 ? 4096 : i, &qwOut, 0);
+			WriteFileEx(hTemp, pBuff, (DWORD)(i > 4096 ? 4096 : i), &qwOut, 0);
 		}
 	}
 

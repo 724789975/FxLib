@@ -24,7 +24,7 @@
     <ClCompile Include="proto_dispatcher.cpp">
       <Filter>common</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\ShareMem.cpp">
+    <ClCompile Include="..\common\share_memory.cpp">
       <Filter>common</Filter>
     </ClCompile>
   </ItemGroup>

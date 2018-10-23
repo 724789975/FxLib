@@ -154,7 +154,7 @@
     <ClCompile Include="..\common\fxtimer.cpp" />
     <ClCompile Include="..\common\log_thread.cpp" />
     <ClCompile Include="..\common\segvcatch.cpp" />
-    <ClCompile Include="..\common\ShareMem.cpp" />
+    <ClCompile Include="..\common\share_memory.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="proto_dispatcher.cpp" />

@@ -8,7 +8,7 @@
 #include "fxtimer.h"
 #include "fxmeta.h"
 
-#include "ShareMem.h"
+#include "share_memory.h"
 #include "fix_string.h"
 
 class BBB
