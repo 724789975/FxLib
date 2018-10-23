@@ -13,15 +13,14 @@
 #include <assert.h>
 
 CShareMem::CShareMem(std::string szName, unsigned long long qwSize)
-	: m_pData(NULL)
-	, m_szShmName(szName)
+	: m_szShmName(szName)
 	, m_qwSize(qwSize)
 #ifdef WIN32
 	, m_hShmId(INVALID_HANDLE_VALUE)
 #else
 	, m_hShmId(0XFFFFFFFF)
 #endif // WIN32
-
+	, m_pData(NULL)
 {
 }
 

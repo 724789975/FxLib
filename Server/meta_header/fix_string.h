@@ -40,7 +40,7 @@ public:
 
 	void Clear()
 	{
-		memset(m_szString, 0, dwStringLen)
+		memset(m_szString, 0, dwStringLen);
 	}
 
 	const char* String()const
