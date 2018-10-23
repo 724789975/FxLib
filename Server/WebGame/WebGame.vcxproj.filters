@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="GameServer.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="PlayerSession.cpp" />
+    <ClCompile Include="ServerSession.cpp" />
+    <ClCompile Include="SlaveServerSession.cpp" />
+    <ClCompile Include="SocketSession.cpp" />
+    <ClCompile Include="..\common\fxmeta.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\fxtimer.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\log_thread.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\thread.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManagerSession.cpp" />
+    <ClCompile Include="proto_dispatcher.cpp" />
+    <ClCompile Include="msg_proto\web_game.pb.cc">
+      <Filter>msg_proto</Filter>
+    </ClCompile>
+    <ClCompile Include="msg_proto\web_data.pb.cc">
+      <Filter>msg_proto</Filter>
+    </ClCompile>
+    <ClCompile Include="GameConfigBase.cpp" />
+    <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="TetrisBase.cpp" />
+    <ClCompile Include="Timers.cpp" />
+    <ClCompile Include="GameServerBase.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="gamedefine.h" />
+    <ClInclude Include="GameServer.h" />
+    <ClInclude Include="PlayerSession.h" />
+    <ClInclude Include="ServerSession.h" />
+    <ClInclude Include="SlaveServerSession.h" />
+    <ClInclude Include="SocketSession.h" />
+    <ClInclude Include="GameManagerSession.h" />
+    <ClInclude Include="msg_proto\web_game.pb.h">
+      <Filter>msg_proto</Filter>
+    </ClInclude>
+    <ClInclude Include="msg_proto\web_data.pb.h">
+      <Filter>msg_proto</Filter>
+    </ClInclude>
+    <ClInclude Include="GameConfigBase.h" />
+    <ClInclude Include="GameScene.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="TetrisBase.h" />
+    <ClInclude Include="Timers.h" />
+    <ClInclude Include="GameServerBase.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="common">
+      <UniqueIdentifier>{bfabf50a-a17d-41d4-8701-9ed6902037bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="msg_proto">
+      <UniqueIdentifier>{3d251793-a406-4030-90cf-0733f4b8e164}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="GameServer.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="PlayerSession.cpp" />
+    <ClCompile Include="ServerSession.cpp" />
+    <ClCompile Include="SocketSession.cpp" />
+    <ClCompile Include="..\common\fxmeta.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\fxtimer.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\log_thread.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\thread.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="proto_dispatcher.cpp" />
+    <ClCompile Include="msg_proto\web_game.pb.cc">
+      <Filter>msg_proto</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerManager.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="CenterSession.cpp" />
+    <ClCompile Include="LoginSession.cpp" />
+    <ClCompile Include="GameManagerSession.cpp" />
+    <ClCompile Include="TeamSession.cpp" />
+    <ClCompile Include="msg_proto\web_data.pb.cc">
+      <Filter>msg_proto</Filter>
+    </ClCompile>
+    <ClCompile Include="GameServerBase.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="gamedefine.h" />
+    <ClInclude Include="GameServer.h" />
+    <ClInclude Include="PlayerSession.h" />
+    <ClInclude Include="ServerSession.h" />
+    <ClInclude Include="SocketSession.h" />
+    <ClInclude Include="msg_proto\web_game.pb.h">
+      <Filter>msg_proto</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerManager.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="CenterSession.h" />
+    <ClInclude Include="LoginSession.h" />
+    <ClInclude Include="GameManagerSession.h" />
+    <ClInclude Include="TeamSession.h" />
+    <ClInclude Include="msg_proto\web_data.pb.h">
+      <Filter>msg_proto</Filter>
+    </ClInclude>
+    <ClInclude Include="GameServerBase.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="common">
+      <UniqueIdentifier>{3e2d4393-4242-472e-80ed-2f125046d8af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="msg_proto">
+      <UniqueIdentifier>{0286d2fa-1779-4838-a9ff-27c743b1f5eb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
