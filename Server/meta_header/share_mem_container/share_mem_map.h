@@ -3,7 +3,7 @@
 
 //K只能为基础类型 且 不能为string, 可以为char[] V必须指定默认构造函数
 template<typename K, typename V, unsigned int MAXNUM>
-class MapPool
+class ShareMemMap
 {
 	struct KVPair
 	{
@@ -19,7 +19,7 @@ public:
 
 	//typedef KeyStore* Iterator;
 
-	MapPool() {}
+	ShareMemMap() {}
 
 	bool create()
 	{

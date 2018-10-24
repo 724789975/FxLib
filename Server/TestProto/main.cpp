@@ -11,6 +11,8 @@
 #include "share_memory.h"
 #include "fix_string.h"
 
+#include "share_mem_container/share_mem_map.h"
+
 class BBB
 {
 public:
@@ -152,6 +154,8 @@ int main(int argc, char **argv)
 	oMem.Init(bCreated);
 	FixString<1024>* pFixString = oMem.GetMemory<FixString<1024> >();
 	*pFixString = "test_123";
+
+	ShareMemMap<int, int, 1024> oMap;
 
 	Test* t1 = new Test;
 	GetTimeHandler()->AddTimer(10, &t1->CEventCaller<Test, 9>::MakeEvent(t1, &Test::F9));
