@@ -155,7 +155,8 @@ int main(int argc, char **argv)
 	FixString<1024>* pFixString = oMem.GetMemory<FixString<1024> >();
 	*pFixString = "test_123";
 
-	ShareMemMap<int, int, 1024> oMap;
+	ShareMemory::Map<int, int, 1024> oMap;
+	oMap.Alloc(123);
 
 	Test* t1 = new Test;
 	GetTimeHandler()->AddTimer(10, &t1->CEventCaller<Test, 9>::MakeEvent(t1, &Test::F9));

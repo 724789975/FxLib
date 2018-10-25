@@ -33,7 +33,7 @@ public:
 		return *this;
 	}
 
-	bool operator < (const FixString<dwStringLen>& refFixString)
+	bool operator < (const FixString<dwStringLen>& refFixString) const
 	{
 		return strcmp(m_szString, refFixString.m_szString) < 0;
 	}
