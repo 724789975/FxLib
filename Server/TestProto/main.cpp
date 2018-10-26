@@ -13,6 +13,8 @@
 
 #include "share_mem_container/share_mem_map.h"
 
+#include "derive_list.h"
+
 class BBB
 {
 public:
@@ -110,7 +112,6 @@ private:
 
 };
 
-
 void DumpTest()
 {
 	int * p = NULL;
@@ -141,7 +142,7 @@ int main(int argc, char **argv)
 	GetTimeHandler()->Run();
 	try
 	{
-		DumpTest();
+		//DumpTest();
 	}
 	catch (const std::exception& e)
 	{
@@ -157,6 +158,10 @@ int main(int argc, char **argv)
 
 	ShareMemory::Map<int, int, 1024> oMap;
 	oMap.Alloc(123);
+
+	typedef DL::DeriveList< BBB, DL::DeriveList<AAA, NullType> > TTT;
+	int len = DL::Length<TTT>::Value;
+	DL::DeriveList< BBB, DL::DeriveList<AAA,NullType> > a;
 
 	Test* t1 = new Test;
 	GetTimeHandler()->AddTimer(10, &t1->CEventCaller<Test, 9>::MakeEvent(t1, &Test::F9));
