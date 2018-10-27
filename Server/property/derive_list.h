@@ -23,12 +23,17 @@ namespace DL
 		enum { Value = 0 };
 	};
 
-
 	template <typename H, typename T>
 	struct Length< DeriveList<H, T> >
 	{
-		enum { Value = 1 + Length<DeriveList<H, T>::Base>::Value };
+		enum { Value = 1 + Length<T>::Value };
 	};
+
+	//template <typename T>
+	//struct Length<DeriveList<T, NullType> >
+	//{
+	//	enum { Value = 1 };
+	//};
 
 	template <typename TL, unsigned int index> struct TypeAt;
 

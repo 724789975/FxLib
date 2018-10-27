@@ -3,7 +3,7 @@
 
 #include "derive_list.h"
 
-template<typename T, typename const char*(szName)()>
+template<typename T, const char*(szName)()>
 class Property
 {
 public:
@@ -54,34 +54,36 @@ public:\
 	static const char* __##Name () { return #Name; }\
 	Type & Get##Name (){return m_oProperty.Value();}\
 	void Set##Name (const Type& value){m_oProperty = value;}\
-protected:\
 private:\
 	Property<Type, __##Name> m_oProperty;\
 };
-
-#define HasOnChangeDefine(C, F)\
-template<typename T>\
-struct C##Has##F;
 
 #define HasOnChange(C, F)\
 template<typename T>\
 struct C##Has##F {\
 	template<typename U, void (U::*)()> struct HELPS;\
-	template<typename U> static char Check(HELPS<U, &U::##F>*);\
+	template<typename U> static char Check(HELPS<U, &U::F>*);\
 	template<typename U> static int Check(...);\
 	const static bool Has = sizeof(Check<T>(0)) == sizeof(char);\
 };
 
-#define PropertyDefine(C, Type, Name) \
+#define PropertyDeclare(C, Type, Name) \
 CommonPropertyDeclare(Type, Name)\
 HasOnChange(C, On##Name##Change)\
-template<bool>\
-void Name##Changed(){}\
-template<>\
-void Name##Changed<true>();\
-Type & Get##Name (){return m_oPropertys.Get##Name();}\
-void Set##Name (const Type& value){return m_oPropertys.Set##Name(value);}\
-void Set##Name (const Type& value, std::ostream& refOstream)\
+template<bool> \
+void Name##Changed();\
+Type & Get##Name ();\
+void Set##Name (const Type& value);\
+void Set##Name (const Type& value, std::ostream& refOstream);
+
+#define PropertyDefine(C, Type, Name) \
+template<bool> \
+void C::Name##Changed(){}\
+template<> \
+void C::Name##Changed<true>(){}\
+Type & C::Get##Name (){return m_oPropertys.Get##Name();}\
+void C::Set##Name (const Type& value){return m_oPropertys.Set##Name(value);}\
+void C::Set##Name (const Type& value, std::ostream& refOstream)\
 {\
 	refOstream << __FUNCTION__ << " old value : " << Get##Name();\
 	m_oPropertys.Set##Name(value);\
@@ -89,21 +91,12 @@ void Set##Name (const Type& value, std::ostream& refOstream)\
 	Name##Changed<C##Has##On##Name##Change<C>::Has>(); \
 }
 
-	//Name##Changed<false>();\
-
-#define PropertyChangeDefine(C, Name)\
-template<>\
-void C##::##Name##Changed<true>()\
-{\
-}
-
 //TODO 需要继承的列表
 class Table
 {
 public:
-	PropertyDefine(Table, int, RoleId);
-	PropertyDefine(Table, int, TeamId);
-
+	PropertyDeclare(Table, int, RoleId);
+	PropertyDeclare(Table, int, TeamId);
 
 	typedef DERIDELIST_2(RoleId, TeamId) Propertys;
 
@@ -116,7 +109,8 @@ private:
 
 };
 
-PropertyChangeDefine(Table, RoleId);
-PropertyChangeDefine(Table, TeamId);
+PropertyDefine(Table, int, RoleId);
+PropertyDefine(Table, int, TeamId);
+
 
 #endif // !__Property_H__
