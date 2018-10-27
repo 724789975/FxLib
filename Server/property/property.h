@@ -1,6 +1,8 @@
 #ifndef __Property_H__
 #define __Property_H__
 
+#include "derive_list.h"
+
 template<typename T, typename const char*(szName)()>
 class Property
 {
@@ -57,36 +59,64 @@ private:\
 	Property<Type, __##Name> m_oProperty;\
 };
 
-#define PropertyDefine(Type, Name) \
+#define HasOnChangeDefine(C, F)\
+template<typename T>\
+struct C##Has##F;
+
+#define HasOnChange(C, F)\
+template<typename T>\
+struct C##Has##F {\
+	template<typename U, void (U::*)()> struct HELPS;\
+	template<typename U> static char Check(HELPS<U, &U::##F>*);\
+	template<typename U> static int Check(...);\
+	const static bool Has = sizeof(Check<T>(0)) == sizeof(char);\
+};
+
+#define PropertyDefine(C, Type, Name) \
 CommonPropertyDeclare(Type, Name)\
+HasOnChange(C, On##Name##Change)\
+template<bool>\
+void Name##Changed(){}\
+template<>\
+void Name##Changed<true>();\
 Type & Get##Name (){return m_oPropertys.Get##Name();}\
 void Set##Name (const Type& value){return m_oPropertys.Set##Name(value);}\
+void Set##Name (const Type& value, std::ostream& refOstream)\
+{\
+	refOstream << __FUNCTION__ << " old value : " << Get##Name();\
+	m_oPropertys.Set##Name(value);\
+	refOstream << ", new value : " << Get##Name();\
+	Name##Changed<C##Has##On##Name##Change<C>::Has>(); \
+}
 
+	//Name##Changed<false>();\
 
-#define PropertyList(...) \
-class Propertys : __VA_ARGS__{};\
+#define PropertyChangeDefine(C, Name)\
+template<>\
+void C##::##Name##Changed<true>()\
+{\
+}
 
 //TODO 需要继承的列表
 class Table
 {
 public:
-	CommonPropertyDeclare(int, RoleId);
-	CommonPropertyDeclare(int, TeamId);
+	PropertyDefine(Table, int, RoleId);
+	PropertyDefine(Table, int, TeamId);
 
-	//PropertyList(public RoleId,
-	//	public TeamId
-	//);
 
-	template<class T> class Propertys;
-	template<> class Propertys<NullType> {};
+	typedef DERIDELIST_2(RoleId, TeamId) Propertys;
 
-	template<typename T, typename U>
-	class Propertys<TYPELIST_2(T, U)> {};
-	//class Propertys : public TYPELIST_2(RoleId, TeamId) {};
-	Propertys<TYPELIST_2(RoleId, TeamId)> m_oPropertys;
+	//void OnRoleIdChange() {}
+	void OnTeamIdChange() {}
 protected:
 private:
 
+	Propertys m_oPropertys;
+
 };
+
+PropertyChangeDefine(Table, RoleId);
+PropertyChangeDefine(Table, TeamId);
 
 #endif // !__Property_H__

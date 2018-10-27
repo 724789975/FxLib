@@ -14,11 +14,13 @@
 #include "share_mem_container/share_mem_map.h"
 
 #include "derive_list.h"
+#include "property.h"
 
 class BBB
 {
 public:
 	BBB(){}
+	int b;
 };
 
 class AAA
@@ -30,6 +32,7 @@ public:
 	void Fun(BBB& a, test& t1){}
 	void Fun1(BBB& a){}
 	bool Fun2(BBB& a, google::protobuf::Message& t1) { return false; }
+	int c;
 protected:
 private:
 	int a;
@@ -161,7 +164,14 @@ int main(int argc, char **argv)
 
 	typedef DL::DeriveList< BBB, DL::DeriveList<AAA, NullType> > TTT;
 	int len = DL::Length<TTT>::Value;
-	DL::DeriveList< BBB, DL::DeriveList<AAA,NullType> > a;
+	TTT a;
+
+	DL::TypeAt<TTT, 1>::Result b1;
+	b1.c = 1;
+
+	Table table;
+
+	table.SetRoleId(123, std::cout);
 
 	Test* t1 = new Test;
 	GetTimeHandler()->AddTimer(10, &t1->CEventCaller<Test, 9>::MakeEvent(t1, &Test::F9));
