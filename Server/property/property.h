@@ -1,6 +1,7 @@
 #ifndef __Property_H__
 #define __Property_H__
 
+#include "integral_constant.h"
 #include "derive_list.h"
 
 template<typename T, const char*(szName)()>
@@ -67,50 +68,43 @@ struct C##Has##F {\
 	const static bool Has = sizeof(Check<T>(0)) == sizeof(char);\
 };
 
-#define PropertyDeclare(C, Type, Name) \
+#define PropertyDefine(C, Type, Name) \
 CommonPropertyDeclare(Type, Name)\
 HasOnChange(C, On##Name##Change)\
-template<bool> \
-void Name##Changed();\
-Type & Get##Name ();\
-void Set##Name (const Type& value);\
-void Set##Name (const Type& value, std::ostream& refOstream);
-
-#define PropertyDefine(C, Type, Name) \
-template<bool> \
-void C::Name##Changed(){}\
-template<> \
-void C::Name##Changed<true>(){}\
-Type & C::Get##Name (){return m_oPropertys.Get##Name();}\
-void C::Set##Name (const Type& value){return m_oPropertys.Set##Name(value);}\
-void C::Set##Name (const Type& value, std::ostream& refOstream)\
+template<typename T> \
+void Name##Changed(T* pT, true_type t){ pT->On##Name##Change(); }\
+template<typename T> \
+void Name##Changed(T* pT, false_type f){}\
+Type & Get##Name (){return m_oPropertys.Get##Name();}\
+void Set##Name (const Type& value){return m_oPropertys.Set##Name(value);}\
+void Set##Name (const Type& value, std::ostream& refOstream)\
 {\
 	refOstream << __FUNCTION__ << " old value : " << Get##Name();\
 	m_oPropertys.Set##Name(value);\
 	refOstream << ", new value : " << Get##Name();\
-	Name##Changed<C##Has##On##Name##Change<C>::Has>(); \
+	Name##Changed(this, integral_constant<bool, C##Has##On##Name##Change<C>::Has>()); \
 }
 
-//TODO 需要继承的列表
 class Table
 {
 public:
-	PropertyDeclare(Table, int, RoleId);
-	PropertyDeclare(Table, int, TeamId);
+	PropertyDefine(Table, int, RoleId);
+	PropertyDefine(Table, int, TeamId);
 
 	typedef DERIDELIST_2(RoleId, TeamId) Propertys;
 
 	//void OnRoleIdChange() {}
-	void OnTeamIdChange() {}
+	void OnTeamIdChange()
+	{
+		int a = 0;
+		++a;
+	}
 protected:
 private:
 
 	Propertys m_oPropertys;
 
 };
-
-PropertyDefine(Table, int, RoleId);
-PropertyDefine(Table, int, TeamId);
 
 
 #endif // !__Property_H__

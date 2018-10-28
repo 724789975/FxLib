@@ -15,6 +15,7 @@
 
 #include "derive_list.h"
 #include "property.h"
+#include "integral_constant.h"
 
 class BBB
 {
@@ -171,7 +172,7 @@ int main(int argc, char **argv)
 
 	Table table;
 
-	table.SetRoleId(123, std::cout);
+	table.SetTeamId(123, std::cout);
 
 	Test* t1 = new Test;
 	GetTimeHandler()->AddTimer(10, &t1->CEventCaller<Test, 9>::MakeEvent(t1, &Test::F9));
