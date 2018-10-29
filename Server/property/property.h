@@ -8,6 +8,7 @@ template<typename T, const char*(szName)()>
 class Property
 {
 public:
+	typedef T TypeValue;
 	Property()
 		: m_bChanged(false)
 	{}

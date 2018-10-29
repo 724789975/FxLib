@@ -126,5 +126,107 @@ inline std::string GBKToUTF8(const std::string szGBK)
 
 }
 
+template<typename T>
+inline const char* ToString(const T& c)
+{
+	static char szBuff[512] = { 0 };
+
+	memcpy(szBuff, &c, 512);
+	szBuff[511] = 0;
+}
+
+template<>
+inline const char* ToString<char>(const char& c)
+{
+	static char szBuff[2] = { 0 };
+	szBuff[0] = c;
+	szBuff[1] = 0;
+	return szBuff;
+}
+
+template<>
+inline const char* ToString<unsigned char>(const unsigned char& c)
+{
+	static char szBuff[2] = { 0 };
+	szBuff[0] = c;
+	szBuff[1] = 0;
+	return szBuff;
+}
+
+template<>
+inline const char* ToString<short>(const short& wSrc)
+{
+	static char szBuff[8] = { 0 };
+	sprintf(szBuff, "%d", wSrc);
+	return szBuff;
+}
+
+template<>
+inline const char* ToString<unsigned short>(const unsigned short& wSrc)
+{
+	static char szBuff[8] = { 0 };
+	sprintf(szBuff, "%d", wSrc);
+	return szBuff;
+}
+
+template<>
+inline const char* ToString<int>(const int& dwSrc)
+{
+	static char szBuff[8] = { 0 };
+	sprintf(szBuff, "%d", dwSrc);
+	return szBuff;
+}
+
+template<>
+inline const char* ToString<unsigned int>(const unsigned int& dwSrc)
+{
+	static char szBuff[32] = { 0 };
+	sprintf(szBuff, "%d", dwSrc);
+	return szBuff;
+}
+
+template<>
+inline const char* ToString<float>(const float& dwSrc)
+{
+	static char szBuff[32] = { 0 };
+	sprintf(szBuff, "%f", dwSrc);
+	return szBuff;
+}
+
+template<>
+inline const char* ToString<double>(const double& qwSrc)
+{
+	static char szBuff[64] = { 0 };
+	sprintf(szBuff, "%g", qwSrc);
+	return szBuff;
+}
+
+template<>
+inline const char* ToString<long long>(const long long& qwSrc)
+{
+	static char szBuff[64] = { 0 };
+	sprintf(szBuff, "%lld", qwSrc);
+	return szBuff;
+}
+
+template<>
+inline const char* ToString<unsigned long long> (const unsigned long long& qwSrc)
+{
+	static char szBuff[64] = { 0 };
+	sprintf(szBuff, "%llu", qwSrc);
+	return szBuff;
+}
+
+template<>
+inline const char* ToString<std::string>(const std::string& qwSrc)
+{
+	return qwSrc.c_str();
+}
+
+
+
+
+
+
 
 #endif  // __STRHELPER_H_2009_0824__
