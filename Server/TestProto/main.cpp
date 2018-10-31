@@ -167,12 +167,13 @@ int main(int argc, char **argv)
 	int len = DL::Length<TTT>::Value;
 	TTT a;
 
-	DL::TypeAt<TTT, 1>::Result b1;
-	b1.c = 1;
+	DL::TypeAt<TTT, 0>::Result b1;
+	b1.b = 1;
 
 	Table table;
 
 	table.SetTeamId(123, std::cout);
+	table.GetRedisStringData();
 
 	Test* t1 = new Test;
 	GetTimeHandler()->AddTimer(10, &t1->CEventCaller<Test, 9>::MakeEvent(t1, &Test::F9));

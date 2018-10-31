@@ -29,7 +29,10 @@ namespace TL
 	* \brief 计算Typelist的长度
 	*
 	*/
-	template <typename TL> struct Length;
+	template <typename TL> struct Length
+	{
+		enum { value = 1 };
+	};
 	template <> struct Length<NullType>
 	{
 		enum { value = 0 };

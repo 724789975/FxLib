@@ -16,6 +16,9 @@ namespace DL
 	};
 
 	template <typename TL> struct Length;
+	//{
+	//	enum { Value = 1 };
+	//};
 
 	template <>
 	struct Length<NullType>
@@ -47,6 +50,12 @@ namespace DL
 	struct TypeAt<DeriveList<H, T>, i>
 	{
 		typedef typename TypeAt<T, i - 1>::Result Result;
+	};
+
+	template <typename TL>
+	struct TypeAt<TL, 0>
+	{
+		typedef TL Result;
 	};
 };
 
