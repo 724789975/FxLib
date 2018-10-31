@@ -100,9 +100,7 @@ Type & GetPrimaryKey() { return Get##Name (); }
 #define GetPropertyRdedisStringDeclare	\
 const char* GetRedisStringData(); \
 template<int dwIndex> \
-void GetRedisStringData(std::ostream& refOstream); \
-template<> \
-void GetRedisStringData<DL::Length<Propertys>::Value>(std::ostream& refOstream);
+void GetRedisStringData(std::ostream& refOstream);
 
 #define GetPropertyRdedisStringDefine \
 const char* Table::GetRedisStringData()\
