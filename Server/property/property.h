@@ -140,7 +140,7 @@ public:
 		std::stringstream ssData;
 		ssData << "HMSET " << RedisTableName() << "_" << GetRoleId() << " ";
 		GetRedisStringData<0>(ssData);
-		const char* szData = ssDat.str().c_str();
+		const char* szData = ssData.str().c_str();
 		return szData;
 	}
 
