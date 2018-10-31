@@ -5,6 +5,7 @@
 #include "derive_list.h"
 #include "args_num.h"
 #include "strhelper.h"
+#include "fix_string.h"
 
 #include <sstream>
 
@@ -92,15 +93,29 @@ void Set##Name (const Type& value, std::ostream& refOstream)\
 	Name##Changed(this, integral_constant<bool, C##Has##On##Name##Change<C>::Has>()); \
 }
 
+#define PrimaryPropertyDefine(C, Type, Name) \
+PropertyDefine(C, Type, Name) \
+Type & GetPrimaryKey() { return Get##Name (); }
+
 #define GetPropertyRdedisStringDeclare	\
+const char* GetRedisStringData(); \
 template<int dwIndex> \
-void GetRedisStringData(std::stringstream& refOstream); \
+void GetRedisStringData(std::ostream& refOstream); \
 template<> \
-void GetRedisStringData<DL::Length<Propertys>::Value>(std::stringstream& refOstream);
+void GetRedisStringData<DL::Length<Propertys>::Value>(std::ostream& refOstream);
 
 #define GetPropertyRdedisStringDefine \
+const char* Table::GetRedisStringData()\
+{\
+	if (!m_bChanged) { return ""; }\
+	std::stringstream ssData;\
+	ssData << "HMSET " << RedisTableName() << "_" << GetPrimaryKey() << " ";\
+	GetRedisStringData<0>(ssData);\
+	std::string szData = ssData.str();\
+	return szData.c_str();\
+}\
 template<int dwIndex> \
-void Table::GetRedisStringData(std::stringstream& refOstream) \
+void Table::GetRedisStringData(std::ostream& refOstream) \
 {\
 	typename DL::TypeAt<Propertys, dwIndex>::Result& refData = m_oPropertys; \
 	if (refData.Data().Changed())\
@@ -110,7 +125,7 @@ void Table::GetRedisStringData(std::stringstream& refOstream) \
 	GetRedisStringData<dwIndex + 1>(refOstream); \
 }\
 template<> \
-void Table::GetRedisStringData<DL::Length<Table::Propertys>::Value>(std::stringstream& refOstream) \
+void Table::GetRedisStringData<DL::Length<Table::Propertys>::Value>(std::ostream& refOstream) \
 {}
 
 #define ProoertyTableName(Name) \
@@ -120,10 +135,11 @@ class Table
 {
 public:
 	ProoertyTableName(table);
-	PropertyDefine(Table, int, RoleId);
+	PrimaryPropertyDefine(Table, int, RoleId);
 	PropertyDefine(Table, double, TeamId);
+	PropertyDefine(Table, FixString<64>, Name);
 
-	typedef DERIDELIST_2(RoleId, TeamId) Propertys;
+	typedef DERIDELIST_3(RoleId, TeamId, Name) Propertys;
 
 	GetPropertyRdedisStringDeclare;
 
@@ -132,16 +148,6 @@ public:
 	{
 		int a = 0;
 		++a;
-	}
-
-	const char* GetRedisStringData()
-	{
-		if (!m_bChanged) { return ""; }
-		std::stringstream ssData;
-		ssData << "HMSET " << RedisTableName() << "_" << GetRoleId() << " ";
-		GetRedisStringData<0>(ssData);
-		const char* szData = ssData.str().c_str();
-		return szData;
 	}
 
 protected:

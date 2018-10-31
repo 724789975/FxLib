@@ -1,11 +1,25 @@
 #ifndef __FixString_H__
 #define __FixString_H__
 #include <string>
+#include <ostream>
 
 template<unsigned int dwStringLen>
 class FixString
 {
 public:
+	enum { Length = dwStringLen };
+
+	friend std::ostream & operator<<(std::ostream & refOutput, FixString<dwStringLen> & szStr)
+	{
+		refOutput << szStr.m_szString;
+		return refOutput;
+	}
+	friend std::istream & operator>>(std::istream & refInput, FixString<dwStringLen> & szStr)
+	{
+		refInput >> szStr.m_szString;
+		return refInput;
+	}
+
 	FixString()
 	{}
 	FixString(const char* szString)
@@ -37,6 +51,7 @@ public:
 	{
 		return strcmp(m_szString, refFixString.m_szString) < 0;
 	}
+
 
 	void Clear()
 	{

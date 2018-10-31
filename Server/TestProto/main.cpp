@@ -16,6 +16,7 @@
 #include "derive_list.h"
 #include "property.h"
 #include "integral_constant.h"
+#include "fix_string.h"
 
 class BBB
 {
@@ -173,6 +174,7 @@ int main(int argc, char **argv)
 	Table table;
 
 	table.SetTeamId(123, std::cout);
+	table.SetName("asdf", std::cout);
 	table.GetRedisStringData();
 
 	Test* t1 = new Test;

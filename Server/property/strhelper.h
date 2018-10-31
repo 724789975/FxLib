@@ -133,6 +133,7 @@ inline const char* ToString(const T& c)
 
 	memcpy(szBuff, &c, 512);
 	szBuff[511] = 0;
+	return szBuff;
 }
 
 template<>
