@@ -59,6 +59,7 @@ private:
 class Name \
 {\
 public:\
+	typedef Type TypeValue;\
 	static const char* __##Name () { return #Name; }\
 	Type & Get##Name () {return m_oProperty.Value();}\
 	void Set##Name (const Type& value) { m_oProperty = value; }\
@@ -97,33 +98,56 @@ void Set##Name (const Type& value, std::ostream& refOstream)\
 PropertyDefine(C, Type, Name) \
 Type & GetPrimaryKey() { return Get##Name (); }
 
-#define GetPropertyRdedisStringDeclare	\
-const char* GetRedisStringData(); \
+#define PropertyRdedisStringDeclare	\
+std::string GetRedisSaveString(); \
 template<int dwIndex> \
-void GetRedisStringData(std::ostream& refOstream);
+void GetRedisSaveString(std::ostream& refOstream);\
+std::string GetRedisFetchString(); \
+template<int dwIndex> \
+void GetRedisFetchString(std::ostream& refOstream);
 
-#define GetPropertyRdedisStringDefine \
-const char* Table::GetRedisStringData()\
+#define PropertyRdedisStringDefine \
+std::string Table::GetRedisSaveString()\
 {\
 	if (!m_bChanged) { return ""; }\
 	std::stringstream ssData;\
-	ssData << "HMSET " << RedisTableName() << "_" << GetPrimaryKey() << " ";\
-	GetRedisStringData<0>(ssData);\
-	std::string szData = ssData.str();\
-	return szData.c_str();\
+	ssData << "HMSET " << RedisTableName() << "_" << GetPrimaryKey();\
+	GetRedisSaveString<0>(ssData);\
+	return ssData.str();\
 }\
 template<int dwIndex> \
-void Table::GetRedisStringData(std::ostream& refOstream) \
+void Table::GetRedisSaveString(std::ostream& refOstream) \
 {\
 	typename DL::TypeAt<Propertys, dwIndex>::Result& refData = m_oPropertys; \
 	if (refData.Data().Changed())\
 	{\
-		refOstream << "\"" << refData.Data().Name() << "\" " << ToRedisString(refData.Data().Value()); \
+		refOstream << " \"" << refData.Data().Name() << "\" " << Value2RedisString(refData.Data().Value()); \
 	}\
-	GetRedisStringData<dwIndex + 1>(refOstream); \
+	GetRedisSaveString<dwIndex + 1>(refOstream); \
 }\
 template<> \
-void Table::GetRedisStringData<DL::Length<Table::Propertys>::Value>(std::ostream& refOstream) \
+void Table::GetRedisSaveString<DL::Length<Table::Propertys>::Value>(std::ostream& refOstream) \
+{}\
+std::string Table::GetRedisFetchString()\
+{\
+	if (!m_bChanged) { return ""; }\
+	std::stringstream ssData;\
+	ssData << "HMGET " << RedisTableName() << "_" << GetPrimaryKey();\
+	GetRedisFetchString<0>(ssData);\
+	return ssData.str();\
+}\
+template<int dwIndex> \
+void Table::GetRedisFetchString(std::ostream& refOstream) \
+{\
+	typename DL::TypeAt<Propertys, dwIndex>::Result& refData = m_oPropertys; \
+	if (refData.Data().Changed())\
+	{\
+		refOstream << " \"" << refData.Data().Name() << "\""; \
+	}\
+	GetRedisFetchString<dwIndex + 1>(refOstream); \
+}\
+template<> \
+void Table::GetRedisFetchString<DL::Length<Table::Propertys>::Value>(std::ostream& refOstream) \
 {}
 
 #define ProoertyTableName(Name) \
@@ -139,7 +163,7 @@ public:
 
 	typedef DERIDELIST_3(RoleId, TeamId, Name) Propertys;
 
-	GetPropertyRdedisStringDeclare;
+	PropertyRdedisStringDeclare;
 
 	//void OnRoleIdChange() {}
 	void OnTeamIdChange()
@@ -156,7 +180,6 @@ private:
 	bool m_bChanged;
 };
 
-GetPropertyRdedisStringDefine;
-
+PropertyRdedisStringDefine;
 
 #endif // !__Property_H__

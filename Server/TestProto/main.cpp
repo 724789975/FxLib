@@ -175,7 +175,8 @@ int main(int argc, char **argv)
 
 	table.SetTeamId(123, std::cout);
 	table.SetName("asdf", std::cout);
-	table.GetRedisStringData();
+	std::string sz1 = table.GetRedisSaveString();
+	std::string sz2 = table.GetRedisFetchString();
 
 	Test* t1 = new Test;
 	GetTimeHandler()->AddTimer(10, &t1->CEventCaller<Test, 9>::MakeEvent(t1, &Test::F9));

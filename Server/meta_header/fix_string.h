@@ -66,6 +66,8 @@ public:
 	{
 		return m_szString;
 	}
+
+	operator char*() { return m_szString; }
 protected:
 private:
 

@@ -2,6 +2,7 @@
 #define __STRHELPER_H_2009_0824__
 
 #include <string>
+#include <stdlib.h>
 #ifdef WIN32
 #else
 #include <string.h>
@@ -127,7 +128,7 @@ inline std::string GBKToUTF8(const std::string szGBK)
 }
 
 template<typename T>
-inline const char* ToString(const T& c)
+inline const char* Value2String(const T& c)
 {
 	static char szBuff[512] = { 0 };
 
@@ -137,7 +138,7 @@ inline const char* ToString(const T& c)
 }
 
 template<>
-inline const char* ToString<char>(const char& c)
+inline const char* Value2String<char>(const char& c)
 {
 	static char szBuff[2] = { 0 };
 	szBuff[0] = c;
@@ -146,7 +147,7 @@ inline const char* ToString<char>(const char& c)
 }
 
 template<>
-inline const char* ToString<unsigned char>(const unsigned char& c)
+inline const char* Value2String<unsigned char>(const unsigned char& c)
 {
 	static char szBuff[2] = { 0 };
 	szBuff[0] = c;
@@ -155,7 +156,7 @@ inline const char* ToString<unsigned char>(const unsigned char& c)
 }
 
 template<>
-inline const char* ToString<short>(const short& wSrc)
+inline const char* Value2String<short>(const short& wSrc)
 {
 	static char szBuff[8] = { 0 };
 	sprintf(szBuff, "%d", wSrc);
@@ -163,7 +164,7 @@ inline const char* ToString<short>(const short& wSrc)
 }
 
 template<>
-inline const char* ToString<unsigned short>(const unsigned short& wSrc)
+inline const char* Value2String<unsigned short>(const unsigned short& wSrc)
 {
 	static char szBuff[8] = { 0 };
 	sprintf(szBuff, "%d", wSrc);
@@ -171,7 +172,7 @@ inline const char* ToString<unsigned short>(const unsigned short& wSrc)
 }
 
 template<>
-inline const char* ToString<int>(const int& dwSrc)
+inline const char* Value2String<int>(const int& dwSrc)
 {
 	static char szBuff[8] = { 0 };
 	sprintf(szBuff, "%d", dwSrc);
@@ -179,7 +180,7 @@ inline const char* ToString<int>(const int& dwSrc)
 }
 
 template<>
-inline const char* ToString<unsigned int>(const unsigned int& dwSrc)
+inline const char* Value2String<unsigned int>(const unsigned int& dwSrc)
 {
 	static char szBuff[32] = { 0 };
 	sprintf(szBuff, "%d", dwSrc);
@@ -187,7 +188,7 @@ inline const char* ToString<unsigned int>(const unsigned int& dwSrc)
 }
 
 template<>
-inline const char* ToString<float>(const float& dwSrc)
+inline const char* Value2String<float>(const float& dwSrc)
 {
 	static char szBuff[32] = { 0 };
 	sprintf(szBuff, "%f", dwSrc);
@@ -195,7 +196,7 @@ inline const char* ToString<float>(const float& dwSrc)
 }
 
 template<>
-inline const char* ToString<double>(const double& qwSrc)
+inline const char* Value2String<double>(const double& qwSrc)
 {
 	static char szBuff[64] = { 0 };
 	sprintf(szBuff, "%g", qwSrc);
@@ -203,7 +204,7 @@ inline const char* ToString<double>(const double& qwSrc)
 }
 
 template<>
-inline const char* ToString<long long>(const long long& qwSrc)
+inline const char* Value2String<long long>(const long long& qwSrc)
 {
 	static char szBuff[64] = { 0 };
 	sprintf(szBuff, "%lld", qwSrc);
@@ -211,7 +212,7 @@ inline const char* ToString<long long>(const long long& qwSrc)
 }
 
 template<>
-inline const char* ToString<unsigned long long> (const unsigned long long& qwSrc)
+inline const char* Value2String<unsigned long long> (const unsigned long long& qwSrc)
 {
 	static char szBuff[64] = { 0 };
 	sprintf(szBuff, "%llu", qwSrc);
@@ -219,19 +220,19 @@ inline const char* ToString<unsigned long long> (const unsigned long long& qwSrc
 }
 
 template<>
-inline const char* ToString<std::string>(const std::string& qwSrc)
+inline const char* Value2String<std::string>(const std::string& qwSrc)
 {
 	return qwSrc.c_str();
 }
 
 template<typename T>
-inline const char* ToRedisString(T t)
+inline const char* Value2RedisString(T t)
 {
-	return ToString(t);
+	return Value2String(t);
 }
 
 template<>
-inline const char* ToRedisString<>(const std::string& szData)
+inline const char* Value2RedisString<>(const std::string& szData)
 {
 	std::string sz = "\"";
 	sz += szData;
@@ -240,7 +241,7 @@ inline const char* ToRedisString<>(const std::string& szData)
 }
 
 template<>
-inline const char* ToRedisString<>(const char* szData)
+inline const char* Value2RedisString<>(const char* szData)
 {
 	std::string sz = "\"";
 	sz += szData;
@@ -248,7 +249,65 @@ inline const char* ToRedisString<>(const char* szData)
 	return sz.c_str();
 }
 
+template<typename T>
+inline void String2Value(const char* szData, T& refValue)
+{
+	memcpy(&refValue, szData, sizeof(T));
+}
 
+template<>
+inline void String2Value<char>(const char* szData, char& refValue)
+{
+	refValue = *szData;
+}
+
+template<>
+inline void String2Value<short>(const char* szData, short& refValue)
+{
+	refValue = atoi(szData);
+}
+
+template<>
+inline void String2Value<unsigned short>(const char* szData, unsigned short& refValue)
+{
+	refValue = atoi(szData);
+}
+
+template<>
+inline void String2Value<int>(const char* szData, int& refValue)
+{
+	refValue = atoi(szData);
+}
+
+template<>
+inline void String2Value<unsigned int>(const char* szData, unsigned int& refValue)
+{
+	refValue = atoi(szData);
+}
+
+template<>
+inline void String2Value<float>(const char* szData, float& refValue)
+{
+	refValue = atof(szData);
+}
+
+template<>
+inline void String2Value<long long>(const char* szData, long long& refValue)
+{
+	refValue = atoll(szData);
+}
+
+template<>
+inline void String2Value<unsigned long long>(const char* szData, unsigned long long& refValue)
+{
+	refValue = atoll(szData);
+}
+
+template<>
+inline void String2Value<double>(const char* szData, double& refValue)
+{
+	refValue = atof(szData);
+}
 
 
 
