@@ -6,7 +6,6 @@
 #include "iothread.h"
 #include "net.h"
 #include "netstream.h"
-#include "lua_engine.h"
 #include <string>
 #include <sstream>
 #include "sha1.h"
