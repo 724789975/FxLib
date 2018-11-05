@@ -43,7 +43,7 @@ test.pb.obj:test.pb.cc
 
 {$(DIR_SRC)}.cpp{$(DIR_BIN)}.obj ::
         @echo $< Compiling...
-	$(CC) $(CFLAGS) $(DIR_INCLUDE) $<0
+	$(CC) $(CFLAGS) $(DIR_INCLUDE) $<
 
 $(EXECUTABLE_NAME) : $(DIR_BIN)\*.obj test.pb.obj
 	@echo Linking $(EXECUTABLE_NAME)...
