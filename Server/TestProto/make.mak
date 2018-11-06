@@ -38,25 +38,24 @@ LINKLIBS = $(LIBDIRS) $(LIBS)
 
 LKFLAGS = $(LKFLAGS) /LIBPATH:$(LINKLIBS)
 
-test.pb.obj:test.pb.cc
-	$(CC) $(CFLAGS) $(DIR_INCLUDE) test.pb.cc
-
-{$(DIR_SRC)}.cpp{$(DIR_BIN)}.obj ::
-        @echo $< Compiling...
-	$(CC) $(CFLAGS) $(DIR_INCLUDE) $<
-
-$(EXECUTABLE_NAME) : $(DIR_BIN)\*.obj test.pb.obj
-	@echo Linking $(EXECUTABLE_NAME)...
-	$(LK) $(LKFLAGS)  $(DIR_BIN)\*.obj 
-
 # build application
 target: $(EXECUTABLE_NAME)
 
+###$(EXECUTABLE_NAME) : test.pb.obj proto_dispatcher.obj main.obj
+$(EXECUTABLE_NAME) : makeobj
+	@echo Linking $(EXECUTABLE_NAME)...
+	$(LK) $(LKFLAGS) $(DIR_BIN)\*.obj
+
+makeobj:
+	@for %%f in (*.cpp) do ( $(CC) $(CFLAGS) $(DIR_INCLUDE) %%f )
+	@for %%f in (*.cc) do ( $(CC) $(CFLAGS) $(DIR_INCLUDE) %%f )
+
 # delete output directories
 clean:
- @if exist $(DIR_OUT) del $(DIR_BIN)*.obj
- @if exist $(DIR_BIN) del $(DIR_OUT)*.exe
- @if exist $(DIR_BIN) del $(DIR_OUT)$(TARGET).pdb
+	@if exist $(DIR_OUT) del $(DIR_BIN)*.obj
+	@if exist $(DIR_BIN) del $(DIR_OUT)*.exe
+	@if exist $(DIR_BIN) del $(DIR_OUT)$(TARGET).pdb
 
 # create directories and build application
 all: clean target
+
