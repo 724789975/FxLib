@@ -414,7 +414,6 @@ char* GetExeName()
 		//GetCurrentDirectory(256, strWorkPath);
 
 		GetModuleFileName(NULL, strExePath, 256);
-		//??????   
 		for (int i = strlen(strExePath); i >= 0; i--)
 		{
 			if (strExePath[i] == '.')
