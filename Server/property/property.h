@@ -150,13 +150,13 @@ template<> \
 void Table::GetRedisFetchString<DL::Length<Table::Propertys>::Value>(std::ostream& refOstream) \
 {}
 
-#define ProoertyTableName(Name) \
+#define PropertyTableName(Name) \
 const char* RedisTableName(){ return #Name; }
 
 class Table
 {
 public:
-	ProoertyTableName(table);
+	PropertyTableName(table);
 	PrimaryPropertyDefine(Table, int, RoleId);
 	PropertyDefine(Table, double, TeamId);
 	PropertyDefine(Table, FixString<64>, Name);

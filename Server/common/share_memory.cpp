@@ -103,7 +103,7 @@ bool CShareMem::Open()
 		return false;
 	}
 
-	ResizeFile(hFile);
+	//ResizeFile(hFile);
 
 	m_hShmId = CreateFileMapping(hFile, NULL, PAGE_READWRITE, 0,
 		(DWORD)m_qwSize, m_szShmName.c_str());
@@ -112,11 +112,11 @@ bool CShareMem::Open()
 		return false;
 	}
 
-	m_hShmId = OpenFileMapping(FILE_MAP_READ | FILE_SHARE_WRITE, FALSE, m_szShmName.c_str());
-	if (m_hShmId == INVALID_HANDLE_VALUE)
-	{
-		return false;
-	}
+	//m_hShmId = OpenFileMapping(FILE_MAP_READ | FILE_SHARE_WRITE, FALSE, m_szShmName.c_str());
+	//if (m_hShmId == INVALID_HANDLE_VALUE)
+	//{
+	//	return false;
+	//}
 
 	m_pData = MapViewOfFile(m_hShmId, FILE_MAP_READ | FILE_SHARE_WRITE, 0, 0, 0);
 	if (m_pData == NULL)
@@ -163,7 +163,7 @@ bool CShareMem::Create()
 		return false;
 	}
 
-	ResizeFile(hFile);
+	//ResizeFile(hFile);
 
 	m_hShmId = CreateFileMapping(hFile, NULL, PAGE_READWRITE, 0,
 		(DWORD)m_qwSize, m_szShmName.c_str());
