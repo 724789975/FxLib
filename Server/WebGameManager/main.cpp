@@ -9,6 +9,10 @@
 #include <signal.h>
 #include "gflags/gflags.h"
 
+#ifndef WIN32
+#include <sys/wait.h>
+#endif
+
 unsigned int g_dwPort = 20000;
 bool g_bRun = true;
 
