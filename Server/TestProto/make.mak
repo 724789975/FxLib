@@ -1,7 +1,7 @@
 #define macros
 
 CC = cl
-CFLAGS = /nologo /c /W4 /Zc:forScope /Zc:wchar_t /EHsc /D"_CONSOLE" /D"WIN32"
+CFLAGS = /nologo /c /W3 /Gm- /Zc:forScope /Zc:wchar_t /EHsc /D"_CONSOLE" /D"WIN32"
 
 !IF "$(DEBUG)" == "1"
 CFLAGS = $(CFLAGS) /Od /Ob0 /MTd /ZI /D"_DEBUG"
@@ -20,8 +20,9 @@ DIR_INCLUDE = \
         
 DIR_BIN = .\\
 DIR_OUT = ..\\DEBUG\\
+OBJ_OUT = .\\DEBUG\\
 
-CFLAGS = $(CFLAGS) /Fo"$(DIR_BIN)\\"  /Fd"$(DIR_OUT)\$(TARGET).pdb"
+CFLAGS = $(CFLAGS) /Fo"$(OBJ_OUT)\\"  /Fd"$(DIR_OUT)\$(TARGET).pdb"
 
 LK = link
 LKFLAGS = /NOLOGO /MANIFEST:NO
@@ -44,7 +45,7 @@ target: $(EXECUTABLE_NAME)
 ###$(EXECUTABLE_NAME) : test.pb.obj proto_dispatcher.obj main.obj
 $(EXECUTABLE_NAME) : makeobj
 	@echo Linking $(EXECUTABLE_NAME)...
-	$(LK) $(LKFLAGS) $(DIR_BIN)\*.obj
+	$(LK) $(LKFLAGS) $(OBJ_OUT)\*.obj
 
 makeobj:
 	@for %%f in (*.cpp) do ( $(CC) $(CFLAGS) $(DIR_INCLUDE) %%f )
@@ -52,9 +53,9 @@ makeobj:
 
 # delete output directories
 clean:
-	@if exist $(DIR_OUT) del $(DIR_BIN)*.obj
-	@if exist $(DIR_BIN) del $(DIR_OUT)*.exe
-	@if exist $(DIR_BIN) del $(DIR_OUT)$(TARGET).pdb
+ @if exist $(OBJ_OUT) del $(OBJ_OUT)*.obj
+ @if exist $(DIR_BIN) del $(DIR_OUT)$(TARGET)*.exe
+ @if exist $(DIR_BIN) del $(DIR_OUT)$(TARGET).pdb
 
 # create directories and build application
 all: clean target

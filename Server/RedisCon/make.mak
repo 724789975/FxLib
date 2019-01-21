@@ -1,7 +1,7 @@
 #define macros
 
 CC = cl
-CFLAGS = /nologo /c /W4 /Zc:forScope /Zc:wchar_t /EHsc /D"_CONSOLE" /D"WIN32"
+CFLAGS = /nologo /c /GS /JMC /Gd /W3 /Zc:forScope /Zc:wchar_t /EHsc /D"_CONSOLE" /D"WIN32"
 
 !IF "$(DEBUG)" == "1"
 CFLAGS = $(CFLAGS) /Od /Ob0 /MTd /ZI /D"_DEBUG"
@@ -23,15 +23,15 @@ DIR_OUT = ..\\DEBUG\\
 CFLAGS = $(CFLAGS) /Fo"$(DIR_BIN)\\"  /Fd"$(DIR_OUT)\$(TARGET).pdb"
 
 LK = link
-LKFLAGS = /NOLOGO /MANIFEST:NO
+LKFLAGS = /NOLOGO
  
 !IF "$(DEBUG)" == "0"
 LKFLAGS = $(LKFLAGS) /OPT:REF /OPT:ICF
 !ELSE
-LKFLAGS = $(LKFLAGS) /debug
+LKFLAGS = $(LKFLAGS)
 !ENDIF
 
-LKFLAGS = $(LKFLAGS) /PDB:"$(DIR_OUT)\$(TARGET).pdb" /OUT:"$(DIR_OUT)\$(STATIC_LIB_NAME)"
+LKFLAGS = $(LKFLAGS) /OUT:"$(DIR_OUT)\$(STATIC_LIB_NAME)"
 
 LIBDIRS = .\libs
 LIBS = *.lib
