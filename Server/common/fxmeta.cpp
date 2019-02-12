@@ -191,13 +191,14 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...)
 	return true;
 }
 
+#define TRACE_SIZE 100
 void PrintTrace(char* strTrace)
 {
 	int nLen = 0;
 	nLen += sprintf(strTrace + nLen, "%s\n", " [Trace] ___________begin___________");
 #ifdef WIN32
 	unsigned int   i;
-	void         * stack[100];
+	void         * stack[TRACE_SIZE];
 	unsigned short frames;
 	SYMBOL_INFO  * symbol = NULL;
 	HANDLE         process;
@@ -206,7 +207,7 @@ void PrintTrace(char* strTrace)
 
 	SymInitialize(process, NULL, TRUE);
 
-	frames = CaptureStackBackTrace(0, 100, stack, NULL);
+	frames = CaptureStackBackTrace(0, TRACE_SIZE, stack, NULL);
 	symbol = (SYMBOL_INFO *)calloc(sizeof(SYMBOL_INFO) + 256 * sizeof(char), 1);
 	if (symbol)
 	{
@@ -223,16 +224,15 @@ void PrintTrace(char* strTrace)
 	}
 
 #else
-	void *bt[20];
-	char **strings;
-	int sz;
-
-	sz = backtrace(bt, 20);
-	strings = backtrace_symbols(bt, sz);
+	void *bt[TRACE_SIZE];
+	int sz = backtrace(bt, TRACE_SIZE);
+	char **strings = backtrace_symbols(bt, sz);
 	for(int i = 1; i < sz; ++i)
 	{
 		nLen += sprintf(strTrace + nLen, "%s\n", strings[i]);
 	}
+	free(strings);
+	strings = NULL;
 #endif // WIN32
 	nLen += sprintf(strTrace + nLen, "%s\n", " [Trace] ___________end___________");
 }
