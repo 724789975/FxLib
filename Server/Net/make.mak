@@ -1,12 +1,16 @@
 #define macros
 
 CC = cl
-CFLAGS = /nologo /c /GS /JMC /Gd /W3 /Zc:forScope /Zc:wchar_t /EHsc /D"_CONSOLE" /D"WIN32"
+CFLAGS = /c /analyze- /W3 /Zc:wchar_t /Gm- /Zc:inline /fp:precise /D"WIN32" /D"_LIB" /D"_CRT_SECURE_NO_DEPRECATE" /D"_CRT_NONSTDC_NO_DEPRECATE" /D"_MBCS" /errorReport:prompt /WX- /Zc:forScope /Gd /Oy- /FC /EHsc /nologo /diagnostics:classic
 
 !IF "$(DEBUG)" == "1"
-CFLAGS = $(CFLAGS) /Od /Ob0 /MTd /ZI /D"_DEBUG"
+CFLAGS = $(CFLAGS) /D"_DEBUG" /JMC /GS /ZI /Od /RTC1 /MTd /Fd"Debug\Database.pdb"
+DIR_OUT = ..\\DEBUG\\
+OBJ_OUT = .\\DEBUG
 !ELSE
-CFLAGS = $(CFLAGS) /O2 /Ob1 /MT /Zi /D"NDEBUG"
+CFLAGS = $(CFLAGS) /D"NDEBUG" /GS /GL /Gy /Zi /Oi /O2 /MT /Fd"Release\Database.pdb"  
+DIR_OUT = ..\\RELEASE\\
+OBJ_OUT = .\\RELEASE
 !ENDIF
 
 TARGET = Net
@@ -14,46 +18,32 @@ EXECUTABLE_NAME = $(TARGET).exe
 STATIC_LIB_NAME = $(TARGET).lib
 DIR_SRC = .\\
 DIR_INCLUDE = \
-        /I "../meta_header"
+        /I "../meta_header" \
         
-DIR_BIN = .\\
-DIR_OUT = ..\\DEBUG\\
-
-CFLAGS = $(CFLAGS) /Fo"$(DIR_BIN)\\"  /Fd"$(DIR_OUT)\$(TARGET).pdb"
 
 LK = link
-LKFLAGS = /NOLOGO
+LKFLAGS = /lib /NOLOGO
  
-!IF "$(DEBUG)" == "0"
-LKFLAGS = $(LKFLAGS) /OPT:REF /OPT:ICF
-!ELSE
-LKFLAGS = $(LKFLAGS)
-!ENDIF
-
 LKFLAGS = $(LKFLAGS) /OUT:"$(DIR_OUT)\$(STATIC_LIB_NAME)"
-
-LIBDIRS = .\libs
-LIBS = *.lib
-LINKLIBS = $(LIBDIRS) $(LIBS)
-
-LKFLAGS = $(LKFLAGS) /LIBPATH:$(LINKLIBS)
-
-{$(DIR_SRC)}.cpp{$(DIR_BIN)}.obj ::
-        @echo $< Compiling...
-	$(CC) $(CFLAGS) $(DIR_INCLUDE) $<
-
-$(STATIC_LIB_NAME) : $(DIR_BIN)\*.obj
-	@echo Linking $(STATIC_LIB_NAME)...
-	$(LK) /lib $(LKFLAGS) $(DIR_BIN)\*.obj 
 
 # build application
 target: $(STATIC_LIB_NAME)
 
+# link objs
+$(STATIC_LIB_NAME) : makeobj
+	@echo Linking $(STATIC_LIB_NAME)...
+	$(LK) $(LKFLAGS) $(OBJ_OUT)\*.obj
+
+# cl ojbs
+makeobj:
+	@for %%f in (*.cpp) do ( $(CC) $(CFLAGS) /Fo"$(OBJ_OUT)\%%~nf.obj" $(DIR_INCLUDE) %%f )
+	@for %%f in (*.cc) do ( $(CC) $(CFLAGS) /Fo"$(OBJ_OUT)\%%~nf.obj" $(DIR_INCLUDE) %%f )
+
 # delete output directories
 clean:
- @if exist $(DIR_OUT) del $(DIR_BIN)*.obj
- @if exist $(DIR_BIN) del $(DIR_OUT)$(STATIC_LIB_NAME)
- @if exist $(DIR_BIN) del $(DIR_OUT)$(TARGET).pdb
+ @if exist $(OBJ_OUT) del $(OBJ_OUT)\*.obj
+ @if exist $(DIR_OUT) del $(DIR_OUT)\$(STATIC_LIB_NAME)
+ @if exist $(OBJ_OUT) del $(OBJ_OUT)\$(TARGET).pdb
 
 # create directories and build application
 all: clean target

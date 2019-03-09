@@ -1,9 +1,5 @@
 
 all:
-	cd common
-	nmake /f make.mak
-	cd ..
-
 	cd Database
 	nmake /f make.mak
 	cd ..
@@ -33,10 +29,6 @@ all:
 	cd ..
 
 dbg:
-	cd common
-	nmake /f make.mak DEBUG=1
-	cd ..
-
 	cd Database
 	nmake /f make.mak DEBUG=1
 	cd ..
@@ -66,36 +58,39 @@ dbg:
 	cd ..
 
 clean:
-	cd common
-	nmake /f make.mak clean
-	cd ..
-
 	cd Database
 	nmake /f make.mak clean
+	nmake /f make.mak DEBUG=1 clean
 	cd ..
 
 	cd LuaLib
 	nmake /f make.mak clean
+	nmake /f make.mak DEBUG=1 clean
 	cd ..
 
 	cd Net
 	nmake /f make.mak clean
+	nmake /f make.mak DEBUG=1 clean
 	cd ..
 
 	cd UrlRequest
 	nmake /f make.mak clean
+	nmake /f make.mak DEBUG=1 clean
 	cd ..
 
 	cd RedisCon
 	nmake /f make.mak clean
+	nmake /f make.mak DEBUG=1 clean
 	cd ..
 
 	cd RedisTest
 	nmake /f make.mak clean
+	nmake /f make.mak DEBUG=1 clean
 	cd ..
 
 	cd TestProto
 	nmake /f make.mak clean
+	nmake /f make.mak DEBUG=1 clean
 	cd ..
 
 
