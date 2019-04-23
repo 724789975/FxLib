@@ -161,7 +161,7 @@ public:
 	PropertyDefine(Table, double, TeamId);
 	PropertyDefine(Table, FixString<64>, Name);
 
-	typedef DERIDELIST_3(RoleId, TeamId, Name) Propertys;
+	typedef DERIDELIST(RoleId, TeamId, Name) Propertys;
 
 	PropertyRdedisStringDeclare;
 
