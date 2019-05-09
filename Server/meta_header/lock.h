@@ -75,6 +75,7 @@ private:
 #endif
 };
 
+//进程锁问题 如果进程没有解锁就推出 会出现死锁问题
 class ProcessLock : public IFxLock
 {
 public:
