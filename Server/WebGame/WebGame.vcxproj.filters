@@ -33,6 +33,8 @@
     <ClCompile Include="TetrisBase.cpp" />
     <ClCompile Include="Timers.cpp" />
     <ClCompile Include="GameServerBase.cpp" />
+    <ClCompile Include="..\common\exception_dump.cpp" />
+    <ClCompile Include="..\common\segvcatch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gamedefine.h" />

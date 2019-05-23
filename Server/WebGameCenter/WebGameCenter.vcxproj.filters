@@ -25,6 +25,7 @@
       <Filter>msg_proto</Filter>
     </ClCompile>
     <ClCompile Include="GameServerBase.cpp" />
+    <ClCompile Include="..\common\segvcatch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameServer.h" />
