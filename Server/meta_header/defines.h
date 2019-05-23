@@ -56,7 +56,7 @@
 #include "TargetConditionals.h"
 
 #define CCDEFINE_APPLE 1
-#define CCDEFINE_BIGENDIAN			1
+//#define CCDEFINE_BIGENDIAN			1
 #define CCDEFINE_NAME "gcc-apple"
 
 #if defined(__LP64__)
@@ -69,7 +69,7 @@
 
 #elif __ANDROID__ || ANDROID
 #define CCDEFINE_ANDROID 1
-#define CCDEFINE_BIGENDIAN			1
+//#define CCDEFINE_BIGENDIAN			1
 #define CCDEFINE_NAME "gcc-android"
 
 #if defined(__LP64__)
@@ -82,7 +82,7 @@
 
 #elif __CYGWIN__ || __MINGW32__ || __MINGW64__
 #define CCDEFINE_GCC_CYGWIN 1
-#define CCDEFINE_BIGENDIAN			1
+//#define CCDEFINE_BIGENDIAN			1
 #define CCDEFINE_NAME "gcc-cygwin"
 #if __GNUC__ < 4 || __GNUC_MINOR < 6
 #define nullptr 0
@@ -93,7 +93,7 @@
 #endif
 
 #elif defined(__linux__)
-#define CCDEFINE_BIGENDIAN			1
+//#define CCDEFINE_BIGENDIAN			1
 #define CCDEFINE_GCC_LINUX 1
 #define CCDEFINE_NAME "gcc-linux"
 
@@ -107,9 +107,9 @@
 
 #endif // _MSC_VER
 
-#if !defined(CCDEFINE_BIGENDIAN)
-#error please define CCDEFINE_BIGENDIAN 
-#endif
+//#if !defined(CCDEFINE_BIGENDIAN)
+//#error please define CCDEFINE_BIGENDIAN 
+//#endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // Visual C++
@@ -152,14 +152,14 @@
 
 #else
 //GCC
-#pragma GCC diagnostic ignored "-Wmissing-braces"
+//#pragma GCC diagnostic ignored "-Wmissing-braces"
 
 #define FORCEINLINE inline
 
 #define RESTRICT __restrict__
 
-#define ALIGN_PREFIX(alignment)
-#define ALIGN_SUFFIX(alignment)				__attribute__ ((aligned(n)))
+//#define ALIGN_PREFIX(alignment)
+//#define ALIGN_SUFFIX(alignment)				__attribute__ ((aligned(n)))
 
 #ifdef DLL
 #	define DLL_ENTRY_IMPORT
@@ -178,26 +178,26 @@
 #endif//BEHAVIACDLL_EXPORTS
 
 #if CCDEFINE_MSVC
-//warning C4275: non dll-interface class 'stdext::exception' used as base for dll-interface class 'std::bad_cast'
-#pragma warning(disable : 4275)
-
-//warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
-#pragma warning(disable : 4530)
-
-//warning C4251: 'behaviac::VariableRegistry::m_proxyHolders' : class 'behaviac::vector<T>' needs to have dll-interface to be used
-//by clients of class 'behaviac::VariableRegistry'
-#pragma warning(disable : 4251)
-
-//unreferenced formal parameter
-#pragma warning(disable : 4100)
-
-#pragma warning(disable : 4127) // conditional expression is constant
-
-//warning C4702: unreachable code
-#pragma warning(disable : 4702)
-
-//'strcpy': This function or variable may be unsafe.
-#pragma warning(disable : 4996)
+////warning C4275: non dll-interface class 'stdext::exception' used as base for dll-interface class 'std::bad_cast'
+//#pragma warning(disable : 4275)
+//
+////warning C4530: C++ exception handler used, but unwind semantics are not enabled. Specify /EHsc
+//#pragma warning(disable : 4530)
+//
+////warning C4251: 'behaviac::VariableRegistry::m_proxyHolders' : class 'behaviac::vector<T>' needs to have dll-interface to be used
+////by clients of class 'behaviac::VariableRegistry'
+//#pragma warning(disable : 4251)
+//
+////unreferenced formal parameter
+//#pragma warning(disable : 4100)
+//
+//#pragma warning(disable : 4127) // conditional expression is constant
+//
+////warning C4702: unreachable code
+//#pragma warning(disable : 4702)
+//
+////'strcpy': This function or variable may be unsafe.
+//#pragma warning(disable : 4996)
 
 #endif//CCDEFINE_MSVC
 
