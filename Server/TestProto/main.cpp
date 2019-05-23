@@ -17,6 +17,8 @@
 #include "integral_constant.h"
 #include "fix_string.h"
 
+#include "meta/meta.h"
+
 class BBB
 {
 public:
