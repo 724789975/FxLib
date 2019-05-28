@@ -159,6 +159,7 @@ int main(int argc, char **argv)
 	bool bCreated;
 	oMem.Init(bCreated);
 	FixString<1024>* pFixString = oMem.GetMemory<FixString<1024> >();
+	new(pFixString) FixString<1024>();
 	*pFixString = "test_123";
 
 	ShareMemory::Map<int, int, 1024> oMap;

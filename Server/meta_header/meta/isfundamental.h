@@ -39,9 +39,6 @@ namespace Meta {
 	IS_FUNDAMENTAL(int8_t);
 	IS_FUNDAMENTAL(int16_t);
 
-	IS_FUNDAMENTAL(signed long);
-	IS_FUNDAMENTAL(unsigned long);
-
 	IS_FUNDAMENTAL(int);
 
 	IS_FUNDAMENTAL(char);

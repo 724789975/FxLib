@@ -9,6 +9,8 @@
 #include <sys/ipc.h>
 #include <sys/errno.h>
 #include <fcntl.h>
+#include <sys/mman.h>
+#include <unistd.h> 
 #endif
 
 #include <assert.h>
@@ -125,11 +127,11 @@ bool CShareMem::Open()
 		return false;
 	}
 #else
-	//int fHandle = open((m_szShmName + ".shm").c_str(), O_RDWR, 0777);
-	//if (fHandle == -1)
-	//{
-	//	return false;
-	//}
+	int fHandle = open((m_szShmName + ".shm").c_str(), O_RDWR, 0777);
+	if (fHandle == -1)
+	{
+		return false;
+	}
 	key_t keyShmKey = ftok((m_szShmName + ".shm").c_str(), 'a');
 	if (keyShmKey == -1)
 	{
@@ -147,6 +149,8 @@ bool CShareMem::Open()
 	{
 		return false;
 	}
+
+	m_pData = mmap(m_pData, m_qwSize, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED, fHandle, 0);
 #endif // WIN32
 	return true;
 }
@@ -184,6 +188,10 @@ bool CShareMem::Create()
 	{
 		return false;
 	}
+	if (0 != ftruncate(fHandle, m_qwSize))
+	{
+		return false;
+	}
 	key_t keyShmKey = ftok((m_szShmName + ".shm").c_str(), 'a');
 	if (keyShmKey == -1)
 	{
@@ -202,6 +210,7 @@ bool CShareMem::Create()
 		shmctl(m_hShmId, IPC_RMID, NULL);
 		return false;
 	}
+	m_pData = mmap(m_pData, m_qwSize, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED, fHandle, 0);
 #endif // WIN32
 	return true;
 }
