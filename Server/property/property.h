@@ -130,7 +130,6 @@ void Table::GetRedisSaveString<DL::Length<Table::Propertys>::Value>(std::ostream
 {}\
 std::string Table::GetRedisFetchString()\
 {\
-	if (!m_bChanged) { return ""; }\
 	std::stringstream ssData;\
 	ssData << "HMGET " << RedisTableName() << "_" << GetPrimaryKey();\
 	GetRedisFetchString<0>(ssData);\
@@ -161,7 +160,8 @@ public:
 	PropertyDefine(Table, double, TeamId);
 	PropertyDefine(Table, FixString<64>, Name);
 
-	typedef DERIDELIST(RoleId, TeamId, Name) Propertys;
+	typedef DERIDELIST(RoleId,
+		TeamId, Name) Propertys;
 
 	PropertyRdedisStringDeclare;
 

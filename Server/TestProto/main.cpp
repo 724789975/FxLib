@@ -175,12 +175,16 @@ int main(int argc, char **argv)
 	Table table;
 
 	std::ostream& refOut = std::cout;
+	table.SetRoleId(112233, refOut);
+	refOut << "\n";
 	table.SetTeamId(123, refOut);
 	refOut << "\n";
 	table.SetName("asdf", std::cout);
 	refOut << "\n";
 	std::string sz1 = table.GetRedisSaveString();
 	std::string sz2 = table.GetRedisFetchString();
+	LogExe(LogLv_Debug3, sz1.c_str());
+	LogExe(LogLv_Debug3, sz2.c_str());
 
 	Test* t1 = new Test;
 	GetTimeHandler()->AddTimer(10, &t1->CEventCaller<Test, 9>::MakeEvent(t1, &Test::F9));
