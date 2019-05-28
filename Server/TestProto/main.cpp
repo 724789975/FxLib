@@ -14,7 +14,6 @@
 #include "share_mem_container/share_mem_map.h"
 
 #include "property.h"
-#include "integral_constant.h"
 #include "fix_string.h"
 
 #include "meta/meta.h"

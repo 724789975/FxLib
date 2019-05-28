@@ -1,11 +1,11 @@
 #ifndef __Property_H__
 #define __Property_H__
 
-#include "integral_constant.h"
 #include "derive_list.h"
 #include "args_num.h"
 #include "strhelper.h"
 #include "fix_string.h"
+#include "meta/meta.h"
 
 #include <sstream>
 
@@ -81,17 +81,17 @@ struct C##Has##F {\
 CommonPropertyDeclare(Type, Name)\
 HasOnChange(C, On##Name##Change)\
 template<typename T> \
-void Name##Changed(T* pT, true_type t){ pT->On##Name##Change(); }\
+void Name##Changed(T* pT, Meta::TrueType t){ pT->On##Name##Change(); }\
 template<typename T> \
-void Name##Changed(T* pT, false_type f){}\
+void Name##Changed(T* pT, Meta::FalseType f){}\
 Type & Get##Name (){return m_oPropertys.Get##Name();}\
 void Set##Name (const Type& value){ m_bChanged = true; return m_oPropertys.Set##Name(value); } \
 void Set##Name (const Type& value, std::ostream& refOstream)\
 {\
 	refOstream << __FUNCTION__ << " old value : " << Get##Name();\
-	m_oPropertys.Set##Name(value);\
+	Set##Name(value);\
 	refOstream << ", new value : " << Get##Name();\
-	Name##Changed(this, integral_constant<bool, C##Has##On##Name##Change<C>::Has>()); \
+	Name##Changed(this, Meta::BooleanType<C##Has##On##Name##Change<C>::Has>()); \
 }
 
 #define PrimaryPropertyDefine(C, Type, Name) \

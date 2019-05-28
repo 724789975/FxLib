@@ -143,9 +143,9 @@ int main(int argc, char **argv)
 	GetTimeHandler()->Init();
 	GetTimeHandler()->Run();
 
-	TestTimer oTimer;
-	GetTimeHandler()->AddDelayTimer(10, &oTimer);
-	GetTimeHandler()->AddEveryFewMinuteTimer(5, &oTimer);
+	//TestTimer oTimer;
+	//GetTimeHandler()->AddTimer(10, &oTimer);
+	//GetTimeHandler()->AddEveryFewMinuteTimer(5, &oTimer);
 	while (g_bRun)
 	{
 		GetTimeHandler()->Run();

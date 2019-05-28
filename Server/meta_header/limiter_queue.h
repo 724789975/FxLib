@@ -160,6 +160,7 @@ public:
 			if (pCB)
 			{
 				m_mmapEvents.erase(m_mmapEvents.begin());
+				pCB->SetPP(NULL);
 				pCB->Tick(qwTick);
 			}
 		}
@@ -209,6 +210,7 @@ public:
 			if (pCB)
 			{
 				m_mmapEvents.erase(m_mmapEvents.begin());
+				pCB->SetPP(NULL);
 				pCB->Tick(qwTick);
 			}
 		}

@@ -57,6 +57,8 @@ public:
 
 		m_dwDayTimeStart = (unsigned int)(t - (t - m_dwTimeZone * 3600) % 86400);
 
+		strftime(m_strTime, 64, "%Y-%m-%d %H:%M:%S", &tmLocal);
+
 		//设置随机数种子
 		srand((unsigned int)m_qwSecond);
 		//srand(0);
@@ -164,7 +166,7 @@ private:
 		m_qwDeltaTime = s_qwSecond - m_qwSecond;
 		if (m_qwDeltaTime >= 0.1f)
 		{
-			LogExe(LogLv_Critical, "FPS : %d", (int)(1 / m_qwDeltaTime));
+			LogExe(LogLv_Critical, "FPS : %f", 1 / m_qwDeltaTime);
 		}
 
 		Proc((int)(1 / m_qwDeltaTime), s_qwSecond);

@@ -2,6 +2,8 @@
 #ifndef __META_METABASE_H__
 #define __META_METABASE_H__
 
+#include <cstdint>
+
 namespace Meta {
 	struct Empty {
 		typedef Empty Type;
