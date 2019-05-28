@@ -90,7 +90,7 @@ namespace Meta {
 	template <typename T, bool bHasFromString>
 	struct IsRefTypeStruct {
 		enum {
-			Result = behaviac::Meta::TIsRefType<T>::Result
+			Result = Meta::TIsRefType<T>::Result
 		};
 	};
 

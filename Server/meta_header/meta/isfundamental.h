@@ -14,13 +14,13 @@
 #ifndef __META_ISFUNDAMENTAL_H__
 #define __META_ISFUNDAMENTAL_H__
 
-    namespace Meta {
-        template< typename Type >
-        struct IsFundamental {
-            enum {
-                Result = 0
-            };
-        };
+namespace Meta {
+	template< typename Type >
+	struct IsFundamental {
+		enum {
+			Result = 0
+		};
+	};
 
 #define IS_FUNDAMENTAL( Type )     \
     template<>                          \
@@ -32,33 +32,33 @@
         };                              \
     };
 
-		IS_FUNDAMENTAL(uint8_t)
-		IS_FUNDAMENTAL(uint16_t)
-		IS_FUNDAMENTAL(uint32_t)
+	IS_FUNDAMENTAL(uint8_t);
+	IS_FUNDAMENTAL(uint16_t);
+	IS_FUNDAMENTAL(uint32_t);
 
-		IS_FUNDAMENTAL(int8_t)
-		IS_FUNDAMENTAL(int16_t)
+	IS_FUNDAMENTAL(int8_t);
+	IS_FUNDAMENTAL(int16_t);
 
-		IS_FUNDAMENTAL(signed long)
-		IS_FUNDAMENTAL(unsigned long)
+	IS_FUNDAMENTAL(signed long);
+	IS_FUNDAMENTAL(unsigned long);
 
-		IS_FUNDAMENTAL(int)
+	IS_FUNDAMENTAL(int);
 
-		IS_FUNDAMENTAL(char)
-		IS_FUNDAMENTAL(bool)
+	IS_FUNDAMENTAL(char);
+	IS_FUNDAMENTAL(bool);
 
 #if !CCDEFINE_64BITS
-		IS_FUNDAMENTAL(int64_t)
-		IS_FUNDAMENTAL(uint64_t)
+	IS_FUNDAMENTAL(int64_t);
+	IS_FUNDAMENTAL(uint64_t);
 #else
-		IS_FUNDAMENTAL(long long)
-		IS_FUNDAMENTAL(unsigned long long)
+	IS_FUNDAMENTAL(long long);
+	IS_FUNDAMENTAL(unsigned long long);
 #endif//CDEFINE_64BITS
 
-		IS_FUNDAMENTAL(float)
-		IS_FUNDAMENTAL(double)
+	IS_FUNDAMENTAL(float);
+	IS_FUNDAMENTAL(double);
 
-		IS_FUNDAMENTAL(void)
-    }
+	IS_FUNDAMENTAL(void);
+}
 
 #endif	//__META_ISFUNDAMENTAL_H__
