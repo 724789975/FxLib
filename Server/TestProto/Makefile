@@ -26,8 +26,8 @@ ARFLAGS			= -rc
 #==========================================================
 #  Commands
 CODE_DIR = ./ ../common
-INCLUDE_DIR =./ ../gflags ../meta_header/ ../protobuf-3.5.1 ../lua ../tolua
-LIB_FILE = -L../Debug -Lcrypto -lpthread -lLuaLib -lNet -lDatabase -lgflags -lprotobuf
+INCLUDE_DIR =./ ../gflags ../meta_header/ ../protobuf-3.5.1 ../property
+LIB_FILE = -L../Debug -Lcrypto -lpthread -lDatabase -lgflags -lprotobuf
 OUTPUT_DIR =../Debug
 OUTPUT = TestProto
 #==========================================================
