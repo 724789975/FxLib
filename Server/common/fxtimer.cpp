@@ -125,7 +125,7 @@ public:
 	}
 
 	// 添加事件 (每多少秒执行, 事件指针) 被60整除
-	virtual bool AddSecontTimer(unsigned int dwSecond, CEventBase* pEvent)
+	virtual bool AddSecondTimer(unsigned int dwSecond, CEventBase* pEvent)
 	{
 		return PushEvent(GetSecond() - (GetSecond() % dwSecond) + dwSecond, pEvent) != NULL;
 	}

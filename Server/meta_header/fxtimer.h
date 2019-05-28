@@ -43,7 +43,7 @@ public:
 	// 添加事件 (多长事件后执行, 事件指针)
 	virtual bool AddTimer(double dSecond, CEventBase* pEvent) = 0;
 	// 添加事件 (每多少秒执行, 事件指针) 被60整除
-	virtual bool AddSecontTimer(unsigned int dwSecond, CEventBase* pEvent) = 0;
+	virtual bool AddSecondTimer(unsigned int dwSecond, CEventBase* pEvent) = 0;
 	// 添加事件 (每多少分执行, 事件指针) 被60整除
 	virtual bool AddMinuteTimer(unsigned int dwMinute, CEventBase* pEvent) = 0;
 	// 添加事件 (每多少小时执行, 事件指针) 被24整除

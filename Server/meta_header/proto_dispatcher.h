@@ -3,7 +3,7 @@
 #include <functional>
 #include <map>
 #include <string>
-#include "nulltype.h"
+#include "meta/meta.h"
 #include "callback_dispatch.h"
 
 namespace google
@@ -29,7 +29,7 @@ namespace CallBackDispatcher
 		const ProtobufCallback& operator= (const ProtobufCallback& ref) {};
 	};
 
-	template <typename MsgType, typename OwnerType = NullType>
+	template <typename MsgType, typename OwnerType = Meta::Null>
 	class ProtoMessageCallback : public ProtobufCallback<OwnerType>
 	{
 	public:
@@ -47,12 +47,12 @@ namespace CallBackDispatcher
 	};
 
 	template <typename MsgType>
-	class ProtoMessageCallback<MsgType, NullType> : public ProtobufCallback<NullType>
+	class ProtoMessageCallback<MsgType, Meta::Null> : public ProtobufCallback<Meta::Null>
 	{
 	public:
 		typedef std::function<void(const MsgType&)>	Function;
 		ProtoMessageCallback(const Function& refCallBack) : m_fpCallBack(refCallBack) {}
-		virtual void Exec(NullType* pOwner, const google::protobuf::Message* pMsg) const
+		virtual void Exec(Meta::Null* pOwner, const google::protobuf::Message* pMsg) const
 		{
 			if (pMsg)
 			{
@@ -86,7 +86,7 @@ namespace CallBackDispatcher
 		std::string m_szName;
 	};
 
-	template <typename OwnerType = NullType>
+	template <typename OwnerType = Meta::Null>
 	class ProtoDispatcher : public ProtoDispatcherBase<OwnerType>
 	{
 	public:
@@ -100,14 +100,14 @@ namespace CallBackDispatcher
 	};
 
 	template <>
-	class ProtoDispatcher<NullType> : public ProtoDispatcherBase<NullType>
+	class ProtoDispatcher<Meta::Null> : public ProtoDispatcherBase<Meta::Null>
 	{
 	public:
-		ProtoDispatcher(const std::string szName) : ProtoDispatcherBase<NullType>(szName) {}
+		ProtoDispatcher(const std::string szName) : ProtoDispatcherBase<Meta::Null>(szName) {}
 		template <typename MsgType>
 		void FuncReg(const typename ProtoMessageCallback<MsgType>::Function& refFunc)
 		{
-			ProtoDispatcherBase<NullType>::m_mapMessageCallBack[MsgType::descriptor()] =
+			ProtoDispatcherBase<Meta::Null>::m_mapMessageCallBack[MsgType::descriptor()] =
 				new ProtoMessageCallback<MsgType>(refFunc);
 		}
 	};

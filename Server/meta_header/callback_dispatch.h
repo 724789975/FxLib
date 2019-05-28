@@ -2,12 +2,12 @@
 #define __CALLBACK_DISPATCH_H__
 
 #include <map>
-#include "nulltype.h"
+#include "meta/meta.h"
 
 namespace CallBackDispatcher
 {
-	template <typename R, typename K, class Owner, typename P1 = NullType, typename P2 = NullType, typename P3 = NullType,
-		typename P4 = NullType, typename P5 = NullType, typename P6 = NullType, typename P7 = NullType, typename P8 = NullType>
+	template <typename R, typename K, class Owner, typename P1 = Meta::Null, typename P2 = Meta::Null, typename P3 = Meta::Null,
+		typename P4 = Meta::Null, typename P5 = Meta::Null, typename P6 = Meta::Null, typename P7 = Meta::Null, typename P8 = Meta::Null>
 	class ClassCallBackDispatcher;
 	template <typename R, typename K, class Owner, typename P1, typename P2>
 	class ClassCallBackDispatcher<R, K, Owner, P1, P2>

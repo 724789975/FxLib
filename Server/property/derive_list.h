@@ -1,11 +1,7 @@
 #ifndef __DefiveList_H__
 #define __DefiveList_H__
 #include "args_num.h"
-
-#ifndef __NULL_TYPE_H__
-#define __NULL_TYPE_H__
-class NullType {};
-#endif	//!__NULL_TYPE_H__
+#include "meta/meta.h"
 
 namespace DL
 {
@@ -22,7 +18,7 @@ namespace DL
 	//};
 
 	template <>
-	struct Length<NullType>
+	struct Length<Meta::Null>
 	{
 		enum { Value = 0 };
 	};
@@ -34,7 +30,7 @@ namespace DL
 	};
 
 	//template <typename T>
-	//struct Length<DeriveList<T, NullType> >
+	//struct Length<DeriveList<T, Meta::Null> >
 	//{
 	//	enum { Value = 1 };
 	//};
@@ -75,7 +71,7 @@ namespace DL
 	DERIDELIST_JOIN(DERIDELIST_, GET_ARG_COUNT(__VA_ARGS__))(__VA_ARGS__)
 #endif // WIN32
 
-#define DERIDELIST_1(T1) DL::DeriveList<T1,NullType>
+#define DERIDELIST_1(T1) DL::DeriveList<T1,Meta::Null>
 #define DERIDELIST_2(T1,T2) DL::DeriveList<T1,DERIDELIST_1(T2)>
 #define DERIDELIST_3(T1,T2,T3) DL::DeriveList<T1,DERIDELIST_2(T2,T3)>
 #define DERIDELIST_4(T1,T2,T3,T4) DL::DeriveList<T1,DERIDELIST_3(T2,T3,T4)>

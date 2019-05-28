@@ -55,14 +55,14 @@ public:
 	bool F1(double fSecond)
 	{
 		LogExe(LogLv_Debug3, "%s", "");
-		GetTimeHandler()->AddSecontTimer(12, &CEventCaller<Test, 1>::GetEvent());
+		GetTimeHandler()->AddSecondTimer(12, &CEventCaller<Test, 1>::GetEvent());
 		return true;
 	}
 	bool F2(double fSecond)
 	{
 		static int dwT = 10;
 		LogExe(LogLv_Debug3, "%s", "");
-		GetTimeHandler()->AddSecontTimer(15, &CEventCaller<Test, 2>::GetEvent());
+		GetTimeHandler()->AddSecondTimer(15, &CEventCaller<Test, 2>::GetEvent());
 		--dwT;
 		if (dwT <= 0)
 		{
@@ -164,7 +164,7 @@ int main(int argc, char **argv)
 	ShareMemory::Map<int, int, 1024> oMap;
 	oMap.Alloc(123);
 
-	typedef DL::DeriveList< BBB, DL::DeriveList<AAA, NullType> > TTT;
+	typedef DL::DeriveList< BBB, DL::DeriveList<AAA, Meta::Null> > TTT;
 	int len = DL::Length<TTT>::Value;
 	TTT a;
 
@@ -173,8 +173,11 @@ int main(int argc, char **argv)
 
 	Table table;
 
-	table.SetTeamId(123, std::cout);
+	std::ostream& refOut = std::cout;
+	table.SetTeamId(123, refOut);
+	refOut << "\n";
 	table.SetName("asdf", std::cout);
+	refOut << "\n";
 	std::string sz1 = table.GetRedisSaveString();
 	std::string sz2 = table.GetRedisFetchString();
 

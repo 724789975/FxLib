@@ -21,7 +21,9 @@ public:
 	}
 
 	FixString()
-	{}
+	{
+		m_szString[0] = 0;
+	}
 	FixString(const char* szString)
 	{
 		memcpy(m_szString, szString, dwStringLen);
