@@ -150,7 +150,7 @@ bool CShareMem::Open()
 		return false;
 	}
 
-	m_pData = mmap(m_pData, m_qwSize, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED, fHandle, 0);
+	assert(m_pData == mmap(m_pData, m_qwSize, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED, fHandle, 0));
 #endif // WIN32
 	return true;
 }
@@ -210,7 +210,7 @@ bool CShareMem::Create()
 		shmctl(m_hShmId, IPC_RMID, NULL);
 		return false;
 	}
-	m_pData = mmap(m_pData, m_qwSize, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED, fHandle, 0);
+	assert(m_pData == mmap(m_pData, m_qwSize, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED, fHandle, 0));
 #endif // WIN32
 	return true;
 }
