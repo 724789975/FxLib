@@ -72,7 +72,7 @@ namespace DL
 #endif // WIN32
 
 #define DERIDELIST_1(T1) DL::DeriveList<T1,Meta::Null>
-#define DERIDELIST_2(T1, T2) DL::DeriveList<T1, DERIDELIST_1(T2)>
+#define DERIDELIST_2(T1,T2) DL::DeriveList<T1,DERIDELIST_1(T2)>
 #define DERIDELIST_3(T1,T2,T3) DL::DeriveList<T1,DERIDELIST_2(T2,T3)>
 #define DERIDELIST_4(T1,T2,T3,T4) DL::DeriveList<T1,DERIDELIST_3(T2,T3,T4)>
 #define DERIDELIST_5(T1,T2,T3,T4,T5) DL::DeriveList<T1,DERIDELIST_4(T2,T3,T4,T5)>
