@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <string>
 #include <stdlib.h>
+#include "defines.h"
 
 #ifdef WIN32
 #include <Windows.h>
@@ -148,7 +149,7 @@ FILE* GetLogFile()
 	static char sstrPath[512] = { 0 };
 	static char strLogPath[512] = { 0 };
 	unsigned int dwTime = GetTimeHandler()->GetSecond() - GetTimeHandler()->GetSecond() % 3600;
-	sprintf(strLogPath, "./%s_%d_%d_exe_log.txt", GetExeName(), dwTime, GetPid());
+	string_snprintf(strLogPath, 512 - 1, "./%s_%d_%d_exe_log.txt", GetExeName(), dwTime, GetPid());
 
 	//if (strcmp(strLogPath, sstrPath) != 0)
 	//{
@@ -167,7 +168,7 @@ FILE* GetLogFile()
 			fclose(pFile);
 			pFile = NULL;
 		}
-		pFile = fopen(strLogPath, "a+");
+		fopen_s(&pFile, strLogPath, "a+");
 		setvbuf(pFile, (char *)NULL, _IOLBF, 1024);
 	}
 	return pFile;
@@ -187,15 +188,15 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...)
 	{
 		return false;
 	}
-	sprintf(strBuffer + nCheck, "%s", "\n");
+	string_sprintf(strBuffer + nCheck, 2, "%s", "\n");
 	return true;
 }
 
 #define TRACE_SIZE 100
-void PrintTrace(char* strTrace)
+void PrintTrace(char* strTrace, int dwLen)
 {
 	int nLen = 0;
-	nLen += sprintf(strTrace + nLen, "%s\n", " [Trace] ___________begin___________");
+	nLen += string_sprintf(strTrace + nLen, dwLen - 1, "%s\n", " [Trace] ___________begin___________");
 #ifdef WIN32
 	unsigned int   i;
 	void         * stack[TRACE_SIZE];
@@ -218,7 +219,7 @@ void PrintTrace(char* strTrace)
 		{
 			SymFromAddr(process, (DWORD64)(stack[i]), 0, symbol);
 
-			nLen += sprintf(strTrace + nLen, "%i: %s - 0x%0X\n", frames - i - 1, symbol->Name, (unsigned int)(symbol->Address));
+			nLen += string_sprintf(strTrace + nLen, dwLen - nLen - 1, "%i: %s - 0x%0X\n", frames - i - 1, symbol->Name, (unsigned int)(symbol->Address));
 		}
 		free(symbol);
 	}
@@ -229,12 +230,12 @@ void PrintTrace(char* strTrace)
 	char **strings = backtrace_symbols(bt, sz);
 	for(int i = 1; i < sz; ++i)
 	{
-		nLen += sprintf(strTrace + nLen, "%s\n", strings[i]);
+		nLen += string_sprintf(strTrace + nLen, dwLen - nLen - 1, "%s\n", strings[i]);
 	}
 	free(strings);
 	strings = NULL;
 #endif // WIN32
-	nLen += sprintf(strTrace + nLen, "%s\n", " [Trace] ___________end___________");
+	nLen += string_sprintf(strTrace + nLen, dwLen - nLen - 1, "%s\n", " [Trace] ___________end___________");
 }
 
 void ListDir(const char* pDirName, ListDirAndLoadFile* pListDirAndLoadFile)
@@ -245,9 +246,9 @@ void ListDir(const char* pDirName, ListDirAndLoadFile* pListDirAndLoadFile)
 	char strFileName[MAX_PATH];
 
 	WIN32_FIND_DATA FindFileData;
-	strcpy(szFind, pDirName);
+	string_cpy_s(szFind, MAX_PATH, pDirName);
 
-	strcat(szFind, "*.*");
+	string_cat_s(szFind, MAX_PATH - 1, "*.*");
 	HANDLE hFind = ::FindFirstFile(szFind, &FindFileData);
 
 	if (INVALID_HANDLE_VALUE == hFind) return;
@@ -257,18 +258,18 @@ void ListDir(const char* pDirName, ListDirAndLoadFile* pListDirAndLoadFile)
 		{
 			if (FindFileData.cFileName[0] != '.')
 			{
-				strcpy(szFile, pDirName);
+				string_cpy_s(szFile, MAX_PATH, pDirName);
 				//strcat(szFile,"//");  
-				strcat(szFile, FindFileData.cFileName);
-				strcat(szFile, "//");
+				string_cat_s(szFile, MAX_PATH, FindFileData.cFileName);
+				string_cat_s(szFile, MAX_PATH, "//");
 				ListDir(szFile, pListDirAndLoadFile);
 			}
 		}
 		else
 		{
 
-			strcpy(strFileName, pDirName);
-			strcat(strFileName, FindFileData.cFileName);
+			string_cpy_s(strFileName, MAX_PATH, pDirName);
+			string_cat_s(strFileName, MAX_PATH, FindFileData.cFileName);
 			pListDirAndLoadFile->LoadFile(strFileName);
 		}
 
@@ -377,7 +378,7 @@ char* GetExePath()
 #else
 		char strSysfile[256] =
 		{ 0 };
-		sprintf(strSysfile, "/proc/%d/exe", getpid());
+		string_sprintf(strSysfile, 256 -1, "/proc/%d/exe", getpid());
 
 		int nRet = readlink(strSysfile, strWorkPath, 256);
 		if ((nRet > 0) & (nRet < 256))
@@ -430,7 +431,7 @@ char* GetExeName()
 #else
 		char strSysfile[256] =
 		{ 0 };
-		sprintf(strSysfile, "/proc/%d/exe", getpid());
+		string_sprintf(strSysfile, 256 - 1, "/proc/%d/exe", getpid());
 
 		int nRet = readlink(strSysfile, strExePath, 256);
 		if ((nRet > 0) & (nRet < 256))

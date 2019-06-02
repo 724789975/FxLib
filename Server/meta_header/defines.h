@@ -20,20 +20,20 @@
 //#define _CRT_SECURE_NO_WARNINGS
 //#endif
 
-#define CDEFINE_MSVC		1
+#define CCDEFINE_MSVC		1
 #define CDEFINE_BIGENDIAN			1
 
 #if _MSC_VER >= 1900
-#define CDEFINE_MSVC2015 1
+#define CCDEFINE_MSVC2015 1
 #define CDEFINE_NAME "vs2015"
 #elif _MSC_VER >= 1800
-#define CDEFINE_MSVC2013 1
+#define CCDEFINE_MSVC2013 1
 #define CDEFINE_NAME "vs2013"
 #elif _MSC_VER >= 1600
-#define CDEFINE_MSVC2010 1
+#define CCDEFINE_MSVC2010 1
 #define CDEFINE_NAME "vs2010"
 #elif _MSC_VER >= 1500
-#define CDEFINE_MSVC2008 1
+#define CCDEFINE_MSVC2008 1
 #define CDEFINE_NAME "vs2008"
 #define nullptr 0
 #elif _MSC_VER >= 1400
@@ -41,7 +41,7 @@
 #define CDEFINE_NAME "vs2005"
 #define nullptr 0
 #elif _MSC_VER >= 1310
-#define CDEFINE_MSVC2003 1
+#define CCDEFINE_MSVC2003 1
 #define CDEFINE_NAME "vs2003"
 #define nullptr 0
 #else
@@ -231,26 +231,35 @@
 #define string_cmp(d, s) strcmp(d, s)
 
 #if CCDEFINE_MSVC
+#define string_cpy_s(d, n, s) strcpy_s(d, n, s)
+#define string_cat_s(d, n, s) strcat_s(d, n, s)
 #define string_icmp _stricmp
 #define string_nicmp _strnicmp
-#define string_snprintf _snprintf
+#define string_snprintf _snprintf_s
 #define string_vnprintf vsnprintf
 #define string_vnwprintf _vsnwprintf_s
-#define string_sprintf(s, fmt, ...) ASSERT(ARRAY_LENGTH(s) > 0); _snprintf(s, ARRAY_LENGTH(s), fmt, __VA_ARGS__); s[ARRAY_LENGTH(s) - 1] = '\0';
+#define string_sprintf sprintf_s
+//#define string_sprintf(s, fmt, ...) ASSERT(ARRAY_LENGTH(s) > 0); _snprintf(s, ARRAY_LENGTH(s), fmt, __VA_ARGS__); s[ARRAY_LENGTH(s) - 1] = '\0';
 #elif CCDEFINE_APPLE || CCDEFINE_ANDROID || CCDEFINE_GCC_LINUX || CCDEFINE_GCC_CYGWIN
+#define string_cpy_s(d, n, s) strcpy_s(d, s)
+#define string_cat_s(d, n, s) strcat(d, s)
 #define string_icmp strcasecmp
 #define string_nicmp strncasecmp
 #define string_snprintf snprintf
 #define string_vnprintf vsnprintf
 #define string_vnwprintf vswprintf
-#define string_sprintf(s, fmt, ...) ASSERT(ARRAY_LENGTH(s) > 0); snprintf(s, ARRAY_LENGTH(s), fmt, __VA_ARGS__); s[ARRAY_LENGTH(s) - 1] = '\0'
+#define string_sprintf snprintf
+//#define string_sprintf(s, fmt, ...) ASSERT(ARRAY_LENGTH(s) > 0); snprintf(s, ARRAY_LENGTH(s), fmt, __VA_ARGS__); s[ARRAY_LENGTH(s) - 1] = '\0'
 #else
+#define string_cpy_s(d, n, s) strcpy_s(d, s)
+#define string_cat_s(d, n, s) strcat(d, s)
 #define string_icmp stricmp
 #define string_nicmp strnicmp
 #define string_snprintf snprintf
 #define string_vnprintf vsnprintf
 #define string_vnwprintf vswprintf
-#define string_sprintf(s, fmt, ...) ASSERT(ARRAY_LENGTH(s) > 0); snprintf(s, ARRAY_LENGTH(s), fmt, __VA_ARGS__); s[ARRAY_LENGTH(s) - 1] = '\0'
+#define string_sprintf snprintf
+//#define string_sprintf(s, fmt, ...) ASSERT(ARRAY_LENGTH(s) > 0); snprintf(s, ARRAY_LENGTH(s), fmt, __VA_ARGS__); s[ARRAY_LENGTH(s) - 1] = '\0'
 #endif//CCDEFINE_MSVC
 
 #define HW_MEM_ALIGN								16

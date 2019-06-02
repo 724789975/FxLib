@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <string>
 #include <string.h>
+#include "defines.h"
 
 #ifdef WIN32
 #include <io.h>
@@ -185,12 +186,12 @@ void LogThread::ReadLog(unsigned int dwLogType, char* strLog)
 	if (dwLogType & LT_Screen)
 	{
 		char* pStr = (char*)(m_strScreenLog[m_dwCurrentIndex]) + dwScreenLogIndex;
-		dwScreenLogIndex += sprintf(pStr, "%s", strLog);
+		dwScreenLogIndex += string_sprintf(pStr, 0, "%s", strLog);
 	}
 	if (dwLogType & LT_File)
 	{
 		char* pStr = (char*)(m_strFileLog[m_dwCurrentIndex]) + dwFileLogIndex;
-		dwFileLogIndex += sprintf(pStr, "%s", strLog);
+		dwFileLogIndex += string_sprintf(pStr, 0, "%s", strLog);
 	}
 	m_pLock->UnLock();
 }
@@ -217,9 +218,9 @@ FILE* LogThread::GetLogFile()
 		return pFile;
 	}
 #ifdef WIN32
-	sprintf(strLogPath, "%s%s%s%s", GetExePath(), "\\", GetExeName(), "_log.txt");
+	string_sprintf(strLogPath, 0, "%s%s%s%s", GetExePath(), "\\", GetExeName(), "_log.txt");
 #else
-	sprintf(strLogPath, "%s%s%s%s", GetExePath(), "/", GetExeName(), "_log.txt");
+	string_sprintf(strLogPath, 0, "%s%s%s%s", GetExePath(), "/", GetExeName(), "_log.txt");
 #endif // WIN32
 
 	if (strcmp(strLogPath, sstrPath) != 0)
@@ -229,7 +230,7 @@ FILE* LogThread::GetLogFile()
 			fclose(pFile);
 			pFile = NULL;
 		}
-		sprintf(sstrPath, "%s", strLogPath);
+		string_sprintf(sstrPath, 0, "%s", strLogPath);
 		pFile = fopen(sstrPath, "a+");
 		if (pFile)
 		{
