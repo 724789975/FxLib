@@ -288,7 +288,7 @@ inline void String2Value<unsigned int>(const char* szData, unsigned int& refValu
 template<>
 inline void String2Value<float>(const char* szData, float& refValue)
 {
-	refValue = atof(szData);
+	refValue = (float)atof(szData);
 }
 
 template<>
