@@ -21,7 +21,7 @@ public:
 	void DeleteShareMem();
 
 	// bCreated 是否创建了新的共享内存
-	bool Init(bool& bCreated);
+	bool Init(bool& bCreated, void* pAddr = NULL);
 
 	template<typename T>
 	T* GetMemory()
@@ -30,8 +30,8 @@ public:
 	}
 private:
 	bool IsExist();
-	bool Open();
-	bool Create();
+	bool Open(void* pAddr);
+	bool Create(void* pAddr);
 #ifdef WIN32
 	bool ResizeFile(HANDLE h_File);
 #else

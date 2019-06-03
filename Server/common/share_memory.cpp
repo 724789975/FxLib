@@ -31,13 +31,13 @@ CShareMem::~CShareMem()
 {
 }
 
-bool CShareMem::Init(bool& bCreated)
+bool CShareMem::Init(bool& bCreated, void* pAddr /*= NULL*/)
 {
 	bCreated = false;
-	if (!Open())
+	if (!Open(pAddr))
 	{
 		bCreated = true;
-		return Create();
+		return Create(pAddr);
 	}
 	return true;
 }
@@ -93,7 +93,7 @@ bool CShareMem::IsExist()
 	return false;
 }
 
-bool CShareMem::Open()
+bool CShareMem::Open(void* pAddr)
 {
 	assert(m_pData == NULL);
 #ifdef WIN32
@@ -120,7 +120,7 @@ bool CShareMem::Open()
 	//	return false;
 	//}
 
-	m_pData = MapViewOfFile(m_hShmId, FILE_MAP_READ | FILE_SHARE_WRITE, 0, 0, 0);
+	m_pData = MapViewOfFileEx(m_hShmId, FILE_MAP_READ | FILE_SHARE_WRITE, 0, 0, 0, pAddr);
 	if (m_pData == NULL)
 	{
 		CloseHandle(hFile);
@@ -144,7 +144,7 @@ bool CShareMem::Open()
 		return false;
 	}
 
-	m_pData = shmat(m_hShmId, NULL, 0);
+	m_pData = shmat(m_hShmId, pAddr, 0);
 	if (m_pData == (void*)-1)
 	{
 		return false;
@@ -155,7 +155,7 @@ bool CShareMem::Open()
 	return true;
 }
 
-bool CShareMem::Create()
+bool CShareMem::Create(void* pAddr)
 {
 	assert(m_pData == NULL);
 #ifdef WIN32
@@ -176,7 +176,7 @@ bool CShareMem::Create()
 		return false;
 	}
 
-	m_pData = MapViewOfFile(m_hShmId, FILE_MAP_READ | FILE_SHARE_WRITE, 0, 0, 0);
+	m_pData = MapViewOfFileEx(m_hShmId, FILE_MAP_READ | FILE_SHARE_WRITE, 0, 0, 0, pAddr);
 	if (m_pData == NULL)
 	{
 		CloseHandle(hFile);
@@ -204,7 +204,7 @@ bool CShareMem::Create()
 		return false;
 	}
 
-	m_pData = shmat(m_hShmId, NULL, 0);
+	m_pData = shmat(m_hShmId, pAddr, 0);
 	if (m_pData == (void*)-1)
 	{
 		shmctl(m_hShmId, IPC_RMID, NULL);

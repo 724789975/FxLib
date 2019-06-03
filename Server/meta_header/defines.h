@@ -239,6 +239,7 @@
 #define string_vnprintf vsnprintf
 #define string_vnwprintf _vsnwprintf_s
 #define string_sprintf sprintf_s
+#define file_open(h, p, m) fopen_s(h, p, m)
 //#define string_sprintf(s, fmt, ...) ASSERT(ARRAY_LENGTH(s) > 0); _snprintf(s, ARRAY_LENGTH(s), fmt, __VA_ARGS__); s[ARRAY_LENGTH(s) - 1] = '\0';
 #elif CCDEFINE_APPLE || CCDEFINE_ANDROID || CCDEFINE_GCC_LINUX || CCDEFINE_GCC_CYGWIN
 #define string_cpy_s(d, n, s) strcpy_s(d, s)
@@ -249,6 +250,7 @@
 #define string_vnprintf vsnprintf
 #define string_vnwprintf vswprintf
 #define string_sprintf snprintf
+#define file_open(h, p, m) h = fopen(p, m)
 //#define string_sprintf(s, fmt, ...) ASSERT(ARRAY_LENGTH(s) > 0); snprintf(s, ARRAY_LENGTH(s), fmt, __VA_ARGS__); s[ARRAY_LENGTH(s) - 1] = '\0'
 #else
 #define string_cpy_s(d, n, s) strcpy_s(d, s)
@@ -259,6 +261,7 @@
 #define string_vnprintf vsnprintf
 #define string_vnwprintf vswprintf
 #define string_sprintf snprintf
+#define file_open(h, p, m) h = fopen(p, m)
 //#define string_sprintf(s, fmt, ...) ASSERT(ARRAY_LENGTH(s) > 0); snprintf(s, ARRAY_LENGTH(s), fmt, __VA_ARGS__); s[ARRAY_LENGTH(s) - 1] = '\0'
 #endif//CCDEFINE_MSVC
 

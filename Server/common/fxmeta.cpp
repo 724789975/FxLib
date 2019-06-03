@@ -168,7 +168,7 @@ FILE* GetLogFile()
 			fclose(pFile);
 			pFile = NULL;
 		}
-		fopen_s(&pFile, strLogPath, "a+");
+		file_open(&pFile, strLogPath, "a+");
 		setvbuf(pFile, (char *)NULL, _IOLBF, 1024);
 	}
 	return pFile;
