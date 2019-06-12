@@ -1,5 +1,5 @@
-﻿#ifndef __THRDQUEUE_H_NICK_2009_1203__
-#define __THRDQUEUE_H_NICK_2009_1203__
+﻿#ifndef __THRDQUEUE_H__
+#define __THRDQUEUE_H__
 
 #include "fxmeta.h"
 #include <stdlib.h>
@@ -103,5 +103,5 @@ private:
 	FxCriticalLock    m_poLock;
 };
 
-#endif  // __THRDQUEUE_H_NICK_2009_1203__
+#endif  // __THRDQUEUE_H__
 

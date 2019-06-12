@@ -1,5 +1,5 @@
-﻿#ifndef __CONNECTIONMGR_H_NICK_2009_1203__
-#define __CONNECTIONMGR_H_NICK_2009_1203__
+﻿#ifndef __CONNECTIONMGR_H__
+#define __CONNECTIONMGR_H__
 
 #include <list>
 #include "connection.h"
@@ -27,5 +27,5 @@ protected:
     TDynamicPoolEx<FxConnection> m_oConnPool;
 };
 
-#endif  // __CONNECTIONMGR_H_NICK_2009_1203__
+#endif  // __CONNECTIONMGR_H__
 
