@@ -15,7 +15,7 @@
 
 LogThread::LogThread()
 {
-	m_pLock = FxCreateThreadLock();
+	//m_pLock = FxCreateThreadLock();
 
 	m_dwInIndex = 0;
 	m_dwOutIndex = 0;

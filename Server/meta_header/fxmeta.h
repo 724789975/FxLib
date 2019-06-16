@@ -10,6 +10,11 @@
 #include "redef_assert.h"
 #include "defines.h"
 
+
+#include "utility.h"
+
+using namespace Utility;
+
 #ifdef WIN32
 #include <io.h>
 #else
@@ -80,37 +85,6 @@ static const char* LogLevelString[LogLv_Count] =
 		"LogLv_Debug3   ",
 };
 
-int GetPid();
-FILE* GetLogFile();
-
-void PrintTrace(char* strTrace, int dwLen);
-
-bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
-
-#define LogFun(eLogType, eLevel, strFmt, ...)\
-{\
-	{\
-		char strLog[2048] = {0};\
-		if(eLevel < LogLv_Count)\
-		{\
-			int nLenStr = 0;\
-			nLenStr += sprintf(strLog + nLenStr, "%s.%d\t", GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq());\
-			nLenStr += sprintf(strLog + nLenStr, "%s", LogLevelString[eLevel]);\
-			nLenStr += sprintf(strLog + nLenStr, "[%s,%d,%s] ", __FILE__, __LINE__, __FUNCTION__);\
-			nLenStr += sprintf(strLog + nLenStr, strFmt, ##__VA_ARGS__);\
-			nLenStr += sprintf(strLog + nLenStr, "%s", "\n");\
-			if(eLevel == LogLv_Error)\
-			{\
-				PrintTrace(strLog + nLenStr, 2048 - nLenStr);\
-			}\
-			LogThread::Instance()->ReadLog(eLogType, strLog);\
-		}\
-		else\
-		{\
-			printf("error log fun !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");\
-		}\
-	}\
-}
 
 // can be used only in main thread
 #define LogExe(eLevel, strFmt, ...)\
@@ -148,20 +122,9 @@ bool Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 	}\
 }
 
-inline const char* GetSeparator()
-{
-#ifdef WIN32
-	return "\\";
-#else
-	return "/";
-#endif // WIN32
-}
 
-#ifdef WIN32
-#define Access _access
-#else
-#define Access access
-#endif
+
+
 
 //#define ThreadLog(eLevel, pFile, dwThreadId, strFmt, ...)
 #define ThreadLog(eLevel, pFile, strFmt, ...)\
@@ -236,13 +199,5 @@ private:
 
 #define FX_INFINITE			0xffffffff
 
-IFxLock* FxCreateThreadLock();
-
-IFxLock* FxCreateThreadFakeLock();
-
-void FxSleep(UINT32 dwMilliseconds);
-
-char* GetExePath();
-char* GetExeName();
 
 #endif

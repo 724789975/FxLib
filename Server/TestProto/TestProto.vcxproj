@@ -156,6 +156,7 @@
     <ClCompile Include="..\common\segvcatch.cpp" />
     <ClCompile Include="..\common\share_memory.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
+    <ClCompile Include="..\common\utility.cpp" />
     <ClCompile Include="main.cpp">
       <PreprocessToFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</PreprocessToFile>
     </ClCompile>

@@ -1,5 +1,5 @@
 #ifndef __REDEF_ASSERT_H__
-#define  __REDEF_ASSERT_H__
+#define __REDEF_ASSERT_H__
 
 #include <assert.h>
 
