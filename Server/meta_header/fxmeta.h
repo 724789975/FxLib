@@ -44,22 +44,6 @@ public:
 
 void ListDir(const char* pDirName, ListDirAndLoadFile* pListDirAndLoadFile);
 
-class IFxMeta
-{
-public:
-	virtual ~IFxMeta(void)
-	{
-	}
-
-	virtual void AddRef(void) = 0;
-
-	virtual UINT32 QueryRef(void) = 0;
-
-	virtual void Release(void) = 0;
-
-	virtual const char * GetModuleName(void) = 0;
-};
-
 enum LOGLEVEL
 {
 	LogLv_Error,
