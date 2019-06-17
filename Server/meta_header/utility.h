@@ -27,6 +27,16 @@ namespace Utility
 	void					PrintTrace(char* strTrace, int dwLen);
 	bool					Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 	void					FxSleep(unsigned int dwMilliseconds);
+
+	class ListDirAndLoadFile
+	{
+	public:
+		virtual ~ListDirAndLoadFile()
+		{
+		}
+		virtual bool operator()(const char* pFileName) = 0;
+	};
+	void ListDir(const char* pDirName, ListDirAndLoadFile& refLoadFile);
 }
 
 //#define LogOutHeader(eLevel, os1)\

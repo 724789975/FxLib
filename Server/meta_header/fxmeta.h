@@ -33,17 +33,6 @@ typedef unsigned long long	UINT64;
 #define NULL 0
 #endif
 
-class ListDirAndLoadFile
-{
-public:
-	virtual ~ListDirAndLoadFile()
-	{
-	}
-	virtual bool LoadFile(const char* pFileName) = 0;
-};
-
-void ListDir(const char* pDirName, ListDirAndLoadFile* pListDirAndLoadFile);
-
 enum LOGLEVEL
 {
 	LogLv_Error,
