@@ -16,6 +16,12 @@
     <ClCompile Include="..\common\utility.cpp">
       <Filter>common</Filter>
     </ClCompile>
+    <ClCompile Include="..\common\exception_dump.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\segvcatch.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SocketSession.h" />

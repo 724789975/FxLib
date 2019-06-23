@@ -5,6 +5,7 @@
 #include "ifnet.h"
 
 #include <map>
+#include <string>
 
 class CHttpSession : public FxSession
 {
