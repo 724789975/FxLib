@@ -122,10 +122,12 @@ FILE*& FxIoThread::GetFile()
 			m_pFile = NULL;
 		}
 		m_pFile = fopen(m_szLogPath, "a+");
+		setvbuf(m_pFile, (char *)NULL, _IOLBF, 1024);
 	}
 	if (m_pFile == NULL)
 	{
 		m_pFile = fopen(m_szLogPath, "a+");
+		setvbuf(m_pFile, (char *)NULL, _IOLBF, 1024);
 	}
 	return m_pFile;
 }
