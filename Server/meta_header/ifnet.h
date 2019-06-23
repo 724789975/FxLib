@@ -701,8 +701,6 @@ namespace HttpHelp
 			ri->body = buf + 1;
 		}
 
-		return 0;
-
 		return request_length + init_skip;
 	}
 	static const char * mg_get_response_code_text(int response_code)
