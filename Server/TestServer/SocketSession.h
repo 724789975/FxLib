@@ -4,6 +4,8 @@
 
 #include "ifnet.h"
 
+#include "lock.h"
+
 #include <set>
 #include <list>
 #include <deque>
@@ -56,7 +58,7 @@ private:
 
 	std::deque<FxSession* > m_listSession;
 
-	IFxLock*			m_pLock;
+	FxCriticalLock			m_oLock;
 };
 
 class CWebSocketSessionFactory : public TSingleton<CWebSocketSessionFactory>, public IFxSessionFactory
@@ -77,7 +79,7 @@ private:
 
 	std::deque<FxSession*> m_listSession;
 
-	IFxLock*			m_pLock;
+	FxCriticalLock			m_oLock;
 };
 
 //static CSessionFactory oSessionFactory;

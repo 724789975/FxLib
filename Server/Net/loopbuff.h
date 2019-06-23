@@ -38,7 +38,7 @@ private:
 	 char*					m_pszBuff;			 // Buff
 	 bool					m_bLoop;
 	 bool					m_bUseLoop;
-	 IFxLock*				m_poLock;
+	 FxCriticalLock			m_oLock;
 };
 
 

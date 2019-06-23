@@ -114,7 +114,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Visual C++
 #if CCDEFINE_MSVC
-#define FORCEINLINE __inline
 #define FORCENOINLINE _declspec(noinline)
 
 #if _MSC_VER >= 1400

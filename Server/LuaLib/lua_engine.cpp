@@ -63,7 +63,7 @@ bool CLuaEngine::Reload(char* szScriptPath)
 	}
 	lua_settop(m_pBackState, 0);
 #endif // WIN32
-	ListDir(strScriptPath, this);
+	ListDir(strScriptPath, *this); 
 
 	lua_settop(m_pBackState, 0);
 

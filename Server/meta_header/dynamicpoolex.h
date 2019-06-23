@@ -4,6 +4,7 @@
 #include "fxmeta.h"
 #include <list>
 #include <deque>
+#include "lock.h"
 
 class FxFakeLock : public IFxLock
 {
@@ -79,8 +80,8 @@ public:
         
         if (!bSingleThread)
         {
-            m_pFreeLock   = FxCreateThreadLock();
-            m_pAllocLock  = FxCreateThreadLock();
+            m_pFreeLock   = new FxCriticalLock();
+            m_pAllocLock  = new FxCriticalLock();
         }
 		else
 		{

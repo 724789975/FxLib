@@ -107,7 +107,7 @@ void HttpCallBackTest(HttpRequestInfo& oHttpRequestInfo, CHttpSession& refHttpSe
 		"</body>\r\n"
 		"</html>\r\n";
 
-	sprintf(szBuf, g_szResponse, 404, HttpHelp::mg_get_response_code_text(404), GetTimeHandler()->GetTimeStr(), szContent.size(), szContent.c_str());
+	sprintf(szBuf, g_szResponse, 200, HttpHelp::mg_get_response_code_text(200), GetTimeHandler()->GetTimeStr(), szContent.size(), szContent.c_str());
 
 	if (!refHttpSession.Send(szBuf, strlen(szBuf)))
 	{

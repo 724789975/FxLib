@@ -160,7 +160,7 @@ static unsigned int dwScreenLogIndex = 0;
 static unsigned int dwFileLogIndex = 0;
 void LogThread::ReadLog(unsigned int dwLogType, char* strLog)
 {
-	m_pLock->Lock();
+	//FxLockImp(this->m_pLock);
 	bool bPrint = false;
 	if (dwScreenLogIndex + 2048 > LOGLENGTH)
 	{
@@ -193,7 +193,6 @@ void LogThread::ReadLog(unsigned int dwLogType, char* strLog)
 		char* pStr = (char*)(m_strFileLog[m_dwCurrentIndex]) + dwFileLogIndex;
 		dwFileLogIndex += string_sprintf(pStr, 0, "%s", strLog);
 	}
-	m_pLock->UnLock();
 }
 
 #ifdef WIN32

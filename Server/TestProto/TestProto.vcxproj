@@ -150,7 +150,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\common\exception_dump.cpp" />
-    <ClCompile Include="..\common\fxmeta.cpp" />
     <ClCompile Include="..\common\fxtimer.cpp" />
     <ClCompile Include="..\common\log_thread.cpp" />
     <ClCompile Include="..\common\segvcatch.cpp" />

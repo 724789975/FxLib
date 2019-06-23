@@ -15,7 +15,7 @@ enum LogType
 	LT_Screen = 1,
 	LT_File = 1 << 1,
 };
-class LogThread : public TSingleton<LogThread>, public IFxThread
+class LogThread : public IFxThread
 {
 public:
 	LogThread();

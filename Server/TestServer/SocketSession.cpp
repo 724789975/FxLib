@@ -125,7 +125,6 @@ void CSocketSession::Release(void)
 
 CSessionFactory::CSessionFactory()
 {
-	m_pLock = FxCreateThreadLock();
 	for(int i = 0; i < 512; ++i)
 	{
 		//CBinarySocketSession* pSession = new CBinarySocketSession;
@@ -137,7 +136,7 @@ CSessionFactory::CSessionFactory()
 
 FxSession*	CSessionFactory::CreateSession()
 {
-	m_pLock->Lock();
+	m_oLock.Lock();
 	FxSession* pSession = NULL;
 	if(m_listSession.size() > 0)
 	{
@@ -149,23 +148,22 @@ FxSession*	CSessionFactory::CreateSession()
 		m_setSessions.insert(pSession);
 	}
 	LogExe(LogLv_Debug, "left free session : %d", (int)m_listSession.size());
-	m_pLock->UnLock();
+	m_oLock.UnLock();
 	return pSession;
 }
 
 void CSessionFactory::Release(FxSession* pSession)
 {
-	m_pLock->Lock();
+	m_oLock.Lock();
 //	m_poolSessions.ReleaseObj(pSession);
 	m_listSession.push_back(pSession);
 	m_setSessions.erase(pSession);
 	LogExe(LogLv_Debug, "left free session : %d", (int)m_listSession.size());
-	m_pLock->UnLock();
+	m_oLock.UnLock();
 }
 
 CWebSocketSessionFactory::CWebSocketSessionFactory()
 {
-	m_pLock = FxCreateThreadLock();
 	for (int i = 0; i < 64; ++i)
 	{
 		CWebSocketSession* pSession = new CWebSocketSession;
@@ -175,7 +173,7 @@ CWebSocketSessionFactory::CWebSocketSessionFactory()
 
 FxSession * CWebSocketSessionFactory::CreateSession()
 {
-	m_pLock->Lock();
+	m_oLock.Lock();
 	FxSession* pSession = NULL;
 	if (m_listSession.size() > 0)
 	{
@@ -187,18 +185,18 @@ FxSession * CWebSocketSessionFactory::CreateSession()
 		m_setSessions.insert(pSession);
 	}
 	LogExe(LogLv_Debug, "left free session : %d", (int)m_listSession.size());
-	m_pLock->UnLock();
+	m_oLock.UnLock();
 	return pSession;
 }
 
 void CWebSocketSessionFactory::Release(FxSession * pSession)
 {
-	m_pLock->Lock();
+	m_oLock.Lock();
 	//	m_poolSessions.ReleaseObj(pSession);
 	m_listSession.push_back(pSession);
 	m_setSessions.erase(pSession);
 	LogExe(LogLv_Debug, "left free session : %d", (int)m_listSession.size());
-	m_pLock->UnLock();
+	m_oLock.UnLock();
 }
 
 BinaryDataHeader::BinaryDataHeader()
@@ -434,7 +432,7 @@ void CChatManagerSession::Release(void)
 
 void CChatManagerSession::OnClose()
 {
-	GetTimeHandler()->AddDelayTimer(2, this);
+	//GetTimeHandler()->AddDelayTimer(2, this);
 }
 
 bool CChatManagerSession::OnTimer(double fSecond)

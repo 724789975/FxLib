@@ -1,6 +1,7 @@
 ﻿#include "loopbuff.h"
 #include <malloc.h>
 #include <memory.h>
+#include "lock.h"
 
 FxLoopBuff::FxLoopBuff()
 {
@@ -12,7 +13,6 @@ FxLoopBuff::FxLoopBuff()
     m_pszBuff       = NULL;
     m_bLoop         = false;
     m_bUseLoop      = false;
-    m_poLock        = FxCreateThreadLock();
 }
 
 FxLoopBuff::~FxLoopBuff()
@@ -23,11 +23,6 @@ FxLoopBuff::~FxLoopBuff()
         m_pszBuff = NULL;
     }
 
-    if (NULL != m_poLock)
-    {
-        m_poLock->Release();
-        m_poLock = NULL;
-    }
     m_nTotalLen     = 0;
     m_nFreeLen      = 0;
     m_nInCursor     = 0;
@@ -74,10 +69,9 @@ int FxLoopBuff::GetFreeLen()
 
 int FxLoopBuff::GetUseLen()
 {
-    m_poLock->Lock();
+	FxLockImp oLock(&m_oLock);
     if (m_nFreeLen == m_nTotalLen)
     {
-        m_poLock->UnLock();
         return 0;
     }
 
@@ -92,18 +86,15 @@ int FxLoopBuff::GetUseLen()
         nRet = m_nInCursor - m_nUseCursor;
     }
 
-    m_poLock->UnLock();
-
     return nRet;
 }
 
 int FxLoopBuff::GetInCursorPtr(char*& pBuf)
 {
-    m_poLock->Lock();
+	FxLockImp oLock(&m_oLock);
 
     if (0 == m_nFreeLen)
     {
-        m_poLock->UnLock();
         pBuf = NULL;
         return 0;
     }
@@ -120,16 +111,14 @@ int FxLoopBuff::GetInCursorPtr(char*& pBuf)
         nRet = m_nTotalLen - m_nInCursor;
     }
 
-    m_poLock->UnLock();
     return nRet;
 }
 
 int FxLoopBuff::GetOutCursorPtr(char*& pBuf)
 {
-    m_poLock->Lock();
+	FxLockImp oLock(&m_oLock);
     if (m_nTotalLen == m_nFreeLen)
     {
-        m_poLock->UnLock();
         pBuf = NULL;
         return 0;
     }
@@ -146,16 +135,14 @@ int FxLoopBuff::GetOutCursorPtr(char*& pBuf)
         nRet = m_nInCursor - m_nOutCursor;
     }
 
-    m_poLock->UnLock();
     return nRet;
 }
 
 int FxLoopBuff::GetUsedCursorPtr(char*& pBuf)
 {
-    m_poLock->Lock();
+	FxLockImp oLock(&m_oLock);
     if (m_nTotalLen == m_nFreeLen)
     {
-        m_poLock->UnLock();
         pBuf = NULL;
         return 0;
     }
@@ -172,22 +159,19 @@ int FxLoopBuff::GetUsedCursorPtr(char*& pBuf)
         nRet = m_nInCursor - m_nUseCursor;
     }
 
-    m_poLock->UnLock();
     return nRet;
 }
 
 bool FxLoopBuff::PushBuff(const char* pInBuff, int nLen)
 {
-    m_poLock->Lock();
+	FxLockImp oLock(&m_oLock);
     if (0 >= nLen)
     {
-        m_poLock->UnLock();
         return false;
     }
 
     if (nLen > m_nFreeLen)
     {
-        m_poLock->UnLock();
         // 超出空闲字节长度
         return false;
     }
@@ -217,22 +201,19 @@ bool FxLoopBuff::PushBuff(const char* pInBuff, int nLen)
     }
 
     m_nFreeLen -= nLen;
-    m_poLock->UnLock();
     return true;
 }
 
 bool FxLoopBuff::PopBuff(char* pOutBuff, int nLen)
 {
-    m_poLock->Lock();
+	FxLockImp oLock(&m_oLock);
     if (0 >= nLen)
     {
-        m_poLock->UnLock();
         return false;
     }
 
     if (nLen + m_nFreeLen > m_nTotalLen)
     {
-        m_poLock->UnLock();
         // 超出buff中已用长度
         return false;
     }
@@ -260,22 +241,19 @@ bool FxLoopBuff::PopBuff(char* pOutBuff, int nLen)
     }
 
     m_nFreeLen += nLen;
-    m_poLock->UnLock();
     return true;
 }
 
 bool FxLoopBuff::DiscardBuff(int nLen)
 {
-    m_poLock->Lock();
+	FxLockImp oLock(&m_oLock);
     if (0 >= nLen)
     {
-        m_poLock->UnLock();
         return false;
     }
 
     if (nLen + m_nFreeLen > m_nTotalLen)
     {
-        m_poLock->UnLock();
         // 超出buff中已用长度
         return false;
     }
@@ -291,22 +269,19 @@ bool FxLoopBuff::DiscardBuff(int nLen)
     }
     
     m_nFreeLen += nLen;
-    m_poLock->UnLock();
     return true;
 }
 
 bool FxLoopBuff::CostBuff(int nLen)
 {
-    m_poLock->Lock();
+	FxLockImp oLock(&m_oLock);
     if (0 >= nLen)
     {
-        m_poLock->UnLock();
         return false;
     }
 
     if (nLen > m_nFreeLen)
     {
-        m_poLock->UnLock();
         // 超出空闲字节长度
         return false;
     }
@@ -323,22 +298,19 @@ bool FxLoopBuff::CostBuff(int nLen)
     }
 
     m_nFreeLen -= nLen;
-    m_poLock->UnLock();
     return true;
 }
 
 bool FxLoopBuff::CostUsedBuff(int nLen)
 {
-    m_poLock->Lock();
+	FxLockImp oLock(&m_oLock);
     if (0 >= nLen)
     {
-        m_poLock->UnLock();
         return false;
     }
 
     if (m_nFreeLen + nLen > m_nTotalLen)
     {
-        m_poLock->UnLock();
         // 超出buff中空闲长度
         return false;
     }
@@ -356,7 +328,6 @@ bool FxLoopBuff::CostUsedBuff(int nLen)
             nUseCursor = m_nUseCursor + nLen - m_nTotalLen;
             if (nUseCursor > m_nInCursor)
             {
-                m_poLock->UnLock();
                 return false;
             }
             m_nUseCursor = nUseCursor;
@@ -367,14 +338,12 @@ bool FxLoopBuff::CostUsedBuff(int nLen)
     {
         if (nLen + m_nUseCursor > m_nInCursor)
         {
-            m_poLock->UnLock();
             return false;
         }
 
         m_nUseCursor += nLen;
     }
 
-    m_poLock->UnLock();
     return true;
 }
 

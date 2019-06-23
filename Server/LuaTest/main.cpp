@@ -71,8 +71,8 @@ int main(int argc, char **argv)
 {
 	signal(SIGINT, EndFun);
 	signal(SIGTERM, EndFun);
-	LogThread::CreateInstance();
-	LogThread::Instance()->Init();
+	//LogThread::CreateInstance();
+	//LogThread::Instance()->Init();
 
 	int tolua_tarray_open(lua_State*);
 
@@ -151,6 +151,6 @@ int main(int argc, char **argv)
 		GetTimeHandler()->Run();
 		FxSleep(1000);
 	}
-	LogThread::Instance()->Stop();
+	//LogThread::Instance()->Stop();
 	return 0;
 }
