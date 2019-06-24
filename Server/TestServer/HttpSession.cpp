@@ -37,7 +37,11 @@ void CHttpSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
 
 	HttpRequestInfo oInfo = { 0 };
-	HttpHelp::parse_http_request(m_dataRecvBuf, dwLen, &oInfo);
+	if (0 >= HttpHelp::parse_http_request(m_dataRecvBuf, dwLen, &oInfo))
+	{
+		LogExe(LogLv_Warn, "parse_http_request error!!!");
+		return;
+	}
 
 	std::map<std::string, HttpCallBack>::iterator it = m_mapCallBacks.find(oInfo.request_uri);
 	if (it == m_mapCallBacks.end())
@@ -59,7 +63,7 @@ void CHttpSession::OnRecv(const char* pBuf, UINT32 dwLen)
 		return;
 	}
 	it->second(oInfo, *this);
-	Close();
+	//Close();
 }
 
 void CHttpSession::Release(void)
@@ -111,7 +115,7 @@ void HttpCallBackTest(HttpRequestInfo& oHttpRequestInfo, CHttpSession& refHttpSe
 
 	if (!refHttpSession.Send(szBuf, strlen(szBuf)))
 	{
-		refHttpSession.Close();
+		//refHttpSession.Close();
 	}
 }
 
