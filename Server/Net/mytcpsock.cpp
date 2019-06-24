@@ -3063,7 +3063,7 @@ void FxTCPConnectSock::__ProcRecv(unsigned int dwLen)
 {
 	if (GetConnection())
 	{
-		if (unsigned int(-1) == dwLen)
+		if ((unsigned int)(-1) == dwLen)
 		{
 #ifdef WIN32
 			PostRecvFree();
@@ -3192,7 +3192,7 @@ void FxWebSocketConnect::__ProcRecv(unsigned int dwLen)
 {
 	if (GetConnection())
 	{
-		if (unsigned int(-1) == dwLen)
+		if ((unsigned int)(-1) == dwLen)
 		{
 #ifdef WIN32
 			PostRecvFree();
