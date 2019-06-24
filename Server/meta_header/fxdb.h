@@ -72,12 +72,12 @@ struct SDBAccount{
     char                m_szLoginName[MAX_DBNAME_SIZE];       
     char                m_szLoginPwd[MAX_DBNAME_SIZE];        
 	char                m_szCharactSet[MAX_DBCHARACTSET_SIZE];  
-    UINT16              m_wConnPort;
+    unsigned short      m_wConnPort;
 };
 
 struct SDBConnInfo
 {    
-    UINT32              m_dwDBId;           
+    unsigned int              m_dwDBId;           
 	SDBAccount          m_stAccount; 
 };
 
@@ -86,19 +86,19 @@ class  IDataReader
 public:
     virtual   ~IDataReader(){}
 	
-	virtual UINT32      GetRecordCount(void) = 0;
+	virtual unsigned int		GetRecordCount(void) = 0;
     
-    virtual UINT32      GetFieldCount(void) = 0;
+    virtual unsigned int		GetFieldCount(void) = 0;
     
-    virtual bool        GetFirstRecord(void) = 0;
+    virtual bool				GetFirstRecord(void) = 0;
 
-    virtual bool        GetNextRecord(void) = 0;
+    virtual bool				GetNextRecord(void) = 0;
 	
-    virtual const char* GetFieldValue(UINT32 dwIndex) = 0;
+    virtual const char*			GetFieldValue(unsigned int dwIndex) = 0;
 	
-    virtual INT32       GetFieldLength(UINT32 dwIndex) = 0;
+    virtual int					GetFieldLength(unsigned int dwIndex) = 0;
 	
-    virtual void        Release(void)=0;
+    virtual void				Release(void)=0;
 };
 
 class IStmt
@@ -106,13 +106,13 @@ class IStmt
 public:
 	virtual ~IStmt () {}
 
-	virtual bool		Prepare(const char* pszSQL, UINT32 dwParamNum, UINT32 dwResultNum) = 0;
+	virtual bool		Prepare(const char* pszSQL, unsigned int dwParamNum, unsigned int dwResultNum) = 0;
 
-	virtual void		BindParam(unsigned int eFieldType, void* pBuf, UINT32 dwSize) = 0;
+	virtual void		BindParam(unsigned int eFieldType, void* pBuf, unsigned int dwSize) = 0;
 
 	virtual bool		BindParamComplete() = 0;
 
-	virtual void		BindResult(unsigned int eFieldType, void* pBuf, UINT32 dwBufSize, UINT32* pdwLength) = 0;
+	virtual void		BindResult(unsigned int eFieldType, void* pBuf, unsigned int dwBufSize, unsigned int* pdwLength) = 0;
 
 	virtual bool		BindResultComplete() = 0;
 
@@ -120,13 +120,13 @@ public:
 
 	virtual const char* GetErrorString() = 0;
 
-	virtual UINT32		AffectedRows() = 0;
+	virtual unsigned int		AffectedRows() = 0;
 
 	virtual bool		Restore() = 0;
 
 	virtual bool		Fetch() = 0;
 
-	virtual UINT32		NumOfRows() = 0;
+	virtual unsigned int		NumOfRows() = 0;
 
 	virtual void		Release() = 0;
 };
@@ -136,13 +136,13 @@ class IDBConnection
 public:	
     virtual   ~IDBConnection(){}
 
-    virtual UINT32      EscapeString(const char* pszSrc, INT32 nSrcLen, char* pszDest, INT32 nDestLen) = 0;
+    virtual unsigned int      EscapeString(const char* pszSrc, int nSrcLen, char* pszDest, int nDestLen) = 0;
     
-	virtual INT32       Query(const char* pszSQL) = 0;
+	virtual int       Query(const char* pszSQL) = 0;
 	
-    virtual INT32       Query(const char* pszSQL, IDataReader** ppReader) = 0;
+    virtual int       Query(const char* pszSQL, IDataReader** ppReader) = 0;
 	
-	virtual UINT32      GetLastError(void) = 0;
+	virtual unsigned int      GetLastError(void) = 0;
     
     virtual const char* GetLastErrorString(void) = 0;
 
@@ -154,7 +154,7 @@ class IQuery
 public:
     virtual   ~IQuery(){}
 
-    virtual INT32       GetDBId(void) = 0;
+    virtual int       GetDBId(void) = 0;
 	
 	virtual void        OnQuery(IDBConnection *poDBConnection) = 0;
 	
@@ -170,11 +170,11 @@ public:
 
 	virtual bool        Open(SDBConnInfo& DBInfo) = 0;
 	
-	virtual void        Close(UINT32 dwDBId) = 0;
+	virtual void        Close(unsigned int dwDBId) = 0;
     	
 	virtual bool        AddQuery(IQuery *poQuery) = 0;
 	
-	virtual bool        Run(UINT32 dwCount = -1) = 0;
+	virtual bool        Run(unsigned int dwCount = -1) = 0;
 };
 
 IDBModule *             FxDBGetModule();

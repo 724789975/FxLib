@@ -55,7 +55,7 @@ public:
     	
 	virtual bool        AddRequest(IUrlRequest *poRequest) = 0;
 	
-	virtual bool        Run(UINT32 dwCount = -1) = 0;
+	virtual bool        Run(unsigned int dwCount = -1) = 0;
 };
 
 IUrlRequestModule *             FxUrlRequestGetModule();
