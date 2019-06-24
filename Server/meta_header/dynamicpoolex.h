@@ -64,7 +64,7 @@ public:
     }
 
     // Max count表示Pool的最大值，如果传入0，则表示没有限制
-    bool Init(UINT32 dwInitCount, UINT32 dwGrowCount, bool bSingleThread = false, UINT32 dwMaxCount = 0)
+    bool Init(unsigned int dwInitCount, unsigned int dwGrowCount, bool bSingleThread = false, unsigned int dwMaxCount = 0)
     {
         if(dwMaxCount != 0)
         {
@@ -185,7 +185,7 @@ public:
     }
 
 protected:
-    bool _AllocT(UINT32 dwCount)
+    bool _AllocT(unsigned int dwCount)
     {
         if (0 == dwCount)
         {
@@ -207,7 +207,7 @@ protected:
 
 		// 该用malloc / free方式预分配内存
         // FxShellT* poShellT = (FxShellT*) malloc (sizeof(FxShellT) * dwCount);
-        UINT32 dwNewCount = dwCount;
+        unsigned int dwNewCount = dwCount;
         if(m_dwMaxCount != 0)
         {
             if(dwNewCount + m_dwNowAllCount >= m_dwMaxCount)
@@ -231,7 +231,7 @@ protected:
         //    m_nOffset = int((char*)&(poShellT->m_oT) - (char*)poShellT);
         //}
 
-        for(UINT32 i = 0; i < dwNewCount; ++i)
+        for(unsigned int i = 0; i < dwNewCount; ++i)
         {
 			// 引用计算置为0
             poShellT[i].m_byRef = 0;
@@ -257,7 +257,7 @@ private:
     public:
         FxShellT(){}
         ~FxShellT(){}
-        UINT8   m_byRef;
+        unsigned char   m_byRef;
         //T       m_oT;
     };
 
@@ -269,11 +269,11 @@ private:
 	std::deque<FxShellT*> m_ListAll;
     IFxLock* m_pAllocLock;
 
-    UINT32  m_dwInitCount;
-    UINT32  m_dwGrowCount;
-    UINT32  m_dwMaxCount;
+    unsigned int  m_dwInitCount;
+    unsigned int  m_dwGrowCount;
+    unsigned int  m_dwMaxCount;
 
-    UINT32  m_dwNowAllCount;
+    unsigned int  m_dwNowAllCount;
 	// 壳与对象的偏移量，由于linux下g++产生的结构字节对齐(包含模板template时)与vc不同，
 	// 所以干脆统一采用计算偏移量的方式，※渴望一种更直观安全的技巧
     //int     m_nOffset;
