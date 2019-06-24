@@ -19,35 +19,35 @@ public:
 	CTeam();
 	~CTeam();
 
-	UINT32 GetTeamNum() { return m_mapPlayers.size(); }			//一边有多少人
-	virtual UINT64* GetTeam() { return m_pPlayerSlots; }
-	virtual UINT64* GetRedTeam() { return m_pPlayerSlots; }
-	virtual UINT64* GetBlueTeam() { return m_pPlayerSlots + MAXCLIENTNUM / 2; }
+	unsigned int GetTeamNum() { return m_mapPlayers.size(); }			//一边有多少人
+	virtual unsigned long long* GetTeam() { return m_pPlayerSlots; }
+	virtual unsigned long long* GetRedTeam() { return m_pPlayerSlots; }
+	virtual unsigned long long* GetBlueTeam() { return m_pPlayerSlots + MAXCLIENTNUM / 2; }
 
 	bool InsertIntoTeam(const GameProto::RoleData& refRoleData);
-	bool KickPlayer(UINT64 qwPlayerId);
+	bool KickPlayer(unsigned long long qwPlayerId);
 
 	void NotifyPlayer();
 
-	UINT64 GetLeaderId() { return m_qwLeader; }
+	unsigned long long GetLeaderId() { return m_qwLeader; }
 	ETeamState GetState() { return m_eState; }
 	
-	void SetTeamId(UINT64 qwTeamId) { m_qwTeamId = qwTeamId; }
-	UINT32 GetTeamId(UINT32 dwTeamId) { return dwTeamId; }
+	void SetTeamId(unsigned long long qwTeamId) { m_qwTeamId = qwTeamId; }
+	unsigned int GetTeamId(unsigned int dwTeamId) { return dwTeamId; }
 
 	void SetState(ETeamState eState) { m_eState = eState; }
 
-	GameProto::EErrorCode ChangeSlot(UINT64 qwPlayerId, UINT32 dwSlotId);
+	GameProto::EErrorCode ChangeSlot(unsigned long long qwPlayerId, unsigned int dwSlotId);
 
-	GameProto::TeamRoleData* GetTeamRoleData(UINT64 qwPlayerId);
-	std::map<UINT64, GameProto::TeamRoleData>& GetTeamRoles() { return m_mapPlayers; }
+	GameProto::TeamRoleData* GetTeamRoleData(unsigned long long qwPlayerId);
+	std::map<unsigned long long, GameProto::TeamRoleData>& GetTeamRoles() { return m_mapPlayers; }
 
-	std::map<UINT64, GameProto::TeamRoleData> m_mapPlayers;		//<playerid, data>
-	UINT64 m_pPlayerSlots[MAXCLIENTNUM];						//playerid
-	UINT64 m_qwLeader;
+	std::map<unsigned long long, GameProto::TeamRoleData> m_mapPlayers;		//<playerid, data>
+	unsigned long long m_pPlayerSlots[MAXCLIENTNUM];						//playerid
+	unsigned long long m_qwLeader;
 
 	ETeamState m_eState;
-	UINT64 m_qwTeamId;
+	unsigned long long m_qwTeamId;
 };
 
 class CTeamManager
@@ -56,11 +56,11 @@ public:
 	CTeamManager();
 	~CTeamManager();
 
-	CTeam* GetTeam(UINT64 qwTeamId);
-	CTeam& CreateTeam(UINT64 qwTeamId);
-	bool ReleaseTeam(UINT64 qwTeamId);
+	CTeam* GetTeam(unsigned long long qwTeamId);
+	CTeam& CreateTeam(unsigned long long qwTeamId);
+	bool ReleaseTeam(unsigned long long qwTeamId);
 private:
-	std::map<UINT64, CTeam> m_mapTeams;						//<teamid, team>
+	std::map<unsigned long long, CTeam> m_mapTeams;						//<teamid, team>
 
 };
 

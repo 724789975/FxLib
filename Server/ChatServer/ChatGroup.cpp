@@ -30,8 +30,8 @@ void DBLoadGroupQuery::OnResult(void)
 	while (m_pReader->GetNextRecord())
 	{
 		std::string szPlayerId = m_pReader->GetFieldValue(0);
-		UINT32 dwPower = atoi(m_pReader->GetFieldValue(1));
-		UINT32 dwJoinTime = atoi(m_pReader->GetFieldValue(2));
+		unsigned int dwPower = atoi(m_pReader->GetFieldValue(1));
+		unsigned int dwJoinTime = atoi(m_pReader->GetFieldValue(2));
 		//ChatGroupMember& refMember = refManager.m_mapChatGroups[m_dwGroupId].m_mapChatMembers[szPlayerId];
 		ChatGroupMember& refMember = refManager.m_mapChatGroups[m_dwGroupId].m_mapChatGroupMembers[HashToIndex(szPlayerId.c_str(), szPlayerId.size())][szPlayerId];
 		refMember.m_szPlayerId = szPlayerId;
@@ -205,7 +205,7 @@ public:
 		m_strQuery = szTemp;
 	}
 	~DBInviteGroupMemberQuery() {}
-	virtual INT32 GetDBId(void) { return 0; }
+	virtual int GetDBId(void) { return 0; }
 
 	virtual void OnQuery(IDBConnection *poDBConnection)
 	{
@@ -318,7 +318,7 @@ public:
 		m_strQuery = szTemp;
 	}
 	~DBLeaveGroupQuery() {}
-	virtual INT32 GetDBId(void) { return 0; }
+	virtual int GetDBId(void) { return 0; }
 
 	virtual void OnQuery(IDBConnection *poDBConnection)
 	{
@@ -447,7 +447,7 @@ public:
 		m_strQuery = "SELECT `id` FROM groups;";
 	}
 	~DBLoadGroupsQuery(){}
-	virtual INT32 GetDBId(void) { return 0; }
+	virtual int GetDBId(void) { return 0; }
 
 	virtual void OnQuery(IDBConnection *poDBConnection)
 	{
@@ -459,7 +459,7 @@ public:
 
 	virtual void OnResult(void)
 	{
-		UINT32 dwGroupId = 0;
+		unsigned int dwGroupId = 0;
 		while (m_pReader->GetNextRecord())
 		{
 			dwGroupId = atoi(m_pReader->GetFieldValue(0));

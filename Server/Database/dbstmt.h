@@ -13,13 +13,13 @@ public:
 	FxMySQLStmt(FxMySQLConnection* pConnection, MYSQL_STMT* pStmt);
 	~FxMySQLStmt();
 
-	bool		Prepare(const char* pszSQL, UINT32 dwParamNum, UINT32 dwResultNum);
+	bool		Prepare(const char* pszSQL, unsigned int dwParamNum, unsigned int dwResultNum);
 
-	void		BindParam(unsigned int eFieldType, void* pBuf, UINT32 dwSize);
+	void		BindParam(unsigned int eFieldType, void* pBuf, unsigned int dwSize);
 
 	bool		BindParamComplete();
 
-	void		BindResult(unsigned int eFieldType, void* pBuf, UINT32 dwBufSize, UINT32* pdwLength);
+	void		BindResult(unsigned int eFieldType, void* pBuf, unsigned int dwBufSize, unsigned int* pdwLength);
 
 	bool		BindResultComplete();
 
@@ -27,13 +27,13 @@ public:
 
 	const char* GetErrorString();
 
-	UINT32		AffectedRows();
+	unsigned int		AffectedRows();
 
 	bool		Restore();
 
 	bool		Fetch();
 
-	UINT32		NumOfRows();
+	unsigned int		NumOfRows();
 
 	void		Release();
 
@@ -42,10 +42,10 @@ private:
 	MYSQL_STMT* m_pStmt;
 	MYSQL_BIND* m_pParamsBind;
 	MYSQL_BIND* m_pResultsBind;
-	UINT32 m_dwCurBindParamPos;
-	UINT32 m_dwParamsNum;
-	UINT32 m_dwCurBindResultPos;
-	UINT32 m_dwResultsNum;
+	unsigned int m_dwCurBindParamPos;
+	unsigned int m_dwParamsNum;
+	unsigned int m_dwCurBindResultPos;
+	unsigned int m_dwResultsNum;
 };
 
 #endif /* __DB_STMT_H_2012_11_28__ */

@@ -36,12 +36,12 @@ void CPlayerSession::OnClose(void)
 	m_qwPlayerId = 0;
 }
 
-void CPlayerSession::OnError(UINT32 dwErrorNo)
+void CPlayerSession::OnError(unsigned int dwErrorNo)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
 }
 
-void CPlayerSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void CPlayerSession::OnRecv(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	std::string szProtocolName;
@@ -127,7 +127,7 @@ bool CPlayerSession::OnPlayerRequestGameEnter(CPlayerSession& refSession, google
 	{
 		for (int i = 0; i < MAXCLIENTNUM; i++)
 		{
-			UINT64 qwPlayerId = CGameSceneBase::Instance()->GetPlayers()[i];
+			unsigned long long qwPlayerId = CGameSceneBase::Instance()->GetPlayers()[i];
 			if (!qwPlayerId)
 			{
 				continue;

@@ -6,9 +6,6 @@
     <ClCompile Include="PlayerSession.cpp" />
     <ClCompile Include="ServerSession.cpp" />
     <ClCompile Include="SocketSession.cpp" />
-    <ClCompile Include="..\common\fxmeta.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
     <ClCompile Include="..\common\fxtimer.cpp">
       <Filter>common</Filter>
     </ClCompile>
@@ -29,6 +26,9 @@
     </ClCompile>
     <ClCompile Include="TeamSession.cpp" />
     <ClCompile Include="GameServerBase.cpp" />
+    <ClCompile Include="..\common\utility.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gamedefine.h" />

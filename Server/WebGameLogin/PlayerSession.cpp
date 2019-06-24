@@ -17,7 +17,7 @@ static char g_pPlayerSessionBuf[g_dwPlayerSessionBuffLen];
 class RedisGetServerId : public IRedisQuery
 {
 public:
-	RedisGetServerId(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId), m_dwServerId(0), m_pReader(NULL) {}
+	RedisGetServerId(unsigned long long qwPlayerId) : m_qwPlayerId(qwPlayerId), m_dwServerId(0), m_pReader(NULL) {}
 	~RedisGetServerId() {}
 
 	virtual int					GetDBId(void) { return 0; }
@@ -30,12 +30,12 @@ public:
 	virtual void OnResult(void) { std::string szServerId; m_pReader->GetValue(szServerId); m_dwServerId = atoi(szServerId.c_str()); }
 	virtual void Release(void) { m_pReader->Release(); }
 
-	INT32 GetServerId() { return m_dwServerId; }
+	int GetServerId() { return m_dwServerId; }
 
 private:
 	IRedisDataReader* m_pReader;
-	INT32 m_dwServerId;
-	UINT64 m_qwPlayerId;
+	int m_dwServerId;
+	unsigned long long m_qwPlayerId;
 };
 
 CPlayerSession::CPlayerSession()
@@ -75,12 +75,12 @@ void CPlayerSession::OnClose(void)
 	}
 }
 
-void CPlayerSession::OnError(UINT32 dwErrorNo)
+void CPlayerSession::OnError(unsigned int dwErrorNo)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
 }
 
-void CPlayerSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void CPlayerSession::OnRecv(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	std::string szProtocolName;
@@ -128,7 +128,7 @@ bool CPlayerSession::OnPlayerRequestLogin(CPlayerSession& refSession, google::pr
 
 	RedisGetServerId oServerId(pMsg->qw_player_id());
 	FxRedisGetModule()->QueryDirect(&oServerId);
-	UINT32 dwServerId = oServerId.GetServerId();
+	unsigned int dwServerId = oServerId.GetServerId();
 
 	GameServer::Instance()->GetPlayerManager().OnPlayerLogin(this, *pMsg);
 	m_qwPlayerId = pMsg->qw_player_id();
@@ -259,19 +259,19 @@ bool CPlayerSession::OnPlayerRequestLoginOnLinePlayer(CPlayerSession& refSession
 		}
 		virtual void Release(void) { m_pReader->Release(); }
 
-		std::vector<UINT64>& GetPlayers() { return m_vecPlayers; }
+		std::vector<unsigned long long>& GetPlayers() { return m_vecPlayers; }
 
 	private:
 		IRedisDataReader* m_pReader;
-		std::vector<UINT64> m_vecPlayers;
+		std::vector<unsigned long long> m_vecPlayers;
 	};
 
 	RedisPlayerIds oServerPlayerIds;
 	FxRedisGetModule()->QueryDirect(&oServerPlayerIds);
 
 	GameProto::LoginAckPlayerOnLinePlayer oResult;
-	std::vector<UINT64>& ref_vecPlayers = oServerPlayerIds.GetPlayers();
-	for (std::vector<UINT64>::iterator it = ref_vecPlayers.begin(); it != ref_vecPlayers.end(); ++it)
+	std::vector<unsigned long long>& ref_vecPlayers = oServerPlayerIds.GetPlayers();
+	for (std::vector<unsigned long long>::iterator it = ref_vecPlayers.begin(); it != ref_vecPlayers.end(); ++it)
 	{
 		oResult.add_qw_player_id(*it);
 	}
@@ -358,7 +358,7 @@ bool CPlayerSession::OnPlayerRequestLoginRefuseEnterTeam(CPlayerSession& refSess
 
 	RedisGetServerId oServerId(pMsg->qw_player_id());
 	FxRedisGetModule()->QueryDirect(&oServerId);
-	UINT32 dwServerId = oServerId.GetServerId();
+	unsigned int dwServerId = oServerId.GetServerId();
 
 	CLoginSession* pLoginSession = GameServer::Instance()->GetLoginSessionManager().GetLoginSession(dwServerId);
 	if (pLoginSession)

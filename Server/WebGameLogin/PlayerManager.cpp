@@ -11,7 +11,7 @@ PlayerManager::~PlayerManager()
 {
 }
 
-Player* PlayerManager::GetPlayer(UINT64 qwPlayerId)
+Player* PlayerManager::GetPlayer(unsigned long long qwPlayerId)
 {
 	if (m_mapPlayers.find(qwPlayerId) == m_mapPlayers.end())
 	{
@@ -23,7 +23,7 @@ Player* PlayerManager::GetPlayer(UINT64 qwPlayerId)
 Player* PlayerManager::OnPlayerLogin(CPlayerSession* pSession, GameProto::PlayerRequestLogin& refLogin)
 {
 	Player* pPlayer = NULL;
-	std::map<UINT64, Player>::iterator it = m_mapPlayers.find(refLogin.qw_player_id());
+	std::map<unsigned long long, Player>::iterator it = m_mapPlayers.find(refLogin.qw_player_id());
 	if (it != m_mapPlayers.end())
 	{
 		GameProto::LoginNotifyPlayerGameKick oKick;
@@ -43,7 +43,7 @@ Player* PlayerManager::OnPlayerLogin(CPlayerSession* pSession, GameProto::Player
 	return pPlayer;
 }
 
-void PlayerManager::OnSessionClose(UINT64 qwPlayerId)
+void PlayerManager::OnSessionClose(unsigned long long qwPlayerId)
 {
 	m_mapPlayers.erase(qwPlayerId);
 }

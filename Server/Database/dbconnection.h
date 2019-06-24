@@ -27,12 +27,12 @@ public:
     bool            CheckConnect();
 	void            Close();
 
-	UINT32          GetAffectedRows() { return (UINT32)mysql_affected_rows(m_myConnection); }
-	UINT32          EscapeString(const char* pszSrc, INT32 nSize, char* pszDest);
-	INT32           Query(const char* pszSQL, FxMySQLReader& rcdSet);
-	INT32           Query(const char* pszSQL, INT32 nLength, FxMySQLReader& rcdSet);
-	INT32           Query(const char* pszSQL);
-	UINT32          GetLastError();
+	unsigned int          GetAffectedRows() { return (unsigned int)mysql_affected_rows(m_myConnection); }
+	unsigned int          EscapeString(const char* pszSrc, int nSize, char* pszDest);
+	int           Query(const char* pszSQL, FxMySQLReader& rcdSet);
+	int           Query(const char* pszSQL, int nLength, FxMySQLReader& rcdSet);
+	int           Query(const char* pszSQL);
+	unsigned int          GetLastError();
 	const char*     GetLastErrorString();
 	IStmt*			CreateStmt();
 

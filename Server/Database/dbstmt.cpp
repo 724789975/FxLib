@@ -18,7 +18,7 @@ FxMySQLStmt::~FxMySQLStmt()
 	delete [] m_pResultsBind;
 }
 
-bool FxMySQLStmt::Prepare( const char* pszSQL, UINT32 dwParamNum, UINT32 dwResultNum )
+bool FxMySQLStmt::Prepare( const char* pszSQL, unsigned int dwParamNum, unsigned int dwResultNum )
 {
 	if (mysql_stmt_prepare(m_pStmt, pszSQL, strlen(pszSQL)) != 0)
 		return false;
@@ -34,7 +34,7 @@ bool FxMySQLStmt::Prepare( const char* pszSQL, UINT32 dwParamNum, UINT32 dwResul
 	return true;
 }
 
-void FxMySQLStmt::BindParam(unsigned int eFieldType, void* pBuf, UINT32 dwSize)
+void FxMySQLStmt::BindParam(unsigned int eFieldType, void* pBuf, unsigned int dwSize)
 {
 	unsigned long dwLength = dwSize;
 	m_pParamsBind[m_dwCurBindParamPos].buffer_type = (enum_field_types)eFieldType;
@@ -53,7 +53,7 @@ bool FxMySQLStmt::BindParamComplete()
 	return true;
 }
 
-void FxMySQLStmt::BindResult(unsigned int eFieldType, void* pBuf, UINT32 dwBufSize, UINT32* pdwLength)
+void FxMySQLStmt::BindResult(unsigned int eFieldType, void* pBuf, unsigned int dwBufSize, unsigned int* pdwLength)
 {
 	m_pResultsBind[m_dwCurBindResultPos].buffer_type = (enum_field_types)eFieldType;
 	m_pResultsBind[m_dwCurBindResultPos].buffer = pBuf;
@@ -83,9 +83,9 @@ const char* FxMySQLStmt::GetErrorString()
 	return mysql_stmt_error(m_pStmt);
 }
 
-UINT32 FxMySQLStmt::AffectedRows()
+unsigned int FxMySQLStmt::AffectedRows()
 {
-	return (UINT32)(mysql_stmt_affected_rows(m_pStmt));
+	return (unsigned int)(mysql_stmt_affected_rows(m_pStmt));
 }
 
 bool FxMySQLStmt::Restore()
@@ -102,9 +102,9 @@ bool FxMySQLStmt::Fetch()
 	return true;
 }
 
-UINT32 FxMySQLStmt::NumOfRows()
+unsigned int FxMySQLStmt::NumOfRows()
 {
-	return (UINT32)(mysql_stmt_num_rows(m_pStmt));
+	return (unsigned int)(mysql_stmt_num_rows(m_pStmt));
 }
 
 void FxMySQLStmt::Release()

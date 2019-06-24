@@ -51,7 +51,7 @@ public:
 	 ~FxLoopBuffMgr();
 	 //DECLARE_SINGLETON(FxLoopBuffMgr);
 
-	 bool					 Init(UINT32 dwCount);
+	 bool					 Init(unsigned int dwCount);
 	 FxLoopBuff*			 Fetch();
 	 bool					 Release(FxLoopBuff* pBuff);
 

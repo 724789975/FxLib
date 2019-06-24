@@ -8,9 +8,9 @@
 #include <arpa/inet.h>
 #include <ctype.h>
 #include <stdlib.h>
-#define SOCKET UINT32
+#define SOCKET unsigned int
 //#define DLLCLASS_DECL
-#define INVALID_SOCKET UINT32(-1)
+#define INVALID_SOCKET (unsigned int)(-1)
 #endif
 
 #include <assert.h>
@@ -118,7 +118,7 @@ struct SPerUDPIoData
 struct SNetEvent
 {
 	ENetEvtType						eType;
-	UINT32							dwValue;
+	unsigned int							dwValue;
 };
 
 class FxSession
@@ -131,23 +131,23 @@ public:
 
 	virtual void					OnClose(void) = 0;
 
-	virtual void					OnError(UINT32 dwErrorNo) = 0;
+	virtual void					OnError(unsigned int dwErrorNo) = 0;
 
-	virtual void					OnRecv(const char* pBuf, UINT32 dwLen) = 0;
+	virtual void					OnRecv(const char* pBuf, unsigned int dwLen) = 0;
 
 	virtual void					Release(void) = 0;
 
 	virtual char*					GetRecvBuf() = 0;
 
-	virtual UINT32					GetRecvSize() = 0;
+	virtual unsigned int					GetRecvSize() = 0;
 
-	virtual UINT32		 			GetRemoteIP();
+	virtual unsigned int		 			GetRemoteIP();
 
 	virtual const char* 			GetRemoteIPStr();
 
-	virtual UINT32					GetRemotePort();
+	virtual unsigned int					GetRemotePort();
 
-	virtual bool					Send(const char* pBuf,UINT32 dwLen);
+	virtual bool					Send(const char* pBuf,unsigned int dwLen);
 
 	virtual void					Close(void);
 
@@ -204,7 +204,7 @@ public:
 	unsigned int					GetSockId(){ return m_dwSockId; }
 
 #ifdef WIN32
-	virtual void					OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred) = 0;    // 
+	virtual void					OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred) = 0;    // 
 #else
 	virtual void					OnParserIoEvent(int dwEvents) = 0;    // 
 #endif // WIN32
@@ -224,11 +224,11 @@ public:
 
 	virtual unsigned int			GetHeaderLength() = 0;		// 消息头长度
 
-	virtual int						ParsePacket(const char* pBuf, UINT32 dwLen);
+	virtual int						ParsePacket(const char* pBuf, unsigned int dwLen);
 
 	virtual void*					GetPkgHeader() = 0;			//有歧义了 现在只代表接收到的包头
-	virtual void*					BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen) = 0;
-	virtual bool					BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset) = 0;
+	virtual void*					BuildSendPkgHeader(unsigned int& dwHeaderLen, unsigned int dwDataLen) = 0;
+	virtual bool					BuildRecvPkgHeader(char* pBuff, unsigned int dwLen, unsigned int dwOffset) = 0;
 	virtual int						__CheckPkgHeader(const char* pBuf) = 0;
 
 };
@@ -255,13 +255,13 @@ public:
 
 	virtual void					OnRead() = 0;
 	virtual void					OnWrite() = 0;
-	virtual SOCKET					Listen(UINT32 dwIP, UINT16& wPort) = 0;
+	virtual SOCKET					Listen(unsigned int dwIP, UINT16& wPort) = 0;
 	virtual bool					StopListen() = 0;
 	virtual bool					Close() = 0;
 	virtual void					ProcEvent(SNetEvent oEvent) = 0;
 
 #ifdef WIN32
-	virtual void					OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred) = 0;		//
+	virtual void					OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred) = 0;		//
 #else
 	virtual void					OnParserIoEvent(int dwEvents) = 0;		//
 #endif // WIN32
@@ -296,7 +296,7 @@ public:
 
 	virtual bool					PostClose() = 0;
 #ifdef WIN32
-	virtual void					OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred) = 0;		//
+	virtual void					OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred) = 0;		//
 #else
 	virtual void					OnParserIoEvent(int dwEvents) = 0;		//
 #endif // WIN32
@@ -314,13 +314,13 @@ class IFxNet
 public:
 	virtual							~IFxNet() {}
 	virtual bool					Init() = 0;
-	virtual bool					Run(UINT32 dwCount) = 0;
+	virtual bool					Run(unsigned int dwCount) = 0;
 	virtual void					Release() = 0;
 
-	virtual SOCKET					TcpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect = false) = 0;
-	virtual IFxListenSocket*		Listen(IFxSessionFactory* pSessionFactory, ESocketType eSocketListenType, UINT32 dwIP, UINT16& dwPort) = 0;
+	virtual SOCKET					TcpConnect(FxSession* poSession, unsigned int dwIP, UINT16 wPort, bool bReconnect = false) = 0;
+	virtual IFxListenSocket*		Listen(IFxSessionFactory* pSessionFactory, ESocketType eSocketListenType, unsigned int dwIP, UINT16& dwPort) = 0;
 
-	virtual SOCKET					UdpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect = false) = 0;
+	virtual SOCKET					UdpConnect(FxSession* poSession, unsigned int dwIP, UINT16 wPort, bool bReconnect = false) = 0;
 
 private:
 

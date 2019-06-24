@@ -18,15 +18,15 @@ public:
 
 	virtual void		OnClose(void);
 
-	virtual void		OnError(UINT32 dwErrorNo);
+	virtual void		OnError(unsigned int dwErrorNo);
 
-	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
+	virtual void		OnRecv(const char* pBuf, unsigned int dwLen);
 
 	virtual void		Release(void);
 
 	virtual char*		GetRecvBuf(){ return m_dataRecvBuf; }
 
-	virtual UINT32		GetRecvSize(){ return 64 * 1024; };
+	virtual unsigned int		GetRecvSize(){ return 64 * 1024; };
 
 	//void				SetFxSessionFactory(IFxSessionFactory* pFxSessionFactory) { m_pFxSessionFactory = pFxSessionFactory; }
 
@@ -54,7 +54,7 @@ private:
 
 	std::deque<FxSession* > m_listSession;
 
-	IFxLock*			m_pLock;
+	FxCriticalLock		m_oLock;
 };
 
 class CWebSocketSessionFactory : public TSingleton<CWebSocketSessionFactory>, public IFxSessionFactory
@@ -75,7 +75,7 @@ private:
 
 	std::deque<FxSession*> m_listSession;
 
-	IFxLock*			m_pLock;
+	FxCriticalLock		m_oLock;
 };
 
 //static CSessionFactory oSessionFactory;
@@ -87,14 +87,14 @@ public:
 	virtual ~BinaryDataHeader();
 	virtual unsigned int GetHeaderLength(){ return sizeof(m_dataRecvBuffer); }		// 消息头长度
 	virtual void* GetPkgHeader();
-	virtual void* BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen);
-	virtual bool BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset);
+	virtual void* BuildSendPkgHeader(unsigned int& dwHeaderLen, unsigned int dwDataLen);
+	virtual bool BuildRecvPkgHeader(char* pBuff, unsigned int dwLen, unsigned int dwOffset);
 	virtual int __CheckPkgHeader(const char* pBuf);
 private:
 	// // 消息头 为网络字节序
 	char m_dataRecvBuffer[8];
 	char m_dataSendBuffer[8];
-	static const UINT32 s_dwMagic = 'T' << 24 | 'E' << 16 | 'S' << 8 | 'T';
+	static const unsigned int s_dwMagic = 'T' << 24 | 'E' << 16 | 'S' << 8 | 'T';
 	//static const UINT32 s_dwMagic = 12345678;
 };
 
@@ -105,10 +105,10 @@ public:
 	virtual ~WebSocketDataHeader();
 	virtual unsigned int GetHeaderLength() { return m_dwHeaderLength; }		// 消息头长度 这个只能BuildRecvPkgHeader之后调用
 	virtual void* GetPkgHeader();
-	virtual void* BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen);
-	virtual bool BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset);
+	virtual void* BuildSendPkgHeader(unsigned int& dwHeaderLen, unsigned int dwDataLen);
+	virtual bool BuildRecvPkgHeader(char* pBuff, unsigned int dwLen, unsigned int dwOffset);
 	virtual int __CheckPkgHeader(const char* pBuf);
-	virtual int	ParsePacket(const char* pBuf, UINT32 dwLen);
+	virtual int	ParsePacket(const char* pBuf, unsigned int dwLen);
 
 private:
 	/************************/
@@ -130,7 +130,7 @@ private:
 	// // 消息头 为网络字节序
 	char m_dataRecvBuffer[16];
 	char m_dataSendBuffer[16];
-	static const UINT32 s_dwMagic = 'T' << 24 | 'E' << 16 | 'S' << 8 | 'T';
+	static const unsigned int s_dwMagic = 'T' << 24 | 'E' << 16 | 'S' << 8 | 'T';
 
 	unsigned int m_dwHeaderLength;
 	//static const UINT32 s_dwMagic = 12345678;
@@ -174,7 +174,7 @@ class CChatManagerSession : public TSingleton<CChatManagerSession>, public CBina
 {
 public:
 	virtual void		OnConnect(void);
-	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
+	virtual void		OnRecv(const char* pBuf, unsigned int dwLen);
 	virtual void		Release(void);
 	virtual void		OnClose();
 

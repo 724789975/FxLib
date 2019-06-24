@@ -32,12 +32,12 @@ void CPlayerSession::OnClose(void)
 
 }
 
-void CPlayerSession::OnError(UINT32 dwErrorNo)
+void CPlayerSession::OnError(unsigned int dwErrorNo)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
 }
 
-void CPlayerSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void CPlayerSession::OnRecv(const char* pBuf, unsigned int dwLen)
 {
 	//CNetStream oStream(pBuf, dwLen);
 	//Protocol::EGameProtocol eProrocol;
@@ -60,7 +60,7 @@ void CPlayerSession::Release(void)
 	Init(NULL);
 }
 
-void CPlayerSession::OnRequestGameManagerInfo(const char* pBuf, UINT32 dwLen)
+void CPlayerSession::OnRequestGameManagerInfo(const char* pBuf, unsigned int dwLen)
 {
 	//CNetStream oStream(pBuf, dwLen);
 	//stPLAYER_REQUEST_GAME_MANAGER_INFO oPLAYER_REQUEST_GAME_MANAGER_INFO;

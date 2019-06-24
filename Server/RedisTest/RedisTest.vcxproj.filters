@@ -10,9 +10,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\common\fxmeta.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
     <ClCompile Include="..\common\fxtimer.cpp">
       <Filter>common</Filter>
     </ClCompile>
@@ -23,5 +20,8 @@
       <Filter>common</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\common\utility.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -36,18 +36,18 @@ void ChatManagerSession::OnClose(void)
 	g_bRun = false;
 }
 
-void ChatManagerSession::OnError(UINT32 dwErrorNo)
+void ChatManagerSession::OnError(unsigned int dwErrorNo)
 {
 
 }
 
-void ChatManagerSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void ChatManagerSession::OnRecv(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oNetStream(pBuf, dwLen);
 	Protocol::EChatProtocol eProrocol;
 	oNetStream.ReadInt((int&)eProrocol);
-	const char* pData = pBuf + sizeof(UINT32);
-	dwLen -= sizeof(UINT32);
+	const char* pData = pBuf + sizeof(unsigned int);
+	dwLen -= sizeof(unsigned int);
 
 	switch (eProrocol)
 	{
@@ -64,7 +64,7 @@ void ChatManagerSession::Release(void)
 
 }
 
-void ChatManagerSession::OnNotifyChatInfo(const char* pBuf, UINT32 dwLen)
+void ChatManagerSession::OnNotifyChatInfo(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_MANAGER_NOTIFY_CHAT_INFO oCHAT_MANAGER_NOTIFY_CHAT_INFO;
@@ -92,7 +92,7 @@ void ChatManagerSession::OnNotifyChatInfo(const char* pBuf, UINT32 dwLen)
 	}
 }
 
-void ChatManagerSession::OnBroadcastMsg(const char* pBuf, UINT32 dwLen)
+void ChatManagerSession::OnBroadcastMsg(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_MANAGER_NOTIFY_CHAT_BROADCAST oCHAT_MANAGER_NOTIFY_CHAT_BROADCAST;
@@ -106,7 +106,7 @@ void ChatManagerSession::OnBroadcastMsg(const char* pBuf, UINT32 dwLen)
 
 }
 
-void ChatManagerSession::OnLoginSign(const char* pBuf, UINT32 dwLen)
+void ChatManagerSession::OnLoginSign(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_MANAGER_NOTIFY_CHAT_LOGIN oCHAT_MANAGER_NOTIFY_CHAT_LOGIN;
@@ -129,7 +129,7 @@ void ChatManagerSession::OnLoginSign(const char* pBuf, UINT32 dwLen)
 	Send(g_pChatServerManagerSessionBuf, g_dwChatServerManagerSessionBuffLen - oStreamSign.GetDataLength());
 }
 
-void ChatManagerSession::OnLoginSignByGM(const char* pBuf, UINT32 dwLen)
+void ChatManagerSession::OnLoginSignByGM(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_MANAGER_NOTIFY_CHAT_LOGIN oCHAT_MANAGER_NOTIFY_CHAT_LOGIN;

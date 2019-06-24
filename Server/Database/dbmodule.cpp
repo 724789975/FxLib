@@ -58,7 +58,7 @@ bool FxDBModule::Open(SDBConnInfo& DBInfo)
 	return true;
 }
 
-void FxDBModule::Close(UINT32 dwDBId)
+void FxDBModule::Close(unsigned int dwDBId)
 {
 	FxMySqlClient * poMySqlClient = FindDBClient(dwDBId);
 	if(NULL == poMySqlClient)
@@ -86,10 +86,10 @@ bool FxDBModule::AddQuery(IQuery *poQuery)
 	return true;
 }
 
-bool FxDBModule::Run(UINT32 dwCount)
+bool FxDBModule::Run(unsigned int dwCount)
 {
     bool bRet = false;
-    for (UINT32 i = 0; i < dwCount; i++)
+    for (unsigned int i = 0; i < dwCount; i++)
     {
         if (!__CallBackResult())
         {
@@ -108,7 +108,7 @@ bool FxDBModule::Init()
 
 void FxDBModule::Uninit()
 {
-    std::map<UINT32, FxMySqlClient*>::iterator it = m_mapDBClient.begin();
+    std::map<unsigned int, FxMySqlClient*>::iterator it = m_mapDBClient.begin();
 	for(; it != m_mapDBClient.end(); ++it)
 	{
 		FxMySqlClient * poMySqlClient = it->second;
@@ -126,9 +126,9 @@ void FxDBModule::Uninit()
 	__ClearResult();
 }
 
-FxMySqlClient * FxDBModule::FindDBClient(UINT32 dwDBId)
+FxMySqlClient * FxDBModule::FindDBClient(unsigned int dwDBId)
 {
-	std::map<UINT32, FxMySqlClient*>::iterator it = m_mapDBClient.find(dwDBId);
+	std::map<unsigned int, FxMySqlClient*>::iterator it = m_mapDBClient.find(dwDBId);
 	if(it == m_mapDBClient.end())
     {
 		return NULL;

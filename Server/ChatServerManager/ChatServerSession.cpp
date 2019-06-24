@@ -27,18 +27,18 @@ void ChatServerSession::OnClose(void)
 
 }
 
-void ChatServerSession::OnError(UINT32 dwErrorNo)
+void ChatServerSession::OnError(unsigned int dwErrorNo)
 {
 
 }
 
-void ChatServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void ChatServerSession::OnRecv(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	Protocol::EChatProtocol eProrocol;
 	oStream.ReadInt((int&)eProrocol);
-	const char* pData = pBuf + sizeof(UINT32);
-	dwLen -= sizeof(UINT32);
+	const char* pData = pBuf + sizeof(unsigned int);
+	dwLen -= sizeof(unsigned int);
 
 	switch (eProrocol)
 	{
@@ -77,7 +77,7 @@ void ChatServerSession::ChatLoginByGM(std::string szPlayerId)
 	Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
 }
 
-void ChatServerSession::OnChatServerInfo(const char* pBuf, UINT32 dwLen)
+void ChatServerSession::OnChatServerInfo(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_SEND_CHAT_MANAGER_INFO oCHAT_SEND_CHAT_MANAGER_INFO;
@@ -90,7 +90,7 @@ void ChatServerSession::OnChatServerInfo(const char* pBuf, UINT32 dwLen)
 	ChatServerManager::Instance()->GetChatServerSessionManager().OnChatServerInfo(this);
 }
 
-void ChatServerSession::OnChatLoginSign(const char* pBuf, UINT32 dwLen)
+void ChatServerSession::OnChatLoginSign(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN;
@@ -105,7 +105,7 @@ void ChatServerSession::OnChatLoginSign(const char* pBuf, UINT32 dwLen)
 	pSession->OnLoginSign(m_szChatIp, m_dwChatPort, m_dwWebSocketChatPort, oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN.szPlayerId, oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN.szSign);
 }
 
-void ChatServerSession::OnChatLoginSignGM(const char* pBuf, UINT32 dwLen)
+void ChatServerSession::OnChatLoginSignGM(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM oCHAT_SEND_CHAT_MANAGER_LOGIN_SIGN_GM;
@@ -159,7 +159,7 @@ void ChatServerSessionManager::Release(FxSession* pSession)
 
 }
 
-ChatServerSession* ChatServerSessionManager::GetChatServerSession(UINT32 dwHashIndex)
+ChatServerSession* ChatServerSessionManager::GetChatServerSession(unsigned int dwHashIndex)
 {
 	if (m_mapSessionIpPort.find(dwHashIndex) == m_mapSessionIpPort.end())
 	{

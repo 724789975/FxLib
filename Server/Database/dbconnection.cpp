@@ -124,7 +124,7 @@ bool FxMySQLConnection::CheckConnect()
 	return true;
 }
 
-INT32 FxMySQLConnection::Query(const char* pszSQL)
+int FxMySQLConnection::Query(const char* pszSQL)
 {
 	if(false == CheckConnect())
 	{
@@ -133,7 +133,7 @@ INT32 FxMySQLConnection::Query(const char* pszSQL)
 
 	if (0 != mysql_query(m_myConnection, pszSQL))
 	{
-		UINT32 dwErr = mysql_errno(m_myConnection);
+		unsigned int dwErr = mysql_errno(m_myConnection);
 		if(CR_SERVER_LOST == dwErr || CR_CONN_HOST_ERROR == dwErr || CR_SERVER_GONE_ERROR == dwErr)
 		{
 			if(false == ReConnect())
@@ -153,20 +153,20 @@ INT32 FxMySQLConnection::Query(const char* pszSQL)
 	}
 
 	mysql_free_result(mysql_store_result(m_myConnection));
-    INT32 nRet = (INT32)mysql_affected_rows(m_myConnection);
+    int nRet = (int)mysql_affected_rows(m_myConnection);
     while(!mysql_next_result(m_myConnection))
     {
         MYSQL_RES* tmpRes = mysql_store_result(m_myConnection);
         if (NULL != tmpRes)
         {
             mysql_free_result(tmpRes);
-            nRet = (INT32)mysql_affected_rows(m_myConnection);
+            nRet = (int)mysql_affected_rows(m_myConnection);
         }
     }
 	return nRet;
 }
 
-INT32 FxMySQLConnection::Query(const char* pszSQL, INT32 nLength, FxMySQLReader& reader)
+int FxMySQLConnection::Query(const char* pszSQL, int nLength, FxMySQLReader& reader)
 {
     if(false == CheckConnect())
     {
@@ -175,7 +175,7 @@ INT32 FxMySQLConnection::Query(const char* pszSQL, INT32 nLength, FxMySQLReader&
 
     if (0 != mysql_real_query(m_myConnection, pszSQL, nLength))
     {
-        UINT32 dwErr = mysql_errno(m_myConnection);
+        unsigned int dwErr = mysql_errno(m_myConnection);
         if(CR_SERVER_LOST == dwErr || CR_CONN_HOST_ERROR == dwErr || CR_SERVER_GONE_ERROR == dwErr)
         {
             if(false == ReConnect())
@@ -238,7 +238,7 @@ INT32 FxMySQLConnection::Query(const char* pszSQL, INT32 nLength, FxMySQLReader&
     return  FXDB_ERR_UNKNOWN;
 }
 
-INT32 FxMySQLConnection::Query(const char* pszSQL, FxMySQLReader& reader)
+int FxMySQLConnection::Query(const char* pszSQL, FxMySQLReader& reader)
 {
 	if(false == CheckConnect())
 	{
@@ -247,7 +247,7 @@ INT32 FxMySQLConnection::Query(const char* pszSQL, FxMySQLReader& reader)
 
 	if (0 != mysql_query(m_myConnection, pszSQL))
 	{
-		UINT32 dwErr = mysql_errno(m_myConnection);
+		unsigned int dwErr = mysql_errno(m_myConnection);
 		if(CR_SERVER_LOST == dwErr || CR_CONN_HOST_ERROR == dwErr || CR_SERVER_GONE_ERROR == dwErr)
 		{
 			if(false == ReConnect())
@@ -310,7 +310,7 @@ INT32 FxMySQLConnection::Query(const char* pszSQL, FxMySQLReader& reader)
 	return  FXDB_ERR_UNKNOWN;
 }
 
-UINT32 FxMySQLConnection::EscapeString(const char* pszSrc, INT32 nSize, char* pszDest)
+unsigned int FxMySQLConnection::EscapeString(const char* pszSrc, int nSize, char* pszDest)
 {
 	if (NULL == m_myConnection)
 	{
@@ -335,11 +335,11 @@ UINT32 FxMySQLConnection::EscapeString(const char* pszSrc, INT32 nSize, char* ps
 	}
 }
 
-UINT32 FxMySQLConnection::GetLastError() 
+unsigned int FxMySQLConnection::GetLastError() 
 { 
 	if(m_myConnection!=NULL)
 	{
-		return (UINT32)mysql_errno(m_myConnection);
+		return (unsigned int)mysql_errno(m_myConnection);
 	}
 	return  0;
 }

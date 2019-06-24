@@ -69,7 +69,7 @@ void FxTCPListenSock::OnWrite()
 {
 }
 
-SOCKET FxTCPListenSock::Listen(UINT32 dwIP, UINT16& wPort)
+SOCKET FxTCPListenSock::Listen(unsigned int dwIP, unsigned short& wPort)
 {
 	SetSock(socket(AF_INET, SOCK_STREAM, 0));
 	if (INVALID_SOCKET == GetSock())
@@ -85,7 +85,7 @@ SOCKET FxTCPListenSock::Listen(UINT32 dwIP, UINT16& wPort)
 		return false;
 	}
 
-	INT32 nReuse = 0;
+	int nReuse = 0;
 	setsockopt(GetSock(), SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(nReuse));
 
 	sockaddr_in stAddr = { 0 };
@@ -165,7 +165,7 @@ SOCKET FxTCPListenSock::Listen(UINT32 dwIP, UINT16& wPort)
 		return false;
 	}
 
-	for (INT32 i = 0; i < sizeof(m_oSPerIoDatas) / sizeof(m_oSPerIoDatas[0]); i++)
+	for (int i = 0; i < sizeof(m_oSPerIoDatas) / sizeof(m_oSPerIoDatas[0]); i++)
 	{
 		if (false == PostAccept(m_oSPerIoDatas[i]))
 		{
@@ -183,7 +183,7 @@ bool FxTCPListenSock::StopListen()
 {
 	if (SSTATE_LISTEN != GetState())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d != SSTATE_LISTEN", (UINT32)GetState());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d != SSTATE_LISTEN", (unsigned int)GetState());
 		return false;
 	}
 
@@ -236,11 +236,11 @@ void FxTCPListenSock::Reset()
 	SetSock(INVALID_SOCKET);
 }
 
-bool FxTCPListenSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
+bool FxTCPListenSock::PushNetEvent(ENetEvtType eType, unsigned int dwValue)
 {
 	if (SSTATE_INVALID == GetState())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d == SSTATE_INVALID", (UINT32)GetState());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d == SSTATE_INVALID", (unsigned int)GetState());
 
 		return false;
 	}
@@ -317,7 +317,7 @@ void FxTCPListenSock::__ProcAssociate()
 
 }
 
-void FxTCPListenSock::__ProcError(UINT32 dwErrorNo)
+void FxTCPListenSock::__ProcError(unsigned int dwErrorNo)
 {
 
 }
@@ -446,7 +446,7 @@ bool FxTCPListenSock::InitAcceptEx()
 	return true;
 }
 
-void FxTCPListenSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred)
+void FxTCPListenSock::OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred)
 {
 	SPerIoData* pSPerIoData = (SPerIoData*)pIoData;
 	switch (GetState())
@@ -486,7 +486,7 @@ void FxTCPListenSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTra
 		break;
 		default:
 		{
-			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d != SSTATE_LISTEN", (UINT32)GetState());
+			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d != SSTATE_LISTEN", (unsigned int)GetState());
 
 			Close();        // 未知错误，不应该发生//
 		}
@@ -539,9 +539,9 @@ void FxTCPListenSock::OnAccept(SPerIoData* pstPerIoData)
 
 		sockaddr_in* pstRemoteAddr = NULL;
 		sockaddr_in* pstLocalAddr = NULL;
-		INT32 nRemoteAddrLen = sizeof(sockaddr_in);
-		INT32 nLocalAddrLen = sizeof(sockaddr_in);
-		INT32 nAddrLen = sizeof(sockaddr_in) + 16;
+		int nRemoteAddrLen = sizeof(sockaddr_in);
+		int nLocalAddrLen = sizeof(sockaddr_in);
+		int nAddrLen = sizeof(sockaddr_in) + 16;
 
 		m_lpfnGetAcceptExSockaddrs(
 			pstPerIoData->Buf,
@@ -670,8 +670,8 @@ void FxTCPListenSock::OnAccept()
 {
 	sockaddr_in stLocalAddr;
 	sockaddr_in stRemoteAddr;
-	UINT32 dwAddrLen = sizeof(stRemoteAddr);
-	UINT32 hAcceptSock = accept(GetSock(), (sockaddr*)&stRemoteAddr, &dwAddrLen);
+	unsigned int dwAddrLen = sizeof(stRemoteAddr);
+	unsigned int hAcceptSock = accept(GetSock(), (sockaddr*)&stRemoteAddr, &dwAddrLen);
 	if (INVALID_SOCKET == hAcceptSock)
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "%s", "INVALID_SOCKET == hAcceptSock");
@@ -752,7 +752,7 @@ void FxTCPListenSock::OnAccept()
 	setsockopt(hAcceptSock, SOL_TCP, TCP_KEEPINTVL, (void *)&keepInterval, sizeof(keepInterval));
 	setsockopt(hAcceptSock, SOL_TCP, TCP_KEEPCNT, (void *)&keepCount, sizeof(keepCount));
 
-	INT32 nFlags = fcntl(hAcceptSock, F_GETFL, 0);
+	int nFlags = fcntl(hAcceptSock, F_GETFL, 0);
 	nFlags |= O_NONBLOCK;
 	fcntl(hAcceptSock, F_SETFL, nFlags);
 
@@ -829,9 +829,9 @@ void FxWebSocketListen::OnAccept(SPerIoData* pstPerIoData)
 
 		sockaddr_in* pstRemoteAddr = NULL;
 		sockaddr_in* pstLocalAddr = NULL;
-		INT32 nRemoteAddrLen = sizeof(sockaddr_in);
-		INT32 nLocalAddrLen = sizeof(sockaddr_in);
-		INT32 nAddrLen = sizeof(sockaddr_in) + 16;
+		int nRemoteAddrLen = sizeof(sockaddr_in);
+		int nLocalAddrLen = sizeof(sockaddr_in);
+		int nAddrLen = sizeof(sockaddr_in) + 16;
 
 		m_lpfnGetAcceptExSockaddrs(
 			pstPerIoData->Buf,
@@ -942,8 +942,8 @@ void FxWebSocketListen::OnAccept()
 {
 	sockaddr_in stLocalAddr;
 	sockaddr_in stRemoteAddr;
-	UINT32 dwAddrLen = sizeof(stRemoteAddr);
-	UINT32 hAcceptSock = accept(GetSock(), (sockaddr*)&stRemoteAddr, &dwAddrLen);
+	unsigned int dwAddrLen = sizeof(stRemoteAddr);
+	unsigned int hAcceptSock = accept(GetSock(), (sockaddr*)&stRemoteAddr, &dwAddrLen);
 	if (INVALID_SOCKET == hAcceptSock)
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "%s", "INVALID_SOCKET == hAcceptSock");
@@ -1024,7 +1024,7 @@ void FxWebSocketListen::OnAccept()
 	setsockopt(hAcceptSock, SOL_TCP, TCP_KEEPINTVL, (void *)&keepInterval, sizeof(keepInterval));
 	setsockopt(hAcceptSock, SOL_TCP, TCP_KEEPCNT, (void *)&keepCount, sizeof(keepCount));
 
-	INT32 nFlags = fcntl(hAcceptSock, F_GETFL, 0);
+	int nFlags = fcntl(hAcceptSock, F_GETFL, 0);
 	nFlags |= O_NONBLOCK;
 	fcntl(hAcceptSock, F_SETFL, nFlags);
 
@@ -1162,9 +1162,9 @@ void FxHttpListen::OnAccept(SPerIoData * pstPerIoData)
 
 		sockaddr_in* pstRemoteAddr = NULL;
 		sockaddr_in* pstLocalAddr = NULL;
-		INT32 nRemoteAddrLen = sizeof(sockaddr_in);
-		INT32 nLocalAddrLen = sizeof(sockaddr_in);
-		INT32 nAddrLen = sizeof(sockaddr_in) + 16;
+		int nRemoteAddrLen = sizeof(sockaddr_in);
+		int nLocalAddrLen = sizeof(sockaddr_in);
+		int nAddrLen = sizeof(sockaddr_in) + 16;
 
 		m_lpfnGetAcceptExSockaddrs(
 			pstPerIoData->Buf,
@@ -1275,8 +1275,8 @@ void FxHttpListen::OnAccept()
 {
 	sockaddr_in stLocalAddr;
 	sockaddr_in stRemoteAddr;
-	UINT32 dwAddrLen = sizeof(stRemoteAddr);
-	UINT32 hAcceptSock = accept(GetSock(), (sockaddr*)&stRemoteAddr, &dwAddrLen);
+	unsigned int dwAddrLen = sizeof(stRemoteAddr);
+	unsigned int hAcceptSock = accept(GetSock(), (sockaddr*)&stRemoteAddr, &dwAddrLen);
 	if (INVALID_SOCKET == hAcceptSock)
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "%s", "INVALID_SOCKET == hAcceptSock");
@@ -1598,7 +1598,7 @@ bool FxTCPConnectSockBase::Send(const char* pData, int dwLen)
 		return false;
 	}
 
-	UINT32 dwHeaderLen = 0;
+	unsigned int dwHeaderLen = 0;
 	char* pDataHeaderBuff = (char*)(pDataHeader->BuildSendPkgHeader(dwHeaderLen, dwLen));
 	if ((unsigned int)dwLen + dwHeaderLen > (unsigned int)m_poSendBuf->GetTotalLen())
 	{
@@ -1652,7 +1652,7 @@ bool FxTCPConnectSockBase::Send(const char* pData, int dwLen)
 	return true;
 }
 
-bool FxTCPConnectSockBase::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
+bool FxTCPConnectSockBase::PushNetEvent(ENetEvtType eType, unsigned int dwValue)
 {
 	SNetEvent oEvent;
 	// 先扔网络事件进去，然后在报告上层有事件，先后顺序不能错，这样上层就不会错取事件//
@@ -1704,7 +1704,7 @@ bool FxTCPConnectSockBase::PostSend()
 		{
 			InterlockedCompareExchange(&m_nPostSend, 0, 1);
 
-			UINT32 dwErr = WSAGetLastError();
+			unsigned int dwErr = WSAGetLastError();
 			LogExe(LogLv_Error, "WSASend errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
 			return false;
@@ -1838,7 +1838,7 @@ bool FxTCPConnectSockBase::PostSendThread()
 		{
 			InterlockedCompareExchange(&m_nPostSend, 0, 1);
 
-			UINT32 dwErr = WSAGetLastError();
+			unsigned int dwErr = WSAGetLastError();
 			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "WSASend errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
 			return false;
@@ -1946,7 +1946,7 @@ bool FxTCPConnectSockBase::SendImmediately()
 		int nRet = send(GetSock(), pSendBuf, nLen, 0);
 		if (0 > nRet)
 		{
-			UINT32 dwError = 0;
+			unsigned int dwError = 0;
 #ifdef WIN32
 			dwError = WSAGetLastError();
 			InterlockedCompareExchange(&m_nPostSend, m_nPostSend - 1, m_nPostSend);
@@ -2002,7 +2002,7 @@ void FxTCPConnectSockBase::__ProcAssociate()
 	}
 }
 
-void FxTCPConnectSockBase::__ProcConnectError(UINT32 dwErrorNo)
+void FxTCPConnectSockBase::__ProcConnectError(unsigned int dwErrorNo)
 {
 	if (GetConnection())
 	{
@@ -2015,7 +2015,7 @@ void FxTCPConnectSockBase::__ProcConnectError(UINT32 dwErrorNo)
 	}
 }
 
-void FxTCPConnectSockBase::__ProcError(UINT32 dwErrorNo)
+void FxTCPConnectSockBase::__ProcError(unsigned int dwErrorNo)
 {
 	if (GetConnection())
 	{
@@ -2126,7 +2126,7 @@ void FxTCPConnectSockBase::OnConnect()
 {
 #ifdef WIN32
 	sockaddr_in stAddr = { 0 };
-	INT32 nAddrLen = sizeof(stAddr);
+	int nAddrLen = sizeof(stAddr);
 	getsockname(GetSock(), (sockaddr*)&stAddr, &nAddrLen);
 
 	GetConnection()->SetLocalIP(stAddr.sin_addr.s_addr);
@@ -2149,7 +2149,7 @@ void FxTCPConnectSockBase::OnConnect()
 	SetState(SSTATE_ESTABLISH);
 	PushNetEvent(NETEVT_ESTABLISH, 0);
 
-	INT32 nError = 0;
+	int nError = 0;
 	socklen_t nLen = sizeof(nError);
 	if (getsockopt(GetSock(), SOL_SOCKET, SO_ERROR, &nError, &nLen) < 0)
 	{
@@ -2170,7 +2170,7 @@ void FxTCPConnectSockBase::OnConnect()
 	}
 
 	sockaddr_in stAddr = { 0 };
-	UINT32 dwAddrLen = sizeof(stAddr);
+	unsigned int dwAddrLen = sizeof(stAddr);
 	getsockname(GetSock(), (sockaddr*)&stAddr, &dwAddrLen);
 
 	GetConnection()->SetLocalIP(stAddr.sin_addr.s_addr);
@@ -2202,7 +2202,7 @@ bool FxTCPConnectSockBase::PostClose()
 	ZeroMemory(&m_stRecvIoData.stOverlapped, sizeof(m_stRecvIoData.stOverlapped));
 	// Post失败的时候再进入这个函数时可能会丢失一次//
 
-	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(0), (ULONG_PTR)this, &m_stRecvIoData.stOverlapped))
+	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), unsigned int(0), (ULONG_PTR)this, &m_stRecvIoData.stOverlapped))
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "PostQueuedCompletionStatus errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
@@ -2217,7 +2217,7 @@ bool FxTCPConnectSockBase::PostClose()
 }
 
 #ifdef WIN32
-void FxTCPConnectSockBase::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred)
+void FxTCPConnectSockBase::OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred)
 {
 	SPerIoData* pSPerIoData = (SPerIoData*)pIoData;
 	if (NULL == pSPerIoData)
@@ -2264,7 +2264,7 @@ void FxTCPConnectSockBase::OnRecv(bool bRet, int dwBytes)
 		return;
 	}
 
-	if (UINT32(-1) == dwBytes)
+	if (unsigned int(-1) == dwBytes)
 	{
 		InterlockedCompareExchange(&m_nPostRecv, m_nPostRecv - 1, m_nPostRecv);
 		if (0 == m_nPostRecv)
@@ -2346,7 +2346,7 @@ void FxTCPConnectSockBase::OnRecv(bool bRet, int dwBytes)
 		else
 		{
 			char* pParseBuf = pUseBuf + nParserLen;
-			UINT32 dwHeaderLen = GetDataHeader()->GetHeaderLength();
+			unsigned int dwHeaderLen = GetDataHeader()->GetHeaderLength();
 			GetDataHeader()->BuildRecvPkgHeader(pParseBuf, (int)dwHeaderLen > nLen ? nLen : dwHeaderLen, 0);
 			m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen);
 			if (-1 == m_nPacketLen)
@@ -2485,7 +2485,7 @@ void FxTCPConnectSockBase::OnSend(bool bRet, int dwBytes)
 		return;
 	}
 
-	if (UINT32(-1) == dwBytes)
+	if (unsigned int(-1) == dwBytes)
 	{
 		InterlockedCompareExchange(&m_nPostSend, m_nPostSend - 1, m_nPostSend);
 		if (0 == m_nPostSend)
@@ -2592,7 +2592,7 @@ bool FxTCPConnectSockBase::PostRecvFree()
 	}
 	ZeroMemory(&m_stRecvIoData.stOverlapped, sizeof(m_stRecvIoData.stOverlapped));
 	//post 失败的时候 再进入这个函数 可能会丢失一次
-	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(-1), (ULONG_PTR)this, &m_stRecvIoData.stOverlapped))
+	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), unsigned int(-1), (ULONG_PTR)this, &m_stRecvIoData.stOverlapped))
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "PostQueuedCompletionStatus error : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 		InterlockedCompareExchange(&m_nPostRecv, 0, 1);
@@ -2732,7 +2732,7 @@ void FxTCPConnectSockBase::OnRecv()
 			else
 			{
 				char* pParseBuf = pUseBuf + nParserLen;
-				UINT32 dwHeaderLen = GetDataHeader()->GetHeaderLength();
+				unsigned int dwHeaderLen = GetDataHeader()->GetHeaderLength();
 				GetDataHeader()->BuildRecvPkgHeader(pParseBuf, (int)dwHeaderLen > nLen ? nLen : dwHeaderLen, 0);
 				m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen);
 				if (-1 == m_nPacketLen)
@@ -3010,7 +3010,7 @@ SOCKET FxTCPConnectSock::Connect()
 		&GuidConnectEx, sizeof(GuidConnectEx),
 		&lpfnConnectEx, sizeof(lpfnConnectEx), &dwBytes, 0, 0))
 	{
-		PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
+		PushNetEvent(NETEVT_CONN_ERR, (unsigned int)WSAGetLastError());
 		closesocket(GetSock());
 		return INVALID_SOCKET;
 	}
@@ -3028,7 +3028,7 @@ SOCKET FxTCPConnectSock::Connect()
 		&m_stRecvIoData.stOverlapped); // [in]
 	if (0 == bResult)      // 返回值处//
 	{
-		int dwError = (UINT32)WSAGetLastError();
+		int dwError = (unsigned int)WSAGetLastError();
 		if (dwError != ERROR_IO_PENDING)
 		{
 			PushNetEvent(NETEVT_CONN_ERR, dwError);
@@ -3059,11 +3059,11 @@ void FxTCPConnectSock::OnConnect()
 	FxTCPConnectSockBase::OnConnect();
 }
 
-void FxTCPConnectSock::__ProcRecv(UINT32 dwLen)
+void FxTCPConnectSock::__ProcRecv(unsigned int dwLen)
 {
 	if (GetConnection())
 	{
-		if (UINT32(-1) == dwLen)
+		if (unsigned int(-1) == dwLen)
 		{
 #ifdef WIN32
 			PostRecvFree();
@@ -3188,11 +3188,11 @@ std::string ResponseKey(std::string szWebInfo)
 	return base64::base64_encode((unsigned char*)dwarrMessageDigest, 20);
 }
 
-void FxWebSocketConnect::__ProcRecv(UINT32 dwLen)
+void FxWebSocketConnect::__ProcRecv(unsigned int dwLen)
 {
 	if (GetConnection())
 	{
-		if (UINT32(-1) == dwLen)
+		if (unsigned int(-1) == dwLen)
 		{
 #ifdef WIN32
 			PostRecvFree();
@@ -3336,7 +3336,7 @@ void FxWebSocketConnect::OnRecv(bool bRet, int dwBytes)
 			return;
 		}
 
-		if (UINT32(-1) == dwBytes)
+		if (unsigned int(-1) == dwBytes)
 		{
 			InterlockedCompareExchange(&m_nPostRecv, m_nPostRecv - 1, m_nPostRecv);
 			if (0 == m_nPostRecv)
@@ -3436,7 +3436,7 @@ void FxWebSocketConnect::OnRecv(bool bRet, int dwBytes)
 		return;
 	}
 
-	if (UINT32(-1) == dwBytes)
+	if (unsigned int(-1) == dwBytes)
 	{
 		InterlockedCompareExchange(&m_nPostRecv, m_nPostRecv - 1, m_nPostRecv);
 		if (0 == m_nPostRecv)
@@ -3971,7 +3971,7 @@ bool FxHttpConnect::Send(const char* pData, int dwLen)
 	return true;
 }
 
-void FxHttpConnect::__ProcRecv(UINT32 dwLen)
+void FxHttpConnect::__ProcRecv(unsigned int dwLen)
 {
 	if (GetConnection())
 	{
@@ -4023,7 +4023,7 @@ bool FxHttpConnect::PostSend()
 		{
 			InterlockedCompareExchange(&m_nPostSend, 0, 1);
 
-			UINT32 dwErr = WSAGetLastError();
+			unsigned int dwErr = WSAGetLastError();
 			LogExe(LogLv_Error, "WSASend errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
 			return false;

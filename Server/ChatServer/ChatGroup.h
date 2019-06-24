@@ -27,7 +27,7 @@ class DBGroupChatQuery : public IQuery
 public:
 	DBGroupChatQuery(stCHAT_NOTIFY_CHAT_GROUP_CHAT& refChat);
 	~DBGroupChatQuery() {}
-	virtual INT32 GetDBId(void) { return 0; }
+	virtual int GetDBId(void) { return 0; }
 	virtual void OnQuery(IDBConnection *poDBConnection);
 	virtual void OnResult(void);
 	virtual void Release(void);

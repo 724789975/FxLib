@@ -26,12 +26,12 @@ void ChatSession::OnClose(void)
 	ChatServer::Instance()->GetChatPlayerManager().OnSessionClose(m_szId);
 }
 
-void ChatSession::OnError(UINT32 dwErrorNo)
+void ChatSession::OnError(unsigned int dwErrorNo)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, error no : %d\n", GetRemoteIPStr(), GetRemotePort(), dwErrorNo);
 }
 
-void ChatSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void ChatSession::OnRecv(const char* pBuf, unsigned int dwLen)
 {
 	ChatPlayer* pChatPlayer = ChatServer::Instance()->GetChatPlayerManager().GetChatPlayer(m_szId);
 	if (!pChatPlayer)
@@ -49,13 +49,13 @@ void ChatSession::Reset()
 	memset(m_szId, 0, IDLENTH);
 }
 
-void ChatSession::OnMsg(const char* pBuf, UINT32 dwLen)
+void ChatSession::OnMsg(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oNetStream(pBuf, dwLen);
 	Protocol::EChatProtocol eProrocol;
 	oNetStream.ReadInt((int&)eProrocol);
-	const char* pData = pBuf + sizeof(UINT32);
-	dwLen -= sizeof(UINT32);
+	const char* pData = pBuf + sizeof(unsigned int);
+	dwLen -= sizeof(unsigned int);
 
 	switch (eProrocol)
 	{
@@ -80,7 +80,7 @@ public:
 	}
 	virtual ~DBUnreadChatQuery() {}
 
-	virtual INT32 GetDBId(void) { return 0; }
+	virtual int GetDBId(void) { return 0; }
 
 	virtual void OnQuery(IDBConnection *poDBConnection)
 	{
@@ -110,7 +110,7 @@ private:
 	IDataReader* m_pReader;
 };
 
-void ChatSession::OnLogin(const char* pBuf, UINT32 dwLen)
+void ChatSession::OnLogin(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oNetStream(pBuf, dwLen);
 	stPLAYER_REQUEST_CHAT_LOGIN oPLAYER_REQUEST_CHAT_LOGIN;

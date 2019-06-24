@@ -12,7 +12,7 @@ FxConnectionMgr::~FxConnectionMgr()
 {
 }
 
-bool FxConnectionMgr::Init(INT32 nMax)
+bool FxConnectionMgr::Init(int nMax)
 {
 	if(!m_oConnPool.Init(nMax, nMax / 2))
 	{

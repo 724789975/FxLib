@@ -24,7 +24,7 @@ FxSession::~FxSession()
 	//}
 }
 
-bool FxSession::Send(const char* pBuf,UINT32 dwLen)
+bool FxSession::Send(const char* pBuf,unsigned int dwLen)
 {
 	if (!m_poConnection)
 	{
@@ -94,7 +94,7 @@ SOCKET FxSession::Reconnect(void)
 	return m_poConnection->Reconnect();
 }
 
-UINT32 FxSession::GetRemoteIP()
+unsigned int FxSession::GetRemoteIP()
 {
 	if (NULL != m_poConnection)
 	{
@@ -114,7 +114,7 @@ const char* FxSession::GetRemoteIPStr()
 	return "NoIP";
 }
 
-UINT32 FxSession::GetRemotePort()
+unsigned int FxSession::GetRemotePort()
 {
 	if (NULL != m_poConnection)
 	{
@@ -178,14 +178,14 @@ IFxNet* FxNetGetModule()
 	return FxNetModule::Instance();
 }
 
-int IFxDataHeader::ParsePacket(const char* pBuf, UINT32 dwLen)
+int IFxDataHeader::ParsePacket(const char* pBuf, unsigned int dwLen)
 {
 	if (dwLen < GetHeaderLength())
 	{
 		return 0;
 	}
 
-	INT32 iPkgLen = __CheckPkgHeader(pBuf);
+	int iPkgLen = __CheckPkgHeader(pBuf);
 
 	return iPkgLen;
 }

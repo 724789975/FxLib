@@ -19,11 +19,11 @@ public:
 
 	virtual void		OnConnect(void);
 	virtual void		OnClose(void);
-	virtual void		OnError(UINT32 dwErrorNo);
-	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
+	virtual void		OnError(unsigned int dwErrorNo);
+	virtual void		OnRecv(const char* pBuf, unsigned int dwLen);
 	virtual void		Release(void) = 0;
 	virtual char*		GetRecvBuf() { return m_dataRecvBuf; }
-	virtual UINT32		GetRecvSize() { return 64 * 1024; };
+	virtual unsigned int		GetRecvSize() { return 64 * 1024; };
 
 	virtual void		Init();
 	unsigned int		GetServerId() { return m_dwServerId; }
@@ -70,7 +70,7 @@ public:
 	void Release(CBinaryLoginSession* pSession);
 
 	std::map<unsigned int, CBinaryLoginSession*>& GetLoginSessions() { return m_mapLoginSessions; }
-	CBinaryLoginSession* GetLoginSession(UINT32 dwServerId);
+	CBinaryLoginSession* GetLoginSession(unsigned int dwServerId);
 
 private:
 	TDynamicPoolEx<CBinaryLoginSession> m_poolSessions;

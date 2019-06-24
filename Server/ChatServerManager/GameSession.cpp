@@ -25,18 +25,18 @@ void GameSession::OnClose(void)
 
 }
 
-void GameSession::OnError(UINT32 dwErrorNo)
+void GameSession::OnError(unsigned int dwErrorNo)
 {
 
 }
 
-void GameSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void GameSession::OnRecv(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oNetStream(pBuf, dwLen);
 	Protocol::EChatProtocol eProrocol;
 	oNetStream.ReadInt((int&)eProrocol);
-	const char* pData = pBuf + sizeof(UINT32);
-	dwLen -= sizeof(UINT32);
+	const char* pData = pBuf + sizeof(unsigned int);
+	dwLen -= sizeof(unsigned int);
 
 	switch (eProrocol)
 	{
@@ -73,7 +73,7 @@ void GameSession::OnLoginSign(std::string szChatIp, unsigned int dwChatPort, uns
 	Send(g_pGameSessionBuf, g_dwGameSessionBuffLen - oStreamGame.GetDataLength());
 }
 
-void GameSession::OnLogin(const char* pBuf, UINT32 dwLen)
+void GameSession::OnLogin(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stGAME_REQUEST_CHAT_MANAGER_LOGIN oGAME_REQUEST_CHAT_MANAGER_LOGIN;
@@ -102,7 +102,7 @@ void GameSession::OnLogin(const char* pBuf, UINT32 dwLen)
 	Send(g_pGameSessionBuf, g_dwGameSessionBuffLen - oStreamGame.GetDataLength());
 }
 
-void GameSession::OnPlayerLogin(const char * pBuf, UINT32 dwLen)
+void GameSession::OnPlayerLogin(const char * pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stGAME_REQUEST_CHAT_MANAGER_PLAYER_LOGIN oGAME_REQUEST_CHAT_MANAGER_PLAYER_LOGIN;
@@ -112,7 +112,7 @@ void GameSession::OnPlayerLogin(const char * pBuf, UINT32 dwLen)
 		return;
 	}
 
-	UINT32 dwHashIndex = HashToIndex(oGAME_REQUEST_CHAT_MANAGER_PLAYER_LOGIN.szPlayerId.c_str(), oGAME_REQUEST_CHAT_MANAGER_PLAYER_LOGIN.szPlayerId.size());
+	unsigned int dwHashIndex = HashToIndex(oGAME_REQUEST_CHAT_MANAGER_PLAYER_LOGIN.szPlayerId.c_str(), oGAME_REQUEST_CHAT_MANAGER_PLAYER_LOGIN.szPlayerId.size());
 	ChatServerSession* pServerSession = ChatServerManager::Instance()->GetChatServerSessionManager().GetChatServerSession(dwHashIndex);
 	if (!pServerSession)
 	{

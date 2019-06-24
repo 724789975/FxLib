@@ -51,7 +51,7 @@ bool GameServer::Init(std::string szGameManagerIp, unsigned short wGameManagerPo
 	class RedisSetServerIp : public IRedisQuery
 	{
 	public:
-		RedisSetServerIp(UINT64 qwTeamId, std::string szGameIp) : m_qwTeamId(qwTeamId), m_szGameIp(szGameIp) {}
+		RedisSetServerIp(unsigned long long qwTeamId, std::string szGameIp) : m_qwTeamId(qwTeamId), m_szGameIp(szGameIp) {}
 		~RedisSetServerIp() {}
 
 		virtual int					GetDBId(void) { return 0; }
@@ -65,14 +65,14 @@ bool GameServer::Init(std::string szGameManagerIp, unsigned short wGameManagerPo
 		virtual void Release(void) { }
 
 	private:
-		UINT64 m_qwTeamId;
+		unsigned long long m_qwTeamId;
 		std::string m_szGameIp;
 	};
 
 	class RedisSetServerPort : public IRedisQuery
 	{
 	public:
-		RedisSetServerPort(UINT64 qwTeamId, UINT32 dwPort) : m_qwTeamId(qwTeamId), m_dwPort(dwPort) {}
+		RedisSetServerPort(unsigned long long qwTeamId, unsigned int dwPort) : m_qwTeamId(qwTeamId), m_dwPort(dwPort) {}
 		~RedisSetServerPort() {}
 
 		virtual int					GetDBId(void) { return 0; }
@@ -86,8 +86,8 @@ bool GameServer::Init(std::string szGameManagerIp, unsigned short wGameManagerPo
 		virtual void Release(void) { }
 
 	private:
-		UINT64 m_qwTeamId;
-		UINT32 m_dwPort;
+		unsigned long long m_qwTeamId;
+		unsigned int m_dwPort;
 	};
 
 	RedisSetServerIp oRedisSetServerIp(qwTeamId, szGameManagerIp);
@@ -110,7 +110,7 @@ bool GameServer::GameEnd()
 	class RedisDelServerIp : public IRedisQuery
 	{
 	public:
-		RedisDelServerIp(UINT64 qwTeamId) : m_qwTeamId(qwTeamId) {}
+		RedisDelServerIp(unsigned long long qwTeamId) : m_qwTeamId(qwTeamId) {}
 		~RedisDelServerIp() {}
 
 		virtual int					GetDBId(void) { return 0; }
@@ -124,13 +124,13 @@ bool GameServer::GameEnd()
 		virtual void Release(void) { }
 
 	private:
-		UINT64 m_qwTeamId;
+		unsigned long long m_qwTeamId;
 	};
 
 	class RedisDelServerPort : public IRedisQuery
 	{
 	public:
-		RedisDelServerPort(UINT64 qwTeamId) : m_qwTeamId(qwTeamId){}
+		RedisDelServerPort(unsigned long long qwTeamId) : m_qwTeamId(qwTeamId){}
 		~RedisDelServerPort() {}
 
 		virtual int					GetDBId(void) { return 0; }
@@ -144,7 +144,7 @@ bool GameServer::GameEnd()
 		virtual void Release(void) { }
 
 	private:
-		UINT64 m_qwTeamId;
+		unsigned long long m_qwTeamId;
 	};
 
 	RedisDelServerIp oRedisDelServerIp(m_qwTeamId);

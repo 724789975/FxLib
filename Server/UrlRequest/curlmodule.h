@@ -19,7 +19,7 @@ public:
 	virtual bool        Init();
 	virtual void        Close();
 	virtual bool        AddRequest(IUrlRequest *poRequest);
-	virtual bool        Run(UINT32 dwCount = -1);
+	virtual bool        Run(unsigned int dwCount = -1);
 
 	void AddResult(IUrlRequest* poRequest);
 

@@ -23,20 +23,20 @@ public:
 	//DECLARE_SINGLETON(FxNetModule);
 
 	virtual bool				Init();
-	virtual bool				Run(UINT32 dwCount = 0xffffffff);
+	virtual bool				Run(unsigned int dwCount = 0xffffffff);
 	virtual void				Release();
 	virtual bool				SetNetOpt(ENetOpt eOpt, int nValue);
 
-	virtual IFxListenSocket*	Listen(IFxSessionFactory* pSessionFactory, ESocketType eSocketListenType, UINT32 dwIP, UINT16& dwPort);
+	virtual IFxListenSocket*	Listen(IFxSessionFactory* pSessionFactory, ESocketType eSocketListenType, unsigned int dwIP, unsigned short& dwPort);
 
-	virtual SOCKET				TcpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect = false);
+	virtual SOCKET				TcpConnect(FxSession* poSession, unsigned int dwIP, unsigned short wPort, bool bReconnect = false);
 
-	virtual SOCKET				UdpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect = false);
+	virtual SOCKET				UdpConnect(FxSession* poSession, unsigned int dwIP, unsigned short wPort, bool bReconnect = false);
 
 	void						Uninit();
 
 	bool						PushNetEvent(IFxSocket* poSock, SNetEvent oEvent);
-	FxIoThread*					FetchIoThread(UINT32 dwSockId);
+	FxIoThread*					FetchIoThread(unsigned int dwSockId);
 
 	int							GetThreadCount() { return m_nNetThreadCount; }
 

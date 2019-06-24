@@ -22,11 +22,11 @@ void CSlaveServerSession::OnClose(void)
 {
 }
 
-void CSlaveServerSession::OnError(UINT32 dwErrorNo)
+void CSlaveServerSession::OnError(unsigned int dwErrorNo)
 {
 }
 
-void CSlaveServerSession::OnRecv(const char * pBuf, UINT32 dwLen)
+void CSlaveServerSession::OnRecv(const char * pBuf, unsigned int dwLen)
 {
 }
 

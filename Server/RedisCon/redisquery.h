@@ -13,8 +13,8 @@ public:
 	FxRedisQuery();
 	virtual ~FxRedisQuery();
 
-	virtual INT32		Query(const char* pszSQL);
-	virtual INT32		Query(const char* pszSQL, IRedisDataReader **ppReader);
+	virtual int		Query(const char* pszSQL);
+	virtual int		Query(const char* pszSQL, IRedisDataReader **ppReader);
 
 	bool ConnectRedis(const std::string& szHost, unsigned int dwPort, std::string szPassword);
 	void		        Query(IRedisQuery* poQuery);

@@ -66,8 +66,8 @@ bool CGameCommonConfig::Init()
 		virtual void Release(void) { m_pReader->Release(); }
 
 		IRedisDataReader* m_pReader;
-		UINT32 m_dwPrepareTime;
-		UINT32 m_dwGameReadyTime;
+		unsigned int m_dwPrepareTime;
+		unsigned int m_dwGameReadyTime;
 		float m_fSuspendTime;
 	};
 

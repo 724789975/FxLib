@@ -402,7 +402,7 @@ FxLoopBuffMgr::~FxLoopBuffMgr()
 
 }
 
-bool FxLoopBuffMgr::Init(UINT32 dwCount)
+bool FxLoopBuffMgr::Init(unsigned int dwCount)
 {
     m_oBuffPool.Init(dwCount, dwCount / 2);
     return true;

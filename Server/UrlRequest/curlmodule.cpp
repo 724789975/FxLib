@@ -32,10 +32,10 @@ bool FxCurlModule::AddRequest(IUrlRequest *poRequest)
 	return m_oCUrlThread.AddRequest(poRequest);
 }
 
-bool FxCurlModule::Run(UINT32 dwCount /*= -1*/)
+bool FxCurlModule::Run(unsigned int dwCount /*= -1*/)
 {
 	bool bRet = false;
-	for (UINT32 i = 0; i < dwCount; i++)
+	for (unsigned int i = 0; i < dwCount; i++)
 	{
 		if (!CallBackResult())
 		{

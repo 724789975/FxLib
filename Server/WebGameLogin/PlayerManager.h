@@ -12,14 +12,14 @@ public:
 
 	bool Init() { return true; }
 
-	Player* GetPlayer(UINT64 qwPlayerId);
-	std::map<UINT64, Player>& GetPlayerMap() { return m_mapPlayers; }
+	Player* GetPlayer(unsigned long long qwPlayerId);
+	std::map<unsigned long long, Player>& GetPlayerMap() { return m_mapPlayers; }
 
 	Player* OnPlayerLogin(CPlayerSession* pSession, GameProto::PlayerRequestLogin& refLogin);
-	void OnSessionClose(UINT64 qwPlayerId);
+	void OnSessionClose(unsigned long long qwPlayerId);
 
 private:
-	std::map<UINT64, Player> m_mapPlayers;
+	std::map<unsigned long long, Player> m_mapPlayers;
 };
 
 #endif // __ChatPlayerManager_H__

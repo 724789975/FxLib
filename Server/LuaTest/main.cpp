@@ -16,7 +16,7 @@ class TestTimer: public IFxTimer
 {
 	virtual bool OnTimer(double fSecond)
 	{
-		LogFun(LT_File | LT_Screen, LogLv_Error, "%f", fSecond);
+		//LogFun(LT_File | LT_Screen, LogLv_Error, "%f", fSecond);
 		return true;
 	}
 };

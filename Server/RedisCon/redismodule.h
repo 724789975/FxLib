@@ -22,9 +22,9 @@ public:
 	virtual const char* GetModuleName(void);
 
 	virtual bool		Open(std::string szHost, unsigned int dwPort, std::string szPassword, unsigned int dwRedisId);
-	virtual void        Close(UINT32 dwDBId);
+	virtual void        Close(unsigned int dwDBId);
 	virtual bool		AddQuery(IRedisQuery*poQuery);
-	virtual bool        Run(UINT32 dwCount);
+	virtual bool        Run(unsigned int dwCount);
 
 	//主线程阻塞查询
 	virtual void		QueryDirect(IRedisQuery* poQuery);
@@ -35,7 +35,7 @@ public:
 
     FxRedisReader*      FetchReader();
     void                ReleaseReader(FxRedisReader* poReader);
-    FxRedisClient *     FindDBClient(UINT32 dwDBId);
+    FxRedisClient *     FindDBClient(unsigned int dwDBId);
 
 private:
     bool                __CallBackResult();
@@ -45,8 +45,8 @@ private:
 	FxCriticalLock		    m_oLock;
     TDynamicPoolEx<FxRedisReader>   m_oReaderPool;
 	std::list<IRedisQuery*>       m_oResultList;
-	std::map<UINT32, FxRedisClient*> m_mapDBClient;
-	std::map<UINT32, FxRedisQuery> m_mapRedisQuery;
+	std::map<unsigned int, FxRedisClient*> m_mapDBClient;
+	std::map<unsigned int, FxRedisQuery> m_mapRedisQuery;
 };
 
 #endif  // __REDIS_MODULE_H__

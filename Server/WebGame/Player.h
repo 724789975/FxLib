@@ -18,8 +18,8 @@ public:
 	void SetPlayerSession(CPlayerSession* pPlayerSession) { m_pPlayerSession = pPlayerSession; }
 	CPlayerSession* GetPlayerSession() { return m_pPlayerSession; }
 
-	void SetPlayerId(UINT64 qwPlayerId) { m_qwPlayerId = qwPlayerId; GetPlayerData(); }
-	UINT64 GetPlayerId() { return m_qwPlayerId; }
+	void SetPlayerId(unsigned long long qwPlayerId) { m_qwPlayerId = qwPlayerId; GetPlayerData(); }
+	unsigned long long GetPlayerId() { return m_qwPlayerId; }
 
 	virtual TetrisBase& GetTetrisData() = 0;
 
@@ -29,7 +29,7 @@ public:
 protected:
 	virtual void GetPlayerData() = 0;
 	CPlayerSession* m_pPlayerSession;
-	UINT64 m_qwPlayerId;
+	unsigned long long m_qwPlayerId;
 };
 
 class CCommonPlayer : public CPlayerBase

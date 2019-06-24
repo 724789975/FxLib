@@ -28,13 +28,13 @@ bool ChatPlayer::Init(ChatSession* pSession, std::string szID)
 	return true;
 }
 
-void ChatPlayer::OnMsg(const char* pBuf, UINT32 dwLen)
+void ChatPlayer::OnMsg(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oNetStream(pBuf, dwLen);
 	Protocol::EChatProtocol eProrocol;
 	oNetStream.ReadInt((int&)eProrocol);
-	const char* pData = pBuf + sizeof(UINT32);
-	dwLen -= sizeof(UINT32);
+	const char* pData = pBuf + sizeof(unsigned int);
+	dwLen -= sizeof(unsigned int);
 
 	switch (eProrocol)
 	{
@@ -47,7 +47,7 @@ void ChatPlayer::OnMsg(const char* pBuf, UINT32 dwLen)
 	}
 }
 
-void ChatPlayer::OnPrivateChat(const char* pBuf, UINT32 dwLen)
+void ChatPlayer::OnPrivateChat(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oNetStream(pBuf, dwLen);
 	stPLAYER_REQUEST_PRIVATE_CHAT oPLAYER_REQUEST_PRIVATE_CHAT;
@@ -125,7 +125,7 @@ public:
 		m_strQuery = szTemp;
 	}
 	~DBCreateGroupQuery(){}
-	virtual INT32 GetDBId(void) { return 0; }
+	virtual int GetDBId(void) { return 0; }
 
 	virtual void OnQuery(IDBConnection *poDBConnection)
 	{
@@ -137,7 +137,7 @@ public:
 
 	virtual void OnResult(void)
 	{
-		UINT32 dwGroupId = 0;
+		unsigned int dwGroupId = 0;
 		while (m_pReader->GetNextRecord())
 		{
 			dwGroupId = atoi(m_pReader->GetFieldValue(0));
@@ -161,13 +161,13 @@ private:
 	IDataReader* m_pReader;
 };
 
-void ChatPlayer::OnRequestCreateChatGroup(const char* pBuf, UINT32 dwLen)
+void ChatPlayer::OnRequestCreateChatGroup(const char* pBuf, unsigned int dwLen)
 {
 	DBCreateGroupQuery* pQuery = new DBCreateGroupQuery(m_szPyayerId);
 	FxDBGetModule()->AddQuery(pQuery);
 }
 
-void ChatPlayer::OnCreateChatGroup(UINT32 dwGroupId)
+void ChatPlayer::OnCreateChatGroup(unsigned int dwGroupId)
 {
 	if (dwGroupId == 0)
 	{
@@ -198,7 +198,7 @@ void ChatPlayer::OnCreateChatGroup(UINT32 dwGroupId)
 	m_pSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
 }
 
-void ChatPlayer::OnRequestGroupChat(const char* pBuf, UINT32 dwLen)
+void ChatPlayer::OnRequestGroupChat(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oNetStream(pBuf, dwLen);
 	stPLAYER_REQUEST_CHAT_GROUP_CHAT oPLAYER_REQUEST_CHAT_GROUP_CHAT;
@@ -245,7 +245,7 @@ void ChatPlayer::OnGroupChat(stCHAT_NOTIFY_PLAYER_GROUP_CHAT& refChat)
 	m_pSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
 }
 
-void ChatPlayer::OnRequestInviteEnterGroupChat(const char* pBuf, UINT32 dwLen)
+void ChatPlayer::OnRequestInviteEnterGroupChat(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oNetStream(pBuf, dwLen);
 	stPLAYER_REQUEST_INVITE_ENTER_GROUP_CHAT oInviteEnterGroupChat;
@@ -284,7 +284,7 @@ void ChatPlayer::OnInviteEnterGroupChatResult(stCHAT_ACK_PLAYER_INVITE_GROUP_CHA
 	m_pSession->Send(g_pChatPlayerBuff, g_dwChatPlayerBuffLen - oStream.GetDataLength());
 }
 
-void ChatPlayer::OnRequestLeaveGroupChat(const char* pBuf, UINT32 dwLen)
+void ChatPlayer::OnRequestLeaveGroupChat(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oNetStream(pBuf, dwLen);
 	stPLAYER_REQUEST_LEAVE_GROUP_CHAT oLeaveGroupChat;

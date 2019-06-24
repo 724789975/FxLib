@@ -20,11 +20,11 @@ public:
 
 	virtual void		OnConnect(void);
 	virtual void		OnClose(void);
-	virtual void		OnError(UINT32 dwErrorNo);
-	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
+	virtual void		OnError(unsigned int dwErrorNo);
+	virtual void		OnRecv(const char* pBuf, unsigned int dwLen);
 	virtual void		Release(void) = 0;
 	virtual char*		GetRecvBuf() { return m_dataRecvBuf; }
-	virtual UINT32		GetRecvSize() { return 64 * 1024; };
+	virtual unsigned int		GetRecvSize() { return 64 * 1024; };
 
 	virtual void		Init();
 
@@ -40,7 +40,7 @@ public:
 	bool		OnPlayerRequestLoginLeaveTeam(CPlayerSession& refSession, google::protobuf::Message& refMsg);
 
 protected:
-	UINT64 m_qwPlayerId;
+	unsigned long long m_qwPlayerId;
 private:
 	char m_dataRecvBuf[1024 * 1024];
 

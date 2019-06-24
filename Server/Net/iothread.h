@@ -23,10 +23,10 @@ public:
 
 	bool					Start();
 
-	bool					Init(UINT32 dwMaxSock);
+	bool					Init(unsigned int dwMaxSock);
 	void					Uninit();
 
-	UINT32					GetThreadId();
+	unsigned int					GetThreadId();
 	FILE*&					GetFile();
 
 	void					AddConnectSocket(IFxConnectSocket* pSock);
@@ -35,8 +35,8 @@ public:
 #ifdef WIN32
 	bool					AddEvent(int hSock, IFxSocket* poSock);
 #else
-	bool					AddEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock);
-	bool					ChangeEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock);
+	bool					AddEvent(int hSock, unsigned int dwEvents, IFxSocket* poSock);
+	bool					ChangeEvent(int hSock, unsigned int dwEvents, IFxSocket* poSock);
 	bool					DelEvent(int hSock);
 #endif // WIN32
 
@@ -57,7 +57,7 @@ private:
 protected:
 	IFxThreadHandler*		m_poThrdHandler;
 
-	UINT32					m_dwMaxSock;
+	unsigned int					m_dwMaxSock;
 	bool					m_bStop;
 
 #ifdef WIN32

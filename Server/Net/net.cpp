@@ -138,7 +138,7 @@ void FxNetModule::Uninit()
     __DestroyComponent();
 }
 
-IFxListenSocket* FxNetModule::Listen(IFxSessionFactory* pSessionFactory, ESocketType eSocketListenType, UINT32 dwIP, UINT16& dwPort)
+IFxListenSocket* FxNetModule::Listen(IFxSessionFactory* pSessionFactory, ESocketType eSocketListenType, unsigned int dwIP, unsigned short& dwPort)
 {
 	IFxListenSocket* pListenSocket = NULL;
 	switch (eSocketListenType)
@@ -180,7 +180,7 @@ IFxListenSocket* FxNetModule::Listen(IFxSessionFactory* pSessionFactory, ESocket
 	return NULL;
 }
 
-SOCKET FxNetModule::TcpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect /*= false*/)
+SOCKET FxNetModule::TcpConnect(FxSession* poSession, unsigned int dwIP, unsigned short wPort, bool bReconnect /*= false*/)
 {
 	FxConnection* poConnection = FxConnectionMgr::Instance()->Create();
 	if (NULL == poConnection)
@@ -198,7 +198,7 @@ SOCKET FxNetModule::TcpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, 
 	return poConnection->Reconnect();
 }
 
-SOCKET FxNetModule::UdpConnect(FxSession* poSession, UINT32 dwIP, UINT16 wPort, bool bReconnect /*= false*/)
+SOCKET FxNetModule::UdpConnect(FxSession* poSession, unsigned int dwIP, unsigned short wPort, bool bReconnect /*= false*/)
 {
 	FxConnection* poConnection = FxConnectionMgr::Instance()->Create();
 	if (NULL == poConnection)
@@ -229,12 +229,12 @@ bool FxNetModule::PushNetEvent(IFxSocket* poSock, SNetEvent oEvent)
 	return false;
 }
 
-bool FxNetModule::Run(UINT32 dwCount)
+bool FxNetModule::Run(unsigned int dwCount)
 {
     bool bRet = true;
 
 	SSockNetEvent* pEvent = NULL;
-    for (UINT32 i = 0; i < dwCount; i++)
+    for (unsigned int i = 0; i < dwCount; i++)
     {
 		pEvent = m_pEventQueue->PopFront();
         if (NULL == pEvent)
@@ -263,7 +263,7 @@ void FxNetModule::Release()
     Uninit();
 }
 
-FxIoThread* FxNetModule::FetchIoThread(UINT32 dwSockId)
+FxIoThread* FxNetModule::FetchIoThread(unsigned int dwSockId)
 {
     int nIndex = dwSockId % m_nNetThreadCount;
     return m_pEpollHandlers + nIndex;

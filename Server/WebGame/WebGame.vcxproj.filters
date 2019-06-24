@@ -7,9 +7,6 @@
     <ClCompile Include="ServerSession.cpp" />
     <ClCompile Include="SlaveServerSession.cpp" />
     <ClCompile Include="SocketSession.cpp" />
-    <ClCompile Include="..\common\fxmeta.cpp">
-      <Filter>common</Filter>
-    </ClCompile>
     <ClCompile Include="..\common\fxtimer.cpp">
       <Filter>common</Filter>
     </ClCompile>
@@ -35,6 +32,9 @@
     <ClCompile Include="GameServerBase.cpp" />
     <ClCompile Include="..\common\exception_dump.cpp" />
     <ClCompile Include="..\common\segvcatch.cpp" />
+    <ClCompile Include="..\common\utility.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="gamedefine.h" />

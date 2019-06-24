@@ -5,7 +5,7 @@
 class RedisGetPlayerData : public IRedisQuery
 {
 public:
-	RedisGetPlayerData(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId), m_pReader(NULL) {}
+	RedisGetPlayerData(unsigned long long qwPlayerId) : m_qwPlayerId(qwPlayerId), m_pReader(NULL) {}
 	~RedisGetPlayerData() {}
 
 	virtual int					GetDBId(void) { return 0; }
@@ -30,9 +30,9 @@ public:
 
 	std::string m_szName;
 	std::string m_szHeadImg;
-	UINT32 m_dwSex;
+	unsigned int m_dwSex;
 private:
-	UINT64 m_qwPlayerId;
+	unsigned long long m_qwPlayerId;
 	IRedisDataReader* m_pReader;
 };
 

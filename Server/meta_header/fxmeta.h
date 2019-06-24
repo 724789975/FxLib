@@ -21,14 +21,14 @@ using namespace Utility;
 #include <unistd.h>
 #endif // WIN32
 
-typedef signed char			INT8;
-typedef unsigned char		UINT8;
-typedef signed short		INT16;
-typedef unsigned short		UINT16;
-typedef signed int			INT32;
-typedef unsigned int		UINT32;
-typedef signed long long	INT64;
-typedef unsigned long long	UINT64;
+//typedef signed char			INT8;
+//typedef unsigned char		unsigned char;
+//typedef signed short		short;
+//typedef unsigned short		unsigned short;
+//typedef signed int			int;
+//typedef unsigned int		unsigned int;
+//typedef signed long long	long long;
+//typedef unsigned long long	unsigned long long;
 #ifndef NULL
 #define NULL 0
 #endif

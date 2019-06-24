@@ -151,10 +151,10 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\common\fxmeta.cpp" />
     <ClCompile Include="..\common\fxtimer.cpp" />
     <ClCompile Include="..\common\log_thread.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
+    <ClCompile Include="..\common\utility.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="tarraybind.cpp" />
   </ItemGroup>

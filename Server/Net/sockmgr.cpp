@@ -13,7 +13,7 @@ FxMySockMgr::~FxMySockMgr()
 
 }
 
-bool FxMySockMgr::Init(INT32 nMax)
+bool FxMySockMgr::Init(int nMax)
 {
     if (!m_oTCPSockPool.Init(nMax, nMax / 2, false, MAX_SOCKET_COUNT))
     {
@@ -103,7 +103,7 @@ FxHttpConnect* FxMySockMgr::CreateHttpConnect()
 	return poSock;
 }
 
-FxTCPListenSock* FxMySockMgr::CreateCommonTcpListen(UINT32 dwPort, IFxSessionFactory* pSessionFactory)
+FxTCPListenSock* FxMySockMgr::CreateCommonTcpListen(unsigned int dwPort, IFxSessionFactory* pSessionFactory)
 {
 	FxTCPListenSock* pSock = new FxTCPListenSock();
 	pSock->IFxListenSocket::Init(pSessionFactory);
@@ -112,7 +112,7 @@ FxTCPListenSock* FxMySockMgr::CreateCommonTcpListen(UINT32 dwPort, IFxSessionFac
 	pSock->SetSockId(m_dwNextId++);
 	return pSock;
 
-	static std::map<UINT32, FxTCPListenSock> s_mapListenSocks;
+	static std::map<unsigned int, FxTCPListenSock> s_mapListenSocks;
 	if (m_mapListenSocks.find(dwPort) != m_mapListenSocks.end())
 	{
 		return NULL;
@@ -130,7 +130,7 @@ FxTCPListenSock* FxMySockMgr::CreateCommonTcpListen(UINT32 dwPort, IFxSessionFac
 	return &s_mapListenSocks[dwPort];
 }
 
-FxWebSocketListen* FxMySockMgr::CreateWebSocketListen(UINT32 dwPort, IFxSessionFactory* pSessionFactory)
+FxWebSocketListen* FxMySockMgr::CreateWebSocketListen(unsigned int dwPort, IFxSessionFactory* pSessionFactory)
 {
 	FxWebSocketListen* pSock = new FxWebSocketListen();
 	pSock->IFxListenSocket::Init(pSessionFactory);
@@ -139,7 +139,7 @@ FxWebSocketListen* FxMySockMgr::CreateWebSocketListen(UINT32 dwPort, IFxSessionF
 	pSock->SetSockId(m_dwNextId++);
 	return pSock;
 
-	static std::map<UINT32, FxWebSocketListen> s_mapListenSocks;
+	static std::map<unsigned int, FxWebSocketListen> s_mapListenSocks;
 	if (m_mapListenSocks.find(dwPort) != m_mapListenSocks.end())
 	{
 		return NULL;
@@ -157,7 +157,7 @@ FxWebSocketListen* FxMySockMgr::CreateWebSocketListen(UINT32 dwPort, IFxSessionF
 	return &s_mapListenSocks[dwPort];
 }
 
-FxHttpListen* FxMySockMgr::CreateHttpListen(UINT32 dwPort, IFxSessionFactory* pSessionFactory)
+FxHttpListen* FxMySockMgr::CreateHttpListen(unsigned int dwPort, IFxSessionFactory* pSessionFactory)
 {
 	FxHttpListen* pSock = new FxHttpListen();
 	pSock->IFxListenSocket::Init(pSessionFactory);
@@ -166,7 +166,7 @@ FxHttpListen* FxMySockMgr::CreateHttpListen(UINT32 dwPort, IFxSessionFactory* pS
 	pSock->SetSockId(m_dwNextId++);
 	return pSock;
 
-	static std::map<UINT32, FxHttpListen> s_mapListenSocks;
+	static std::map<unsigned int, FxHttpListen> s_mapListenSocks;
 	if (m_mapListenSocks.find(dwPort) != m_mapListenSocks.end())
 	{
 		return NULL;
@@ -235,7 +235,7 @@ FxUDPConnectSock * FxMySockMgr::CreateUdpSock()
     return poSock;
 }
 
-FxUDPListenSock* FxMySockMgr::CreateUdpSockListen(UINT32 dwPort, IFxSessionFactory* pSessionFactory)
+FxUDPListenSock* FxMySockMgr::CreateUdpSockListen(unsigned int dwPort, IFxSessionFactory* pSessionFactory)
 {
 	FxUDPListenSock* pSock = new FxUDPListenSock();
 	pSock->IFxListenSocket::Init(pSessionFactory);
@@ -244,7 +244,7 @@ FxUDPListenSock* FxMySockMgr::CreateUdpSockListen(UINT32 dwPort, IFxSessionFacto
 	pSock->SetSockId(m_dwNextId++);
 	return pSock;
 
-	static std::map<UINT32, FxUDPListenSock> s_mapListenSocks;
+	static std::map<unsigned int, FxUDPListenSock> s_mapListenSocks;
 	if (m_mapListenSocks.find(dwPort) != m_mapListenSocks.end())
 	{
 		return NULL;

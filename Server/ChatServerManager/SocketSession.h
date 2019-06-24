@@ -13,10 +13,10 @@ public:
 	virtual ~TextDataHeader();
 	virtual unsigned int GetHeaderLength() { return 0; }		// 消息头长度
 	virtual void* GetPkgHeader();
-	virtual void* BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen);
-	virtual bool BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset);
+	virtual void* BuildSendPkgHeader(unsigned int& dwHeaderLen, unsigned int dwDataLen);
+	virtual bool BuildRecvPkgHeader(char* pBuff, unsigned int dwLen, unsigned int dwOffset);
 	virtual int __CheckPkgHeader(const char* pBuf);
-	virtual int	ParsePacket(const char* pBuf, UINT32 dwLen);
+	virtual int	ParsePacket(const char* pBuf, unsigned int dwLen);
 private:
 	// // 消息头 为网络字节序
 	//static const UINT32 s_dwMagic = 12345678;
@@ -29,14 +29,14 @@ public:
 	virtual ~BinaryDataHeader();
 	virtual unsigned int GetHeaderLength(){ return sizeof(m_dataRecvBuffer); }		// 消息头长度
 	virtual void* GetPkgHeader();
-	virtual void* BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen);
-	virtual bool BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset);
+	virtual void* BuildSendPkgHeader(unsigned int& dwHeaderLen, unsigned int dwDataLen);
+	virtual bool BuildRecvPkgHeader(char* pBuff, unsigned int dwLen, unsigned int dwOffset);
 	virtual int __CheckPkgHeader(const char* pBuf);
 private:
 	// // 消息头 为网络字节序
 	char m_dataRecvBuffer[8];
 	char m_dataSendBuffer[8];
-	static const UINT32 s_dwMagic = 'T' << 24 | 'E' << 16 | 'S' << 8 | 'T';
+	static const unsigned int s_dwMagic = 'T' << 24 | 'E' << 16 | 'S' << 8 | 'T';
 	//static const UINT32 s_dwMagic = 12345678;
 };
 
@@ -47,10 +47,10 @@ public:
 	virtual ~WebSocketDataHeader();
 	virtual unsigned int GetHeaderLength() { return m_dwHeaderLength; }		// 消息头长度 这个只能BuildRecvPkgHeader之后调用
 	virtual void* GetPkgHeader();
-	virtual void* BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen);
-	virtual bool BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset);
+	virtual void* BuildSendPkgHeader(unsigned int& dwHeaderLen, unsigned int dwDataLen);
+	virtual bool BuildRecvPkgHeader(char* pBuff, unsigned int dwLen, unsigned int dwOffset);
 	virtual int __CheckPkgHeader(const char* pBuf);
-	virtual int	ParsePacket(const char* pBuf, UINT32 dwLen);
+	virtual int	ParsePacket(const char* pBuf, unsigned int dwLen);
 
 private:
 	/************************/
@@ -72,7 +72,7 @@ private:
 	// // 消息头 为网络字节序
 	char m_dataRecvBuffer[16];
 	char m_dataSendBuffer[16];
-	static const UINT32 s_dwMagic = 'T' << 24 | 'E' << 16 | 'S' << 8 | 'T';
+	static const unsigned int s_dwMagic = 'T' << 24 | 'E' << 16 | 'S' << 8 | 'T';
 
 	unsigned int m_dwHeaderLength;
 	//static const UINT32 s_dwMagic = 12345678;

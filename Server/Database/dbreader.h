@@ -11,17 +11,17 @@ public:
 	FxMySQLReader();
 	virtual ~FxMySQLReader();
 
-	virtual UINT32      GetRecordCount();
+	virtual unsigned int      GetRecordCount();
 
-	virtual UINT32      GetFieldCount();
+	virtual unsigned int      GetFieldCount();
 
     virtual bool        GetFirstRecord();
 
     virtual bool        GetNextRecord();
 
-	virtual const char* GetFieldValue(UINT32 dwIndex);
+	virtual const char* GetFieldValue(unsigned int dwIndex);
 
-    virtual INT32       GetFieldLength(UINT32 dwIndex);
+    virtual int       GetFieldLength(unsigned int dwIndex);
 
 	virtual void        Release();
 

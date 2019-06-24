@@ -38,12 +38,12 @@ void CCenterSession::OnClose(void)
 {
 }
 
-void CCenterSession::OnError(UINT32 dwErrorNo)
+void CCenterSession::OnError(unsigned int dwErrorNo)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
 }
 
-void CCenterSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void CCenterSession::OnRecv(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	std::string szProtocolName;

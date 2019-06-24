@@ -24,15 +24,15 @@ public:
 
 	CPlayerSession* GetSession() { return m_pSession; }
 
-	UINT64 GetPlayerId() { return m_qwPyayerId; }
-	UINT64 GetTeamId() { return m_qwTeamId; }
-	UINT32 GetTeamServerId() { return m_dwTeamServerId; }
+	unsigned long long GetPlayerId() { return m_qwPyayerId; }
+	unsigned long long GetTeamId() { return m_qwTeamId; }
+	unsigned int GetTeamServerId() { return m_dwTeamServerId; }
 	std::string GetNickName() { return m_szNickName; }
 	std::string GetAvatar() { return m_szAvatar; }
-	UINT32 GetSex() { return m_dwSex; }
+	unsigned int GetSex() { return m_dwSex; }
 
 	void SetState(EPlayrState eState) { m_eState = eState; }
-	void SetTeamInfo(UINT64 qwTeamId, UINT32 dwTeamServerId) { m_qwTeamId = qwTeamId; m_dwTeamServerId = dwTeamServerId; }
+	void SetTeamInfo(unsigned long long qwTeamId, unsigned int dwTeamServerId) { m_qwTeamId = qwTeamId; m_dwTeamServerId = dwTeamServerId; }
 
 	bool OnPlayerRequestLogin(CPlayerSession& refSession, GameProto::PlayerRequestLogin& refLogin);
 	void OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto::PlayerRequestLoginMakeTeam& refMsg);
@@ -49,15 +49,15 @@ private:
 
 	EPlayrState m_eState;
 
-	UINT64 m_qwPyayerId;
+	unsigned long long m_qwPyayerId;
 	std::string m_szNickName;
 	std::string m_szAvatar;
-	UINT32 m_dwSex;
-	UINT32 m_dwBalance;
+	unsigned int m_dwSex;
+	unsigned int m_dwBalance;
 	std::string m_szToken;
 
-	UINT64 m_qwTeamId;
-	UINT32 m_dwTeamServerId;
+	unsigned long long m_qwTeamId;
+	unsigned int m_dwTeamServerId;
 };
 
 #endif // !__ChatPlayer_H__

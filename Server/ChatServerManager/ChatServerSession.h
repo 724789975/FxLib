@@ -15,16 +15,16 @@ public:
 
 	virtual void		OnConnect(void);
 	virtual void		OnClose(void);
-	virtual void		OnError(UINT32 dwErrorNo);
-	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
+	virtual void		OnError(unsigned int dwErrorNo);
+	virtual void		OnRecv(const char* pBuf, unsigned int dwLen);
 	virtual void		Release(void);
 	virtual char*		GetRecvBuf() { return m_dataRecvBuf; }
-	virtual UINT32		GetRecvSize() { return 64 * 1024; };
+	virtual unsigned int		GetRecvSize() { return 64 * 1024; };
 	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
 
-	UINT32 GetChatServerPort() { return m_dwChatServerPort; }
-	UINT32 GetChatPort() { return m_dwChatPort; }
-	UINT32 GetWebSocketChatPort() { return m_dwWebSocketChatPort; }
+	unsigned int GetChatServerPort() { return m_dwChatServerPort; }
+	unsigned int GetChatPort() { return m_dwChatPort; }
+	unsigned int GetWebSocketChatPort() { return m_dwWebSocketChatPort; }
 	std::string GetChatIp() { return m_szChatIp; }
 
 	void ChatLogin(std::string szServerId, std::string szPlayerId);
@@ -34,14 +34,14 @@ private:
 	BinaryDataHeader m_oBinaryDataHeader;
 	char m_dataRecvBuf[1024 * 1024];
 private:
-	UINT32 m_dwChatServerPort;
-	UINT32 m_dwChatPort;
-	UINT32 m_dwWebSocketChatPort;
+	unsigned int m_dwChatServerPort;
+	unsigned int m_dwChatPort;
+	unsigned int m_dwWebSocketChatPort;
 	std::string m_szChatIp;
 private:
-	void OnChatServerInfo(const char* pBuf, UINT32 dwLen);
-	void OnChatLoginSign(const char* pBuf, UINT32 dwLen);
-	void OnChatLoginSignGM(const char* pBuf, UINT32 dwLen);
+	void OnChatServerInfo(const char* pBuf, unsigned int dwLen);
+	void OnChatLoginSign(const char* pBuf, unsigned int dwLen);
+	void OnChatLoginSignGM(const char* pBuf, unsigned int dwLen);
 };
 
 class ChatServerSessionManager : public IFxSessionFactory
@@ -57,7 +57,7 @@ public:
 
 	virtual void Release(FxSession* pSession);
 	ChatServerSession* GetChatServerSessions() { return m_oChatServerSessions; }
-	ChatServerSession* GetChatServerSession(UINT32 dwHashIndex);
+	ChatServerSession* GetChatServerSession(unsigned int dwHashIndex);
 
 	void OnChatServerInfo(ChatServerSession* pChatServerSession);
 

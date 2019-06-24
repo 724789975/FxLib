@@ -55,19 +55,19 @@ bool FxConnection::IsConnecting(void)
 	return (CONN_ASSOCIATE == m_nConnStat ||  CONN_CONN== m_nConnStat);
 }
 
-void FxConnection::SetRemoteIP(UINT32 dwIP)
+void FxConnection::SetRemoteIP(unsigned int dwIP)
 {
 	m_dwRemoteIP = dwIP;
 	memcpy(m_szRemoteIP, inet_ntoa((in_addr&)m_dwRemoteIP), 16);
 }
 
-void FxConnection::SetLocalIP(UINT32 dwIP)
+void FxConnection::SetLocalIP(unsigned int dwIP)
 {
 	m_dwLocalIP = dwIP;
 	memcpy(m_szLocalIP, inet_ntoa((in_addr&)m_dwLocalIP), 16);
 }
 
-bool FxConnection::Send(const char* pBuf,UINT32 dwLen)
+bool FxConnection::Send(const char* pBuf,unsigned int dwLen)
 {
 	if (NULL == m_poSock)
 	{
@@ -163,7 +163,7 @@ void FxConnection::OnClose()
 	m_poSession->Release();
 }
 
-void FxConnection::OnRecv(UINT32 dwLen)
+void FxConnection::OnRecv(unsigned int dwLen)
 {
 	if (NULL == m_poSession)
 	{
@@ -178,7 +178,7 @@ void FxConnection::OnRecv(UINT32 dwLen)
 	m_poSession->OnRecv(m_poSession->GetRecvBuf(), dwLen);
 }
 
-void FxConnection::OnError(UINT32 dwErrorNo)
+void FxConnection::OnError(unsigned int dwErrorNo)
 {
 	if (NULL == m_poSession)
 	{
@@ -205,7 +205,7 @@ char* FxConnection::GetRecvBuf()
 	return NULL;
 }
 
-UINT32 FxConnection::GetRecvSize()
+unsigned int FxConnection::GetRecvSize()
 {
 	if (m_poSession)
 	{
@@ -214,7 +214,7 @@ UINT32 FxConnection::GetRecvSize()
 	return 0;
 }
 
-void FxConnection::OnConnError(UINT32 dwErrorNo)
+void FxConnection::OnConnError(unsigned int dwErrorNo)
 {
 	if (NULL == m_poSession)
 	{

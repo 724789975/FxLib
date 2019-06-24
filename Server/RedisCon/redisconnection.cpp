@@ -62,7 +62,7 @@ bool FxRedisConnection::ReConnect()
 	return true;
 }
 
-INT32 FxRedisConnection::Query(const char* pszCMD)
+int FxRedisConnection::Query(const char* pszCMD)
 {
 	redisReply* preply = NULL;
 	if (CheckConnection())
@@ -85,7 +85,7 @@ INT32 FxRedisConnection::Query(const char* pszCMD)
 	return 0;
 }
 
-INT32 FxRedisConnection::Query(const char* pszCMD, FxRedisReader& reader)
+int FxRedisConnection::Query(const char* pszCMD, FxRedisReader& reader)
 {
 	if(false == CheckConnection())
 	{

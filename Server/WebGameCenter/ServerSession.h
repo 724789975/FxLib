@@ -20,11 +20,11 @@ public:
 
 	virtual void		OnConnect(void);
 	virtual void		OnClose(void);
-	virtual void		OnError(UINT32 dwErrorNo);
-	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
+	virtual void		OnError(unsigned int dwErrorNo);
+	virtual void		OnRecv(const char* pBuf, unsigned int dwLen);
 	virtual void		Release(void) = 0;
 	virtual char*		GetRecvBuf() { return m_dataRecvBuf; }
-	virtual UINT32		GetRecvSize() { return 64 * 1024; };
+	virtual unsigned int		GetRecvSize() { return 64 * 1024; };
 
 	virtual void		Init();
 
@@ -34,13 +34,13 @@ private:
 	CallBackDispatcher::ProtoCallBackDispatch<CServerSession, CServerSession> m_oProtoDispatch;
 
 	//服务器的相关信息在这个类里就可以了 这样就简单了一些 服务器数量不会太多
-	UINT32				m_dwServerId;
+	unsigned int				m_dwServerId;
 	//std::string			m_szTeamServerIp;
-	UINT32				m_dwTeamPort;
+	unsigned int				m_dwTeamPort;
 	//std::string			m_szGameServerManagerIp;
-	UINT32				m_dwGameServerManagerPort;
+	unsigned int				m_dwGameServerManagerPort;
 	//std::string			m_szLoginServerIp;
-	UINT32				m_dwLoginPort;
+	unsigned int				m_dwLoginPort;
 };
 
 class CBinaryServerSession : public CServerSession

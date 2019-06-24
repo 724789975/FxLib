@@ -13,11 +13,11 @@ public:
 	FxMySqlClient();
 	virtual ~FxMySqlClient();
 
-	virtual UINT32		GetLastError(void);
+	virtual unsigned int		GetLastError(void);
 	virtual const char* GetLastErrorString(void);
-	virtual UINT32		EscapeString(const char* pszSrc, INT32 nSrcLen, char* pszDest, INT32 nDestLen);
-	virtual INT32		Query(const char* pszSQL);
-	virtual INT32		Query(const char* pszSQL, IDataReader **ppReader);
+	virtual unsigned int		EscapeString(const char* pszSrc, int nSrcLen, char* pszDest, int nDestLen);
+	virtual int		Query(const char* pszSQL);
+	virtual int		Query(const char* pszSQL, IDataReader **ppReader);
 	virtual void		ThrdFunc();
 	virtual void		Stop();
 	virtual IStmt*		CreateStmt();

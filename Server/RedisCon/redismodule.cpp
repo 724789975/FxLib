@@ -58,7 +58,7 @@ bool FxRedisModule::Open(std::string szHost, unsigned int dwPort, std::string sz
 	return true;
 }
 
-void FxRedisModule::Close(UINT32 dwDBId)
+void FxRedisModule::Close(unsigned int dwDBId)
 {
 	FxRedisClient * poMySqlClient = FindDBClient(dwDBId);
 	if(NULL == poMySqlClient)
@@ -86,10 +86,10 @@ bool FxRedisModule::AddQuery(IRedisQuery*poQuery)
 	return true;
 }
 
-bool FxRedisModule::Run(UINT32 dwCount)
+bool FxRedisModule::Run(unsigned int dwCount)
 {
     bool bRet = false;
-    for (UINT32 i = 0; i < dwCount; i++)
+    for (unsigned int i = 0; i < dwCount; i++)
     {
         if (!__CallBackResult())
         {
@@ -113,7 +113,7 @@ bool FxRedisModule::Init()
 
 void FxRedisModule::Uninit()
 {
-    std::map<UINT32, FxRedisClient*>::iterator it = m_mapDBClient.begin();
+    std::map<unsigned int, FxRedisClient*>::iterator it = m_mapDBClient.begin();
 	for(; it != m_mapDBClient.end(); ++it)
 	{
 		FxRedisClient * poMySqlClient = it->second;
@@ -131,9 +131,9 @@ void FxRedisModule::Uninit()
 	__ClearResult();
 }
 
-FxRedisClient * FxRedisModule::FindDBClient(UINT32 dwDBId)
+FxRedisClient * FxRedisModule::FindDBClient(unsigned int dwDBId)
 {
-	std::map<UINT32, FxRedisClient*>::iterator it = m_mapDBClient.find(dwDBId);
+	std::map<unsigned int, FxRedisClient*>::iterator it = m_mapDBClient.find(dwDBId);
 	if(it == m_mapDBClient.end())
     {
 		return NULL;

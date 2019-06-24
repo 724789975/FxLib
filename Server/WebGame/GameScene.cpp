@@ -10,7 +10,7 @@
 class RedisSetPlayerTeamId : public IRedisQuery
 {
 public:
-	RedisSetPlayerTeamId(UINT64 qwTeamId, UINT64 qwPlayerId) : m_qwTeamId(qwTeamId), m_qwPlayerId(qwPlayerId) {}
+	RedisSetPlayerTeamId(unsigned long long qwTeamId, unsigned long long qwPlayerId) : m_qwTeamId(qwTeamId), m_qwPlayerId(qwPlayerId) {}
 	~RedisSetPlayerTeamId() {}
 
 	virtual int					GetDBId(void) { return 0; }
@@ -24,14 +24,14 @@ public:
 	virtual void Release(void) { }
 
 private:
-	UINT64 m_qwTeamId;
-	UINT64 m_qwPlayerId;
+	unsigned long long m_qwTeamId;
+	unsigned long long m_qwPlayerId;
 };
 
 class RedisDelPlayerTeamId : public IRedisQuery
 {
 public:
-	RedisDelPlayerTeamId(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId) {}
+	RedisDelPlayerTeamId(unsigned long long qwPlayerId) : m_qwPlayerId(qwPlayerId) {}
 	~RedisDelPlayerTeamId() {}
 
 	virtual int					GetDBId(void) { return 0; }
@@ -45,7 +45,7 @@ public:
 	virtual void Release(void) { }
 
 private:
-	UINT64 m_qwPlayerId;
+	unsigned long long m_qwPlayerId;
 };
 
 CGameSceneBase::CGameSceneBase()
@@ -57,7 +57,7 @@ CGameSceneBase::~CGameSceneBase()
 {
 }
 
-bool CGameSceneBase::Init(unsigned int dwGameType, std::string szRoles, UINT64 qwTeamId)
+bool CGameSceneBase::Init(unsigned int dwGameType, std::string szRoles, unsigned long long qwTeamId)
 {
 	switch ((GameProto::EGameType)(dwGameType))
 	{
@@ -118,9 +118,9 @@ void CGameSceneBase::Run(double fTime)
 
 void CGameSceneBase::Preparing(double fTime)
 {
-	static UINT32 s_dwNotifyTime = m_dwGameStartTime + 5;
+	static unsigned int s_dwNotifyTime = m_dwGameStartTime + 5;
 
-	INT32 dwLeftTime = m_dwGameStartTime + CGameConfigBase::Instance()->GetPrepareTime() - GetTimeHandler()->GetSecond();
+	int dwLeftTime = m_dwGameStartTime + CGameConfigBase::Instance()->GetPrepareTime() - GetTimeHandler()->GetSecond();
 	if (dwLeftTime < 0)
 	{
 		ChangeState(GameProto::ESS_GameReady);
@@ -146,9 +146,9 @@ void CGameSceneBase::Preparing(double fTime)
 
 void CGameSceneBase::GameReady(double fTime)
 {
-	static UINT32 s_dwNotifyTime = m_dwGameStartTime + CGameConfigBase::Instance()->GetPrepareTime() + 1;
+	static unsigned int s_dwNotifyTime = m_dwGameStartTime + CGameConfigBase::Instance()->GetPrepareTime() + 1;
 
-	INT32 dwLeftTime = m_dwGameStartTime + CGameConfigBase::Instance()->GetPrepareTime() + CGameConfigBase::Instance()->GetGameReadyTime() - GetTimeHandler()->GetSecond();
+	int dwLeftTime = m_dwGameStartTime + CGameConfigBase::Instance()->GetPrepareTime() + CGameConfigBase::Instance()->GetGameReadyTime() - GetTimeHandler()->GetSecond();
 	if (dwLeftTime < 0)
 	{
 		ChangeState(GameProto::ESS_Gaming);
@@ -224,7 +224,7 @@ void CGameSceneBase::NotifyPlayer(google::protobuf::Message& refMsg)
 	}
 }
 
-void CGameSceneBase::NotifyPlayerExcept(google::protobuf::Message& refMsg, UINT64 qwPlayerId)
+void CGameSceneBase::NotifyPlayerExcept(google::protobuf::Message& refMsg, unsigned long long qwPlayerId)
 {
 	for (int i = 0; i < MAXCLIENTNUM; ++i)
 	{
@@ -291,9 +291,9 @@ bool CGameSceneCommon::Init()
 	return true;
 }
 
-CPlayerBase* CGameSceneCommon::GetPlayer(UINT64 qwPlayerId)
+CPlayerBase* CGameSceneCommon::GetPlayer(unsigned long long qwPlayerId)
 {
-	std::map<UINT64, CCommonPlayer>::iterator it = m_mapPlayers.find(qwPlayerId);
+	std::map<unsigned long long, CCommonPlayer>::iterator it = m_mapPlayers.find(qwPlayerId);
 	if (it == m_mapPlayers.end())
 	{
 		return NULL;
@@ -303,7 +303,7 @@ CPlayerBase* CGameSceneCommon::GetPlayer(UINT64 qwPlayerId)
 
 void CGameSceneCommon::OnGameStart()
 {
-	for (std::map<UINT64, CCommonPlayer>::iterator it = m_mapPlayers.begin();
+	for (std::map<unsigned long long, CCommonPlayer>::iterator it = m_mapPlayers.begin();
 		it != m_mapPlayers.end(); ++it)
 	{
 		it->second.Init();
@@ -312,7 +312,7 @@ void CGameSceneCommon::OnGameStart()
 
 void CGameSceneCommon::Gaming(double fTime)
 {
-	for (std::map<UINT64, CCommonPlayer>::iterator it = m_mapPlayers.begin();
+	for (std::map<unsigned long long, CCommonPlayer>::iterator it = m_mapPlayers.begin();
 		it != m_mapPlayers.end(); ++it)
 	{
 		it->second.Update(fTime);

@@ -43,7 +43,7 @@ FxIoThread::~FxIoThread()
 #endif // WIN32
 }
 
-bool FxIoThread::Init(UINT32 dwMaxSock)
+bool FxIoThread::Init(unsigned int dwMaxSock)
 {
 #ifdef WIN32
 	// 初始化的时候 先获取下 创建完成端口 //
@@ -100,7 +100,7 @@ void FxIoThread::Uninit()
 	
 
 
-UINT32 FxIoThread::GetThreadId()
+unsigned int FxIoThread::GetThreadId()
 {
 	if (m_poThrdHandler)
 	{
@@ -171,7 +171,7 @@ bool FxIoThread::AddEvent(int hSock, IFxSocket* poSock)
 	return true;
 }
 #else
-bool FxIoThread::AddEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
+bool FxIoThread::AddEvent(int hSock, unsigned int dwEvents, IFxSocket* poSock)
 {
 	if (hSock < 0)
 	{
@@ -197,7 +197,7 @@ bool FxIoThread::AddEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
 	return true;
 }
 
-bool FxIoThread::ChangeEvent(int hSock, UINT32 dwEvents, IFxSocket* poSock)
+bool FxIoThread::ChangeEvent(int hSock, unsigned int dwEvents, IFxSocket* poSock)
 {
 	if (m_hEpoll < 0)
 	{
@@ -327,13 +327,13 @@ bool FxIoThread::__DealData()
 		poSock->Close();
 	}
 
-	INT32 nCount = WaitEvents(1);
+	int nCount = WaitEvents(1);
 	if (nCount < 0)
 	{
 		return false;
 	}
 
-	for (INT32 i = 0; i < nCount; i++)
+	for (int i = 0; i < nCount; i++)
 	{
 		epoll_event* pEvent = GetEvent(i);
 		if (NULL == pEvent)

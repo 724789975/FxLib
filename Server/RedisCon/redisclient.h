@@ -13,8 +13,8 @@ public:
 	FxRedisClient();
 	virtual ~FxRedisClient();
 
-	virtual INT32		Query(const char* pszSQL);
-	virtual INT32		Query(const char* pszSQL, IRedisDataReader **ppReader);
+	virtual int		Query(const char* pszSQL);
+	virtual int		Query(const char* pszSQL, IRedisDataReader **ppReader);
 	virtual void		ThrdFunc();
 	virtual void		Stop();
 

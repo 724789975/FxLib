@@ -18,8 +18,8 @@ public:
 	bool            ReConnect();
 	bool			Close();
 
-	INT32           Query(const char* pszCMD, FxRedisReader& rcdSet);
-	INT32           Query(const char* pszCMD);
+	int           Query(const char* pszCMD, FxRedisReader& rcdSet);
+	int           Query(const char* pszCMD);
 
 private:
 	bool			CheckConnection();

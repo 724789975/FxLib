@@ -693,7 +693,7 @@ public:
 	}
 	virtual ~DBChatQuery() {}
 
-	virtual INT32 GetDBId(void) { return 0; }
+	virtual int GetDBId(void) { return 0; }
 
 	virtual void OnQuery(IDBConnection *poDBConnection)
 	{

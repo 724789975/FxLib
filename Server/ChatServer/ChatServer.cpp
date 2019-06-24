@@ -21,7 +21,7 @@ ChatServer::~ChatServer()
 {
 }
 
-bool ChatServer::Init(std::string szChatSessionIp, UINT16& wChatSessionPort, UINT16& wChatWebSocketSessionPort, UINT16& wChatServerSessionPort)
+bool ChatServer::Init(std::string szChatSessionIp, unsigned short& wChatSessionPort, unsigned short& wChatWebSocketSessionPort, unsigned short& wChatServerSessionPort)
 {
 	m_oChatBinarySessionManager.Init();
 	m_oChatPlayerManager.Init();
@@ -80,7 +80,7 @@ void ChatServer::Close()
 	m_oChatManagerSession.Close();
 }
 
-void ChatServer::SetHashIndex(UINT32 dwIndex)
+void ChatServer::SetHashIndex(unsigned int dwIndex)
 {
 	m_dwHashIndex = dwIndex;
 	for (unsigned int i = 0; i < ChatConstant::g_dwHashGen; ++i)

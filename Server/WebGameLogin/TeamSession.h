@@ -19,11 +19,11 @@ public:
 
 	virtual void		OnConnect(void);
 	virtual void		OnClose(void);
-	virtual void		OnError(UINT32 dwErrorNo);
-	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
+	virtual void		OnError(unsigned int dwErrorNo);
+	virtual void		OnRecv(const char* pBuf, unsigned int dwLen);
 	virtual void		Release(void) = 0;
 	virtual char*		GetRecvBuf() { return m_dataRecvBuf; }
-	virtual UINT32		GetRecvSize() { return 64 * 1024; };
+	virtual unsigned int		GetRecvSize() { return 64 * 1024; };
 
 	virtual void		Init();
 	unsigned int		GetServerId() { return m_dwServerId; }
@@ -71,7 +71,7 @@ public:
 	void Release(CBinaryTeamSession* pSession);
 
 	std::map<unsigned int, CBinaryTeamSession*>& GetTeamSessions() { return m_mapTeamSessions; }
-	CBinaryTeamSession* GetTeamSession(UINT32 dwTeamServerId);
+	CBinaryTeamSession* GetTeamSession(unsigned int dwTeamServerId);
 
 private:
 	TDynamicPoolEx<CBinaryTeamSession> m_poolSessions;

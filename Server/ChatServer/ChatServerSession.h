@@ -14,11 +14,11 @@ public:
 
 	virtual void		OnConnect(void);
 	virtual void		OnClose(void);
-	virtual void		OnError(UINT32 dwErrorNo);
-	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
+	virtual void		OnError(unsigned int dwErrorNo);
+	virtual void		OnRecv(const char* pBuf, unsigned int dwLen);
 	virtual void		Release(void);
 	virtual char*		GetRecvBuf() { return m_dataRecvBuf; }
-	virtual UINT32		GetRecvSize() { return 64 * 1024; };
+	virtual unsigned int		GetRecvSize() { return 64 * 1024; };
 	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
 
 	void				OnGroupCreate(unsigned int dwGroupId);
@@ -32,19 +32,19 @@ private:
 	BinaryDataHeader m_oBinaryDataHeader;
 	char m_dataRecvBuf[64 * 1024];
 
-	UINT32 m_dwHashIndex;
+	unsigned int m_dwHashIndex;
 private:
 	char m_szId[32];
 private:
-	void OnChatToChatHashIndex(const char* pBuf, UINT32 dwLen);
-	void OnChatToChatPrivateChat(const char* pBuf, UINT32 dwLen);
-	void OnChatToChatGroupCreate(const char* pBuf, UINT32 dwLen);
-	void OnChatToChatGroupChat(const char* pBuf, UINT32 dwLen);
-	void OnChatToChatGroupMemberChat(const char* pBuf, UINT32 dwLen);
-	void OnChatToChatInviteGroupMember(const char* pBuf, UINT32 dwLen);
-	void OnChatToChatInviteGroupMemberResult(const char* pBuf, UINT32 dwLen);
-	void OnChatToChatLeaveGroupChat(const char* pBuf, UINT32 dwLen);
-	void OnChatToChatLeaveGroupChatResult(const char* pBuf, UINT32 dwLen);
+	void OnChatToChatHashIndex(const char* pBuf, unsigned int dwLen);
+	void OnChatToChatPrivateChat(const char* pBuf, unsigned int dwLen);
+	void OnChatToChatGroupCreate(const char* pBuf, unsigned int dwLen);
+	void OnChatToChatGroupChat(const char* pBuf, unsigned int dwLen);
+	void OnChatToChatGroupMemberChat(const char* pBuf, unsigned int dwLen);
+	void OnChatToChatInviteGroupMember(const char* pBuf, unsigned int dwLen);
+	void OnChatToChatInviteGroupMemberResult(const char* pBuf, unsigned int dwLen);
+	void OnChatToChatLeaveGroupChat(const char* pBuf, unsigned int dwLen);
+	void OnChatToChatLeaveGroupChatResult(const char* pBuf, unsigned int dwLen);
 };
 
 class ChatServerSessionManager : public IFxSessionFactory
@@ -60,7 +60,7 @@ public:
 	bool Init() { return true; }
 	virtual void Release(FxSession* pSession);
 
-	void SetHashIndex(UINT32 dwIndex, ChatServerSession* pChatServerSession);
+	void SetHashIndex(unsigned int dwIndex, ChatServerSession* pChatServerSession);
 
 	void CloseSessions();
 	

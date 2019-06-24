@@ -22,20 +22,20 @@ public:
 
 	bool						IsConnected(void);
 	bool						IsConnecting(void);
-	bool						Send(const char* pBuf,UINT32 dwLen);
+	bool						Send(const char* pBuf,unsigned int dwLen);
 	void						Close(void);
 	SOCKET						Reconnect();
-	const UINT32				GetRemoteIP(void)				{ return m_dwRemoteIP;	}
+	const unsigned int				GetRemoteIP(void)				{ return m_dwRemoteIP;	}
 	const char*					GetRemoteIPStr(void)			{ return m_szRemoteIP;	}
-	UINT16						GetRemotePort(void)				{ return m_wRemotePort; }
-	const UINT32				GetLocalIP(void)				{ return m_dwLocalIP;	}
+	unsigned short						GetRemotePort(void)				{ return m_wRemotePort; }
+	const unsigned int				GetLocalIP(void)				{ return m_dwLocalIP;	}
 	const char*					GetLocalIPStr(void)				{ return m_szLocalIP;	}
-	UINT16						GetLocalPort(void)				{ return m_wLocalPort;	}
+	unsigned short						GetLocalPort(void)				{ return m_wLocalPort;	}
 
-	void						SetRemoteIP(UINT32 dwIP);
-	void						SetRemotePort(UINT16 wPort)		{ m_wRemotePort = wPort; }
-	void						SetLocalIP(UINT32 dwIP);
-	void						SetLocalPort(UINT16 wPort)		{ m_wLocalPort = wPort; }
+	void						SetRemoteIP(unsigned int dwIP);
+	void						SetRemotePort(unsigned short wPort)		{ m_wRemotePort = wPort; }
+	void						SetLocalIP(unsigned int dwIP);
+	void						SetLocalPort(unsigned short wPort)		{ m_wLocalPort = wPort; }
 	void						SetSock(IFxConnectSocket* poSock);
 	void						SetSession(FxSession* poSession){ m_poSession = poSession; }
 	void						SetReconnect(bool bReconnect);
@@ -44,17 +44,17 @@ public:
 
 	void						Reset();
 
-	void						SetID(UINT32 dwID)				{ m_dwID = dwID; }
-	UINT32						GetID()							{ return m_dwID; }
+	void						SetID(unsigned int dwID)				{ m_dwID = dwID; }
+	unsigned int						GetID()							{ return m_dwID; }
 
 	void						OnConnect();
 	void						OnAssociate();
 	void						OnClose();
-	void						OnRecv(UINT32 dwLen);
-	void						OnConnError(UINT32 dwErrorNo);
-	void						OnError(UINT32 dwErrorNo);
+	void						OnRecv(unsigned int dwLen);
+	void						OnConnError(unsigned int dwErrorNo);
+	void						OnError(unsigned int dwErrorNo);
 	char*						GetRecvBuf();
-	UINT32						GetRecvSize();
+	unsigned int						GetRecvSize();
 
 	void						OnSocketDestroy();
 
@@ -62,12 +62,12 @@ public:
 
 private:
 	bool						m_bReconnect;
-	UINT32						m_dwID;
+	unsigned int						m_dwID;
 	EConnStat					m_nConnStat;
-	UINT32						m_dwLocalIP;
-	UINT16						m_wLocalPort;
-	UINT32						m_dwRemoteIP;
-	UINT16						m_wRemotePort;
+	unsigned int						m_dwLocalIP;
+	unsigned short						m_wLocalPort;
+	unsigned int						m_dwRemoteIP;
+	unsigned short						m_wRemotePort;
 	char						m_szLocalIP[16];
 	char						m_szRemoteIP[16];
 	IFxConnectSocket*			m_poSock;

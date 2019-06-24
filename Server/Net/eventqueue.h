@@ -27,7 +27,7 @@ public:
         }
     };
 
-	inline bool Init(INT32 nMax)
+	inline bool Init(int nMax)
     {
         if (nMax != m_nSize)
         {

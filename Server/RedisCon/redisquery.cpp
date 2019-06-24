@@ -28,12 +28,12 @@ void FxRedisQuery::Query(IRedisQuery *poQuery)
 	poQuery->Release();
 }
 
-INT32 FxRedisQuery::Query(const char* pszCMD)
+int FxRedisQuery::Query(const char* pszCMD)
 {
 	return m_oMySqlConn.Query(pszCMD);
 }
 
-INT32 FxRedisQuery::Query(const char* pszCMD, IRedisDataReader **ppReader)
+int FxRedisQuery::Query(const char* pszCMD, IRedisDataReader **ppReader)
 {
     if (NULL != *ppReader)
     {
@@ -47,7 +47,7 @@ INT32 FxRedisQuery::Query(const char* pszCMD, IRedisDataReader **ppReader)
     }
     *ppReader = poReader;
 
-	INT32 nRetCode = m_oMySqlConn.Query( pszCMD, *poReader);
+	int nRetCode = m_oMySqlConn.Query( pszCMD, *poReader);
 
 	return nRetCode;
 }

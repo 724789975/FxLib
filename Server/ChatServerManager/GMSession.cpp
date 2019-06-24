@@ -31,12 +31,12 @@ void GMSession::OnClose(void)
 
 }
 
-void GMSession::OnError(UINT32 dwErrorNo)
+void GMSession::OnError(unsigned int dwErrorNo)
 {
 
 }
 
-void GMSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void GMSession::OnRecv(const char* pBuf, unsigned int dwLen)
 {
 	const_cast<char*>(pBuf)[dwLen] = 0;
 	LogExe(LogLv_Debug, "%s", pBuf);
@@ -144,7 +144,7 @@ bool GMSession::LoginTest(Json::Value& refjReq, Json::Value& refjAck)
 		return true;
 	}
 
-	UINT32 dwHashIndex =  HashToIndex(szPlayerId.c_str(), szPlayerId.size());
+	unsigned int dwHashIndex =  HashToIndex(szPlayerId.c_str(), szPlayerId.size());
 	ChatServerSession* pServerSession = ChatServerManager::Instance()->GetChatServerSessionManager().GetChatServerSession(dwHashIndex);
 	if (!pServerSession)
 	{

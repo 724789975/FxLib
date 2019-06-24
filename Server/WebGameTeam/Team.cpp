@@ -18,7 +18,7 @@ CTeam::~CTeam()
 	class RedisTeamRelease : public IRedisQuery
 	{
 	public:
-		RedisTeamRelease(UINT64 qwPlayerId) : m_pReader(NULL) { m_qwPlayerId = qwPlayerId; }
+		RedisTeamRelease(unsigned long long qwPlayerId) : m_pReader(NULL) { m_qwPlayerId = qwPlayerId; }
 		~RedisTeamRelease() {}
 
 		virtual int					GetDBId(void) { return 0; }
@@ -33,10 +33,10 @@ CTeam::~CTeam()
 
 	private:
 		IRedisDataReader* m_pReader;
-		UINT64 m_qwPlayerId;
+		unsigned long long m_qwPlayerId;
 	};
 
-	for (std::map<UINT64, GameProto::TeamRoleData >::iterator it = m_mapPlayers.begin();
+	for (std::map<unsigned long long, GameProto::TeamRoleData >::iterator it = m_mapPlayers.begin();
 		it != m_mapPlayers.end(); ++it)
 	{
 		RedisTeamRelease oRelease(it->first);
@@ -76,7 +76,7 @@ bool CTeam::InsertIntoTeam(const GameProto::RoleData& refRoleData)
 	return bInsert;
 }
 
-bool CTeam::KickPlayer(UINT64 qwPlayerId)
+bool CTeam::KickPlayer(unsigned long long qwPlayerId)
 {
 	if (m_mapPlayers.find(qwPlayerId) == m_mapPlayers.end())
 	{
@@ -99,14 +99,14 @@ void CTeam::NotifyPlayer()
 {
 	GameProto::TeamNotifyLoginTeamInfo oNotify;
 	oNotify.set_qw_team_id(m_qwTeamId);
-	for (std::map<UINT64, GameProto::TeamRoleData >::iterator it = m_mapPlayers.begin();
+	for (std::map<unsigned long long, GameProto::TeamRoleData >::iterator it = m_mapPlayers.begin();
 		it != m_mapPlayers.end(); ++it)
 	{
 		GameProto::TeamRoleData* pTeamRoleData = oNotify.add_team_role_data();
 		pTeamRoleData->CopyFrom(it->second);
 	}
 
-	for (std::map<UINT64, GameProto::TeamRoleData >::iterator it = m_mapPlayers.begin();
+	for (std::map<unsigned long long, GameProto::TeamRoleData >::iterator it = m_mapPlayers.begin();
 		it != m_mapPlayers.end(); ++it)
 	{
 		CBinaryLoginSession* pLoginSession = GameServer::Instance()->GetLoginSessionManager().GetLoginSession(it->second.dw_server_id());
@@ -121,7 +121,7 @@ void CTeam::NotifyPlayer()
 	}
 }
 
-GameProto::EErrorCode CTeam::ChangeSlot(UINT64 qwPlayerId, UINT32 dwSlotId)
+GameProto::EErrorCode CTeam::ChangeSlot(unsigned long long qwPlayerId, unsigned int dwSlotId)
 {
 	if (m_mapPlayers.find(qwPlayerId) == m_mapPlayers.end())
 	{
@@ -139,7 +139,7 @@ GameProto::EErrorCode CTeam::ChangeSlot(UINT64 qwPlayerId, UINT32 dwSlotId)
 	return GameProto::EC_NONE;
 }
 
-GameProto::TeamRoleData* CTeam::GetTeamRoleData(UINT64 qwPlayerId)
+GameProto::TeamRoleData* CTeam::GetTeamRoleData(unsigned long long qwPlayerId)
 {
 	if (m_mapPlayers.find(qwPlayerId) == m_mapPlayers.end())
 	{
@@ -157,7 +157,7 @@ CTeamManager::~CTeamManager()
 {
 }
 
-CTeam* CTeamManager::GetTeam(UINT64 qwTeamId)
+CTeam* CTeamManager::GetTeam(unsigned long long qwTeamId)
 {
 	if (m_mapTeams.find(qwTeamId) == m_mapTeams.end())
 	{
@@ -166,7 +166,7 @@ CTeam* CTeamManager::GetTeam(UINT64 qwTeamId)
 	return &m_mapTeams[qwTeamId];
 }
 
-CTeam& CTeamManager::CreateTeam(UINT64 qwTeamId)
+CTeam& CTeamManager::CreateTeam(unsigned long long qwTeamId)
 {
 	if (m_mapTeams.find(qwTeamId) != m_mapTeams.end())
 	{
@@ -178,9 +178,9 @@ CTeam& CTeamManager::CreateTeam(UINT64 qwTeamId)
 	return m_mapTeams[qwTeamId];
 }
 
-bool CTeamManager::ReleaseTeam(UINT64 qwTeamId)
+bool CTeamManager::ReleaseTeam(unsigned long long qwTeamId)
 {
-	std::map<UINT64, CTeam>::iterator it = m_mapTeams.find(qwTeamId);
+	std::map<unsigned long long, CTeam>::iterator it = m_mapTeams.find(qwTeamId);
 	if (it == m_mapTeams.end())
 	{
 		return false;

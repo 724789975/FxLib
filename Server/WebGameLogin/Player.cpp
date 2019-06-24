@@ -14,7 +14,7 @@ static char g_pPlayerBuff[g_dwPlayerBuffLen];
 class RedisGetServerId : public IRedisQuery
 {
 public:
-	RedisGetServerId(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId), m_dwServerId(0), m_pReader(NULL) {}
+	RedisGetServerId(unsigned long long qwPlayerId) : m_qwPlayerId(qwPlayerId), m_dwServerId(0), m_pReader(NULL) {}
 	~RedisGetServerId() {}
 
 	virtual int					GetDBId(void) { return 0; }
@@ -27,12 +27,12 @@ public:
 	virtual void OnResult(void) { std::string szServerId; m_pReader->GetValue(szServerId); m_dwServerId = atoi(szServerId.c_str()); }
 	virtual void Release(void) { m_pReader->Release(); }
 
-	INT32 GetServerId() { return m_dwServerId; }
+	int GetServerId() { return m_dwServerId; }
 
 private:
 	IRedisDataReader* m_pReader;
-	INT32 m_dwServerId;
-	UINT64 m_qwPlayerId;
+	int m_dwServerId;
+	unsigned long long m_qwPlayerId;
 };
 
 Player::Player()
@@ -62,7 +62,7 @@ bool Player::OnPlayerRequestLogin(CPlayerSession& refSession, GameProto::PlayerR
 	class RedisServerId : public IRedisQuery
 	{
 	public:
-		RedisServerId(UINT64 qwPlayerId, UINT32 dwServerId) : m_qwPlayerId(qwPlayerId), m_dwServerId(dwServerId) {}
+		RedisServerId(unsigned long long qwPlayerId, unsigned int dwServerId) : m_qwPlayerId(qwPlayerId), m_dwServerId(dwServerId) {}
 		~RedisServerId() {}
 
 		virtual int					GetDBId(void) { return 0; }
@@ -75,8 +75,8 @@ bool Player::OnPlayerRequestLogin(CPlayerSession& refSession, GameProto::PlayerR
 		virtual void OnResult(void) { }
 		virtual void Release(void) { }
 	private:
-		UINT32 m_dwServerId;
-		UINT64 m_qwPlayerId;
+		unsigned int m_dwServerId;
+		unsigned long long m_qwPlayerId;
 	};
 
 	RedisServerId oServerId(refLogin.qw_player_id(), GameServer::Instance()->GetServerId());
@@ -144,11 +144,11 @@ void Player::OnPlayerRequestLoginMakeTeam(CPlayerSession& refSession, GameProto:
 		virtual void OnResult(void) { m_pReader->GetValue(m_qwTeamId); }
 		virtual void Release(void) { m_pReader->Release(); }
 
-		INT64 GetTeamId() { return m_qwTeamId; }
+		long long GetTeamId() { return m_qwTeamId; }
 
 	private:
 		IRedisDataReader* m_pReader;
-		INT64 m_qwTeamId;
+		long long m_qwTeamId;
 	};
 
 	RedisTeamId oTeamId;
@@ -226,7 +226,7 @@ bool Player::OnPlayerRequestLoginInviteTeam(CPlayerSession& refSession, GameProt
 
 	RedisGetServerId oServerId(m_qwPyayerId);
 	FxRedisGetModule()->QueryDirect(&oServerId);
-	UINT32 dwServerId = oServerId.GetServerId();
+	unsigned int dwServerId = oServerId.GetServerId();
 	CLoginSession* pLoginSession = GameServer::Instance()->GetLoginSessionManager().GetLoginSession(dwServerId);
 
 	if (pLoginSession)
@@ -331,14 +331,14 @@ void Player::OnClose()
 
 	RedisGetServerId oServerId(m_qwPyayerId);
 	FxRedisGetModule()->QueryDirect(&oServerId);
-	UINT32 dwServerId = oServerId.GetServerId();
+	unsigned int dwServerId = oServerId.GetServerId();
 
 	if (dwServerId == GameServer::Instance()->GetServerId())
 	{
 		class RedisSetPlayerOffLine : public IRedisQuery
 		{
 		public:
-			RedisSetPlayerOffLine(UINT64 qwPlayerId) : m_qwPlayerId(qwPlayerId), m_qwServerId(0) {}
+			RedisSetPlayerOffLine(unsigned long long qwPlayerId) : m_qwPlayerId(qwPlayerId), m_qwServerId(0) {}
 			~RedisSetPlayerOffLine() {}
 
 			virtual int					GetDBId(void) { return 0; }
@@ -352,8 +352,8 @@ void Player::OnClose()
 			virtual void Release(void) { }
 
 		private:
-			INT64 m_qwServerId;
-			UINT64 m_qwPlayerId;
+			long long m_qwServerId;
+			unsigned long long m_qwPlayerId;
 		};
 
 		RedisSetPlayerOffLine oSetPlayerOffLine (m_qwPyayerId);

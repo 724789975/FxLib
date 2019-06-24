@@ -24,7 +24,7 @@ void CSocketSession::OnClose(void)
 //	LogFun(LT_Screen, LogLv_Debug, "ip : %s, port : %d", GetRemoteIPStr(), GetRemotePort());
 }
 
-void CSocketSession::OnError(UINT32 dwErrorNo)
+void CSocketSession::OnError(unsigned int dwErrorNo)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
 }
@@ -35,7 +35,7 @@ public:
 	DBQuery(){}
 	virtual ~DBQuery(){}
 
-	virtual INT32 GetDBId(void) { return 0; }
+	virtual int GetDBId(void) { return 0; }
 
 	virtual void OnQuery(IDBConnection *poDBConnection)
 	{
@@ -45,7 +45,7 @@ public:
 			while(pReader->GetNextRecord())
 			{
 				char strValue[1024] = { 0 };
-				UINT32 dwLen = 0;
+				unsigned int dwLen = 0;
 				dwLen += sprintf(strValue + dwLen, "%s", "role id : ");
 				dwLen += sprintf(strValue + dwLen, "%s", pReader->GetFieldValue(0));
 				dwLen += sprintf(strValue + dwLen, "%s", " user id : ");
@@ -77,7 +77,7 @@ private:
 };
 
 std::map<std::string, CSocketSession*> mapSocket;
-void CSocketSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void CSocketSession::OnRecv(const char* pBuf, unsigned int dwLen)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
 	//printf("time : %s ip : %s, port : %d, recv %s", GetTimeHandler()->GetTimeStr(), GetRemoteIPStr(), GetRemotePort(), pBuf);
@@ -115,7 +115,6 @@ void CSocketSession::Release(void)
 
 CSessionFactory::CSessionFactory()
 {
-	m_pLock = FxCreateThreadLock();
 	for(int i = 0; i < 64; ++i)
 	{
 		CBinarySocketSession* pSession = new CBinarySocketSession;
@@ -126,7 +125,7 @@ CSessionFactory::CSessionFactory()
 
 FxSession*	CSessionFactory::CreateSession()
 {
-	m_pLock->Lock();
+	m_oLock.Lock();
 	FxSession* pSession = NULL;
 	if(m_listSession.size() > 0)
 	{
@@ -138,23 +137,22 @@ FxSession*	CSessionFactory::CreateSession()
 		m_setSessions.insert(pSession);
 	}
 	LogExe(LogLv_Debug, "left free session : %d", (int)m_listSession.size());
-	m_pLock->UnLock();
+	m_oLock.UnLock();
 	return pSession;
 }
 
 void CSessionFactory::Release(FxSession* pSession)
 {
-	m_pLock->Lock();
+	m_oLock.Lock();
 //	m_poolSessions.ReleaseObj(pSession);
 	m_listSession.push_back(pSession);
 	m_setSessions.erase(pSession);
 	LogExe(LogLv_Debug, "left free session : %d", (int)m_listSession.size());
-	m_pLock->UnLock();
+	m_oLock.UnLock();
 }
 
 CWebSocketSessionFactory::CWebSocketSessionFactory()
 {
-	m_pLock = FxCreateThreadLock();
 	for (int i = 0; i < 64; ++i)
 	{
 		CWebSocketSession* pSession = new CWebSocketSession;
@@ -164,7 +162,7 @@ CWebSocketSessionFactory::CWebSocketSessionFactory()
 
 FxSession * CWebSocketSessionFactory::CreateSession()
 {
-	m_pLock->Lock();
+	m_oLock.Lock();
 	FxSession* pSession = NULL;
 	if (m_listSession.size() > 0)
 	{
@@ -176,18 +174,18 @@ FxSession * CWebSocketSessionFactory::CreateSession()
 		m_setSessions.insert(pSession);
 	}
 	LogExe(LogLv_Debug, "left free session : %d", (int)m_listSession.size());
-	m_pLock->UnLock();
+	m_oLock.UnLock();
 	return pSession;
 }
 
 void CWebSocketSessionFactory::Release(FxSession * pSession)
 {
-	m_pLock->Lock();
+	m_oLock.Lock();
 	//	m_poolSessions.ReleaseObj(pSession);
 	m_listSession.push_back(pSession);
 	m_setSessions.erase(pSession);
 	LogExe(LogLv_Debug, "left free session : %d", (int)m_listSession.size());
-	m_pLock->UnLock();
+	m_oLock.UnLock();
 }
 
 BinaryDataHeader::BinaryDataHeader()
@@ -204,7 +202,7 @@ void* BinaryDataHeader::GetPkgHeader()
 	return (void*)m_dataRecvBuffer;
 }
 
-void* BinaryDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen)
+void* BinaryDataHeader::BuildSendPkgHeader(unsigned int& dwHeaderLen, unsigned int dwDataLen)
 {
 	//*((UINT32*)m_dataBuffer) = htonl(dwDataLen);
 	dwHeaderLen = sizeof(m_dataSendBuffer);
@@ -214,7 +212,7 @@ void* BinaryDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen
 	return (void*)m_dataSendBuffer;
 }
 
-bool BinaryDataHeader::BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset)
+bool BinaryDataHeader::BuildRecvPkgHeader(char* pBuff, unsigned int dwLen, unsigned int dwOffset)
 {
 	if (dwLen + dwOffset > GetHeaderLength())
 	{
@@ -230,13 +228,13 @@ int BinaryDataHeader::__CheckPkgHeader(const char* pBuf)
 	CNetStream oHeaderStream(m_dataRecvBuffer, sizeof(m_dataRecvBuffer));
 	CNetStream oRecvStream(pBuf, sizeof(m_dataRecvBuffer));
 
-	UINT32 dwHeaderLength = 0;
-	UINT32 dwBufferLength = 0;
+	unsigned int dwHeaderLength = 0;
+	unsigned int dwBufferLength = 0;
 	oHeaderStream.ReadInt(dwHeaderLength);
 	oRecvStream.ReadInt(dwBufferLength);
 
-	UINT32 dwHeaderMagic = 0;
-	UINT32 dwBufferMagic = 0;
+	unsigned int dwHeaderMagic = 0;
+	unsigned int dwBufferMagic = 0;
 	oHeaderStream.ReadInt(dwHeaderMagic);
 	oRecvStream.ReadInt(dwBufferMagic);
 
@@ -267,7 +265,7 @@ void * WebSocketDataHeader::GetPkgHeader()
 	return (void*)m_dataRecvBuffer;
 }
 
-void* WebSocketDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen)
+void* WebSocketDataHeader::BuildSendPkgHeader(unsigned int& dwHeaderLen, unsigned int dwDataLen)
 {
 	dwHeaderLen = 1;
 	CNetStream oNetStream(ENetStreamType_Write, m_dataSendBuffer, sizeof(m_dataSendBuffer));
@@ -300,7 +298,7 @@ void* WebSocketDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwData
 	return (void*)m_dataSendBuffer;
 }
 
-bool WebSocketDataHeader::BuildRecvPkgHeader(char * pBuff, UINT32 dwLen, UINT32 dwOffset)
+bool WebSocketDataHeader::BuildRecvPkgHeader(char * pBuff, unsigned int dwLen, unsigned int dwOffset)
 {
 	memcpy(m_dataRecvBuffer + dwOffset, pBuff, sizeof(m_dataRecvBuffer) - dwOffset > dwLen ? dwLen : sizeof(m_dataRecvBuffer) - dwOffset);
 	m_dwHeaderLength = 0;
@@ -349,7 +347,7 @@ int WebSocketDataHeader::__CheckPkgHeader(const char * pBuf)
 	return (int)(m_qwPayloadLen + m_dwHeaderLength);
 }
 
-int WebSocketDataHeader::ParsePacket(const char * pBuf, UINT32 dwLen)
+int WebSocketDataHeader::ParsePacket(const char * pBuf, unsigned int dwLen)
 {
 	if (dwLen < 2)
 	{
@@ -387,10 +385,10 @@ void CChatManagerSession::OnConnect(void)
 	Send(szPlayerInfo, 1024 - oGameStream.GetDataLength());
 }
 
-void CChatManagerSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void CChatManagerSession::OnRecv(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
-	UINT32 dwProtocol = 0;
+	unsigned int dwProtocol = 0;
 	oStream.ReadInt(dwProtocol);
 	if (dwProtocol != 45002)
 	{
@@ -402,9 +400,9 @@ void CChatManagerSession::OnRecv(const char* pBuf, UINT32 dwLen)
 	oStream.ReadString(szIp);
 	std::string szSign;
 	oStream.ReadString(szSign);
-	UINT32 dwPort = 0;
+	unsigned int dwPort = 0;
 	oStream.ReadInt(dwPort);
-	UINT32 dwWebPort = 0;
+	unsigned int dwWebPort = 0;
 	oStream.ReadInt(dwWebPort);
 
 	if (mapSocket.find(szPlayerId) == mapSocket.end())

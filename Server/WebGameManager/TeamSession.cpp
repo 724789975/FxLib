@@ -106,12 +106,12 @@ void CTeamSession::OnClose(void)
 {
 }
 
-void CTeamSession::OnError(UINT32 dwErrorNo)
+void CTeamSession::OnError(unsigned int dwErrorNo)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
 }
 
-void CTeamSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void CTeamSession::OnRecv(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	std::string szProtocolName;
@@ -145,7 +145,7 @@ bool CTeamSession::OnTeamRequestGameManagerGameStart(CTeamSession& refSession, g
 	}
 
 	char szRoles[MAXCLIENTNUM * 32] = {0};
-	UINT64 dwLen = 0;
+	unsigned long long dwLen = 0;
 	dwLen += sprintf(szRoles + dwLen, "[");
 	for (int i = 0; i < pMsg->qw_player_ids_size(); ++i)
 	{

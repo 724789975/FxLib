@@ -14,21 +14,21 @@ FxMySQLReader::~FxMySQLReader()
 	}
 }
 
-UINT32 FxMySQLReader::GetRecordCount()
+unsigned int FxMySQLReader::GetRecordCount()
 {
     if (NULL != m_res)
     {
-        return (UINT32)mysql_num_rows(m_res);
+        return (unsigned int)mysql_num_rows(m_res);
     }
 
     return 0;
 }
 
-UINT32 FxMySQLReader::GetFieldCount()
+unsigned int FxMySQLReader::GetFieldCount()
 {
     if (NULL != m_res)
     {
-        return (UINT32)mysql_num_fields(m_res);
+        return (unsigned int)mysql_num_fields(m_res);
     }
 
     return 0;
@@ -61,7 +61,7 @@ bool FxMySQLReader::GetNextRecord()
 	return (m_row != NULL);
 }
 
-const char* FxMySQLReader::GetFieldValue(UINT32 dwIndex)
+const char* FxMySQLReader::GetFieldValue(unsigned int dwIndex)
 {
 	if (NULL == m_row)
     {
@@ -76,7 +76,7 @@ const char* FxMySQLReader::GetFieldValue(UINT32 dwIndex)
 	return m_row[dwIndex];
 }
 
-INT32 FxMySQLReader::GetFieldLength(UINT32 dwIndex)
+int FxMySQLReader::GetFieldLength(unsigned int dwIndex)
 {
 	if (NULL == m_row)
     {

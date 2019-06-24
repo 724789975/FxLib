@@ -47,12 +47,12 @@ void CLoginSession::OnClose(void)
 
 }
 
-void CLoginSession::OnError(UINT32 dwErrorNo)
+void CLoginSession::OnError(unsigned int dwErrorNo)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
 }
 
-void CLoginSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void CLoginSession::OnRecv(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	std::string szProtocolName;
@@ -258,7 +258,7 @@ bool CLoginSession::OnLoginRequestTeamGameStart(CLoginSession& refSession, googl
 	}
 	GameProto::TeamRequestGameManagerGameStart oRequest;
 	oRequest.set_qw_team_id(pMsg->qw_team_id());
-	for (UINT32 i = 0; i < MAXCLIENTNUM; ++i)
+	for (unsigned int i = 0; i < MAXCLIENTNUM; ++i)
 	{
 		oRequest.add_qw_player_ids(pTeam->GetTeam()[i]);
 	}
@@ -429,7 +429,7 @@ void BinaryLoginSessionManager::Release(CBinaryLoginSession * pSession)
 	m_poolSessions.ReleaseObj(pSession);
 }
 
-CBinaryLoginSession* BinaryLoginSessionManager::GetLoginSession(UINT32 dwServerId)
+CBinaryLoginSession* BinaryLoginSessionManager::GetLoginSession(unsigned int dwServerId)
 {
 	if (m_mapLoginSessions.find(dwServerId) == m_mapLoginSessions.end())
 	{

@@ -32,18 +32,18 @@ void ChatServerSession::OnClose(void)
 
 }
 
-void ChatServerSession::OnError(UINT32 dwErrorNo)
+void ChatServerSession::OnError(unsigned int dwErrorNo)
 {
 
 }
 
-void ChatServerSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void ChatServerSession::OnRecv(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	Protocol::EChatProtocol eProrocol;
 	oStream.ReadInt((int&)eProrocol);
-	const char* pData = pBuf + sizeof(UINT32);
-	dwLen -= sizeof(UINT32);
+	const char* pData = pBuf + sizeof(unsigned int);
+	dwLen -= sizeof(unsigned int);
 
 	switch (eProrocol)
 	{
@@ -118,7 +118,7 @@ void ChatServerSession::OnLeaveGroupChatResult(stCHAT_NOTIFY_CHAT_PLAYER_LEAVE_G
 	Send(g_pChatServerSessionBuf, g_dwChatServerSessionBuffLen - oStream.GetDataLength());
 }
 
-void ChatServerSession::OnChatToChatHashIndex(const char* pBuf, UINT32 dwLen)
+void ChatServerSession::OnChatToChatHashIndex(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_TO_CHAT_HASH_INDEX oCHAT_TO_CHAT_HASH_INDEX;
@@ -127,7 +127,7 @@ void ChatServerSession::OnChatToChatHashIndex(const char* pBuf, UINT32 dwLen)
 	ChatServer::Instance()->GetChatServerSessionManager().SetHashIndex(m_dwHashIndex, this);
 }
 
-void ChatServerSession::OnChatToChatPrivateChat(const char* pBuf, UINT32 dwLen)
+void ChatServerSession::OnChatToChatPrivateChat(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_SEND_CHAT_PRIVATE_CHAT oCHAT_SEND_CHAT_PRIVATE_CHAT;
@@ -147,7 +147,7 @@ void ChatServerSession::OnChatToChatPrivateChat(const char* pBuf, UINT32 dwLen)
 	}
 }
 
-void ChatServerSession::OnChatToChatGroupCreate(const char* pBuf, UINT32 dwLen)
+void ChatServerSession::OnChatToChatGroupCreate(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_NOTIFY_CHAT_GROUP_CREATE oCHAT_NOTIFY_CHAT_GROUP_CREATE;
@@ -157,7 +157,7 @@ void ChatServerSession::OnChatToChatGroupCreate(const char* pBuf, UINT32 dwLen)
 	FxDBGetModule()->AddQuery(pQuery);
 }
 
-void ChatServerSession::OnChatToChatGroupChat(const char* pBuf, UINT32 dwLen)
+void ChatServerSession::OnChatToChatGroupChat(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_NOTIFY_CHAT_GROUP_CHAT oCHAT_NOTIFY_CHAT_GROUP_CHAT;
@@ -167,7 +167,7 @@ void ChatServerSession::OnChatToChatGroupChat(const char* pBuf, UINT32 dwLen)
 	FxDBGetModule()->AddQuery(pQuery);
 }
 
-void ChatServerSession::OnChatToChatGroupMemberChat(const char* pBuf, UINT32 dwLen)
+void ChatServerSession::OnChatToChatGroupMemberChat(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_NOTIFY_CHAT_GROUP_MEMBER_CHAT oChat;
@@ -187,7 +187,7 @@ void ChatServerSession::OnChatToChatGroupMemberChat(const char* pBuf, UINT32 dwL
 	}
 }
 
-void ChatServerSession::OnChatToChatInviteGroupMember(const char* pBuf, UINT32 dwLen)
+void ChatServerSession::OnChatToChatInviteGroupMember(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT oChat;
@@ -204,7 +204,7 @@ void ChatServerSession::OnChatToChatInviteGroupMember(const char* pBuf, UINT32 d
 	}
 }
 
-void ChatServerSession::OnChatToChatInviteGroupMemberResult(const char* pBuf, UINT32 dwLen)
+void ChatServerSession::OnChatToChatInviteGroupMemberResult(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_NOTIFY_CHAT_INVITE_ENTER_GROUP_CHAT_RESULT oInviteChatResult;
@@ -225,7 +225,7 @@ void ChatServerSession::OnChatToChatInviteGroupMemberResult(const char* pBuf, UI
 	}
 }
 
-void ChatServerSession::OnChatToChatLeaveGroupChat(const char* pBuf, UINT32 dwLen)
+void ChatServerSession::OnChatToChatLeaveGroupChat(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT oLeaveChat;
@@ -242,7 +242,7 @@ void ChatServerSession::OnChatToChatLeaveGroupChat(const char* pBuf, UINT32 dwLe
 	}
 }
 
-void ChatServerSession::OnChatToChatLeaveGroupChatResult(const char* pBuf, UINT32 dwLen)
+void ChatServerSession::OnChatToChatLeaveGroupChatResult(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	stCHAT_NOTIFY_CHAT_PLAYER_LEAVE_GROUP_CHAT_RESULT oLeaveChatResult;
@@ -296,7 +296,7 @@ void ChatServerSessionManager::Release(FxSession* pSession)
 
 }
 
-void ChatServerSessionManager::SetHashIndex(UINT32 dwIndex, ChatServerSession* pChatServerSession)
+void ChatServerSessionManager::SetHashIndex(unsigned int dwIndex, ChatServerSession* pChatServerSession)
 {
 	for (unsigned int i = 0; i < ChatConstant::g_dwHashGen; ++i)
 	{ 

@@ -12,7 +12,7 @@ public:
 	ChatServerManager();
 	virtual ~ChatServerManager();
 
-	bool Init(UINT16& dwPort, UINT16& dwGamePort, UINT16& dwGMPort);
+	bool Init(unsigned short& dwPort, unsigned short& dwGamePort, unsigned short& dwGMPort);
 
 	void Close();
 

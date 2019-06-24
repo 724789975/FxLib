@@ -79,7 +79,7 @@ bool FxMySqlClient::AddQuery(IQuery *poDBCommand)
 	return true;
 }
 
-UINT32 FxMySqlClient::EscapeString(const char* pszSrc, INT32 nSrcLen, char* pszDest, INT32 nDestLen)
+unsigned int FxMySqlClient::EscapeString(const char* pszSrc, int nSrcLen, char* pszDest, int nDestLen)
 {
 	if (NULL == m_poMySqlConn)
 	{
@@ -89,7 +89,7 @@ UINT32 FxMySqlClient::EscapeString(const char* pszSrc, INT32 nSrcLen, char* pszD
 	return m_poMySqlConn->EscapeString(pszSrc, nSrcLen, pszDest);
 }
 
-INT32 FxMySqlClient::Query(const char* pszSQL)
+int FxMySqlClient::Query(const char* pszSQL)
 {
 	if (false == m_bDbOK)
 	{
@@ -99,7 +99,7 @@ INT32 FxMySqlClient::Query(const char* pszSQL)
 	return m_poMySqlConn->Query(pszSQL);
 }
 
-INT32 FxMySqlClient::Query(const char* pszSQL, IDataReader **ppReader)
+int FxMySqlClient::Query(const char* pszSQL, IDataReader **ppReader)
 {
 	if (NULL != *ppReader)
 	{
@@ -119,7 +119,7 @@ INT32 FxMySqlClient::Query(const char* pszSQL, IDataReader **ppReader)
 	}
 	*ppReader = poReader;
 
-	INT32 nRetCode = m_poMySqlConn->Query(pszSQL, (INT32)strlen(pszSQL), *poReader);
+	int nRetCode = m_poMySqlConn->Query(pszSQL, (int)strlen(pszSQL), *poReader);
 
 	if (FXDB_ERR_CONN == nRetCode)
 	{
@@ -129,7 +129,7 @@ INT32 FxMySqlClient::Query(const char* pszSQL, IDataReader **ppReader)
 	return nRetCode;
 }
 
-UINT32 FxMySqlClient::GetLastError(void)
+unsigned int FxMySqlClient::GetLastError(void)
 {
 	return m_poMySqlConn->GetLastError();
 }

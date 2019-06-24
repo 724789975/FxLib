@@ -15,15 +15,15 @@ public:
 
 	//DECLARE_SINGLETON(FxConnectionMgr)
 
-	bool                    Init(INT32 nMax);
+	bool                    Init(int nMax);
 	void                    Uninit();
 
 	FxConnection*           Create();
 	void                    Release(FxConnection* poConnection);
 
 protected:
-	UINT32					m_dwNextId;
-	INT32					m_nMaxConnection;
+	unsigned int					m_dwNextId;
+	int					m_nMaxConnection;
     TDynamicPoolEx<FxConnection> m_oConnPool;
 };
 

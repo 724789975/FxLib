@@ -24,12 +24,12 @@ public:
 	virtual bool						Init();
 	virtual void						OnRead();
 	virtual void						OnWrite();
-	virtual SOCKET						Listen(UINT32 dwIP, UINT16& wPort);
+	virtual SOCKET						Listen(unsigned int dwIP, unsigned short& wPort);
 	virtual bool						StopListen();
 	virtual bool						Close();
 	void								Reset();
 
-	bool								PushNetEvent(ENetEvtType eType, UINT32 dwValue);
+	bool								PushNetEvent(ENetEvtType eType, unsigned int dwValue);
 
 	void								SetState(ESocketState eState)					{ m_nState = eState; }
 	ESocketState						GetState()										{ return m_nState; }
@@ -37,7 +37,7 @@ public:
 	virtual void						ProcEvent(SNetEvent oEvent);
 
 #ifdef WIN32
-	virtual void						OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred);		//
+	virtual void						OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred);		//
 #else
 	virtual void						OnParserIoEvent(int dwEvents);		//  1/4 //
 #endif // WIN32
@@ -48,7 +48,7 @@ protected:
 	bool AddEvent();
 
 	void								__ProcAssociate();
-	void								__ProcError(UINT32 dwErrorNo);
+	void								__ProcError(unsigned int dwErrorNo);
 	void								__ProcTerminate();
 
 protected:
@@ -122,7 +122,7 @@ public:
 	
 	virtual bool						Send(const char* pData, int dwLen);
 
-	bool								PushNetEvent(ENetEvtType eType, UINT32 dwValue);
+	bool								PushNetEvent(ENetEvtType eType, unsigned int dwValue);
 
 	bool								IsConnected()									{ return m_nState == SSTATE_ESTABLISH; }
 	void								SetState(ESocketState eState)					{ m_nState = eState; }
@@ -142,7 +142,7 @@ public:
 	virtual bool						PostRecv();
 	bool								PostRecvFree();
 
-	virtual void						OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred);		// 处理完成端口事件//
+	virtual void						OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred);		// 处理完成端口事件//
 #else
 	virtual void						OnParserIoEvent(int dwEvents);		//  1/4 //
 #endif // WIN32
@@ -158,10 +158,10 @@ protected:
 
 	void								__ProcEstablish();
 	void								__ProcAssociate();
-	void								__ProcConnectError(UINT32 dwErrorNo);
-	void								__ProcError(UINT32 dwErrorNo);
+	void								__ProcConnectError(unsigned int dwErrorNo);
+	void								__ProcError(unsigned int dwErrorNo);
 	void								__ProcTerminate();
-	virtual void						__ProcRecv(UINT32 dwLen) = 0;
+	virtual void						__ProcRecv(unsigned int dwLen) = 0;
 	virtual void						__ProcRelease() = 0;
 protected:
 	virtual void						OnConnect();
@@ -195,7 +195,7 @@ protected:
 	LONG            				    m_nPostRecv;        // 未决的WSARecv操作数//
 	LONG            				    m_nPostSend;        // 未决的WSASend操作数/
 
-	UINT32          				    m_dwLastError;      // 最后的出错信息//
+	unsigned int          				    m_dwLastError;      // 最后的出错信息//
 #else
 	bool								m_bSending;
 #endif // WIN32
@@ -212,7 +212,7 @@ public:
 protected:
 	virtual void						OnConnect();
 private:
-	void								__ProcRecv(UINT32 dwLen);
+	void								__ProcRecv(unsigned int dwLen);
 	void								__ProcRelease();
 };
 
@@ -233,7 +233,7 @@ public:
 	SOCKET								Connect() { Assert(0); return INVALID_SOCKET; }
 	virtual void						Reset();
 private:
-	void								__ProcRecv(UINT32 dwLen);
+	void								__ProcRecv(unsigned int dwLen);
 	void								__ProcRelease();
 
 protected:
@@ -262,7 +262,7 @@ public:
 	bool								PostRecv();
 #endif // WIN32
 private:
-	void								__ProcRecv(UINT32 dwLen);
+	void								__ProcRecv(unsigned int dwLen);
 	void								__ProcRelease();
 
 protected:

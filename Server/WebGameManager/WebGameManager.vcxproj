@@ -161,10 +161,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\common\fxmeta.cpp" />
     <ClCompile Include="..\common\fxtimer.cpp" />
     <ClCompile Include="..\common\log_thread.cpp" />
     <ClCompile Include="..\common\thread.cpp" />
+    <ClCompile Include="..\common\utility.cpp" />
     <ClCompile Include="CenterSession.cpp" />
     <ClCompile Include="GameServer.cpp" />
     <ClCompile Include="GameServerBase.cpp" />

@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 	IFxNet* pNet = NULL;
 	IFxListenSocket* pTcpListenSocket = NULL;
 	IFxListenSocket* pUdpListenSocket = NULL;
-	UINT16 wPort = 0;
+	unsigned short wPort = 0;
 
 	if (!GetTimeHandler()->Init())
 	{

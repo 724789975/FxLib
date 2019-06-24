@@ -68,7 +68,7 @@ int main(int argc, char **argv)
 	}
 	//----------------------order can't change end-----------------------//
 
-	UINT16 w1 = FLAGS_chat_server_port, w2 = FLAGS_game_server_port, w3 = FLAGS_gm_port;
+	unsigned short w1 = FLAGS_chat_server_port, w2 = FLAGS_game_server_port, w3 = FLAGS_gm_port;
 	ChatServerManager::Instance()->Init(w1, w2, w3);
 	while (g_bRun)
 	{

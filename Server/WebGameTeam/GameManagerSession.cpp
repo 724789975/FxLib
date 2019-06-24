@@ -39,12 +39,12 @@ void CGameManagerSession::OnClose(void)
 {
 }
 
-void CGameManagerSession::OnError(UINT32 dwErrorNo)
+void CGameManagerSession::OnError(unsigned int dwErrorNo)
 {
 	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
 }
 
-void CGameManagerSession::OnRecv(const char* pBuf, UINT32 dwLen)
+void CGameManagerSession::OnRecv(const char* pBuf, unsigned int dwLen)
 {
 	CNetStream oStream(pBuf, dwLen);
 	std::string szProtocolName;
@@ -96,9 +96,9 @@ bool CGameManagerSession::OnGameManagerAckTeamGameStart(CGameManagerSession& ref
 	oResult.set_dw_slave_server_port(pMsg->dw_slave_server_port());
 	oResult.set_sz_listen_ip(pMsg->sz_listen_ip());
 	oResult.set_qw_team_id(pMsg->qw_team_id());
-	std::map<UINT64, GameProto::TeamRoleData>& refRoles = pTeam->GetTeamRoles();
+	std::map<unsigned long long, GameProto::TeamRoleData>& refRoles = pTeam->GetTeamRoles();
 	std::map<unsigned int, CBinaryLoginSession*>& refLoginSessions = GameServer::Instance()->GetLoginSessionManager().GetLoginSessions();
-	for (std::map<UINT64, GameProto::TeamRoleData>::iterator it = refRoles.begin();
+	for (std::map<unsigned long long, GameProto::TeamRoleData>::iterator it = refRoles.begin();
 		it != refRoles.end(); ++it)
 	{
 		std::map<unsigned int, CBinaryLoginSession*>::iterator it1 = refLoginSessions.find((it->second).dw_server_id());

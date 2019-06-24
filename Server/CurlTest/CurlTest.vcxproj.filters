@@ -13,28 +13,31 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="源文件\common">
+      <UniqueIdentifier>{d55437c8-be0f-4748-88c4-61bd79b7c4bf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\common\fxmeta.cpp">
-      <Filter>源文件</Filter>
+    <ClCompile Include="..\common\exception_dump.cpp">
+      <Filter>源文件\common</Filter>
     </ClCompile>
     <ClCompile Include="..\common\fxtimer.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\common</Filter>
     </ClCompile>
     <ClCompile Include="..\common\log_thread.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\thread.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="..\common\exception_dump.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\common</Filter>
     </ClCompile>
     <ClCompile Include="..\common\segvcatch.cpp">
-      <Filter>源文件</Filter>
+      <Filter>源文件\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\thread.cpp">
+      <Filter>源文件\common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\common\utility.cpp">
+      <Filter>源文件\common</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

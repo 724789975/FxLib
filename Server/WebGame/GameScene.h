@@ -13,7 +13,7 @@ public:
 	CGameSceneBase();
 	virtual ~CGameSceneBase();
 
-	static bool Init(unsigned int dwGameType, std::string szRoles, UINT64 qwTeamId);
+	static bool Init(unsigned int dwGameType, std::string szRoles, unsigned long long qwTeamId);
 	virtual bool Init() = 0;
 
 	virtual void Run(double fTime);
@@ -26,11 +26,11 @@ public:
 	virtual void OnGameStart();
 	virtual void OnTransact();
 
-	virtual CPlayerBase* GetPlayer(UINT64 qwPlayerId) = 0;
+	virtual CPlayerBase* GetPlayer(unsigned long long qwPlayerId) = 0;
 	virtual void GameEnd();
 
 	void NotifyPlayer(google::protobuf::Message& refMsg);
-	void NotifyPlayerExcept(google::protobuf::Message& refMsg, UINT64 qwPlayerId);
+	void NotifyPlayerExcept(google::protobuf::Message& refMsg, unsigned long long qwPlayerId);
 
 	void ChangeState(GameProto::EGameSceneState eGameSceneState);
 
@@ -38,19 +38,19 @@ public:
 
 	virtual GameProto::EGameSceneState GetSceneState() = 0;
 
-	UINT64* GetPlayers() { return m_qwRoles; }
+	unsigned long long* GetPlayers() { return m_qwRoles; }
 
 protected:
 
 	virtual void SetSceneState(GameProto::EGameSceneState eGameSceneState) = 0;
 	GameProto::EGameSceneState m_eGameSceneState;
 
-	UINT32 m_dwGameType;
+	unsigned int m_dwGameType;
 
-	UINT64 m_qwRoles[MAXCLIENTNUM];
-	UINT64 m_qwTeamId;
+	unsigned long long m_qwRoles[MAXCLIENTNUM];
+	unsigned long long m_qwTeamId;
 
-	UINT32 m_dwGameStartTime;
+	unsigned int m_dwGameStartTime;
 };
 
 class CGameSceneCommon : public CGameSceneBase
@@ -61,7 +61,7 @@ public:
 
 	virtual bool Init();
 
-	virtual CPlayerBase * GetPlayer(UINT64 qwPlayerId);
+	virtual CPlayerBase * GetPlayer(unsigned long long qwPlayerId);
 
 	virtual void OnGameStart();
 	virtual void Gaming(double fTime);
@@ -71,7 +71,7 @@ public:
 protected:
 	virtual void SetSceneState(GameProto::EGameSceneState eGameSceneState);
 private:
-	std::map<UINT64, CCommonPlayer> m_mapPlayers;
+	std::map<unsigned long long, CCommonPlayer> m_mapPlayers;
 
 	GameProto::GameCommonSceneInfo m_oSceneInfo;
 };

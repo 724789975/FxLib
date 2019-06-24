@@ -11,7 +11,7 @@ ChatServerManager::~ChatServerManager()
 {
 }
 
-bool ChatServerManager::Init(UINT16& dwPort, UINT16& dwGamePort, UINT16& dwGMPort)
+bool ChatServerManager::Init(unsigned short& dwPort, unsigned short& dwGamePort, unsigned short& dwGMPort)
 {
 	m_pChatServerListenSocket = FxNetGetModule()->Listen(&m_oChatSessionManager, SLT_CommonTcp, 0, dwPort);
 	if (m_pChatServerListenSocket == NULL)

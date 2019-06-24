@@ -97,7 +97,7 @@ int main(int argc, char **argv)
 		goto STOP;
 	}
 
-	UINT16 w1 = FLAGS_chat_session_port, w2 = FLAGS_chat_web_socket_session, w3 = FLAGS_chat_server_session_port;
+	unsigned short w1 = FLAGS_chat_session_port, w2 = FLAGS_chat_web_socket_session, w3 = FLAGS_chat_server_session_port;
 	if (!ChatServer::Instance()->Init(FLAGS_chat_server_ip, w1, w2, w3))
 	{
 		g_bRun = false;

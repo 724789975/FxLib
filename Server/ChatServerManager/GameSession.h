@@ -14,19 +14,19 @@ public:
 
 	virtual void		OnConnect(void);
 	virtual void		OnClose(void);
-	virtual void		OnError(UINT32 dwErrorNo);
-	virtual void		OnRecv(const char* pBuf, UINT32 dwLen);
+	virtual void		OnError(unsigned int dwErrorNo);
+	virtual void		OnRecv(const char* pBuf, unsigned int dwLen);
 	virtual void		Release(void);
 	virtual char*		GetRecvBuf() { return m_dataRecvBuf; }
-	virtual UINT32		GetRecvSize() { return 64 * 1024; };
+	virtual unsigned int		GetRecvSize() { return 64 * 1024; };
 	virtual IFxDataHeader* GetDataHeader() { return &m_oBinaryDataHeader; }
 
 	std::string			GetServerId() { return m_szServerId; }
 	void				OnLoginSign(std::string szChatIp, unsigned int dwChatPort, unsigned int dwWebSocketChatPort, std::string szPlayerId, std::string szSign);
 
 private:
-	void				OnLogin(const char* pBuf, UINT32 dwLen);
-	void				OnPlayerLogin(const char* pBuf, UINT32 dwLen);
+	void				OnLogin(const char* pBuf, unsigned int dwLen);
+	void				OnPlayerLogin(const char* pBuf, unsigned int dwLen);
 private:
 	BinaryDataHeader m_oBinaryDataHeader;
 	char m_dataRecvBuf[64 * 1024];

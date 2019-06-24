@@ -21,9 +21,9 @@ public:
 	virtual const char* GetModuleName(void);
 
 	virtual bool        Open(SDBConnInfo& DBInfo);
-	virtual void        Close(UINT32 dwDBId);
+	virtual void        Close(unsigned int dwDBId);
 	virtual bool        AddQuery(IQuery *poQuery);
-	virtual bool        Run(UINT32 dwCount);
+	virtual bool        Run(unsigned int dwCount);
 
     bool                Init();
     void                Uninit();
@@ -31,7 +31,7 @@ public:
 
     FxMySQLReader*      FetchReader();
     void                ReleaseReader(FxMySQLReader* poReader);
-    FxMySqlClient *     FindDBClient(UINT32 dwDBId);
+    FxMySqlClient *     FindDBClient(unsigned int dwDBId);
 
 private:
     bool                __CallBackResult();
@@ -41,7 +41,7 @@ private:
 	FxCriticalLock		    m_oLock;
     TDynamicPoolEx<FxMySQLReader>   m_oReaderPool;
 	std::list<IQuery*>       m_oResultList;
-	std::map<UINT32, FxMySqlClient*> m_mapDBClient;
+	std::map<unsigned int, FxMySqlClient*> m_mapDBClient;
 };
 
 #endif  // __DBDBMODULE_H_2009_0824__

@@ -52,7 +52,7 @@ void FxUDPListenSock::OnWrite()
 
 }
 
-SOCKET FxUDPListenSock::Listen(UINT32 dwIP, UINT16& wPort)
+SOCKET FxUDPListenSock::Listen(unsigned int dwIP, unsigned short& wPort)
 {
 	memset(&m_stAddr, 0, sizeof(m_stAddr));
 	SetSock(socket(AF_INET, SOCK_DGRAM, 0));
@@ -68,7 +68,7 @@ SOCKET FxUDPListenSock::Listen(UINT32 dwIP, UINT16& wPort)
 		return false;
 	}
 
-	INT32 nReuse = 1;
+	int nReuse = 1;
 	setsockopt(GetSock(), SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(nReuse));
 
 	m_stAddr.sin_family = AF_INET;
@@ -134,7 +134,7 @@ bool FxUDPListenSock::StopListen()
 {
 	if (SSTATE_LISTEN != GetState())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d != SSTATE_LISTEN", (UINT32)GetState());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d != SSTATE_LISTEN", (unsigned int)GetState());
 		return false;
 	}
 
@@ -187,11 +187,11 @@ void FxUDPListenSock::Reset()
 	SetSock(INVALID_SOCKET);
 }
 
-bool FxUDPListenSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
+bool FxUDPListenSock::PushNetEvent(ENetEvtType eType, unsigned int dwValue)
 {
 	if (SSTATE_INVALID == GetState())
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d == SSTATE_INVALID", (UINT32)GetState());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d == SSTATE_INVALID", (unsigned int)GetState());
 
 		return false;
 	}
@@ -241,7 +241,7 @@ void FxUDPListenSock::ProcEvent(SNetEvent oEvent)
 }
 
 #ifdef WIN32
-void FxUDPListenSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred)
+void FxUDPListenSock::OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred)
 {
 	SPerUDPIoData* pSPerUDPIoData = (SPerUDPIoData*)pIoData;
 	switch (GetState())
@@ -307,7 +307,7 @@ void FxUDPListenSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTra
 	break;
 	default:
 	{
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d != SSTATE_LISTEN", (UINT32)GetState());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d != SSTATE_LISTEN", (unsigned int)GetState());
 
 		Close();        // 未知错误，不应该发生//
 	}
@@ -360,7 +360,7 @@ void FxUDPListenSock::__ProcAssociate()
 
 }
 
-void FxUDPListenSock::__ProcError(UINT32 dwErrorNo)
+void FxUDPListenSock::__ProcError(unsigned int dwErrorNo)
 {
 
 }
@@ -606,7 +606,7 @@ void FxUDPListenSock::OnAccept(SPerUDPIoData* pstPerIoData)
 		poSock->m_bSendAck = true;
 
 		sockaddr_in stLocalAddr;
-		INT32 nLocalAddrLen = sizeof(sockaddr_in);
+		int nLocalAddrLen = sizeof(sockaddr_in);
 
 		if (getsockname(poSock->GetSock(), (sockaddr*)(&stLocalAddr), &nLocalAddrLen) == SOCKET_ERROR)
 		{
@@ -750,7 +750,7 @@ void FxUDPListenSock::OnAccept()
 	setsockopt(poSock->GetSock(), SOL_SOCKET, SO_SNDLOWAT, &UDP_VAL_SO_SNDLOWAT, sizeof(UDP_VAL_SO_SNDLOWAT));
 	setsockopt(poSock->GetSock(), SOL_SOCKET, SO_SNDBUF, &UDP_MAX_SYS_SEND_BUF, sizeof(UDP_MAX_SYS_SEND_BUF));
 
-	INT32 nFlags = fcntl(poSock->GetSock(), F_GETFL, 0);
+	int nFlags = fcntl(poSock->GetSock(), F_GETFL, 0);
 	nFlags |= O_NONBLOCK;
 	fcntl(poSock->GetSock(), F_SETFL, nFlags);
 
@@ -861,7 +861,7 @@ void FxUDPListenSock::OnAccept()
 	poSock->m_oSendWindow.m_pSeqRetryCount[btId] = 0;
 	poSock->m_oSendWindow.m_btEnd++;
 
-	INT32 nReuse = 1;
+	int nReuse = 1;
 	setsockopt(poSock->GetSock(), SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(nReuse));
 	if (bind(poSock->GetSock(), (sockaddr*)&m_stAddr, sizeof(m_stAddr)) < 0)
 	{
@@ -1209,7 +1209,7 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 	static char pTemData[RECV_BUFF_SIZE] = { 0 };
 
 	CNetStream oNetStream(ENetStreamType_Write, pTemData, dwLen + pDataHeader->GetHeaderLength());
-	UINT32 dwHeaderLen = 0;
+	unsigned int dwHeaderLen = 0;
 	char* pDataHeaderBuff = (char*)(pDataHeader->BuildSendPkgHeader(dwHeaderLen, dwLen));
 	oNetStream.WriteData(pDataHeaderBuff, dwHeaderLen);
 	//oNetStream.WriteData((char*)(&oUDPPacketHeader), sizeof(oUDPPacketHeader));
@@ -1228,7 +1228,7 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 	return true;
 }
 
-bool FxUDPConnectSock::PushNetEvent(ENetEvtType eType, UINT32 dwValue)
+bool FxUDPConnectSock::PushNetEvent(ENetEvtType eType, unsigned int dwValue)
 {
 	SNetEvent oEvent;
 	// 先扔网络事件进去，然后在报告上层有事件，先后顺序不能错，这样上层就不会错取事件//
@@ -1603,7 +1603,7 @@ ContinuetSend:
 		unsigned long ul = 1;
 		if (SOCKET_ERROR == ioctlsocket(GetSock(), FIONBIO, (unsigned long*)&ul))
 		{
-			PushNetEvent(NETEVT_CONN_ERR, (UINT32)WSAGetLastError());
+			PushNetEvent(NETEVT_CONN_ERR, (unsigned int)WSAGetLastError());
 			closesocket(GetSock());
 			LogExe(LogLv_Critical, "Set socket FIONBIO error : %d, socket : %d, socket id %d", WSAGetLastError(), GetSock(), GetSockId());
 			return INVALID_SOCKET;
@@ -1658,7 +1658,7 @@ ContinuetSend:
 		}
 	}
 
-	INT32 nError = 0;
+	int nError = 0;
 	socklen_t nLen = sizeof(nError);
 	if (getsockopt(GetSock(), SOL_SOCKET, SO_ERROR, &nError, &nLen) < 0)
 	{
@@ -1697,7 +1697,7 @@ bool FxUDPConnectSock::PostClose()
 	ZeroMemory(&m_stRecvIoData.stOverlapped, sizeof(m_stRecvIoData.stOverlapped));
 	// Post失败的时候再进入这个函数时可能会丢失一次//
 
-	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(0), (ULONG_PTR)this, &m_stRecvIoData.stOverlapped))
+	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), unsigned int(0), (ULONG_PTR)this, &m_stRecvIoData.stOverlapped))
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "PostQueuedCompletionStatus errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
@@ -1766,7 +1766,7 @@ bool FxUDPConnectSock::PostRecv()
 	return true;
 }
 
-void FxUDPConnectSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTransferred)
+void FxUDPConnectSock::OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred)
 {
 	SPerUDPIoData* pSPerUDPIoData = (SPerUDPIoData*)pIoData;
 	if (NULL == pSPerUDPIoData)
@@ -1802,7 +1802,7 @@ void FxUDPConnectSock::OnParserIoEvent(bool bRet, void* pIoData, UINT32 dwByteTr
 	default:
 	{
 		// 如果其他状态收到消息 肯定不对
-		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d, error", (UINT32)GetState());
+		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d, error", (unsigned int)GetState());
 		Close();        // 未知错误，不应该发生//
 	}
 	break;
@@ -2065,7 +2065,7 @@ bool FxUDPConnectSock::PostSend()
 			{
 				if (WSAGetLastError() != WSA_IO_PENDING)
 				{
-					UINT32 dwErr = WSAGetLastError();
+					unsigned int dwErr = WSAGetLastError();
 					LogExe(LogLv_Error, "WSASend errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
 					return false;
@@ -2131,7 +2131,7 @@ bool FxUDPConnectSock::PostSend()
 		{
 			if (WSAGetLastError() != WSA_IO_PENDING)
 			{
-				UINT32 dwErr = WSAGetLastError();
+				unsigned int dwErr = WSAGetLastError();
 				LogExe(LogLv_Error, "WSASend errno : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 
 				return false;
@@ -2200,7 +2200,7 @@ void FxUDPConnectSock::__ProcAssociate()
 	}
 }
 
-void FxUDPConnectSock::__ProcConnectError(UINT32 dwErrorNo)
+void FxUDPConnectSock::__ProcConnectError(unsigned int dwErrorNo)
 {
 	if (GetConnection())
 	{
@@ -2215,7 +2215,7 @@ void FxUDPConnectSock::__ProcConnectError(UINT32 dwErrorNo)
 	}
 }
 
-void FxUDPConnectSock::__ProcError(UINT32 dwErrorNo)
+void FxUDPConnectSock::__ProcError(unsigned int dwErrorNo)
 {
 	if (GetConnection())
 	{
@@ -2235,7 +2235,7 @@ void FxUDPConnectSock::__ProcTerminate()
 	PushNetEvent(NETEVT_RELEASE, 0);
 }
 
-void FxUDPConnectSock::__ProcRecv(UINT32 dwLen)
+void FxUDPConnectSock::__ProcRecv(unsigned int dwLen)
 {
 	if (GetConnection())
 	{
@@ -2263,7 +2263,7 @@ void FxUDPConnectSock::__ProcRecv(UINT32 dwLen)
 	}
 }
 
-void FxUDPConnectSock::__ProcRecvPackageError(UINT32 dwLen)
+void FxUDPConnectSock::__ProcRecvPackageError(unsigned int dwLen)
 {
 	if (GetConnection())
 	{
@@ -2305,7 +2305,7 @@ bool FxUDPConnectSock::PostSendFree()
 	static SPerUDPIoData oUDPIoData = { 0 };
 	oUDPIoData.nOp = IOCP_SEND;
 	ZeroMemory(&oUDPIoData.stOverlapped, sizeof(oUDPIoData.stOverlapped));
-	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), UINT32(-1), (ULONG_PTR)this, &oUDPIoData.stOverlapped))
+	if (!PostQueuedCompletionStatus(m_poIoThreadHandler->GetHandle(), unsigned int(-1), (ULONG_PTR)this, &oUDPIoData.stOverlapped))
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "PostQueuedCompletionStatus error : %d, socket : %d, socket id : %d", WSAGetLastError(), GetSock(), GetSockId());
 		return false;
@@ -2600,7 +2600,7 @@ void FxUDPConnectSock::OnRecv(bool bRet, int dwBytes)
 			else
 			{
 				char* pParseBuf = pUseBuf + nParserLen;
-				UINT32 dwHeaderLen = GetDataHeader()->GetHeaderLength();
+				unsigned int dwHeaderLen = GetDataHeader()->GetHeaderLength();
 				GetDataHeader()->BuildRecvPkgHeader(pParseBuf, (int)dwHeaderLen > nLen ? nLen : dwHeaderLen, 0);
 				m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen);
 				if (-1 == m_nPacketLen)
@@ -3008,7 +3008,7 @@ void FxUDPConnectSock::OnRecv()
 			else
 			{
 				char* pParseBuf = pUseBuf + nParserLen;
-				UINT32 dwHeaderLen = GetDataHeader()->GetHeaderLength();
+				unsigned int dwHeaderLen = GetDataHeader()->GetHeaderLength();
 				GetDataHeader()->BuildRecvPkgHeader(pParseBuf, (int)dwHeaderLen > nLen ? nLen : dwHeaderLen, 0);
 				m_nPacketLen = GetDataHeader()->ParsePacket(pParseBuf, nLen);
 				if (-1 == m_nPacketLen)

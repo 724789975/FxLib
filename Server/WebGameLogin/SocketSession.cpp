@@ -19,7 +19,7 @@ void* BinaryDataHeader::GetPkgHeader()
 	return (void*)m_dataRecvBuffer;
 }
 
-void* BinaryDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen)
+void* BinaryDataHeader::BuildSendPkgHeader(unsigned int& dwHeaderLen, unsigned int dwDataLen)
 {
 	//*((UINT32*)m_dataBuffer) = htonl(dwDataLen);
 	dwHeaderLen = sizeof(m_dataSendBuffer);
@@ -29,7 +29,7 @@ void* BinaryDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen
 	return (void*)m_dataSendBuffer;
 }
 
-bool BinaryDataHeader::BuildRecvPkgHeader(char* pBuff, UINT32 dwLen, UINT32 dwOffset)
+bool BinaryDataHeader::BuildRecvPkgHeader(char* pBuff, unsigned int dwLen, unsigned int dwOffset)
 {
 	if (dwLen + dwOffset > GetHeaderLength())
 	{
@@ -45,13 +45,13 @@ int BinaryDataHeader::__CheckPkgHeader(const char* pBuf)
 	CNetStream oHeaderStream(m_dataRecvBuffer, sizeof(m_dataRecvBuffer));
 	CNetStream oRecvStream(pBuf, sizeof(m_dataRecvBuffer));
 
-	UINT32 dwHeaderLength = 0;
-	UINT32 dwBufferLength = 0;
+	unsigned int dwHeaderLength = 0;
+	unsigned int dwBufferLength = 0;
 	oHeaderStream.ReadInt(dwHeaderLength);
 	oRecvStream.ReadInt(dwBufferLength);
 
-	UINT32 dwHeaderMagic = 0;
-	UINT32 dwBufferMagic = 0;
+	unsigned int dwHeaderMagic = 0;
+	unsigned int dwBufferMagic = 0;
 	oHeaderStream.ReadInt(dwHeaderMagic);
 	oRecvStream.ReadInt(dwBufferMagic);
 
@@ -82,7 +82,7 @@ void * WebSocketDataHeader::GetPkgHeader()
 	return (void*)m_dataRecvBuffer;
 }
 
-void* WebSocketDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwDataLen)
+void* WebSocketDataHeader::BuildSendPkgHeader(unsigned int& dwHeaderLen, unsigned int dwDataLen)
 {
 	dwHeaderLen = 1;
 	CNetStream oNetStream(ENetStreamType_Write, m_dataSendBuffer, sizeof(m_dataSendBuffer));
@@ -115,7 +115,7 @@ void* WebSocketDataHeader::BuildSendPkgHeader(UINT32& dwHeaderLen, UINT32 dwData
 	return (void*)m_dataSendBuffer;
 }
 
-bool WebSocketDataHeader::BuildRecvPkgHeader(char * pBuff, UINT32 dwLen, UINT32 dwOffset)
+bool WebSocketDataHeader::BuildRecvPkgHeader(char * pBuff, unsigned int dwLen, unsigned int dwOffset)
 {
 	memcpy(m_dataRecvBuffer + dwOffset, pBuff, sizeof(m_dataRecvBuffer) - dwOffset > dwLen ? dwLen : sizeof(m_dataRecvBuffer) - dwOffset);
 	m_dwHeaderLength = 0;
@@ -164,7 +164,7 @@ int WebSocketDataHeader::__CheckPkgHeader(const char * pBuf)
 	return (int)(m_qwPayloadLen + m_dwHeaderLength);
 }
 
-int WebSocketDataHeader::ParsePacket(const char * pBuf, UINT32 dwLen)
+int WebSocketDataHeader::ParsePacket(const char * pBuf, unsigned int dwLen)
 {
 	if (dwLen < 2)
 	{
