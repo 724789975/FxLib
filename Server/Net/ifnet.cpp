@@ -36,7 +36,7 @@ bool FxSession::Send(const char* pBuf,unsigned int dwLen)
 	    return m_poConnection->Send(pBuf, dwLen);
 	}
 	
-	LogExe(LogLv_Error, "connection : %p, IsConnected() : %d", m_poConnection, (int)m_poConnection->IsConnected());
+	LogExe(LogLv_Error, "connection : %p, id : %d, IsConnected() : %d", m_poConnection, m_poConnection->GetID, (int)m_poConnection->IsConnected());
 	return false;
 }
 
