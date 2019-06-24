@@ -1,4 +1,6 @@
 #include "HttpSession.h"
+#include <fstream>
+#include <sstream>
 
 const static char* g_szResponse =
 	"HTTP/1.1 %d %s\r\n"
@@ -119,12 +121,30 @@ void HttpCallBackTest(HttpRequestInfo& oHttpRequestInfo, CHttpSession& refHttpSe
 	}
 }
 
+void HttpCallBackIndex(HttpRequestInfo & oHttpRequestInfo, CHttpSession & refHttpSession)
+{
+	std::ifstream t1("index.html");
+	std::stringstream buffer;
+	buffer << t1.rdbuf();
+	t1.close();
+	std::string szContent(buffer.str());
+
+	char szBuf[1024 * 64] = { 0 };
+	sprintf(szBuf, g_szResponse, 200, HttpHelp::mg_get_response_code_text(200), GetTimeHandler()->GetTimeStr(), szContent.size(), szContent.c_str());
+	if (!refHttpSession.Send(szBuf, strlen(szBuf)))
+	{
+		//refHttpSession.Close();
+	}
+}
+
 class Init
 {
 public:
 	Init()
 	{
 		CHttpSession::RegistCallBack("/test", HttpCallBackTest);
+		CHttpSession::RegistCallBack("/index", HttpCallBackIndex);
+		CHttpSession::RegistCallBack("/index.html", HttpCallBackIndex);
 	}
 	~Init(){}
 

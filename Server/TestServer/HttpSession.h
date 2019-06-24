@@ -57,5 +57,6 @@ private:
 
 
 void HttpCallBackTest(HttpRequestInfo& oHttpRequestInfo, CHttpSession& refHttpSession);
+void HttpCallBackIndex(HttpRequestInfo& oHttpRequestInfo, CHttpSession& refHttpSession);
 
 #endif // !__HttpSession_H__

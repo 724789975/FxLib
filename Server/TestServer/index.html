@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>百度翻译</title>
+<meta name="keywords" content="翻译,在线翻译,百度翻译,词典,英语,"/>
+<meta name="description" content="百度翻译提供即时免费的多语种文本翻译和网页翻译服务，支持中、英、日、韩、泰、法、西、德等28种热门语言互译，覆盖756个翻译方向。"/>
+<meta name="renderer" content="webkit">
+<meta name="force-rendering" content="webkit">
+
+
+
+<script>
+    /* 配置需要统计的模块，以及整体的抽样率，不需要的模块不配置即可（可点击上面的模块名称自动隐藏） */
+    window.alogObjectConfig = {
+        sample: '1', // 配置整体的抽样率（下面各个统计模块的抽样是在此基础上进行的再抽样），https协议的网页必须配置(需要保证抽样后的PV控制在100万以内)，http的可以不配置（默认为1）
+ 
+        product: '156',  // 必须, DP平台产品线id
+        page: '156_1',  // 必须, DP平台页面id
+        monkey_page: '',  // 如果页面已经有hunter平台的monkey，则为monkey的pageId, 否侧无需该字段
+        speed_page: '',  // 如果页面已经有webspeed平台的性能监控，则为性能的page_id,否侧无需该字段
+ 
+        // 性能----------------------------------------------------------------------------------
+        speed: {
+            sample: '0.2'   // 抽样率, 0~1，建议使采样的pv控制在100万以内，必须要设定，否则统计不会生效
+            //custom_metrics: ['c_item1','p_item3']  //自定义的性能指标，自动上报，只有这些指标都统计完毕之后数据才会发送
+            //special_pages: [{id:34, sample:1}]  // 特殊页面，和老的性能配置一致
+        },
+ 
+        // 访问和点击----------------------------------------------------------------------------
+        monkey: {
+            sample: '0.2'   // 抽样率, 0~1  建议使采样的pv控制在50万以内，必须要设定，否则统计不会生效
+            //hid: ''       // 兼容hunter的monkey，monkey实验的ID
+            //pageflag: ''  // 个别特殊产品线使用hunter的monkey的pageflag
+        },
+ 
+        // js异常，配合FIS插件还可以自动加try/catch监控，详见‘帮助文档’--------------------------
+        exception: { 
+            sample: '0.05'   // 抽样率, 0~1  建议使采样的pv控制在50万以内，必须要设定，否则统计不会生效
+        },
+ 
+        // 浏览器新特性(H5/CSS3)-----------------------------------------------------------------
+        feature: {
+            sample: '0.05'   // 抽样率, 0~1  建议使采样的pv控制在50万以内，必须要设定，否则统计不会生效
+        },
+ 
+        // 自定义事件，详见‘帮助文档’------------------------------------------------------------
+        cus: {
+            sample: '0.05'   // 抽样率, 0~1  必须要设定，否则统计不会生效
+        },
+ 
+        // 跨站资源监控--------------------------------------------------------------------------
+        csp: {
+            sample: '0.05',  // 抽样率, 0~1  建议使采样的pv控制在100万以内，必须要设定，否则统计不会生效
+            'default-src': [
+                {match: '*bae.baidu.com', target: 'Accept,Warn'},
+                {match: '*.baidu.com,*.bdstatic.com,*.baidustatic.com,*.baiduimg.com,*.bdimg.com,localhost,*.hao123.com,*.hao123img.com', target: 'Accept'},
+                {match: /^(127|172|192|10)(\.\d+){3}$/, target: 'Accept'},
+                {match: '*', target: 'Accept,Warn'}
+            ]
+        }
+    };
+ 
+    void function(a,b,c,d,e,f,g){a.alogObjectName=e,a[e]=a[e]||function(){(a[e].q=a[e].q||[]).push(arguments)},a[e].l=a[e].l||+new Date,d="https:"===a.location.protocol?"https://fex.bdstatic.com"+d:"http://fex.bdstatic.com"+d;var h=!0;if(a.alogObjectConfig&&a.alogObjectConfig.sample){var i=Math.random();a.alogObjectConfig.rand=i,i>a.alogObjectConfig.sample&&(h=!1)}h&&(f=b.createElement(c),f.async=!0,f.src=d+"?v="+~(new Date/864e5)+~(new Date/864e5),g=b.getElementsByTagName(c)[0],g.parentNode.insertBefore(f,g))}(window,document,"script","/hunter/alog/alog.min.js","alog"),void function(){function a(){}window.PDC={mark:function(a,b){alog("speed.set",a,b||+new Date),alog.fire&&alog.fire("mark")},init:function(a){alog("speed.set","options",a)},view_start:a,tti:a,page_ready:a}}();
+    void function(n){var o=!1;n.onerror=function(n,e,t,c){var i=!0;return!e&&/^script error/i.test(n)&&(o?i=!1:o=!0),i&&alog("exception.send","exception",{msg:n,js:e,ln:t,col:c}),!1},alog("exception.on","catch",function(n){alog("exception.send","exception",{msg:n.msg,js:n.path,ln:n.ln,method:n.method,flag:"catch"})})}(window);
+</script>
+
+<script>
+            var _hmt = _hmt || [];
+            (function() {
+              var hm = document.createElement("script");
+              hm.src = "//hm.baidu.com/hm.js?64ecd82404c51e03dc91cb9e8c025574";
+              var s = document.getElementsByTagName("script")[0]; 
+              s.parentNode.insertBefore(hm, s);
+            })();
+        </script>
+<link rel="icon" type="image/png" href="//fanyi.bdstatic.com/static/translation/img/favicon/favicon-32x32_ca689c3.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="//fanyi.bdstatic.com/static/translation/img/favicon/favicon-16x16_e1883cf.png" sizes="16x16" />
+<link rel="shortcut icon" type="image/x-icon" href="//fanyi.bdstatic.com/static/translation/img/favicon/favicon_d87cd2a.ico" />
+<link rel="bookmark" type="image/x-icon" href="//fanyi.bdstatic.com/static/translation/img/favicon/favicon_d87cd2a.ico" />
+<script>function addLoadEvent(t){var e=window.onload;window.onload="function"!=typeof window.onload?t:function(){e&&e(),t()}}var outdatedBrowser=function(t){function e(t){s.style.opacity=t/100,s.style.filter="alpha(opacity="+t+")"
+}function o(t){e(t),1==t&&(s.style.display="block"),100==t&&(u=!0)}function r(){var t=document.getElementById("btnCloseUpdateBrowser");
+s.style.backgroundColor=bkgColor,s.style.color=txtColor,s.children[0].style.color=txtColor,s.children[1].style.color=txtColor,t.onmousedown=function(){return s.style.display="none",!1
+}}function a(){var t=!1;if(window.XMLHttpRequest)t=new XMLHttpRequest;else if(window.ActiveXObject)try{t=new ActiveXObject("Msxml2.XMLHTTP")
+}catch(e){try{t=new ActiveXObject("Microsoft.XMLHTTP")}catch(e){t=!1}}return t}function n(t){var e=a();return e&&(e.onreadystatechange=function(){l(e)
+},e.open("GET",t,!0),e.send(null)),!1}function l(t){var e=document.getElementById("outdated");return 4==t.readyState&&(e.innerHTML=200==t.status||304==t.status?t.responseText:f,r()),!1
+}var s=document.getElementById("outdated");this.defaultOpts={bgColor:"#f25648",color:"#ffffff",lowerThan:"transform",languagePath:"../outdatedbrowser/lang/en.html"},t?("IE8"==t.lowerThan||"borderSpacing"==t.lowerThan?t.lowerThan="borderSpacing":"IE9"==t.lowerThan||"boxShadow"==t.lowerThan?t.lowerThan="boxShadow":"IE10"==t.lowerThan||"transform"==t.lowerThan||""==t.lowerThan||"undefined"==typeof t.lowerThan?t.lowerThan="transform":("IE11"==t.lowerThan||"borderImage"==t.lowerThan)&&(t.lowerThan="borderImage"),this.defaultOpts.bgColor=t.bgColor,this.defaultOpts.color=t.color,this.defaultOpts.lowerThan=t.lowerThan,this.defaultOpts.languagePath=t.languagePath,bkgColor=this.defaultOpts.bgColor,txtColor=this.defaultOpts.color,cssProp=this.defaultOpts.lowerThan,languagePath=this.defaultOpts.languagePath):(bkgColor=this.defaultOpts.bgColor,txtColor=this.defaultOpts.color,cssProp=this.defaultOpts.lowerThan,languagePath=this.defaultOpts.languagePath);
+var u=!0,d=function(){var t=document.createElement("div"),e="Khtml Ms O Moz Webkit".split(" "),o=e.length;return function(r){if(r in t.style)return!0;
+for(r=r.replace(/^[a-z]/,function(t){return t.toUpperCase()});o--;)if(e[o]+r in t.style)return!0;return!1}}();if(!d(""+cssProp)){if(u&&"1"!==s.style.opacity){u=!1;
+for(var i=1;100>=i;i++)setTimeout(function(t){return function(){o(t)}}(i),8*i)}" "===languagePath||0==languagePath.length?r():n(languagePath);
+var f='<h6>Your browser is out-of-date!</h6><p>Update your browser to view this website correctly. <a id="btnUpdateBrowser" href="http://outdatedbrowser.com/">Update my browser now </a></p><p class="last"><a href="#" id="btnCloseUpdateBrowser" title="Close">&times;</a></p>'
+}};addLoadEvent(function(){outdatedBrowser({bgColor:"#f25648",color:"#ffffff",lowerThan:"IE11",languagePath:""})});</script>
+<link rel="stylesheet" type="text/css" href="//fanyi.bdstatic.com/static/translation/pkg/public_8497597.css"/><link rel="stylesheet" type="text/css" href="//fanyi.bdstatic.com/static/translation/pkg/index_0c89f01.css"/><style></style></head>
+<body>
+
+<script> alog('speed.set', 'ht', +new Date); </script>
+<div class="container">
+<div class="header">
+<div class="inner">
+<div class="logo">
+<h1>
+<a href="/" class="logo-image" title="百度翻译" target="_self">
+<img src="//fanyi.bdstatic.com/static/translation/img/header/logo_40c4f13.svg" alt="" width="96" height="31" />
+</a>
+</h1>
+</div>
+<div class="navigation">
+<ul>
+<li class="account-wrap wrap-login">
+<a href="https://passport.baidu.com/v2/?login" class="account-login account-head">登录<i class="arrow-down"></i></a>
+<ol class="account-panel">
+<li>
+<a href="https://passport.baidu.com/v2/?login" class="account-login">登录</a>
+</li>
+<li>
+<a href="https://passport.baidu.com/v2/?reg" class="account-register">注册</a>
+</li>
+</ol>
+</li>
+</ul>
+</div>
+<div class="browser-edition-tip" style="display:none" >
+<span>抱歉，您正在使用的浏览器未被完全支持，我们强烈推荐您进行浏览器升级。</span>
+<a href="###">关闭</a>
+</div>
+<script type="text/html" id="tpl-user-info">
+    <li class="account-wrap">
+        <a href="http://www.baidu.com/p/{{$data['user_name']}}" class="account-head">{{$data['user_name']}}<i class="arrow-down"></i></a>
+        <ol class="account-panel">
+            <li>
+                <a href="http://www.baidu.com/p/{{$data['user_name']}}">{{$data['user_name']}}<i class="arrow-down"></i></a>
+            </li>
+            <li><a href="https://passport.baidu.com/">账号设置</a></li>
+            <li><a href="https://passport.baidu.com/?logout" class="account-logout" target="_self">退出</a></li>
+        </ol>
+    </li>
+</script>
+<div class="download-guide">
+<ul class="download-guide-ul">
+<li class="guide-list download-plugin ">
+<span class="list-name">下载翻译插件</span>
+<span class="list-contain plugin-contain">
+<h2>百度截图翻译插件<span class="note">（暂时仅支持Chrome浏览器）</span></h2>
+<p class="desc">网页截图，轻松识别，结果立现</p>
+<a class="ocr-extension-browser browser-border" href="/static/webpage/ocrPluginPage.html" target="_blank" >chrome版</a>
+<h2>百度网页翻译插件<span class="note">（请选择你当前的浏览器，下载对应插件）</span></h2>
+<p class="desc">一键网页翻译，支持划词翻译，海淘必备神器</p>
+<ul class="logo-list">
+<li class="logo-list-li browser1">
+<a target="_blank" href="static/webpage/pluginPage.html"><span>chrome版</span></a>
+</li>
+<li class="logo-list-li browser2">
+<a target="_blank" href="http://chajian.baidu.com/2015/#search/百度翻译/ikkepelhgbcgmhhmcmpfkjmchccjblkd"><span>百度版</span></a>
+</li>
+<li class="logo-list-li browser3">
+<a href="https://fanyiapp.cdn.bcebos.com/plug-in/bdtrans_1.2.5_other.crx"><span>QQ版</span></a>
+</li>
+<li class="logo-list-li browser4">
+<a href="https://fanyiapp.cdn.bcebos.com/plug-in/bdtrans_1.2.5_other.crx"><span>360安全版</span></a>
+</li>
+<li class="logo-list-li browser5">
+<a href="https://fanyiapp.cdn.bcebos.com/plug-in/bdtrans_1.2.5_other.crx"><span>360极速版</span></a>
+</li>
+<li class="logo-list-li browser6">
+<a href="https://fanyiapp.cdn.bcebos.com/plug-in/bdtrans_1.2.5_other.crx"><span>猎豹版</span></a>
+</li>
+<li class="logo-list-li browser7">
+<a href="http://extensions.uc.cn/newindex.htm#!detail/ikkepelhgbcgmhhmcmpfkjmchccjblkd" target="_blank"><span>UC版</span></a>
+</li>
+<li class="logo-list-li browser8">
+<a href="https://fanyiapp.cdn.bcebos.com/plug-in/bdtrans_1.2.5_other.crx"><span>Opera版</span></a>
+</li>
+</ul>
+</span>
+</li>
+<li class="guide-list download-app">
+<a class="list-name app-list-name" href="http://fanyi.baidu.com/appdownload/download.html" target="_blank">下载翻译app</a>
+<a class="list-contain app-contain" href="http://fanyi.baidu.com/appdownload/download.html" target="_blank">
+<span class="icon-text">支持拍照翻译</span>
+</a>
+</li>
+</ul>
+</div>
+<div class="manual-trans-info">
+<div class="entry-trans-info">
+<a href="http://fanyi-pro.baidu.com/?hmsr=%E7%99%BE%E5%BA%A6%E7%BF%BB%E8%AF%91&hmpl=%E5%9B%BA%E5%AE%9A%E5%85%A5%E5%8F%A3&hmcu=%E9%A1%B6%E9%83%A8%E6%8C%89%E9%92%AE&hmkw=&hmci=" target="_blank" class="list-name">人工翻译</a>
+<span class="list-container">
+<p class="content-text"><span class="content-text-num">13352</span>&nbsp;名专业译员&nbsp;,&nbsp;<span class="content-text-num">2528</span>&nbsp;名母语审校</p>
+<p class="content-text">为您提供专属【翻译官】</p>
+<ul class="infolist-ul">
+<li class="info-li">
+<a href="http://fanyi-pro.baidu.com/quick?hmsr=%E7%99%BE%E5%BA%A6%E7%BF%BB%E8%AF%91&hmpl=%E5%9B%BA%E5%AE%9A%E5%85%A5%E5%8F%A3&hmcu=%E9%A1%B6%E9%83%A8%E6%8C%89%E9%92%AE-%E6%97%A5%E5%B8%B8%E5%BF%AB%E8%AF%91&hmkw=&hmci=" target="_blank" class="quick-trans">
+<h1>日常快译</h1>
+<p>中英互译</p>
+<p>在线输入</p>
+<p>即时返回</p>
+<p>适合日常交流用语</p>
+</a>
+</li>
+<li class="info-li">
+<a href="http://fanyi-pro.baidu.com/doc?hmsr=%E7%99%BE%E5%BA%A6%E7%BF%BB%E8%AF%91&hmpl=%E5%9B%BA%E5%AE%9A%E5%85%A5%E5%8F%A3&hmcu=%E9%A1%B6%E9%83%A8%E6%8C%89%E9%92%AE-%E4%B8%93%E4%B8%9A%E7%BF%BB%E8%AF%91&hmkw=&hmci=" target="_blank" class="doc-trans">
+<h1>专业翻译</h1>
+<p>多语言翻译</p>
+<p>上传文档</p>
+<p>专业审校排版</p>
+<p>适合文档证件资料</p>
+</a>
+</li>
+</ul>
+</span>
+</div>
+</div>
+<div class="trans-machine">
+<a href="https://fanyi-wifi.baidu.com/intro" target="_blank" data-stat-id="72">百度wifi翻译机</a>
+<span class="icon-hotlk"></span>
+</div></div>
+</div>
+<div class="divide-wrap">
+<div class="colorbar-before"></div>
+<div class="colorbar-after"></div>
+<div class="colorbar"></div>
+</div><div class="main main-outer" id="main-outer">
+<div class="main main-inner">
+<div class="inner">
+<div class="translate-wrap">
+<div class="trans-operation-wrapper clearfix">
+<div class="trans-operation clearfix">
+<a href="javascript:void(0);" class="language-btn select-from-language" >
+<span class="select-inner">
+<span class="language-selected" data-lang="auto">
+自动检测</span>
+<i class="arrow-down"></i>
+</span>
+</a>
+<a href="javascript:void(0);" class="language-btn-disable from-to-exchange">
+<span class="exchange-mask">
+</span>
+</a>
+<a href="javascript:void(0);" class="language-btn select-to-language" >
+<span class="select-inner">
+<span class="language-selected" data-lang="zh">
+中文
+</span>
+<i class="arrow arrow-down"></i>
+</span>
+</a>
+<a href="javascript:void(0);" class="trans-btn trans-btn-zh icon-transbtn" id="translate-button" target="_self"></a>
+<a href="javascript:" class="manual-trans-btn icon-manual"></a>
+</div>
+<div class="translate-language from-language-list" >
+<div id="from-cover-line" class="from-cover-line"></div>
+<div class="language-data">
+<ul class="language-often clearfix">
+<li>
+<a href="javascript:void(0);" value="auto" class="lang-selected lang-auto">自动检测</a>
+<div class="latest-msg-bubble often-lang-bubble">你的常用语种在这里</div>
+</li>
+</ul>
+<div class="language-list clearfix">
+<ul>
+<li class="language-class">
+ABC
+</li>
+<li>
+<a href="javascript:void(0);" value="ara" class="data-lang ">
+阿拉伯语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="est" class="data-lang ">
+爱沙尼亚语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="bul" class="data-lang ">
+保加利亚语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="pl" class="data-lang ">
+波兰语
+</a>
+</li>
+</ul>
+<ul>
+<li class="language-class">
+DEFG
+</li>
+<li>
+<a href="javascript:void(0);" value="dan" class="data-lang ">
+丹麦语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="de" class="data-lang ">
+德语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="ru" class="data-lang ">
+俄语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="fra" class="data-lang ">
+法语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="fin" class="data-lang ">
+芬兰语
+</a>
+</li>
+</ul>
+<ul>
+<li class="language-class">
+HIJKLMN
+</li>
+<li>
+<a href="javascript:void(0);" value="kor" class="data-lang ">
+韩语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="nl" class="data-lang ">
+荷兰语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="cs" class="data-lang ">
+捷克语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="rom" class="data-lang ">
+罗马尼亚语
+</a>
+</li>
+</ul>
+<ul>
+<li class="language-class">
+OPQRST
+</li>
+<li>
+<a href="javascript:void(0);" value="pt" class="data-lang ">
+葡萄牙语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="jp" class="data-lang ">
+日语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="swe" class="data-lang ">
+瑞典语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="slo" class="data-lang ">
+斯洛文尼亚语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="th" class="data-lang ">
+泰语
+</a>
+</li>
+</ul>
+<ul>
+<li class="language-class">
+UVWX
+</li>
+<li>
+<a href="javascript:void(0);" value="wyw" class="data-lang ">
+文言文
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="spa" class="data-lang ">
+西班牙语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="el" class="data-lang ">
+希腊语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="hu" class="data-lang ">
+匈牙利语
+</a>
+</li>
+</ul>
+<ul>
+<li class="language-class">
+YZ
+</li>
+<li>
+<a href="javascript:void(0);" value="zh" class="data-lang ">
+中文
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="en" class="data-lang ">
+英语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="it" class="data-lang ">
+意大利语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="vie" class="data-lang ">
+越南语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="yue" class="data-lang ">
+粤语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="cht" class="data-lang ">
+中文繁体
+</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="translate-language to-language-list" >
+<div id="to-cover-line"></div>
+<div class="language-data">
+<ul class="language-often clearfix"></ul>
+<div class="language-list clearfix">
+<ul>
+<li class="language-class">
+ABC
+</li>
+<li>
+<a href="javascript:void(0);" value="ara" class="data-lang ">
+阿拉伯语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="est" class="data-lang ">
+爱沙尼亚语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="bul" class="data-lang ">
+保加利亚语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="pl" class="data-lang ">
+波兰语
+</a>
+</li>
+</ul>
+<ul>
+<li class="language-class">
+DEFG
+</li>
+<li>
+<a href="javascript:void(0);" value="dan" class="data-lang ">
+丹麦语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="de" class="data-lang ">
+德语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="ru" class="data-lang ">
+俄语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="fra" class="data-lang ">
+法语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="fin" class="data-lang ">
+芬兰语
+</a>
+</li>
+</ul>
+<ul>
+<li class="language-class">
+HIJKLMN
+</li>
+<li>
+<a href="javascript:void(0);" value="kor" class="data-lang ">
+韩语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="nl" class="data-lang ">
+荷兰语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="cs" class="data-lang ">
+捷克语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="rom" class="data-lang ">
+罗马尼亚语
+</a>
+</li>
+</ul>
+<ul>
+<li class="language-class">
+OPQRST
+</li>
+<li>
+<a href="javascript:void(0);" value="pt" class="data-lang ">
+葡萄牙语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="jp" class="data-lang ">
+日语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="swe" class="data-lang ">
+瑞典语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="slo" class="data-lang ">
+斯洛文尼亚语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="th" class="data-lang ">
+泰语
+</a>
+</li>
+</ul>
+<ul>
+<li class="language-class">
+UVWX
+</li>
+<li>
+<a href="javascript:void(0);" value="wyw" class="data-lang ">
+文言文
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="spa" class="data-lang ">
+西班牙语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="el" class="data-lang ">
+希腊语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="hu" class="data-lang ">
+匈牙利语
+</a>
+</li>
+</ul>
+<ul>
+<li class="language-class">
+YZ
+</li>
+<li>
+<a href="javascript:void(0);" value="zh" class="data-lang lang-selected">
+中文
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="en" class="data-lang ">
+英语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="it" class="data-lang ">
+意大利语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="vie" class="data-lang ">
+越南语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="yue" class="data-lang ">
+粤语
+</a>
+</li>
+<li>
+<a href="javascript:void(0);" value="cht" class="data-lang ">
+中文繁体
+</a>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<script type="text/html" id="tplLangItem">
+    <a href="javascript:void(0);" class="data-lang {{if isSelected}}lang-selected{{/if}}{{if supportOcr}} support-ocr{{/if}}" value="{{value}}">{{text}}</a>
+</script>
+<script type="text/html" id="tplLangItemDisable">
+    <span class="data-lang new-lang-disable {{if isSelected}}lang-selected{{/if}}{{if supportOcr}} support-ocr{{/if}}" value="{{value}}">{{text}}</span>
+</script>
+<div class="doc-trans-operation">
+<div class="doc-trans-guide-layout"></div>
+<div class="doc-trans-dir">
+<div class="doc-lang-pair curr-doc-dir auto">
+<span class="from-doc-lang">中英互译(默认)</span>
+<span class="doc-lang-arrow"></span>
+<span class="to-doc-lang"></span>
+</div>
+<div class="doc-lang-select">
+<div class="doc-lang-pair" data-dir="zh2en">
+<span class="from-doc-lang">中文</span>
+<span class="doc-lang-arrow"></span>
+<span class="to-doc-lang">英语</span>
+</div>
+<div class="doc-lang-pair" data-dir="en2zh">
+<span class="from-doc-lang">英语</span>
+<span class="doc-lang-arrow"></span>
+<span class="to-doc-lang">中文</span>
+</div>
+<div class="doc-lang-pair" data-dir="zh2jp">
+<span class="from-doc-lang">中文</span>
+<span class="doc-lang-arrow"></span>
+<span class="to-doc-lang">日语</span>
+</div>
+<div class="doc-lang-pair" data-dir="jp2zh">
+<span class="from-doc-lang">日语</span>
+<span class="doc-lang-arrow"></span>
+<span class="to-doc-lang">中文</span>
+</div>
+<div class="doc-lang-pair" data-dir="zh2kor">
+<span class="from-doc-lang">中文</span>
+<span class="doc-lang-arrow"></span>
+<span class="to-doc-lang">韩语</span>
+</div>
+<div class="doc-lang-pair" data-dir="kor2zh">
+<span class="from-doc-lang">韩语</span>
+<span class="doc-lang-arrow"></span>
+<span class="to-doc-lang">中文</span>
+</div>
+<div class="doc-lang-pair selected" data-dir="auto2auto">
+<span class="from-doc-lang">中英互译</span>
+</div>
+<div class="doc-lang-guide-container">
+<span>点击设置语言，与文档翻译方向一致</span>
+<a class="know-btn" href="javascript:">知道了</a>
+</div>
+</div>
+</div>
+<a href="javascript:" class="doc-trans-btn">翻译</a>
+</div>
+<div class="translate-setting">
+<a href="javascript:void(0);" data-href="/collection" class="collection-btn data-hover-tip" data-hover-tip-text="收藏夹"><span class="icon-collect"></span></a>
+<a href="javascript:void(0);" class="setting-btn data-hover-tip" data-hover-tip-text="设置"><span class="icon-setting"></span></a>
+<div class="setting-options">
+<span class="setting-options-arrow"><em class="setting-arrow-inner"></em></span>
+<table>
+<tbody>
+<tr class="zonedword-switch setting-checked">
+<td><span class="check-label">划词翻译</span></td>
+<td><span class="check-option"></span></td>
+</tr>
+<tr class="realtrans-switch setting-checked">
+<td><span class="check-label">实时翻译</span></td>
+<td><span class="check-option"></span></td>
+</tr>
+<tr class="history-switch setting-checked">
+<td><span class="check-label">历史记录</span></td>
+<td><span class="check-option"></span></td>
+</tr>
+<tr>
+<td colspan="2"><hr class="split-line"/></td>
+</tr>
+<tr class="sound-spd-switch">
+<td><span class="check-label">发音语速</span></td>
+<td><div class="sound-spd-items"><span id="spd-slow" class="sound-spd-radio" data-value="slow"><span class="icon-radio radio-btn"></span>较慢</span><span id="spd-normal" class="sound-spd-radio" data-value="normal" checked><span class="icon-radio radio-btn"></span>中速</span><span id="spd-fast" class="sound-spd-radio" data-value="fast"><span class="icon-radio radio-btn"></span>较快</span></div></td>
+</tr>
+<tr class="sound-prefer-switch">
+<td><span class="check-label">英语发音偏好</span></td>
+<td><div class="sound-prefer-items"><span id="prefer-en" class="sound-prefer-radio" data-value="en" checked><span class="icon-radio radio-btn"></span>美式</span><span id="prefer-uk" class="sound-prefer-radio" data-value="uk"><span class="icon-radio radio-btn"></span>英式</span></div></td>
+</tr>
+<tr class="sound-trigger-switch">
+<td><span class="check-label">发音模式</span></td>
+<td><div class="sound-trigger-items"><span id="click-trigger" class="sound-trigger-radio" data-value="click"><span class="icon-radio radio-btn"></span>点击发音</span><span id="hover-trigger" class="sound-trigger-radio" data-value="hover" checked><span class="icon-radio radio-btn"></span>自动发音</span></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="translateio">
+<div class="translate-main  clearfix">
+<div class="trans-left">
+<div class="trans-input-wrap">
+<div class="image-wrap">
+<div id="image-holder"></div>
+</div>
+<div class="input-wrap">
+<a href="###" class="textarea-clear-btn" title="清空"></a>
+<div class="doc-trans-file"></div>
+<div class="textarea-wrap">
+<div class="textarea-bg">
+<span class="prompt-text"></span>
+</div>
+<div class="textarea-bg-text" id="textarea-bg-text"></div>
+<textarea class="textarea" id="baidu_translate_input"></textarea>
+</div>
+<ul class="sug-wrap" id="sug-wrap">
+</ul>
+<div class="input-operate">
+<a href="###" class="operate-btn op-sound data-hover-tip" data-hover-tip-text="发音"><span class="icon-sound"></a>
+<div class="op-favor-container">
+<a href="javascript:void(0);" class="operate-btn op-favo data-hover-tip" data-hover-tip-text="收藏结果"><span class="icon-favo"></span></a>
+<div class="input-coll-extra-container">
+<div class="input-coll-group-container">
+<a class="close-input-coll-group" href="javascript:"></a>
+<header class="gray">
+添加收藏到&nbsp;<span class="black">(单选)</span>&nbsp;：</header>
+<hr>
+<ol class="input-coll-ol scrollbar-inner">
+</ol>
+<hr>
+<div class="new-coll-group-container">
+<a class="add-new-group" href="javascript:">新收藏分组</a>
+<div class="new-coll-group-input-container">
+<input type="text" placeholder="请输入新分组名称" class="new-group-name"><a class="new-group-confirm disabled-new-group-confirm" href="javascript:">创建并添加</a>
+</div>
+</div>
+</div>
+<div class="new-coll-group-err-msg"></div>
+</div>
+<script type="text/template" id="tpl-input-ol">
+    {{each groupList as group}}
+        <li class="input-coll-li" title="{{group.nameDisplayLegth > 14 ? group.name : ''}}" data-group-id="{{group.id}}" data-stat-id="18">{{group.name}}</li>
+    {{/each}}
+</script>
+</div>
+<div class="trans-correct">
+</div>
+<div class="trans-prompt">
+<p class="prompt-wrap">
+</p>
+</div>
+</div>
+<div id="upload-btn">
+<span class="upload-btn-title">上传文档</span>
+<div class="upload-tip">支持word、ppt、excel、jpg等格式</div>
+<div class="first-tip">支持中英日韩，不限字符翻译，免费导出</div>
+</div>
+<div id="upload-btn-hidden"></div>
+</div>
+</div>
+</div>
+<div class="trans-right">
+<div class="output-wrap output-blank">
+</div>
+<span class="hover-tips-wrap" id="hover-tips" style="display:none;">
+<span class="tips-content">清空内容</span>
+<span class="tips-arrow-down"></span>
+</span>
+</div>
+<div class="flash" style="font-size:0;width:0;height:0;overflow:hidden;position:absolute;left:-999999em;z-index:-9999;">
+<img id="btpm-swf-src" src="//fanyi.bdstatic.com/static/translation/widget/translate/common/flash/bt_e981bce.swf" style="display:none;" alt="" />
+<div class="bt-flash" style="width:0;height:0;font-size:0;overflow:hidden;"></div>
+</div>
+</div>
+<div class="preview-placeholder">
+<img id="preview-img">
+</div>
+</div>
+<div class="upload-fail-tip">
+请先设置语种，然后点击 [翻译] 按钮开始翻译</div>
+<div class="trans-other-wrap clearfix">
+<div class="history-wrap">
+<div class="history-container">
+<div class="history-title">
+<div class="history-control-bar">
+<div class="history-remove-edit">
+<span class="history-remove-all">清空</span><span class="split-symbol">|</span><span class="history-edit-btn">编辑</span>
+</div>
+<span class="history-complete">完成</span>
+</div>
+<h1><span class="history-icon icon-history"></span>历史记录</h1>
+</div>
+<ul class="history-items"></ul>
+<div class="history-tip">
+<p>暂时没有您的历史记录</p>
+<p class="history-tip-row">不想显示历史记录？<a class="history-tip-setting">点此设置</a></p>
+</div>
+</div>
+</div>
+<div class="hot-link-out-container"></div>
+<div class="trans-left">
+<nav id="side-nav">
+<div class="sidv-nav-position-layer">
+<div class="side-nav-wrapper"></div>
+<div id="nav-mask"></div>
+<div id="nav-st" class="nav-st">
+<h1>拖动以排序</h1>
+<div class="nav-st-items"></div>
+<div class="nav-st-footer"><div class="nav-st-default" data-stat-id="63">恢复默认</div></div>
+</div>
+</div>
+</nav>
+
+<div class="trans-right trans-other-right" id="transOtherRight"></div>
+</div>
+</div>
+<div class="doc-trans-view-wrap">
+<div class="loading-exit-btn doc-trans-btn-common doc-trans-btn-white">退出</div>
+<div class="view-btn-group">
+<a class="go-back doc-trans-btn-common" href="javascript:"/>
+<a class="view-re-upload-btn doc-trans-btn-common">上传新文档</a>
+<div class="export-doc-btn doc-trans-btn-common doc-trans-btn-blue">
+<div class="export-tip">
+仅支持<span class="red-font">部分</span>翻译导出，其余原文输出<br>
+<div class="no-tip-check">
+<div class="no-tip-checkbox"></div>
+不再提示</div>
+<br>
+<hr class="tip-hr">
+<a class="confirm-export-btn doc-trans-btn-common">确认导出</a>
+</div>
+</div>
+</div>
+<div class="doc-whole-container">
+<div class="src-doc-container">
+<div class="file-name-container">
+<p class="file-name"></p>
+</div>
+<div class="view-file-name"></div>
+<div class="src-doc-position-container">
+<div class="src-doc-scroll-wrapper scrollbar-inner">
+<div class="src-doc-padding-wrapper"></div>
+</div>
+</div>
+</div>
+<div class="dst-doc-container">
+<div class="loading-container">
+<p>小译正在努力翻译…</p>
+<div class="progress-bar-container"><div class="progress-bar"></div></div>
+<p class="doc-view-lang-pair"><span class="doc-view-from-lang"></span><span class="dir-arrow"></span><span class="doc-view-to-lang"></span></p>
+</div>
+<div class="loading-err-container">
+<p class="err-title">文档解析失败</p>
+<p class="err-content">可能是文件过大、图片较多导致的<br>建议拆分成小文档，逐个翻译哦</p>
+<a class="doc-trans-btn-common doc-trans-btn-blue err-exit-btn">退出</a>
+<a class="doc-trans-btn-common doc-trans-btn-white err-re-upload-btn">重新上传</a>
+</div>
+<div class="view-dst-title">译文（来自机器翻译）</div>
+<div class="dst-doc-position-container">
+<div class="dst-doc-scroll-wrapper scrollbar-inner">
+<div class="dst-doc-padding-wrapper"></div>
+</div>
+<div class="doc-async-translating-tip">正在加载…</div>
+</div>
+</div>
+<iframe
+            id="doc-view-iframe"
+            width="100%"
+            height="100%"
+            frameborder='0'>
+</iframe>
+</div>
+<div class="doc-feedback-group">
+<a
+            href="javascript:"
+            id="doc-view-feedback">用户反馈</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="zonedword-wrap" class="zonedword zonedword-wrap">
+<div class="zonedword-title">
+<a href="javascript:void(0);" class="zonedword-close" title="关闭"><span class="icon-zclose"></span></a>
+<div class="zonedword-setting">
+<a href="javascript:void(0);" class="zonedword-setting-icon" title="设置"><span class="icon-zsetting"></span></a>
+<div class="setting-options">
+<span class="setting-options-arrow"><em class="setting-arrow-inner"></em></span>
+<a href="javascript:void(0);" class="zonedword-switch setting-checked">
+<span class="check-label">划词翻译</span><span class="check-option"></span>
+</a>
+</div>
+</div>
+<span>百度翻译</span>
+</div>
+<div class="zonedword-content">
+<div class="zonedword-search-wrap">
+<div class="zonedword-search-input-wrap">
+<input class="zonedword-search-input" type="text" value=""></input>
+</div>
+<a class="zonedword-search-button" href="###">查询</a>
+</div>
+<div class="zonedword-result-wrap">
+<p class="zonedword-loading-tip">
+<img src="//fanyi.bdstatic.com/static/translation/img/translate/zonedword/loading_50c5e3e.gif" width="32" height="32" alt="" style="margin-bottom:5px;">
+<br>
+努力翻译中...</p>
+<p class="zonedword-error-tip"></p>
+<div class="zonedword-result-container">
+<div class="zoned-coll-extra-container">
+<div class="zoned-coll-group-container scrollbar-inner">
+<header class="gray">添加收藏到&nbsp;<span class="black">(单选)</span>&nbsp;：</header>
+<hr>
+<ol class="zoned-coll-ol scrollbar-inner">
+</ol>
+</div>
+</div>
+<div class="zonedword-result clearfix">
+</div>
+</div>
+</div>
+<div class="zonedword-download-tip">
+<p>
+<a class='zonedword-detail-link sec-trans' href="javascript:void(0);">查看更多</a>
+<a class='zonedword-close-coll-link' href="javascript:">收起分组</a>
+<a href="javascript:void(0);" class="operate-btn op-favo data-hover-tip" title="收藏结果" data-hover-tip-text="收藏结果"><span class="icon-favo"></span></a>
+</p>
+</div>
+</div>
+</div>
+<div class="footer cleafix">
+<div class="extra-wrap">
+<a href="feedback" class="feedback-btn extra-btn" id="index-feedback-btn">意见反馈</a>
+<a href="###" class="backtotop-btn extra-btn "></a>
+</div>
+<div class="inner clearfix">
+<div class="spread-wrap">
+</div>
+<div class="copyright">
+<ul><li>
+<span class="copyright-text" dir="ltr">&copy;2019&nbsp;Baidu</span>
+</li>
+<li>
+<a href="http://www.baidu.com/duty/" target="_blank">使用百度前必读</a>
+<span class="split-line">|</span>
+</li>
+<li>
+<a href="http://fanyi-pro.baidu.com/?hmsr=%E7%99%BE%E5%BA%A6%E7%BF%BB%E8%AF%91&hmpl=%E5%9B%BA%E5%AE%9A%E5%85%A5%E5%8F%A3&hmcu=%E5%BA%95%E9%83%A8%E5%8F%8B%E9%93%BE&hmkw=&hmci=" target="_blank" class="foot-manual-link">百度人工翻译</a>
+<span class="split-line">|</span>
+</li>
+<li>
+<a href="http://api.fanyi.baidu.com/" target="_blank">百度翻译开放平台</a>
+<span class="split-line">|</span>
+</li>
+<li>
+<a href="http://ai.baidu.com/" target="_blank">百度大脑</a>
+<span class="split-line">|</span>
+</li>
+<li>
+<a href="http://fanyi.baidu.com/static/webpage/agreement.html" target="_blank">翻译协议</a>
+<span class="split-line">|</span>
+</li>
+<li>
+<a href="mailto:translate-service@baidu.com">建议与反馈</a>
+<span class="split-line">|</span>
+</li>
+<li>
+<a href="http://help.baidu.com/question?prod_en=fanyi&class=276&id=1000317" target="_blank">帮助</a>
+</li>
+</ul>
+</div>
+<div class="follow-wrapper">
+<div class="follow-btns" id="follow-btns">
+<a title="关注微博" class="follow-weibo-btn" data-pos='0'>关注微博</a>
+<a title="关注微信" class="follow-weixin-btn" data-pos='1'>关注微信</a>
+<a title="下载手机版" class="mobile-link" data-pos='2'>手机版</a>
+<a title="联系我们" href="mailto:translate-service@baidu.com" class="contact-us-btn" target="_self" data-pos='3'>联系我们</a>
+</div>
+<div id="follow-dialog" class="follow-dialog hide">
+<div class="fdialog-mask"></div>
+<div class="fdialog-wrap" id="fdialog-wrap">
+<div class="fdialog-main">
+<i class="fdialog-close" id="fdialog-close"></i>
+<div class="fdialog-cont cont-0">
+<img src="//fanyi.bdstatic.com/static/translation/img/footer/weibo_aabf3b9.png" />
+<a data-pos='0' data-type="weibo-link-click" class="fdialog-link" href="http://weibo.com/baidutranslate">点击查看微博</a>
+<div class="fdialog-info">
+<p>这里有关于国外、旅游最有趣、有品、有料的资讯</p>
+<p class="text-big">扫描二维码，即刻关注百度翻译官方微博</p>
+</div>
+</div>
+<div class="fdialog-cont cont-1">
+<img src="//fanyi.bdstatic.com/static/translation/img/footer/wechat_76663d3.jpg" />
+<a class="fdialog-link"></a>
+<div class="fdialog-info">
+<p>这里有关于国外、旅游最有趣、有品、有料的资讯</p>
+<p class="text-big">扫描二维码，即刻订阅</p>
+</div>
+</div>
+<div class="fdialog-cont cont-2">
+<img src="//fanyi.bdstatic.com/static/translation/img/footer/app_e8ff780.png" />
+<a data-pos='2' data-type="mobile-link-click" class="fdialog-link" href="http://fanyi.baidu.com/appdownload/download.html">百度翻译手机端</a>
+<div class="fdialog-info">
+<p>随说随译。离线翻译，无网使用。一切尽在百度翻译APP。</p>
+<p class="text-big">扫描二维码，即可下载</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+</body>
+</html>
+
