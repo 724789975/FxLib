@@ -255,7 +255,7 @@ public:
 
 	virtual void					OnRead() = 0;
 	virtual void					OnWrite() = 0;
-	virtual SOCKET					Listen(unsigned int dwIP, UINT16& wPort) = 0;
+	virtual SOCKET					Listen(unsigned int dwIP, unsigned short& wPort) = 0;
 	virtual bool					StopListen() = 0;
 	virtual bool					Close() = 0;
 	virtual void					ProcEvent(SNetEvent oEvent) = 0;
@@ -317,10 +317,10 @@ public:
 	virtual bool					Run(unsigned int dwCount) = 0;
 	virtual void					Release() = 0;
 
-	virtual SOCKET					TcpConnect(FxSession* poSession, unsigned int dwIP, UINT16 wPort, bool bReconnect = false) = 0;
-	virtual IFxListenSocket*		Listen(IFxSessionFactory* pSessionFactory, ESocketType eSocketListenType, unsigned int dwIP, UINT16& dwPort) = 0;
+	virtual SOCKET					TcpConnect(FxSession* poSession, unsigned int dwIP, unsigned short wPort, bool bReconnect = false) = 0;
+	virtual IFxListenSocket*		Listen(IFxSessionFactory* pSessionFactory, ESocketType eSocketListenType, unsigned int dwIP, unsigned short& dwPort) = 0;
 
-	virtual SOCKET					UdpConnect(FxSession* poSession, unsigned int dwIP, UINT16 wPort, bool bReconnect = false) = 0;
+	virtual SOCKET					UdpConnect(FxSession* poSession, unsigned int dwIP, unsigned short wPort, bool bReconnect = false) = 0;
 
 private:
 
