@@ -35,7 +35,7 @@ public:
 
 	void						Uninit();
 
-	bool						PushNetEvent(IFxSocket* poSock, SNetEvent oEvent);
+	bool						PushNetEvent(IFxSocket* poSock, const SNetEvent& oEvent);
 	FxIoThread*					FetchIoThread(unsigned int dwSockId);
 
 	int							GetThreadCount() { return m_nNetThreadCount; }

@@ -216,7 +216,7 @@ SOCKET FxNetModule::UdpConnect(FxSession* poSession, unsigned int dwIP, unsigned
 	return poConnection->Reconnect();
 }
 
-bool FxNetModule::PushNetEvent(IFxSocket* poSock, SNetEvent oEvent)
+bool FxNetModule::PushNetEvent(IFxSocket* poSock, const SNetEvent& oEvent)
 {
 	SSockNetEvent oSockEvent;
 	oSockEvent.poSock = poSock;

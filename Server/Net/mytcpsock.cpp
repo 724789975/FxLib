@@ -488,6 +488,7 @@ void FxTCPListenSock::OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwB
 		{
 			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "state : %d != SSTATE_LISTEN", (unsigned int)GetState());
 
+			PushNetEvent(NETEVT_ERROR, NET_UNKNOWN_ERROR);
 			Close();        // 未知错误，不应该发生//
 		}
 		break;
@@ -1724,6 +1725,7 @@ bool FxTCPConnectSockBase::PostSend()
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "NULL == m_poIoThreadHandler, socket : %d, socket id : %d", GetSock(), GetSockId());
 
+		PushNetEvent(NETEVT_ERROR, NET_UNKNOWN_ERROR);
 		Close();
 		return false;
 	}
@@ -2223,6 +2225,7 @@ void FxTCPConnectSockBase::OnParserIoEvent(bool bRet, void* pIoData, unsigned in
 	if (NULL == pSPerIoData)
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "socket : %d, socket id : %d", GetSock(), GetSockId());
+		PushNetEvent(NETEVT_ERROR, NET_UNKNOWN_ERROR);
 		Close();
 		return;
 	}
@@ -2251,6 +2254,7 @@ void FxTCPConnectSockBase::OnParserIoEvent(bool bRet, void* pIoData, unsigned in
 		default:
 		{
 			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "socket : %d, socket id : %d", GetSock(), GetSockId());
+			PushNetEvent(NETEVT_ERROR, NET_UNKNOWN_ERROR);
 			Close();
 		}
 		break;
@@ -2262,6 +2266,7 @@ void FxTCPConnectSockBase::OnRecv(bool bRet, int dwBytes)
 	if (0 == dwBytes)
 	{
 		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+		PushNetEvent(NETEVT_ERROR, NET_EOF_ERROR);
 		Close();
 		return;
 	}
@@ -2692,6 +2697,7 @@ void FxTCPConnectSockBase::OnRecv()
 	else if (0 == nLen)
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "socket : %d, socket id : %d", GetSock(), GetSockId());
+		PushNetEvent(NETEVT_ERROR, NET_EOF_ERROR);
 		Close();
 		return;
 	}
@@ -2976,7 +2982,7 @@ SOCKET FxTCPConnectSock::Connect()
 	if (NULL == m_poIoThreadHandler)
 	{
 		//		m_pLock.UnLock();
-		PushNetEvent(NETEVT_ERROR, 0);
+		PushNetEvent(NETEVT_ERROR, NET_UNKNOWN_ERROR);
 		Close();
 		return INVALID_SOCKET;
 	}
@@ -3243,6 +3249,7 @@ void FxWebSocketConnect::__ProcRecv(unsigned int dwLen)
 			}
 			if (!m_poSendBuf->PushBuff(szResponse, strlen(szResponse)))
 			{
+				PushNetEvent(NETEVT_ERROR, NET_SEND_OVERFLOW);
 				Close();
 				return;
 			}
@@ -3338,6 +3345,7 @@ void FxWebSocketConnect::OnRecv(bool bRet, int dwBytes)
 		if (0 == dwBytes)
 		{
 			InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+			PushNetEvent(NETEVT_ERROR, NET_EOF_ERROR);
 			Close();
 			return;
 		}
@@ -3438,6 +3446,7 @@ void FxWebSocketConnect::OnRecv(bool bRet, int dwBytes)
 	if (0 == dwBytes)
 	{
 		InterlockedCompareExchange(&m_nPostRecv, 0, m_nPostRecv);
+		PushNetEvent(NETEVT_ERROR, NET_EOF_ERROR);
 		Close();
 		return;
 	}
@@ -3676,6 +3685,7 @@ void FxWebSocketConnect::OnRecv()
 		else if (0 == nLen)
 		{
 			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "socket : %d, socket id : %d", GetSock(), GetSockId());
+			PushNetEvent(NETEVT_ERROR, NET_EOF_ERROR);
 			Close();
 			return;
 		}
@@ -3752,6 +3762,7 @@ void FxWebSocketConnect::OnRecv()
 		else if (0 == nLen)
 		{
 			ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "socket : %d, socket id : %d", GetSock(), GetSockId());
+			PushNetEvent(NETEVT_ERROR, NET_EOF_ERROR);
 			Close();
 			return;
 		}
@@ -4051,6 +4062,7 @@ bool FxHttpConnect::PostSend()
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "NULL == m_poIoThreadHandler, socket : %d, socket id : %d", GetSock(), GetSockId());
 
+		PushNetEvent(NETEVT_ERROR, NET_UNKNOWN_ERROR);
 		Close();
 		return false;
 	}
@@ -4061,6 +4073,7 @@ bool FxHttpConnect::PostSend()
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "false == m_poIoThreadHandler->ChangeEvent, socket : %d, socket id : %d", GetSock(), GetSockId());
 
+		PushNetEvent(NETEVT_ERROR, NET_SEND_ERROR);
 		Close();
 		return false;
 	}
@@ -4090,6 +4103,7 @@ bool FxHttpConnect::PostSend()
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "send 0 == nRet, socket : %d, socket id : %d", GetSock(), GetSockId());
 		return false;
 	}
+	PushNetEvent(NETEVT_ERROR, NET_CLOSE_ERROR);
 	Close();
 	return true;
 #endif // WIN32
@@ -4130,11 +4144,13 @@ void FxHttpConnect::OnRecv(bool bRet, int dwBytes)
 {
 	if (0 == dwBytes)
 	{
+		PushNetEvent(NETEVT_ERROR, NET_EOF_ERROR);
 		Close();
 		return;
 	}
 	if (false == bRet)
 	{
+		PushNetEvent(NETEVT_ERROR, NET_RECV_ERROR);
 		Close();
 		return;
 	}
@@ -4182,6 +4198,7 @@ void FxHttpConnect::OnRecv()
 	else if (0 == nLen)
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "socket : %d, socket id : %d", GetSock(), GetSockId());
+		PushNetEvent(NETEVT_ERROR, NET_EOF_ERROR);
 		Close();
 		return;
 	}

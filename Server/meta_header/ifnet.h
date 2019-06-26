@@ -29,13 +29,16 @@ class IFxDataHeader;
 
 
 enum ENetErrCode{
-	NET_RECVBUFF_ERROR				= -7,
-	NET_CONNECT_FAIL				= -6,
-	NET_SYSTEM_ERROR				= -5, 
-	NET_RECV_ERROR					= -4, 
-	NET_SEND_ERROR					= -3, 
-	NET_SEND_OVERFLOW				= -2,
-	NET_PACKET_ERROR				= -1,
+	NET_UNKNOWN_ERROR				= -100,
+	NET_CLOSE_ERROR					= -9,
+	NET_RECVBUFF_ERROR				= -8,
+	NET_CONNECT_FAIL				= -7,
+	NET_SYSTEM_ERROR				= -6, 
+	NET_RECV_ERROR					= -5, 
+	NET_SEND_ERROR					= -4, 
+	NET_SEND_OVERFLOW				= -3,
+	NET_PACKET_ERROR				= -2,
+	NET_EOF_ERROR					= -1,
 	NET_SUCCESS						= 0
 };
 
@@ -118,7 +121,7 @@ struct SPerUDPIoData
 struct SNetEvent
 {
 	ENetEvtType						eType;
-	unsigned int							dwValue;
+	unsigned int					dwValue;
 };
 
 class FxSession
