@@ -124,6 +124,16 @@ unsigned int FxSession::GetRemotePort()
 	return 0;
 }
 
+int FxSession::GetConnectId()
+{
+	if (NULL != m_poConnection)
+	{
+		return m_poConnection->GetID();
+	}
+
+	return 0;
+}
+
 FxConnection* FxSession::GetConnection(void)
 {
 	return m_poConnection;

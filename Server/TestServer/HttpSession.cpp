@@ -27,11 +27,12 @@ void CHttpSession::OnConnect(void)
 
 void CHttpSession::OnClose(void)
 {
+	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p, connect id : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), GetConnectId());
 }
 
 void CHttpSession::OnError(unsigned int dwErrorNo)
 {
-	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), dwErrorNo);
+	LogExe(LogLv_Debug, "ip : %s, port : %d, connect addr : %p, connect id : %d, error no : %d", GetRemoteIPStr(), GetRemotePort(), (GetConnection()), GetConnectId(), dwErrorNo);
 }
 
 void CHttpSession::OnRecv(const char* pBuf, unsigned int dwLen)

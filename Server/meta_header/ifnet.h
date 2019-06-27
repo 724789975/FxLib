@@ -142,13 +142,15 @@ public:
 
 	virtual char*					GetRecvBuf() = 0;
 
-	virtual unsigned int					GetRecvSize() = 0;
+	virtual unsigned int			GetRecvSize() = 0;
 
-	virtual unsigned int		 			GetRemoteIP();
+	virtual unsigned int		 	GetRemoteIP();
 
 	virtual const char* 			GetRemoteIPStr();
 
-	virtual unsigned int					GetRemotePort();
+	virtual unsigned int			GetRemotePort();
+
+	virtual int						GetConnectId();
 
 	virtual bool					Send(const char* pBuf,unsigned int dwLen);
 

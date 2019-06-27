@@ -25,12 +25,12 @@ public:
 	bool						Send(const char* pBuf,unsigned int dwLen);
 	void						Close(void);
 	SOCKET						Reconnect();
-	const unsigned int				GetRemoteIP(void)				{ return m_dwRemoteIP;	}
+	const unsigned int			GetRemoteIP(void)				{ return m_dwRemoteIP;	}
 	const char*					GetRemoteIPStr(void)			{ return m_szRemoteIP;	}
-	unsigned short						GetRemotePort(void)				{ return m_wRemotePort; }
-	const unsigned int				GetLocalIP(void)				{ return m_dwLocalIP;	}
+	unsigned short				GetRemotePort(void)				{ return m_wRemotePort; }
+	const unsigned int			GetLocalIP(void)				{ return m_dwLocalIP;	}
 	const char*					GetLocalIPStr(void)				{ return m_szLocalIP;	}
-	unsigned short						GetLocalPort(void)				{ return m_wLocalPort;	}
+	unsigned short				GetLocalPort(void)				{ return m_wLocalPort;	}
 
 	void						SetRemoteIP(unsigned int dwIP);
 	void						SetRemotePort(unsigned short wPort)		{ m_wRemotePort = wPort; }
@@ -45,7 +45,7 @@ public:
 	void						Reset();
 
 	void						SetID(unsigned int dwID)				{ m_dwID = dwID; }
-	unsigned int						GetID()							{ return m_dwID; }
+	unsigned int				GetID()							{ return m_dwID; }
 
 	void						OnConnect();
 	void						OnAssociate();
@@ -54,7 +54,7 @@ public:
 	void						OnConnError(unsigned int dwErrorNo);
 	void						OnError(unsigned int dwErrorNo);
 	char*						GetRecvBuf();
-	unsigned int						GetRecvSize();
+	unsigned int				GetRecvSize();
 
 	void						OnSocketDestroy();
 
@@ -62,12 +62,12 @@ public:
 
 private:
 	bool						m_bReconnect;
-	unsigned int						m_dwID;
+	unsigned int				m_dwID;
 	EConnStat					m_nConnStat;
-	unsigned int						m_dwLocalIP;
-	unsigned short						m_wLocalPort;
-	unsigned int						m_dwRemoteIP;
-	unsigned short						m_wRemotePort;
+	unsigned int				m_dwLocalIP;
+	unsigned short				m_wLocalPort;
+	unsigned int				m_dwRemoteIP;
+	unsigned short				m_wRemotePort;
 	char						m_szLocalIP[16];
 	char						m_szRemoteIP[16];
 	IFxConnectSocket*			m_poSock;
