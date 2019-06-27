@@ -37,7 +37,7 @@ void CHttpSession::OnError(unsigned int dwErrorNo)
 
 void CHttpSession::OnRecv(const char* pBuf, unsigned int dwLen)
 {
-	LogExe(LogLv_Debug, "ip : %s, port : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), pBuf);
+	LogExe(LogLv_Debug, "ip : %s, port : %d, connect id : %d, recv %s", GetRemoteIPStr(), GetRemotePort(), GetConnectId(), pBuf);
 
 	HttpRequestInfo oInfo = { 0 };
 	if (0 >= HttpHelp::parse_http_request(m_dataRecvBuf, dwLen, &oInfo))
