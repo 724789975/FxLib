@@ -4103,6 +4103,7 @@ bool FxHttpConnect::PostSend()
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "send 0 == nRet, socket : %d, socket id : %d", GetSock(), GetSockId());
 		return false;
 	}
+	ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "http close, socket : %d, socket id : %d", GetSock(), GetSockId());
 	PushNetEvent(NETEVT_ERROR, NET_CLOSE_ERROR);
 	Close();
 	return true;
