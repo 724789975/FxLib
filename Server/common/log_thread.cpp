@@ -1,11 +1,12 @@
 #include "log_thread.h"
 #include "fxmeta.h"
+#include "defines.h"
+#include "fxtimer.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include <string>
 #include <string.h>
-#include "defines.h"
 
 #ifdef WIN32
 #include <io.h>
@@ -13,10 +14,29 @@
 #include <unistd.h>
 #endif
 
-LogThread::LogThread()
+LogItem::LogItem()
+	: m_dwLogLength(0)
 {
-	//m_pLock = FxCreateThreadLock();
+	memset(m_szScreenLog, 0, LOGLENGTH);
+}
 
+void LogItem::Reset()
+{
+	memset(m_szScreenLog, 0, LOGLENGTH);
+	m_dwLogLength = 0;
+
+	m_streamLogStream.clear();
+	m_streamLogStream.str("");
+}
+
+std::stringstream& LogItem::GetStream()
+{
+	return m_streamLogStream;
+}
+
+LogThread::LogThread(bool bPrintScene)
+	: m_bPrintScene(bPrintScene)
+{
 	m_dwInIndex = 0;
 	m_dwOutIndex = 0;
 	memset(m_strScreenLog, 0, 2 * LOGLENGTH);
@@ -34,98 +54,18 @@ void LogThread::ThrdFunc()
 	{
 		if (m_bPrint)
 		{
-			bool bEmpty = false;
-			unsigned int dwIndex = m_dwCurrentIndex ? 0 : 1;
-			if (strlen(m_strScreenLog[dwIndex]) > 0)
-			{
-				printf("%s", m_strScreenLog[dwIndex]);
-			}
-			else
-			{
-				bEmpty = true;
-			}
+			unsigned int dwIndex = m_dwCurrentIndex + 1;
+			dwIndex %= 2;
 
-			if (strlen(m_strFileLog[dwIndex]) > 0)
+			LogItem& refItem = m_oLogItem[dwIndex];
+			std::stringstream& refStream = refItem.GetStream();
+			if (refStream.str().size())
 			{
-				FILE* pFile = GetLogFile();
-				Assert(pFile);
-				if (pFile)
-				{
-					int ret = fprintf(pFile, "%s", m_strFileLog[dwIndex]);
-					if (ret <= 0)
-					{
-						printf("write to file failed errno : %d\n", ret);
-					}
-					bEmpty = false;
-				}
 			}
-
-			if (bEmpty)
-			{
-				printf("write empty~~~~~~~~~~~~~~~~~~!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
-			}
-
-			m_bPrint = false;
-			memset(m_strScreenLog[dwIndex], 0, LOGLENGTH);
-			memset(m_strFileLog[dwIndex], 0, LOGLENGTH);
 		}
 		FxSleep(1);
 	}
 
-	if (m_bPrint)
-	{
-		unsigned int dwIndex = m_dwCurrentIndex ? 0 : 1;
-		if (strlen(m_strScreenLog[dwIndex]) > 0)
-		{
-			printf("%s", m_strScreenLog[dwIndex]);
-			memset(m_strScreenLog[dwIndex], 0, LOGLENGTH);
-		}
-
-		if (strlen(m_strFileLog[dwIndex]) > 0)
-		{
-			FILE* pFile = GetLogFile();
-			Assert(pFile);
-			if (pFile)
-			{
-				int ret = fprintf(pFile, "%s", m_strFileLog[dwIndex]);
-				if (ret <= 0)
-				{
-					printf("write to file failed errno : %d\n", ret);
-					memset(m_strFileLog[dwIndex], 0, LOGLENGTH);
-				}
-			}
-		}
-	}
-	unsigned int dwIndex = m_dwCurrentIndex;
-	if (strlen(m_strScreenLog[dwIndex]) > 0)
-	{
-		printf("%s", m_strScreenLog[dwIndex]);
-		memset(m_strScreenLog[dwIndex], 0, LOGLENGTH);
-	}
-
-	if (strlen(m_strFileLog[dwIndex]) > 0)
-	{
-		FILE* pFile = GetLogFile();
-		Assert(pFile);
-		if (pFile)
-		{
-			int ret = fprintf(pFile, "%s", m_strFileLog[dwIndex]);
-			if (ret <= 0)
-			{
-				printf("write to file failed errno : %d\n", ret);
-				memset(m_strFileLog[dwIndex], 0, LOGLENGTH);
-			}
-		}
-	}
-	FILE* pFile = GetLogFile();
-	Assert(pFile);
-	if (pFile)
-	{
-		fprintf(pFile, "%s:%d LogLv_Info\t\t[%s, %s, %d] thread : %d end!!!!!!!!!!!!!!!!!!!!!\n",
-			GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq(), __FILE__, __FUNCTION__, __LINE__, m_poThrdHandler->GetThreadId());
-	}
-	printf("%s:%d LogLv_Info\t\t[%s, %s, %d] thread : %d end!!!!!!!!!!!!!!!!!!!!!\n",
-		GetTimeHandler()->GetTimeStr(), GetTimeHandler()->GetTimeSeq(), __FILE__, __FUNCTION__, __LINE__, m_poThrdHandler->GetThreadId());
 }
 
 void LogThread::Stop()
@@ -156,43 +96,14 @@ bool LogThread::Init()
 	return Start();
 }
 
-static unsigned int dwScreenLogIndex = 0;
-static unsigned int dwFileLogIndex = 0;
 void LogThread::ReadLog(unsigned int dwLogType, char* strLog)
 {
-	//FxLockImp(this->m_pLock);
-	bool bPrint = false;
-	if (dwScreenLogIndex + 2048 > LOGLENGTH)
+	if (m_bPrintScene)
 	{
-		bPrint = true;
-	}
-	if (dwFileLogIndex + 2048 > LOGLENGTH)
-	{
-		bPrint = true;
+		printf("%s", strLog);
 	}
 
-	if (bPrint)
-	{
-		unsigned int dwIndex = m_dwCurrentIndex ? 0 : 1;
-		while (m_strScreenLog[dwIndex][0] | m_strFileLog[dwIndex][0])
-		{
-			FxSleep(1);
-		}
-		dwScreenLogIndex = 0;
-		dwFileLogIndex = 0;
-		m_dwCurrentIndex = dwIndex;
-		m_bPrint = bPrint;
-	}
-	if (dwLogType & LT_Screen)
-	{
-		char* pStr = (char*)(m_strScreenLog[m_dwCurrentIndex]) + dwScreenLogIndex;
-		dwScreenLogIndex += string_sprintf(pStr, 0, "%s", strLog);
-	}
-	if (dwLogType & LT_File)
-	{
-		char* pStr = (char*)(m_strFileLog[m_dwCurrentIndex]) + dwFileLogIndex;
-		dwFileLogIndex += string_sprintf(pStr, 0, "%s", strLog);
-	}
+	//FxLockImp(this->m_pLock);
 }
 
 #ifdef WIN32
@@ -216,11 +127,24 @@ FILE* LogThread::GetLogFile()
 		}
 		return pFile;
 	}
+
+	if (m_bPrintScene)
+	{
+		//主线程 根据时间更换日志
 #ifdef WIN32
-	string_sprintf(strLogPath, 0, "%s%s%s%s", GetExePath(), "\\", GetExeName(), "_log.txt");
+		string_sprintf(strLogPath, 0, "%s%s%s%s", GetExePath(), "\\", GetExeName(), "_log.txt");
 #else
-	string_sprintf(strLogPath, 0, "%s%s%s%s", GetExePath(), "/", GetExeName(), "_log.txt");
+		string_sprintf(strLogPath, 0, "%s%s%s%s", GetExePath(), "/", GetExeName(), "_log.txt");
 #endif // WIN32
+	}
+	else
+	{
+#ifdef WIN32
+		string_sprintf(strLogPath, 0, "%s%s%s%s", GetExePath(), "\\", GetExeName(), "_log.txt");
+#else
+		string_sprintf(strLogPath, 0, "%s%s%s%s", GetExePath(), "/", GetExeName(), "_log.txt");
+#endif // WIN32
+	}
 
 	if (strcmp(strLogPath, sstrPath) != 0)
 	{
@@ -239,3 +163,14 @@ FILE* LogThread::GetLogFile()
 	return pFile;
 }
 
+LogImp::LogImp(LogThread& refLog)
+	: m_refLog(refLog)
+{
+
+}
+
+LogImp::~LogImp()
+{
+	m_refLog.m_dwCurrentIndex += 1;
+	m_refLog.m_dwCurrentIndex %= 2;
+}
