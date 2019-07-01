@@ -4,6 +4,7 @@
 #include "singleton.h"
 #include "thread.h"
 #include <stdio.h>
+#include <sstream>
 
 #define LOGLENGTH 512*1024
 
@@ -15,34 +16,68 @@ enum LogType
 	LT_Screen = 1,
 	LT_File = 1 << 1,
 };
-class LogThread : public IFxThread
+
+class LogItem
 {
 public:
-	LogThread();
-	virtual ~LogThread(){}
+	LogItem();
+	void									Reset();
+	std::stringstream&						GetStream();
+private:
+	char									m_szScreenLog[LOGLENGTH];
+	unsigned int							m_dwLogLength;
 
-	virtual void ThrdFunc();
-	virtual void Stop();
-	bool Start();
-	bool Init();
+	std::stringstream						m_streamLogStream;
+};
 
-	void ReadLog(unsigned int dwLogType, char* strLog);
-	FILE* GetLogFile();
+class LogThread;
+
+class LogImp
+{
+public:
+	LogImp(LogThread& refLog);
+	~LogImp();
 protected:
 private:
-	bool					m_bStop;
+	LogThread& m_refLog;
+};
+
+class LogThread : public IFxThread
+{
+	friend class LogImp;
+public:
+	LogThread(bool bPrintScene);
+	virtual ~LogThread(){}
+
+	virtual void							ThrdFunc();
+	virtual void							Stop();
+	bool									Start();
+	bool									Init();
+
+	std::stringstream						GetStream();
+
+	void									ReadLog(unsigned int dwLogType, char* strLog);
+	FILE*									GetLogFile();
+protected:
+private:
+	bool									m_bStop;
 	
-	unsigned int			m_dwInIndex;
-	unsigned int			m_dwOutIndex;
+	unsigned int							m_dwInIndex;
+	unsigned int							m_dwOutIndex;
 
-	IFxLock*				m_pLock;
-	IFxThreadHandler*		m_poThrdHandler;
+	IFxLock*								m_pLock;
+	IFxThreadHandler*						m_poThrdHandler;
 
-	char					m_strScreenLog[2][LOGLENGTH];
-	char					m_strFileLog[2][LOGLENGTH];
+	char									m_strScreenLog[2][LOGLENGTH];
+	char									m_strFileLog[2][LOGLENGTH];
 
-	bool					m_bPrint;
-	unsigned int			m_dwCurrentIndex;
+	bool									m_bPrint;
+
+	LogItem									m_oLogItem[2];
+
+	unsigned int							m_dwCurrentIndex;				//当前为可写 +1 为写入
+
+	bool									m_bPrintScene;					//是否在屏幕上打印(主线程在屏幕上打印 其余只打印log)
 };
 
 #endif // !__LOG_H__
