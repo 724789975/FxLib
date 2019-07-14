@@ -107,6 +107,7 @@ public:
 		ReleaseMutex(m_hMutex);
 	}
 #else
+#if 0
 	struct mt
 	{
 		pthread_mutex_t mutex;
@@ -137,7 +138,70 @@ public:
 	{
 		pthread_mutex_unlock(&mm->mutex);
 	}
+#else
+	union semun
+	{
+		int val;
+		struct semid_ds *buf;
+		unsigned short *arr;
+	};
 
+	ProcessLock(const char* szName)
+	{
+		int fd = open(szName, O_CREAT | O_RDWR, 0600);
+		assert(fd != -1);
+		close(fd);
+		key_t kt = ftok(szName, 'a');
+		assert(kt != -1);
+		m_dwSemId = semget((key_t)kt, 1, IPC_CREAT | IPC_EXCL | 0600);
+		if (m_dwSemId == -1)
+		{
+			m_dwSemId = semget(kt, 1, IPC_CREAT | 0600);
+			assert(m_dwSemId != -1);
+		}
+		else
+		{
+			union semun sem_union;
+			sem_union.val = 1;
+			if (semctl(m_dwSemId, 0, SETVAL, sem_union) == -1)
+			{
+				assert(0);
+			}
+		}
+
+	}
+	virtual ~ProcessLock()
+	{
+		if (semctl(m_dwSemId, 0, IPC_RMID) == -1)
+		{
+			assert(0);
+		}
+
+	}
+	void Lock()
+	{
+		struct sembuf sem_b;
+		sem_b.sem_num = 0;
+		sem_b.sem_op = -1;
+		sem_b.sem_flg = SEM_UNDO;
+		if (semop(m_dwSemId, &sem_b, 1) == -1)
+		{
+			assert(0);
+		}
+
+	}
+	void UnLock()
+	{
+		struct sembuf sem_b;
+		sem_b.sem_num = 0;
+		sem_b.sem_op = 1;
+		sem_b.sem_flg = SEM_UNDO;
+		if (semop(m_dwSemId, &sem_b, 1) == -1)
+		{
+			assert(0);
+		}
+	}
+#endif
 #endif
 
 	virtual void Release()
@@ -150,7 +214,11 @@ private:
 #ifdef WIN32
 	HANDLE m_hMutex;
 #else
+#if 0
 	struct mt* mm;
+#else
+	int m_dwSemId;
+#endif
 #endif // WIN32
 
 };
