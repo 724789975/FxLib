@@ -1,5 +1,10 @@
 find ./ -name '*log.txt' | xargs rm -rf
 
+#删除共享内存
+ipcs -m | awk '$2 ~/[0-9]+/{print $2}' | while read s; do ipcrm -m $s; done
+#删除进程锁
+ipcs -s | awk '$2 ~/[0-9]+/{print $2}' | while read s; do ipcrm -s $s; done
+
 ./WebGameCenter --server_port 40000 &
 
 sleep 1
