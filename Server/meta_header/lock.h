@@ -6,15 +6,18 @@
 #ifdef WIN32
 #include <WinSock2.h>
 #else
+#include<sys/types.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
 #include <pthread.h>
 #include <sys/mman.h>
-#include <sys/types.h>
 #include <sys/wait.h>
 #include <fcntl.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <sys/sem.h>
 #endif
 
 class FxCriticalLock : public IFxLock

@@ -25,7 +25,7 @@ namespace RTTI
 };
 
 #define INTERFACE_DECLARE_OPERATORS(InterFaceName) \
-	typedef RTTI::CRTTIInterface<##InterFaceName##> Parent;\
+	typedef RTTI::CRTTIInterface<InterFaceName> Parent;\
 	typedef Parent::Interface Interface;\
 	enum { depth = 0, };\
 	\

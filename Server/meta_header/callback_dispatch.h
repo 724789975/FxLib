@@ -19,7 +19,7 @@ namespace CallBackDispatcher
 		{
 			if (m_mapCallBackFuns.find(k) != m_mapCallBackFuns.end())
 			{
-				return false;
+				return NULL;
 			}
 			m_mapCallBackFuns[k] = pCallBackFunction;
 			return true;
@@ -28,7 +28,7 @@ namespace CallBackDispatcher
 		{
 			if (m_mapCallBackFuns.find(k) == m_mapCallBackFuns.end())
 			{
-				return false;
+				return NULL;
 			}
 			return m_mapCallBackFuns[k];
 		}
@@ -61,7 +61,7 @@ namespace CallBackDispatcher
 		{
 			if (m_mapCallBackFuns.find(k) == m_mapCallBackFuns.end())
 			{
-				return false;
+				return NULL;
 			}
 			return m_mapCallBackFuns[k];
 		}
@@ -94,7 +94,7 @@ namespace CallBackDispatcher
 		{
 			if (m_mapCallBackFuns.find(k) == m_mapCallBackFuns.end())
 			{
-				return false;
+				return NULL;
 			}
 			return m_mapCallBackFuns[k];
 		}
