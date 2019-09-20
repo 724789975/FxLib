@@ -286,6 +286,7 @@ void FxIoThread::ThrdFunc()
 
 bool FxIoThread::__DealData()
 {
+	const int dwTimeOut = 1;
 #ifdef WIN32
 	void* pstPerIoData = NULL;
 	IFxSocket* poSock = NULL;
@@ -303,7 +304,7 @@ bool FxIoThread::__DealData()
 			&dwByteTransferred,
 			(PULONG_PTR)&poSock,
 			(LPOVERLAPPED*)&pstPerIoData,
-			0);
+			dwTimeOut);
 
 		if (poSock)
 		{
@@ -327,7 +328,7 @@ bool FxIoThread::__DealData()
 		poSock->Close();
 	}
 
-	int nCount = WaitEvents(1);
+	int nCount = WaitEvents(dwTimeOut);
 	if (nCount < 0)
 	{
 		return false;
