@@ -90,14 +90,7 @@ SOCKET FxTCPListenSock::Listen(unsigned int dwIP, unsigned short& wPort)
 
 	sockaddr_in stAddr = { 0 };
 	stAddr.sin_family = AF_INET;
-	if (0 == dwIP)
-	{
-		stAddr.sin_addr.s_addr = htonl(INADDR_ANY);
-	}
-	else
-	{
-		stAddr.sin_addr.s_addr = dwIP;
-	}
+	stAddr.sin_addr.s_addr = dwIP;
 	stAddr.sin_port = htons(wPort);
 
 	if (bind(GetSock(), (sockaddr*)&stAddr, sizeof(stAddr)) < 0)
