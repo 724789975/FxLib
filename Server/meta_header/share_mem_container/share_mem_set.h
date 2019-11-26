@@ -13,7 +13,7 @@ namespace ShareMemory
 	public:
 		typedef const K* Iterator;
 
-		Set() {}
+		Set() : m_dwSize(0){}
 
 		void Clear()
 		{

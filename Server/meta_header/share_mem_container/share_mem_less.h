@@ -19,7 +19,7 @@ namespace ShareMemory
 	public:
 		bool operator() (const T& refLeft, const T& refRight)
 		{
-			return (!KeyCompare()(refLeft, refRight)) && (KeyCompare()(refRight, refLeft));
+			return (!KeyCompare()(refLeft, refRight)) && (!KeyCompare()(refRight, refLeft));
 		}
 	};
 };
