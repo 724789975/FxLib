@@ -13,7 +13,7 @@ namespace ShareMemory
 	public:
 		typedef const K* Iterator;
 
-		Set() {}
+		Set() :m_dwSize(0){}
 
 		void Clear()
 		{
@@ -24,7 +24,7 @@ namespace ShareMemory
 		{
 			if (m_dwSize >= MAXNUM)
 			{
-				return NULL;
+				return End();
 			}
 
 			if (m_dwSize == 0)
@@ -37,14 +37,15 @@ namespace ShareMemory
 			unsigned int dwLeftIndex = 0;
 			unsigned int dwRightIndex = 0;
 
-			if (Search(k, dwLeftIndex, dwRightIndex) != 0XFFFFFFFF)
+			int dwIndexTemp = Search(k, dwLeftIndex, dwRightIndex);
+			if (dwIndexTemp != 0XFFFFFFFF)
 			{
-				return NULL;
+				return m_oKeys + dwIndexTemp;
 			}
 			//放到最前面
 			if (m_oLess(k, m_oKeys[dwLeftIndex]))
 			{
-				memcpy(&m_oKeys[dwLeftIndex + 1], &m_oKeys[dwLeftIndex], (m_dwSize - dwLeftIndex) * sizeof(KVPair));
+				memmove(&m_oKeys[dwLeftIndex + 1], &m_oKeys[dwLeftIndex], (m_dwSize - dwLeftIndex) * sizeof(K));
 				m_oKeys[dwLeftIndex] = k;
 				++m_dwSize;
 				return &m_oKeys[dwLeftIndex];
@@ -57,12 +58,17 @@ namespace ShareMemory
 				return &m_oKeys[m_dwSize - 1];
 			}
 
-			memcpy(&m_oKeys[dwRightIndex + 1], &m_oKeys[dwRightIndex], (m_dwSize - dwRightIndex) * sizeof(KVPair));
+			memmove(&m_oKeys[dwRightIndex + 1], &m_oKeys[dwRightIndex], (m_dwSize - dwRightIndex) * sizeof(K));
 
 			m_oKeys[dwRightIndex] = k;
 			++m_dwSize;
 
 			return &m_oKeys[dwRightIndex];
+		}
+
+		bool Remove(const Iterator p_k)
+		{
+			Remove(*p_k);
 		}
 
 		bool Remove(const K& k)
@@ -82,29 +88,29 @@ namespace ShareMemory
 				memset(&m_oKeys[dwIndex], 0, sizeof(K));
 				return true;
 			}
-			memcpy(&m_oKeys[dwIndex], &m_oKeys[dwIndex + 1], (m_dwSize - 1 - dwIndex) * sizeof(K));
+			memmove(&m_oKeys[dwIndex], &m_oKeys[dwIndex + 1], (m_dwSize - 1 - dwIndex) * sizeof(K));
 			memset(&m_oKeys[m_dwSize - 1], 0, sizeof(K));
 			--m_dwSize;
 			return true;
 		}
 
-		Iterator Find(K k)
+		Iterator Find(const K& k)
 		{
 			unsigned int dw_index = Search(k);
 			if (dw_index == 0XFFFFFFFF)
 			{
-				return NULL;
+				return End();
 			}
 
 			return &m_oKeys[dw_index];
 		}
 
-		Iterator Begin()
+		Iterator Begin() const
 		{
 			return m_oKeys;
 		}
 
-		Iterator End()
+		Iterator End() const
 		{
 			return m_oKeys + m_dwSize;
 		}
@@ -113,7 +119,7 @@ namespace ShareMemory
 	protected:
 	private:
 
-		unsigned int Search(K k)
+		unsigned int Search(const K& k) const
 		{
 			if (m_dwSize == 0)
 			{
@@ -126,7 +132,7 @@ namespace ShareMemory
 			return Search(k, dwLeftIndex, dwRightIndex);
 		}
 
-		unsigned int Search(const K& k, unsigned int& dwLeftIndex, unsigned int& dwRightIndex)
+		unsigned int Search(const K& k, unsigned int& dwLeftIndex, unsigned int& dwRightIndex) const
 		{
 			if (m_dwSize == 0)
 			{
