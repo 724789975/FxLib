@@ -7,7 +7,7 @@ namespace ShareMemory
 	class Less
 	{
 	public:
-		bool operator() (const T& refLeft, const T& refRight)
+		bool operator() (const T& refLeft, const T& refRight)const
 		{
 			return refLeft < refRight;
 		}
@@ -17,7 +17,7 @@ namespace ShareMemory
 	class Equal
 	{
 	public:
-		bool operator() (const T& refLeft, const T& refRight)
+		bool operator() (const T& refLeft, const T& refRight)const
 		{
 			return (!KeyCompare()(refLeft, refRight)) && (!KeyCompare()(refRight, refLeft));
 		}

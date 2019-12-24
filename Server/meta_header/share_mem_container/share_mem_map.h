@@ -6,7 +6,7 @@
 namespace ShareMemory
 {
 	//K只能为基础类型 且 不能为string, 可以为char[] V必须指定默认构造函数
-	//K要支持=操作
+	//K要支持[]=操作
 	template<typename K, typename V, unsigned int MAXNUM, class KeyLess = Less<K> >
 	class Map
 	{
@@ -36,23 +36,23 @@ namespace ShareMemory
 			KVPair* pPair = _Alloc(k);
 			if (!pPair)
 			{
-				return NULL;
+				return End();
 			}
 			return &(pPair->v);
 		}
 
-		Iterator Insert(K k, V v)
+		Iterator Insert(const K& k, const V& v)
 		{
 			KVPair* pPair = _Alloc(k);
 			if (!pPair)
 			{
-				return NULL;
+				return End();
 			}
-			memcpy(&pPair->v, &v, sizeof(V));
+			memmove(&pPair->v, &v, sizeof(V));
 			return (Iterator)pPair;
 		}
 
-		bool Remove(K k)
+		bool Remove(const K& k)
 		{
 			unsigned int dwLeftIndex = 0;
 			unsigned int dwRightIndex = 0;
@@ -63,38 +63,37 @@ namespace ShareMemory
 				return false;
 			}
 
-			//m_oPool.ReleaseObj(m_oKeyStores[dwIndex]);
 			if (dwIndex == m_dwSize - 1)
 			{
 				--m_dwSize;
-				memset(&m_oKeystores[dwIndex], 0, sizeof(KVPair));
+				memset(&m_oKeyStores[dwIndex], 0, sizeof(KVPair));
 				return true;
 			}
-			memcpy(&m_oKeystores[dwIndex], &m_oKeystores[dwIndex + 1], (m_dwSize - 1 - dwIndex) * sizeof(KVPair));
-			memset(&m_oKeystores[m_dwSize - 1], 0, sizeof(KVPair));
+			memmove(&m_oKeyStores[dwIndex], &m_oKeyStores[dwIndex + 1], (m_dwSize - 1 - dwIndex) * sizeof(KVPair));
+			memset(&m_oKeyStores[m_dwSize - 1], 0, sizeof(KVPair));
 			--m_dwSize;
 			return true;
 		}
 
-		Iterator Find(K k)
+		Iterator Find(const K& k)
 		{
 			unsigned int dwIndex = Search(k);
 			if (dwIndex == 0XFFFFFFFF)
 			{
-				return NULL;
+				return End();
 			}
 
-			return (Iterator)(&m_oKeystores[dwIndex]);
+			return (Iterator)(&m_oKeyStores[dwIndex]);
 		}
 
 		Iterator Begin()
 		{
-			return (Iterator)m_oKeystores;
+			return (Iterator)m_oKeyStores;
 		}
 
 		Iterator End()
 		{
-			return (Iterator)m_oKeystores + m_dwSize;
+			return (Iterator)m_oKeyStores + m_dwSize;
 		}
 
 		unsigned int Size() const { return m_dwSize; }
@@ -109,7 +108,7 @@ namespace ShareMemory
 				return pPair->v;
 			}
 
-			return m_oKeystores[dwIndex].v;
+			return m_oKeyStores[dwIndex].v;
 		}
 	protected:
 	private:
@@ -122,10 +121,9 @@ namespace ShareMemory
 
 			if (m_dwSize == 0)
 			{
-				//memcpy(&m_o_keystores[0].v, &v, sizeof(v));
-				m_oKeystores[0].k = k;
+				m_oKeyStores[0].k = k;
 				++m_dwSize;
-				return &m_oKeystores[0];
+				return &m_oKeyStores[0];
 			}
 
 			unsigned int dwLeftIndex = 0;
@@ -136,33 +134,30 @@ namespace ShareMemory
 				return nullptr;
 			}
 			//放到最前面
-			if (m_oLess(k, m_oKeystores[dwLeftIndex].k))
+			if (m_oLess(k, m_oKeyStores[dwLeftIndex].k))
 			{
-				memcpy(&m_oKeystores[dwLeftIndex + 1], &m_oKeystores[dwLeftIndex], (m_dwSize - dwLeftIndex) * sizeof(KVPair));
-				//memcpy(&m_o_keystores[dw_left_index].v, &v, sizeof(v));
-				m_oKeystores[dwLeftIndex].k = k;
+				memmove(&m_oKeyStores[dwLeftIndex + 1], &m_oKeyStores[dwLeftIndex], (m_dwSize - dwLeftIndex) * sizeof(KVPair));
+				m_oKeyStores[dwLeftIndex].k = k;
 				++m_dwSize;
-				return &m_oKeystores[dwLeftIndex];
+				return &m_oKeyStores[dwLeftIndex];
 			}
 			//放到最后面
-			if (m_oLess(m_oKeystores[dwRightIndex].k, k))
+			if (m_oLess(m_oKeyStores[dwRightIndex].k, k))
 			{
-				//memcpy(&m_o_keystores[m_dw_size].v, &v, sizeof(v));
-				m_oKeystores[m_dwSize].k = k;
+				m_oKeyStores[m_dwSize].k = k;
 				++m_dwSize;
-				return &m_oKeystores[m_dwSize - 1];
+				return &m_oKeyStores[m_dwSize - 1];
 			}
 
-			memcpy(&m_oKeystores[dwRightIndex + 1], &m_oKeystores[dwRightIndex], (m_dwSize - dwRightIndex) * sizeof(KVPair));
+			memmove(&m_oKeyStores[dwRightIndex + 1], &m_oKeyStores[dwRightIndex], (m_dwSize - dwRightIndex) * sizeof(KVPair));
 
-			//m_o_keystores[dw_right_index].v = v;
-			m_oKeystores[dwRightIndex].k = k;
+			m_oKeyStores[dwRightIndex].k = k;
 			++m_dwSize;
 
-			return &m_oKeystores[dwRightIndex];
+			return &m_oKeyStores[dwRightIndex];
 		}
 
-		unsigned int Search(K k)
+		unsigned int Search(const K& k) const
 		{
 			if (m_dwSize == 0)
 			{
@@ -187,19 +182,19 @@ namespace ShareMemory
 
 			unsigned int dwMidIndex = (dwLeftIndex + dwRightIndex) / 2;
 
-			while (dwLeftIndex < dwRightIndex && !m_oEqual(m_oKeystores[dwMidIndex].k, k))
+			while (dwLeftIndex < dwRightIndex && !m_oEqual(m_oKeyStores[dwMidIndex].k, k))
 			{
-				if (m_oLess(m_oKeystores[dwMidIndex].k, k))
+				if (m_oLess(m_oKeyStores[dwMidIndex].k, k))
 				{
 					dwLeftIndex = dwMidIndex + 1;
 				}
-				else if (m_oLess(k, m_oKeystores[dwMidIndex].k))
+				else if (m_oLess(k, m_oKeyStores[dwMidIndex].k))
 				{
 					dwRightIndex = dwMidIndex;
 				}
 				dwMidIndex = (dwLeftIndex + dwRightIndex) / 2;
 			}
-			if (m_oEqual(m_oKeystores[dwMidIndex].k, k))
+			if (m_oEqual(m_oKeyStores[dwMidIndex].k, k))
 			{
 				return dwMidIndex;
 			}
@@ -208,7 +203,7 @@ namespace ShareMemory
 
 	private:
 		unsigned int m_dwSize;
-		KVPair m_oKeystores[MAXNUM];
+		KVPair m_oKeyStores[MAXNUM];
 
 		KeyLess m_oLess;
 		Equal<K, KeyLess> m_oEqual;
