@@ -19,7 +19,7 @@ namespace ShareMemory
 			m_pKeys = new K[MAXNUM];
 			if (!m_pKeys)
 			{
-				throw(std::exception())
+				throw(std::exception());
 			}
 		}
 
