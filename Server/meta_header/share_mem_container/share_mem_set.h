@@ -2,70 +2,89 @@
 #define __ShareMemSet_H__
 
 #include "share_mem_less.h"
+#include <exception>
 
 namespace ShareMemory
 {
-	//KÖ»ÄÜÎª»ù´¡ÀàĞÍ ÇÒ ²»ÄÜÎªstring, ¿ÉÒÔÎªchar[] 
-	//KÒªÖ§³Ö=²Ù×÷
+	//Kåªèƒ½ä¸ºåŸºç¡€ç±»å‹ ä¸” ä¸èƒ½ä¸ºstring, å¯ä»¥ä¸ºchar[] 
+	//Kè¦æ”¯æŒ=æ“ä½œ
 	template<typename K, unsigned int MAXNUM, class KeyLess = Less<K> >
 	class Set
 	{
 	public:
-		typedef const K* Iterator;
+		typedef const K* iterator;
 
-		Set() : m_dwSize(0){}
+		Set() : m_dwSize(0)
+		{
+			m_pKeys = new K[MAXNUM];
+			if (!m_pKeys)
+			{
+				throw(std::exception())
+			}
+		}
 
-		void Clear()
+		void clear()
 		{
 			m_dwSize = 0;
 		}
 
-		Iterator Insert(const K& k)
+		iterator insert(const K& k)
 		{
 			if (m_dwSize >= MAXNUM)
 			{
-				return NULL;
+				return end();
 			}
 
 			if (m_dwSize == 0)
 			{
-				m_oKeys[0] = k;
+				m_pKeys[0] = k;
 				++m_dwSize;
-				return &m_oKeys[0];
+				return &m_pKeys[0];
 			}
 
 			unsigned int dwLeftIndex = 0;
 			unsigned int dwRightIndex = 0;
 
-			if (Search(k, dwLeftIndex, dwRightIndex) != 0XFFFFFFFF)
+			int dwIndexTemp = Search(k, dwLeftIndex, dwRightIndex);
+			if (dwIndexTemp != 0XFFFFFFFF)
 			{
-				return NULL;
+				return &m_pKeys[dwIndexTemp];
 			}
-			//·Åµ½×îÇ°Ãæ
-			if (m_oLess(k, m_oKeys[dwLeftIndex]))
+			//æ”¾åˆ°æœ€å‰é¢
+			if (m_oLess(k, m_pKeys[dwLeftIndex]))
 			{
-				memcpy(&m_oKeys[dwLeftIndex + 1], &m_oKeys[dwLeftIndex], (m_dwSize - dwLeftIndex) * sizeof(KVPair));
-				m_oKeys[dwLeftIndex] = k;
+				memmove(m_pKeys + dwLeftIndex + 1, m_pKeys + dwLeftIndex, (m_dwSize - dwLeftIndex) * sizeof(KVPair));
+				m_pKeys[dwLeftIndex] = k;
 				++m_dwSize;
-				return &m_oKeys[dwLeftIndex];
+				return m_pKeys + dwLeftIndex;
 			}
-			//·Åµ½×îºóÃæ
-			if (m_oLess(m_oKeys[dwRightIndex], k))
+			//æ”¾åˆ°æœ€åé¢
+			if (m_oLess(m_pKeys[dwRightIndex], k))
 			{
-				m_oKeys[m_dwSize] = k;
+				m_pKeys[m_dwSize] = k;
 				++m_dwSize;
-				return &m_oKeys[m_dwSize - 1];
+				return m_pKeys + m_dwSize - 1;
 			}
 
-			memcpy(&m_oKeys[dwRightIndex + 1], &m_oKeys[dwRightIndex], (m_dwSize - dwRightIndex) * sizeof(KVPair));
+			memmove(m_pKeys + dwRightIndex + 1, m_pKeys + dwRightIndex, (m_dwSize - dwRightIndex) * sizeof(KVPair));
 
-			m_oKeys[dwRightIndex] = k;
+			m_pKeys[dwRightIndex] = k;
 			++m_dwSize;
 
-			return &m_oKeys[dwRightIndex];
+			return m_pKeys + dwRightIndex;
 		}
 
-		bool Remove(const K& k)
+		bool empty()const
+		{
+			return this->m_dwSize == 0;
+		}
+
+		iterator erase(iterator k)
+		{
+			return erase(*k);
+		}
+
+		iterator erase(const K& k)
 		{
 			unsigned int dwLeftIndex = 0;
 			unsigned int dwRightIndex = 0;
@@ -73,47 +92,47 @@ namespace ShareMemory
 			unsigned int dwIndex = Search(k);
 			if (dwIndex == 0XFFFFFFFF)
 			{
-				return false;
+				return end();
 			}
 
 			if (dwIndex == m_dwSize - 1)
 			{
 				--m_dwSize;
-				memset(&m_oKeys[dwIndex], 0, sizeof(K));
-				return true;
+				memset(m_pKeys + dwIndex, 0, sizeof(K));
+				return m_pKeys + dwIndex;
 			}
-			memcpy(&m_oKeys[dwIndex], &m_oKeys[dwIndex + 1], (m_dwSize - 1 - dwIndex) * sizeof(K));
-			memset(&m_oKeys[m_dwSize - 1], 0, sizeof(K));
+			memmove(m_pKeys + dwIndex, m_pKeys + dwIndex + 1, (m_dwSize - 1 - dwIndex) * sizeof(K));
+			memset(m_pKeys + m_dwSize - 1, 0, sizeof(K));
 			--m_dwSize;
-			return true;
+			return m_pKeys + dwIndex;
 		}
 
-		Iterator Find(K k)
+		iterator find(K k)
 		{
 			unsigned int dw_index = Search(k);
 			if (dw_index == 0XFFFFFFFF)
 			{
-				return NULL;
+				return end();
 			}
 
-			return &m_oKeys[dw_index];
+			return m_pKeys + dw_index;
 		}
 
-		Iterator Begin()
+		iterator begin() const
 		{
-			return m_oKeys;
+			return m_pKeys;
 		}
 
-		Iterator End()
+		iterator end() const
 		{
-			return m_oKeys + m_dwSize;
+			return m_pKeys + m_dwSize;
 		}
 
-		unsigned int Size() const { return m_dwSize; }
+		unsigned int size() const { return m_dwSize; }
 	protected:
 	private:
 
-		unsigned int Search(K k)
+		unsigned int Search(const K& k) const
 		{
 			if (m_dwSize == 0)
 			{
@@ -126,31 +145,31 @@ namespace ShareMemory
 			return Search(k, dwLeftIndex, dwRightIndex);
 		}
 
-		unsigned int Search(const K& k, unsigned int& dwLeftIndex, unsigned int& dwRightIndex)
+		unsigned int Search(const K& k, unsigned int& dwLeftIndex, unsigned int& dwRightIndex) const
 		{
 			if (m_dwSize == 0)
 			{
 				return 0XFFFFFFFF;
 			}
-			//¶ş·Ö·¨²éÕÒ
+			//äºŒåˆ†æ³•æŸ¥æ‰¾
 			dwLeftIndex = 0;
 			dwRightIndex = m_dwSize - 1;
 
 			unsigned int dwMidIndex = (dwLeftIndex + dwRightIndex) / 2;
 
-			while (dwLeftIndex < dwRightIndex && !m_oEqual(m_oKeys[dwMidIndex], k))
+			while (dwLeftIndex < dwRightIndex && !m_oEqual(m_pKeys[dwMidIndex], k))
 			{
-				if (m_oLess(m_oKeys[dwMidIndex], k))
+				if (m_oLess(m_pKeys[dwMidIndex], k))
 				{
 					dwLeftIndex = dwMidIndex + 1;
 				}
-				else if (m_oLess(k, m_oKeys[dwMidIndex]))
+				else if (m_oLess(k, m_pKeys[dwMidIndex]))
 				{
 					dwRightIndex = dwMidIndex;
 				}
 				dwMidIndex = (dwLeftIndex + dwRightIndex) / 2;
 			}
-			if (m_oEqual(m_oKeys[dwMidIndex], k))
+			if (m_oEqual(m_pKeys[dwMidIndex], k))
 			{
 				return dwMidIndex;
 			}
@@ -159,7 +178,7 @@ namespace ShareMemory
 
 	private:
 		unsigned int m_dwSize;
-		K m_oKeys[MAXNUM];
+		K* m_pKeys;
 
 		KeyLess m_oLess;
 		Equal<K, KeyLess> m_oEqual;
