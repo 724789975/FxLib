@@ -27,6 +27,7 @@ namespace Utility
 	void					PrintTrace(char* strTrace, int dwLen);
 	bool					Log(char* strBuffer, unsigned int dwLen, const char* strFmt, ...);
 	void					FxSleep(unsigned int dwMilliseconds);
+	const char*				GetOsInfo();
 
 	class ListDirAndLoadFile
 	{

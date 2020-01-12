@@ -256,6 +256,51 @@ namespace Utility
 #endif // WIN32
 
 	}
+	
+	const char* GetOsInfo()
+	{
+		static char szOsInfo[256] =
+		{ 0 };
+		static bool bInited = false;
+
+		if (!bInited)
+		{
+#ifdef WIN32
+			// get os name according to version number  
+			OSVERSIONINFO osver = { sizeof(OSVERSIONINFO) };
+			GetVersionEx(&osver);
+			if (osver.dwMajorVersion == 5 && osver.dwMinorVersion == 0)
+				sprintf_s(szOsInfo, 256, "%s", "Windows 2000");
+			else if (osver.dwMajorVersion == 5 && osver.dwMinorVersion == 1)
+				sprintf_s(szOsInfo, 256, "%s", "Windows XP");
+			else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 0)
+				sprintf_s(szOsInfo, 256, "%s", "Windows 2003");
+			else if (osver.dwMajorVersion == 5 && osver.dwMinorVersion == 2)
+				sprintf_s(szOsInfo, 256, "%s", "windows vista");
+			else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 1)
+				sprintf_s(szOsInfo, 256, "%s", "windows 7");
+			else if (osver.dwMajorVersion == 6 && osver.dwMinorVersion == 2)
+				sprintf_s(szOsInfo, 256, "%s", "windows 10");
+#else
+			FILE* fp = fopen("/proc/version", "r");
+			if (NULL == fp)
+			{
+				printf("failed to open version\n");
+				retrun NULL;
+			}
+			while (!feof(fp))
+			{
+				memset(szOsInfo, 0, sizeof(szOsInfo));
+				fgets(szOsInfo, sizeof(szOsInfo) - 1, fp); // leave out \n  
+			}
+#endif // WIN32
+			bInited = true;
+		}
+
+		return szOsInfo;
+	}
+	//https://www.cnblogs.com/lidabo/p/7554473.html
+
 	void ListDir(const char * pDirName, ListDirAndLoadFile & refLoadFile)
 	{
 #ifdef WIN32
