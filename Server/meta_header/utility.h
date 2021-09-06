@@ -10,11 +10,11 @@
 #include "redef_assert.h"
 #include "defines.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <io.h>
 #else
 #include <unistd.h>
-#endif // WIN32
+#endif // _WIN32
 
 
 namespace Utility

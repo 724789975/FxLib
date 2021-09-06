@@ -3,7 +3,7 @@
 
 #include <string>
 #include <stdlib.h>
-#ifdef WIN32
+#ifdef _WIN32
 #else
 #include <string.h>
 #include <iconv.h>
@@ -17,7 +17,7 @@ inline void _StrSafeCopy(char *pszDest, const char *pszSrc, size_t nLen) throw()
 		return;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	lstrcpyn(pszDest, pszSrc, (INT32)nLen);
 #else
 	size_t nSrcLen = strnlen(pszSrc, nLen-1);
@@ -26,7 +26,7 @@ inline void _StrSafeCopy(char *pszDest, const char *pszSrc, size_t nLen) throw()
 #endif
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 template <class T>
 inline void StrSafeCopy(T& Destination, const char* Source) throw()
 {
@@ -66,7 +66,7 @@ inline void SafeSprintf(T& Destination, const char *format, ...) throw()
 
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 inline size_t StrNLen(const char *s, size_t maxlen)
 {
 	size_t i;
@@ -96,7 +96,7 @@ inline std::string GBKToUTF8(const std::string szGBK)
 	{
 		return "";
 	}
-#ifdef WIN32
+#ifdef _WIN32
 	int dwLen = MultiByteToWideChar(CP_ACP, 0, szGBK.c_str(), -1, NULL, 0);
 	wchar_t * wszUtf8 = new wchar_t[dwLen];
 	memset(wszUtf8, 0, dwLen);
@@ -123,7 +123,7 @@ inline std::string GBKToUTF8(const std::string szGBK)
 	free(outbuf);
 	iconv_close(cd);
 	return strOutUTF8;
-#endif // WIN32
+#endif // _WIN32
 
 }
 

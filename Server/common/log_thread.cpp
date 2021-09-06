@@ -8,7 +8,7 @@
 #include <string>
 #include <string.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <io.h>
 #else
 #include <unistd.h>
@@ -106,7 +106,7 @@ void LogThread::ReadLog(unsigned int dwLogType, char* strLog)
 	//FxLockImp(this->m_pLock);
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 #define Access _access
 #else
 #define Access access
@@ -130,20 +130,20 @@ FILE* LogThread::GetLogFile()
 
 	if (m_bPrintScene)
 	{
-		//Ö÷Ïß³Ì ¸ù¾ÝÊ±¼ä¸ü»»ÈÕÖ¾
-#ifdef WIN32
+		//ï¿½ï¿½ï¿½ß³ï¿½ ï¿½ï¿½ï¿½ï¿½Ê±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¾
+#ifdef _WIN32
 		string_sprintf(strLogPath, 0, "%s%s%s%s", GetExePath(), "\\", GetExeName(), "_log.txt");
 #else
 		string_sprintf(strLogPath, 0, "%s%s%s%s", GetExePath(), "/", GetExeName(), "_log.txt");
-#endif // WIN32
+#endif // _WIN32
 	}
 	else
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		string_sprintf(strLogPath, 0, "%s%s%s%s", GetExePath(), "\\", GetExeName(), "_log.txt");
 #else
 		string_sprintf(strLogPath, 0, "%s%s%s%s", GetExePath(), "/", GetExeName(), "_log.txt");
-#endif // WIN32
+#endif // _WIN32
 	}
 
 	if (strcmp(strLogPath, sstrPath) != 0)

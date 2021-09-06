@@ -2,7 +2,7 @@
 #ifndef __FXCURL_H__
 #define __FXCURL_H__
 
-#ifdef WIN32
+#ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN		// 从 Windows 头中排除极少使用的资料
 #include <WinSock2.h>
 #include <windows.h>

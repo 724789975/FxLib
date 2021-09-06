@@ -1,6 +1,6 @@
 #include "thread.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <Windows.h>
 #include <process.h>
 
@@ -19,7 +19,7 @@
 #include <errno.h>
 #include <netinet/in.h>
 #include <execinfo.h>
-#endif // WIN32
+#endif // _WIN32
 
 class FxThreadHandler : public IFxThreadHandler
 {
@@ -30,16 +30,16 @@ public:
 		m_bIsStop = true;
 		m_bNeedWaitfor = bNeedWaitfor;
 		m_pThread = pThread;
-#ifdef WIN32
+#ifdef _WIN32
 		m_hHandle = INVALID_HANDLE_VALUE;
-#endif // WIN32
+#endif // _WIN32
 	}
 
 	virtual ~FxThreadHandler()
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		if (m_hHandle != INVALID_HANDLE_VALUE)
-#endif // WIN32
+#endif // _WIN32
 		{
 			unsigned int dwErrCode = 0;
 			Kill(dwErrCode);
@@ -57,7 +57,7 @@ public:
 
 	inline virtual bool Kill(unsigned int dwExitCode)
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		if (m_hHandle == INVALID_HANDLE_VALUE)
 		{
 			return false;
@@ -73,7 +73,7 @@ public:
 #else
 		pthread_cancel(m_dwThreadId);
 		return false;
-#endif // WIN32
+#endif // _WIN32
 	}
 
 	inline virtual bool WaitFor(unsigned int dwWaitTime = 0xffffffff)
@@ -82,7 +82,7 @@ public:
 		{
 			return false;
 		}
-#ifdef WIN32
+#ifdef _WIN32
 		if (INVALID_HANDLE_VALUE == m_hHandle)
 		{
 			return false;
@@ -99,7 +99,7 @@ public:
 #else
 		pthread_join(m_dwThreadId, NULL);
 		return true;
-#endif // WIN32
+#endif // _WIN32
 		return false;
 	}
 
@@ -118,7 +118,7 @@ public:
 
 	inline bool Start()
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		m_hHandle = (HANDLE)_beginthreadex(0, 0, __StaticThreadFunc, this, 0, &m_dwThreadId);
 		if (m_hHandle == NULL)
 		{
@@ -130,21 +130,21 @@ public:
 		{
 			return false;
 		}
-#endif // WIN32
+#endif // _WIN32
 		return true;
 	}
 
 private:
 	static unsigned int
-#ifdef WIN32
+#ifdef _WIN32
 		__stdcall
-#endif // WIN32
+#endif // _WIN32
 		__StaticThreadFunc(void *arg)
 	{
 		FxThreadHandler *pThreadCtrl = (FxThreadHandler *)arg;
 		pThreadCtrl->m_bIsStop = false;
 
-#ifdef WIN32
+#ifdef _WIN32
 #else
 		pthread_setcancelstate(PTHREAD_CANCEL_ENABLE, 0);
 		pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, 0);
@@ -165,10 +165,10 @@ private:
 		{
 			pthread_detach(pthread_self());
 		}
-#endif // WIN32
+#endif // _WIN32
 		pThreadCtrl->m_pThread->ThrdFunc();
 
-#ifdef WIN32
+#ifdef _WIN32
 		//??????????????ж?//
 		if (!pThreadCtrl->m_bNeedWaitfor)
 		{
@@ -176,18 +176,18 @@ private:
 			pThreadCtrl->m_hHandle = INVALID_HANDLE_VALUE;
 			pThreadCtrl->m_bIsStop = true;
 		}
-#endif // WIN32
+#endif // _WIN32
 		return 0;
 	}
 
 protected:
 
 	bool m_bNeedWaitfor;
-#ifdef WIN32
+#ifdef _WIN32
 	unsigned int m_dwThreadId;
 #else
 	pthread_t m_dwThreadId;
-#endif // WIN32
+#endif // _WIN32
 	IFxThread* m_pThread;
 };
 

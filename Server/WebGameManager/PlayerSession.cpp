@@ -3,12 +3,12 @@
 #include "gamedefine.h"
 #include "GameServer.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <Windows.h>
 #include <ShellAPI.h>
 #else
 #include<unistd.h>
-#endif // WIN32
+#endif // _WIN32
 
 const static unsigned int g_dwPlayerSessionBuffLen = 64 * 1024;
 static char g_pPlayerSessionBuf[g_dwPlayerSessionBuffLen];

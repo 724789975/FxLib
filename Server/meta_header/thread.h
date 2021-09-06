@@ -39,14 +39,14 @@ public:
 		return m_bIsStop;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	void* GetHandle(void)
 	{
 		return m_hHandle;
 	}
 protected:
 	void* m_hHandle;		// 
-#endif // WIN32
+#endif // _WIN32
 
 protected:
 	bool m_bIsStop;

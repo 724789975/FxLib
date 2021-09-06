@@ -62,11 +62,11 @@ bool FxMySQLConnection::Connect()
 
     char pszSql[1024] = {0};
 
-#ifdef WIN32
+#ifdef _WIN32
 	_snprintf(pszSql, 1024, "set names %s;", m_oAccount.m_szCharactSet);
 #else
 	snprintf(pszSql, 1024, "set names %s;set character_set_database=%s; set character_set_server=%s;", m_oAccount.m_szCharactSet, m_oAccount.m_szCharactSet, m_oAccount.m_szCharactSet);
-#endif // WIN32
+#endif // _WIN32
 
     
 
@@ -317,7 +317,7 @@ unsigned int FxMySQLConnection::EscapeString(const char* pszSrc, int nSize, char
 		return 0;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	__try
 #else
 	try
@@ -325,7 +325,7 @@ unsigned int FxMySQLConnection::EscapeString(const char* pszSrc, int nSize, char
 	{
 		return mysql_real_escape_string(m_myConnection, pszDest, pszSrc, nSize);
 	}
-#ifdef WIN32
+#ifdef _WIN32
 	__except(EXCEPTION_EXECUTE_HANDLER)
 #else
 	catch(...)

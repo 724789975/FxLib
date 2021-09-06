@@ -6,16 +6,16 @@
 #include "fxmeta.h"
 #include "lock.h"
 #include "limiter_queue.h"
-#ifdef WIN32
+#ifdef _WIN32
 #include <time.h>
 #else
 #include <sys/time.h>
-#endif // WIN32
+#endif // _WIN32
 
 double GetTimeOfDay()
 {
 	static double s_qwTime = 0;
-#ifdef WIN32
+#ifdef _WIN32
 	SYSTEMTIME st;
 	GetSystemTime(&st);
 	s_qwTime = st.wSecond + st.wMilliseconds / 1000.0f;
@@ -206,7 +206,7 @@ unsigned int IFxTimerHandler::GetTimeStampFromStr(const char* szTimeStr)
 {
 	tm _tm;
 
-#ifdef WIN32
+#ifdef _WIN32
 	sscanf_s(szTimeStr, "%4d-%2d-%2d %2d:%2d:%2d",
 #else
 	sscanf(szTimeStr, "%4d-%2d-%2d %2d:%2d:%2d",

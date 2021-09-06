@@ -1,11 +1,11 @@
 #include "RedisConn.h"
-#ifdef WIN32
+#ifdef _WIN32
 #include <time.h>
 #else
 #include <sys/time.h>
-#endif // WIN32
+#endif // _WIN32
 
-#ifdef WIN32
+#ifdef _WIN32
 #define strtoll  _strtoi64
 #define strtoull _strtoui64
 #endif
@@ -1747,7 +1747,7 @@ void redispool::init(REDISDBURL& dburls)
 			if (conn->reconnect() == false)
 			{
 				//LOG_ERROR("%s %d %s", __FILE__, __LINE__, __FUNCTION__);
-				//LOG_ERROR("Redis£¨%s£©£¬¶Ë¿Ú%d ÎÞ·¨Á¬½Ó", cfg.m_sIP.c_str(), cfg.m_uiPort);
+				//LOG_ERROR("Redisï¿½ï¿½%sï¿½ï¿½ï¿½ï¿½ï¿½Ë¿ï¿½%d ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½", cfg.m_sIP.c_str(), cfg.m_uiPort);
 				//JyAst(false);
 			}
 		}
@@ -1808,7 +1808,7 @@ redisconn* redispool::__create()
 	if (conn->reconnect() == false)
 	{
 		//LOG_ERROR("%s %d %s", __FILE__, __LINE__, __FUNCTION__);
-		//LOG_ERROR("Redis£¨%s£©£¬¶Ë¿Ú%d ÎÞ·¨Á¬½Ó", cfg->m_sIP.c_str(), cfg->m_uiPort);
+		//LOG_ERROR("Redisï¿½ï¿½%sï¿½ï¿½ï¿½ï¿½ï¿½Ë¿ï¿½%d ï¿½Þ·ï¿½ï¿½ï¿½ï¿½ï¿½", cfg->m_sIP.c_str(), cfg->m_uiPort);
 	}
 	return conn;
 }

@@ -1,7 +1,7 @@
 ﻿#ifndef __MyTcpSock_h__
 #define __MyTcpSock_h__
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <WinSock2.h>
 #include <Windows.h>
 #include <mswsock.h>
@@ -36,11 +36,11 @@ public:
 
 	virtual void						ProcEvent(SNetEvent oEvent);
 
-#ifdef WIN32
+#ifdef _WIN32
 	virtual void						OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred);		//
 #else
 	virtual void						OnParserIoEvent(int dwEvents);		//  1/4 //
-#endif // WIN32
+#endif // _WIN32
 
 public:
 
@@ -58,7 +58,7 @@ protected:
 
 	FxIoThread*							m_poIoThreadHandler;
 
-#ifdef WIN32
+#ifdef _WIN32
 	virtual bool						PostAccept(SPerIoData& oSPerIoData);
 	bool								InitAcceptEx();
 	virtual void						OnAccept(SPerIoData* pstPerIoData);
@@ -68,7 +68,7 @@ protected:
 	LPFN_GETACCEPTEXSOCKADDRS			m_lpfnGetAcceptExSockaddrs;
 #else
 	virtual  void						OnAccept();
-#endif // WIN32
+#endif // _WIN32
 };
 
 class FxWebSocketListen : public FxTCPListenSock
@@ -78,11 +78,11 @@ public:
 	~FxWebSocketListen();
 
 private:
-#ifdef WIN32
+#ifdef _WIN32
 	virtual void						OnAccept(SPerIoData* pstPerIoData);
 #else
 	virtual  void						OnAccept();
-#endif // WIN32
+#endif // _WIN32
 };
 
 class FxHttpListen : public FxTCPListenSock
@@ -92,17 +92,17 @@ public:
 	~FxHttpListen();
 
 protected:
-#ifdef WIN32
+#ifdef _WIN32
 	virtual bool						PostAccept(SPerIoData& oSPerIoData);
-#endif // WIN32
+#endif // _WIN32
 
 
 private:
-#ifdef WIN32
+#ifdef _WIN32
 	virtual void						OnAccept(SPerIoData* pstPerIoData);
 #else
 	virtual  void						OnAccept();
-#endif // WIN32
+#endif // _WIN32
 };
 
 class FxConnection;
@@ -138,21 +138,21 @@ public:
 	SOCKET								Connect() = 0;
 
 	virtual bool						PostClose();
-#ifdef WIN32
+#ifdef _WIN32
 	virtual bool						PostRecv();
 	bool								PostRecvFree();
 
 	virtual void						OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred);		// 处理完成端口事件//
 #else
 	virtual void						OnParserIoEvent(int dwEvents);		//  1/4 //
-#endif // WIN32
+#endif // _WIN32
 
 protected:
 
 	virtual bool						PostSend();
-#ifdef WIN32
+#ifdef _WIN32
 	bool								PostSendThread();	//其实就是PostSend 不过在线程中执行
-#endif // WIN32
+#endif // _WIN32
 	bool								PostSendFree();
 	bool								SendImmediately();						// //
 
@@ -165,13 +165,13 @@ protected:
 	virtual void						__ProcRelease() = 0;
 protected:
 	virtual void						OnConnect();
-#ifdef WIN32
+#ifdef _WIN32
 	virtual void						OnRecv(bool bRet, int dwBytes);
 	virtual void						OnSend(bool bRet, int dwBytes);
 #else
 	virtual void						OnRecv();
 	virtual void						OnSend();
-#endif // WIN32
+#endif // _WIN32
 
 protected:
 	ESocketState						m_nState;
@@ -189,7 +189,7 @@ protected:
 	int									m_nPacketLen;       // 未处理完的逻辑数据包长度//
 
 protected:
-#ifdef WIN32
+#ifdef _WIN32
 	SPerIoData							m_stRecvIoData;
 	SPerIoData							m_stSendIoData;
 	LONG            				    m_nPostRecv;        // 未决的WSARecv操作数//
@@ -198,7 +198,7 @@ protected:
 	unsigned int          				    m_dwLastError;      // 最后的出错信息//
 #else
 	bool								m_bSending;
-#endif // WIN32
+#endif // _WIN32
 
 };
 
@@ -237,11 +237,11 @@ private:
 	void								__ProcRelease();
 
 protected:
-#ifdef WIN32
+#ifdef _WIN32
 	virtual void						OnRecv(bool bRet, int dwBytes);
 #else
 	virtual void						OnRecv();
-#endif // WIN32
+#endif // _WIN32
 
 private:
 	EWebSocketHandShakeState			m_eWebSocketHandShakeState;
@@ -258,21 +258,21 @@ public:
 
 	virtual bool						Send(const char* pData, int dwLen);
 	virtual bool						AddEvent();
-#ifdef WIN32
+#ifdef _WIN32
 	bool								PostRecv();
-#endif // WIN32
+#endif // _WIN32
 private:
 	void								__ProcRecv(unsigned int dwLen);
 	void								__ProcRelease();
 
 protected:
 	virtual bool						PostSend();
-#ifdef WIN32
+#ifdef _WIN32
 	virtual void						OnRecv(bool bRet, int dwBytes);
 	virtual void						OnSend(bool bRet, int dwBytes);
 #else
 	virtual void						OnRecv();
 	virtual void						OnSend();
-#endif // WIN32
+#endif // _WIN32
 };
 #endif // !__MySock_h__

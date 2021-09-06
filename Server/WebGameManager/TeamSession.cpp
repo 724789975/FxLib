@@ -16,7 +16,7 @@ static char g_pTeamSessionBuf[g_dwTeamSessionBuffLen];
 
 bool StartProccess(unsigned long long qwTeamId, unsigned int dwTeamServerId, char* szRoles)
 {
-#ifdef WIN32
+#ifdef _WIN32
 	SHELLEXECUTEINFO shell = { sizeof(shell) };
 	shell.fMask = SEE_MASK_NOCLOSEPROCESS;
 	shell.lpVerb = "open";
@@ -72,7 +72,7 @@ bool StartProccess(unsigned long long qwTeamId, unsigned int dwTeamServerId, cha
 		return true;
 	}
 	return false;
-#endif // WIN32
+#endif // _WIN32
 }
 
 CTeamSession::CTeamSession()
@@ -88,7 +88,7 @@ CTeamSession::~CTeamSession()
 
 void CTeamSession::OnConnect(void)
 {
-	//Ïò¶Ô·½·¢ËÍ±¾·þÎñÆ÷ÐÅÏ¢
+	//ï¿½ï¿½Ô·ï¿½ï¿½ï¿½ï¿½Í±ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï¢
 	GameProto::ServerInfo oInfo;
 	oInfo.set_dw_server_id(GameServer::Instance()->GetServerId());
 	//oInfo.set_sz_listen_ip((*it)->GetRemoteIPStr());

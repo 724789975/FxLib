@@ -15,11 +15,11 @@
 
 using namespace Utility;
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <io.h>
 #else
 #include <unistd.h>
-#endif // WIN32
+#endif // _WIN32
 
 //typedef signed char			INT8;
 //typedef unsigned char		unsigned char;

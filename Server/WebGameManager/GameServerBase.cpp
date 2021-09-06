@@ -3,13 +3,13 @@
 #include "fxmeta.h"
 #include <stdio.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <Windows.h>
 #include <psapi.h>
 #else
 #include <sys/types.h>
 #include <unistd.h>
-#endif // WIN32
+#endif // _WIN32
 
 
 

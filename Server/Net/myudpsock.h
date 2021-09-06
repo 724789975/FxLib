@@ -1,7 +1,7 @@
 ﻿#ifndef __MyUdpSock_h__
 #define __MyUdpSock_h__
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <WinSock2.h>
 #include <Windows.h>
 #include <mswsock.h>
@@ -92,11 +92,11 @@ public:
 
 	virtual void				ProcEvent(SNetEvent oEvent);
 
-#ifdef WIN32
+#ifdef _WIN32
 	virtual void				OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred);		//
 #else
 	virtual void				OnParserIoEvent(int dwEvents);		//  1/4 //
-#endif // WIN32
+#endif // _WIN32
 
 private:
 	bool						AddEvent();
@@ -105,12 +105,12 @@ private:
 	void						__ProcError(unsigned int dwErrorNo);
 	void						__ProcTerminate();
 
-#ifdef WIN32
+#ifdef _WIN32
 	bool						PostAccept(SPerUDPIoData& oSPerIoData);
 	void						OnAccept(SPerUDPIoData* pstPerIoData);
 #else
 	void						OnAccept();
-#endif // WIN32
+#endif // _WIN32
 
 private:
 	ESocketState				m_nState;
@@ -119,10 +119,10 @@ private:
 	FxLoopBuff*					m_poRecvBuf;
 
 	sockaddr_in					m_stAddr;
-#ifdef WIN32
+#ifdef _WIN32
 	SPerUDPIoData				m_oSPerIoDatas[128];
 	UDPPacketHeader				m_oPacketHeaders[128];
-#endif // WIN32
+#endif // _WIN32
 };
 
 class FxConnection;
@@ -160,13 +160,13 @@ public:
 
 	void						SetRemoteAddr(sockaddr_in& refstRemoteAddr);
 	virtual bool				PostClose();
-#ifdef WIN32
+#ifdef _WIN32
 	bool						PostRecv();
 
 	virtual void				OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred);		// 处理完成端口事件//
 #else
 	virtual void				OnParserIoEvent(int dwEvents);		//  1/4 //
-#endif // WIN32
+#endif // _WIN32
 
 	virtual void				Update();
 
@@ -184,14 +184,14 @@ private:
 	void						__ProcRecvPackageError(unsigned int dwLen);
 	void						__ProcRelease();
 private:
-#ifdef WIN32
+#ifdef _WIN32
 	bool						PostSendFree();
 	void						OnRecv(bool bRet, int dwBytes);
 	void						OnSend(bool bRet, int dwBytes);
 #else
 	void						OnRecv();
 	void						OnSend();
-#endif // WIN32
+#endif // _WIN32
 
 private:
 	ESocketState				m_nState;
@@ -216,14 +216,14 @@ private:
 	sockaddr					m_stRemoteAddr;
 
 private:
-#ifdef WIN32
+#ifdef _WIN32
 	SPerUDPIoData				m_stRecvIoData;
 	SPerUDPIoData				m_stSendIoData;
 	LONG						m_nPostRecv;        // 未决的WSARecv操作数//
 
 	unsigned int						m_dwLastError;      // 最后的出错信息//
 #else
-#endif // WIN32
+#endif // _WIN32
 
 	// bytes send and recieved
 	unsigned int				num_bytes_send;
@@ -258,9 +258,9 @@ private:
 	unsigned char				m_btAckLast;
 	unsigned char				m_btSynLast;
 
-#ifdef WIN32
+#ifdef _WIN32
 	unsigned char				m_byRecvBufferId;
-#endif // WIN32
+#endif // _WIN32
 };
 
 

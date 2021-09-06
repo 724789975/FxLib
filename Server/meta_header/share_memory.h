@@ -5,9 +5,9 @@
 #include <stdio.h>
 #include <string>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
-#endif // WIN32
+#endif // _WIN32
 
 
 class CShareMem
@@ -20,7 +20,7 @@ public:
 
 	void DeleteShareMem();
 
-	// bCreated 是否创建了新的共享内存
+	// bCreated 锟角否创斤拷锟斤拷锟铰的癸拷锟斤拷锟节达拷
 	bool Init(bool& bCreated, void* pAddr = NULL);
 
 	template<typename T>
@@ -32,19 +32,19 @@ private:
 	bool IsExist();
 	bool Open(void* pAddr);
 	bool Create(void* pAddr);
-#ifdef WIN32
+#ifdef _WIN32
 	bool ResizeFile(HANDLE h_File);
 #else
-#endif // WIN32
+#endif // _WIN32
 
 	std::string m_szShmName;
 	unsigned long long m_qwSize;
 
-#ifdef WIN32
+#ifdef _WIN32
 	HANDLE
 #else
 	int
-#endif // WIN32
+#endif // _WIN32
 		m_hShmId;
 
 	void* m_pData;

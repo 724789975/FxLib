@@ -7,11 +7,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #else
 #include <unistd.h>
-#endif // WIN32
+#endif // _WIN32
 
 
 namespace ExceptionDump
@@ -24,7 +24,7 @@ namespace ExceptionDump
 
 		if (!bInited)
 		{
-#ifdef WIN32
+#ifdef _WIN32
 			//GetCurrentDirectory(256, strWorkPath);
 
 			GetModuleFileName(NULL, strExePath, 256);
@@ -89,22 +89,22 @@ namespace ExceptionDump
 
 	void HandleExceptionSegFault()
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		MessageBox(NULL, "exception : segment fault", "ERROR", MB_ICONINFORMATION | MB_OK);
 #else
 		MakeDump();
-#endif // WIN32
+#endif // _WIN32
 
 		throw std::runtime_error("exception : segment fault");
 	}
 
 	void HandleExceptionFpError()
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		MessageBox(NULL, "exception : float-point error", "ERROR", MB_ICONINFORMATION | MB_OK);
 #else
 		MakeDump();
-#endif // WIN32
+#endif // _WIN32
 		throw std::runtime_error("exception : float-point error");
 	}
 

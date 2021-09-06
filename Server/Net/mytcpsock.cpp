@@ -12,7 +12,7 @@
 #include "base64.h"
 #include "ifnet.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 struct tcp_keepalive
 {
 	u_long  onoff;
@@ -30,7 +30,7 @@ struct tcp_keepalive
 #include <pthread.h>
 int     MAX_SYS_SEND_BUF = (128 * 1024);
 int     VAL_SO_SNDLOWAT = (64 * 1024);
-#endif // WIN32
+#endif // _WIN32
 
 #define RECV_BUFF_SIZE 8*64*1024
 #define SEND_BUFF_SIZE 64*64*1024
@@ -75,12 +75,12 @@ SOCKET FxTCPListenSock::Listen(unsigned int dwIP, unsigned short& wPort)
 	if (INVALID_SOCKET == GetSock())
 	{
 
-#ifdef WIN32
+#ifdef _WIN32
 		int dwErr = WSAGetLastError();
 		LogExe(LogLv_Error, "create socket error, %u:%u, errno %d", dwIP, wPort, dwErr);
 #else
 		LogExe(LogLv_Error, "create socket error, %u:%u, errno %d", dwIP, wPort, errno);
-#endif // WIN32
+#endif // _WIN32
 
 		return false;
 	}
@@ -95,40 +95,40 @@ SOCKET FxTCPListenSock::Listen(unsigned int dwIP, unsigned short& wPort)
 
 	if (bind(GetSock(), (sockaddr*)&stAddr, sizeof(stAddr)) < 0)
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		int dwErr = WSAGetLastError();
 		LogExe(LogLv_Error, "bind at %u:%d failed, errno %d", dwIP, wPort, dwErr);
 #else
 		LogExe(LogLv_Error, "bind at %u:%d failed, errno %d", dwIP, wPort, errno);
-#endif // WIN32
+#endif // _WIN32
 		return false;
 	}
 	if (listen(GetSock(), 128) < 0)
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		int dwErr = WSAGetLastError();
 		LogExe(LogLv_Error, "listen at %u:%d failed, errno %d", dwIP, wPort, dwErr);
 #else
 		LogExe(LogLv_Error, "listen at %u:%d failed, errno %d", dwIP, wPort, errno);
-#endif // WIN32
+#endif // _WIN32
 		return false;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	int
 #else
 	socklen_t
-#endif // WIN32
+#endif // _WIN32
 	 nLocalAddrLen = sizeof(stAddr);
 	if (getsockname(GetSock(), (sockaddr*)&stAddr, &nLocalAddrLen) < 0)
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		closesocket(GetSock());
 		int dwErr = WSAGetLastError();
 #else
 		close(GetSock());
 		int dwErr = errno;
-#endif // WIN32
+#endif // _WIN32
 
 		LogExe(LogLv_Critical, "socket getsockname error : %d, socket : %d, socket id %d", dwErr, GetSock(), GetSockId());
 		return INVALID_SOCKET;
@@ -149,7 +149,7 @@ SOCKET FxTCPListenSock::Listen(unsigned int dwIP, unsigned short& wPort)
 	{
 		return false;
 	}
-#ifdef WIN32
+#ifdef _WIN32
 
 	if (false == InitAcceptEx())
 	{
@@ -167,7 +167,7 @@ SOCKET FxTCPListenSock::Listen(unsigned int dwIP, unsigned short& wPort)
 		}
 	}
 #else
-#endif // WIN32
+#endif // _WIN32
 	LogExe(LogLv_Info, "listen at %u:%d success", dwIP, wPort);
 	return true;
 }
@@ -186,11 +186,11 @@ bool FxTCPListenSock::StopListen()
 		return false;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	shutdown(GetSock(), SD_RECEIVE);
 #else
 	shutdown(GetSock(), SHUT_RD);
-#endif // WIN32
+#endif // _WIN32
 
 	SetState(SSTATE_STOP_LISTEN);
 
@@ -207,12 +207,12 @@ bool FxTCPListenSock::Close()
 		return true;
 	}
 	SetState(SSTATE_CLOSE);
-#ifdef WIN32
+#ifdef _WIN32
 	closesocket(GetSock());
 #else
 	m_poIoThreadHandler->DelEvent(GetSock());
 	close(GetSock());
-#endif // WIN32
+#endif // _WIN32
 
 	SetSock(INVALID_SOCKET);
 
@@ -252,7 +252,7 @@ bool FxTCPListenSock::PushNetEvent(ENetEvtType eType, unsigned int dwValue)
 
 bool FxTCPListenSock::AddEvent()
 {
-#ifdef WIN32
+#ifdef _WIN32
 	if (!m_poIoThreadHandler->AddEvent(GetSock(), this))
 	{
 		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
@@ -266,7 +266,7 @@ bool FxTCPListenSock::AddEvent()
 		Close();
 		return false;
 	}
-#endif // WIN32
+#endif // _WIN32
 
 	PushNetEvent(NETEVT_ASSOCIATE, 0);
 	return true;
@@ -319,7 +319,7 @@ void FxTCPListenSock::__ProcTerminate()
 {
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 bool FxTCPListenSock::PostAccept(SPerIoData& oSPerIoData)
 {
 	SOCKET hNewSock = WSASocket(
@@ -765,7 +765,7 @@ void FxTCPListenSock::OnAccept()
 	return;
 }
 
-#endif // WIN32
+#endif // _WIN32
 
 FxWebSocketListen::FxWebSocketListen()
 {
@@ -777,7 +777,7 @@ FxWebSocketListen::~FxWebSocketListen()
 
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 void FxWebSocketListen::OnAccept(SPerIoData* pstPerIoData)
 {
 	SOCKET hSock = pstPerIoData->hSock;
@@ -1038,7 +1038,7 @@ void FxWebSocketListen::OnAccept()
 
 	return;
 }
-#endif // WIN32
+#endif // _WIN32
 
 /************************************************************************/
 /*                           http  listen                               */
@@ -1052,7 +1052,7 @@ FxHttpListen::~FxHttpListen()
 {
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 bool FxHttpListen::PostAccept(SPerIoData& oSPerIoData)
 {
 	SOCKET hNewSock = WSASocket(
@@ -1367,7 +1367,7 @@ void FxHttpListen::OnAccept()
 
 	return;
 }
-#endif // WIN32
+#endif // _WIN32
 
 
 
@@ -1385,7 +1385,7 @@ FxTCPConnectSockBase::FxTCPConnectSockBase()
 	SetSock(INVALID_SOCKET);
 	m_nNeedData = 0;
 	m_nPacketLen = 0;
-#ifdef WIN32
+#ifdef _WIN32
 	m_dwLastError = 0;
 	m_stRecvIoData.nOp = IOCP_RECV;
 	m_stSendIoData.nOp = IOCP_SEND;
@@ -1394,7 +1394,7 @@ FxTCPConnectSockBase::FxTCPConnectSockBase()
 	m_dwLastError = 0;
 #else
 	m_bSending = false;
-#endif // WIN32
+#endif // _WIN32
 
 	m_bSendLinger = false;     // 发送延迟，直到成功，或者30次后，这时默认设置//
 
@@ -1491,7 +1491,7 @@ bool FxTCPConnectSockBase::Close()
 		return true;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	shutdown(GetSock(), SD_RECEIVE);
 #else
 	shutdown(GetSock(), SHUT_RD);
@@ -1500,20 +1500,20 @@ bool FxTCPConnectSockBase::Close()
 	//SendImmediately();
 #endif	//WIN32
 
-#ifdef WIN32
+#ifdef _WIN32
 	if (0 != m_dwLastError)
 	{
 		PushNetEvent(NETEVT_ERROR, m_dwLastError);
 		m_dwLastError = 0;
 	}
-#endif // WIN32
+#endif // _WIN32
 
-#ifdef WIN32
+#ifdef _WIN32
 	CancelIo((HANDLE)GetSock());
 	closesocket(GetSock());
 #else
 	close(GetSock());
-#endif // WIN32
+#endif // _WIN32
 
 	SetSock(INVALID_SOCKET);
 
@@ -1549,14 +1549,14 @@ void FxTCPConnectSockBase::Reset()
 		m_poSendBuf = NULL;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	m_dwLastError = 0;
 	m_nPostRecv = 0;
 	m_nPostSend = 0;
 	m_dwLastError = 0;
 #else
 	m_bSending = false;
-#endif // WIN32
+#endif // _WIN32
 	m_bSendLinger = false;     //发送延迟，直到成功，或者30次后，这时默认设置//
 }
 
@@ -1578,7 +1578,7 @@ bool FxTCPConnectSockBase::Send(const char* pData, int dwLen)
 	IFxDataHeader* pDataHeader = GetDataHeader();
 	if (pDataHeader == NULL)
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		m_dwLastError = NET_SEND_OVERFLOW;
 		LogExe(LogLv_Error, "send error pDataHeader == NULL, socket : %d, socket id : %d", GetSock(), GetSockId());
 
@@ -1588,7 +1588,7 @@ bool FxTCPConnectSockBase::Send(const char* pData, int dwLen)
 		LogExe(LogLv_Error, "send error pDataHeader == NULL, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		PostClose();
-#endif // WIN32
+#endif // _WIN32
 		return false;
 	}
 
@@ -1596,7 +1596,7 @@ bool FxTCPConnectSockBase::Send(const char* pData, int dwLen)
 	char* pDataHeaderBuff = (char*)(pDataHeader->BuildSendPkgHeader(dwHeaderLen, dwLen));
 	if ((unsigned int)dwLen + dwHeaderLen > (unsigned int)m_poSendBuf->GetTotalLen())
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		m_dwLastError = NET_SEND_OVERFLOW;
 		LogExe(LogLv_Error, "send error NET_SEND_OVERFLOW, socket : %d, socket id : %d", GetSock(), GetSockId());
 
@@ -1606,7 +1606,7 @@ bool FxTCPConnectSockBase::Send(const char* pData, int dwLen)
 		LogExe(LogLv_Error, "send error NET_SEND_OVERFLOW, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		PostClose();
-#endif // WIN32
+#endif // _WIN32
 		return false;
 	}
 
@@ -1629,7 +1629,7 @@ bool FxTCPConnectSockBase::Send(const char* pData, int dwLen)
 
 	if (false == PostSendFree())
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		m_dwLastError = WSAGetLastError();
 		LogExe(LogLv_Error, "false == PostSendFree(), socket : %d, socket id : %d", GetSock(), GetSockId());
 
@@ -1639,7 +1639,7 @@ bool FxTCPConnectSockBase::Send(const char* pData, int dwLen)
 		LogExe(LogLv_Error, "false == PostSendFree(), socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		PostClose();
-#endif // WIN32
+#endif // _WIN32
 		return false;
 	}
 
@@ -1662,7 +1662,7 @@ bool FxTCPConnectSockBase::PushNetEvent(ENetEvtType eType, unsigned int dwValue)
 
 bool FxTCPConnectSockBase::PostSend()
 {
-#ifdef WIN32
+#ifdef _WIN32
 	if (false == IsConnected())
 	{
 		LogExe(LogLv_Error, "false == IsConnect(), socket : %d, socket id : %d", GetSock(), GetSockId());
@@ -1791,11 +1791,11 @@ bool FxTCPConnectSockBase::PostSend()
 	}
 
 	return true;
-#endif // WIN32
+#endif // _WIN32
 
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 bool FxTCPConnectSockBase::PostSendThread()
 {
 	if (false == IsConnected())
@@ -1842,11 +1842,11 @@ bool FxTCPConnectSockBase::PostSendThread()
 
 	return true;
 }
-#endif // WIN32
+#endif // _WIN32
 
 bool FxTCPConnectSockBase::PostSendFree()
 {
-#ifdef WIN32
+#ifdef _WIN32
 	return PostSend();
 #else
 	if (false == IsConnected())
@@ -1867,7 +1867,7 @@ bool FxTCPConnectSockBase::PostSendFree()
 	return m_poIoThreadHandler->ChangeEvent(GetSock(), EPOLLOUT | EPOLLIN, this);
 
 	return true;
-#endif // WIN32
+#endif // _WIN32
 }
 bool FxTCPConnectSockBase::SendImmediately()
 {
@@ -1876,7 +1876,7 @@ bool FxTCPConnectSockBase::SendImmediately()
 		return false;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	if (m_dwLastError)
 #else
 	if (errno != 0)
@@ -1894,7 +1894,7 @@ bool FxTCPConnectSockBase::SendImmediately()
 
 	while (true)
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		LONG nPostSend = InterlockedCompareExchange(&m_nPostSend, 1, 0);
 		if (0 != nPostSend)
 		{
@@ -1913,7 +1913,7 @@ bool FxTCPConnectSockBase::SendImmediately()
 		{
 			break;
 		}
-#endif // WIN32
+#endif // _WIN32
 	}
 
 	while (true)
@@ -1930,11 +1930,11 @@ bool FxTCPConnectSockBase::SendImmediately()
 			return true;
 		}
 
-#ifdef WIN32
+#ifdef _WIN32
 		InterlockedCompareExchange(&m_nPostSend, 0, 1);
 #else
 		m_bSending = true;
-#endif // WIN32
+#endif // _WIN32
 
 		nLen = 64 * 1024 < nLen ? 64 * 1024 : nLen;     // 最大64K
 
@@ -1942,13 +1942,13 @@ bool FxTCPConnectSockBase::SendImmediately()
 		if (0 > nRet)
 		{
 			unsigned int dwError = 0;
-#ifdef WIN32
+#ifdef _WIN32
 			dwError = WSAGetLastError();
 			InterlockedCompareExchange(&m_nPostSend, m_nPostSend - 1, m_nPostSend);
 #else
 			m_bSending = false;
 			dwError = errno;
-#endif // WIN32
+#endif // _WIN32
 			//continue;
 			if (dwError)
 			{
@@ -2039,7 +2039,7 @@ IFxDataHeader* FxTCPConnectSockBase::GetDataHeader()
 
 bool FxTCPConnectSockBase::AddEvent()
 {
-#ifdef WIN32
+#ifdef _WIN32
 	if (!m_poIoThreadHandler->AddEvent(GetSock(), this))
 	{
 		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
@@ -2057,7 +2057,7 @@ bool FxTCPConnectSockBase::AddEvent()
 		Close();
 		return false;
 	}
-#endif // WIN32
+#endif // _WIN32
 
 	PushNetEvent(NETEVT_ASSOCIATE, 0);
 	return true;
@@ -2119,7 +2119,7 @@ void FxTCPConnectSockBase::ProcEvent(SNetEvent oEvent)
 
 void FxTCPConnectSockBase::OnConnect()
 {
-#ifdef WIN32
+#ifdef _WIN32
 	sockaddr_in stAddr = { 0 };
 	int nAddrLen = sizeof(stAddr);
 	getsockname(GetSock(), (sockaddr*)&stAddr, &nAddrLen);
@@ -2180,13 +2180,13 @@ void FxTCPConnectSockBase::OnConnect()
 		PushNetEvent(NETEVT_ERROR, errno);
 		Close();
 	}
-#endif // WIN32
+#endif // _WIN32
 
 }
 
 bool FxTCPConnectSockBase::PostClose()
 {
-#ifdef WIN32
+#ifdef _WIN32
 	if (false == IsConnected())
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
@@ -2208,10 +2208,10 @@ bool FxTCPConnectSockBase::PostClose()
 #else
 	m_poIoThreadHandler->PushDelayCloseSock(this);
 	return true;
-#endif // WIN32
+#endif // _WIN32
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 void FxTCPConnectSockBase::OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred)
 {
 	SPerIoData* pSPerIoData = (SPerIoData*)pIoData;
@@ -2855,7 +2855,7 @@ void FxTCPConnectSockBase::OnSend()
 		return;
 	}
 }
-#endif // WIN32
+#endif // _WIN32
 
 
 FxTCPConnectSock::FxTCPConnectSock()
@@ -2890,7 +2890,7 @@ SOCKET FxTCPConnectSock::Connect()
 		return INVALID_SOCKET;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	SetSock(WSASocket(
 		AF_INET,
 		SOCK_STREAM,
@@ -2900,7 +2900,7 @@ SOCKET FxTCPConnectSock::Connect()
 		WSA_FLAG_OVERLAPPED));
 #else
 	SetSock(socket(AF_INET, SOCK_STREAM, 0));
-#endif // WIN32
+#endif // _WIN32
 
 	if (INVALID_SOCKET == GetSock())
 	{
@@ -2909,7 +2909,7 @@ SOCKET FxTCPConnectSock::Connect()
 		return INVALID_SOCKET;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	// keep alive
 	struct tcp_keepalive keepAliveIn;
 	struct tcp_keepalive keepAliveOut;
@@ -2968,7 +2968,7 @@ SOCKET FxTCPConnectSock::Connect()
 	setsockopt(GetSock(), SOL_TCP, TCP_KEEPIDLE, (void *)&keepIdle, sizeof(keepIdle));
 	setsockopt(GetSock(), SOL_TCP, TCP_KEEPINTVL, (void *)&keepInterval, sizeof(keepInterval));
 	setsockopt(GetSock(), SOL_TCP, TCP_KEEPCNT, (void *)&keepCount, sizeof(keepCount));
-#endif // WIN32
+#endif // _WIN32
 	// [end]
 
 	SetIoThread(FxNetModule::Instance()->FetchIoThread(GetSock()));
@@ -2987,7 +2987,7 @@ SOCKET FxTCPConnectSock::Connect()
 
 	SetState(SSTATE_CONNECT);
 
-#ifdef WIN32
+#ifdef _WIN32
 	if (!AddEvent())
 	{
 		//		m_pLock.UnLock();
@@ -3003,10 +3003,10 @@ SOCKET FxTCPConnectSock::Connect()
 		Close();
 		return INVALID_SOCKET;
 	}
-#endif // WIN32
+#endif // _WIN32
 
 	//请求连接时 Windows跟linux是有区别的//
-#ifdef WIN32
+#ifdef _WIN32
 	LPFN_CONNECTEX lpfnConnectEx = NULL;
 	DWORD dwBytes = 0;
 	GUID GuidConnectEx = WSAID_CONNECTEX;
@@ -3054,7 +3054,7 @@ SOCKET FxTCPConnectSock::Connect()
 			return INVALID_SOCKET;
 		}
 	}
-#endif // WIN32
+#endif // _WIN32
 
 	return GetSock();
 }
@@ -3070,7 +3070,7 @@ void FxTCPConnectSock::__ProcRecv(unsigned int dwLen)
 	{
 		if ((unsigned int)(-1) == dwLen)
 		{
-#ifdef WIN32
+#ifdef _WIN32
 			PostRecvFree();
 #else
 			PushNetEvent(NETEVT_ERROR, NET_RECV_ERROR);
@@ -3199,7 +3199,7 @@ void FxWebSocketConnect::__ProcRecv(unsigned int dwLen)
 	{
 		if ((unsigned int)(-1) == dwLen)
 		{
-#ifdef WIN32
+#ifdef _WIN32
 			PostRecvFree();
 #else
 			PushNetEvent(NETEVT_ERROR, NET_RECV_ERROR);
@@ -3248,7 +3248,7 @@ void FxWebSocketConnect::__ProcRecv(unsigned int dwLen)
 			}
 			if (false == PostSendFree())
 			{
-#ifdef WIN32
+#ifdef _WIN32
 				m_dwLastError = WSAGetLastError();
 				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "false == PostSendFree(), socket : %d, socket id : %d", GetSock(), GetSockId());
 
@@ -3258,7 +3258,7 @@ void FxWebSocketConnect::__ProcRecv(unsigned int dwLen)
 				ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "false == PostSendFree(), socket : %d, socket id : %d", GetSock(), GetSockId());
 
 				Close();
-#endif // WIN32
+#endif // _WIN32
 				return;
 			}
 			m_eWebSocketHandShakeState = WSHSS_Connected;
@@ -3330,7 +3330,7 @@ void FxWebSocketConnect::__ProcRelease()
 	FxMySockMgr::Instance()->Release(this);
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 void FxWebSocketConnect::OnRecv(bool bRet, int dwBytes)
 {
 	if (m_eWebSocketHandShakeState == WSHSS_Request)
@@ -3899,7 +3899,7 @@ void FxWebSocketConnect::OnRecv()
 		}
 	}
 }
-#endif // WIN32
+#endif // _WIN32
 
 /************************************************************************/
 /*                           http conntection                           */
@@ -3915,7 +3915,7 @@ FxHttpConnect::~FxHttpConnect()
 
 bool FxHttpConnect::AddEvent()
 {
-#ifdef WIN32
+#ifdef _WIN32
 	if (!m_poIoThreadHandler->AddEvent(GetSock(), this))
 	{
 		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
@@ -3933,7 +3933,7 @@ bool FxHttpConnect::AddEvent()
 		Close();
 		return false;
 	}
-#endif // WIN32
+#endif // _WIN32
 
 	PushNetEvent(NETEVT_ASSOCIATE, 0);
 	return true;
@@ -3966,7 +3966,7 @@ bool FxHttpConnect::Send(const char* pData, int dwLen)
 
 	if (false == PostSendFree())
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		m_dwLastError = WSAGetLastError();
 		LogExe(LogLv_Error, "false == PostSendFree(), socket : %d, socket id : %d", GetSock(), GetSockId());
 
@@ -3976,7 +3976,7 @@ bool FxHttpConnect::Send(const char* pData, int dwLen)
 		LogExe(LogLv_Error, "false == PostSendFree(), socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		PostClose();
-#endif // WIN32
+#endif // _WIN32
 		return false;
 	}
 
@@ -4012,7 +4012,7 @@ void FxHttpConnect::__ProcRelease()
 
 bool FxHttpConnect::PostSend()
 {
-#ifdef WIN32
+#ifdef _WIN32
 	if (false == IsConnected())
 	{
 		LogExe(LogLv_Error, "false == IsConnect(), socket : %d, socket id : %d", GetSock(), GetSockId());
@@ -4100,11 +4100,11 @@ bool FxHttpConnect::PostSend()
 	PushNetEvent(NETEVT_ERROR, NET_CLOSE_ERROR);
 	Close();
 	return true;
-#endif // WIN32
+#endif // _WIN32
 
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 bool FxHttpConnect::PostRecv()
 {
 	if (false == IsConnected())
@@ -4214,6 +4214,6 @@ void FxHttpConnect::OnSend()
 	m_bSending = false;
 	PostSend();
 }
-#endif // WIN32
+#endif // _WIN32
 
 

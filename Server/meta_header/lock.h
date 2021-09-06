@@ -3,7 +3,7 @@
 
 #include "fxmeta.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <WinSock2.h>
 #else
 #include<sys/types.h>
@@ -28,7 +28,7 @@ public:
 //		{
 //		}
 	public:
-	#ifdef WIN32
+	#ifdef _WIN32
 		FxCriticalLock()
 		{
 			InitializeCriticalSection(&m_lock);
@@ -71,18 +71,18 @@ public:
 		}
 
 private:
-#ifdef WIN32
+#ifdef _WIN32
 	CRITICAL_SECTION m_lock;
 #else
 	pthread_mutex_t m_lock;
 #endif
 };
 
-//½ø³ÌËøÎÊÌâ Èç¹û½ø³ÌÃ»ÓÐ½âËø¾ÍÍÆ³ö »á³öÏÖËÀËøÎÊÌâ
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ã»ï¿½Ð½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 class ProcessLock : public IFxLock
 {
 public:
-#ifdef WIN32
+#ifdef _WIN32
 	ProcessLock(const char* szName)
 	{
 		m_hMutex = CreateMutex(NULL, false, szName);
@@ -214,7 +214,7 @@ public:
 	}
 
 private:
-#ifdef WIN32
+#ifdef _WIN32
 	HANDLE m_hMutex;
 #else
 #if 0
@@ -222,7 +222,7 @@ private:
 #else
 	int m_dwSemId;
 #endif
-#endif // WIN32
+#endif // _WIN32
 
 };
 

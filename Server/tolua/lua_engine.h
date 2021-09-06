@@ -104,7 +104,7 @@ template<class T>
 inline void CLuaEngine::PushValue(T* pT)
 {
 	std::string strLuaType = "";
-#ifdef WIN32
+#ifdef _WIN32
 	std::string strTypeName = typeid(*pT).name();
 	bool bClass = false;
 	char strLuaNameBuffer[128] = {0};

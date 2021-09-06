@@ -91,7 +91,7 @@ namespace segvcatch
 	}
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 
 	static LONG CALLBACK win32_exception_handler(LPEXCEPTION_POINTERS e)
@@ -125,7 +125,7 @@ namespace segvcatch
 		INIT_SEGV;
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 		SetUnhandledExceptionFilter(win32_exception_handler);
 #endif
 	}
@@ -140,7 +140,7 @@ namespace segvcatch
 		INIT_FPE;
 #endif
 
-#ifdef WIN32
+#ifdef _WIN32
 		SetUnhandledExceptionFilter(win32_exception_handler);
 #endif
 	}

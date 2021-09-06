@@ -18,11 +18,11 @@
 CShareMem::CShareMem(std::string szName, unsigned long long qwSize)
 	: m_szShmName(szName)
 	, m_qwSize(qwSize)
-#ifdef WIN32
+#ifdef _WIN32
 	, m_hShmId(INVALID_HANDLE_VALUE)
 #else
 	, m_hShmId(0XFFFFFFFF)
-#endif // WIN32
+#endif // _WIN32
 	, m_pData(NULL)
 {
 }
@@ -44,7 +44,7 @@ bool CShareMem::Init(bool& bCreated, void* pAddr /*= NULL*/)
 
 void CShareMem::DeleteShareMem()
 {
-#ifdef WIN32
+#ifdef _WIN32
 	// 关闭视图
 	if (m_pData != NULL)
 	{
@@ -67,7 +67,7 @@ void CShareMem::DeleteShareMem()
 
 bool CShareMem::IsExist()
 {
-#ifdef WIN32
+#ifdef _WIN32
 	HANDLE h_File = CreateFile((m_szShmName + ".shm").c_str(), GENERIC_READ,
 		FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
 		NULL, OPEN_EXISTING, NULL, NULL);
@@ -89,14 +89,14 @@ bool CShareMem::IsExist()
 		fclose(fp);
 		return true;
 	}
-#endif // WIN32
+#endif // _WIN32
 	return false;
 }
 
 bool CShareMem::Open(void* pAddr)
 {
 	assert(m_pData == NULL);
-#ifdef WIN32
+#ifdef _WIN32
 	HANDLE hFile = CreateFile((m_szShmName + ".shm").c_str(), GENERIC_READ | GENERIC_WRITE,
 		FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
 		NULL, OPEN_EXISTING, NULL, NULL);
@@ -151,14 +151,14 @@ bool CShareMem::Open(void* pAddr)
 	}
 
 	assert(m_pData == mmap(m_pData, m_qwSize, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED, fHandle, 0));
-#endif // WIN32
+#endif // _WIN32
 	return true;
 }
 
 bool CShareMem::Create(void* pAddr)
 {
 	assert(m_pData == NULL);
-#ifdef WIN32
+#ifdef _WIN32
 	HANDLE hFile = CreateFile((m_szShmName + ".shm").c_str(), GENERIC_READ | GENERIC_WRITE,
 		FILE_SHARE_READ | FILE_SHARE_WRITE | FILE_SHARE_DELETE,
 		NULL, CREATE_NEW, NULL, NULL);
@@ -211,11 +211,11 @@ bool CShareMem::Create(void* pAddr)
 		return false;
 	}
 	assert(m_pData == mmap(m_pData, m_qwSize, PROT_READ | PROT_WRITE, MAP_SHARED | MAP_FIXED, fHandle, 0));
-#endif // WIN32
+#endif // _WIN32
 	return true;
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 bool CShareMem::ResizeFile(HANDLE hFile)
 {
 	LARGE_INTEGER qwFileSize;
@@ -236,7 +236,7 @@ bool CShareMem::ResizeFile(HANDLE hFile)
 	return true;
 }
 #else
-#endif // WIN32
+#endif // _WIN32
 
 
 

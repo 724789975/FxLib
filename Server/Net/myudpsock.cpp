@@ -11,13 +11,13 @@
 #define RECV_BUFF_SIZE 32*64*1024
 #define SEND_BUFF_SIZE 32*64*1024
 
-#ifdef WIN32
+#ifdef _WIN32
 #else
 #include <unistd.h>
 #include <fcntl.h>
 int UDP_MAX_SYS_SEND_BUF = (128 * 1024);
 int UDP_VAL_SO_SNDLOWAT = (64 * 1024);
-#endif // WIN32
+#endif // _WIN32
 
 FxUDPListenSock::FxUDPListenSock()
 {
@@ -58,12 +58,12 @@ SOCKET FxUDPListenSock::Listen(unsigned int dwIP, unsigned short& wPort)
 	SetSock(socket(AF_INET, SOCK_DGRAM, 0));
 	if (INVALID_SOCKET == GetSock())
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		int dwErr = WSAGetLastError();
 		LogExe(LogLv_Error, "create socket error, %u:%u, errno %d", dwIP, wPort, dwErr);
 #else
 		LogExe(LogLv_Error, "create socket error, %u:%u, errno %d", dwIP, wPort, errno);
-#endif // WIN32
+#endif // _WIN32
 
 		return false;
 	}
@@ -82,7 +82,7 @@ SOCKET FxUDPListenSock::Listen(unsigned int dwIP, unsigned short& wPort)
 	}
 	m_stAddr.sin_port = htons(wPort);
 
-#ifdef WIN32
+#ifdef _WIN32
 	unsigned long ul = 1;
 	if (SOCKET_ERROR == ioctlsocket(GetSock(), FIONBIO, (unsigned long*)&ul))
 	{
@@ -91,16 +91,16 @@ SOCKET FxUDPListenSock::Listen(unsigned int dwIP, unsigned short& wPort)
 			WSAGetLastError(), GetSock(), GetSockId());
 		return false;
 	}
-#endif // WIN32
+#endif // _WIN32
 
 	if (bind(GetSock(), (sockaddr*)&m_stAddr, sizeof(m_stAddr)) < 0)
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		int dwErr = WSAGetLastError();
 		LogExe(LogLv_Error, "bind at %u:%d failed, errno %d", dwIP, wPort, dwErr);
 #else
 		LogExe(LogLv_Error, "bind at %u:%d failed, errno %d", dwIP, wPort, errno);
-#endif // WIN32
+#endif // _WIN32
 		return false;
 	}
 
@@ -119,14 +119,14 @@ SOCKET FxUDPListenSock::Listen(unsigned int dwIP, unsigned short& wPort)
 	}
 	LogExe(LogLv_Info, "listen at %u:%d success", dwIP, wPort);
 
-#ifdef WIN32
+#ifdef _WIN32
 	for (int i = 0; i < sizeof(m_oSPerIoDatas) / sizeof(SPerUDPIoData); ++i)
 	{
 		m_oSPerIoDatas[i].stWsaBuf.buf = (char*)(&m_oPacketHeaders[i]);
 		m_oSPerIoDatas[i].stWsaBuf.len = sizeof(m_oPacketHeaders[i]);
 		PostAccept(m_oSPerIoDatas[i]);
 	}
-#endif // WIN32
+#endif // _WIN32
 	return true;
 }
 
@@ -144,11 +144,11 @@ bool FxUDPListenSock::StopListen()
 		return false;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	shutdown(GetSock(), SD_RECEIVE);
 #else
 	shutdown(GetSock(), SHUT_RD);
-#endif // WIN32
+#endif // _WIN32
 
 	SetState(SSTATE_STOP_LISTEN);
 
@@ -165,12 +165,12 @@ bool FxUDPListenSock::Close()
 		return true;
 	}
 	SetState(SSTATE_CLOSE);
-#ifdef WIN32
+#ifdef _WIN32
 	closesocket(GetSock());
 #else
 	m_poIoThreadHandler->DelEvent(GetSock());
 	close(GetSock());
-#endif // WIN32
+#endif // _WIN32
 
 	SetSock(INVALID_SOCKET);
 
@@ -240,7 +240,7 @@ void FxUDPListenSock::ProcEvent(SNetEvent oEvent)
 	}
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 void FxUDPListenSock::OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred)
 {
 	SPerUDPIoData* pSPerUDPIoData = (SPerUDPIoData*)pIoData;
@@ -332,11 +332,11 @@ void FxUDPListenSock::OnParserIoEvent(int dwEvents)
 		OnAccept();
 	}
 }
-#endif // WIN32
+#endif // _WIN32
 
 bool FxUDPListenSock::AddEvent()
 {
-#ifdef WIN32
+#ifdef _WIN32
 	if (!m_poIoThreadHandler->AddEvent(GetSock(), this))
 	{
 		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
@@ -350,7 +350,7 @@ bool FxUDPListenSock::AddEvent()
 		Close();
 		return false;
 	}
-#endif // WIN32
+#endif // _WIN32
 
 	PushNetEvent(NETEVT_ASSOCIATE, 0);
 	return true;
@@ -371,7 +371,7 @@ void FxUDPListenSock::__ProcTerminate()
 
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 bool FxUDPListenSock::PostAccept(SPerUDPIoData& oSPerIoData)
 {
 	SOCKET hNewSock = WSASocket(
@@ -868,12 +868,12 @@ void FxUDPListenSock::OnAccept()
 	setsockopt(poSock->GetSock(), SOL_SOCKET, SO_REUSEADDR, (char*)&nReuse, sizeof(nReuse));
 	if (bind(poSock->GetSock(), (sockaddr*)&m_stAddr, sizeof(m_stAddr)) < 0)
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		int dwErr = WSAGetLastError();
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "bind failed, errno %d", dwErr);
 #else
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "bind failed, errno %d", errno);
-#endif // WIN32
+#endif // _WIN32
 		return;
 	}
 
@@ -939,7 +939,7 @@ void FxUDPListenSock::OnAccept()
 	return;
 }
 
-#endif // WIN32
+#endif // _WIN32
 
 FxUDPConnectSock::FxUDPConnectSock()
 {
@@ -950,14 +950,14 @@ FxUDPConnectSock::FxUDPConnectSock()
 	SetSock(INVALID_SOCKET);
 	m_nNeedData = 0;
 	m_nPacketLen = 0;
-#ifdef WIN32
+#ifdef _WIN32
 	m_dwLastError = 0;
 	m_stRecvIoData.nOp = IOCP_RECV;
 	m_stSendIoData.nOp = IOCP_SEND;
 	m_nPostRecv = 0;
 	m_dwLastError = 0;
 #else
-#endif // WIN32
+#endif // _WIN32
 
 	m_bSendLinger = false;     // 发送延迟，直到成功，或者30次后，这时默认设置//
 
@@ -993,12 +993,12 @@ bool FxUDPConnectSock::Init()
 
 	m_cDelay = 0;
 
-#ifdef WIN32
+#ifdef _WIN32
 	memset(&m_stRecvIoData.stRemoteAddr, 0, sizeof(m_stRecvIoData.stRemoteAddr));
 	memset(&m_stSendIoData.stRemoteAddr, 0, sizeof(m_stSendIoData.stRemoteAddr));
 
 	m_byRecvBufferId = 0;
-#endif // WIN32
+#endif // _WIN32
 	if (NULL == m_poSendBuf)
 	{
 		m_poSendBuf = FxLoopBuffMgr::Instance()->Fetch();
@@ -1102,12 +1102,12 @@ void FxUDPConnectSock::Reset()
 		m_poSendBuf = NULL;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	m_dwLastError = 0;
 	m_nPostRecv = 0;
 	m_dwLastError = 0;
 #else
-#endif // WIN32
+#endif // _WIN32
 	m_bSendLinger = false;     //发送延迟，直到成功，或者30次后，这时默认设置//
 }
 
@@ -1132,7 +1132,7 @@ bool FxUDPConnectSock::Close()
 		return true;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	shutdown(GetSock(), SD_RECEIVE);
 #else
 	shutdown(GetSock(), SHUT_RD);
@@ -1141,20 +1141,20 @@ bool FxUDPConnectSock::Close()
 	//SendImmediately();
 #endif	//WIN32
 
-#ifdef WIN32
+#ifdef _WIN32
 	if (0 != m_dwLastError)
 	{
 		PushNetEvent(NETEVT_ERROR, m_dwLastError);
 		m_dwLastError = 0;
 	}
-#endif // WIN32
+#endif // _WIN32
 
-#ifdef WIN32
+#ifdef _WIN32
 	CancelIo((HANDLE)GetSock());
 	closesocket(GetSock());
 #else
 	close(GetSock());
-#endif // WIN32
+#endif // _WIN32
 
 	SetSock(INVALID_SOCKET);
 
@@ -1181,7 +1181,7 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 	IFxDataHeader* pDataHeader = GetDataHeader();
 	if (pDataHeader == NULL)
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		m_dwLastError = NET_SEND_OVERFLOW;
 		LogExe(LogLv_Error, "send error pDataHeader == NULL, socket : %d, socket id : %d", GetSock(), GetSockId());
 
@@ -1191,13 +1191,13 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 		LogExe(LogLv_Error, "send error pDataHeader == NULL, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		PostClose();
-#endif // WIN32
+#endif // _WIN32
 		return false;
 	}
 
 	if ((unsigned int)dwLen + pDataHeader->GetHeaderLength() > (unsigned int)m_poSendBuf->GetTotalLen())
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		m_dwLastError = NET_SEND_OVERFLOW;
 		LogExe(LogLv_Error, "send error NET_SEND_OVERFLOW, socket : %d, socket id : %d", GetSock(), GetSockId());
 
@@ -1207,7 +1207,7 @@ bool FxUDPConnectSock::Send(const char* pData, int dwLen)
 		LogExe(LogLv_Error, "send error NET_SEND_OVERFLOW, socket : %d, socket id : %d", GetSock(), GetSockId());
 
 		PostClose();
-#endif // WIN32
+#endif // _WIN32
 		return false;
 	}
 
@@ -1260,7 +1260,7 @@ IFxDataHeader* FxUDPConnectSock::GetDataHeader()
 
 bool FxUDPConnectSock::AddEvent()
 {
-#ifdef WIN32
+#ifdef _WIN32
 	if (!m_poIoThreadHandler->AddEvent(GetSock(), this))
 	{
 		PushNetEvent(NETEVT_ERROR, WSAGetLastError());
@@ -1278,7 +1278,7 @@ bool FxUDPConnectSock::AddEvent()
 		Close();
 		return false;
 	}
-#endif // WIN32
+#endif // _WIN32
 
 	PushNetEvent(NETEVT_ASSOCIATE, 0);
 	return true;
@@ -1368,16 +1368,16 @@ SOCKET FxUDPConnectSock::Connect()
 	SetSock(socket(AF_INET, SOCK_DGRAM, 0));
 	if (INVALID_SOCKET == GetSock())
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		int dwErr = WSAGetLastError();
 #else
 		int dwErr = errno;
-#endif // WIN32
+#endif // _WIN32
 		LogExe(LogLv_Critical, "create socket failed, errno %d", dwErr);
 		return INVALID_SOCKET;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	int nSendBuffSize = 256 * 1024;
 	int nRecvBuffSize = 8 * nSendBuffSize;
 	if ((0 != setsockopt(GetSock(), SOL_SOCKET, SO_RCVBUF, (char*)&nRecvBuffSize, sizeof(int))) &&
@@ -1391,17 +1391,17 @@ SOCKET FxUDPConnectSock::Connect()
 #else
 	setsockopt(GetSock(), SOL_SOCKET, SO_SNDLOWAT, &UDP_VAL_SO_SNDLOWAT, sizeof(UDP_VAL_SO_SNDLOWAT));
 	setsockopt(GetSock(), SOL_SOCKET, SO_SNDBUF, &UDP_MAX_SYS_SEND_BUF, sizeof(UDP_MAX_SYS_SEND_BUF));
-#endif // WIN32
+#endif // _WIN32
 
 	SetIoThread(FxNetModule::Instance()->FetchIoThread(GetSock()));
 	if (NULL == m_poIoThreadHandler)
 	{
 		LogExe(LogLv_Critical, "%s", "SetIoThread failed");
-#ifdef WIN32
+#ifdef _WIN32
 		closesocket(GetSock());
 #else
 		close(GetSock());
-#endif // WIN32
+#endif // _WIN32
 		return INVALID_SOCKET;
 	}
 
@@ -1411,29 +1411,29 @@ SOCKET FxUDPConnectSock::Connect()
 	stLocalAddr.sin_port = 0;
 	if (bind(GetSock(), (sockaddr*)&stLocalAddr, sizeof(stLocalAddr)) < 0)
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		int dwErr = WSAGetLastError();
 #else
 		int dwErr = errno;
-#endif // WIN32
+#endif // _WIN32
 		LogExe(LogLv_Critical, "connect bind failed, errno %d", dwErr);
 		return INVALID_SOCKET;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 #else
 	unsigned
-#endif // WIN32
+#endif // _WIN32
 		int nLocalAddrLen = sizeof(stLocalAddr);
 	if (getsockname(GetSock(), (sockaddr*)&stLocalAddr, &nLocalAddrLen) < 0)
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		closesocket(GetSock());
 		int dwErr = WSAGetLastError();
 #else
 		close(GetSock());
 		int dwErr = errno;
-#endif // WIN32
+#endif // _WIN32
 
 		LogExe(LogLv_Critical, "socket getsockname error : %d, socket : %d, socket id %d", dwErr, GetSock(), GetSockId());
 		return INVALID_SOCKET;
@@ -1473,7 +1473,7 @@ SOCKET FxUDPConnectSock::Connect()
 	m_oSendWindow.m_btEnd++;
 
 	sockaddr_in stRemoteAddr = { 0 };
-#ifdef WIN32
+#ifdef _WIN32
 #else
 	unsigned
 #endif	//WIN32
@@ -1503,13 +1503,13 @@ ContinuetSend:
 		sizeof(oUDPPacketHeader), 0, (sockaddr*)(&stAddr),
 		sizeof(stAddr)) < 0)
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		int dwErr = WSAGetLastError();
 		if (WSAGetLastError() != WSA_IO_PENDING)
 #else
 		int dwErr = errno;
 		if (errno != EINPROGRESS && errno != EINTR && errno != EAGAIN)
-#endif // WIN32
+#endif // _WIN32
 		{
 			LogExe(LogLv_Critical, "sendto errno : %d, socket : %d, socket id : %d", dwErr, GetSock(), GetSockId());
 			return INVALID_SOCKET;
@@ -1603,7 +1603,7 @@ ContinuetSend:
 		m_oRecvWindow.m_btEnd++;
 	}
 
-#ifdef WIN32
+#ifdef _WIN32
 	{
 		m_stRecvIoData.nOp = IOCP_RECV;
 		unsigned long ul = 1;
@@ -1615,18 +1615,18 @@ ContinuetSend:
 			return INVALID_SOCKET;
 		}
 	}
-#endif // WIN32
+#endif // _WIN32
 
 	SetState(SSTATE_ESTABLISH);
 	if (!AddEvent())
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		PushNetEvent(NETEVT_CONN_ERR, WSAGetLastError());
 		closesocket(GetSock());
 #else
 		PushNetEvent(NETEVT_CONN_ERR, errno);
 		close(GetSock());
-#endif // WIN32
+#endif // _WIN32
 		return INVALID_SOCKET;
 	}
 
@@ -1634,7 +1634,7 @@ ContinuetSend:
 
 	PushNetEvent(NETEVT_ESTABLISH, 0);
 
-#ifdef WIN32
+#ifdef _WIN32
 	if (connect(GetSock(), (sockaddr*)(&m_stRemoteAddr), sizeof(m_stRemoteAddr)) == SOCKET_ERROR)
 	{
 		if (WSAGetLastError() != WSA_IO_PENDING)
@@ -1680,7 +1680,7 @@ ContinuetSend:
 		return INVALID_SOCKET;
 	}
 
-#endif // WIN32
+#endif // _WIN32
 
 	return GetSock();
 }
@@ -1692,7 +1692,7 @@ void FxUDPConnectSock::SetRemoteAddr(sockaddr_in& refstRemoteAddr)
 
 bool FxUDPConnectSock::PostClose()
 {
-#ifdef WIN32
+#ifdef _WIN32
 	if (false == IsConnected())
 	{
 		ThreadLog(LogLv_Error, m_poIoThreadHandler->GetFile(), "false == IsConnected(), socket : %d, socket id : %d", GetSock(), GetSockId());
@@ -1714,10 +1714,10 @@ bool FxUDPConnectSock::PostClose()
 #else
 	m_poIoThreadHandler->PushDelayCloseSock(this);
 	return true;
-#endif // WIN32
+#endif // _WIN32
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 bool FxUDPConnectSock::PostRecv()
 {
 	if (false == IsConnected())
@@ -1854,7 +1854,7 @@ void FxUDPConnectSock::OnParserIoEvent(int dwEvents)
 	}
 }
 
-#endif // WIN32
+#endif // _WIN32
 
 void FxUDPConnectSock::Update()
 {
@@ -2061,7 +2061,7 @@ bool FxUDPConnectSock::PostSend()
 			refPacket.m_cSyn = i;
 			refPacket.m_cAck = m_oRecvWindow.m_btBegin - 1;
 
-#ifdef WIN32
+#ifdef _WIN32
 			memset(&m_stSendIoData.stOverlapped, 0, sizeof(m_stSendIoData.stOverlapped));
 
 			m_stSendIoData.stWsaBuf.buf = pBuffer;
@@ -2127,7 +2127,7 @@ bool FxUDPConnectSock::PostSend()
 		oPacket.m_cSyn = m_oSendWindow.m_btBegin - 1;
 		oPacket.m_cAck = m_oRecvWindow.m_btBegin - 1;
 
-#ifdef WIN32
+#ifdef _WIN32
 		memset(&m_stSendIoData.stOverlapped, 0, sizeof(m_stSendIoData.stOverlapped));
 
 		m_stSendIoData.stWsaBuf.buf = (char*)(&oPacket);
@@ -2308,7 +2308,7 @@ void FxUDPConnectSock::__ProcRelease()
 	FxMySockMgr::Instance()->Release(this);
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 bool FxUDPConnectSock::PostSendFree()
 {
 	static SPerUDPIoData oUDPIoData = { 0 };
@@ -3161,5 +3161,5 @@ void FxUDPConnectSock::OnSend()
 }
 
 
-#endif // WIN32
+#endif // _WIN32
 

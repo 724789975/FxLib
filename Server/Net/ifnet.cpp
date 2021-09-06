@@ -166,7 +166,7 @@ IFxNet* FxNetGetModule()
 {
 	if(NULL == FxNetModule::Instance())
 	{
-#ifdef WIN32
+#ifdef _WIN32
 	    WSADATA data;
 		int nErr = WSAStartup(MAKEWORD(2, 2), &data);
 		if (nErr != 0)

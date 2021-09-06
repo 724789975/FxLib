@@ -60,16 +60,16 @@ namespace DL
 #define _DERIDELIST_JOIN(a, b) _DERIDELIST_JOIN2(a, b)
 #define _DERIDELIST_JOIN2(a, b) a##b
 
-//ÓÃÓÚÑÓ³ÙÕ¹¿ª
+//ï¿½ï¿½ï¿½ï¿½ï¿½Ó³ï¿½Õ¹ï¿½ï¿½
 #define DERIDELIST_LEFT_BRACKET (
 
-#ifdef WIN32
+#ifdef _WIN32
 #define DERIDELIST(...)\
 	DERIDELIST_JOIN(DERIDELIST_, GET_ARG_COUNT(##__VA_ARGS__))DERIDELIST_LEFT_BRACKET ##__VA_ARGS__)
 #else
 #define DERIDELIST(...)\
 	DERIDELIST_JOIN(DERIDELIST_, GET_ARG_COUNT(__VA_ARGS__))(__VA_ARGS__)
-#endif // WIN32
+#endif // _WIN32
 
 #define DERIDELIST_1(T1) DL::DeriveList<T1,Meta::Null>
 #define DERIDELIST_2(T1,T2) DL::DeriveList<T1,DERIDELIST_1(T2)>

@@ -4,7 +4,7 @@
 #include <fcntl.h>
 #include "net.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <process.h>
 #else
 #include <unistd.h>
@@ -14,11 +14,11 @@ FxIoThread::FxIoThread()
 {
 	m_poThrdHandler = NULL;
 	m_pFile = NULL;
-#ifdef WIN32
+#ifdef _WIN32
 #else
 	m_pEvents = NULL;
 	m_hEpoll = INVALID_SOCKET;
-#endif // WIN32
+#endif // _WIN32
 	m_dwMaxSock = 0;
 	m_bStop = false;
 
@@ -27,7 +27,7 @@ FxIoThread::FxIoThread()
 
 FxIoThread::~FxIoThread()
 {
-#ifdef WIN32
+#ifdef _WIN32
 #else
 	if (m_hEpoll != (int) INVALID_SOCKET)
 	{
@@ -40,12 +40,12 @@ FxIoThread::~FxIoThread()
 		delete m_pEvents;
 		m_pEvents = NULL;
 	}
-#endif // WIN32
+#endif // _WIN32
 }
 
 bool FxIoThread::Init(unsigned int dwMaxSock)
 {
-#ifdef WIN32
+#ifdef _WIN32
 	// 初始化的时候 先获取下 创建完成端口 //
 	m_hCompletionPort = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
 
@@ -67,7 +67,7 @@ bool FxIoThread::Init(unsigned int dwMaxSock)
 		return false;
 	}
 	m_oDelayCloseSockQueue.Init(2 * dwMaxSock);
-#endif // WIN32
+#endif // _WIN32
 	if (!Start())
 	{
 		return false;
@@ -82,7 +82,7 @@ void FxIoThread::Uninit()
 	{
 		Stop();
 	}
-#ifdef WIN32
+#ifdef _WIN32
 #else
 	if (m_hEpoll != (int) INVALID_SOCKET)
 	{
@@ -95,7 +95,7 @@ void FxIoThread::Uninit()
 		delete[] m_pEvents;
 		m_pEvents = NULL;
 	}
-#endif // WIN32
+#endif // _WIN32
 }
 	
 
@@ -146,7 +146,7 @@ void FxIoThread::__DealSock()
 {
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 bool FxIoThread::AddEvent(int hSock, IFxSocket* poSock)
 {
 	if (hSock < 0)
@@ -247,7 +247,7 @@ bool FxIoThread::DelEvent(int hSock)
 	return true;
 }
 
-#endif // WIN32
+#endif // _WIN32
 
 void FxIoThread::ThrdFunc()
 {
@@ -287,7 +287,7 @@ void FxIoThread::ThrdFunc()
 bool FxIoThread::__DealData()
 {
 	const int dwTimeOut = 1;
-#ifdef WIN32
+#ifdef _WIN32
 	void* pstPerIoData = NULL;
 	IFxSocket* poSock = NULL;
 	BOOL bRet = false;
@@ -350,7 +350,7 @@ bool FxIoThread::__DealData()
 
 		poSock->OnParserIoEvent(pEvent->events);
 	}
-#endif // WIN32
+#endif // _WIN32
 	return true;
 }
 
@@ -375,7 +375,7 @@ bool FxIoThread::Start()
 	return true;
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 HANDLE FxIoThread::GetHandle()
 {
 	// 创建完成端口
@@ -428,5 +428,5 @@ void FxIoThread::PushDelayCloseSock(IFxSocket* poSock)
 	}
 }
 
-#endif // WIN32
+#endif // _WIN32
 

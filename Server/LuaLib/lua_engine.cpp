@@ -43,7 +43,7 @@ bool CLuaEngine::Reload(char* szScriptPath)
 	char* strExePath = GetExePath();
 
 	char strScriptPath[256];
-#ifdef WIN32
+#ifdef _WIN32
 	sprintf(strScriptPath, "%s\\%s\\", strExePath, szScriptPath);
 #else
 	sprintf(strScriptPath, "%s/%s/", strExePath, szScriptPath);
@@ -62,7 +62,7 @@ bool CLuaEngine::Reload(char* szScriptPath)
 		return false;
 	}
 	lua_settop(m_pBackState, 0);
-#endif // WIN32
+#endif // _WIN32
 	ListDir(strScriptPath, *this); 
 
 	lua_settop(m_pBackState, 0);
@@ -190,11 +190,11 @@ bool CLuaEngine::LoadFile(const char* pFileName)
 	//strcpy(pc, pFileName);
 	memcpy(pc, pFileName, strlen(pFileName));
 
-#ifdef WIN32
+#ifdef _WIN32
 	char* strFileExt = strrchr(pc, '.');
 #else
 	char* strFileExt = rindex(pc, '.');
-#endif // WIN32
+#endif // _WIN32
 
 
 	if (strcmp(strFileExt, ".lua") != 0)

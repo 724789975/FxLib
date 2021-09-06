@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include "defines.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <Windows.h>
 #include <process.h>
 
@@ -33,11 +33,11 @@ namespace Utility
 {
 	int GetPid()
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		return _getpid();
 #else
 		return (int)getpid();
-#endif // WIN32
+#endif // _WIN32
 	}
 
 	char* GetExePath()
@@ -48,7 +48,7 @@ namespace Utility
 
 		if (!bInited)
 		{
-#ifdef WIN32
+#ifdef _WIN32
 			//GetCurrentDirectory(256, strWorkPath);
 
 			GetModuleFileName(NULL, strWorkPath, 256);
@@ -96,7 +96,7 @@ namespace Utility
 
 		if (!bInited)
 		{
-#ifdef WIN32
+#ifdef _WIN32
 			//GetCurrentDirectory(256, strWorkPath);
 
 			GetModuleFileName(NULL, strExePath, 256);
@@ -144,11 +144,11 @@ namespace Utility
 
 	const char * GetSeparator()
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		return "\\";
 #else
 		return "/";
-#endif // WIN32
+#endif // _WIN32
 	}
 
 	FILE* GetLogFile()
@@ -187,7 +187,7 @@ namespace Utility
 	{
 		int nLen = 0;
 		nLen += string_sprintf(strTrace + nLen, dwLen - 1, "%s\n", " [Trace] ___________begin___________");
-#ifdef WIN32
+#ifdef _WIN32
 		unsigned int   i;
 		void         * stack[TRACE_SIZE];
 		unsigned short frames;
@@ -224,7 +224,7 @@ namespace Utility
 		}
 		free(strings);
 		strings = NULL;
-#endif // WIN32
+#endif // _WIN32
 		nLen += string_sprintf(strTrace + nLen, dwLen - nLen - 1, "%s\n", " [Trace] ___________end___________");
 	}
 
@@ -249,11 +249,11 @@ namespace Utility
 
 	void FxSleep(unsigned int dwMilliseconds)
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		Sleep(dwMilliseconds);
 #else
 		usleep(dwMilliseconds * 1000);
-#endif // WIN32
+#endif // _WIN32
 
 	}
 	
@@ -265,7 +265,7 @@ namespace Utility
 
 		if (!bInited)
 		{
-#ifdef WIN32
+#ifdef _WIN32
 			// get os name according to version number  
 			OSVERSIONINFO osver = { sizeof(OSVERSIONINFO) };
 			GetVersionEx(&osver);
@@ -293,7 +293,7 @@ namespace Utility
 				memset(szOsInfo, 0, sizeof(szOsInfo));
 				fgets(szOsInfo, sizeof(szOsInfo) - 1, fp); // leave out \n  
 			}
-#endif // WIN32
+#endif // _WIN32
 			bInited = true;
 		}
 
@@ -303,7 +303,7 @@ namespace Utility
 
 	void ListDir(const char * pDirName, ListDirAndLoadFile & refLoadFile)
 	{
-#ifdef WIN32
+#ifdef _WIN32
 		char szFile[MAX_PATH] = { 0 };
 		char szFind[MAX_PATH];
 		char strFileName[MAX_PATH];
@@ -360,7 +360,7 @@ namespace Utility
 				continue;
 			}
 #if 1
-			//有的系统不能用readdir 要用stat
+			//锟叫碉拷系统锟斤拷锟斤拷锟斤拷readdir 要锟斤拷stat
 			struct stat buf;
 			std::string strPath(pDirName);
 			std::string strFileName(pDirp->d_name);

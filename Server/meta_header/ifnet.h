@@ -1,7 +1,7 @@
 ﻿#ifndef __IFNET_H__
 #define __IFNET_H__
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <WinSock2.h>
 
 #else
@@ -90,7 +90,7 @@ enum ESocketType
 	SLT_Http,
 };
 
-#ifdef WIN32
+#ifdef _WIN32
 enum EIocpOperation
 {
 	IOCP_RECV = 1,
@@ -116,7 +116,7 @@ struct SPerUDPIoData
 	WSABUF							stWsaBuf;
 	sockaddr_in						stRemoteAddr;
 };
-#endif // WIN32
+#endif // _WIN32
 
 struct SNetEvent
 {
@@ -173,9 +173,9 @@ public:
 	virtual bool					OnDestroy();
 
 	virtual FxConnection*			GetConnection(void);
-#ifdef WIN32
+#ifdef _WIN32
 	void							ForceSend();//udp中才用的到
-#endif // WIN32
+#endif // _WIN32
 protected:
 	virtual void					Init(){}
 private:
@@ -208,11 +208,11 @@ public:
 	void							SetSockId(unsigned int dwSockId){ m_dwSockId = dwSockId; }
 	unsigned int					GetSockId(){ return m_dwSockId; }
 
-#ifdef WIN32
+#ifdef _WIN32
 	virtual void					OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred) = 0;    // 
 #else
 	virtual void					OnParserIoEvent(int dwEvents) = 0;    // 
-#endif // WIN32
+#endif // _WIN32
 
 
 protected:
@@ -265,11 +265,11 @@ public:
 	virtual bool					Close() = 0;
 	virtual void					ProcEvent(SNetEvent oEvent) = 0;
 
-#ifdef WIN32
+#ifdef _WIN32
 	virtual void					OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred) = 0;		//
 #else
 	virtual void					OnParserIoEvent(int dwEvents) = 0;		//
-#endif // WIN32
+#endif // _WIN32
 
 	IFxSessionFactory*				GetSessionFactory(){ return m_poSessionFactory; }
 
@@ -300,11 +300,11 @@ public:
 	virtual IFxDataHeader*			GetDataHeader() = 0;
 
 	virtual bool					PostClose() = 0;
-#ifdef WIN32
+#ifdef _WIN32
 	virtual void					OnParserIoEvent(bool bRet, void* pIoData, unsigned int dwByteTransferred) = 0;		//
 #else
 	virtual void					OnParserIoEvent(int dwEvents) = 0;		//
-#endif // WIN32
+#endif // _WIN32
 
 	virtual void					Update() {}
 

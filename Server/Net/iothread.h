@@ -4,10 +4,10 @@
 #include "mytcpsock.h"
 #include <vector>
 #include <set>
-#ifdef WIN32
+#ifdef _WIN32
 #else
 #include <sys/epoll.h>
-#endif // WIN32
+#endif // _WIN32
 
 
 class FxIoThread : public IFxThread
@@ -32,23 +32,23 @@ public:
 	void					AddConnectSocket(IFxConnectSocket* pSock);
 	void					DelConnectSocket(IFxConnectSocket* pSock);
 
-#ifdef WIN32
+#ifdef _WIN32
 	bool					AddEvent(int hSock, IFxSocket* poSock);
 #else
 	bool					AddEvent(int hSock, unsigned int dwEvents, IFxSocket* poSock);
 	bool					ChangeEvent(int hSock, unsigned int dwEvents, IFxSocket* poSock);
 	bool					DelEvent(int hSock);
-#endif // WIN32
+#endif // _WIN32
 
 	// win下为完成端口 linux下为epoll
-#ifdef WIN32
+#ifdef _WIN32
 	HANDLE					GetHandle();
 #else
 	int						GetHandle();
 	int						WaitEvents(int nMilliSecond);
 	epoll_event*			GetEvent(int nIndex);
 	void					PushDelayCloseSock(IFxSocket* poSock);
-#endif // WIN32
+#endif // _WIN32
 
 private:
 	void					 __DealSock();
@@ -60,13 +60,13 @@ protected:
 	unsigned int					m_dwMaxSock;
 	bool					m_bStop;
 
-#ifdef WIN32
+#ifdef _WIN32
 	HANDLE					m_hCompletionPort;
 #else
 	int						m_hEpoll;
 	epoll_event*			m_pEvents;
 	TEventQueue<IFxSocket*>	m_oDelayCloseSockQueue;
-#endif // WIN32
+#endif // _WIN32
 
 	FILE*					m_pFile;
 	char					m_szLogPath[64];
