@@ -4,11 +4,11 @@ CC = cl
 CFLAGS = /c /analyze- /W3 /Zc:wchar_t /Gm- /Zc:inline /fp:precise /D"WIN32" /D"_LIB" /D"_CRT_SECURE_NO_DEPRECATE" /D"_CRT_NONSTDC_NO_DEPRECATE" /D"_MBCS" /errorReport:prompt /WX- /Zc:forScope /Gd /Oy- /FC /EHsc /nologo /diagnostics:classic
 
 !IF "$(DEBUG)" == "1"
-CFLAGS = $(CFLAGS) /D"_DEBUG" /JMC /GS /ZI /Od /RTC1 /MTd /Fd"Debug\Database.pdb"
+CFLAGS = $(CFLAGS) /D"_DEBUG" /JMC /GS /ZI /Od /RTC1 /MTd /Fd"Debug\Net.pdb"
 DIR_OUT = ..\\DEBUG\\
 OBJ_OUT = .\\DEBUG
 !ELSE
-CFLAGS = $(CFLAGS) /D"NDEBUG" /GS /GL /Gy /Zi /Oi /O2 /MT /Fd"Release\Database.pdb"  
+CFLAGS = $(CFLAGS) /D"NDEBUG" /GS /GL /Gy /Zi /Oi /O2 /MT /Fd"Release\Net.pdb"  
 DIR_OUT = ..\\RELEASE\\
 OBJ_OUT = .\\RELEASE
 !ENDIF
