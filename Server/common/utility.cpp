@@ -286,7 +286,7 @@ namespace Utility
 			if (NULL == fp)
 			{
 				printf("failed to open version\n");
-				retrun NULL;
+				return NULL;
 			}
 			while (!feof(fp))
 			{
