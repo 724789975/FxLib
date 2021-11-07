@@ -12,12 +12,12 @@ RANLIB	= ranlib
 #  Flags
 ifeq ($(BUILD),DEBUG)
 D = d
-C_FLAGS			= -g -O0 -rdynamic -Wall -D_DEBUG -DLINUX
-CXX_FLAGS 		= -g -O0 -rdynamic -Wall -Woverloaded-virtual -D_DEBUG -DLINUX 
+C_FLAGS			= -g -O0 -rdynamic -Wall -D_DEBUG -DLINUX -ldl
+CXX_FLAGS 		= -g -O0 -rdynamic -Wall -Woverloaded-virtual -D_DEBUG -DLINUX -ldl
 else
 D = 
-C_FLAGS			= -g -rdynamic -Wall -DNDEBUG -DLINUX
-CXX_FLAGS 		= -g -rdynamic -Wall -Woverloaded-virtual -DNDEBUG -DLINUX
+C_FLAGS			= -g -rdynamic -Wall -DNDEBUG -DLINUX -ldl
+CXX_FLAGS 		= -g -rdynamic -Wall -Woverloaded-virtual -DNDEBUG -DLINUX -ldl
 endif
 
 ARFLAGS			= -rc
@@ -27,7 +27,7 @@ ARFLAGS			= -rc
 #  Commands
 CODE_DIR = ./ ../common
 INCLUDE_DIR =./ ../gflags ../meta_header/ ../protobuf-3.5.1 ../property
-LIB_FILE = -L../Debug -Lcrypto -lpthread -lDatabase -lgflags -lprotobuf
+LIB_FILE = -L../Debug -Lcrypto -lpthread -lgflags -lprotobuf
 OUTPUT_DIR =../Debug
 OUTPUT = TestProto
 #==========================================================
