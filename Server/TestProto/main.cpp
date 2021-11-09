@@ -17,6 +17,7 @@
 #include "fix_string.h"
 
 #include "meta/meta.h"
+#include "replace_dynamic_library.h"
 
 class BBB
 {
@@ -136,6 +137,8 @@ int main(int argc, char **argv)
 	CallBackDispatcher::ProtoCallBackDispatch<AAA, BBB> ta3(ta);
 	//ta3.GetFunction(NULL);
 	ta3.RegistFunction(test::descriptor(), &AAA::Fun2);
+
+ReplaceDynamicLibrary()("./TestPro.so", "_ZN3BBBC1Ev");
 
 	BBB b;
 	ta3.Dispatch("test", NULL, 0, NULL, b);

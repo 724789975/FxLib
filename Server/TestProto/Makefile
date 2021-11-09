@@ -12,12 +12,12 @@ RANLIB	= ranlib
 #  Flags
 ifeq ($(BUILD),DEBUG)
 D = d
-C_FLAGS			= -g -O0 -rdynamic -Wall -D_DEBUG -DLINUX -ldl
-CXX_FLAGS 		= -g -O0 -rdynamic -Wall -Woverloaded-virtual -D_DEBUG -DLINUX -ldl
+C_FLAGS			= -g -O0 -rdynamic -Wall -D_DEBUG -DLINUX
+CXX_FLAGS 		= -g -O0 -rdynamic -Wall -Woverloaded-virtual -D_DEBUG -DLINUX
 else
 D = 
-C_FLAGS			= -g -rdynamic -Wall -DNDEBUG -DLINUX -ldl
-CXX_FLAGS 		= -g -rdynamic -Wall -Woverloaded-virtual -DNDEBUG -DLINUX -ldl
+C_FLAGS			= -g -rdynamic -Wall -DNDEBUG -DLINUX
+CXX_FLAGS 		= -g -rdynamic -Wall -Woverloaded-virtual -DNDEBUG -DLINUX
 endif
 
 ARFLAGS			= -rc
@@ -40,15 +40,15 @@ all:$(OUTPUT)
 
 $(OUTPUT):$(COBJS:.cc=.o) $(OBJS:.cpp=.o)
 	@echo Build...$@
-	$(CPP) $(CXX_FLAGS) -o $(OUTPUT_DIR)/$(OUTPUT) $(COBJS:.cc=.o) $(OBJS:.cpp=.o) $(LIB_FILE)
+	$(CPP) $(CXX_FLAGS) -fpic -ldl -o $(OUTPUT_DIR)/$(OUTPUT) $(COBJS:.cc=.o) $(OBJS:.cpp=.o) $(LIB_FILE)
 
 %.o: %.cpp
 	@echo Compile...$@
-	$(CPP) $(CXX_FLAGS) -std=c++11 $(INCLUDE_FLAG) -c $< -o $@ -MMD -MP -MF$(@:%.o=%.d) 
+	$(CPP) $(CXX_FLAGS) -fpic -ldl -std=c++11 $(INCLUDE_FLAG) -c $< -o $@ -MMD -MP -MF$(@:%.o=%.d) 
 
 %.o: %.cc
 	@echo Compile...$@
-	$(CC) $(C_FLAGS) -std=c++11 $(INCLUDE_FLAG) -c $< -o $@ -MMD -MP -MF$(@:%.o=%.d)
+	$(CC) $(C_FLAGS) -fpic -ldl -std=c++11 $(INCLUDE_FLAG) -c $< -o $@ -MMD -MP -MF$(@:%.o=%.d)
 	
 -include $(OBJS:.cpp=.d)
 -include $(COBJS:.cc=.d)

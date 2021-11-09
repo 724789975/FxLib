@@ -15,18 +15,21 @@ int ReplaceDynamicLibrary::operator ()(const std::string& szDynamicLibraryName, 
 	void* pHandleSo = dlopen(szDynamicLibraryName.c_str(), RTLD_NOW);
 	if (NULL == pHandleSo)
 	{
+		printf("dlopen - %\n\r", dlerror()); 
 		return 1;
 	}
 
 	void* pOldAddr = dlsym(NULL, szFunctionName.c_str());
 	if (NULL == pOldAddr)
 	{
+		printf("dlopen - %s\n\r", dlerror()); 
 		return 1;
 	}
 	
 	void* pNewAddr = dlsym(pHandleSo, szFunctionName.c_str());
 	if (NULL == pOldAddr)
 	{
+		printf("dlopen - %s\r", dlerror()); 
 		return 1;
 	}
 
