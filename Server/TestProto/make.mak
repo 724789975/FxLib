@@ -5,12 +5,12 @@ CFLAGS = /c /analyze- /W3 /Zc:wchar_t /Gm- /Zc:inline /fp:precise /D "WIN32" /D 
 
 !IF "$(DEBUG)" == "1"
 CFLAGS = $(CFLAGS) /JMC /GS  /ZI /Od /sdl- /D "_DEBUG" /Fd"Debug\vc142.pdb" /D "_MBCS" /RTC1 /Oy- /MTd /Fp"Debug\TestProto.pch"
-DIR_OUT = ..\\DEBUG\\
-OBJ_OUT = .\\DEBUG
+DIR_OUT = ..\\Debug\\
+OBJ_OUT = .\\Debug
 !ELSE
-CFLAGS = $(CFLAGS) /GS /GL /Gy /Zi  /O2 /sdl /D "NDEBUG" /Fd"Release\vc142.pdb" /Oy- /Oi /MD /Fp"Release\TestProto.pch"
-DIR_OUT = ..\\RELEASE\\
-OBJ_OUT = .\\RERLEASE
+CFLAGS = $(CFLAGS) /GS /GL /Gy /Zi  /O2 /sdl- /D "NDEBUG" /Fd"Release\vc142.pdb" /Oy- /Oi /MD /Fp"Release\TestProto.pch"
+DIR_OUT = ..\\Release\\
+OBJ_OUT = .\\Release
 !ENDIF
 
 TARGET = TestProto
