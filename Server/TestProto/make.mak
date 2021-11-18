@@ -3,14 +3,18 @@
 CC = cl
 CFLAGS = /c /analyze- /W3 /Zc:wchar_t /Gm- /Zc:inline /fp:precise /D "WIN32" /D "_CONSOLE" /errorReport:prompt /WX- /Zc:forScope /Gd /FC /EHsc /nologo /diagnostics:classic
 
+DIR_COMMON = ..\\common
+
 !IF "$(DEBUG)" == "1"
 CFLAGS = $(CFLAGS) /JMC /GS  /ZI /Od /sdl- /D "_DEBUG" /Fd"Debug\vc142.pdb" /D "_MBCS" /RTC1 /Oy- /MTd /Fp"Debug\TestProto.pch"
 DIR_OUT = ..\\Debug\\
 OBJ_OUT = .\\Debug
+COMMON_OUT = ..\\common\\Debug
 !ELSE
 CFLAGS = $(CFLAGS) /GS /GL /Gy /Zi  /O2 /sdl- /D "NDEBUG" /Fd"Release\vc142.pdb" /Oy- /Oi /MD /Fp"Release\TestProto.pch"
 DIR_OUT = ..\\Release\\
 OBJ_OUT = .\\Release
+COMMON_OUT = ..\\common\\Release
 !ENDIF
 
 TARGET = TestProto
@@ -45,17 +49,23 @@ target: $(EXECUTABLE_NAME)
 ###$(EXECUTABLE_NAME) : test.pb.obj proto_dispatcher.obj main.obj
 $(EXECUTABLE_NAME) : makeobj
 	@echo Linking $(EXECUTABLE_NAME)...
-	$(LK) $(LKFLAGS) $(OBJ_OUT)\*.obj $(DIR_COMMON)\*.obj
+	$(LK) $(LKFLAGS) $(OBJ_OUT)\*.obj $(COMMON_OUT)\*.obj
 
-makeobj:
+makeobj: $(OBJ_OUT) $(COMMON_OUT)
 	@for %%f in (*.cpp) do ( $(CC) $(CFLAGS) /Fo"$(OBJ_OUT)\%%~nf.obj" $(DIR_INCLUDE) %%f )
-	@for %%f in ($(DIR_COMMON)\*.cpp) do ( $(CC) $(CFLAGS) /Fo"$(DIR_COMMON)\%%~nf.obj" $(DIR_INCLUDE) %%f )
+	@for %%f in ($(DIR_COMMON)\*.cpp) do ( $(CC) $(CFLAGS) /Fo"$(COMMON_OUT)\%%~nf.obj" $(DIR_INCLUDE) %%f )
 	@for %%f in (*.cc) do ( $(CC) $(CFLAGS) /Fo"$(OBJ_OUT)\%%~nf.obj" $(DIR_INCLUDE) %%f )
 
 # delete output directories
 clean:
  @if exist $(OBJ_OUT) del $(OBJ_OUT)\*.obj
+ @if exist $(COMMON_OUT) del $(COMMON_OUT)\*.obj
  @if exist $(DIR_OUT) del $(DIR_OUT)$(TARGET)*
+
+$(OBJ_OUT):
+	 @if not exist $(OBJ_OUT) mkdir $(OBJ_OUT)
+$(COMMON_OUT):
+	 @if not exist $(COMMON_OUT) mkdir $(COMMON_OUT)
 
 # create directories and build application
 all: clean target
