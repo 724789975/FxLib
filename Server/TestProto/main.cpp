@@ -138,9 +138,7 @@ int main(int argc, char **argv)
 	//ta3.GetFunction(NULL);
 	ta3.RegistFunction(test::descriptor(), &AAA::Fun2);
 
-#ifndef _WIN32
 	ReplaceDynamicLibrary()("./TestProto.so", "_ZN3BBBC1Ev");
-#endif	//!_WIN32
 
 	BBB b;
 	ta3.Dispatch("test", NULL, 0, NULL, b);

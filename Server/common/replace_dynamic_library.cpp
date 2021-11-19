@@ -1,6 +1,8 @@
 #include "replace_dynamic_library.h"
 
-#ifndef _WIN32
+#ifdef _WIN32
+#include <windows.h>
+#else
 #include <dlfcn.h>
 #include <sys/mman.h>
 #include <unistd.h>
@@ -11,7 +13,15 @@
 
 int ReplaceDynamicLibrary::operator ()(const std::string& szDynamicLibraryName, const std::string& szFunctionName)
 {
-#ifndef _WIN32
+#ifdef _WIN32
+	HMODULE hDll = LoadLibrary(szDynamicLibraryName.c_str());
+	void* pNewFunc = (void*)GetProcAddress(hDll, szFunctionName.c_str());
+
+	void* pOldFunc = (void*)GetProcAddress(0, szFunctionName.c_str());
+
+	DWORD dwOldFlag = 0;
+	VirtualProtectEx(GetCurrentProcess(), (void*)((long long)pOldFunc - 5), 5 + 2, PAGE_EXECUTE_READWRITE, &dwOldFlag); 
+#else
 	void* pHandleSo = dlopen(szDynamicLibraryName.c_str(), RTLD_NOW);
 	if (NULL == pHandleSo)
 	{
