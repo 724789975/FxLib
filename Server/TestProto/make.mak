@@ -6,7 +6,7 @@ CFLAGS = /c /analyze- /W3 /Zc:wchar_t /Gm- /Zc:inline /fp:precise /D "WIN32" /D 
 DIR_COMMON = ..\\common
 
 !IF "$(DEBUG)" == "1"
-CFLAGS = $(CFLAGS) /JMC /GS  /ZI /Od /sdl- /D "_DEBUG" /Fd"Debug\vc142.pdb" /D "_MBCS" /RTC1 /Oy- /MTd /Fp"Debug\TestProto.pch"
+CFLAGS = $(CFLAGS) /JMC /GS  /ZI /Od /sdl- /D "_DEBUG" /Fd"Debug\vc142.pdb" /D "_MBCS" /RTC1 /Oy- /MDd /Fp"Debug\TestProto.pch"
 DIR_OUT = ..\\Debug\\
 OBJ_OUT = .\\Debug
 COMMON_OUT = ..\\common\\Debug
