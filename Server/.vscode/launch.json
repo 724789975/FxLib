@@ -4,6 +4,24 @@
 	// 欲了解更多信息，请访问: https://go.microsoft.com/fwlink/?linkid=830387
 	"version": "0.2.0",
 	"configurations": [
+		{
+			"name": "(Windows) 附加",
+			"type": "cppvsdbg",
+			"request": "attach",
+			"processId": "${command:pickProcess}"
+		},
+		{
+			"name": "TestProto",
+			"type": "cppvsdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/Debug/TestProto.exe",
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}/Debug",
+			"environment": [],
+			"console": "integratedTerminal",
+			// "externalConsole": false
+		},
 		// {
 		// 	"name": "cl.exe - 生成和调试活动文件",
 		// 	"type": "cppvsdbg",
@@ -16,26 +34,5 @@
 		// 	"console": "externalTerminal",
 		// 	"preLaunchTask": "C/C++: cl.exe 生成活动文件"
 		// },
-		{
-            "name": "C/C++",
-            "type": "cppdbg",
-            "request": "launch",
-            "program": "${fileDirname}/${fileBasenameNoExtension}.exe",
-            "args": [],
-            "stopAtEntry": false,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "gdb.exe",
-            "preLaunchTask": "compile",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ],
-        },
 	]
 }

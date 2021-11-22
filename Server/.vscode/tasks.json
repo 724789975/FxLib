@@ -14,10 +14,9 @@
 			}
 		},
 		{
-			"label": "TestProto",
+			"label": "TestProto build",
 			"type": "shell",
-			"command": "cd TestProto^
-				& \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvarsamd64_x86.bat\" & nmake /f make.mak DEBUG=1" ,
+			"command": "cd TestProto & \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvarsamd64_x86.bat\" & nmake /f make.mak DEBUG=1" ,
 			"problemMatcher": [],
 			"group": {
 				"kind": "build",
@@ -27,8 +26,7 @@
 		{
 			"label": "TestProto clean",
 			"type": "shell",
-			"command": "cd TestProto^
-				& \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvarsamd64_x86.bat\" & nmake /f make.mak DEBUG=1 clean",
+			"command": "cd TestProto & \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvarsamd64_x86.bat\" & nmake /f make.mak DEBUG=1 clean",
 			"problemMatcher": [],
 			"group": {
 				"kind": "build",
