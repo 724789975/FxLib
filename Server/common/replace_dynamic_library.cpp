@@ -13,14 +13,16 @@
 
 int ReplaceDynamicLibrary::operator ()(const std::string& szDynamicLibraryName, const std::string& szFunctionName)
 {
+	void* pOldAddr = NULL;
+	void* pNewAddr = NULL;
 #ifdef _WIN32
 	HMODULE hDll = LoadLibrary(szDynamicLibraryName.c_str());
-	void* pNewFunc = (void*)GetProcAddress(hDll, szFunctionName.c_str());
+	pNewAddr = (void*)GetProcAddress(hDll, szFunctionName.c_str());
 
-	void* pOldFunc = (void*)GetProcAddress(0, szFunctionName.c_str());
+	pOldAddr = (void*)GetProcAddress(0, szFunctionName.c_str());
 
 	DWORD dwOldFlag = 0;
-	VirtualProtectEx(GetCurrentProcess(), (void*)((long long)pOldFunc - 5), 5 + 2, PAGE_EXECUTE_READWRITE, &dwOldFlag); 
+	VirtualProtectEx(GetCurrentProcess(), (void*)((long long)pOldAddr - 5), 5 + 2, PAGE_EXECUTE_READWRITE, &dwOldFlag); 
 #else
 	void* pHandleSo = dlopen(szDynamicLibraryName.c_str(), RTLD_NOW);
 	if (NULL == pHandleSo)
@@ -29,20 +31,42 @@ int ReplaceDynamicLibrary::operator ()(const std::string& szDynamicLibraryName, 
 		return 1;
 	}
 
-	void* pOldAddr = dlsym(NULL, szFunctionName.c_str());
+	pOldAddr = dlsym(NULL, szFunctionName.c_str());
 	if (NULL == pOldAddr)
 	{
 		printf("dlopen - %s\n\r", dlerror()); 
 		return 1;
 	}
 	
-	void* pNewAddr = dlsym(pHandleSo, szFunctionName.c_str());
+	pNewAddr = dlsym(pHandleSo, szFunctionName.c_str());
 	if (NULL == pOldAddr)
 	{
 		printf("dlopen - %s\r", dlerror()); 
 		return 1;
 	}
 
+#endif	//!_WIN32
+
+	return HotPatchFunction(pOldAddr, pNewAddr);
+}
+
+int ReplaceDynamicLibrary::HotPatchFunction(void* pOldAddr, void* pNewAddr)
+{
+#ifdef _WIN32
+	DWORD dwOldFlag = 0;
+	VirtualProtectEx(GetCurrentProcess(), (void*)((long long)pOldAddr - 5), 5 + 2, PAGE_EXECUTE_READWRITE, &dwOldFlag); 
+
+	DWORD dwNewJumpAddr = (DWORD)pNewAddr - (DWORD)pOldAddr;
+	//jmp跳转偏移
+	unsigned char x86Pading[5] = {0xE9, 0, 0, 0, 0};
+	memcpy(x86Pading + 1, &dwNewJumpAddr, 4);
+
+	memcpy((void*)((DWORD)pOldAddr - 5), x86Pading, 5);
+
+	//函数内编译/hotpatch选项填充的额外2字节  /FUNCTIONPADMIN 填充的额外字节
+	unsigned char x86HotPatch[2] = {0xE9, -(5 + 2)};
+	*((unsigned short*)pOldAddr) = *((unsigned short*)x86HotPatch);
+#else
 	int dwPageSize = sysconf(_SC_PAGE_SIZE);
 	int dwPageMask = ~(dwPageSize - 1);
 	// int dwPageNum = (dwPageSize - (pOldAddr & ~dwPageMask) >= size) ? 1 : 2;

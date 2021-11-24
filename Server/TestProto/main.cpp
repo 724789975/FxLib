@@ -129,6 +129,15 @@ void DumpTest()
 	float a = 1 / (a1 - a2);
 }
 
+void TestHotPatch()
+{
+	std::cout <<__FUNCTION__ << "\n";
+}
+void TestHotPatch2222()
+{
+	std::cout <<__FUNCTION__ << "\n";
+}
+
 int main(int argc, char **argv)
 {
 	GetTimeHandler()->Init();
@@ -138,6 +147,9 @@ int main(int argc, char **argv)
 	//ta3.GetFunction(NULL);
 	ta3.RegistFunction(test::descriptor(), &AAA::Fun2);
 
+	ReplaceDynamicLibrary().HotPatchFunction(TestHotPatch, TestHotPatch2222);
+
+	TestHotPatch();
 	ReplaceDynamicLibrary()("./TestProto.so", "_ZN3BBBC1Ev");
 
 	BBB b;
