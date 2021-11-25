@@ -147,10 +147,10 @@ int main(int argc, char **argv)
 	//ta3.GetFunction(NULL);
 	ta3.RegistFunction(test::descriptor(), &AAA::Fun2);
 
-	ReplaceDynamicLibrary().HotPatchFunction(TestHotPatch, TestHotPatch2222);
+	ReplaceDynamicLibrary().HotPatchFunction(&TestHotPatch, &TestHotPatch2222);
 
 	TestHotPatch();
-	ReplaceDynamicLibrary()("./TestProto.so", "_ZN3BBBC1Ev");
+	// ReplaceDynamicLibrary()("./TestProto.so", "_ZN3BBBC1Ev");
 
 	BBB b;
 	ta3.Dispatch("test", NULL, 0, NULL, b);

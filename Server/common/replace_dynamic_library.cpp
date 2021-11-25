@@ -54,7 +54,10 @@ int ReplaceDynamicLibrary::HotPatchFunction(void* pOldAddr, void* pNewAddr)
 {
 #ifdef _WIN32
 	DWORD dwOldFlag = 0;
-	VirtualProtectEx(GetCurrentProcess(), (void*)((long long)pOldAddr - 5), 5 + 2, PAGE_EXECUTE_READWRITE, &dwOldFlag); 
+	if (0 == VirtualProtectEx(GetCurrentProcess(), (void*)((long long)pOldAddr - 5), 5 + 2, PAGE_EXECUTE_READWRITE, &dwOldFlag))
+	{
+		return GetLastError();
+	}
 
 	DWORD dwNewJumpAddr = (DWORD)pNewAddr - (DWORD)pOldAddr;
 	//jmp跳转偏移
@@ -64,8 +67,14 @@ int ReplaceDynamicLibrary::HotPatchFunction(void* pOldAddr, void* pNewAddr)
 	memcpy((void*)((DWORD)pOldAddr - 5), x86Pading, 5);
 
 	//函数内编译/hotpatch选项填充的额外2字节  /FUNCTIONPADMIN 填充的额外字节
-	unsigned char x86HotPatch[2] = {0xE9, -(5 + 2)};
+	unsigned char x86HotPatch[2] = {0xEB, -(5 + 2)};
 	*((unsigned short*)pOldAddr) = *((unsigned short*)x86HotPatch);
+
+	if (0 == VirtualProtectEx(GetCurrentProcess(), (void*)((long long)pOldAddr - 5), 5 + 2, dwOldFlag, NULL))
+	{
+		return GetLastError();
+	}
+	return 0;
 #else
 	int dwPageSize = sysconf(_SC_PAGE_SIZE);
 	int dwPageMask = ~(dwPageSize - 1);
