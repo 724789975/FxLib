@@ -20,9 +20,6 @@ int ReplaceDynamicLibrary::operator ()(const std::string& szDynamicLibraryName, 
 	pNewAddr = (void*)GetProcAddress(hDll, szFunctionName.c_str());
 
 	pOldAddr = (void*)GetProcAddress(0, szFunctionName.c_str());
-
-	DWORD dwOldFlag = 0;
-	VirtualProtectEx(GetCurrentProcess(), (void*)((long long)pOldAddr - 5), 5 + 2, PAGE_EXECUTE_READWRITE, &dwOldFlag); 
 #else
 	void* pHandleSo = dlopen(szDynamicLibraryName.c_str(), RTLD_NOW);
 	if (NULL == pHandleSo)
