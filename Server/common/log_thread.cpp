@@ -130,7 +130,7 @@ FILE* LogThread::GetLogFile()
 
 	if (m_bPrintScene)
 	{
-		//���߳� ����ʱ�������־
+		//主线程 根据时间更换日志
 #ifdef _WIN32
 		string_sprintf(strLogPath, 0, "%s%s%s%s", GetExePath(), "\\", GetExeName(), "_log.txt");
 #else
