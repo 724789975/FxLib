@@ -17,10 +17,20 @@
 			"program": "${workspaceFolder}/Debug/TestProto.exe",
 			"args": [],
 			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}/x64/Debug",
+			"environment": [],
+			"console": "integratedTerminal",
+		},
+		{
+			"name": "TestProto_Win32",
+			"type": "cppvsdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/Debug/TestProto.exe",
+			"args": [],
+			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}/Debug",
 			"environment": [],
 			"console": "integratedTerminal",
-			// "externalConsole": false
 		},
 		// {
 		// 	"name": "cl.exe - 生成和调试活动文件",

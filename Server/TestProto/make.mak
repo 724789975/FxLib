@@ -3,18 +3,22 @@
 CC = cl
 CFLAGS = /c /analyze- /W3 /Zc:wchar_t /Gm- /Zc:inline /fp:precise /D "WIN32" /D "_CONSOLE" /errorReport:prompt /WX- /Zc:forScope /Gd /FC /EHsc /nologo /diagnostics:classic /hotpatch
 
-DIR_COMMON = ..\\common
+!IFDEF WIN32
+PLATFORM_DIR = ""
+!ELSE
+PLATFORM_DIR = x64\\
+!ENDIF
 
 !IF "$(DEBUG)" == "1"
 CFLAGS = $(CFLAGS) /JMC /GS  /ZI /Od /sdl- /D "_DEBUG" /Fd"Debug\vc142.pdb" /D "_MBCS" /RTC1 /Oy- /MTd /Fp"Debug\TestProto.pch"
-DIR_OUT = ..\\Debug\\
-OBJ_OUT = .\\Debug
-COMMON_OUT = ..\\common\\Debug
+DIR_OUT = ..\\$(PLATFORM_DIR)Debug\\
+OBJ_OUT = .\\$(PLATFORM_DIR)Debug
+COMMON_OUT = ..\\common\\$(PLATFORM_DIR)Debug
 !ELSE
 CFLAGS = $(CFLAGS) /GS /GL /Gy /Zi  /O2 /sdl- /D "NDEBUG" /Fd"Release\vc142.pdb" /Oy- /Oi /MT /Fp"Release\TestProto.pch"
-DIR_OUT = ..\\Release\\
-OBJ_OUT = .\\Release
-COMMON_OUT = ..\\common\\Release
+DIR_OUT = ..\\$(PLATFORM_DIR)Release\\
+OBJ_OUT = .\\$(PLATFORM_DIR)Release
+COMMON_OUT = ..\\common\\$(PLATFORM_DIR)Release
 !ENDIF
 
 TARGET = TestProto
@@ -26,8 +30,6 @@ DIR_INCLUDE = \
 		/I "../protobuf-3.5.1" \
 		/I "../property"
         
-DIR_BIN = .\\
-
 LK = link
 LKFLAGS = /NOLOGO /MANIFEST:NO
  
@@ -37,11 +39,15 @@ LKFLAGS = $(LKFLAGS) /OPT:REF /OPT:ICF
  
 LKFLAGS = $(LKFLAGS) /DEBUG /PDB:"$(DIR_OUT)\$(TARGET).pdb" /OUT:"$(DIR_OUT)\$(EXECUTABLE_NAME)" /FUNCTIONPADMIN:5
 
-LIBDIRS = ..\\DEBUG\\
+LIBDIRS = ..\\$(PLATFORM_DIR)DEBUG\\
 LIBS = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ws2_32.lib dbghelp.lib Win32_Interop.lib libprotobufd.lib
 LINKLIBS = $(LIBDIRS) $(LIBS)
 
 LKFLAGS = $(LKFLAGS) /LIBPATH:$(LINKLIBS)
+
+!IFNDEF WIN32
+LKFLAGS = $(LKFLAGS) /MACHINE:X64
+!ENDIF
 
 # build application
 target: $(EXECUTABLE_NAME)
