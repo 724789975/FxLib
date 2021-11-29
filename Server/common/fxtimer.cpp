@@ -18,7 +18,7 @@ double GetTimeOfDay()
 #ifdef _WIN32
 	SYSTEMTIME st;
 	GetSystemTime(&st);
-	s_qwTime = st.wSecond + st.wMilliseconds / 1000.0f;
+	s_qwTime = double(time(NULL)) + double(st.wMilliseconds) / 1000.0f;
 #else
 	static struct timeval tv;
 	gettimeofday(&tv, NULL);
