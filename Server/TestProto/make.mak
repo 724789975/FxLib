@@ -64,14 +64,14 @@ makeobj: $(OBJ_OUT) $(COMMON_OUT)
 
 # delete output directories
 clean:
- @if exist $(OBJ_OUT) del $(OBJ_OUT)\*.obj
- @if exist $(COMMON_OUT) del $(COMMON_OUT)\*.obj
- @if exist $(DIR_OUT) del $(DIR_OUT)$(TARGET)*
+	@if exist $(OBJ_OUT) del $(OBJ_OUT)\*.obj
+	@if exist $(COMMON_OUT) del $(COMMON_OUT)\*.obj
+	@if exist $(DIR_OUT) del $(DIR_OUT)$(TARGET)*
 
 $(OBJ_OUT):
-	 @if not exist $(OBJ_OUT) mkdir $(OBJ_OUT)
+	@if not exist $(OBJ_OUT) mkdir $(OBJ_OUT)
 $(COMMON_OUT):
-	 @if not exist $(COMMON_OUT) mkdir $(COMMON_OUT)
+	@if not exist $(COMMON_OUT) mkdir $(COMMON_OUT)
 
 # create directories and build application
 all: clean target
