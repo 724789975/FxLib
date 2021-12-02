@@ -19,6 +19,9 @@
 #include "meta/meta.h"
 #include "test.h"
 
+#ifdef _WIN32
+	__declspec(dllexport) 
+#endif	//!_WIN32
 BBB::BBB()
 	{
 		std::cout << "replace function is running!!!!!!!!!\n";

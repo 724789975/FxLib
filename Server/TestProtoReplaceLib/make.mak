@@ -1,35 +1,37 @@
 #define macros
 
 CC = cl
-CFLAGS = /nologo /c /JMC /hotpatch /GS /Gd /W3 /Zc:wchar_t /ZI /Gm- /WX- /Zc:inline /fp:precise /Zc:forScope /RTC1 /Oy- /FC /EHsc /D"_CONSOLE" /D"WIN32" /diagnostics:column
+CFLAGS = /nologo /c /hotpatch /Gd /GS /W3 /Zc:wchar_t /Gm- /WX- /Zc:inline /fp:precise /Zc:forScope /FC /EHsc /D"_CONSOLE" /D"WIN32" /diagnostics:column
 
-
-#/JMC /permissive- /hotpatch /GS /analyze- /W3 /Zc:wchar_t   /sdl /Fd"Debug\vc142.pdb" /D "WIN32" /D "TESTPROTOREPLACELIB_EXPORTS" /D "_WINDOWS" /D "_USRDLL" /D "_WINDLL" /D "_UNICODE" /D "UNICODE" /errorReport:prompt /WX- /Zc:forScope /RTC1 /Gd /Oy- /MDd /FC /Fa"Debug\" /EHsc /nologo /Fo"Debug\" /Fp"Debug\TestProtoReplaceLib.pch" /diagnostics:column
-
-#/JMC /permissive- /GS /W3 /Zc:wchar_t /ZI /Gm- /Od /sdl /Fd"x64\Debug\vc142.pdb" /Zc:inline /fp:precise /D "_DEBUG" /D "TESTPROTOREPLACELIB_EXPORTS" /D "_WINDOWS" /D "_USRDLL" /D "_WINDLL" /D "_UNICODE" /D "UNICODE" /errorReport:prompt /WX- /Zc:forScope /RTC1 /Gd /MDd /FC /Fa"x64\Debug\" /EHsc /nologo /Fo"x64\Debug\" /Fp"x64\Debug\TestProtoReplaceLib.pch" /diagnostics:column /JMC /permissive- /hotpatch /GS /analyze- /W3 /Zc:wchar_t /I"../protobuf-3.5.1" /I"../meta_header" /I"../property" /ZI /Gm- /Od /sdl /Fd"Debug\vc142.pdb" /Zc:inline /fp:precise /D "WIN32" /D "_DEBUG" /D "TESTPROTOREPLACELIB_EXPORTS" /D "_WINDOWS" /D "_USRDLL" /D "_WINDLL" /D "_UNICODE" /D "UNICODE" /errorReport:prompt /WX- /Zc:forScope /RTC1 /Gd /Oy- /MDd /FC /Fa"Debug\" /EHsc /nologo /Fo"Debug\" /Fp"Debug\TestProtoReplaceLib.pch" /diagnostics:column 
-
-#/OUT:"C:\Users\72478\Desktop\FxLib\Server\Debug\TestProtoReplaceLib.dll" /MANIFEST /NXCOMPAT /PDB:"C:\Users\72478\Desktop\FxLib\Server\Debug\TestProtoReplaceLib.pdb" /DYNAMICBASE "kernel32.lib" "user32.lib" "gdi32.lib" "winspool.lib" "comdlg32.lib" "advapi32.lib" "shell32.lib" "ole32.lib" "oleaut32.lib" "uuid.lib" "odbc32.lib" "odbccp32.lib" /IMPLIB:"C:\Users\72478\Desktop\FxLib\Server\Debug\TestProtoReplaceLib.lib" /DEBUG /DLL /MACHINE:X86 /INCREMENTAL /PGD:"C:\Users\72478\Desktop\FxLib\Server\Debug\TestProtoReplaceLib.pgd" /SUBSYSTEM:WINDOWS /MANIFESTUAC:NO /ManifestFile:"Debug\TestProtoReplaceLib.dll.intermediate.manifest" /ERRORREPORT:PROMPT /NOLOGO /TLBID:1 
-
-!IF "$(DEBUG)" == "1"
-CFLAGS = $(CFLAGS) /Od /Ob0 /MTd /ZI /D"_DEBUG"
+!IFDEF WIN32
+PLATFORM_DIR = ""
 !ELSE
-CFLAGS = $(CFLAGS) /O2 /Ob1 /MT /Zi /D"NDEBUG"
+PLATFORM_DIR = x64\\
 !ENDIF
 
-TARGET = common
 EXECUTABLE_NAME = $(TARGET).exe
 STATIC_LIB_NAME = $(TARGET).lib
+DYNAMIC_LIB_NAME = $(TARGET).dll
 DIR_SRC = .\\
 DIR_INCLUDE = \
         /I "../meta_header"\
 		/I "../property"\
 		/I "../protobuf-3.5.1"
+
+TARGET = TestProtoDLL
+
+!IF "$(DEBUG)" == "1"
+DIR_OUT = ..\\$(PLATFORM_DIR)Debug\\
+OBJ_OUT = .\\$(PLATFORM_DIR)Debug
+CFLAGS = $(CFLAGS) /JMC /ZI /Od /sdl- /RTC1 /Oy- /Od /Ob0 /MTd /D"_DEBUG" /D "_MBCS" /RTC1 /MTd
+!ELSE
+DIR_OUT = ..\\$(PLATFORM_DIR)Release\\
+OBJ_OUT = .\\$(PLATFORM_DIR)Release
+CFLAGS = $(CFLAGS) /Zi  /O2 /sdl- /D "NDEBUG" /Oy- /Oi /MT
+!ENDIF
+
+CFLAGS = $(CFLAGS) /Fd"$(OBJ_OUT)\$(TARGET)_nmake.pdb" /Fp"$(DIR_OUT)\$(TARGET).pch"
         
-DIR_BIN = .\\
-DIR_OUT = ..\\DEBUG\\
-
-CFLAGS = $(CFLAGS) /Fo"$(DIR_BIN)\\"  /Fd"$(DIR_OUT)\$(TARGET).pdb"
-
 LK = link
 LKFLAGS = /NOLOGO
  
@@ -39,30 +41,35 @@ LKFLAGS = $(LKFLAGS) /OPT:REF /OPT:ICF
 LKFLAGS = $(LKFLAGS)
 !ENDIF
 
-LKFLAGS = $(LKFLAGS) /OUT:"$(DIR_OUT)\$(STATIC_LIB_NAME)"
+LKFLAGS = $(LKFLAGS) /PDB:"$(DIR_OUT)$(TARGET).dll.pdb" /ManifestFile:"$(OBJ_OUT)\$(DYNAMIC_LIB_NAME).intermediate.manifest" /OUT:"$(DIR_OUT)$(DYNAMIC_LIB_NAME)" /MANIFEST /NXCOMPAT /DYNAMICBASE /DLL /INCREMENTAL /SUBSYSTEM:WINDOWS /MANIFESTUAC:NO /TLBID:1
 
-LIBDIRS = .\libs
-LIBS = *.lib
-LINKLIBS = $(LIBDIRS) $(LIBS)
+!IFNDEF WIN32
+LKFLAGS = $(LKFLAGS) /MACHINE:X64
+!ENDIF
 
-LKFLAGS = $(LKFLAGS) /LIBPATH:$(LINKLIBS)
+target : $(DYNAMIC_LIB_NAME)
+
+$(DYNAMIC_LIB_NAME) : makeobj
+	@echo Linking $(DYNAMIC_LIB_NAME)...
+	$(LK) $(LKFLAGS) $(OBJ_OUT)\*.obj
+
+makeobj : $(OBJ_OUT)
+	@for %%f in (*.cpp) do ( $(CC) $(CFLAGS) /Fo"$(OBJ_OUT)\%%~nf.obj" $(DIR_INCLUDE) %%f )
+	@for %%f in (*.cc) do ( $(CC) $(CFLAGS) /Fo"$(OBJ_OUT)\%%~nf.obj" $(DIR_INCLUDE) %%f )
+
 
 {$(DIR_SRC)}.cpp{$(DIR_BIN)}.obj ::
         @echo $< Compiling...
 	$(CC) $(CFLAGS) $(DIR_INCLUDE) $<
 
-$(STATIC_LIB_NAME) : $(DIR_BIN)\*.obj
-	@echo Linking $(STATIC_LIB_NAME)...
-	$(LK) /lib $(LKFLAGS) $(DIR_BIN)\*.obj 
-
-# build application
-target: $(STATIC_LIB_NAME)
+$(OBJ_OUT):
+	@if not exist $(OBJ_OUT) mkdir $(OBJ_OUT)
 
 # delete output directories
 clean:
- @if exist $(DIR_OUT) del $(DIR_BIN)*.obj
- @if exist $(DIR_BIN) del $(DIR_OUT)$(STATIC_LIB_NAME)
- @if exist $(DIR_BIN) del $(DIR_OUT)$(TARGET).pdb
+ 	@if exist $(OBJ_OUT) del $(OBJ_OUT)\*.obj
+	@if exist $(OBJ_OUT) del $(OBJ_OUT)\*.pdb
+	@if exist $(DIR_OUT) del $(DIR_OUT)$(TARGET)*
 
 # create directories and build application
 all: clean target
