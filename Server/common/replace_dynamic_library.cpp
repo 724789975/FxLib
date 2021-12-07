@@ -14,12 +14,27 @@
 int ReplaceDynamicLibrary::operator ()(const std::string& szDynamicLibraryName, const std::string& szFunctionName)
 {
 	void* pOldAddr = NULL;
+#ifdef _WIN32
+	pOldAddr = (void*)GetProcAddress(0, szFunctionName.c_str());
+#else
+	pOldAddr = dlsym(NULL, szFunctionName.c_str());
+	if (NULL == pOldAddr)
+	{
+		printf("dlopen - %s\n\r", dlerror()); 
+		return 1;
+	}
+	
+#endif	//!_WIN32
+
+	return (*this)(pOldAddr, szDynamicLibraryName, szFunctionName);
+}
+
+int ReplaceDynamicLibrary::operator ()(void* pOldAddr, const std::string& szDynamicLibraryName, const std::string& szFunctionName)
+{
 	void* pNewAddr = NULL;
 #ifdef _WIN32
 	HMODULE hDll = LoadLibrary(szDynamicLibraryName.c_str());
 	pNewAddr = (void*)GetProcAddress(hDll, szFunctionName.c_str());
-
-	pOldAddr = (void*)GetProcAddress(0, szFunctionName.c_str());
 #else
 	void* pHandleSo = dlopen(szDynamicLibraryName.c_str(), RTLD_NOW);
 	if (NULL == pHandleSo)
@@ -28,13 +43,6 @@ int ReplaceDynamicLibrary::operator ()(const std::string& szDynamicLibraryName, 
 		return 1;
 	}
 
-	pOldAddr = dlsym(NULL, szFunctionName.c_str());
-	if (NULL == pOldAddr)
-	{
-		printf("dlopen - %s\n\r", dlerror()); 
-		return 1;
-	}
-	
 	pNewAddr = dlsym(pHandleSo, szFunctionName.c_str());
 	if (NULL == pOldAddr)
 	{
@@ -50,37 +58,44 @@ int ReplaceDynamicLibrary::operator ()(const std::string& szDynamicLibraryName, 
 int ReplaceDynamicLibrary::HotPatchFunction(void* pOldAddr, void* pNewAddr)
 {
 #ifdef _WIN32
+	// DWORD dwOldFlag = 0;
+	// if (0 == VirtualProtectEx(GetCurrentProcess(), (void*)((long long)pOldAddr - 5), 5 + 2, PAGE_EXECUTE_READWRITE, &dwOldFlag))
+	// {
+	// 	return GetLastError();
+	// }
+
+	// DWORD dwNewJumpAddr = (long long)pNewAddr - (long long)pOldAddr;
+	// //jmp跳转偏移
+	// unsigned char x86Pading[5] = {0xE9, 0, 0, 0, 0};
+	// memcpy(x86Pading + 1, &dwNewJumpAddr, 4);
+
+	// memcpy((void*)((long long)pOldAddr - 5), x86Pading, 5);
+
+	// //函数内编译/hotpatch选项填充的额外2字节  /FUNCTIONPADMIN 填充的额外字节
+	// unsigned char x86HotPatch[2] = {0xEB, -(5 + 2)};
+	// *((unsigned short*)pOldAddr) = *((unsigned short*)x86HotPatch);
+
+	// if (0 == VirtualProtectEx(GetCurrentProcess(), (void*)((long long)pOldAddr - 5), 5 + 2, dwOldFlag, &dwOldFlag))
+	// {
+	// 	return GetLastError();
+	// }
+	// return 0;
 	DWORD dwOldFlag = 0;
-	if (0 == VirtualProtectEx(GetCurrentProcess(), (void*)((long long)pOldAddr - 5), 5 + 2, PAGE_EXECUTE_READWRITE, &dwOldFlag))
+	if (0 == VirtualProtectEx(GetCurrentProcess(), (void*)((long long)pOldAddr), 24, PAGE_EXECUTE_READWRITE, &dwOldFlag))
 	{
 		return GetLastError();
 	}
 
-	DWORD dwNewJumpAddr = (DWORD)pNewAddr - (DWORD)pOldAddr;
-	//jmp跳转偏移
-	unsigned char x86Pading[5] = {0xE9, 0, 0, 0, 0};
-	memcpy(x86Pading + 1, &dwNewJumpAddr, 4);
-
-	memcpy((void*)((DWORD)pOldAddr - 5), x86Pading, 5);
-
-	//函数内编译/hotpatch选项填充的额外2字节  /FUNCTIONPADMIN 填充的额外字节
-	unsigned char x86HotPatch[2] = {0xEB, -(5 + 2)};
-	*((unsigned short*)pOldAddr) = *((unsigned short*)x86HotPatch);
-
-	if (0 == VirtualProtectEx(GetCurrentProcess(), (void*)((long long)pOldAddr - 5), 5 + 2, dwOldFlag, NULL))
-	{
-		return GetLastError();
-	}
-	return 0;
 #else
 	int dwPageSize = sysconf(_SC_PAGE_SIZE);
 	int dwPageMask = ~(dwPageSize - 1);
-	// int dwPageNum = (dwPageSize - (pOldAddr & ~dwPageMask) >= size) ? 1 : 2;
+	// int dwPageNum = (dwPageSize - (pOldAddr & ~dwPageMask) >= 12 ? 1 : 2;
 	int dwPageNum = 2;
 	if (mprotect((void *)((uintptr_t)pOldAddr & dwPageMask), dwPageNum * dwPageSize, PROT_READ | PROT_WRITE | PROT_EXEC))
 	{
 		return 1;
 	}
+#endif	//!_WIN32
 	
 	/*
 	* Translate the following instructions 
@@ -99,14 +114,18 @@ int ReplaceDynamicLibrary::HotPatchFunction(void* pOldAddr, void* pNewAddr)
 	memset((void*)((uintptr_t)pOldAddr + 10), 0xff, 1);
 	memset((void*)((uintptr_t)pOldAddr + 11), 0xe0, 1);
 
+#ifdef _WIN32
+	if (0 == VirtualProtectEx(GetCurrentProcess(), (void*)((long long)pOldAddr), 24, dwOldFlag, &dwOldFlag))
+	{
+		return GetLastError();
+	}
+#else
 	if (mprotect((void *)((uintptr_t)pOldAddr & dwPageMask), dwPageNum * dwPageSize, PROT_READ | PROT_EXEC))
 	{
 		return 1;
 	}
-
-	return 0;
 #endif	//!_WIN32
 
-	return 1;
+	return 0;
 }
 

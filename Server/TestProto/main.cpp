@@ -23,6 +23,16 @@ class BBB
 {
 public:
 	BBB(){}
+	int fun()
+	{
+		std::cout <<__FUNCTION__ << "\n";
+		return 0;
+	}
+	int fun2()
+	{
+		std::cout <<__FUNCTION__ << "\n";
+		return 0;
+	}
 	int b;
 };
 
@@ -138,6 +148,12 @@ void TestHotPatch2222()
 	std::cout <<__FUNCTION__ << "\n";
 }
 
+template<typename dst_type,typename src_type>
+dst_type pointer_cast(src_type src)
+{
+    return *static_cast<dst_type*>(static_cast<void*>(&src));
+}
+
 int main(int argc, char **argv)
 {
 	GetTimeHandler()->Init();
@@ -150,9 +166,15 @@ int main(int argc, char **argv)
 	ReplaceDynamicLibrary().HotPatchFunction(TestHotPatch, TestHotPatch2222);
 
 	TestHotPatch();
+
+	// ReplaceDynamicLibrary().HotPatchFunction(pointer_cast<void*>(&BBB::fun), pointer_cast<void*>(&BBB::fun2));
+
 	// ReplaceDynamicLibrary()("./TestProto.so", "_ZN3BBBC1Ev");
+	// ReplaceDynamicLibrary()(*(static_cast<void**>(static_cast<void*>(&BBB::fun))), "./TestProtoDLL.dll", "_ZN3BBBC1Ev");
+	ReplaceDynamicLibrary()(pointer_cast<void*>(&BBB::fun), "./TestProtoDLL.dll", "?fun@@YAHXZ");
 
 	BBB b;
+	b.fun();
 	ta3.Dispatch("test", NULL, 0, NULL, b);
 
 	test ttt;

@@ -7,6 +7,8 @@ class ReplaceDynamicLibrary
 {
 public:
     int operator ()(const std::string& szDynamicLibraryName, const std::string& szFunctionName);
+	int ReplaceDynamicLibrary::operator ()(void* pOldAddr
+		, const std::string& szDynamicLibraryName, const std::string& szFunctionName);
 	int HotPatchFunction(void* pOldAddr, void* pNewAddr);
 private:
 };

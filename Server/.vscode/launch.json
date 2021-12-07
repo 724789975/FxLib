@@ -14,7 +14,7 @@
 			"name": "TestProto",
 			"type": "cppvsdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/Debug/TestProto.exe",
+			"program": "${workspaceFolder}/x64/Debug/TestProto.exe",
 			"args": [],
 			"stopAtEntry": false,
 			"cwd": "${workspaceFolder}/x64/Debug",
