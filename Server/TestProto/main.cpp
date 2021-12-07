@@ -169,9 +169,13 @@ int main(int argc, char **argv)
 
 	// ReplaceDynamicLibrary().HotPatchFunction(pointer_cast<void*>(&BBB::fun), pointer_cast<void*>(&BBB::fun2));
 
-	// ReplaceDynamicLibrary()("./TestProto.so", "_ZN3BBBC1Ev");
+#ifdef _WIN32
 	// ReplaceDynamicLibrary()(*(static_cast<void**>(static_cast<void*>(&BBB::fun))), "./TestProtoDLL.dll", "_ZN3BBBC1Ev");
 	ReplaceDynamicLibrary()(pointer_cast<void*>(&BBB::fun), "./TestProtoDLL.dll", "?fun@BBB@@QEAAHXZ");
+#else
+	ReplaceDynamicLibrary()("./TestProto.so", "_ZN3BBB3funEv");
+#endif	//!_WIN32
+
 
 	BBB b;
 	b.fun();
