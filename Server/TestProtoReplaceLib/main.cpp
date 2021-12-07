@@ -30,7 +30,7 @@ BBB::BBB()
 #ifdef _WIN32
 	__declspec(dllexport) 
 #endif	//!_WIN32
-int fun()
+int BBB::fun()
 	{
 		std::cout <<__FUNCTION__ << " replace function is running!! \n";
 		return 0;

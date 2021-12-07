@@ -39,7 +39,7 @@ int ReplaceDynamicLibrary::operator ()(void* pOldAddr, const std::string& szDyna
 	void* pHandleSo = dlopen(szDynamicLibraryName.c_str(), RTLD_NOW);
 	if (NULL == pHandleSo)
 	{
-		printf("dlopen - %\n\r", dlerror()); 
+		printf("dlopen - %s\n\r", dlerror()); 
 		return 1;
 	}
 

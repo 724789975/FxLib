@@ -171,7 +171,7 @@ int main(int argc, char **argv)
 
 	// ReplaceDynamicLibrary()("./TestProto.so", "_ZN3BBBC1Ev");
 	// ReplaceDynamicLibrary()(*(static_cast<void**>(static_cast<void*>(&BBB::fun))), "./TestProtoDLL.dll", "_ZN3BBBC1Ev");
-	ReplaceDynamicLibrary()(pointer_cast<void*>(&BBB::fun), "./TestProtoDLL.dll", "?fun@@YAHXZ");
+	ReplaceDynamicLibrary()(pointer_cast<void*>(&BBB::fun), "./TestProtoDLL.dll", "?fun@BBB@@QEAAHXZ");
 
 	BBB b;
 	b.fun();
