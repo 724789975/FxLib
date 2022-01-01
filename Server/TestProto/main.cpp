@@ -22,7 +22,14 @@
 class BBB
 {
 public:
+#ifdef _WIN32
+	__declspec(dllexport) 
+#endif	//!_WIN32
 	BBB(){}
+	//windows 必须导出才能在exe中被获取
+#ifdef _WIN32
+	__declspec(dllexport) 
+#endif	//!_WIN32
 	int fun()
 	{
 		std::cout <<__FUNCTION__ << "\n";
@@ -171,7 +178,11 @@ int main(int argc, char **argv)
 
 #ifdef _WIN32
 	// ReplaceDynamicLibrary()(*(static_cast<void**>(static_cast<void*>(&BBB::fun))), "./TestProtoDLL.dll", "_ZN3BBBC1Ev");
-	ReplaceDynamicLibrary()(pointer_cast<void*>(&BBB::fun), "./TestProtoDLL.dll", "?fun@BBB@@QEAAHXZ");
+	// ReplaceDynamicLibrary()(pointer_cast<void*>(&BBB::fun), "./TestProtoDLL.dll", "?fun@BBB@@QEAAHXZ");
+	ReplaceDynamicLibrary()("./TestProtoDLL.dll", "?fun@BBB@@QEAAHXZ");
+	// ReplaceDynamicLibrary()("./TestProtoDLL.dll", "??0BBB@@QEAA@XZ");
+
+	// (void*)GetProcAddress(GetCurrentProcess(), szFunctionName.c_str()
 #else
 	ReplaceDynamicLibrary()("./TestProto.so", "_ZN3BBB3funEv");
 #endif	//!_WIN32
