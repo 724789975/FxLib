@@ -4,6 +4,8 @@
  *   Redistributed under LGPL license terms.                               *
  ***************************************************************************/
 
+#include <setjmp.h>
+
 #ifndef _SEGVCATCH_H
 #define	_SEGVCATCH_H
 
@@ -14,6 +16,7 @@ namespace segvcatch
 {
 /*! Signal handler, used to redefine standart exception throwing. */
 typedef void (*handler)();
+typedef void (*sig_handler)(int);
 
 extern segvcatch::handler handler_segv;
 extern segvcatch::handler handler_fpe;
@@ -29,6 +32,12 @@ void init_segv(handler h = 0);
     \param h - optional user's signal handler. By default used an internal signal handler to throw
  std::runtime_error.*/
 void init_fpe(handler h = 0);
+
+void init_sig(int sig, sig_handler h = 0);
+
+jmp_buf& get_jmp_buff();
+
+void long_jmp_env(jmp_buf& env, int sig);
 
 }
 
