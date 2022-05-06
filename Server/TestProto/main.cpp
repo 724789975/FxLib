@@ -138,7 +138,7 @@ private:
 void DumpTest()
 {
 	int * p = NULL;
-	*p = 12;
+	// *p = 12;
 
 	int a1 = 1;
 	int a2 = 1;
@@ -161,8 +161,14 @@ dst_type pointer_cast(src_type src)
     return *static_cast<dst_type*>(static_cast<void*>(&src));
 }
 
+void OnSIgSegv(int n)
+{
+	std::cout <<__FUNCTION__ << "\n";
+}
+
 int main(int argc, char **argv)
 {
+	// signal(SIGSEGV, OnSIgSegv);
 	GetTimeHandler()->Init();
 	ExceptionDump::RegExceptionHandler();
 	AAA ta;
@@ -197,16 +203,18 @@ int main(int argc, char **argv)
 	ttt.set_str("asdf");
 
 	GetTimeHandler()->Run();
-	try
-	{
-		//DumpTest();
-	}
-	catch (const std::exception& e)
-	{
-		LogExe(LogLv_Error, "%s", e.what());
-	}
-	catch (...) {}
 
+	__SET_JMP;
+	DumpTest();
+	// try
+	// {
+	// 	DumpTest();
+	// }
+	// catch(const std::exception& e)
+	// {
+	// 	segvcatch::long_jmp_env(ExceptionDump::get_jmp_buff(), SIGSEGV);
+	// }
+	
 	CShareMem oMem("test", 1024);
 	bool bCreated;
 	oMem.Init(bCreated);
