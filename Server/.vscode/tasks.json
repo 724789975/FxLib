@@ -39,6 +39,32 @@
 				"isDefault": true
 			}
 		},
+		{
+			"label": "TestProtoRe build",
+			"type": "shell",
+			"command": "set Path = %Path%;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30037\\bin\\Hostx64\\x64 &\
+				cd TestProtoReplaceLib &\
+				\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\" &\
+				 nmake /f make.mak DEBUG=1" ,
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "TestProtoRe clean",
+			"type": "shell",
+			"command": "set Path = %Path%;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30037\\bin\\Hostx64\\x64 &\
+				cd TestProtoReplaceLib &\
+				\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvarsamd64_x86.bat\" &\
+				nmake /f make.mak DEBUG=1 clean",
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
 		
 	]
 }

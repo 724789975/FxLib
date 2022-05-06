@@ -27,6 +27,9 @@
     <ClCompile Include="..\common\utility.cpp">
       <Filter>common</Filter>
     </ClCompile>
+    <ClCompile Include="..\common\replace_dynamic_library.cpp">
+      <Filter>common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="test.pb.h" />
