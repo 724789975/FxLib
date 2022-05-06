@@ -6,6 +6,16 @@
 
 #include "segvcatch.h"
 
+#include <signal.h>
+#include <stdexcept>
+
+#ifdef _WIN32
+#define LONG_JMP longjmp
+#else
+#define LONG_JMP siglongjmp
+#endif //!_WIN32
+
+
 //#include <stdexcept>
 
 using namespace std;
@@ -14,6 +24,8 @@ namespace segvcatch
 {
 	segvcatch::handler handler_segv = 0;
 	segvcatch::handler handler_fpe = 0;
+
+	jmp_buf env;
 
 #if defined __GNUC__ && __linux
 
@@ -73,7 +85,14 @@ namespace segvcatch
 	{
 		unblock_signal(SIGSEGV);
 		MAKE_THROW_FRAME(nullp);
-		handle_segv();
+		try
+		{
+			handle_segv();
+		}
+		catch(std::runtime_error& e)
+		{
+			segvcatch::long_jmp_env(env, SIGSEGV);
+		}
 	}
 #endif
 
@@ -87,7 +106,14 @@ namespace segvcatch
 #else
 		MAKE_THROW_FRAME(arithexception);
 #endif
-		handle_fpe();
+		try
+		{
+			handle_fpe();
+		}
+		catch(std::runtime_error& e)
+		{
+			segvcatch::long_jmp_env(env, SIGFPE);
+		}
 	}
 #endif
 
@@ -98,12 +124,26 @@ namespace segvcatch
 	{
 		if (e->ExceptionRecord->ExceptionCode == EXCEPTION_ACCESS_VIOLATION)
 		{
-			handle_segv();
+			try
+			{
+				handle_segv();
+			}
+			catch(std::runtime_error& e)
+			{
+				segvcatch::long_jmp_env(env, SIGSEGV);
+			}
 			return EXCEPTION_CONTINUE_EXECUTION;
 		}
 		else if (e->ExceptionRecord->ExceptionCode == EXCEPTION_INT_DIVIDE_BY_ZERO)
 		{
-			handle_fpe();
+			try
+			{
+				handle_fpe();
+			}
+			catch(std::runtime_error& e)
+			{
+				segvcatch::long_jmp_env(env, SIGFPE);
+			}
 			return EXCEPTION_CONTINUE_EXECUTION;
 		}
 		else
@@ -143,6 +183,21 @@ namespace segvcatch
 #ifdef _WIN32
 		SetUnhandledExceptionFilter(win32_exception_handler);
 #endif
+	}
+
+	void init_sig(int sig, sig_handler h)
+	{
+		signal(sig, h);
+	}
+
+	jmp_buf& get_jmp_buff()
+	{
+		return env;
+	}
+
+	void long_jmp_env(jmp_buf& env, int sig)
+	{
+		LONG_JMP(env, sig);
 	}
 
 }

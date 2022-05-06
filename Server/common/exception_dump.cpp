@@ -87,24 +87,48 @@ namespace ExceptionDump
 	}
 #endif // !WIN32
 
+	void HandleSigSegv(int sig)
+	{
+#ifdef _WIN32
+		MessageBox(NULL, "exception : segment fault " __FUNCTION__, "ERROR", MB_ICONINFORMATION | MB_OK);
+#else
+		MakeDump();
+#endif // _WIN32
+		segvcatch::long_jmp_env(get_jmp_buff(), SIGSEGV);
+	}
+
+	void HandleSigFpe(int sig)
+	{
+#ifdef _WIN32
+		MessageBox(NULL, "exception : float-point error " __FUNCTION__, "ERROR", MB_ICONINFORMATION | MB_OK);
+#else
+		MakeDump();
+#endif // _WIN32
+		segvcatch::long_jmp_env(get_jmp_buff(), SIGFPE);
+	}
+
 	void HandleExceptionSegFault()
 	{
 #ifdef _WIN32
-		MessageBox(NULL, "exception : segment fault", "ERROR", MB_ICONINFORMATION | MB_OK);
+		MessageBox(NULL, "exception : segment fault " __FUNCTION__, "ERROR", MB_ICONINFORMATION | MB_OK);
 #else
 		MakeDump();
 #endif // _WIN32
 
+	
+		// segvcatch::long_jmp_env(get_jmp_buff(), SIGSEGV);
 		throw std::runtime_error("exception : segment fault");
 	}
 
 	void HandleExceptionFpError()
 	{
 #ifdef _WIN32
-		MessageBox(NULL, "exception : float-point error", "ERROR", MB_ICONINFORMATION | MB_OK);
+		MessageBox(NULL, "exception : float-point error " __FUNCTION__, "ERROR", MB_ICONINFORMATION | MB_OK);
 #else
 		MakeDump();
 #endif // _WIN32
+
+		// segvcatch::long_jmp_env(get_jmp_buff(), SIGFPE);
 		throw std::runtime_error("exception : float-point error");
 	}
 
@@ -112,8 +136,15 @@ namespace ExceptionDump
 	{
 		segvcatch::init_segv(&HandleExceptionSegFault);
 		segvcatch::init_fpe(&HandleExceptionFpError);
+
+		segvcatch::init_sig(SIGSEGV, &HandleSigSegv);
+		segvcatch::init_sig(SIGFPE, &HandleSigFpe);
 	}
 
+	jmp_buf& get_jmp_buff()
+	{
+		return segvcatch::get_jmp_buff();
+	}
 };
 
 
