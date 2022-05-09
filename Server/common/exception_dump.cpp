@@ -89,6 +89,7 @@ namespace ExceptionDump
 
 	void HandleSigSegv(int sig)
 	{
+		signal(sig, HandleSigSegv);
 #ifdef _WIN32
 		MessageBox(NULL, "exception : segment fault " __FUNCTION__, "ERROR", MB_ICONINFORMATION | MB_OK);
 #else
@@ -99,6 +100,7 @@ namespace ExceptionDump
 
 	void HandleSigFpe(int sig)
 	{
+		signal(sig, HandleSigFpe);
 #ifdef _WIN32
 		MessageBox(NULL, "exception : float-point error " __FUNCTION__, "ERROR", MB_ICONINFORMATION | MB_OK);
 #else
