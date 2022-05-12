@@ -19,6 +19,8 @@
 #include "meta/meta.h"
 #include "replace_dynamic_library.h"
 
+Utility::CpuSample oCpuSample;
+
 class BBB
 {
 public:
@@ -79,8 +81,13 @@ public:
 	bool F2(double fSecond)
 	{
 		static int dwT = 10;
-		LogExe(LogLv_Debug3, "%s", "");
-		GetTimeHandler()->AddSecondTimer(15, &CEventCaller<Test, 2>::GetEvent());
+
+		Utility::CpuSample oCurr;
+		Utility::SampleCupInfo(oCurr);
+		Utility::CalcCpuUsage(oCpuSample, oCurr);
+		LogExe(LogLv_Debug3, "CPU %d", Utility::CalcCpuUsage(oCurr, oCpuSample));
+		oCpuSample = oCurr;
+		GetTimeHandler()->AddSecondTimer(10, &CEventCaller<Test, 2>::GetEvent());
 		--dwT;
 		if (dwT <= 0)
 		{
@@ -143,7 +150,7 @@ void DumpTest()
 	int a1 = 1;
 	int a2 = 1;
 
-	float a = 1 / (a1 - a2);
+	// float a = 1 / (a1 - a2);
 }
 
 void TestHotPatch()
@@ -169,6 +176,7 @@ void OnSIgSegv(int n)
 int main(int argc, char **argv)
 {
 	// signal(SIGSEGV, OnSIgSegv);
+	Utility::SampleCupInfo(oCpuSample);
 	GetTimeHandler()->Init();
 	ExceptionDump::RegExceptionHandler();
 	AAA ta;

@@ -40,6 +40,15 @@ namespace Utility
 #endif // _WIN32
 	}
 
+	int GetTid()
+	{
+#ifdef _WIN32
+		return ::GetCurrentThreadId();
+#else
+		return ::syscall(__NR_gettid);
+#endif // _WIN32
+	}
+
 	char* GetExePath()
 	{
 		static char strWorkPath[256] =
@@ -299,7 +308,145 @@ namespace Utility
 
 		return szOsInfo;
 	}
-	//https://www.cnblogs.com/lidabo/p/7554473.html
+
+	int	GetCpuInfo(ProcCpuInfo& orefProcCpuInfo)
+	{
+#ifdef _WIN32
+		HANDLE hProcess = ::OpenThread(THREAD_ALL_ACCESS, FALSE, ::GetCurrentThreadId());
+		if (NULL == hProcess)
+		{
+			return ::GetLastError();
+		}
+		
+		FILETIME sUTime;
+		FILETIME sSTime;
+		FILETIME t1, t2;
+
+		if (!::GetThreadTimes(hProcess, &t1, &t2, &sSTime, &sUTime))
+		{
+			return ::GetLastError();
+		}
+		
+		ULARGE_INTEGER qwTmp;
+
+		qwTmp.LowPart = sUTime.dwLowDateTime;
+		qwTmp.HighPart = sUTime.dwHighDateTime;
+		orefProcCpuInfo.qwUTime = qwTmp.QuadPart;
+
+		qwTmp.LowPart = sSTime.dwLowDateTime;
+		qwTmp.HighPart = sSTime.dwHighDateTime;
+		orefProcCpuInfo.qwSTime = qwTmp.QuadPart;
+		
+		::CloseHandle(hProcess);
+#else
+		int dwTid = GetTid();
+		char szPath[256] = {0};
+		sprintf(szPath, "/proc/self/task/%d/stat", dwTid);
+		FILE* f = ::open(szPath, "r");
+		if (!f)
+		{
+			return -1;
+		}
+		fscanf(f, "%*d %*s %*c %*d"
+			"%*d %*d %*d %*d %*u %*u %*u %*u"
+			"%llu %llu"
+			, orefProcCpuInfo.qwUTime, orefProcCpuInfo.qwSTime);
+		
+		::fclose(f);
+#endif //!_WIN32
+		return 0;
+	}
+
+	int GetSysCpuInfo(SysCpuInfo& orefSysCpuInfo)
+	{
+#ifdef _WIN32
+		HANDLE hProcess = ::OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, ::GetCurrentProcessId());
+		if (NULL == hProcess)
+		{
+			return ::GetLastError();
+		}
+
+		FILETIME sIdleTime;
+		FILETIME sUTime;
+		FILETIME sSTime;
+		
+		if (!::GetSystemTimes(&sIdleTime, &sSTime, &sUTime))
+		{
+			return ::GetLastError();
+		}
+
+		ULARGE_INTEGER qwTmp;
+
+		qwTmp.LowPart = sUTime.dwLowDateTime;
+		qwTmp.HighPart = sUTime.dwHighDateTime;
+		orefSysCpuInfo.qwUTime = qwTmp.QuadPart;
+
+		qwTmp.LowPart = sSTime.dwLowDateTime;
+		qwTmp.HighPart = sSTime.dwHighDateTime;
+		orefSysCpuInfo.qwSTime = qwTmp.QuadPart;
+		
+		::CloseHandle(hProcess);
+#else
+		FILE* f = ::fopen("/proc/stat", "r");
+		if (f)
+		{
+			fscanf(f, "%*s %llu %llu %llu %llu %llu %llu %llu %llu"
+				, &orefSysCpuInfo.qwUTime, &orefSysCpuInfo.qwNice, &orefSysCpuInfo.qwSTime
+				, &orefSysCpuInfo.qwIdle, &orefSysCpuInfo.qwIOWait, &orefSysCpuInfo.qwIrq
+				, &orefSysCpuInfo.qwSoftIrq, &orefSysCpuInfo.qwSteal);
+		}
+		else
+		{
+			return -1;
+		}
+
+		::fclose(f);
+#endif //!_WIN32
+		return 0;
+	}
+
+	int GetCpuCoreNumber()
+	{
+#ifdef _WIN32
+		SYSTEM_INFO si;
+		GetSystemInfo(&si);
+		return si.dwNumberOfProcessors;
+#else
+		return sysconf(_SC_NPROCESSORS_ONLN);
+		return ::get_nprocs()
+#endif //!_WIN32
+	}
+
+	int CalcCpuUsage(const CpuSample& refPrev, const CpuSample& refCurr)
+	{
+		static const int dwNCores = GetCpuCoreNumber();
+
+		unsigned long long qwUserTime = refCurr.oProcCpuInfo.qwUTime - refPrev.oProcCpuInfo.qwUTime
+										+ refCurr.oProcCpuInfo.qwSTime - refPrev.oProcCpuInfo.qwSTime;
+
+		unsigned long long qwSysTime = refCurr.oSysCpuInfo.qwUTime	-	refPrev.oSysCpuInfo.qwUTime
+										+ refCurr.oSysCpuInfo.qwSTime	-	refPrev.oSysCpuInfo.qwSTime
+										+ refCurr.oSysCpuInfo.qwIdle	-	refPrev.oSysCpuInfo.qwIdle
+										+ refCurr.oSysCpuInfo.qwNice	-	refPrev.oSysCpuInfo.qwNice
+										+ refCurr.oSysCpuInfo.qwIOWait	-	refPrev.oSysCpuInfo.qwIOWait
+										+ refCurr.oSysCpuInfo.qwIrq		-	refPrev.oSysCpuInfo.qwIrq
+										+ refCurr.oSysCpuInfo.qwSoftIrq	-	refPrev.oSysCpuInfo.qwSoftIrq
+										+ refCurr.oSysCpuInfo.qwSteal	-	refPrev.oSysCpuInfo.qwSteal
+										;
+
+		if (0 == qwSysTime)
+		{
+			return 0;
+		}
+		
+		return (int)(100 * dwNCores * qwUserTime / qwSysTime);
+	}
+
+	void SampleCupInfo(CpuSample& oSample)
+	{
+		GetCpuInfo(oSample.oProcCpuInfo);
+		GetSysCpuInfo(oSample.oSysCpuInfo);
+	}
 
 	void ListDir(const char * pDirName, ListDirAndLoadFile & refLoadFile)
 	{
