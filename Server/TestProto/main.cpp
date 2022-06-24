@@ -145,12 +145,12 @@ private:
 void DumpTest()
 {
 	int * p = NULL;
-	// *p = 12;
+	*p = 12;
 
 	int a1 = 1;
 	int a2 = 1;
 
-	// float a = 1 / (a1 - a2);
+	float a = 1 / (a1 - a2);
 }
 
 void TestHotPatch()
