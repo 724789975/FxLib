@@ -28,7 +28,7 @@ ARFLAGS			= -rc
 CODE_DIR = ./ ../common
 INCLUDE_DIR =./ ../gflags ../meta_header/ ../protobuf-3.5.1 ../property
 LIB_FILE = -L../Debug -Lcrypto -lpthread -lgflags -lprotobuf
-OUTPUT_DIR =./
+OUTPUT_DIR =../Debug
 OUTPUT = TestProto
 #==========================================================
 
