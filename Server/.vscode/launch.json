@@ -22,6 +22,17 @@
 			"console": "integratedTerminal",
 		},
 		{
+			"name": "TestProto Release",
+			"type": "cppvsdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/x64/Release/TestProto.exe",
+			"args": [],
+			"stopAtEntry": false,
+			"cwd": "${workspaceFolder}/x64/Release",
+			"environment": [],
+			"console": "integratedTerminal",
+		},
+		{
 			"name": "TestProto_Win32",
 			"type": "cppvsdbg",
 			"request": "launch",
