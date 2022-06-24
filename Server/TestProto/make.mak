@@ -36,14 +36,19 @@ DIR_INCLUDE = \
 LK = link
 LKFLAGS = /NOLOGO /MANIFEST:NO
  
-!IF "$(DEBUG)" == "0"
+!IF "$(DEBUG)" != "0"
 LKFLAGS = $(LKFLAGS) /OPT:REF /OPT:ICF
 !ENDIF
  
 LKFLAGS = $(LKFLAGS) /DEBUG /PDB:"$(DIR_OUT)$(TARGET).pdb" /ManifestFile:"$(OBJ_OUT)\$(DYNAMIC_LIB_NAME).intermediate.manifest" /OUT:"$(DIR_OUT)\$(EXECUTABLE_NAME)" /FUNCTIONPADMIN:5 /INCREMENTAL
 
+!IF "$(DEBUG)" == "1"
 LIBDIRS = ..\\$(PLATFORM_DIR)DEBUG\\
 LIBS = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ws2_32.lib dbghelp.lib Win32_Interop.lib libprotobufd.lib
+!ELSE
+LIBDIRS = ..\\$(PLATFORM_DIR)RELEASE\\
+LIBS = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ws2_32.lib dbghelp.lib Win32_Interop.lib libprotobuf.lib
+!ENDIF
 LINKLIBS = $(LIBDIRS) $(LIBS)
 
 LKFLAGS = $(LKFLAGS) /LIBPATH:$(LINKLIBS)
