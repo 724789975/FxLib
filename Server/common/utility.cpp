@@ -23,10 +23,14 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#include <unistd.h>
+#include <fcntl.h>
+
 #include <errno.h>
 #include <netinet/in.h>
 #include <execinfo.h>
 #include <sys/stat.h>
+#include <sys/syscall.h>
 #endif	//WIN32
 
 namespace Utility
@@ -45,7 +49,7 @@ namespace Utility
 #ifdef _WIN32
 		return ::GetCurrentThreadId();
 #else
-		return ::syscall(__NR_gettid);
+		return syscall(__NR_gettid);
 #endif // _WIN32
 	}
 
@@ -342,15 +346,15 @@ namespace Utility
 		int dwTid = GetTid();
 		char szPath[256] = {0};
 		sprintf(szPath, "/proc/self/task/%d/stat", dwTid);
-		FILE* f = ::open(szPath, "r");
+		FILE* f = fopen(szPath, "r");
 		if (!f)
 		{
 			return -1;
 		}
 		fscanf(f, "%*d %*s %*c %*d"
-			"%*d %*d %*d %*d %*u %*u %*u %*u"
-			"%llu %llu"
-			, orefProcCpuInfo.qwUTime, orefProcCpuInfo.qwSTime);
+			" %*d %*d %*d %*d %*u %*u %*u %*u"
+			" %llu %llu"
+			, &orefProcCpuInfo.qwUTime, &orefProcCpuInfo.qwSTime);
 		
 		::fclose(f);
 #endif //!_WIN32
@@ -413,7 +417,7 @@ namespace Utility
 		return si.dwNumberOfProcessors;
 #else
 		return sysconf(_SC_NPROCESSORS_ONLN);
-		return ::get_nprocs()
+		//return ::get_nprocs()
 #endif //!_WIN32
 	}
 
