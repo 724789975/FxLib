@@ -145,7 +145,7 @@ private:
 void DumpTest()
 {
 	int * p = NULL;
-	// *p = 12;
+	*p = 12;
 
 	int a1 = 1;
 	int a2 = 1;
