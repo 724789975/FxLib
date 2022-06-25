@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <iostream>
 
 #ifdef _WIN32
 #include <windows.h>
@@ -87,45 +88,31 @@ namespace ExceptionDump
 	}
 #endif // !WIN32
 
-	void HandleSigSegv(int sig)
-	{
-		signal(sig, HandleSigSegv);
-#ifdef _WIN32
-		MessageBox(NULL, "exception : segment fault " __FUNCTION__, "ERROR", MB_ICONINFORMATION | MB_OK);
-#else
-		MakeDump();
-#endif // _WIN32
-		segvcatch::long_jmp_env(get_jmp_buff(), SIGSEGV);
-	}
+	void HandleSigSegv(int sig);
+	void HandleSigFpe(int sig);
+	void HandleSig(int sig);
+	void HandleExceptionSegFault(int sig);
+	void HandleExceptionFpError(int sig);
+	void HandleExceptionSig(int sig);
 
-	void HandleSigFpe(int sig)
-	{
-		signal(sig, HandleSigFpe);
-#ifdef _WIN32
-		MessageBox(NULL, "exception : float-point error " __FUNCTION__, "ERROR", MB_ICONINFORMATION | MB_OK);
-#else
-		MakeDump();
-#endif // _WIN32
-		segvcatch::long_jmp_env(get_jmp_buff(), SIGFPE);
-	}
-
-	void HandleExceptionSegFault()
+	void HandleExceptionSegFault(int sig)
 	{
 #ifdef _WIN32
 		MessageBox(NULL, "exception : segment fault " __FUNCTION__, "ERROR", MB_ICONINFORMATION | MB_OK);
+		signal(sig, &HandleSigSegv);
 #else
 		MakeDump();
 #endif // _WIN32
-
 	
 		// segvcatch::long_jmp_env(get_jmp_buff(), SIGSEGV);
 		throw std::runtime_error("exception : segment fault");
 	}
 
-	void HandleExceptionFpError()
+	void HandleExceptionFpError(int sig)
 	{
 #ifdef _WIN32
 		MessageBox(NULL, "exception : float-point error " __FUNCTION__, "ERROR", MB_ICONINFORMATION | MB_OK);
+		signal(sig, &HandleSigFpe);
 #else
 		MakeDump();
 #endif // _WIN32
@@ -134,13 +121,68 @@ namespace ExceptionDump
 		throw std::runtime_error("exception : float-point error");
 	}
 
+	void HandleExceptionSig(int sig)
+	{
+#ifdef _WIN32
+		MessageBox(NULL, "exception : sig error " __FUNCTION__, "ERROR", MB_ICONINFORMATION | MB_OK);
+		signal(sig, &HandleSig);
+#else
+		MakeDump();
+#endif // _WIN32
+
+		// segvcatch::long_jmp_env(get_jmp_buff(), sig);
+		throw std::runtime_error("exception : sig error");
+	}
+
+	void HandleSigSegv(int sig)
+	{
+		try
+		{
+			HandleExceptionSegFault(sig);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+			segvcatch::long_jmp_env(get_jmp_buff(), sig);
+		}
+		
+	}
+
+	void HandleSigFpe(int sig)
+	{
+		try
+		{
+			HandleExceptionFpError(sig);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+			segvcatch::long_jmp_env(get_jmp_buff(), SIGFPE);
+		}
+		
+	}
+
+	void HandleSig(int sig)
+	{
+		try
+		{
+			HandleExceptionSig(sig);
+		}
+		catch(const std::exception& e)
+		{
+			std::cerr << e.what() << '\n';
+			segvcatch::long_jmp_env(get_jmp_buff(), SIGFPE);
+		}
+		
+	}
+
 	void RegExceptionHandler()
 	{
-		segvcatch::init_segv(&HandleExceptionSegFault);
-		segvcatch::init_fpe(&HandleExceptionFpError);
+		segvcatch::init_segv(&HandleSigSegv);
+		segvcatch::init_fpe(&HandleSigFpe);
 
-		segvcatch::init_sig(SIGSEGV, &HandleSigSegv);
-		segvcatch::init_sig(SIGFPE, &HandleSigFpe);
+		segvcatch::init_sig(SIGABRT, &HandleSig);
+		// segvcatch::init_sig(SIGFPE, &HandleSigFpe);
 	}
 
 	jmp_buf& get_jmp_buff()

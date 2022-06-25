@@ -22,6 +22,7 @@ details.  */
 
 #define HANDLE_SEGV 1
 #define HANDLE_FPE 1
+#define HANDLE_SIG 1
 
 #define SIGNAL_HANDLER(_name)					\
 static void _Jv_##_name (int, siginfo_t *,			\
@@ -148,6 +149,18 @@ do								\
     act.k_sa_flags = SA_SIGINFO|0x4000000;			\
     act.k_sa_restorer = restore_rt;				\
     syscall (SYS_rt_sigaction, SIGFPE, &act, NULL, _NSIG / 8);	\
+  }								\
+while (0)  
+
+#define INIT_SIG(sig, name)	\
+do								\
+  {								\
+    struct kernel_sigaction act;				\
+    act.k_sa_sigaction = _Jv_##name;				\
+    sigemptyset (&act.k_sa_mask);				\
+    act.k_sa_flags = SA_SIGINFO|0x4000000;			\
+    act.k_sa_restorer = restore_rt;				\
+    syscall (SYS_rt_sigaction, sig, &act, NULL, _NSIG / 8);	\
   }								\
 while (0)  
 

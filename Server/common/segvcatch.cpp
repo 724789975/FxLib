@@ -22,8 +22,9 @@ using namespace std;
 
 namespace segvcatch
 {
-	segvcatch::handler handler_segv = 0;
-	segvcatch::handler handler_fpe = 0;
+	segvcatch::sig_handler handler_segv = 0;
+	segvcatch::sig_handler handler_fpe = 0;
+	segvcatch::sig_handler handler_sig = 0;
 
 	jmp_buf env;
 
@@ -39,27 +40,33 @@ namespace segvcatch
 
 #endif /*defined __GNUC__ && __linux*/
 
-	void default_segv()
+	void default_segv(int sig)
 	{
 		throw "Segmentation fault";
 	}
 
-	void default_fpe()
+	void default_fpe(int sig)
 	{
 		throw "Floating-point exception";
 	}
 
 
-	void handle_segv()
+	void handle_segv(int sig)
 	{
 		if (handler_segv)
-			handler_segv();
+			handler_segv(sig);
 	}
 
-	void handle_fpe()
+	void handle_fpe(int sig)
 	{
 		if (handler_fpe)
-			handler_fpe();
+			handler_fpe(sig);
+	}
+
+	void handle_sig(int sig)
+	{
+		if (handler_sig)
+			handler_sig(sig);
 	}
 
 #if defined (HANDLE_SEGV) || defined(HANDLE_FPE)
@@ -87,7 +94,7 @@ namespace segvcatch
 		MAKE_THROW_FRAME(nullp);
 		try
 		{
-			handle_segv();
+			handle_segv(SIGSEGV);
 		}
 		catch(std::runtime_error& e)
 		{
@@ -108,13 +115,35 @@ namespace segvcatch
 #endif
 		try
 		{
-			handle_fpe();
+			handle_fpe(SIGFPE);
 		}
 		catch(std::runtime_error& e)
 		{
 			segvcatch::long_jmp_env(env, SIGFPE);
 		}
 	}
+#endif
+
+#ifdef HANDLE_SIG
+
+#define SIGNAL_SIG_HANDLER(sig, catch_sig)\
+	SIGNAL_HANDLER(##catch_sig)\
+	{\
+		unblock_signal(sig);\
+		MAKE_THROW_FRAME(nullp);\
+		try\
+		{\
+			handle_sig(sig);\
+		}\
+		catch(std::runtime_error& e)\
+		{\
+			segvcatch::long_jmp_env(env, sig);\
+		}\
+	}
+
+	SIGNAL_SIG_HANDLER(SIGINT, catch_int)
+	SIGNAL_SIG_HANDLER(SIGABRT, catch_abrt)
+
 #endif
 
 #ifdef _WIN32
@@ -126,7 +155,7 @@ namespace segvcatch
 		{
 			try
 			{
-				handle_segv();
+				handle_segv(SIGSEGV);
 			}
 			catch(std::runtime_error& e)
 			{
@@ -138,7 +167,7 @@ namespace segvcatch
 		{
 			try
 			{
-				handle_fpe();
+				handle_fpe(SIGFPE);
 			}
 			catch(std::runtime_error& e)
 			{
@@ -155,7 +184,7 @@ namespace segvcatch
 namespace segvcatch
 {
 
-	void init_segv(handler h)
+	void init_segv(sig_handler h)
 	{
 		if (h)
 			handler_segv = h;
@@ -163,6 +192,8 @@ namespace segvcatch
 			handler_segv = default_segv;
 #ifdef HANDLE_SEGV
 		INIT_SEGV;
+#else
+		signal(SIGSEGV, h);
 #endif
 
 #ifdef _WIN32
@@ -170,7 +201,7 @@ namespace segvcatch
 #endif
 	}
 
-	void init_fpe(handler h)
+	void init_fpe(sig_handler h)
 	{
 		if (h)
 			handler_fpe = h;
@@ -178,6 +209,8 @@ namespace segvcatch
 			handler_fpe = default_fpe;
 #ifdef HANDLE_FPE
 		INIT_FPE;
+#else
+		signal(SIGFPE, h);
 #endif
 
 #ifdef _WIN32
@@ -187,7 +220,10 @@ namespace segvcatch
 
 	void init_sig(int sig, sig_handler h)
 	{
+#ifdef _WIN32
 		signal(sig, h);
+#else
+#endif
 	}
 
 	jmp_buf& get_jmp_buff()
