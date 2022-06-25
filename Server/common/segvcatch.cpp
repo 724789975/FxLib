@@ -23,8 +23,6 @@ using namespace std;
 
 namespace segvcatch
 {
-	segvcatch::sig_handler handler_segv = 0;
-	segvcatch::sig_handler handler_fpe = 0;
 	segvcatch::sig_handler handler_sig[128] = {0};
 
 	jmp_buf env;
@@ -121,7 +119,7 @@ namespace segvcatch
 #ifdef HANDLE_SIG
 
 #define SIGNAL_SIG_HANDLER(sig, catch_sig)\
-	SIGNAL_HANDLER(##catch_sig)\
+	SIGNAL_HANDLER(catch_sig)\
 	{\
 		unblock_signal(sig);\
 		MAKE_THROW_FRAME(nullp);\
@@ -141,10 +139,7 @@ namespace segvcatch
 	SIGNAL_SIG_HANDLER(SIGILL,		catch_ill)
 	SIGNAL_SIG_HANDLER(SIGTRAP,		catch_trap)
 	SIGNAL_SIG_HANDLER(SIGABRT,		catch_abrt)
-	SIGNAL_SIG_HANDLER(SIGIOT,		catch_iot)
 	SIGNAL_SIG_HANDLER(SIGBUS,		catch_bus)
-	SIGNAL_SIG_HANDLER(SIGPIPE,		catch_pipe)
-	SIGNAL_SIG_HANDLER(SIGSEGV,		catch_segv)
 	SIGNAL_SIG_HANDLER(SIGPIPE,		catch_pipe)
 	SIGNAL_SIG_HANDLER(SIGALRM,		catch_alrm)
 	SIGNAL_SIG_HANDLER(SIGTERM,		catch_term)
@@ -240,11 +235,6 @@ namespace segvcatch
 				INIT_SIG(SIGABRT,		catch_abrt);
 			}
 			break;
-			case SIGIOT:
-			{
-				INIT_SIG(SIGIOT,		catch_iot);
-			}
-			break;
 			case SIGBUS:
 			{
 				INIT_SIG(SIGBUS,		catch_bus);
@@ -265,7 +255,7 @@ namespace segvcatch
 			break;
 #endif	//!HANDLE_SEGV
 #ifdef HANDLE_FPE
-			case SIGPIPE:
+			case SIGFPE:
 			{
 				INIT_FPE;
 				handler_sig[sig] = default_fpe;
