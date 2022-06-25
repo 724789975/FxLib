@@ -152,11 +152,11 @@ do								\
   }								\
 while (0)  
 
-#define INIT_SIG(sig, name)	\
+#define INIT_SIG(sig, _name)	\
 do								\
   {								\
     struct kernel_sigaction act;				\
-    act.k_sa_sigaction = _Jv_##name;				\
+    act.k_sa_sigaction = _Jv_##_name;				\
     sigemptyset (&act.k_sa_mask);				\
     act.k_sa_flags = SA_SIGINFO|0x4000000;			\
     act.k_sa_restorer = restore_rt;				\

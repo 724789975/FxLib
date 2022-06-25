@@ -163,7 +163,7 @@ do								\
   }								\
 while (0)  
 
-#define INIT_SIG(sig, name)						\
+#define INIT_SIG(sig, _name)						\
 do								\
   {								\
     struct kernel_sigaction act;				\
