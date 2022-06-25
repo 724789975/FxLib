@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29521.150
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Net", "Net\Net.vcxproj", "{5F97E034-3D07-4FCE-9A0D-410661E3C32A}"
 EndProject
@@ -52,8 +52,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebGameCenter", "WebGameCenter\WebGameCenter.vcxproj", "{F17F0ED9-26AE-4BA7-8857-4570430591AC}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "WebGameTeam", "WebGameTeam\WebGameTeam.vcxproj", "{D346BE90-D375-4F89-BA46-2CB2DFDEFE02}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestProtoReplaceLib", "TestProtoReplaceLib\TestProtoReplaceLib.vcxproj", "{58994789-9AB8-454B-9DB9-67C875D7494D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -212,14 +210,6 @@ Global
 		{D346BE90-D375-4F89-BA46-2CB2DFDEFE02}.Release|Win32.Build.0 = Release|Win32
 		{D346BE90-D375-4F89-BA46-2CB2DFDEFE02}.Release|x64.ActiveCfg = Release|x64
 		{D346BE90-D375-4F89-BA46-2CB2DFDEFE02}.Release|x64.Build.0 = Release|x64
-		{58994789-9AB8-454B-9DB9-67C875D7494D}.Debug|Win32.ActiveCfg = Debug|Win32
-		{58994789-9AB8-454B-9DB9-67C875D7494D}.Debug|Win32.Build.0 = Debug|Win32
-		{58994789-9AB8-454B-9DB9-67C875D7494D}.Debug|x64.ActiveCfg = Debug|x64
-		{58994789-9AB8-454B-9DB9-67C875D7494D}.Debug|x64.Build.0 = Debug|x64
-		{58994789-9AB8-454B-9DB9-67C875D7494D}.Release|Win32.ActiveCfg = Release|Win32
-		{58994789-9AB8-454B-9DB9-67C875D7494D}.Release|Win32.Build.0 = Release|Win32
-		{58994789-9AB8-454B-9DB9-67C875D7494D}.Release|x64.ActiveCfg = Release|x64
-		{58994789-9AB8-454B-9DB9-67C875D7494D}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -238,8 +228,5 @@ Global
 		{EB21C203-95D0-4BE1-B4FD-72A41F08D026} = {3AD657D7-06B5-4500-972C-09435B2DCDAA}
 		{F17F0ED9-26AE-4BA7-8857-4570430591AC} = {3AD657D7-06B5-4500-972C-09435B2DCDAA}
 		{D346BE90-D375-4F89-BA46-2CB2DFDEFE02} = {3AD657D7-06B5-4500-972C-09435B2DCDAA}
-	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {C7583D7F-A30C-468A-B307-22596DA7528F}
 	EndGlobalSection
 EndGlobal

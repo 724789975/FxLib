@@ -34,7 +34,6 @@
 #include "Win32_Common.h"
 #include "Win32_Error.h"
 #include "Win32_Assert.h"
-#include <system_error>
 
 using namespace std;
 

@@ -16,17 +16,10 @@
 		{
 			"label": "TestProto build",
 			"type": "shell",
-			"command": "set Path = %Path%;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Tools\\MSVC\\14.24.28314\\bin\\Hostx64\\x64 & cd TestProto & \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Auxiliary\\Build\\vcvars64.bat\" & nmake /f make.mak DEBUG=1 target",
-			"problemMatcher": [],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
-		},
-		{
-			"label": "TestProto release build",
-			"type": "shell",
-			"command": "set Path = %Path%;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Tools\\MSVC\\14.24.28314\\bin\\Hostx64\\x64 & cd TestProto & \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Auxiliary\\Build\\vcvars64.bat\" & nmake /f make.mak target",
+			"command": "set Path = %Path%;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30037\\bin\\Hostx64\\x64 &\
+				cd TestProto &\
+				\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\" &\
+				 nmake /f make.mak DEBUG=1" ,
 			"problemMatcher": [],
 			"group": {
 				"kind": "build",
@@ -36,37 +29,10 @@
 		{
 			"label": "TestProto clean",
 			"type": "shell",
-			"command": "set Path = %Path%;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Tools\\MSVC\\14.24.28314\\bin\\Hostx64\\x64 & cd TestProto & \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Auxiliary\\Build\\vcvars64.bat\" & nmake /f make.mak DEBUG=1 clean",
-			"problemMatcher": [],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
-		},
-		{
-			"label": "TestProto release clean",
-			"type": "shell",
-			"command": "set Path = %Path%;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Tools\\MSVC\\14.24.28314\\bin\\Hostx64\\x64 & cd TestProto & \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Auxiliary\\Build\\vcvars64.bat\" & nmake /f make.mak clean",
-			"problemMatcher": [],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
-		},
-		{
-			"label": "TestProto Dll build",
-			"type": "shell",
-			"command": "set Path = %Path%;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Tools\\MSVC\\14.24.28314\\bin\\Hostx64\\x64 & cd TestProtoReplaceLib & \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Auxiliary\\Build\\vcvars64.bat\" & nmake /f make.mak DEBUG=1 target",
-			"problemMatcher": [],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
-		},
-		{
-			"label": "TestProto Dll clean",
-			"type": "shell",
-			"command": "set Path = %Path%;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Tools\\MSVC\\14.24.28314\\bin\\Hostx64\\x64 & cd TestProtoReplaceLib & \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Auxiliary\\Build\\vcvars64.bat\" & nmake /f make.mak DEBUG=1 clean",
+			"command": "set Path = %Path%;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30037\\bin\\Hostx64\\x64 &\
+				cd TestProto &\
+				\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvarsamd64_x86.bat\" &\
+				nmake /f make.mak DEBUG=1 clean",
 			"problemMatcher": [],
 			"group": {
 				"kind": "build",
@@ -76,7 +42,10 @@
 		{
 			"label": "TestProtoRe build",
 			"type": "shell",
-			"command": "set Path = %Path%;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Tools\\MSVC\\14.24.28314\\bin\\Hostx64\\x64 & cd TestProtoReplaceLib & \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Auxiliary\\Build\\vcvars64.bat\" & nmake /f make.mak DEBUG=1" ,
+			"command": "set Path = %Path%;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30037\\bin\\Hostx64\\x64 &\
+				cd TestProtoReplaceLib &\
+				\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvars64.bat\" &\
+				 nmake /f make.mak DEBUG=1" ,
 			"problemMatcher": [],
 			"group": {
 				"kind": "build",
@@ -86,27 +55,10 @@
 		{
 			"label": "TestProtoRe clean",
 			"type": "shell",
-			"command": "set Path = %Path%;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.0037\\bin\\Hostx64\\x64 & cd TestProtoReplaceLib & \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvarsamd64_x86.bat\" & nmake /f make.mak DEBUG=1 clean",
-			"problemMatcher": [],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
-		},
-		{
-			"label": "TestProto Dll releasae build",
-			"type": "shell",
-			"command": "set Path = %Path%;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Tools\\MSVC\\14.24.28314\\bin\\Hostx64\\x64 & cd TestProtoReplaceLib & \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Auxiliary\\Build\\vcvars64.bat\" & nmake /f make.mak target",
-			"problemMatcher": [],
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			}
-		},
-		{
-			"label": "TestProto Dll release clean",
-			"type": "shell",
-			"command": "set Path = %Path%;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Tools\\MSVC\\14.24.28314\\bin\\Hostx64\\x64 & cd TestProtoReplaceLib & \"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Preview\\VC\\Auxiliary\\Build\\vcvars64.bat\" & nmake /f make.mak clean",
+			"command": "set Path = %Path%;C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Tools\\MSVC\\14.29.30037\\bin\\Hostx64\\x64 &\
+				cd TestProtoReplaceLib &\
+				\"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\Community\\VC\\Auxiliary\\Build\\vcvarsamd64_x86.bat\" &\
+				nmake /f make.mak DEBUG=1 clean",
 			"problemMatcher": [],
 			"group": {
 				"kind": "build",
