@@ -45,14 +45,12 @@
 	}\
 	else\
 	{\
-		std::cout << "error sig : " << __jmp_ret;\
+		std::cout << "error sig : " << __jmp_ret << "\n";\
 	}
 #endif  //!_WIN32
 	
 namespace ExceptionDump
 {
-	// void HandleExceptionSegFault();
-	// void HandleExceptionFpError();
 	void RegExceptionHandler();
 
 	jmp_buf& get_jmp_buff();

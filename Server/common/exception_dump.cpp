@@ -171,18 +171,16 @@ namespace ExceptionDump
 		catch(const std::exception& e)
 		{
 			std::cerr << e.what() << '\n';
-			segvcatch::long_jmp_env(get_jmp_buff(), SIGFPE);
+			segvcatch::long_jmp_env(get_jmp_buff(), sig);
 		}
 		
 	}
 
 	void RegExceptionHandler()
 	{
-		segvcatch::init_segv(&HandleSigSegv);
-		segvcatch::init_fpe(&HandleSigFpe);
-
+		segvcatch::init_sig(SIGSEGV, &HandleSigSegv);
+		segvcatch::init_sig(SIGFPE, &HandleSigFpe);
 		segvcatch::init_sig(SIGABRT, &HandleSig);
-		// segvcatch::init_sig(SIGFPE, &HandleSigFpe);
 	}
 
 	jmp_buf& get_jmp_buff()
