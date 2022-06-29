@@ -27,7 +27,7 @@
 	}\
 	else\
 	{\
-		std::cout << "error sig : " << __jmp_ret;\
+		std::cout << "error sig : " << __jmp_ret << "\n";\
 	}
 #else
 	#define __SET_JMP\
