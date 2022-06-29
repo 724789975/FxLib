@@ -142,15 +142,27 @@ private:
 
 };
 
+int g_i = 0;
+struct __test
+{
+	char ttt[1024 * 512] = {0};
+};
+
 void DumpTest()
 {
-	int * p = NULL;
-	*p = 12;
+	// int * p = NULL;
+	// *p = 12;
 
-	int a1 = 1;
+	int a1 = g_i;
 	int a2 = 1;
 
-	float a = 1 / (a1 - a2);
+	__test t;
+
+	t.ttt[0] = a1 + 1;
+	int c = t.ttt[0];
+	g_i = t.ttt[2];
+	if(c) abort();
+	// float a = 1 / (a1 - a2);
 }
 
 void TestHotPatch()
@@ -202,13 +214,13 @@ int main(int argc, char **argv)
 #endif	//!_WIN32
 
 
-	BBB b;
-	b.fun();
-	ta3.Dispatch("test", NULL, 0, NULL, b);
+	// BBB b;
+	// b.fun();
+	// ta3.Dispatch("test", NULL, 0, NULL, b);
 
-	test ttt;
-	ttt.set_id(123);
-	ttt.set_str("asdf");
+	// test ttt;
+	// ttt.set_id(123);
+	// ttt.set_str("asdf");
 
 	GetTimeHandler()->Run();
 

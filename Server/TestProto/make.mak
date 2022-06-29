@@ -18,7 +18,7 @@ OBJ_OUT = .\\$(PLATFORM_DIR)Debug
 COMMON_OUT = ..\\common\\$(PLATFORM_DIR)Debug
 CFLAGS = $(CFLAGS) /JMC /GS /ZI /Od /sdl- /D"_DEBUG" /D"_MBCS" /RTC1 /Oy- /MTd
 !ELSE
-CFLAGS = $(CFLAGS) /GS /GL /Gy /Zi /O2 /sdl- /D"NDEBUG" /Oy- /Oi /MT
+CFLAGS = $(CFLAGS) /GS /GL /Gy /Zi /Od /sdl- /D"NDEBUG" /Oy- /Oi /MT
 DIR_OUT = ..\\$(PLATFORM_DIR)Release\\
 OBJ_OUT = .\\$(PLATFORM_DIR)Release
 COMMON_OUT = ..\\common\\$(PLATFORM_DIR)Release
